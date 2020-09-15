@@ -16,12 +16,12 @@ export default new Router({
       component: Home
     },
     {
-      path: '/',
+      path: '/bioView',
       name: 'bioView',
       component: BioView
     },
     {
-      path: '/',
+      path: '/epiView',
       name: 'epiView',
       component: EpiView
     },

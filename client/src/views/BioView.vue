@@ -7,10 +7,7 @@
 <script>
 
 export default {
-  name: 'BioView',
-  data: () => ({
-
-  })
+  name: 'BioView'
 }
 </script>
 

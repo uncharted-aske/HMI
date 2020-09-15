@@ -7,10 +7,7 @@
 <script>
 
 export default {
-  name: 'EpiView',
-  data: () => ({
-
-  })
+  name: 'EpiView'
 }
 </script>
 
