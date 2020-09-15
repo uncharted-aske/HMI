@@ -1,6 +1,16 @@
 <template>
   <div class="container-fluid">
-    TEST
+     <button
+            type="button"
+            class="btn btn-primary"
+            @click="openView('epi')"
+          > EPI view</button>
+       <button
+            type="button"
+            class="btn btn-primary"
+            @click="openView('bio')"
+          > BIO view</button>
+
   </div>
 </template>
 
@@ -15,9 +25,10 @@ export default {
     this.refresh()
   },
   methods: {
-
     refresh () {
-
+    },
+    openView (view) {
+      this.$router.push({ name: view })
     }
   }
 }
