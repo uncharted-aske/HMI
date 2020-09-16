@@ -35,6 +35,7 @@
 import ChimeGTRI from '../assets/formatted-CHIME-SIR-GTRI.json'
 import ChimeGrFN from '../assets/formatted-CHIME-SIR-GrFN.json'
 import ChimeCAG from '../assets/formatted-CHIME-SIR-CAG.json'
+import ChimeIR from '../assets/formatted-CHIME-IR_CHIME-GTRI-IR.json'
 
 import ModelRenderer from '@/graphs/elk/model-renderer'
 import { layered } from '@/graphs/elk/elk-strategies'
@@ -42,9 +43,9 @@ import { layered } from '@/graphs/elk/elk-strategies'
 export default {
   name: 'EpiView',
   data: () => ({
-    modelsList: ['ChimeGTRI', 'ChimeGrFN', 'ChimeCAG'],
-    selectedModel: 'ChimeGrFN',
-    graphData: ChimeGrFN
+    modelsList: ['ChimeIR', 'ChimeGTRI', 'ChimeCAG', 'ChimeGrFN'],
+    selectedModel: 'ChimeIR',
+    graphData: ChimeIR
   }),
   watch: {
     graphData () {
@@ -66,11 +67,6 @@ export default {
       edgeControlOffset: -20
     })
 
-    // const zoom = this.renderer.zoom();
-    // zoom.on('zoom', ()=> {
-    //   console.log(zoom.scale());
-    // })
-
     // this.renderer.setCallback('nodeClick', (node) => {
     //   const props = node.datum().data;
     //   console.log(props);
@@ -90,6 +86,9 @@ export default {
       this.selectedModel = model
 
       switch (this.selectedModel) {
+        case 'ChimeIR':
+          this.graphData = ChimeIR
+          break
         case 'ChimeGTRI':
           this.graphData = ChimeGTRI
           break
