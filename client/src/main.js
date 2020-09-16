@@ -2,8 +2,7 @@ import Vue from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
+
 
 import App from './App.vue'
 import router from './router'
