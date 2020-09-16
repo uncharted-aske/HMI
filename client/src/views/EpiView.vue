@@ -38,8 +38,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
-
 // Model representations
 import ChimeGTRI from '../assets/formatted-CHIME-SIR-GTRI.json'
 import ChimeGrFN from '../assets/formatted-CHIME-SIR-GrFN.json'
@@ -85,7 +83,9 @@ export default {
   },
   methods: {
     refresh () {
-      // if (_.isEmpty(this.graphData)) return
+      const groups = this.graphData.groups || []
+      this.renderer.setData(this.graphData, { groups })
+      this.renderer.render()
     },
     setModel (e) {
       const model = e.target.value
