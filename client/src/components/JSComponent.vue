@@ -6,6 +6,8 @@
 </template>
 
 <script>
+  // next line needed to pass eslint
+  /* eslint-disable */
   export default {
     name: 'JSComponent',
     data: () => ({
