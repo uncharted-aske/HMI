@@ -10,8 +10,6 @@
 
 <script>
 export default {
-  name: 'NotFound',
-  mounted () {
-  }
+  name: 'NotFound'
 }
 </script>
