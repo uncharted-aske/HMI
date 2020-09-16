@@ -18,10 +18,6 @@
             :selected="item === selectedModel"
           >{{ item }}</option>
         </select>
-        <!-- <button
-          class="btn btn-primary btn-xs"
-          @click="highlight()">Highlight
-        </button> -->
           <div
             ref="test"
             style="width:1000px; height: 800px; border: 1px solid #888"
@@ -53,6 +49,11 @@ export default {
     selectedModel: 'ChimeGrFN',
     graphData: ChimeGrFN
   }),
+  watch: {
+    graphData () {
+      this.refresh()
+    }
+  },
   created () {
     this.renderer = null
   },
