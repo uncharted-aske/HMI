@@ -38,13 +38,15 @@
 </template>
 
 <script>
-// import _ from 'lodash'
-// import * as d3 from 'd3'
+import _ from 'lodash'
 
 // Model representations
 import ChimeGTRI from '../assets/formatted-CHIME-SIR-GTRI.json'
 import ChimeGrFN from '../assets/formatted-CHIME-SIR-GrFN.json'
 import ChimeCAG from '../assets/formatted-CHIME-SIR-CAG.json'
+
+import ModelRenderer from '@/graphs/elk/model-renderer'
+import { layered } from '@/graphs/elk/elk-strategies'
 
 export default {
   name: 'EpiView',
@@ -53,9 +55,37 @@ export default {
     selectedModel: 'ChimeGrFN',
     graphData: ChimeGrFN
   }),
+  created () {
+    this.renderer = null
+  },
+  mounted () {
+    this.renderer = new ModelRenderer({
+      el: this.$refs.test,
+      strategy: layered,
+      nodeWidth: 120,
+      nodeHeight: 30,
+
+      useEdgeControl: false,
+      edgeControlOffsetType: 'unit',
+      edgeControlOffset: -20
+    })
+
+    // const zoom = this.renderer.zoom();
+    // zoom.on('zoom', ()=> {
+    //   console.log(zoom.scale());
+    // })
+
+    // this.renderer.setCallback('nodeClick', (node) => {
+    //   const props = node.datum().data;
+    //   console.log(props);
+    //   // this.parameters = props.parameters;
+    // });
+
+    this.refresh()
+  },
   methods: {
     refresh () {
-
+      // if (_.isEmpty(this.graphData)) return
     },
     setModel (e) {
       const model = e.target.value
