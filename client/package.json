@@ -7,7 +7,7 @@
     "build:scripts": "rollup --config",
     "build:types": "tsc --declaration --emitDeclarationOnly --skipLibCheck --outDir ./dist",
     "clean": "rimraf build",
-    "lint": "eslint --ext .js,.ts,.jsx,.tsx,.vue \"./{src,spec}/**\"",
+    "lint": "eslint \"./{src,spec}/**/*.{js,ts,jsx,tsx,vue}\"",
     "prepack": "run-s clean test lint",
     "start": "yarn watch --config-dev-server",
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.cjs",
