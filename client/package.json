@@ -14,7 +14,12 @@
     "watch": "yarn build:scripts --watch"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.30",
+    "@fortawesome/free-solid-svg-icons": "^5.14.0",
+    "@fortawesome/vue-fontawesome": "^2.0.0",
+    "bootstrap": "^4.5.2",
     "vue": "^2.6.12"
+    "vue-router": "^3.4.3"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
