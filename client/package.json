@@ -3,25 +3,45 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build": "run-p build:**",
+    "build:scripts": "rollup --config",
+    "build:types": "tsc --declaration --emitDeclarationOnly --skipLibCheck --outDir ./dist",
+    "clean": "rimraf build",
+    "lint": "eslint . --ext .js,.ts,.jsx,.tsx,.vue \"./{src,spec}/**\"",
+    "prepack": "run-s clean test lint",
+    "start": "yarn watch --config-dev-server",
+    "test": "karma start --single-run --browsers ChromeHeadless karma.conf.cjs",
+    "watch": "yarn build:scripts --watch"
   },
   "dependencies": {
-    "vue": "^2.6.11"
+    "vue": "^2.6.12"
   },
   "devDependencies": {
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-replace": "^2.3.3",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "@vue/compiler-sfc": "^3.0.0-rc.12",
     "@vue/eslint-config-standard": "^5.1.2",
-    "eslint": "^6.7.2",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint": "^7.9.0",
+    "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
-    "sass": "^1.26.5",
-    "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
+    "globby": "^11.0.1",
+    "live-server": "^1.2.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.27.0",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-sourcemaps": "^0.6.2",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "rollup-plugin-vue": "^5.1.9",
+    "tslib": "^2.0.1",
+    "typescript": "^4.0.2",
+    "vue-class-component": "^7.2.5",
+    "vue-property-decorator": "^9.0.0",
+    "vue-template-compiler": "^2.6.12"
   }
 }
