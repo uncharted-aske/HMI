@@ -10,53 +10,53 @@
  * @param {object} graph - graph
  */
 const _metadata = (graph) => {
-  const incomingMap = {};
-  const outgoingMap = {};
+  const incomingMap = {}
+  const outgoingMap = {}
   graph.edges.forEach(edge => {
-    const source = edge.source;
-    const target = edge.target;
+    const source = edge.source
+    const target = edge.target
 
     if (!{}.hasOwnProperty.call(outgoingMap, source)) {
-      outgoingMap[source] = 1;
+      outgoingMap[source] = 1
     } else {
-      outgoingMap[source] = outgoingMap[source] + 1;
+      outgoingMap[source] = outgoingMap[source] + 1
     }
 
     if (!{}.hasOwnProperty.call(incomingMap, target)) {
-      incomingMap[target] = 1;
+      incomingMap[target] = 1
     } else {
-      incomingMap[target] = incomingMap[target] + 1;
+      incomingMap[target] = incomingMap[target] + 1
     }
-  });
+  })
 
   return {
     incomingMap,
     outgoingMap
-  };
-};
+  }
+}
 
 /**
  * Create edges
  * @param {Object} g - graph
  */
 const createEdges = (g) => {
-  const result = [];
+  const result = []
 
-  const outgoingMap = {};
-  const incomingMap = {};
+  const outgoingMap = {}
+  const incomingMap = {}
 
   g.edges.forEach(edge => {
-    const source = edge.source;
-    const target = edge.target;
+    const source = edge.source
+    const target = edge.target
     if (!{}.hasOwnProperty.call(outgoingMap, source)) {
-      outgoingMap[source] = -1;
+      outgoingMap[source] = -1
     }
     if (!{}.hasOwnProperty.call(incomingMap, target)) {
-      incomingMap[target] = -1;
+      incomingMap[target] = -1
     }
 
-    outgoingMap[source] = outgoingMap[source] + 1;
-    incomingMap[target] = incomingMap[target] + 1;
+    outgoingMap[source] = outgoingMap[source] + 1
+    incomingMap[target] = incomingMap[target] + 1
 
     result.push({
       id: source + ':' + target,
@@ -67,10 +67,10 @@ const createEdges = (g) => {
       targets: [edge.target],
       */
       data: edge
-    });
-  });
-  return result;
-};
+    })
+  })
+  return result
+}
 
 /**
  * Creates nodes
@@ -81,27 +81,27 @@ const createEdges = (g) => {
  * @param {Array} groups
  */
 const createNodes = (g, options) => {
-  const metadata = _metadata(g);
-  const width = options.nodeSize.width;
-  const height = options.nodeSize.height;
-  const result = [];
+  const metadata = _metadata(g)
+  const width = options.nodeSize.width
+  const height = options.nodeSize.height
+  const result = []
 
-  const compoundNodes = {};
+  const compoundNodes = {}
   if (options.groups) {
     options.groups.forEach(g => {
-      compoundNodes[g.id] = [];
-    });
+      compoundNodes[g.id] = []
+    })
   }
 
   g.nodes.forEach(node => {
-    const ports = [];
-    const outgoingPorts = metadata.outgoingMap[node.id] || 0;
-    const incomingPorts = metadata.incomingMap[node.id] || 0;
+    const ports = []
+    const outgoingPorts = metadata.outgoingMap[node.id] || 0
+    const incomingPorts = metadata.incomingMap[node.id] || 0
     for (let i = 0; i < outgoingPorts; i++) {
-      ports.push({ id: `${node.id}:source:${i}`, type: 'outgoing' });
+      ports.push({ id: `${node.id}:source:${i}`, type: 'outgoing' })
     }
     for (let i = 0; i < incomingPorts; i++) {
-      ports.push({ id: `${node.id}:target:${i}`, type: 'incoming' });
+      ports.push({ id: `${node.id}:target:${i}`, type: 'incoming' })
     }
 
     const nodeSpec = {
@@ -116,23 +116,23 @@ const createNodes = (g, options) => {
       data: node,
       ports: ports,
       group: null
-    };
+    }
 
     if (options.groups) {
-      let added = false;
+      let added = false
       options.groups.forEach(g => {
         if (g.members.includes(node.id)) {
-          nodeSpec.group = g.id;
-          compoundNodes[g.id].push(nodeSpec);
-          added = true;
+          nodeSpec.group = g.id
+          compoundNodes[g.id].push(nodeSpec)
+          added = true
         }
-      });
-      if (added === true) return;
+      })
+      if (added === true) return
     }
 
     // Default
-    result.push(nodeSpec);
-  });
+    result.push(nodeSpec)
+  })
 
   // Add compound nodes
   Object.keys(compoundNodes).forEach(key => {
@@ -140,13 +140,11 @@ const createNodes = (g, options) => {
       id: key,
       type: 'container',
       children: compoundNodes[key]
-    });
-  });
+    })
+  })
 
-  return result;
-};
-
-
+  return result
+}
 
 /**
  * Create the basic nodes/edges data structure from a graph model
@@ -160,9 +158,9 @@ export const createGraph = (graph, options) => {
   return {
     nodes: createNodes(graph, options),
     edges: createEdges(graph)
-  };
-};
+  }
+}
 
 export default {
   createGraph
-};
+}
