@@ -1,8 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-12">
-        <h2>Epidemiological View</h2>
+      <div class="col-3">
         <select
          class="custom-select"
           @change="setModel"
@@ -18,17 +17,15 @@
             :selected="item === selectedModel"
           >{{ item }}</option>
         </select>
-          <div
-            ref="test"
-            style="width:1000px; height: 800px; border: 1px solid #888"
-          />
-        <!-- <div class="parallel-views">
-          <div
-            ref="test"
-            style="width:1800px; height: 800px; border: 1px solid #888"
-          />
-        </div> -->
       </div>
+    </div>
+    <div class="row">
+       <div class="col">
+           <div
+            ref="test"
+            style="width:100%; height: 800px;"
+          />
+        </div>
     </div>
   </div>
 </template>
