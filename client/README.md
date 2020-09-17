@@ -1,4 +1,5 @@
-# uncharted-aske-hmi
+# uncharted-aske-hmi-client
+![client](https://github.com/uncharted-aske/HMI/workflows/client/badge.svg)
 
 ## Project setup
 ```
