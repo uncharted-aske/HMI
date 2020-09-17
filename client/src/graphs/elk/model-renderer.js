@@ -67,7 +67,13 @@ export default class ModelRenderer extends ELKBaseRenderer {
 
       // Distinguish constants from variables
       rect.filter(d => !_.isNil(d.data.type))
-        .style('fill', d => d.data.type === 'constant' ? '#9ebcda' : '#e0ecf4')
+        .style('fill', d => {
+          if (d.data.type === 'constant' || d.data.type === 'function' || d.data.type === 'transition') {
+            return '#9ebcda'
+          } else if (d.data.type === 'variable' || d.data.type === 'state') {
+            return '#e0ecf4'
+          }
+        })
 
       node.append('text')
         .attr('x', 10)
@@ -108,6 +114,25 @@ export default class ModelRenderer extends ELKBaseRenderer {
         const target = d.data.target.replace(/\s/g, '')
         return `url(#start-${source}-${target})`
       })
+
+    edges.filter(d => !_.isNil(d.data.metadata))
+      .append('text')
+      .attr('x', d => {
+        const coords = d.sections[0]
+        const sourceX = coords.startPoint.x
+        const targetX = coords.endPoint.x
+        return ((sourceX + targetX) / 2)
+      })
+      .attr('y', d => {
+        const coords = d.sections[0]
+        const sourceY = coords.startPoint.y
+        const targetY = coords.endPoint.y
+        return ((sourceY + targetY) / 2)
+      })
+      .attr('dy', -5)
+      .style('fill', '#808080')
+      .style('font-size', '12')
+      .text(d => d.data.metadata.multiplicity)
 
     d3.selectAll('.edge').style('opacity', 0)
       .transition()
