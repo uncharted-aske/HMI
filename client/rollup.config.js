@@ -40,12 +40,16 @@ function liveServer (options = {}) {
   };
 }
 
-function generateClientConfig (dist = false, startDevServer = false) {
+function inputForType (type) {
+  if (type === 'test') {
+    return undefined;
+  }
+
   const input = {};
 
-  if (dist) {
+  if (type === 'dist') {
     input['js/main'] = 'build/js/main.js';
-  } else {
+  } else if (type === 'build') {
     globby.sync([
       path.join('src/', '/**/*.{ts,js}'),
       `!${path.join('src/', '/**/*.d.ts')}`,
@@ -56,87 +60,121 @@ function generateClientConfig (dist = false, startDevServer = false) {
     });
   }
 
-  const buildPlugins = [
-    replace({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL),
-    }),
-    alias({
-      entries: [
-        { find: /^@\/(.*)$/, replacement: path.join(__dirname, 'src/', '$1') },
-      ],
-    }),
-    resolve({
-      extensions,
-      jsnext: true,
-      browser: true,
-      preferBuiltins: false,
-    }),
-    commonjs(),
-    typescript({
-      typescript: require('typescript'),
-      cacheRoot: path.resolve(__dirname, '.rts2_cache'),
-    }),
-    vue({
-      needMap: false,
-      style: {
-        preprocessOptions: {
-          scss: {
-            includePaths: ['../node_modules'],
-          },
-        },
+  return { input };
+}
+
+function outputForType (type) {
+  if (type === 'test') {
+    return {
+      output: {
+        format: 'iife',
+        name: 'HMI',
+        sourcemap: 'inline',
       },
-    }),
-  ];
+    };
+  }
 
-  const distPlugins = [
-    copy({
-      targets: [
-        { src: 'src/static/*', dest: 'dist' },
-      ],
-    }),
-  ];
-
-  const config = {
-    input: input,
-    treeshake: true,
-
+  return {
     output: {
-      dir: dist ? distDir : buildDir,
+      dir: type === 'dist' ? distDir : buildDir,
       format: 'esm',
-      sourcemap: !dist,
+      sourcemap: type !== 'dist',
       chunkFileNames: 'web_modules/[name].js',
       // paths: id => console.log(id),
     },
-
-    plugins: dist ? distPlugins : buildPlugins,
-
-    watch: {
-      clearScreen: false,
-    },
   };
+}
 
-  if (!dist) {
-    config.manualChunks = function (id) {
-      if (id.includes('tslib.js')) {
-        return 'tslib';
-      }
-
-      if (id.includes('node_modules/')) {
-        const parsed = path.parse(id);
-        const folders = parsed.dir.split('/');
-        while (folders.shift() !== 'node_modules') {}
-        if (folders.length > 1 && folders[0].startsWith('@')) {
-          return path.join(folders[0], folders[1]);
-        }
-        return folders[0];
-      }
-
-      if (!path.isAbsolute(id)) {
-        return id;
-      }
+function pluginsForType (type) {
+  if (type === 'dist') {
+    return {
+      plugins: [
+        copy({
+          targets: [
+            { src: 'src/static/*', dest: 'dist' },
+          ],
+        }),
+      ],
     };
   }
+
+  return {
+    plugins: [
+      replace({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL),
+      }),
+      alias({
+        entries: [
+          { find: /^@\/(.*)$/, replacement: path.join(__dirname, 'src/', '$1') },
+        ],
+      }),
+      resolve({
+        extensions,
+        jsnext: true,
+        browser: true,
+        preferBuiltins: false,
+      }),
+      commonjs(),
+      typescript({
+        typescript: require('typescript'),
+        cacheRoot: path.resolve(__dirname, '.rts2_cache'),
+      }),
+      vue({
+        needMap: false,
+        style: {
+          preprocessOptions: {
+            scss: {
+              includePaths: ['../node_modules'],
+            },
+          },
+        },
+      }),
+    ],
+  };
+}
+
+function chunksForType (type) {
+  if (type === 'build') {
+    return {
+      manualChunks: function (id) {
+        if (id.includes('tslib.js')) {
+          return 'tslib';
+        }
+
+        if (id.includes('node_modules/')) {
+          const parsed = path.parse(id);
+          const folders = parsed.dir.split('/');
+          while (folders.shift() !== 'node_modules') {}
+          if (folders.length > 1 && folders[0].startsWith('@')) {
+            return path.join(folders[0], folders[1]);
+          }
+          return folders[0];
+        }
+
+        if (!path.isAbsolute(id)) {
+          return id;
+        }
+      },
+    };
+  }
+
+  return undefined;
+}
+
+function generateClientConfig (type, startDevServer = false) {
+  const config = Object.assign(
+    {
+      treeshake: true,
+      watch: {
+        clearScreen: false,
+      },
+    },
+    inputForType(type),
+    outputForType(type),
+    pluginsForType(type),
+    chunksForType(type),
+  );
 
   if (startDevServer) {
     config.plugins.push(sourceMaps());
@@ -161,7 +199,9 @@ function generateClientConfig (dist = false, startDevServer = false) {
 
 module.exports = function generator (args) {
   const config = [];
-  config.push(generateClientConfig(args['config-dist'], args['config-dev-server']));
+
+  const type = (args['config-dist'] && 'dist') || (args['config-test'] && 'test') || 'build';
+  config.push(generateClientConfig(type, args['config-dev-server']));
 
   return config;
 };

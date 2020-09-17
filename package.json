@@ -11,7 +11,7 @@
     "test": "yarn workspaces run test",
     "pre-push": "run-p pre-push:**",
     "pre-push:lint": "yarn lint",
-    "_pre-push:test": "yarn test"
+    "pre-push:test": "yarn test"
   },
   "husky": {
     "hooks": {
