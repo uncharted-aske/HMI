@@ -108,7 +108,6 @@ const createNodes = (g, options) => {
       id: node.id,
       concept: node.concept,
       label: node.label,
-      display: node.display,
       type: 'node',
       width,
       height,

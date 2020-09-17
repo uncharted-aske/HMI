@@ -33,7 +33,7 @@ export default class ModelRenderer extends ELKBaseRenderer {
     groups.append('text')
       .attr('x', 10)
       .attr('y', 0)
-      .style('fill', '#333')
+      .style('fill', '#808080')
       .style('font-weight', '600')
       .text(d => d.id)
 
@@ -55,15 +55,19 @@ export default class ModelRenderer extends ELKBaseRenderer {
           return svgUtil.translate(d.x, d.y)
         })
 
-      node
+      const rect = node
         .append('rect')
         .attr('x', 0)
         .attr('y', 0)
         .attr('width', d => d.width)
         .attr('height', d => d.height)
-        .style('fill', d => d.data.isRewardVar ? '#56b3e9' : '#EFF')
+        .style('fill', '#e0ecf4')
         .style('stroke', '#888')
         .style('stroke-width', 2)
+
+      // Distinguish constants from variables
+      rect.filter(d => !_.isNil(d.data.type))
+        .style('fill', d => d.data.type === 'constant' ? '#9ebcda' : '#e0ecf4')
 
       node.append('text')
         .attr('x', 10)

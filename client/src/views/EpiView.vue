@@ -35,7 +35,7 @@
 import ChimeGTRI from '../assets/formatted-CHIME-SIR-GTRI.json'
 import ChimeGrFN from '../assets/formatted-CHIME-SIR-GrFN.json'
 import ChimeCAG from '../assets/formatted-CHIME-SIR-CAG.json'
-import ChimeIR from '../assets/formatted-CHIME-IR_CHIME-GTRI-IR.json'
+import ChimeIR from '../assets/formatted-CHIME-IR_CHIME-GTRI-IR'
 
 import ModelRenderer from '@/graphs/elk/model-renderer'
 import { layered } from '@/graphs/elk/elk-strategies'
