@@ -11,7 +11,8 @@ const server = require('live-server');
 const copy = require('rollup-plugin-copy');
 const alias = require('@rollup/plugin-alias');
 
-const buildDir = path.resolve(__dirname, 'dist');
+const buildDir = path.resolve(__dirname, 'build');
+const distDir = path.resolve(__dirname, 'dist');
 
 const extensions = [
   '.js', '.jsx', '.ts', '.tsx',
@@ -39,65 +40,84 @@ function liveServer (options = {}) {
   };
 }
 
-function generateClientConfig (startDevServer = false) {
+function generateClientConfig (dist = false, startDevServer = false) {
   const input = {};
-  globby.sync([
-    path.join('src/', '/**/*.{ts,js}'),
-    `!${path.join('src/', '/**/*.d.ts')}`,
-    path.join('src/', '/**/*.vue'),
-  ]).forEach(file => {
-    const parsed = path.parse(file);
-    input[path.join('js', parsed.dir.substr('src/'.length), parsed.ext === '.vue' ? parsed.base : parsed.name)] = file;
-  });
+
+  if (dist) {
+    input['js/main'] = 'build/js/main.js';
+  } else {
+    globby.sync([
+      path.join('src/', '/**/*.{ts,js}'),
+      `!${path.join('src/', '/**/*.d.ts')}`,
+      path.join('src/', '/**/*.vue'),
+    ]).forEach(file => {
+      const parsed = path.parse(file);
+      input[path.join('js', parsed.dir.substr('src/'.length), parsed.ext === '.vue' ? parsed.base : parsed.name)] = file;
+    });
+  }
+
+  const buildPlugins = [
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL),
+    }),
+    alias({
+      entries: [
+        { find: /^@\/(.*)$/, replacement: path.join(__dirname, 'src/', '$1') },
+      ],
+    }),
+    resolve({
+      extensions,
+      jsnext: true,
+      browser: true,
+      preferBuiltins: false,
+    }),
+    commonjs(),
+    typescript({
+      typescript: require('typescript'),
+      cacheRoot: path.resolve(__dirname, '.rts2_cache'),
+    }),
+    vue({
+      needMap: false,
+      style: {
+        preprocessOptions: {
+          scss: {
+            includePaths: ['../node_modules'],
+          },
+        },
+      },
+    }),
+  ];
+
+  const distPlugins = [
+    copy({
+      targets: [
+        { src: 'src/static/*', dest: 'dist' },
+      ],
+    }),
+  ];
 
   const config = {
     input: input,
     treeshake: true,
 
     output: {
-      dir: buildDir,
+      dir: dist ? distDir : buildDir,
       format: 'esm',
-      sourcemap: true,
+      sourcemap: !dist,
       chunkFileNames: 'web_modules/[name].js',
       // paths: id => console.log(id),
     },
 
-    plugins: [
-      replace({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-        'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL),
-      }),
-      alias({
-        entries: [
-          { find: /^@\/(.*)$/, replacement: path.join(__dirname, 'src/', '$1') },
-        ],
-      }),
-      resolve({
-        extensions,
-        jsnext: true,
-        browser: true,
-        preferBuiltins: false,
-      }),
-      commonjs(),
-      typescript({
-        typescript: require('typescript'),
-        cacheRoot: path.resolve(__dirname, '.rts2_cache'),
-      }),
-      vue({
-        needMap: false,
-      }),
-      copy({
-        targets: [
-          { src: 'src/static/*', dest: 'dist' },
-        ],
-      }),
-    ],
+    plugins: dist ? distPlugins : buildPlugins,
 
     watch: {
       clearScreen: false,
     },
+  };
 
-    manualChunks (id) {
+  if (!dist) {
+    config.manualChunks = function (id) {
       if (id.includes('tslib.js')) {
         return 'tslib';
       }
@@ -115,8 +135,8 @@ function generateClientConfig (startDevServer = false) {
       if (!path.isAbsolute(id)) {
         return id;
       }
-    },
-  };
+    };
+  }
 
   if (startDevServer) {
     config.plugins.push(sourceMaps());
@@ -128,10 +148,10 @@ function generateClientConfig (startDevServer = false) {
       open: false,
       wait: 500,
       // proxy: [['/api', 'http://127.0.0.1:8080']], // not needed for now, used to proxy to the server API
-      watch: [path.resolve(__dirname, 'dist/js')],
+      watch: [path.resolve(__dirname, 'build/js')],
       mount: [
-        ['/js', path.resolve(__dirname, 'dist/js')],
-        ['/web_modules', path.resolve(__dirname, 'dist/web_modules')],
+        ['/js', path.resolve(__dirname, 'build/js')],
+        ['/web_modules', path.resolve(__dirname, 'build/web_modules')],
       ],
     }));
   }
@@ -141,7 +161,7 @@ function generateClientConfig (startDevServer = false) {
 
 module.exports = function generator (args) {
   const config = [];
-  config.push(generateClientConfig(args['config-dev-server']));
+  config.push(generateClientConfig(args['config-dist'], args['config-dev-server']));
 
   return config;
 };

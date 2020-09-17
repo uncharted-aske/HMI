@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "run-p build:**",
-    "build:scripts": "rollup --config",
-    "build:types": "tsc --declaration --emitDeclarationOnly --skipLibCheck --outDir ./dist/js",
+    "build": "run-s build:scripts build:dist",
+    "build:scripts": "rollup --config --config-build",
+    "build:dist": "rollup --config --config-dist",
     "clean": "rimraf build",
     "lint": "eslint \"./{src,spec}/**/*.{js,ts,jsx,tsx,vue}\"",
     "prepack": "run-s clean test lint",
