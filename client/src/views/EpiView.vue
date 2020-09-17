@@ -40,6 +40,9 @@ import ChimeGrFN from '../assets/formatted-CHIME-SIR-GrFN.json'
 import ChimeCAG from '../assets/formatted-CHIME-SIR-CAG.json'
 import ChimeIR from '../assets/formatted-CHIME-IR_CHIME-GTRI-IR'
 
+import DSSATPetasceCAG from '../assets/formatted-PETASCE-CAG'
+import DSSATPetasceGrFN from '../assets/formatted-PETASCE-GrFN'
+
 import ModelRenderer from '@/graphs/elk/model-renderer'
 import { layered } from '@/graphs/elk/elk-strategies'
 import { showTooltip, hideTooltip } from '@/utils/svg-util'
@@ -47,7 +50,7 @@ import { showTooltip, hideTooltip } from '@/utils/svg-util'
 export default {
   name: 'EpiView',
   data: () => ({
-    modelsList: ['ChimeIR', 'ChimeGTRI', 'ChimeCAG', 'ChimeGrFN'],
+    modelsList: ['ChimeIR', 'ChimeGTRI', 'ChimeCAG', 'ChimeGrFN', 'DSSATPetasceCAG', 'DSSATPetasceGrFN'],
     selectedModel: 'ChimeIR',
     graphData: ChimeIR
   }),
@@ -74,15 +77,16 @@ export default {
     this.renderer.setCallback('nodeMouseEnter', (node) => {
       const nodeData = node.datum()
       let nodeCoords = []
-      const metadata = nodeData.data.metadata
+      const metadata = JSON.stringify(nodeData.data.metadata).split(',')
       if (_.isNil(nodeData.group)) {
         nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)]
       } else {
+        // For nodes inside groups
         const groups = this.renderer.layout.groups
         const group = groups.find(g => g.id === nodeData.group)
         nodeCoords = [group.x + nodeData.x, group.y + nodeData.y]
       }
-      showTooltip(this.renderer.chart, JSON.stringify(metadata), nodeCoords)
+      showTooltip(this.renderer.chart, metadata, nodeCoords)
     })
 
     this.renderer.setCallback('nodeMouseLeave', (node) => {
@@ -113,6 +117,12 @@ export default {
           break
         case 'ChimeCAG':
           this.graphData = ChimeCAG
+          break
+        case 'DSSATPetasceGrFN':
+          this.graphData = DSSATPetasceGrFN
+          break
+        case 'DSSATPetasceCAG':
+          this.graphData = DSSATPetasceCAG
           break
         default:
           console.error('Switching to invalid dataset: ' + this.selectedModel)
