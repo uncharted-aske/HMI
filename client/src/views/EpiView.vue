@@ -39,6 +39,7 @@ import ChimeIR from '../assets/formatted-CHIME-IR_CHIME-GTRI-IR'
 
 import ModelRenderer from '@/graphs/elk/model-renderer'
 import { layered } from '@/graphs/elk/elk-strategies'
+import { showTooltip, hideTooltip } from '@/utils/svg-util'
 
 export default {
   name: 'EpiView',
@@ -67,11 +68,15 @@ export default {
       edgeControlOffset: -20
     })
 
-    // this.renderer.setCallback('nodeClick', (node) => {
-    //   const props = node.datum().data;
-    //   console.log(props);
-    //   // this.parameters = props.parameters;
-    // });
+    this.renderer.setCallback('nodeMouseEnter', (node) => {
+      const nodeCoords = [node.datum().x + (node.datum().width * 0.5), node.datum().y + (node.datum().height * 0.5)]
+      const metadata = node.datum().data.metadata
+      showTooltip(this.renderer.chart, JSON.stringify(metadata), nodeCoords)
+    })
+
+    this.renderer.setCallback('nodeMouseLeave', (node) => {
+      hideTooltip(this.renderer.chart)
+    })
 
     this.refresh()
   },
