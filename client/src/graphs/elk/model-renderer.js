@@ -115,7 +115,7 @@ export default class ModelRenderer extends ELKBaseRenderer {
         return `url(#start-${source}-${target})`
       })
 
-    edges.filter(d => !_.isNil(d.data.metadata))
+    edges.filter(d => !_.isNil(d.data.metadata) && d.data.metadata.multiplicity > 1)
       .append('text')
       .attr('x', d => {
         const coords = d.sections[0]
