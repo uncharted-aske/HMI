@@ -9,9 +9,9 @@ const replace = require('@rollup/plugin-replace');
 const globby = require('globby');
 const server = require('live-server');
 const copy = require('rollup-plugin-copy');
+const alias = require('@rollup/plugin-alias');
 
 const buildDir = path.resolve(__dirname, 'dist');
-const clientDir = path.resolve(buildDir, 'scripts');
 
 const extensions = [
   '.js', '.jsx', '.ts', '.tsx',
@@ -42,12 +42,12 @@ function liveServer (options = {}) {
 function generateClientConfig (startDevServer = false) {
   const input = {};
   globby.sync([
-    path.join('src/', '/**/*.ts'),
+    path.join('src/', '/**/*.{ts,js}'),
     `!${path.join('src/', '/**/*.d.ts')}`,
     path.join('src/', '/**/*.vue'),
   ]).forEach(file => {
     const parsed = path.parse(file);
-    input[path.join(parsed.dir.substr('src/'.length), parsed.ext === '.vue' ? parsed.base : parsed.name)] = file;
+    input[path.join('js', parsed.dir.substr('src/'.length), parsed.ext === '.vue' ? parsed.base : parsed.name)] = file;
   });
 
   const config = {
@@ -55,16 +55,22 @@ function generateClientConfig (startDevServer = false) {
     treeshake: true,
 
     output: {
-      dir: clientDir,
+      dir: buildDir,
       format: 'esm',
-      sourcemap: startDevServer,
-      chunkFileNames: 'dependencies/[name].js',
+      sourcemap: true,
+      chunkFileNames: 'web_modules/[name].js',
       // paths: id => console.log(id),
     },
 
     plugins: [
       replace({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL),
+      }),
+      alias({
+        entries: [
+          { find: /^@\/(.*)$/, replacement: path.join(__dirname, 'src/', '$1') },
+        ],
       }),
       resolve({
         extensions,
@@ -101,7 +107,7 @@ function generateClientConfig (startDevServer = false) {
         const folders = parsed.dir.split('/');
         while (folders.shift() !== 'node_modules') {}
         if (folders.length > 1 && folders[0].startsWith('@')) {
-          return `${folders[0]}/${folders[1]}`;
+          return path.join(folders[0], folders[1]);
         }
         return folders[0];
       }
@@ -122,9 +128,10 @@ function generateClientConfig (startDevServer = false) {
       open: false,
       wait: 500,
       // proxy: [['/api', 'http://127.0.0.1:8080']], // not needed for now, used to proxy to the server API
-      watch: [path.resolve(__dirname, 'dist/scripts')],
+      watch: [path.resolve(__dirname, 'dist/js')],
       mount: [
-        ['/scripts', path.resolve(__dirname, 'dist/scripts')],
+        ['/js', path.resolve(__dirname, 'dist/js')],
+        ['/web_modules', path.resolve(__dirname, 'dist/web_modules')],
       ],
     }));
   }
