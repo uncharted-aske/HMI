@@ -4,7 +4,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import App from './App.vue';
-import router from './router';
+import { createRouter } from './router';
 
 library.add(faExclamationTriangle);
 
@@ -13,7 +13,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 async function main (): Promise<void> {
   const app = new Vue({
-    router,
+    router: createRouter(Vue),
     render: (h: any): VNode => h(App),
   });
   app.$mount('body');
