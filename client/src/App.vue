@@ -11,7 +11,7 @@
 </script>
 
 <style lang="scss">
-@import '~bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap/dist/css/bootstrap.min';
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
