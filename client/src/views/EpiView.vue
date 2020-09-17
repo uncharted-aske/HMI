@@ -4,11 +4,10 @@
   </div>
 </template>
 
-<script>
-
-export default {
-  name: 'EpiView'
-}
+<script lang="ts">
+  export default {
+    name: 'EpiView',
+  };
 </script>
 
 <style lang="scss" scoped>

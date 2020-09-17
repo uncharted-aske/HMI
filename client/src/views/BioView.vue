@@ -4,11 +4,10 @@
   </div>
 </template>
 
-<script>
-
-export default {
-  name: 'BioView'
-}
+<script lang="ts">
+  export default {
+    name: 'BioView',
+  };
 </script>
 
 <style lang="scss" scoped>
