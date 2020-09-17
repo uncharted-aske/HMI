@@ -55,14 +55,16 @@ export default class ModelRenderer extends ELKBaseRenderer {
           return svgUtil.translate(d.x, d.y)
         })
 
+      // Draw circles for state nodes in Petri Net representation
       node.filter(d => d.data.type === 'state')
         .append('circle')
-        .attr('r', d => d.width * 0.55)
+        .attr('r', d => d.width * 0.5)
         .attr('cx', d => d.width * 0.5)
         .attr('cy', d => d.width * 0.5)
         .style('fill', '#e0ecf4')
         .style('stroke', '#888')
 
+      // Draw rectangles for the rest of node types
       const rect = node.filter(d => d.data.type !== 'state')
         .append('rect')
         .attr('x', 0)
@@ -84,10 +86,19 @@ export default class ModelRenderer extends ELKBaseRenderer {
         })
 
       node
-        .filter(d => d.data.type !== 'transition')
+        .filter(d => d.data.type !== 'transition' && d.data.type !== 'state')
         .append('text')
         .attr('x', 10)
         .attr('y', 20)
+        .style('fill', '#333')
+        .style('font-weight', '600')
+        .text(d => d.data.label)
+
+      node
+        .filter(d => d.data.type === 'state')
+        .append('text')
+        .attr('x', d => d.width * 0.5)
+        .attr('y', d => d.width * 0.5)
         .style('fill', '#333')
         .style('font-weight', '600')
         .text(d => d.data.label)
