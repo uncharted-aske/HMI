@@ -31,6 +31,9 @@
 </template>
 
 <script>
+import _ from 'lodash'
+// import * as d3 from 'd3'
+
 // Model representations
 import ChimeGTRI from '../assets/formatted-CHIME-SIR-GTRI.json'
 import ChimeGrFN from '../assets/formatted-CHIME-SIR-GrFN.json'
@@ -69,8 +72,16 @@ export default {
     })
 
     this.renderer.setCallback('nodeMouseEnter', (node) => {
-      const nodeCoords = [node.datum().x + (node.datum().width * 0.5), node.datum().y + (node.datum().height * 0.5)]
-      const metadata = node.datum().data.metadata
+      const nodeData = node.datum()
+      let nodeCoords = []
+      const metadata = nodeData.data.metadata
+      if (_.isNil(nodeData.group)) {
+        nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)]
+      } else {
+        const groups = this.renderer.layout.groups
+        const group = groups.find(g => g.id === nodeData.group)
+        nodeCoords = [group.x + nodeData.x, group.y + nodeData.y]
+      }
       showTooltip(this.renderer.chart, JSON.stringify(metadata), nodeCoords)
     })
 
