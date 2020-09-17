@@ -55,7 +55,15 @@ export default class ModelRenderer extends ELKBaseRenderer {
           return svgUtil.translate(d.x, d.y)
         })
 
-      const rect = node
+      node.filter(d => d.data.type === 'state')
+        .append('circle')
+        .attr('r', d => d.width * 0.55)
+        .attr('cx', d => d.width * 0.5)
+        .attr('cy', d => d.width * 0.5)
+        .style('fill', '#e0ecf4')
+        .style('stroke', '#888')
+
+      const rect = node.filter(d => d.data.type !== 'state')
         .append('rect')
         .attr('x', 0)
         .attr('y', 0)
@@ -70,12 +78,14 @@ export default class ModelRenderer extends ELKBaseRenderer {
         .style('fill', d => {
           if (d.data.type === 'constant' || d.data.type === 'function' || d.data.type === 'transition') {
             return '#9ebcda'
-          } else if (d.data.type === 'variable' || d.data.type === 'state') {
+          } else if (d.data.type === 'variable') {
             return '#e0ecf4'
-          }
+          } else return '#e0ecf4'
         })
 
-      node.append('text')
+      node
+        .filter(d => d.data.type !== 'transition')
+        .append('text')
         .attr('x', 10)
         .attr('y', 20)
         .style('fill', '#333')
@@ -100,7 +110,9 @@ export default class ModelRenderer extends ELKBaseRenderer {
       .append('path')
       .classed('edge-path', true)
       .attr('cursor', 'pointer')
-      .attr('d', d => pathFn(d.points))
+      .attr('d', d => {
+        return pathFn(d.points)
+      })
       .style('fill', 'none')
       .style('stroke', 'black')
       .style('stroke-width', 2)
@@ -129,9 +141,10 @@ export default class ModelRenderer extends ELKBaseRenderer {
         const targetY = coords.endPoint.y
         return ((sourceY + targetY) / 2)
       })
-      .attr('dy', -5)
+      .attr('dy', -15)
       .style('fill', '#808080')
-      .style('font-size', '12')
+      .style('font-size', '14')
+      .style('font-weight', '600')
       .text(d => d.data.metadata.multiplicity)
 
     d3.selectAll('.edge').style('opacity', 0)

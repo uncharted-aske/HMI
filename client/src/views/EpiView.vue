@@ -32,7 +32,6 @@
 
 <script>
 import _ from 'lodash'
-// import * as d3 from 'd3'
 
 // Model representations
 import ChimeGTRI from '../assets/formatted-CHIME-SIR-GTRI.json'
@@ -47,12 +46,23 @@ import ModelRenderer from '@/graphs/elk/model-renderer'
 import { layered } from '@/graphs/elk/elk-strategies'
 import { showTooltip, hideTooltip } from '@/utils/svg-util'
 
+const DEFAULT_RENDERING_OPTIONS = {
+  nodeWidth: 120,
+  nodeHeight: 30
+}
+
+const PETRI_NET_RENDERING_OPTIONS = {
+  nodeWidth: 50,
+  nodeHeight: 70
+}
+
 export default {
   name: 'EpiView',
   data: () => ({
     modelsList: ['ChimeIR', 'ChimeGTRI', 'ChimeCAG', 'ChimeGrFN', 'DSSATPetasceCAG', 'DSSATPetasceGrFN'],
     selectedModel: 'ChimeIR',
-    graphData: ChimeIR
+    graphData: ChimeIR,
+    renderingOptions: DEFAULT_RENDERING_OPTIONS
   }),
   watch: {
     graphData () {
@@ -63,40 +73,38 @@ export default {
     this.renderer = null
   },
   mounted () {
-    this.renderer = new ModelRenderer({
-      el: this.$refs.test,
-      strategy: layered,
-      nodeWidth: 120,
-      nodeHeight: 30,
-
-      useEdgeControl: false,
-      edgeControlOffsetType: 'unit',
-      edgeControlOffset: -20
-    })
-
-    this.renderer.setCallback('nodeMouseEnter', (node) => {
-      const nodeData = node.datum()
-      let nodeCoords = []
-      const metadata = JSON.stringify(nodeData.data.metadata).split(',')
-      if (_.isNil(nodeData.group)) {
-        nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)]
-      } else {
-        // For nodes inside groups
-        const groups = this.renderer.layout.groups
-        const group = groups.find(g => g.id === nodeData.group)
-        nodeCoords = [group.x + nodeData.x, group.y + nodeData.y]
-      }
-      showTooltip(this.renderer.chart, metadata, nodeCoords)
-    })
-
-    this.renderer.setCallback('nodeMouseLeave', (node) => {
-      hideTooltip(this.renderer.chart)
-    })
-
     this.refresh()
   },
   methods: {
     refresh () {
+      this.renderer = new ModelRenderer(Object.assign({}, {
+        el: this.$refs.test,
+        strategy: layered,
+
+        useEdgeControl: false,
+        edgeControlOffsetType: 'unit',
+        edgeControlOffset: -20
+      }, this.renderingOptions))
+
+      this.renderer.setCallback('nodeMouseEnter', (node) => {
+        const nodeData = node.datum()
+        let nodeCoords = []
+        const metadata = JSON.stringify(nodeData.data.metadata)
+        if (_.isNil(nodeData.group)) {
+          nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)]
+        } else {
+          // For nodes inside groups
+          const groups = this.renderer.layout.groups
+          const group = groups.find(g => g.id === nodeData.group)
+          nodeCoords = [group.x + nodeData.x, group.y + nodeData.y]
+        }
+        showTooltip(this.renderer.chart, metadata, nodeCoords)
+      })
+
+      this.renderer.setCallback('nodeMouseLeave', (node) => {
+        hideTooltip(this.renderer.chart)
+      })
+
       const groups = this.graphData.groups || []
       this.renderer.setData(this.graphData, { groups })
       this.renderer.render()
@@ -107,21 +115,27 @@ export default {
 
       switch (this.selectedModel) {
         case 'ChimeIR':
+          this.renderingOptions = DEFAULT_RENDERING_OPTIONS
           this.graphData = ChimeIR
           break
         case 'ChimeGTRI':
+          this.renderingOptions = PETRI_NET_RENDERING_OPTIONS
           this.graphData = ChimeGTRI
           break
         case 'ChimeGrFN':
+          this.renderingOptions = DEFAULT_RENDERING_OPTIONS
           this.graphData = ChimeGrFN
           break
         case 'ChimeCAG':
+          this.renderingOptions = DEFAULT_RENDERING_OPTIONS
           this.graphData = ChimeCAG
           break
         case 'DSSATPetasceGrFN':
+          this.renderingOptions = DEFAULT_RENDERING_OPTIONS
           this.graphData = DSSATPetasceGrFN
           break
         case 'DSSATPetasceCAG':
+          this.renderingOptions = DEFAULT_RENDERING_OPTIONS
           this.graphData = DSSATPetasceCAG
           break
         default:
