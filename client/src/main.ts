@@ -6,9 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './App.vue';
 import router from './router';
 
-library.add(faExclamationTriangle)
+library.add(faExclamationTriangle);
 
-Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 // Vue.config.productionTip = false
 
 async function main (): Promise<void> {
