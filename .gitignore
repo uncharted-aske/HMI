@@ -1,7 +1,10 @@
 .DS_Store
 node_modules
-/dist
+dist/
+build/
 
+# TypeScript intemediate files
+.rts2_cache/
 
 # local env files
 .env.local

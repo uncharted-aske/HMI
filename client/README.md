@@ -1,24 +1,22 @@
-# uncharted-aske-hmi
+# uncharted-aske-hmi-client
+![client](https://github.com/uncharted-aske/HMI/workflows/client/badge.svg)
 
 ## Project setup
 ```
-npm install
+yarn install
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+yarn start
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+yarn build
 ```
 
 ### Lints and fixes files
 ```
-npm run lint
+yarn lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
