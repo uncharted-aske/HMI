@@ -11,7 +11,7 @@ RUN cd /client && \
     rm -rf node_modules && \
     yarn install && \
     yarn cache clean && \
-    yarn build:prod
+    NODE_ENV="production" yarn build
 
 FROM nginx:1.19.2
 

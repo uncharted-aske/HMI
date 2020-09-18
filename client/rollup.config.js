@@ -18,13 +18,13 @@ const extensions = [
   '.js', '.jsx', '.ts', '.tsx',
 ];
 
-// Environments client is being configured for
+// Environments configuration is being generated for
 const environments = {
-  DEV: 'dev',
-  PROD: 'prod',
+  DEV: 'development',
+  PROD: 'production',
 };
 
-// Types of configuration modes
+// Types of configurations to generate
 const types = {
   BUILD: 'build',
   DIST: 'dist',
@@ -223,7 +223,7 @@ module.exports = function generator (args) {
   }
 
   let env;
-  if (args['config-prod']) {
+  if (process.env.NODE_ENV === environments.PROD) {
     env = environments.PROD;
   } else {
     env = environments.DEV;
