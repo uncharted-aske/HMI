@@ -18,6 +18,19 @@ const extensions = [
   '.js', '.jsx', '.ts', '.tsx',
 ];
 
+// Environments client is being configured for
+const environments = {
+  DEV: 'dev',
+  PROD: 'prod',
+};
+
+// Types of configuration modes
+const types = {
+  BUILD: 'build',
+  DIST: 'dist',
+  TEST: 'test',
+};
+
 function liveServer (options = {}) {
   const defaultParams = {
     file: 'index.html',
@@ -41,15 +54,15 @@ function liveServer (options = {}) {
 }
 
 function inputForType (type) {
-  if (type === 'test') {
+  if (type === types.TEST) {
     return undefined;
   }
 
   const input = {};
 
-  if (type === 'dist') {
+  if (type === types.DIST) {
     input['js/main'] = 'build/js/main.js';
-  } else if (type === 'build') {
+  } else if (type === types.BUILD) {
     globby.sync([
       path.join('src/', '/**/*.{ts,js}'),
       `!${path.join('src/', '/**/*.d.ts')}`,
@@ -64,7 +77,7 @@ function inputForType (type) {
 }
 
 function outputForType (type) {
-  if (type === 'test') {
+  if (type === types.TEST) {
     return {
       output: {
         format: 'iife',
@@ -76,17 +89,17 @@ function outputForType (type) {
 
   return {
     output: {
-      dir: type === 'dist' ? distDir : buildDir,
+      dir: type === types.DIST ? distDir : buildDir,
       format: 'esm',
-      sourcemap: type !== 'dist',
+      sourcemap: type !== types.DIST,
       chunkFileNames: 'web_modules/[name].js',
       // paths: id => console.log(id),
     },
   };
 }
 
-function pluginsForType (type) {
-  if (type === 'dist') {
+function pluginsForType (type, env) {
+  if (type === types.DIST) {
     return {
       plugins: [
         copy({
@@ -125,7 +138,7 @@ function pluginsForType (type) {
         style: {
           preprocessOptions: {
             scss: {
-              includePaths: ['../node_modules'],
+              includePaths: env === environments.DEV ? ['../node_modules'] : ['./node_modules'],
             },
           },
         },
@@ -135,7 +148,7 @@ function pluginsForType (type) {
 }
 
 function chunksForType (type) {
-  if (type === 'build') {
+  if (type === types.BUILD) {
     return {
       manualChunks: function (id) {
         if (id.includes('tslib.js')) {
@@ -162,7 +175,7 @@ function chunksForType (type) {
   return undefined;
 }
 
-function generateClientConfig (type, startDevServer = false) {
+function generateClientConfig (type, env) {
   const config = Object.assign(
     {
       treeshake: true,
@@ -172,11 +185,11 @@ function generateClientConfig (type, startDevServer = false) {
     },
     inputForType(type),
     outputForType(type),
-    pluginsForType(type),
+    pluginsForType(type, env),
     chunksForType(type),
   );
 
-  if (startDevServer) {
+  if (env === environments.DEV) {
     config.plugins.push(sourceMaps());
     config.plugins.push(liveServer({
       port: 8090,
@@ -200,8 +213,23 @@ function generateClientConfig (type, startDevServer = false) {
 module.exports = function generator (args) {
   const config = [];
 
-  const type = (args['config-dist'] && 'dist') || (args['config-test'] && 'test') || 'build';
-  config.push(generateClientConfig(type, args['config-dev-server']));
+  let type;
+  if (args['config-dist']) {
+    type = types.DIST;
+  } else if (args['config-test']) {
+    type = types.TEST;
+  } else {
+    type = types.BUILD;
+  }
+
+  let env;
+  if (args['config-dev-server']) {
+    env = environments.DEV;
+  } else {
+    env = environments.PROD;
+  }
+
+  config.push(generateClientConfig(type, env));
 
   return config;
 };
