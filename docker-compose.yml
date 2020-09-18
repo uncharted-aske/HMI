@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  client:
+    image: docker.uncharted.software/uncharted-aske/hmi/client
+    deploy:
+      update_config:
+        parallelism: 1
+        delay: 60s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+      replicas: 1
+      resources:
+        limits:
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "2"
+    ports:
+      - "8080:80"
