@@ -35,12 +35,17 @@ import _ from 'lodash'
 
 // Model representations
 import ChimeGTRI from '../assets/formatted-CHIME-SIR-GTRI.json'
-import ChimeGrFN from '../assets/formatted-CHIME-SIR-GrFN.json'
-import ChimeCAG from '../assets/formatted-CHIME-SIR-CAG.json'
+import ChimeGrFN from '../assets/formatted-CHIME-SIR-GrFN-new.json'
+import ChimeCAG from '../assets/formatted-CHIME-SIR-CAG-new.json'
 import ChimeIR from '../assets/formatted-CHIME-IR_CHIME-GTRI-IR'
 
 import DSSATPetasceCAG from '../assets/formatted-PETASCE-CAG'
 import DSSATPetasceGrFN from '../assets/formatted-PETASCE-GrFN'
+import DSSATPetdynCAG from '../assets/formatted-PETDYN-CAG'
+import DSSATPetdynGrFN from '../assets/formatted-PETDYN-GrFN'
+
+import SIRCAG from '../assets/formatted-SIR-simple-CAG'
+import SIRGrFN from '../assets/formatted-SIR-simple-GrFN'
 
 import ModelRenderer from '@/graphs/elk/model-renderer'
 import { layered } from '@/graphs/elk/elk-strategies'
@@ -59,7 +64,7 @@ const PETRI_NET_RENDERING_OPTIONS = {
 export default {
   name: 'EpiView',
   data: () => ({
-    modelsList: ['ChimeIR', 'ChimeGTRI', 'ChimeCAG', 'ChimeGrFN', 'DSSATPetasceCAG', 'DSSATPetasceGrFN'],
+    modelsList: ['ChimeIR', 'ChimeGTRI', 'ChimeCAG', 'ChimeGrFN', 'SIRCAG', 'SIRGrFN', 'DSSATPetasceCAG', 'DSSATPetasceGrFN', 'DSSATPetdynCAG', 'DSSATPetdynGrFN'],
     selectedModel: 'ChimeIR',
     graphData: ChimeIR,
     renderingOptions: DEFAULT_RENDERING_OPTIONS
@@ -130,6 +135,14 @@ export default {
           this.renderingOptions = DEFAULT_RENDERING_OPTIONS
           this.graphData = ChimeCAG
           break
+        case 'SIRCAG':
+          this.renderingOptions = DEFAULT_RENDERING_OPTIONS
+          this.graphData = SIRCAG
+          break
+        case 'SIRGrFN':
+          this.renderingOptions = DEFAULT_RENDERING_OPTIONS
+          this.graphData = SIRGrFN
+          break
         case 'DSSATPetasceGrFN':
           this.renderingOptions = DEFAULT_RENDERING_OPTIONS
           this.graphData = DSSATPetasceGrFN
@@ -137,6 +150,14 @@ export default {
         case 'DSSATPetasceCAG':
           this.renderingOptions = DEFAULT_RENDERING_OPTIONS
           this.graphData = DSSATPetasceCAG
+          break
+        case 'DSSATPetdynCAG':
+          this.renderingOptions = DEFAULT_RENDERING_OPTIONS
+          this.graphData = DSSATPetdynCAG
+          break
+        case 'DSSATPetdynGrFN':
+          this.renderingOptions = DEFAULT_RENDERING_OPTIONS
+          this.graphData = DSSATPetdynGrFN
           break
         default:
           console.error('Switching to invalid dataset: ' + this.selectedModel)
