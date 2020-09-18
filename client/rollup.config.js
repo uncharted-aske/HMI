@@ -175,7 +175,7 @@ function chunksForType (type) {
   return undefined;
 }
 
-function generateClientConfig (type, env) {
+function generateClientConfig (type, env, startDevServer = false) {
   const config = Object.assign(
     {
       treeshake: true,
@@ -189,7 +189,7 @@ function generateClientConfig (type, env) {
     chunksForType(type),
   );
 
-  if (env === environments.DEV) {
+  if (startDevServer) {
     config.plugins.push(sourceMaps());
     config.plugins.push(liveServer({
       port: 8090,
@@ -223,13 +223,13 @@ module.exports = function generator (args) {
   }
 
   let env;
-  if (args['config-dev-server']) {
-    env = environments.DEV;
-  } else {
+  if (args['config-prod']) {
     env = environments.PROD;
+  } else {
+    env = environments.DEV;
   }
 
-  config.push(generateClientConfig(type, env));
+  config.push(generateClientConfig(type, env, args['config-dev-server']));
 
   return config;
 };
