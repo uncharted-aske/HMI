@@ -8,6 +8,14 @@ Uncharted's Human Machine Interface for the DARPA ASKE program is designed to su
 yarn install
 ```
 
-## Getting Started
+## Local Docker Swarm Deployment
+Build docker images:
+```shell script
+docker build -t docker.uncharted.software/uncharted-aske/hmi/client -f Dockerfile.client .
+```
 
-On the way!
+Start docker swarm and deploy stack:
+```shell script
+docker swarm init
+docker stack deploy -c docker-compose.yml aske-hmi
+```

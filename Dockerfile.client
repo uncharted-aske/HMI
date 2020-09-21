@@ -1,0 +1,18 @@
+# docker build -t docker.uncharted.software/uncharted-aske/hmi/client -f Dockerfile.client .
+
+FROM node:12-alpine AS builder
+
+WORKDIR /client
+
+COPY ./client /client
+
+RUN cd /client && \
+    echo "Installing node modules..." && \
+    rm -rf node_modules && \
+    yarn install && \
+    yarn cache clean && \
+    NODE_ENV="production" yarn build
+
+FROM nginx:1.19.2
+
+COPY --from=builder /client/dist /usr/share/nginx/html
