@@ -10,7 +10,6 @@ const globby = require('globby');
 const server = require('live-server');
 const copy = require('rollup-plugin-copy');
 const alias = require('@rollup/plugin-alias');
-const image = require('@rollup/plugin-alias');
 
 const buildDir = path.resolve(__dirname, 'build');
 const distDir = path.resolve(__dirname, 'dist');
@@ -131,7 +130,6 @@ function pluginsForType (type) {
           },
         },
       }),
-      image(),
     ],
   };
 }
