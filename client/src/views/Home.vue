@@ -22,9 +22,9 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
 
-  import JSComponent from '../components/JSComponent.vue';
-  import TSComponent from '../components/TSComponent.vue';
-  import TSClassComponent from '../components/TSClassComponent.vue';
+  import JSComponent from '@/components/JSComponent.vue';
+  import TSComponent from '@/components/TSComponent.vue';
+  import TSClassComponent from '@/components/TSClassComponent.vue';
 
   const components = {
     JSComponent,

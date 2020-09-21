@@ -1,15 +1,9 @@
 <template>
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
-      <a href="#" class="navbar-brand">bezKoder</a>
-      <div class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a href="/tutorials" class="nav-link">Tutorials</a>
-        </li>
-        <li class="nav-item">
-          <a href="/add" class="nav-link">Add</a>
-        </li>
-      </div>
-    </nav>
+<nav class="navbar fixed-top navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">
+    <img src="@/assets/logo-uncharted-color-light-tm.png" alt="">
+  </a>
+</nav>
 
 </template>
 
