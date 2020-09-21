@@ -1,7 +1,7 @@
 <template>
 <nav class="navbar fixed-top navbar-dark bg-dark">
   <a class="navbar-brand" href="#">
-    <img src="@/assets/logo-uncharted-color-light-tm.png" alt="" />
+    TEST
   </a>
 </nav>
 
