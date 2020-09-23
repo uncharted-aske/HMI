@@ -163,4 +163,19 @@ export default class ModelRenderer extends ELKBaseRenderer {
       .duration(1600)
       .style('opacity', 1.0)
   }
+
+  hideSubgraph (subgraph) {
+    console.log(subgraph)
+    const chart = this.chart
+
+    const subgraphNodes = chart.selectAll('.node').filter(d => {
+      return subgraph.nodes.map(node => node.id).includes(d.id)
+    })
+    subgraphNodes.style('opacity', 0)
+
+    const subgraphEdges = chart.selectAll('.edge').filter(d => _.some(subgraph.edges, edge => edge.source === d.data.source && edge.target === d.data.target))
+    subgraphEdges.style('opacity', 0)
+
+    // chart.selectAll('.container').style('opacity', 0)
+  }
 }

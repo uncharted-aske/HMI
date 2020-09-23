@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-3">
+      <div class="col-3 action-bar">
         <select
          class="custom-select"
           @change="setModel"
@@ -17,6 +17,7 @@
             :selected="item === selectedModel"
           >{{ item }}</option>
         </select>
+        <button type="button" class="btn btn-secondary filter" @click="onFilter">Filter variables</button>
       </div>
     </div>
     <div class="row">
@@ -163,6 +164,15 @@ export default {
           console.error('Switching to invalid dataset: ' + this.selectedModel)
           break
       }
+    },
+    onFilter () {
+      const filteredNodes = this.graphData.nodes.filter(n => n.type === 'variable')
+      const filteredEdges = this.graphData.edges.filter(e => {
+        const source = filteredNodes.find(f => f.id === e.source)
+        const target = filteredNodes.find(f => f.id === e.target)
+        return !_.isNil(source) || !_.isNil(target)
+      })
+      this.renderer.hideSubgraph({ nodes: filteredNodes, edges: filteredEdges })
     }
 
   }
@@ -170,4 +180,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.action-bar {
+  display: flex;
+  .btn {
+    margin-left: 5px;
+  }
+  .filter {
+    width: 200px;
+  }
+}
 </style>
