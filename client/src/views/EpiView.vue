@@ -36,8 +36,8 @@ import _ from 'lodash'
 
 // Model representations
 import ChimeGTRI from '../assets/formatted-CHIME-SIR-GTRI.json'
-import ChimeGrFN from '../assets/formatted-CHIME-SIR-GrFN-new.json'
-import ChimeCAG from '../assets/formatted-CHIME-SIR-CAG-new.json'
+import ChimeGrFN from '../assets/formatted-CHIME-SIR-GrFN-metadata.json'
+import ChimeCAG from '../assets/formatted-CHIME-SIR-CAG-metadata.json'
 import ChimeIR from '../assets/formatted-CHIME-IR_CHIME-GTRI-IR.json'
 
 import DSSATPetasceCAG from '../assets/formatted-PETASCE-CAG.json'
