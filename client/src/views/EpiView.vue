@@ -4,9 +4,18 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
+  import ActionColumn from '@/components/action-column';
+
   export default {
     name: 'EpiView',
+    components: {
+      ActionColumn,
+
+    },
+    data: () => ({
+
+    }),
   };
 </script>
 
