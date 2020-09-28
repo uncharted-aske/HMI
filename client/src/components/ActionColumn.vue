@@ -1,6 +1,15 @@
 <template>
   <div class="action-column-container">
-    
+     <button
+          class="btn btn-default"
+        >
+          
+        </button>   
+         <button
+          class="btn"
+        >
+          
+        </button>     
 
   </div>
 </template>
@@ -27,6 +36,13 @@
   width: $action-bar-width;
   height: $content-full-height;
   background-color: $background-secondary;
+    & > .btn {
+    background-color: transparent;
+    width: $action-bar-width;
+    height: $action-bar-width;
+    position: relative;
+    border: 1px solid $border;
+  }
 }
 
 </style>
