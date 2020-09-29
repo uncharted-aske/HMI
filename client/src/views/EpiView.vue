@@ -27,7 +27,6 @@
     box-sizing: border-box;
     overflow: hidden;
     display: flex;
-    border: 1px solid gray;
   }
 
 </style>

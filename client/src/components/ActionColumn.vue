@@ -1,12 +1,12 @@
 <template>
   <div class="action-column-container">
      <button
-          class="btn btn-default"
+          class="btn btn-secondary"
         >
           
         </button>   
          <button
-          class="btn"
+          class="btn btn-secondary"
         >
           
         </button>     
@@ -35,13 +35,16 @@
   position: relative;
   width: $action-bar-width;
   height: $content-full-height;
-  background-color: $background-secondary;
+  background-color: #ECEFF1;
     & > .btn {
     background-color: transparent;
     width: $action-bar-width;
     height: $action-bar-width;
     position: relative;
     border: 1px solid $border;
+    &.active {
+      background-color: #ccc;
+    }
   }
 }
 
