@@ -13,7 +13,7 @@
     name: 'EpiView',
     components: {
       ActionColumn,
-      SearchBar
+      SearchBar,
     },
     data: () => ({
 

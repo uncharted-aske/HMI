@@ -1,6 +1,5 @@
 <template>
   <div class="search-bar-container">
-        
 
   </div>
 </template>

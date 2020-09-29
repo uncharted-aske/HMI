@@ -1,24 +1,18 @@
 <template>
   <div class="action-column-container">
-     <button
-          class="btn btn-secondary"
-        >
-          
-        </button>   
-         <button
-          class="btn btn-secondary"
-        >
-          
-        </button>     
-
+    <slot name="actions" />
+    <left-side-panel />
   </div>
 </template>
 
 <script>
 
+  import LeftSidePanel from '@/components/LeftSidePanel.vue';
+
   export default {
     name: 'ActionColumn',
     components: {
+      LeftSidePanel,
     },
     data: () => ({
     }),
