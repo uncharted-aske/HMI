@@ -4,7 +4,7 @@
       <div class="panel-header">
         <h5>{{paneTitle}}</h5>
       </div>
-      <close-button />
+      <!-- <close-button @close=""/> -->
       <!-- <hr class="pane-separator"> -->
       <div class="panel-body">
          <slot name="content" />

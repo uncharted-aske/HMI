@@ -1,7 +1,7 @@
 <template>
   <div
     class="close-button"
-    @click="$emit('click')"
+    @click="$emit('close')"
   >
     <font-awesome-icon :icon="['fas', 'times']" />
   </div>
@@ -26,7 +26,7 @@
   cursor: pointer;
 
   &:hover {
-    color: red;
+    background-color: rgba(38, 50, 56, 0.1);
   }
 
   position: absolute;

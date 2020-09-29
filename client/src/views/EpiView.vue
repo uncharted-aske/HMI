@@ -3,15 +3,22 @@
     <action-column>
       <div slot="actions">
         <button
-        class="btn btn-secondary">
+        class="btn btn-secondary" @click="onClick">
         <font-awesome-icon :icon="['fas', 'filter']" />
-        </button>  
+        </button>
         <button
         class="btn btn-secondary">
-        <font-awesome-icon :icon="['fas', 'info']" />
-        </button>  
-    </div>
-    </action-column>  
+        <font-awesome-icon :icon="['fas', 'info']" @click="onClick"/>
+        </button>
+      </div>
+      <div slot="panel" v-if="showLeftSidePanel">
+        <left-side-panel>
+          <div slot="content">
+            
+          </div>  
+        </left-side-panel>  
+      </div>  
+    </action-column>
     <search-bar />
   </div>
 </template>
@@ -19,16 +26,24 @@
 <script>
   import ActionColumn from '@/components/ActionColumn.vue';
   import SearchBar from '@/components/SearchBar.vue';
+  import LeftSidePanel from '@/components/LeftSidePanel.vue';
 
   export default {
     name: 'EpiView',
     components: {
       ActionColumn,
       SearchBar,
+      LeftSidePanel,
     },
     data: () => ({
-
+      activePane: '',
+      showLeftSidePanel: false,
     }),
+    methods: {
+      onClick() {
+        this.showLeftSidePanel = !this.showLeftSidePanel;
+      },
+    },
   };
 </script>
 
