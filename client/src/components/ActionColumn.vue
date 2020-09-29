@@ -14,8 +14,6 @@
     components: {
       LeftSidePanel,
     },
-    data: () => ({
-    }),
     methods: {
 
     },
