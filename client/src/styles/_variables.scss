@@ -1,6 +1,5 @@
 // Colors
-$body-bg: #FFFFFF;
-
+$secondary-bar-bg: #ECEFF1;
 $border: #CFD8DC;
 
 
@@ -10,8 +9,8 @@ $navbar-outer-height: 49px;
 // 100% height - navbar
 $content-full-height: calc(100vh - #{$navbar-outer-height});
 
-// Action bar width
-$action-bar-width: 50px;
+// Secondary bars width
+$secondary-bar-width: 50px;
 
 
 
