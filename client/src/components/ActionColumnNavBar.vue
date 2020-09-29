@@ -53,8 +53,7 @@ export default {
   top: 0;
   left: 0;
   bottom: 0;
-  background-color: #EAEBEC;
-  border: 1px solid #D9DADB;
+  background-color: $secondary-bar-bg;
 
   li {
     position: relative;

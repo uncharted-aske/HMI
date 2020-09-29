@@ -2,15 +2,7 @@
   <div class="epi-view-container">
     <action-column>
       <div slot="actions">
-        <action-column-nav-bar :actions="actions" :currentActionName="`Facets`" />
-        <!-- <button
-        class="btn btn-secondary" @click="openPane(PANE_ID.FACETS)">
-        <font-awesome-icon :icon="['fas', 'filter']" />
-        </button>
-        <button
-        class="btn btn-secondary">
-        <font-awesome-icon :icon="['fas', 'info']" @click="openPane(PANE_ID.METADATA)"/>
-        </button> -->
+        <action-column-nav-bar :actions="actions" :currentActionName="''" />
       </div>
       <div slot="panel" v-if="showLeftSidePanel">
         <left-side-panel>

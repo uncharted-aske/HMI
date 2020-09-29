@@ -20,7 +20,6 @@
   position: relative;
   width: $secondary-bar-width;
   height: $content-full-height;
-  background-color: $secondary-bar-bg;
 }
 
 </style>
