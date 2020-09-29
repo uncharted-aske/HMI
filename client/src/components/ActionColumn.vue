@@ -33,13 +33,13 @@
 
 .action-column-container {
   position: relative;
-  width: $action-bar-width;
+  width: $secondary-bar-width;
   height: $content-full-height;
-  background-color: #ECEFF1;
+  background-color: $secondary-bar-bg;
     & > .btn {
     background-color: transparent;
-    width: $action-bar-width;
-    height: $action-bar-width;
+    width: $secondary-bar-width;
+    height: $secondary-bar-width;
     position: relative;
     border: 1px solid $border;
     &.active {
