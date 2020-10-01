@@ -20,26 +20,26 @@
 </template>
 
 <script>
-export default {
-  name: 'FacetPanelNav',
-  props: {
-    actions: {
-      type: Array,
-      default: () => []
+  export default {
+    name: 'FacetPanelNav',
+    props: {
+      actions: {
+        type: Array,
+        default: () => [],
+      },
+      currentActionName: {
+        type: String,
+        default: () => '',
+      },
     },
-    currentActionName: {
-      type: String,
-      default: () => ''
-    }
-  },
-  methods: {
-    setActive(actionName) {
-      // If the tab is currently selected, pass '' to signify it should be
-      //  unselected. Otherwise, pass the tab's name to select it
-      this.$emit('setActive', actionName === this.currentActionName ? '' : actionName);
-    }
-  }
-};
+    methods: {
+      setActive (actionName) {
+        // If the tab is currently selected, pass '' to signify it should be
+        //  unselected. Otherwise, pass the tab's name to select it
+        this.$emit('setActive', actionName === this.currentActionName ? '' : actionName);
+      },
+    },
+  };
 </script>
 
 <style lang="scss" scoped>

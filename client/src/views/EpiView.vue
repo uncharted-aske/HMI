@@ -2,16 +2,16 @@
   <div class="epi-view-container">
     <action-column>
       <div slot="actions">
-        <action-column-nav-bar :actions="actions" :currentActionName="''" />
+        <action-column-nav-bar :actions="ACTIONS" :currentActionName="''" />
       </div>
       <div slot="panel" v-if="showLeftSidePanel">
         <left-side-panel>
           <div slot="content">
-            <facets-pane v-if="activePane === PANE_ID.FACETS" />
-            <metadata-pane v-if="activePane ===  PANE_ID.METADATA"/>
-          </div>  
-        </left-side-panel>  
-      </div>  
+            <facets-pane v-if="activePane === LEFT_PANE_ID.FACETS" />
+            <metadata-pane v-if="activePane ===  LEFT_PANE_ID.METADATA"/>
+          </div>
+        </left-side-panel>
+      </div>
     </action-column>
     <search-bar />
   </div>
@@ -25,10 +25,15 @@
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
 
-  const PANE_ID = {
+  const LEFT_PANE_ID = {
     METADATA: 'metadata',
     FACETS: 'facets',
   };
+
+  const ACTIONS =  [
+        { name: 'Facets', icon: 'filter' },
+        { name: 'Metadata', icon: 'info' },
+      ];
 
   export default {
     name: 'EpiView',
@@ -41,18 +46,15 @@
       FacetsPane,
     },
     data: () => ({
-      actions: [
-        { name: 'Facets', icon: 'filter' },
-        { name: 'Metadata', icon: 'info' },
-      ],
       activePane: '',
       showLeftSidePanel: false,
     }),
-    created() {
-      this.PANE_ID = PANE_ID;
+    created () {
+      this.LEFT_PANE_ID = LEFT_PANE_ID;
+      this.ACTIONS = ACTIONS;
     },
     methods: {
-      openPane(paneId) {
+      openPane (paneId) {
         this.showLeftSidePanel = !this.showLeftSidePanel;
         if (this.showLeftSidePanel) {
           this.activePane = paneId;
