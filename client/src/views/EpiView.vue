@@ -2,13 +2,13 @@
   <div class="epi-view-container">
     <action-column>
       <div slot="actions">
-        <action-column-nav-bar :actions="ACTIONS" :currentActionName="''" />
+        <action-column-nav-bar :actions="ACTIONS" :currentAction="currentAction" @set-active="onSetActive" />
       </div>
-      <div slot="panel" v-if="showLeftSidePanel">
+      <div slot="panel" v-if="activePane">
         <left-side-panel>
           <div slot="content">
-            <facets-pane v-if="activePane === LEFT_PANE_ID.FACETS" />
-            <metadata-pane v-if="activePane ===  LEFT_PANE_ID.METADATA"/>
+            <facets-pane v-if="activePane === ACTIONS[0].paneId" />
+            <metadata-pane v-if="activePane ===  ACTIONS[1].paneId"/>
           </div>
         </left-side-panel>
       </div>
@@ -18,6 +18,8 @@
 </template>
 
 <script>
+  import _ from 'lodash';
+
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
@@ -25,14 +27,9 @@
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
 
-  const LEFT_PANE_ID = {
-    METADATA: 'metadata',
-    FACETS: 'facets',
-  };
-
   const ACTIONS =  [
-        { name: 'Facets', icon: 'filter' },
-        { name: 'Metadata', icon: 'info' },
+        { name: 'Facets', icon: 'filter', paneId: 'facets' },
+        { name: 'Metadata', icon: 'info', paneId: 'metadata' },
       ];
 
   export default {
@@ -47,19 +44,22 @@
     },
     data: () => ({
       activePane: '',
-      showLeftSidePanel: false,
     }),
+    computed: {
+      currentAction() {
+        return this.activePane && this.ACTIONS.find(a => a.paneId === this.activePane).name;
+      }
+    },
     created () {
-      this.LEFT_PANE_ID = LEFT_PANE_ID;
       this.ACTIONS = ACTIONS;
     },
     methods: {
-      openPane (paneId) {
-        this.showLeftSidePanel = !this.showLeftSidePanel;
-        if (this.showLeftSidePanel) {
-          this.activePane = paneId;
-          console.log(this.activePane);
+      onSetActive(actionName) {
+        let activePane = '';
+        if (actionName !== '') {
+          activePane = this.ACTIONS.find(a => a.name === actionName).paneId;        
         }
+        this.activePane = activePane;
       },
     },
   };

@@ -5,7 +5,6 @@
     <li
       v-for="(action, idx) in actions"
       :key="idx"
-      :class="{ active: action.name === currentActionName }"
     >
       <button
         class="btn"
@@ -21,22 +20,22 @@
 
 <script>
   export default {
-    name: 'FacetPanelNav',
+    name: 'ActionColumnNavBar',
     props: {
       actions: {
         type: Array,
         default: () => [],
       },
-      currentActionName: {
+      currentAction: {
         type: String,
         default: () => '',
       },
     },
     methods: {
       setActive (actionName) {
-        // If the tab is currently selected, pass '' to signify it should be
-        //  unselected. Otherwise, pass the tab's name to select it
-        this.$emit('setActive', actionName === this.currentActionName ? '' : actionName);
+        // If the action is currently selected, pass '' to signify it should be
+        //  unselected. Otherwise, pass the action's name to select it
+        this.$emit('set-active', actionName === this.currentAction ? '' : actionName);
       },
     },
   };
