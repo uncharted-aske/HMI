@@ -5,6 +5,7 @@
     <li
       v-for="(action, idx) in actions"
       :key="idx"
+      :class="{ active: action.name === currentAction }"
     >
       <button
         class="btn"
@@ -67,7 +68,7 @@
     &.active {
       button {
         color: #ffffff;
-        background-color: #545353;
+        background-color: $btn-secondary-color;
       }
     }
   }

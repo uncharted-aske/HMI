@@ -7,8 +7,8 @@
       <div slot="panel" v-if="activePane">
         <left-side-panel>
           <div slot="content">
-            <facets-pane v-if="activePane === ACTIONS[0].paneId" />
-            <metadata-pane v-if="activePane ===  ACTIONS[1].paneId"/>
+            <facets-pane v-if="activePane === ACTIONS[0].paneId" @close="activePane = ''"/>
+            <metadata-pane v-if="activePane ===  ACTIONS[1].paneId" @close="activePane = ''"/>
           </div>
         </left-side-panel>
       </div>
@@ -18,8 +18,6 @@
 </template>
 
 <script>
-  import _ from 'lodash';
-
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
