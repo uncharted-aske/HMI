@@ -25,10 +25,10 @@
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
 
-  const ACTIONS =  [
-        { name: 'Facets', icon: 'filter', paneId: 'facets' },
-        { name: 'Metadata', icon: 'info', paneId: 'metadata' },
-      ];
+  const ACTIONS = [
+    { name: 'Facets', icon: 'filter', paneId: 'facets' },
+    { name: 'Metadata', icon: 'info', paneId: 'metadata' },
+  ];
 
   export default {
     name: 'EpiView',
@@ -44,18 +44,18 @@
       activePane: '',
     }),
     computed: {
-      currentAction() {
+      currentAction () {
         return this.activePane && this.ACTIONS.find(a => a.paneId === this.activePane).name;
-      }
+      },
     },
     created () {
       this.ACTIONS = ACTIONS;
     },
     methods: {
-      onSetActive(actionName) {
+      onSetActive (actionName) {
         let activePane = '';
         if (actionName !== '') {
-          activePane = this.ACTIONS.find(a => a.name === actionName).paneId;        
+          activePane = this.ACTIONS.find(a => a.name === actionName).paneId;
         }
         this.activePane = activePane;
       },
