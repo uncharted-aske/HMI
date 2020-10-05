@@ -42,24 +42,22 @@
     FacetsPane,
   };
 
-
   @Component({ components })
   export default class EpiView extends Vue {
     activePane = '';
     actions = ACTIONS;
 
-    get currentAction() {
+    get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
     }
 
-    onSetActive (actionName) {
+    onSetActive (actionName: string): void {
       let activePane = '';
       if (actionName !== '') {
         activePane = this.actions.find(a => a.name === actionName).paneId;
       }
       this.activePane = activePane;
     }
-
   }
 </script>
 
