@@ -2,13 +2,13 @@
   <div class="epi-view-container">
     <action-column>
       <div slot="actions">
-        <action-column-nav-bar :actions="ACTIONS" :currentAction="currentAction" @set-active="onSetActive" />
+        <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
       </div>
       <div slot="panel" v-if="activePane">
         <left-side-panel>
           <div slot="content">
-            <facets-pane v-if="activePane === ACTIONS[0].paneId" @close="activePane = ''"/>
-            <metadata-pane v-if="activePane ===  ACTIONS[1].paneId" @close="activePane = ''"/>
+            <facets-pane v-if="activePane === actions[0].paneId" @close="activePane = ''"/>
+            <metadata-pane v-if="activePane ===  actions[1].paneId" @close="activePane = ''"/>
           </div>
         </left-side-panel>
       </div>
@@ -45,17 +45,17 @@
 
   @Component({ components })
   export default class EpiView extends Vue {
-    activePane: string = '';
-    ACTIONS: Array<object> = ACTIONS;
+    activePane = '';
+    actions = ACTIONS;
 
     get currentAction() {
-      return this.activePane && this.ACTIONS.find(a => a.paneId === this.activePane).name;
+      return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
     }
 
     onSetActive (actionName) {
       let activePane = '';
       if (actionName !== '') {
-        activePane = this.ACTIONS.find(a => a.name === actionName).paneId;
+        activePane = this.actions.find(a => a.name === actionName).paneId;
       }
       this.activePane = activePane;
     }
