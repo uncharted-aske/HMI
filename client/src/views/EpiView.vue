@@ -17,7 +17,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
+
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
@@ -30,37 +33,34 @@
     { name: 'Metadata', icon: 'info', paneId: 'metadata' },
   ];
 
-  export default {
-    name: 'EpiView',
-    components: {
-      ActionColumn,
-      ActionColumnNavBar,
-      SearchBar,
-      LeftSidePanel,
-      MetadataPane,
-      FacetsPane,
-    },
-    data: () => ({
-      activePane: '',
-    }),
-    computed: {
-      currentAction () {
-        return this.activePane && this.ACTIONS.find(a => a.paneId === this.activePane).name;
-      },
-    },
-    created () {
-      this.ACTIONS = ACTIONS;
-    },
-    methods: {
-      onSetActive (actionName) {
-        let activePane = '';
-        if (actionName !== '') {
-          activePane = this.ACTIONS.find(a => a.name === actionName).paneId;
-        }
-        this.activePane = activePane;
-      },
-    },
+  const components = {
+    ActionColumn,
+    ActionColumnNavBar,
+    SearchBar,
+    LeftSidePanel,
+    MetadataPane,
+    FacetsPane,
   };
+
+
+  @Component({ components })
+  export default class EpiView extends Vue {
+    activePane: string = '';
+    ACTIONS: Array<object> = ACTIONS;
+
+    get currentAction() {
+      return this.activePane && this.ACTIONS.find(a => a.paneId === this.activePane).name;
+    }
+
+    onSetActive (actionName) {
+      let activePane = '';
+      if (actionName !== '') {
+        activePane = this.ACTIONS.find(a => a.name === actionName).paneId;
+      }
+      this.activePane = activePane;
+    }
+
+  }
 </script>
 
 <style lang="scss" scoped>
