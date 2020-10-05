@@ -4,11 +4,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
-  export default {
-    name: 'FacetsPane',
-  };
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
+
+  @Component
+  export default class FacetsPane extends Vue {
+  }
 </script>
 
 <style lang="scss" scoped>

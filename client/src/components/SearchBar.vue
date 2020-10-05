@@ -4,18 +4,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
-  export default {
-    name: 'SearchBar',
-    components: {
-    },
-    data: () => ({
-    }),
-    methods: {
+  import Vue from 'vue';
+  import Component from 'vue-class-component';
 
-    },
-  };
+  @Component
+  export default class SearchBar extends Vue {
+  }
 </script>
 
 <style lang="scss" scoped>
