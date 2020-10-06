@@ -1,20 +1,19 @@
 <template>
-  <div class="container">
-    <button
-      type="button"
-      class="btn btn-primary"
-      @click="openView('epiView')"
-    > EPI view </button>
+  <div class="home-container">
+    <action-column>
+      <div slot="actions">
+        <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
+      </div>
+      <div slot="panel" v-if="activePane">
+        <left-side-panel @close-pane="onClose">
+          <div slot="content">
+            <facets-pane v-if="activePane === actions[0].paneId" />
+          </div>
+        </left-side-panel>
+      </div> -->
+    </action-column>
+        <search-bar />
 
-    <button
-      type="button"
-      class="btn btn-primary"
-      @click="openView('bioView')"
-    > BIO view </button>
-
-    <JSComponent/>
-    <TSComponent/>
-    <TSClassComponent/>
   </div>
 </template>
 
@@ -22,26 +21,68 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
 
-  import JSComponent from '@/components/JSComponent.vue';
-  import TSComponent from '@/components/TSComponent.vue';
-  import TSClassComponent from '@/components/TSClassComponent.vue';
+  import ActionColumn from '@/components/ActionColumn.vue';
+  import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
+  import SearchBar from '@/components/SearchBar.vue';
+  import LeftSidePanel from '@/components/LeftSidePanel.vue';
+
+  // import JSComponent from '@/components/JSComponent.vue';
+  // import TSComponent from '@/components/TSComponent.vue';
+  // import TSClassComponent from '@/components/TSClassComponent.vue';
+
+  const ACTIONS = [
+    { name: 'Facets', icon: 'filter', paneId: 'facets' },
+  ];
 
   const components = {
-    JSComponent,
-    TSComponent,
-    TSClassComponent,
+    ActionColumn,
+    ActionColumnNavBar,
+    SearchBar,
+    LeftSidePanel,
   };
 
   @Component({ components })
   export default class Home extends Vue {
-    public openView (view: string): void {
-      this.$router.push({ name: view });
+    activePane = '';
+    actions = ACTIONS;
+
+    get currentAction (): string {
+      return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
     }
+
+    onSetActive (actionName: string): void {
+      let activePane = '';
+      if (actionName !== '') {
+        activePane = this.actions.find(a => a.name === actionName).paneId;
+      }
+      this.activePane = activePane;
+    }
+
+    onClose ():void {
+      this.activePane = '';
+    }
+
+  // public openView (view: string): void {
+  //   this.$router.push({ name: view });
+  // }
   }
 </script>
 
 <style lang="scss" scoped>
-.btn {
-  margin: 5px;
-}
+@import "../styles/variables";
+
+.home-container {
+    height: $content-full-height;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    .btn {
+      background-color: transparent;
+      color: $text-color;
+      width: $secondary-bar-width;
+      height: $secondary-bar-width;
+      position: relative;
+      border: 1px solid $border;
+    }
+  }
 </style>
