@@ -49,10 +49,6 @@ export default {
     // OptionsButton
   },
   props: {
-    isCreateCard: {
-      type: Boolean,
-      default: false
-    },
     previewImageSrc: {
       type: String,
       default: ''

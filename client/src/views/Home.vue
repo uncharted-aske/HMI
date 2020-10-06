@@ -14,7 +14,8 @@
     </action-column> 
     <search-bar />  
     <start-screen
-        open-section-header="Models"
+        :open-section-header="`Models`"
+        :recent-cards="models"
     />
   
   </div>
@@ -36,6 +37,18 @@
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
   ];
 
+  const MODELS = [
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
+     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
+      { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
+       { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
+     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
+      { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
+       { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
+     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
+      { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
+  ];
+
   const components = {
     ActionColumn,
     ActionColumnNavBar,
@@ -49,6 +62,7 @@
   export default class Home extends Vue {
     activePane = '';
     actions = ACTIONS;
+    models = MODELS;
 
     get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;

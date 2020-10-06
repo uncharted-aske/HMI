@@ -28,10 +28,6 @@ export default {
     StartScreenCard
   },
   props: {
-    createSectionHeader: {
-      type: String,
-      default: 'Create'
-    },
     openSectionHeader: {
       type: String,
       default: 'Open'
@@ -39,10 +35,6 @@ export default {
     recentCards: {
       type: Array,
       default: () => []
-    },
-    showCreateSection: {
-      type: Boolean,
-      default: true
     }
   },
   data: () => ({
@@ -52,9 +44,6 @@ export default {
   mounted() {
   },
   methods: {
-    onCreate() {
-      this.$emit('create');
-    },
     onOpenRecent(recentCard) {
       this.$emit('open-recent', recentCard);
     },
@@ -79,12 +68,6 @@ export default {
   height: calc(#{$content-full-height} - #{$secondary-bar-width});
   display: flex;
   overflow: hidden;
-
-  .quarter-column {
-    width: 25vw;
-    background: #C4C4C4;
-    padding: 16px 32px;
-  }
 
   .recent {
     flex: 1;
