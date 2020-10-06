@@ -7,16 +7,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
 
-  export default {
-    name: 'Card',
-    methods: {
-      onClick () {
-        this.$emit('click');
-      },
-    },
-  };
+  @Component
+  export default class Card extends Vue {
+    onClick (): void {
+      this.$emit('click');
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

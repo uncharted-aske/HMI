@@ -33,13 +33,11 @@
     openSectionHeader: string;
 
     @Prop({ default: [] })
-    recentCards: Array<object>;
+    recentCards: Record<string, unknown>;
 
-
-    onOpenRecent (recentCard: object) {
+    onOpenRecent (recentCard: Record<string, unknown>): void {
       this.$emit('open-recent', recentCard);
     }
-      
   }
 </script>
 

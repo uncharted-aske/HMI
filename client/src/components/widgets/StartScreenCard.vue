@@ -15,73 +15,41 @@
       </div>
       <h5>{{ title }}</h5>
       <h6 class="subtitle">{{ subtitle }}</h6>
-      <!-- <options-button class="menu">
-        <div
-          slot="content"
-        >
-          <p
-            class="dropdown-option"
-            @click="onRename"
-          >Rename</p>
-          <p
-            class="dropdown-option"
-            @click="onDuplicate"
-          >Duplicate</p>
-          <p
-            class="dropdown-option"
-            @click="onDelete"
-          >Delete</p>
-        </div>
-      </options-button> -->
     </div>
   </card>
 </template>
 
-<script>
+<script lang="ts">
   import _ from 'lodash';
-  import Card from '@/components/widgets/Card.vue';
-  // import OptionsButton from '@/components/widgets/options-button';
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
+  import { Prop } from 'vue-property-decorator';
 
-  export default {
-    name: 'StartScreenCard',
-    components: {
-      Card,
-    // OptionsButton
-    },
-    props: {
-      previewImageSrc: {
-        type: String,
-        default: '',
-      },
-      title: {
-        type: String,
-        default: 'Card Title',
-      },
-      subtitle: {
-        type: String,
-        default: 'Card Subtitle',
-      },
-    },
-    computed: {
-      hasImage () {
-        return !_.isNil(this.previewImageSrc);
-      },
-    },
-    methods: {
-      onCardClick () {
-        this.$emit('click');
-      },
-      onRename () {
-        this.$emit('rename');
-      },
-      onDuplicate () {
-        this.$emit('duplicate');
-      },
-      onDelete () {
-        this.$emit('delete');
-      },
-    },
+  import Card from '@/components/widgets/Card.vue';
+
+  const components = {
+    Card,
   };
+
+  @Component({ components })
+  export default class StartScreenCard extends Vue {
+    @Prop({ default: '' })
+    previewImageSrc: string;
+
+     @Prop({ default: 'Card title' })
+    title: string;
+
+    @Prop({ default: 'Card subtitle' })
+    subtitle: string;
+
+    get hasImage (): boolean {
+      return !_.isNil(this.previewImageSrc);
+    }
+
+    onCardClick (): void {
+      this.$emit('click');
+    }
+  }
 </script>
 <style lang="scss" scoped>
 
@@ -146,7 +114,7 @@
 
     .subtitle {
       font-size: 12px;
-      color: gray;
+      color: #6c757d;
       font-weight: normal;
     }
 
