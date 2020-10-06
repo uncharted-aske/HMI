@@ -46,7 +46,7 @@
 @import "../styles/variables";
 
 .start-screen-container {
-  width: 100%;
+  // width: 100%;
   height: calc(#{$content-full-height} - #{$secondary-bar-width});
   display: flex;
   overflow: hidden;

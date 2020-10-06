@@ -2,22 +2,20 @@
   <div class="home-container">
     <action-column>
       <div slot="actions">
-        <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
       </div>
-      <div slot="panel" v-if="activePane">
-        <left-side-panel @close-pane="onClose">
-          <div slot="content">
-            <facets-pane v-if="activePane === actions[0].paneId" />
-          </div>
-        </left-side-panel>
-      </div> -->
     </action-column>
-    <search-bar />
-    <start-screen
-        :open-section-header="`Models`"
-        :recent-cards="models"
-    />
-
+    <left-side-panel @close-pane="onClose" v-if="activePane">
+      <div slot="content">
+        <facets-pane v-if="activePane === actions[0].paneId" />
+      </div>
+    </left-side-panel>
+    <div class="content">
+      <search-bar />
+      <start-screen
+          :open-section-header="`Models`"
+          :recent-cards="models"
+      /> 
+    </div>
   </div>
 </template>
 
@@ -79,24 +77,18 @@
     onClose ():void {
       this.activePane = '';
     }
-
-  // public openView (view: string): void {
-  //   this.$router.push({ name: view });
-  // }
   }
 </script>
 
 <style lang="scss" scoped>
 @import "../styles/variables";
-
 .home-container {
     position:relative;
-    width: 100vw;
     height: $content-full-height;
     box-sizing: border-box;
     overflow: hidden;
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: row nowrap;
     .btn {
       background-color: transparent;
       color: $text-color;
@@ -105,5 +97,8 @@
       position: relative;
       border: 1px solid $border;
     }
-  }
+    .content {
+      flex-grow: 1;
+    }
+}
 </style>
