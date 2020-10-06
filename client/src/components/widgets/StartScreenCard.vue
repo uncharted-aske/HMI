@@ -38,50 +38,50 @@
 </template>
 
 <script>
-import _ from 'lodash';
-import Card from '@/components/widgets/Card.vue';
-// import OptionsButton from '@/components/widgets/options-button';
+  import _ from 'lodash';
+  import Card from '@/components/widgets/Card.vue';
+  // import OptionsButton from '@/components/widgets/options-button';
 
-export default {
-  name: 'StartScreenCard',
-  components: {
-    Card,
+  export default {
+    name: 'StartScreenCard',
+    components: {
+      Card,
     // OptionsButton
-  },
-  props: {
-    previewImageSrc: {
-      type: String,
-      default: ''
     },
-    title: {
-      type: String,
-      default: 'Card Title'
+    props: {
+      previewImageSrc: {
+        type: String,
+        default: '',
+      },
+      title: {
+        type: String,
+        default: 'Card Title',
+      },
+      subtitle: {
+        type: String,
+        default: 'Card Subtitle',
+      },
     },
-    subtitle: {
-      type: String,
-      default: 'Card Subtitle'
-    }
-  },
-  computed: {
-    hasImage() {
-      return !_.isNil(this.previewImageSrc);
-    }
-  },
-  methods: {
-    onCardClick() {
-      this.$emit('click');
+    computed: {
+      hasImage () {
+        return !_.isNil(this.previewImageSrc);
+      },
     },
-    onRename() {
-      this.$emit('rename');
+    methods: {
+      onCardClick () {
+        this.$emit('click');
+      },
+      onRename () {
+        this.$emit('rename');
+      },
+      onDuplicate () {
+        this.$emit('duplicate');
+      },
+      onDelete () {
+        this.$emit('delete');
+      },
     },
-    onDuplicate() {
-      this.$emit('duplicate');
-    },
-    onDelete() {
-      this.$emit('delete');
-    }
-  }
-};
+  };
 </script>
 <style lang="scss" scoped>
 

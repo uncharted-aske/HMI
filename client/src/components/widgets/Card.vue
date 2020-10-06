@@ -9,14 +9,14 @@
 
 <script>
 
-export default {
-  name: 'Card',
-  methods: {
-    onClick() {
-      this.$emit('click');
-    }
-  }
-};
+  export default {
+    name: 'Card',
+    methods: {
+      onClick () {
+        this.$emit('click');
+      },
+    },
+  };
 </script>
 
 <style lang="scss" scoped>

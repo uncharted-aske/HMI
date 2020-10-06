@@ -11,13 +11,13 @@
           </div>
         </left-side-panel>
       </div> -->
-    </action-column> 
-    <search-bar />  
+    </action-column>
+    <search-bar />
     <start-screen
         :open-section-header="`Models`"
         :recent-cards="models"
     />
-  
+
   </div>
 </template>
 
@@ -29,24 +29,23 @@
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import FacetsPane from '@/components/FacetsPane.vue'; 
-  import StartScreen from '@/components/StartScreen.vue'; 
-
+  import FacetsPane from '@/components/FacetsPane.vue';
+  import StartScreen from '@/components/StartScreen.vue';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
   ];
 
   const MODELS = [
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
-     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
-      { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
-       { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
-     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
-      { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
-       { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
-     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
-      { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test'},
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
   ];
 
   const components = {

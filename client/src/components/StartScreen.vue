@@ -10,54 +10,37 @@
           :title="recentCard.title"
           :subtitle="recentCard.subtitle"
           @click="onOpenRecent(recentCard)"
-          @rename="onRename(recentCard)"
-          @duplicate="onDuplicate(recentCard)"
-          @delete="onDelete(recentCard)"
         />
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import StartScreenCard from '@/components/widgets/StartScreenCard.vue';
+<script lang="ts">
+  import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { Prop } from 'vue-property-decorator';
 
-export default {
-  name: 'StartScreen',
-  components: {
-    StartScreenCard
-  },
-  props: {
-    openSectionHeader: {
-      type: String,
-      default: 'Open'
-    },
-    recentCards: {
-      type: Array,
-      default: () => []
-    }
-  },
-  data: () => ({
-  }),
-  computed: {
-  },
-  mounted() {
-  },
-  methods: {
-    onOpenRecent(recentCard) {
+  import StartScreenCard from '@/components/widgets/StartScreenCard.vue';
+
+  const components = {
+    StartScreenCard,
+  };
+
+  @Component({ components })
+  export default class StartScreen extends Vue {
+    @Prop({ default: 'Open' })
+    openSectionHeader: string;
+
+    @Prop({ default: [] })
+    recentCards: Array<object>;
+
+
+    onOpenRecent (recentCard: object) {
       this.$emit('open-recent', recentCard);
-    },
-    onRename(recentCard) {
-      this.$emit('rename', recentCard);
-    },
-    onDuplicate(recentCard) {
-      this.$emit('duplicate', recentCard);
-    },
-    onDelete(recentCard) {
-      this.$emit('delete', recentCard);
     }
+      
   }
-};
 </script>
 
 <style lang="scss">
