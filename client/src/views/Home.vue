@@ -4,21 +4,18 @@
       <div slot="actions">
         <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
       </div>
-      <div slot="panel" v-if="activePane">
-        <left-side-panel @close-pane="onClosePane">
+    </action-column>
+        <left-side-panel v-if="activePane" @close-pane="onClosePane">
           <div slot="content">
             <facets-pane v-if="activePane === actions[0].paneId" />
           </div>
         </left-side-panel>
-      </div> 
-    </action-column>
     <search-bar />
     <start-screen
         :open-section-header="`Models`"
         :cards="models"
         @open-card="onOpenCard"
     />
-
   </div>
 </template>
 
@@ -80,6 +77,7 @@
         activePane = this.actions.find(a => a.name === actionName).paneId;
       }
       this.activePane = activePane;
+      console.log(this.activePane);
     }
 
     onClosePane ():void {

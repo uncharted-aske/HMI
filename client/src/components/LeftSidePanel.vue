@@ -42,7 +42,7 @@
   height: $content-full-height;
   width: 20vw;
   background-color: $body-bg;
-  position: absolute;
+  position: relative;
   left: 100%;
   top: 0;
   z-index: map-get($z-index-order, side-panel);
