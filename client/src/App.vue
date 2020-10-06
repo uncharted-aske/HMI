@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <NavBar />
+    <nav-bar />
     <router-view />
   </div>
 </template>
@@ -19,13 +19,13 @@
 
 <style lang="scss">
 @import 'bootstrap/dist/css/bootstrap.min';
+@import "styles/variables";
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin-top: $navbar-outer-height;
 }
 </style>

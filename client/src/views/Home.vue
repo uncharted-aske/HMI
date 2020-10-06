@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <button
       type="button"
       class="btn btn-primary"

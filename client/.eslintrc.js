@@ -64,7 +64,6 @@ module.exports = {
         '@typescript-eslint/no-use-before-define': 2,
         '@typescript-eslint/camelcase': 0,
         '@typescript-eslint/no-empty-interface': 2,
-        '@typescript-eslint/explicit-function-return-type': 2,
         '@typescript-eslint/ban-ts-ignore': 0,
         '@typescript-eslint/no-inferrable-types': [2, {
           ignoreParameters: true,
