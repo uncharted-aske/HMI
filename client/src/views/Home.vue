@@ -11,9 +11,12 @@
           </div>
         </left-side-panel>
       </div> -->
-    </action-column>
-        <search-bar />
-
+    </action-column> 
+    <search-bar />  
+    <start-screen
+        open-section-header="Models"
+    />
+  
   </div>
 </template>
 
@@ -25,10 +28,9 @@
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
+  import FacetsPane from '@/components/FacetsPane.vue'; 
+  import StartScreen from '@/components/StartScreen.vue'; 
 
-  // import JSComponent from '@/components/JSComponent.vue';
-  // import TSComponent from '@/components/TSComponent.vue';
-  // import TSClassComponent from '@/components/TSClassComponent.vue';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -39,6 +41,8 @@
     ActionColumnNavBar,
     SearchBar,
     LeftSidePanel,
+    FacetsPane,
+    StartScreen,
   };
 
   @Component({ components })
@@ -72,10 +76,13 @@
 @import "../styles/variables";
 
 .home-container {
+    position:relative;
+    width: 100vw;
     height: $content-full-height;
     box-sizing: border-box;
     overflow: hidden;
     display: flex;
+    flex-flow: column wrap;
     .btn {
       background-color: transparent;
       color: $text-color;

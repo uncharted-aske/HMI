@@ -18,9 +18,8 @@
 @import "../styles/variables";
 
 .action-column-container {
-  position: relative;
   width: $secondary-bar-width;
-  height: $content-full-height;
+  height: 100%;
 }
 
 </style>
