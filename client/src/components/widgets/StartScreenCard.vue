@@ -17,7 +17,7 @@
       <h6 class="subtitle">{{ subtitle }}</h6>
       <div class="icon">
         <font-awesome-icon :icon="['fas', iconType]" />
-      </div>  
+      </div>
     </div>
   </card>
 </template>
