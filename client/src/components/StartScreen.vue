@@ -9,6 +9,7 @@
           :preview-image-src="recentCard.previewImageSrc"
           :title="recentCard.title"
           :subtitle="recentCard.subtitle"
+          :icon="recentCard.type"
           @click="onOpenRecent(recentCard)"
         />
       </div>

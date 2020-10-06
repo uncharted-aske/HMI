@@ -36,16 +36,17 @@
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
   ];
 
+  //Just for test purposes
   const MODELS = [
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'qualitative' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
   ];
 
   const components = {

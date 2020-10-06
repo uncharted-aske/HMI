@@ -15,6 +15,9 @@
       </div>
       <h5>{{ title }}</h5>
       <h6 class="subtitle">{{ subtitle }}</h6>
+      <div class="icon">
+        <font-awesome-icon :icon="['fas', iconType]" />
+      </div>  
     </div>
   </card>
 </template>
@@ -42,8 +45,15 @@
     @Prop({ default: 'Card subtitle' })
     subtitle: string;
 
+    @Prop({ default: 'faExclamationTriangle' })
+    icon: string;
+
     get hasImage (): boolean {
       return !_.isNil(this.previewImageSrc);
+    }
+
+    get iconType (): string {
+      return this.icon === 'computational' ? 'chart-line' : 'book';
     }
 
     onCardClick (): void {
@@ -52,6 +62,7 @@
   }
 </script>
 <style lang="scss" scoped>
+@import '../../styles/variables';
 
   .card-container {
     height: 233px;
@@ -62,27 +73,6 @@
 
   * {
     margin: 0;
-  }
-
-  .centered {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    h4 {
-      text-align: center;
-    }
-
-    .card-icon {
-      font-size: 64px;
-      color: #255DCC;
-      transition: all 0.15s;
-    }
-  }
-
-  .card-container:hover .card-icon {
-    color: lighten(#255DCC, 10%);
   }
 
   .recent-card {
@@ -118,10 +108,11 @@
       font-weight: normal;
     }
 
-    .menu {
+    .icon {
       position: absolute;
-      right: 4px;
-      bottom: 4px;
+      right: 8px;
+      bottom: 8px;
+      color: $icon-color;
     }
 
   }
