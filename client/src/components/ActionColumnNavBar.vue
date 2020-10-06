@@ -19,27 +19,25 @@
   </ul>
 </template>
 
-<script>
-  export default {
-    name: 'ActionColumnNavBar',
-    props: {
-      actions: {
-        type: Array,
-        default: () => [],
-      },
-      currentAction: {
-        type: String,
-        default: () => '',
-      },
-    },
-    methods: {
-      setActive (actionName) {
-        // If the action is currently selected, pass '' to signify it should be
-        //  unselected. Otherwise, pass the action's name to select it
-        this.$emit('set-active', actionName === this.currentAction ? '' : actionName);
-      },
-    },
-  };
+<script lang="ts">
+  import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { Prop } from 'vue-property-decorator';
+
+  @Component
+  export default class ActionColumnNavBar extends Vue {
+    @Prop({ default: [] })
+    actions: Array<string>;
+
+    @Prop({ default: '' })
+    currentAction: string;
+
+    setActive (actionName:string): void {
+      // If the action is currently selected, pass '' to signify it should be
+      //  unselected. Otherwise, pass the action's name to select it
+      this.$emit('set-active', actionName === this.currentAction ? '' : actionName);
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

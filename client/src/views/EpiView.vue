@@ -7,8 +7,8 @@
       <div slot="panel" v-if="activePane">
         <left-side-panel>
           <div slot="content">
-            <facets-pane v-if="activePane === actions[0].paneId" @close="activePane = ''"/>
-            <metadata-pane v-if="activePane ===  actions[1].paneId" @close="activePane = ''"/>
+            <facets-pane v-if="activePane === actions[0].paneId" @close="onClose"/>
+            <metadata-pane v-if="activePane ===  actions[1].paneId" @close="onClose"/>
           </div>
         </left-side-panel>
       </div>
@@ -57,6 +57,10 @@
         activePane = this.actions.find(a => a.name === actionName).paneId;
       }
       this.activePane = activePane;
+    }
+
+    onClose():void {
+      this.activePane = '';
     }
   }
 </script>

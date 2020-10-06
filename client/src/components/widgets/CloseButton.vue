@@ -7,10 +7,13 @@
   </div>
 </template>
 
-<script>
-  export default {
-    name: 'CloseButton',
-  };
+<script lang="ts">
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
+  
+  @Component
+  export default class CloseButton extends Vue { }
+  
 </script>
 
 <style lang="scss" scoped>
