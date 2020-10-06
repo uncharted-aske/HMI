@@ -1,7 +1,6 @@
 <template>
   <div class="action-column-container">
     <slot name="actions" />
-    <!-- <slot name="panel" /> -->
   </div>
 </template>
 
