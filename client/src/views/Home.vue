@@ -5,17 +5,18 @@
         <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
       </div>
       <div slot="panel" v-if="activePane">
-        <left-side-panel @close-pane="onClose">
+        <left-side-panel @close-pane="onClosePane">
           <div slot="content">
             <facets-pane v-if="activePane === actions[0].paneId" />
           </div>
         </left-side-panel>
-      </div> -->
+      </div> 
     </action-column>
     <search-bar />
     <start-screen
         :open-section-header="`Models`"
-        :recent-cards="models"
+        :cards="models"
+        @open-card="onOpenCard"
     />
 
   </div>
@@ -68,6 +69,11 @@
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
     }
 
+    onOpenCard (card: Record<string, unknown>): void {
+      const view = card.type === 'computational' ? 'epiView' : 'bioView';
+      this.$router.push({ name: view });
+    }
+
     onSetActive (actionName: string): void {
       let activePane = '';
       if (actionName !== '') {
@@ -76,13 +82,9 @@
       this.activePane = activePane;
     }
 
-    onClose ():void {
+    onClosePane ():void {
       this.activePane = '';
     }
-
-  // public openView (view: string): void {
-  //   this.$router.push({ name: view });
-  // }
   }
 </script>
 

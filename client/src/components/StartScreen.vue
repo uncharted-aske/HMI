@@ -1,16 +1,16 @@
 <template>
   <div class="start-screen-container">
-    <div class="recent">
+    <div class="start-screen">
       <h4 class="section-header">{{ openSectionHeader }}</h4>
-      <div class="recent-card-list">
+      <div class="card-list">
         <start-screen-card
-          v-for="(recentCard, i) in recentCards"
+          v-for="(card, i) in cards"
           :key="i"
-          :preview-image-src="recentCard.previewImageSrc"
-          :title="recentCard.title"
-          :subtitle="recentCard.subtitle"
-          :icon="recentCard.type"
-          @click="onOpenRecent(recentCard)"
+          :preview-image-src="card.previewImageSrc"
+          :title="card.title"
+          :subtitle="card.subtitle"
+          :icon="card.type"
+          @click="onOpen(card)"
         />
       </div>
     </div>
@@ -34,10 +34,10 @@
     openSectionHeader: string;
 
     @Prop({ default: [] })
-    recentCards: Record<string, unknown>;
+    cards: Record<string, unknown>;
 
-    onOpenRecent (recentCard: Record<string, unknown>): void {
-      this.$emit('open-recent', recentCard);
+    onOpen (card: Record<string, unknown>): void {
+      this.$emit('open-card', card);
     }
   }
 </script>
@@ -51,7 +51,7 @@
   display: flex;
   overflow: hidden;
 
-  .recent {
+  .start-screen {
     flex: 1;
     // Use 22px instead of 32px to account for cards' 10px horizontal margin
     padding: 16px 22px 16px 22px;
@@ -62,7 +62,7 @@
       margin-left: 10px;
     }
 
-    .recent-card-list {
+    .card-list {
       width: 100%;
       display: flex;
       flex-wrap: wrap;
