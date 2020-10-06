@@ -1,7 +1,7 @@
 <template>
   <div
     class="close-button"
-    @click="$emit('close')"
+    @click="onClick"
   >
     <font-awesome-icon :icon="['fas', 'times']" />
   </div>
@@ -10,10 +10,14 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  
+
   @Component
-  export default class CloseButton extends Vue { }
-  
+  export default class CloseButton extends Vue {
+    onClick (): void {
+      this.$emit('close');
+    }
+  }
+
 </script>
 
 <style lang="scss" scoped>

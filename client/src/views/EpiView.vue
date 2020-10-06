@@ -5,10 +5,10 @@
         <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
       </div>
       <div slot="panel" v-if="activePane">
-        <left-side-panel>
+        <left-side-panel @close-pane="onClose">
           <div slot="content">
-            <facets-pane v-if="activePane === actions[0].paneId" @close="onClose"/>
-            <metadata-pane v-if="activePane ===  actions[1].paneId" @close="onClose"/>
+            <facets-pane v-if="activePane === actions[0].paneId" />
+            <metadata-pane v-if="activePane ===  actions[1].paneId" />
           </div>
         </left-side-panel>
       </div>
@@ -59,7 +59,7 @@
       this.activePane = activePane;
     }
 
-    onClose():void {
+    onClose ():void {
       this.activePane = '';
     }
   }

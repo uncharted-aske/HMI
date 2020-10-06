@@ -3,36 +3,36 @@
       <div class="panel-header">
         <h5>{{paneTitle}}</h5>
       </div>
-      <close-button @close="$emit('close')"/>
+      <close-button @close="onClose"/>
       <div class="panel-body">
          <slot name="content" />
       </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
+  import { Prop } from 'vue-property-decorator';
 
   import CloseButton from '@/components/widgets/CloseButton.vue';
 
-  export default {
-    name: 'LeftSidePanel',
-    components: {
-      CloseButton,
-    },
-    props: {
-      isOpen: {
-        type: Boolean,
-        default: false,
-      },
-      paneTitle: {
-        type: String,
-        default: '',
-      },
-    },
-    methods: {
-
-    },
+  const components = {
+    CloseButton,
   };
+
+  @Component({ components })
+  export default class LeftSidePanel extends Vue {
+    @Prop({ default: false })
+    isOpen: boolean;
+
+    @Prop({ default: '' })
+    paneTitle: string;
+
+    onClose (): void {
+      this.$emit('close-pane');
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
