@@ -18,7 +18,6 @@
 @import "../styles/variables";
 
 .search-bar-container {
-  width: 100%;
   height: $secondary-bar-width;
   background-color: $secondary-bar-bg;
 }

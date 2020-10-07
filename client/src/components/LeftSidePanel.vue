@@ -39,10 +39,11 @@
 @import "../styles/variables";
 
 .left-side-panel-container {
-  height: $content-full-height;
-  width: 35%;
+  // position: relative;
+  width: 25%;
+  height: 100%;
   background-color: $body-bg;
-  box-shadow: 0 -1px 0 $border, 0 0 2px rgba(0,0,0,.12), 2px 2px 4px rgba(0,0,0,.24);
+  border: 1px solid $border;
 }
 
 </style>

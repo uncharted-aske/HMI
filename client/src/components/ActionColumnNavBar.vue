@@ -44,6 +44,9 @@
 @import '../styles/variables';
 
 .action-column-nav-bar {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
   width: $secondary-bar-width;
   margin: 0;
   padding: 0;

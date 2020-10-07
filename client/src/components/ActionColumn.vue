@@ -17,8 +17,10 @@
 @import "../styles/variables";
 
 .action-column-container {
+  position: relative;
   width: $secondary-bar-width;
   height: 100%;
+  background-color: $secondary-bar-bg;
 }
 
 </style>

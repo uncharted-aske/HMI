@@ -1,5 +1,5 @@
 <template>
-  <div class="start-screen-container">
+  <div class="start-screen-container"> 
     <div class="start-screen">
       <h4 class="section-header">{{ openSectionHeader }}</h4>
       <div class="card-list">
@@ -13,8 +13,8 @@
           @click="onOpen(card)"
         />
       </div>
-    </div>
-  </div>
+    </div> 
+  </div> 
 </template>
 
 <script lang="ts">
@@ -46,13 +46,11 @@
 @import "../styles/variables";
 
 .start-screen-container {
-  // width: 100%;
   height: calc(#{$content-full-height} - #{$secondary-bar-width});
   display: flex;
   overflow: hidden;
 
   .start-screen {
-    flex: 1;
     // Use 22px instead of 32px to account for cards' 10px horizontal margin
     padding: 16px 22px 16px 22px;
     overflow-y: auto;
@@ -63,9 +61,9 @@
     }
 
     .card-list {
-      width: 100%;
       display: flex;
       flex-wrap: wrap;
+
 
       .card-container {
         margin: 0 10px 20px 10px;

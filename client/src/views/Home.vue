@@ -2,21 +2,24 @@
   <div class="home-container">
     <action-column>
       <div slot="actions">
+        <action-column-nav-bar :actions="actions" :current-action="currentAction" @set-active="onSetActive" />  
       </div>
     </action-column>
-    <left-side-panel @close-pane="onClose" v-if="activePane">
+    <left-side-panel @close-pane="onClosePane" v-if="activePane">
       <div slot="content">
         <facets-pane v-if="activePane === actions[0].paneId" />
       </div>
     </left-side-panel>
+   
     <div class="content">
       <search-bar />
       <start-screen
           :open-section-header="`Models`"
-          :recent-cards="models"
-      /> 
-    </div>
-  </div>
+          :cards="models"
+      />
+    </div>   
+
+  </div>  
 </template>
 
 <script lang="ts">
@@ -29,6 +32,8 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
   import StartScreen from '@/components/StartScreen.vue';
+  import CardsList from '@/components/CardsList.vue';
+
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -45,7 +50,14 @@
     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-  ];
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
+    
+   ];
 
   const components = {
     ActionColumn,
@@ -54,6 +66,7 @@
     LeftSidePanel,
     FacetsPane,
     StartScreen,
+    CardsList,
   };
 
   @Component({ components })
@@ -77,11 +90,14 @@
         activePane = this.actions.find(a => a.name === actionName).paneId;
       }
       this.activePane = activePane;
-      console.log(this.activePane);
     }
 
     onClosePane ():void {
       this.activePane = '';
+    }
+
+    test() {
+      this.activePane = 'facets';
     }
   }
 </script>
@@ -89,22 +105,15 @@
 <style lang="scss" scoped>
 @import "../styles/variables";
 .home-container {
-    position:relative;
-    height: $content-full-height;
-    box-sizing: border-box;
-    overflow: hidden;
-    display: flex;
-    flex-flow: row nowrap;
-    .btn {
-      background-color: transparent;
-      color: $text-color;
-      width: $secondary-bar-width;
-      height: $secondary-bar-width;
-      position: relative;
-      border: 1px solid $border;
-    }
-    .content {
-      flex-grow: 1;
-    }
+  height: $content-full-height;
+  display: flex;
+  flex-flow: row nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  .content {
+    flex-grow: 1;
+  }
+
 }
 </style>
