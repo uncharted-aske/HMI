@@ -5,5 +5,5 @@ interface ActionColumnInterface {
 }
 
 export {
-    ActionColumnInterface,
-}
+  ActionColumnInterface,
+};
