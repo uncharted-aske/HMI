@@ -19,7 +19,7 @@
 
 <style lang="scss">
 @import 'bootstrap/dist/css/bootstrap.min';
-@import "styles/variables";
+@import "styles/aske";
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

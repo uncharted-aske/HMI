@@ -1,5 +1,5 @@
 <template>
-  <div class="epi-view-container">
+  <div class="view-container">
     <action-column>
       <div slot="actions">
         <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
@@ -66,18 +66,5 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
-
-.epi-view-container {
-  height: $content-full-height;
-  display: flex;
-  flex-flow: row nowrap;
-  flex: 1;
-  overflow: hidden;
-  box-sizing: border-box;
-  .content {
-    flex: 1;
-  }
-}
 
 </style>
