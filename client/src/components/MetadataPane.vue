@@ -4,11 +4,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
-  export default {
-    name: 'MetadataPane',
-  };
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
+
+  @Component
+  export default class MetadataPane extends Vue {
+  }
 </script>
 
 <style lang="scss" scoped>

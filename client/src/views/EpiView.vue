@@ -2,13 +2,13 @@
   <div class="epi-view-container">
     <action-column>
       <div slot="actions">
-        <action-column-nav-bar :actions="ACTIONS" :currentAction="currentAction" @set-active="onSetActive" />
+        <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
       </div>
       <div slot="panel" v-if="activePane">
-        <left-side-panel>
+        <left-side-panel @close-pane="onClose">
           <div slot="content">
-            <facets-pane v-if="activePane === ACTIONS[0].paneId" @close="activePane = ''"/>
-            <metadata-pane v-if="activePane ===  ACTIONS[1].paneId" @close="activePane = ''"/>
+            <facets-pane v-if="activePane === actions[0].paneId" />
+            <metadata-pane v-if="activePane ===  actions[1].paneId" />
           </div>
         </left-side-panel>
       </div>
@@ -17,7 +17,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
+
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
@@ -25,42 +28,47 @@
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
 
+  export interface ViewAction {
+  name: string;
+  icon: string;
+  paneId: string;
+}
+
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
     { name: 'Metadata', icon: 'info', paneId: 'metadata' },
   ];
 
-  export default {
-    name: 'EpiView',
-    components: {
-      ActionColumn,
-      ActionColumnNavBar,
-      SearchBar,
-      LeftSidePanel,
-      MetadataPane,
-      FacetsPane,
-    },
-    data: () => ({
-      activePane: '',
-    }),
-    computed: {
-      currentAction () {
-        return this.activePane && this.ACTIONS.find(a => a.paneId === this.activePane).name;
-      },
-    },
-    created () {
-      this.ACTIONS = ACTIONS;
-    },
-    methods: {
-      onSetActive (actionName) {
-        let activePane = '';
-        if (actionName !== '') {
-          activePane = this.ACTIONS.find(a => a.name === actionName).paneId;
-        }
-        this.activePane = activePane;
-      },
-    },
+  const components = {
+    ActionColumn,
+    ActionColumnNavBar,
+    SearchBar,
+    LeftSidePanel,
+    MetadataPane,
+    FacetsPane,
   };
+
+  @Component({ components })
+  export default class EpiView extends Vue {
+    activePane = '';
+    actions: ViewAction[] = ACTIONS;
+
+    get currentAction (): string {
+      return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
+    }
+
+    onSetActive (actionName: string): void {
+      let activePane = '';
+      if (actionName !== '') {
+        activePane = this.actions.find(a => a.name === actionName).paneId;
+      }
+      this.activePane = activePane;
+    }
+
+    onClose ():void {
+      this.activePane = '';
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
