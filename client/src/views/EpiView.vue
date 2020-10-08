@@ -21,18 +21,14 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
 
+  import { ActionColumnInterface } from '../interfaces/Actions';
+
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
-
-  export interface ViewAction {
-  name: string;
-  icon: string;
-  paneId: string;
-}
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -51,7 +47,7 @@
   @Component({ components })
   export default class EpiView extends Vue {
     activePane = '';
-    actions: ViewAction[] = ACTIONS;
+    actions: ActionColumnInterface[] = ACTIONS;
 
     get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;

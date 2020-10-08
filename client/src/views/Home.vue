@@ -26,6 +26,8 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
 
+  import { ActionColumnInterface } from '../interfaces/Actions';
+
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
@@ -69,7 +71,7 @@
   @Component({ components })
   export default class Home extends Vue {
     activePane = '';
-    actions = ACTIONS;
+    actions: ActionColumnInterface[] = ACTIONS;
     models = MODELS;
 
     get currentAction (): string {
