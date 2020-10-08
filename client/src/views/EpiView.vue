@@ -28,6 +28,12 @@
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
 
+  export interface ViewAction {
+  name: string;
+  icon: string;
+  paneId: string;
+}
+
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
     { name: 'Metadata', icon: 'info', paneId: 'metadata' },
@@ -45,7 +51,7 @@
   @Component({ components })
   export default class EpiView extends Vue {
     activePane = '';
-    actions = ACTIONS;
+    actions: ViewAction[] = ACTIONS;
 
     get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;

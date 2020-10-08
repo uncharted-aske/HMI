@@ -26,11 +26,9 @@
 
   @Component
   export default class ActionColumnNavBar extends Vue {
-    @Prop({ default: [] })
-    actions: Array<string>;
+    @Prop({ default: [] }) actions: string[];
 
-    @Prop({ default: '' })
-    currentAction: string;
+    @Prop({ default: '' }) currentAction: string;
 
     setActive (actionName:string): void {
       // If the action is currently selected, pass '' to signify it should be
