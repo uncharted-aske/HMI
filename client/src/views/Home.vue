@@ -18,7 +18,6 @@
           :cards="models"
       />
     </div>   
-
   </div>  
 </template>
 
@@ -108,12 +107,11 @@
   height: $content-full-height;
   display: flex;
   flex-flow: row nowrap;
+  flex: 1;
   overflow: hidden;
   box-sizing: border-box;
-
   .content {
-    flex-grow: 1;
+    flex: 1;
   }
-
 }
 </style>
