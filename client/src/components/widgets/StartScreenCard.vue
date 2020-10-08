@@ -38,7 +38,7 @@
   export default class StartScreenCard extends Vue {
     @Prop({ default: '' }) previewImageSrc: string;
 
-     @Prop({ default: 'Card title' }) title: string;
+    @Prop({ default: 'Card title' }) title: string;
 
     @Prop({ default: 'Card subtitle' }) subtitle: string;
 

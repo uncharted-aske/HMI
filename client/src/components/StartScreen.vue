@@ -22,7 +22,7 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
-  import { CardInterface } from '../interfaces/interfaces';
+  import { CardInterface } from '../types/types';
 
   import StartScreenCard from '@/components/widgets/StartScreenCard.vue';
 
