@@ -12,7 +12,6 @@ interface CardInterface {
   type: string;
 }
 
-
 export {
   ActionColumnInterface,
   CardInterface,
