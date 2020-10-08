@@ -11,7 +11,7 @@
             <metadata-pane v-if="activePane ===  actions[1].paneId" />
           </div>
         </left-side-panel>
-    <div class="content">    
+    <div class="content">
       <search-bar />
     </div>
   </div>
