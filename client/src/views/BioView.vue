@@ -21,7 +21,7 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
 
-  import { ActionColumnInterface } from '../interfaces/interfaces';
+  import { ActionColumnInterface } from '../types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
