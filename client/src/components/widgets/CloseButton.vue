@@ -21,6 +21,7 @@
 </script>
 
 <style lang="scss" scoped>
+@import "../../styles/variables";
 
 .close-button {
   font-size: 16px;
@@ -30,6 +31,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 3px;
+  color: $icon-color;
   cursor: pointer;
 
   &:hover {

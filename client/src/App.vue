@@ -27,5 +27,6 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   margin-top: $navbar-outer-height;
+  background-color: $body-bg;
 }
 </style>

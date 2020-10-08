@@ -1,5 +1,5 @@
 <template>
-  <div class="home-container">
+  <div class="view-container">
     <action-column>
       <div slot="actions">
         <action-column-nav-bar :actions="actions" :current-action="currentAction" @set-active="onSetActive" />
@@ -96,16 +96,4 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
-.home-container {
-  height: $content-full-height;
-  display: flex;
-  flex-flow: row nowrap;
-  flex: 1;
-  overflow: hidden;
-  box-sizing: border-box;
-  .content {
-    flex: 1;
-  }
-}
 </style>

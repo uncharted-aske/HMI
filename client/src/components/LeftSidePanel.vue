@@ -42,7 +42,7 @@
   position: relative;
   width: 20%;
   height: 100%;
-  background-color: $body-bg;
+  background-color: $secondary-bar-bg;
   border: 1px solid $border;
 }
 
