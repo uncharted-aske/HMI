@@ -22,6 +22,8 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
+  import { CardInterface } from '../interfaces/interfaces';
+
   import StartScreenCard from '@/components/widgets/StartScreenCard.vue';
 
   const components = {
@@ -30,13 +32,11 @@
 
   @Component({ components })
   export default class StartScreen extends Vue {
-    @Prop({ default: 'Open' })
-    openSectionHeader: string;
+    @Prop({ default: 'Open' }) openSectionHeader: string;
 
-    @Prop({ default: [] })
-    cards: Record<string, unknown>;
+    @Prop({ default: [] }) cards: CardInterface[];
 
-    onOpen (card: Record<string, unknown>): void {
+    onOpen (card: CardInterface): void {
       this.$emit('open-card', card);
     }
   }

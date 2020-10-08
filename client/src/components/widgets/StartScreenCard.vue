@@ -36,17 +36,13 @@
 
   @Component({ components })
   export default class StartScreenCard extends Vue {
-    @Prop({ default: '' })
-    previewImageSrc: string;
+    @Prop({ default: '' }) previewImageSrc: string;
 
-     @Prop({ default: 'Card title' })
-    title: string;
+     @Prop({ default: 'Card title' }) title: string;
 
-    @Prop({ default: 'Card subtitle' })
-    subtitle: string;
+    @Prop({ default: 'Card subtitle' }) subtitle: string;
 
-    @Prop({ default: 'faExclamationTriangle' })
-    icon: string;
+    @Prop({ default: 'faExclamationTriangle' }) icon: string;
 
     get hasImage (): boolean {
       return !_.isNil(this.previewImageSrc);

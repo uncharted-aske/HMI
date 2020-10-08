@@ -26,7 +26,7 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
 
-  import { ActionColumnInterface } from '../interfaces/Actions';
+  import { ActionColumnInterface, CardInterface } from '../interfaces/interfaces';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
@@ -72,13 +72,13 @@
   export default class Home extends Vue {
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
-    models = MODELS;
+    models: CardInterface[] = MODELS;
 
     get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
     }
 
-    onOpenCard (card: Record<string, unknown>): void {
+    onOpenCard (card: CardInterface): void {
       const view = card.type === 'computational' ? 'epiView' : 'bioView';
       this.$router.push({ name: view });
     }
