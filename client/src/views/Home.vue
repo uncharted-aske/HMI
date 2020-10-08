@@ -35,28 +35,17 @@
   import FacetsPane from '@/components/FacetsPane.vue';
   import StartScreen from '@/components/StartScreen.vue';
 
+  //HACK: Model representations
+  import CHIMECAG from '../assets/formatted-CHIME-SIR-CAG-metadata.json';
+
+
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
   ];
 
   // Just for test purposes
   const MODELS = [
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'qualitative' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-
+    { id: 1, previewImageSrc: null, title: CHIMECAG.metadata.name, subtitle: CHIMECAG.metadata.authors[0].institution, type: 'computational'  },
   ];
 
   const components = {
