@@ -2,7 +2,7 @@
   <div class="home-container">
     <action-column>
       <div slot="actions">
-        <action-column-nav-bar :actions="actions" :current-action="currentAction" @set-active="onSetActive" />  
+        <action-column-nav-bar :actions="actions" :current-action="currentAction" @set-active="onSetActive" />
       </div>
     </action-column>
     <left-side-panel @close-pane="onClosePane" v-if="activePane">
@@ -10,15 +10,15 @@
         <facets-pane v-if="activePane === actions[0].paneId" />
       </div>
     </left-side-panel>
-   
+
     <div class="content">
       <search-bar />
       <start-screen
           :open-section-header="`Models`"
           :cards="models"
       />
-    </div>   
-  </div>  
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -31,8 +31,6 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
   import StartScreen from '@/components/StartScreen.vue';
-  import CardsList from '@/components/CardsList.vue';
-
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -55,8 +53,8 @@
     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
     { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    
-   ];
+
+  ];
 
   const components = {
     ActionColumn,
@@ -65,7 +63,6 @@
     LeftSidePanel,
     FacetsPane,
     StartScreen,
-    CardsList,
   };
 
   @Component({ components })
@@ -93,10 +90,6 @@
 
     onClosePane ():void {
       this.activePane = '';
-    }
-
-    test() {
-      this.activePane = 'facets';
     }
   }
 </script>

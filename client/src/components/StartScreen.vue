@@ -1,5 +1,5 @@
 <template>
-  <div class="start-screen-container"> 
+  <div class="start-screen-container">
     <div class="start-screen">
       <h4 class="section-header">{{ openSectionHeader }}</h4>
       <div class="card-list">
@@ -13,8 +13,8 @@
           @click="onOpen(card)"
         />
       </div>
-    </div> 
-  </div> 
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
