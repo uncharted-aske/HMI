@@ -46,7 +46,7 @@
 .action-column-nav-bar {
   margin: 0 auto;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: $secondary-bar-width;
   margin: 0;
   padding: 0;

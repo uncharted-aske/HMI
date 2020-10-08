@@ -4,16 +4,16 @@
       <div slot="actions">
         <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
       </div>
-      <div slot="panel" v-if="activePane">
-        <left-side-panel @close-pane="onClose">
+    </action-column>
+    <left-side-panel @close-pane="onClose"  v-if="activePane">
           <div slot="content">
             <facets-pane v-if="activePane === actions[0].paneId" />
             <metadata-pane v-if="activePane ===  actions[1].paneId" />
           </div>
         </left-side-panel>
-      </div>
-    </action-column>
-    <search-bar />
+    <div class="content">    
+      <search-bar />
+    </div>
   </div>
 </template>
 
@@ -68,19 +68,16 @@
 <style lang="scss" scoped>
 @import "../styles/variables";
 
-  .epi-view-container {
-    height: $content-full-height;
-    box-sizing: border-box;
-    overflow: hidden;
-    display: flex;
-    .btn {
-      background-color: transparent;
-      color: $text-color;
-      width: $secondary-bar-width;
-      height: $secondary-bar-width;
-      position: relative;
-      border: 1px solid $border;
-    }
+.epi-view-container {
+  height: $content-full-height;
+  display: flex;
+  flex-flow: row nowrap;
+  flex: 1;
+  overflow: hidden;
+  box-sizing: border-box;
+  .content {
+    flex: 1;
   }
+}
 
 </style>
