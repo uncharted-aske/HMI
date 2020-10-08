@@ -1,11 +1,13 @@
 // Colors (based on https://material.io/design/color/the-color-system.html#tools-for-picking-colors)
-$body-bg: #FFFFFF;
-$secondary-bar-bg: #ECEFF1;
+$body-bg: #ECEFF1;
+$secondary-bar-bg: #FFFFFF;
 $border: #CFD8DC;
+
 $text-color: #263238;
 $text-background-color-hovered: rgba(38,50,56, 0.5);
-$btn-secondary-color: #6c757d;
-$icon-color:$btn-secondary-color; 
+$icon-color: #6c757d; 
+
+$selection: #0091EA;
 // Main navbar height
 $navbar-outer-height: 49px;
 // 100% height - navbar
@@ -13,9 +15,7 @@ $content-full-height: calc(100vh - #{$navbar-outer-height});
 // Secondary bars width
 $secondary-bar-width: 50px;
 
-$z-index-order: (
-  side-panel: 50
-);
+
 
 
 

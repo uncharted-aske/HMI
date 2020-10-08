@@ -1,0 +1,13 @@
+@import "variables";
+
+.view-container {
+    height: $content-full-height;
+    display: flex;
+    flex-flow: row nowrap;
+    flex: 1;
+    overflow: hidden;
+    box-sizing: border-box;
+    .content {
+      flex: 1;
+    }
+}
