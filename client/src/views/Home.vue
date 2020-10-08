@@ -16,6 +16,7 @@
       <start-screen
           :open-section-header="`Models`"
           :cards="models"
+          @open-card="onOpenCard"
       />
     </div>
   </div>
@@ -77,6 +78,7 @@
 
     onOpenCard (card: Record<string, unknown>): void {
       const view = card.type === 'computational' ? 'epiView' : 'bioView';
+      console.log(view);
       this.$router.push({ name: view });
     }
 
