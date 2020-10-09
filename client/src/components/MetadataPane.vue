@@ -9,7 +9,7 @@
       <div>{{metadata.description}}</div>
     </div>
     <div class="metadata-item">
-       <div class="key">Createed</div>
+       <div class="key">Created</div>
       <div>{{metadata.created}}</div>
     </div>
     <div class="metadata-item">
@@ -47,6 +47,7 @@
   border-bottom: 1px solid rgba(207, 216, 220, .5);
   .key {
     font-weight: bold;
+    padding-top: 5px;
   }
 }
 </style>
