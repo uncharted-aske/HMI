@@ -2,7 +2,7 @@
   <div class="view-container">
     <action-column>
       <div slot="actions">
-        <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
+        <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active-pane="onSetActive" />
       </div>
     </action-column>
     <left-side-panel @close-pane="onClose"  v-if="activePane">
@@ -69,6 +69,7 @@
     }
 
     onSetActive (actionName: string): void {
+      console.log(actionName);
       let activePane = '';
       if (actionName !== '') {
         activePane = this.actions.find(a => a.name === actionName).paneId;

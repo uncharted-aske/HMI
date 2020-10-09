@@ -1,5 +1,5 @@
 <template>
-  <div class="metadata-pane-container" v-if="metadata">
+  <div class="metadata-pane-container">
     <div class="metadata-item">
       <div class="key">Name</div>
       <div>{{metadata.name}}</div>
