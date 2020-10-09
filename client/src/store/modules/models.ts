@@ -12,8 +12,8 @@ const state: ModelsState = {
 };
 
 const getters: GetterTree<ModelsState, any> = {
+  getSelectedModelId: state => state.selectedModelId,
   getModelsList: state => state.modelsList,
-  // selectedModelMetadata: state => state.modelsList.find( model => model.id as selectedModelId)
 };
 
 const mutations: MutationTree<ModelsState> = {
@@ -25,5 +25,5 @@ const mutations: MutationTree<ModelsState> = {
 export const models = {
   state,
   getters,
-  mutations,
+  mutations
 };
