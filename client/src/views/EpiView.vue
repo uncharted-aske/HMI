@@ -13,6 +13,7 @@
         </left-side-panel>
     <div class="content">
       <search-bar />
+      <epi-graph />
     </div>
   </div>
 </template>
@@ -20,6 +21,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
+  import { Getter, Mutation } from 'vuex-class';
 
   import { ActionColumnInterface } from '../types/types';
 
@@ -29,6 +31,8 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
+  import EpiGraph from '@/components/EpiGraph.vue';
+
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -42,6 +46,7 @@
     LeftSidePanel,
     MetadataPane,
     FacetsPane,
+    EpiGraph,
   };
 
   @Component({ components })

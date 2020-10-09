@@ -25,6 +25,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
+  import { Mutation } from 'vuex-class';
 
   import { ActionColumnInterface, CardInterface } from '../types/types';
 
@@ -44,7 +45,7 @@
   ];
 
   // Just for test purposes
-  const MODELS = [
+  const MODELS_CARDS = [
     { id: 1, previewImageSrc: null, title: CHIMECAG.metadata.name, subtitle: CHIMECAG.metadata.authors[0].institution, type: 'computational'  },
   ];
 
@@ -61,7 +62,9 @@
   export default class Home extends Vue {
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
-    models: CardInterface[] = MODELS;
+    models: CardInterface[] = MODELS_CARDS;
+
+    @Mutation setSelectedModel;
 
     get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
@@ -69,6 +72,7 @@
 
     onOpenCard (card: CardInterface): void {
       const view = card.type === 'computational' ? 'epiView' : 'bioView';
+      this.setSelectedModel(card.id);
       this.$router.push({ name: view });
     }
 

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import App from './App.vue';
 import { createRouter } from './router';
+import { store } from './store';
 
 library.add(faExclamationTriangle, faTimes, faFilter, faInfo, faBook, faChartLine);
 
@@ -14,6 +15,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 async function main (): Promise<void> {
   const app = new Vue({
     router: createRouter(Vue),
+    store,
     render: (h: any): VNode => h(App),
   });
   app.$mount('body');
