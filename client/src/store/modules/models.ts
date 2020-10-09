@@ -7,7 +7,6 @@ const state: ModelsState = {
   selectedModelId: null,
   modelsList: [
     { id: 1, metadata: CHIME.metadata, type: 'computational' },
-    { id: 2, metadata: CHIME.metadata, type: 'computational' },
   ],
 };
 

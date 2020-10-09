@@ -32,15 +32,10 @@ interface ModelsState {
   modelsList: ModelInterface[]
 }
 
-interface Todo {
-  text: string
-}
-
 export {
   ActionColumnInterface,
   CardInterface,
   ModelInterface,
   ModelMetadataInterface,
   ModelsState,
-  Todo,
 };
