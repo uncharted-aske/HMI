@@ -21,7 +21,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { State } from 'vuex-class';
+  // import { State } from 'vuex-class';
 
   import { ActionColumnInterface } from '../types/types';
 
@@ -32,7 +32,6 @@
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
   import EpiGraph from '@/components/EpiGraph.vue';
-
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },

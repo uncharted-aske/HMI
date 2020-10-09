@@ -1,9 +1,3 @@
-interface ModelInterface {
-  id: number;
-  metadata: ModelMetadataInterface,
-  type: string
-}
-
 interface ModelMetadataInterface {
   name: string,
   description: string,
@@ -11,6 +5,12 @@ interface ModelMetadataInterface {
   source: string,
   version: string,
   knowledge: string,
+}
+
+interface ModelInterface {
+  id: number;
+  metadata: ModelMetadataInterface,
+  type: string
 }
 
 interface ActionColumnInterface {
@@ -41,6 +41,6 @@ export {
   CardInterface,
   ModelInterface,
   ModelMetadataInterface,
-  ModelsState, 
+  ModelsState,
   Todo,
 };

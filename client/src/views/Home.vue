@@ -25,7 +25,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { State, Getter, Mutation } from 'vuex-class';
+  import { Getter, Mutation } from 'vuex-class';
 
   import { ActionColumnInterface, CardInterface } from '../types/types';
 
@@ -35,10 +35,6 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
   import StartScreen from '@/components/StartScreen.vue';
-
-  //HACK: Model representations
-  import CHIME from '../assets/uncharted_chime.json';
-
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -67,7 +63,7 @@
 
     get modelsCards (): CardInterface[] {
       const modelsList = this.getModelsList;
-      const modelsCards = modelsList.map(model => Object.assign({}, model, { previewImageSrc: null, title: model.metadata.name, subtitle: model.metadata.source} ));
+      const modelsCards = modelsList.map(model => Object.assign({}, model, { previewImageSrc: null, title: model.metadata.name, subtitle: model.metadata.source }));
       return modelsCards;
     }
 
