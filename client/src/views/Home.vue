@@ -2,7 +2,7 @@
   <div class="view-container">
     <action-column>
       <div slot="actions">
-        <action-column-nav-bar :actions="actions" :current-action="currentAction" @set-active="onSetActive" />
+        <action-column-nav-bar :actions="actions" :current-action="currentAction" @set-active-pane="onSetActivePane" />
       </div>
     </action-column>
     <left-side-panel @close-pane="onClosePane" v-if="activePane">
@@ -73,7 +73,7 @@
       this.$router.push({ name: view });
     }
 
-    onSetActive (actionName: string): void {
+    onSetActivePane (actionName: string): void {
       let activePane = '';
       if (actionName !== '') {
         activePane = this.actions.find(a => a.name === actionName).paneId;

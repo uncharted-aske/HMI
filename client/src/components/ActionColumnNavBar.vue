@@ -33,7 +33,7 @@
     setActive (actionName:string): void {
       // If the action is currently selected, pass '' to signify it should be
       //  unselected. Otherwise, pass the action's name to select it
-      this.$emit('set-active', actionName === this.currentAction ? '' : actionName);
+      this.$emit('set-active-pane', actionName === this.currentAction ? '' : actionName);
     }
   }
 </script>
