@@ -25,5 +25,5 @@ const mutations: MutationTree<ModelsState> = {
 export const models = {
   state,
   getters,
-  mutations
+  mutations,
 };

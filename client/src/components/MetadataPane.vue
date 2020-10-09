@@ -37,7 +37,6 @@
   @Component
   export default class MetadataPane extends Vue {
     @Prop({ default: null }) metadata: ModelMetadataInterface;
-
   }
 </script>
 

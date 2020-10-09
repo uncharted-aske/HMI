@@ -59,10 +59,9 @@
     @Getter getSelectedModelId;
     @Getter getModelsList;
 
-
     get selectedModel (): ModelMetadataInterface {
       const modelsList = this.getModelsList;
-      return modelsList.find(model => model.id == this.getSelectedModelId );
+      return modelsList.find(model => model.id === this.getSelectedModelId);
     }
 
     get currentAction (): string {
