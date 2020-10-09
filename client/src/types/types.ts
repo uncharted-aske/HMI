@@ -1,14 +1,16 @@
 interface ModelInterface {
   id: number;
-  metadata: ModelMetadataInterface[],
+  metadata: ModelMetadataInterface,
+  type: string
 }
 
 interface ModelMetadataInterface {
   name: string,
   description: string,
+  created: string,
   source: string,
   version: string,
-  docs: string,
+  knowledge: string,
 }
 
 interface ActionColumnInterface {
@@ -27,7 +29,7 @@ interface CardInterface {
 
 interface ModelsState {
   selectedModelId: string,
-  // modelsList: ModelInterface[]
+  modelsList: ModelInterface[]
 }
 
 interface Todo {

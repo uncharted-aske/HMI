@@ -1,19 +1,20 @@
 import { GetterTree, MutationTree } from 'vuex';
 import { ModelsState } from '../../types/types';
 
-import CHIMECAG from '../../assets/formatted-CHIME-SIR-CAG-metadata.json';
+import CHIME from '../../assets/uncharted_chime.json';
 
 
 const state: ModelsState = {
-   selectedModelId: 'test'
-//    modelsList: [
-//      { id: 1, metadata: CHIMECAG.metadata },
-//      { id: 2, metadata: CHIMECAG.metadata },
-//    ]
+   selectedModelId: null,
+   modelsList: [
+    { id: 1, metadata: CHIME.metadata, type: 'computational'},
+    { id: 2, metadata: CHIME.metadata, type: 'computational'},
+   ]
 }
 
 const getters: GetterTree<ModelsState, any> = {
-    selectedModelId: state => state.selectedModelId
+    getModelsList: state => state.modelsList
+    // selectedModelMetadata: state => state.modelsList.find( model => model.id as selectedModelId)
 }
 
 const mutations: MutationTree<ModelsState> = {

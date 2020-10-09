@@ -15,7 +15,7 @@
       <search-bar />
       <start-screen
           :open-section-header="`Models`"
-          :cards="models"
+          :cards="modelsCards"
           @open-card="onOpenCard"
       />
     </div>
@@ -25,7 +25,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Mutation } from 'vuex-class';
+  import { State, Getter, Mutation } from 'vuex-class';
 
   import { ActionColumnInterface, CardInterface } from '../types/types';
 
@@ -37,16 +37,11 @@
   import StartScreen from '@/components/StartScreen.vue';
 
   //HACK: Model representations
-  import CHIMECAG from '../assets/formatted-CHIME-SIR-CAG-metadata.json';
+  import CHIME from '../assets/uncharted_chime.json';
 
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
-  ];
-
-  // Just for test purposes
-  const MODELS_CARDS = [
-    { id: 1, previewImageSrc: null, title: CHIMECAG.metadata.name, subtitle: CHIMECAG.metadata.authors[0].institution, type: 'computational'  },
   ];
 
   const components = {
@@ -62,12 +57,18 @@
   export default class Home extends Vue {
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
-    models: CardInterface[] = MODELS_CARDS;
 
+    @Getter getModelsList;
     @Mutation setSelectedModel;
 
     get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
+    }
+
+    get modelsCards (): CardInterface[] {
+      const modelsList = this.getModelsList;
+      const modelsCards = modelsList.map(model => Object.assign({}, model, { previewImageSrc: null, title: model.metadata.name, subtitle: model.metadata.source} ));
+      return modelsCards;
     }
 
     onOpenCard (card: CardInterface): void {

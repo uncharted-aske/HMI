@@ -21,7 +21,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter, Mutation } from 'vuex-class';
+  import { State } from 'vuex-class';
 
   import { ActionColumnInterface } from '../types/types';
 
