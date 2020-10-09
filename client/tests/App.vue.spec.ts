@@ -2,6 +2,7 @@
 /// <reference path="../src/vue-shims.d.ts" />
 import { mount, createLocalVue } from '@vue/test-utils';
 import { createRouter } from '../src/router';
+import { store } from '../src/store';
 import App from '../src/App.vue';
 
 describe('App.vue.spec', function () {
@@ -15,6 +16,7 @@ describe('App.vue.spec', function () {
     wrapper = mount(App, {
       localVue,
       router,
+      store,
     });
   });
 
