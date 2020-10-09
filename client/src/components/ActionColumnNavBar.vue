@@ -42,6 +42,9 @@
 @import '../styles/variables';
 
 .action-column-nav-bar {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
   width: $secondary-bar-width;
   margin: 0;
   padding: 0;
@@ -50,6 +53,7 @@
   left: 0;
   bottom: 0;
   background-color: $secondary-bar-bg;
+  border: 1px solid rgba(207, 216, 220, .5);
 
   li {
     position: relative;
@@ -59,12 +63,13 @@
       width: $secondary-bar-width;
       height:$secondary-bar-width;
       background-color: transparent;
+      color: $icon-color;
     }
 
     &.active {
       button {
-        color: #ffffff;
-        background-color: $btn-secondary-color;
+          border-left: 5px solid $selection;
+          color: $selection;
       }
     }
   }

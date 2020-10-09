@@ -1,7 +1,6 @@
 <template>
   <div class="action-column-container">
     <slot name="actions" />
-    <slot name="panel" />
   </div>
 </template>
 
@@ -20,7 +19,7 @@
 .action-column-container {
   position: relative;
   width: $secondary-bar-width;
-  height: $content-full-height;
+  height: 100%;
 }
 
 </style>

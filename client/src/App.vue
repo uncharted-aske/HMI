@@ -19,7 +19,7 @@
 
 <style lang="scss">
 @import 'bootstrap/dist/css/bootstrap.min';
-@import "styles/variables";
+@import "styles/aske";
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -27,5 +27,6 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   margin-top: $navbar-outer-height;
+  background-color: $body-bg;
 }
 </style>

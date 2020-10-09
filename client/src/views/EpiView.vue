@@ -1,19 +1,19 @@
 <template>
-  <div class="epi-view-container">
+  <div class="view-container">
     <action-column>
       <div slot="actions">
         <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active="onSetActive" />
       </div>
-      <div slot="panel" v-if="activePane">
-        <left-side-panel @close-pane="onClose">
+    </action-column>
+    <left-side-panel @close-pane="onClose"  v-if="activePane">
           <div slot="content">
             <facets-pane v-if="activePane === actions[0].paneId" />
             <metadata-pane v-if="activePane ===  actions[1].paneId" />
           </div>
         </left-side-panel>
-      </div>
-    </action-column>
-    <search-bar />
+    <div class="content">
+      <search-bar />
+    </div>
   </div>
 </template>
 
@@ -21,18 +21,14 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
 
+  import { ActionColumnInterface } from '../types/types';
+
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
-
-  export interface ViewAction {
-  name: string;
-  icon: string;
-  paneId: string;
-}
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -51,7 +47,7 @@
   @Component({ components })
   export default class EpiView extends Vue {
     activePane = '';
-    actions: ViewAction[] = ACTIONS;
+    actions: ActionColumnInterface[] = ACTIONS;
 
     get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
@@ -72,21 +68,5 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
-
-  .epi-view-container {
-    height: $content-full-height;
-    box-sizing: border-box;
-    overflow: hidden;
-    display: flex;
-    .btn {
-      background-color: transparent;
-      color: $text-color;
-      width: $secondary-bar-width;
-      height: $secondary-bar-width;
-      position: relative;
-      border: 1px solid $border;
-    }
-  }
 
 </style>
