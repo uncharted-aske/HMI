@@ -65,11 +65,11 @@
     }
 
     get nodeCount (): number {
-      return this.selectedModel.graph.nodes.length;
+      return this.selectedModel && this.selectedModel.graph.nodes.length;
     }
 
     get edgeCount (): number {
-      return this.selectedModel.graph.edges.length;
+      return this.selectedModel && this.selectedModel.graph.edges.length;
     }
 
     get currentAction (): string {

@@ -1,6 +1,11 @@
 <template>
   <div class="counters-container">
-    {{nodeCount}} - {{edgeCount}}
+    <div>
+    {{nodeCount}} Nodes
+    </div>
+    <div>
+    {{edgeCount}} Links
+    </div>
   </div>
 </template>
 
@@ -27,9 +32,10 @@
   border: 1px solid rgba(207, 216, 220, .5);
   display: flex;
   align-items: center;
-  // padding: 5px;
-  // margin-left: 15px;
-
+  div:not(:first-child)::before {
+    content: "|";
+    margin: 5px;
+  }
 }
 
 </style>
