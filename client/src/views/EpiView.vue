@@ -44,7 +44,6 @@
   import DrilldownMetadataPane from '@/components/DrilldownMetadataPane.vue';
   import HierarchySlider from '@/components/HierarchySlider.vue';
 
-
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
     { name: 'Metadata', icon: 'info', paneId: 'metadata' },
@@ -111,10 +110,10 @@
     }
 
     onHierarchyChange (level): void {
-      
+
     }
 
-    onNodeClick (node):void {
+    onNodeClick (node): void {
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.label;
       this.drilldownMetadata = node.data.metadata;
