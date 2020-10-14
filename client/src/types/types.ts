@@ -73,4 +73,5 @@ export {
   ModelMetadataInterface,
   ModelsState,
   ModelGraphInterface,
+  ModelComponentMetadataInterface,
 };

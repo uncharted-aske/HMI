@@ -16,8 +16,9 @@
       <counters :node-count="nodeCount" :edge-count="edgeCount"/>
       <epi-graph v-if="selectedModel" :graph="selectedModel.graph" @node-click="onNodeClick"/>
     </div>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" v-if="isOpenDrilldown" :pane-title="drilldownPaneTitle">
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" v-if="isOpenDrilldown" :pane-title="drilldownPaneTitle" >
       <div slot="content">
+        <drilldown-metadata-pane :metadata="drilldownMetadata"/>
       </div>  
     </drilldown-panel>  
   </div>
@@ -28,7 +29,7 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { ActionColumnInterface, ModelInterface } from '../types/types';
+  import { ActionColumnInterface, ModelInterface, ModelComponentMetadataInterface } from '../types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
@@ -39,6 +40,8 @@
   import FacetsPane from '@/components/FacetsPane.vue';
   import EpiGraph from '@/components/EpiGraph.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
+  import DrilldownMetadataPane from '@/components/DrilldownMetadataPane.vue';
+
 
 
   const ACTIONS = [
@@ -56,6 +59,7 @@
     FacetsPane,
     EpiGraph,
     DrilldownPanel,
+    DrilldownMetadataPane,
   };
 
   @Component({ components })
@@ -64,6 +68,7 @@
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
     drilldownPaneTitle: '';
+    drilldownMetadata: ModelComponentMetadataInterface;
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
@@ -102,9 +107,9 @@
     }
 
     onNodeClick(node):void {
-      console.log(node);
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.label;
+      this.drilldownMetadata = node.data.metadata;
     }
   }
 </script>

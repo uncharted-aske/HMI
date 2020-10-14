@@ -70,7 +70,7 @@
 
 <style lang="scss" scoped>
 .epi-graph-container {
-  width: 100%;
+  width: 60%;
   height: 800px;
 }
 
