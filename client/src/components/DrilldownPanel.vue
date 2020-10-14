@@ -13,7 +13,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Prop } from 'vue-property-decorator';
+  import { Prop, Watch } from 'vue-property-decorator';
 
   import CloseButton from '@/components/widgets/CloseButton.vue';
 
@@ -28,6 +28,11 @@
 
     @Prop({ default: '' })
     paneTitle: string;
+
+    @Watch('paneTitle')
+    onPropertyChanged(value: string, oldValue: string) {
+      console.log(value);
+    }
 
     onClose (): void {
       this.$emit('close-pane');

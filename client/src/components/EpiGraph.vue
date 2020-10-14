@@ -39,7 +39,7 @@
       }, this.renderingOptions));
 
       this.renderer.setCallback('nodeClick', (node) => {
-        console.log(node.datum());
+        this.$emit('node-click', node.datum());
       });
 
       this.renderer.setCallback('nodeMouseEnter', (node) => {

@@ -5,7 +5,7 @@
         <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active-pane="onSetActive" />
       </div>
     </action-column>
-    <left-side-panel @close-pane="onClose"  v-if="activePane">
+    <left-side-panel @close-pane="onCloseLeftSidePanel"  v-if="activePane">
           <div slot="content">
             <facets-pane v-if="activePane === actions[0].paneId" />
             <metadata-pane v-if="activePane ===  actions[1].paneId && selectedModel" :metadata="selectedModel.metadata"/>
@@ -14,8 +14,12 @@
     <div class="content">
       <search-bar />
       <counters :node-count="nodeCount" :edge-count="edgeCount"/>
-      <epi-graph v-if="selectedModel" :graph="selectedModel.graph"/>
+      <epi-graph v-if="selectedModel" :graph="selectedModel.graph" @node-click="onNodeClick"/>
     </div>
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" v-if="isOpenDrilldown" :pane-title="drilldownPaneTitle">
+      <div slot="content">
+      </div>  
+    </drilldown-panel>  
   </div>
 </template>
 
@@ -34,6 +38,8 @@
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
   import EpiGraph from '@/components/EpiGraph.vue';
+  import DrilldownPanel from '@/components/DrilldownPanel.vue';
+
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -49,12 +55,15 @@
     MetadataPane,
     FacetsPane,
     EpiGraph,
+    DrilldownPanel,
   };
 
   @Component({ components })
   export default class EpiView extends Vue {
+    isOpenDrilldown = false;
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
+    drilldownPaneTitle: '';
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
@@ -85,8 +94,17 @@
       this.activePane = activePane;
     }
 
-    onClose ():void {
+    onCloseLeftSidePanel ():void {
       this.activePane = '';
+    }
+    onCloseDrilldownPanel ():void {
+      this.isOpenDrilldown = false;
+    }
+
+    onNodeClick(node):void {
+      console.log(node);
+      this.isOpenDrilldown = true;
+      this.drilldownPaneTitle = node.label;
     }
   }
 </script>
