@@ -6,10 +6,11 @@ import CHIME from '../../assets/uncharted_chime.json';
 const state: ModelsState = {
   selectedModelId: null,
   modelsList: [
-    { id: 1, 
-      metadata: CHIME.metadata, 
-      graph: { nodes: CHIME.nodes, edges: CHIME.edges, groups: CHIME.groups}, 
-      type: 'computational' 
+    {
+      id: 1,
+      metadata: CHIME.metadata,
+      graph: { nodes: CHIME.nodes, edges: CHIME.edges, groups: CHIME.groups },
+      type: 'computational',
     },
   ],
 };

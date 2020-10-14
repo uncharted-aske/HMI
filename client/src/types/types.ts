@@ -23,7 +23,6 @@ interface GraphNodeInterface {
   metadata: ModelComponentMetadataInterface
 }
 
-
 interface GraphEdgeInterface {
   id: string,
   source: string,
@@ -34,7 +33,6 @@ interface GraphGroupInterface {
   id: string,
   members: string[]
 }
-
 
 interface ModelGraphInterface {
   nodes: GraphNodeInterface[],
@@ -74,5 +72,5 @@ export {
   ModelInterface,
   ModelMetadataInterface,
   ModelsState,
-  ModelGraphInterface
+  ModelGraphInterface,
 };

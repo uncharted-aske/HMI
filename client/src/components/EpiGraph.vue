@@ -7,8 +7,6 @@
   import EpiModelRenderer from '@/graphs/elk/EpiModelRenderer.js';
   import { layered } from '@/graphs/elk/ElkStrategies.js';
 
-  import CHIME from '@/assets/uncharted_chime.json';
-
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
     nodeHeight: 30
@@ -16,8 +14,13 @@
 
   export default {
      name: 'EpiGraph',
+     props: {
+       graph: {
+         type: Object,
+         default: null
+       }
+     },
      data: () => ({
-      graphData: CHIME, 
       renderingOptions: DEFAULT_RENDERING_OPTIONS
      }),
      created() {
@@ -33,8 +36,8 @@
       }, this.renderingOptions));
 
 
-      const groups = this.graphData.groups || [];
-      this.renderer.setData(this.graphData, { groups });
+      const groups = this.graph.groups || [];
+      this.renderer.setData(this.graph, { groups });
       this.renderer.render();
      }
   }

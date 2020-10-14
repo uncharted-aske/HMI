@@ -1,9 +1,9 @@
-import _ from 'lodash'
-import * as d3 from 'd3'
-import moment from 'moment'
+import _ from 'lodash';
+import * as d3 from 'd3';
+import moment from 'moment';
 
-import { SELECTED_COLOR_DARK } from '@/utils/ColorsUtil'
-import stringUtil from '@/utils/StringUtil'
+import { SELECTED_COLOR_DARK } from '@/utils/ColorsUtil';
+import stringUtil from '@/utils/StringUtil';
 
 /* SVG Utility functions */
 
@@ -15,38 +15,38 @@ import stringUtil from '@/utils/StringUtil'
  * @param {object} viewport - optional x1, y1, x2, y2.
  */
 export const createChart = (svg, w, h, viewport = {}) => {
-  svg.attr('width', w + 'px')
-  svg.attr('height', h + 'px')
+  svg.attr('width', w + 'px');
+  svg.attr('height', h + 'px');
 
-  const x1 = viewport.x1 || 0
-  const y1 = viewport.y1 || 0
-  const x2 = viewport.x2 || w
-  const y2 = viewport.y2 || h
+  const x1 = viewport.x1 || 0;
+  const y1 = viewport.y1 || 0;
+  const x2 = viewport.x2 || w;
+  const y2 = viewport.y2 || h;
 
-  svg.attr('preserveAspectRatio', 'xMinYMin meet')
-  svg.attr('viewBox', `${x1} ${y1} ${x2} ${y2}`)
-  svg.append('defs')
+  svg.attr('preserveAspectRatio', 'xMinYMin meet');
+  svg.attr('viewBox', `${x1} ${y1} ${x2} ${y2}`);
+  svg.append('defs');
 
-  return svg
-}
+  return svg;
+};
 
-export const translate = (x, y) => { return `translate(${x}, ${y})` }
+export const translate = (x, y) => { return `translate(${x}, ${y})`; };
 
 export const arc = (x1, y1, x2, y2, xRadius, yRadius) => {
-  const xRotation = 0
-  const largeArcFlag = 0
-  const sweepFlag = 0
-  return `M ${x1} ${y1} A ${xRadius} ${yRadius} ${xRotation} ${largeArcFlag} ${sweepFlag} ${x2} ${y2}`
-}
+  const xRotation = 0;
+  const largeArcFlag = 0;
+  const sweepFlag = 0;
+  return `M ${x1} ${y1} A ${xRadius} ${yRadius} ${xRotation} ${largeArcFlag} ${sweepFlag} ${x2} ${y2}`;
+};
 
 export const line = (x1, y1, x2, y2) => {
-  return 'M' + x1 + ',' + y1 + 'L' + x2 + ',' + y2
-}
+  return 'M' + x1 + ',' + y1 + 'L' + x2 + ',' + y2;
+};
 
 // A path generator
 export const pathFn = d3.line()
   .x(d => d.x)
-  .y(d => d.y)
+  .y(d => d.y);
 
 /**
  * Wrap text as SVG spans
@@ -57,31 +57,31 @@ export const pathFn = d3.line()
  */
 export const wrapText = (text, width) => {
   text.each(function () {
-    const text = d3.select(this)
-    const words = text.text().split(/\s+/).reverse()
-    const lineHeight = 1.1 // ems
-    const y = text.attr('y')
-    const dy = parseFloat(text.attr('dy'))
+    const text = d3.select(this);
+    const words = text.text().split(/\s+/).reverse();
+    const lineHeight = 1.1; // ems
+    const y = text.attr('y');
+    const dy = parseFloat(text.attr('dy'));
 
-    let tspan = text.text(null).append('tspan').attr('x', 0).attr('y', y).attr('dy', dy + 'em')
-    let word = null
-    let line = []
-    let lineNumber = 0
+    let tspan = text.text(null).append('tspan').attr('x', 0).attr('y', y).attr('dy', dy + 'em');
+    let word = null;
+    let line = [];
+    let lineNumber = 0;
     while (true) {
-      word = words.pop()
-      if (_.isEmpty(word)) break
+      word = words.pop();
+      if (_.isEmpty(word)) break;
 
-      line.push(word)
-      tspan.text(line.join(' '))
+      line.push(word);
+      tspan.text(line.join(' '));
       if (tspan.node().getComputedTextLength() > width) {
-        line.pop()
-        tspan.text(line.join(' '))
-        line = [word]
-        tspan = text.append('tspan').attr('x', 0).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word)
+        line.pop();
+        tspan.text(line.join(' '));
+        line = [word];
+        tspan = text.append('tspan').attr('x', 0).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
       }
     }
-  })
-}
+  });
+};
 
 /**
  * Generator function for drawing timeseries
@@ -94,8 +94,8 @@ export const timeseriesLine = (xscale, yscale) => {
   return d3.line()
     .x(d => xscale(d.timestamp))
     .y(d => yscale(d.value))
-    .curve(d3.curveMonotoneX)
-}
+    .curve(d3.curveMonotoneX);
+};
 
 /**
  * Draws an area chart for a time series of the format
@@ -110,20 +110,20 @@ export const timeseriesArea = (xscale, yscale, positive) => {
     .x(d => xscale(d.timestamp))
     .y0(d => {
       if (positive === false) {
-        return d.value <= 0 ? yscale(d.value) : yscale(0)
+        return d.value <= 0 ? yscale(d.value) : yscale(0);
       } else {
-        return yscale(0)
+        return yscale(0);
       }
     })
     .y1(d => {
       if (positive === false) {
-        return yscale(0)
+        return yscale(0);
       } else {
-        return d.value <= 0 ? yscale(0) : yscale(d.value)
+        return d.value <= 0 ? yscale(0) : yscale(d.value);
       }
     })
-    .curve(d3.curveMonotoneX)
-}
+    .curve(d3.curveMonotoneX);
+};
 
 /**
  * Draws the confidence band for a single projection result
@@ -133,17 +133,17 @@ export const timeseriesArea = (xscale, yscale, positive) => {
  * @param {object} experimentResults - projection result with values, confidenceInterval.upper and confidenceInterval.lower
  */
 export const confidenceArea = (xscale, yscale, experimentResults) => {
-  const confidenceInterval = experimentResults.confidenceInterval
+  const confidenceInterval = experimentResults.confidenceInterval;
   return d3.area()
     .x(d => xscale(d.timestamp))
     .y0((d, i) => {
-      return yscale(confidenceInterval.lower[i].value)
+      return yscale(confidenceInterval.lower[i].value);
     })
     .y1((d, i) => {
-      return yscale(confidenceInterval.upper[i].value)
+      return yscale(confidenceInterval.upper[i].value);
     })
-    .curve(d3.curveMonotoneX)
-}
+    .curve(d3.curveMonotoneX);
+};
 
 /**
  * Create and add a crosshair tooltip to given chart element
@@ -168,30 +168,30 @@ export const addCrosshairTooltip = spec => {
     seriesData,
     dateFormatter = v => v,
     valueFormatter = v => v,
-    style
-  } = spec
+    style,
+  } = spec;
 
   const tooltipStyle = Object.assign({
     lineColor: SELECTED_COLOR_DARK,
     circleColor: SELECTED_COLOR_DARK,
-    textColor: SELECTED_COLOR_DARK
-  }, style)
+    textColor: SELECTED_COLOR_DARK,
+  }, style);
 
-  const yMax = Math.max(...yscale.range())
-  const xMax = Math.max(...xscale.range())
+  const yMax = Math.max(...yscale.range());
+  const xMax = Math.max(...xscale.range());
 
   // svg g (chart) element doesn't capture mouse event, so create an overlay for capturing the event
   const overlay = chart.append('rect')
     .style('fill', 'transparent')
     .attr('class', 'event-overlay')
     .attr('width', xMax)
-    .attr('height', yMax)
+    .attr('height', yMax);
 
   // Tooltip
   const tooltip = chart
     .append('g')
     .attr('class', 'experiment-chart-tooltip-container')
-    .style('display', 'none')
+    .style('display', 'none');
 
   tooltip.append('line')
     .attr('class', 'x-hover-line')
@@ -199,13 +199,13 @@ export const addCrosshairTooltip = spec => {
     .attr('y2', yMax)
     .style('stroke', tooltipStyle.lineColor)
     .style('stroke-width', 2)
-    .style('stroke-dasharray', 3.3)
+    .style('stroke-dasharray', 3.3);
 
   tooltip.append('circle')
     .style('fill', '#FFFFFF')
     .style('stroke', tooltipStyle.circleColor)
     .style('stroke-width', 2)
-    .attr('r', 3)
+    .attr('r', 3);
 
   tooltip.append('text')
     .attr('class', 'line-chart-tooltip-text')
@@ -214,21 +214,21 @@ export const addCrosshairTooltip = spec => {
     .style('text-anchor', 'middle')
     .style('font-weight', 'bold')
     .attr('x', 0)
-    .attr('y', -10)
+    .attr('y', -10);
 
-  const bisectDate = d3.bisector(d => d.timestamp).left
+  const bisectDate = d3.bisector(d => d.timestamp).left;
   overlay.on('mouseover', () => tooltip.style('display', null))
     .on('mouseout', () => tooltip.style('display', 'none'))
     .on('mousemove', function () {
-      const xPos = xscale.invert(d3.mouse(this)[0])
-      const series = self.seriesData
-      if (series.length === 1) return
-      const elementIndex = bisectDate(series, xPos, 1) >= series.length ? series.length - 1 : bisectDate(series, xPos, 1)
-      const prevElement = series[elementIndex - 1]
-      const nextElement = series[elementIndex]
-      const d = xPos - prevElement.timestamp > nextElement.timestamp - xPos ? nextElement : prevElement
-      self.select(d)
-    })
+      const xPos = xscale.invert(d3.mouse(this)[0]);
+      const series = self.seriesData;
+      if (series.length === 1) return;
+      const elementIndex = bisectDate(series, xPos, 1) >= series.length ? series.length - 1 : bisectDate(series, xPos, 1);
+      const prevElement = series[elementIndex - 1];
+      const nextElement = series[elementIndex];
+      const d = xPos - prevElement.timestamp > nextElement.timestamp - xPos ? nextElement : prevElement;
+      self.select(d);
+    });
 
   const self = {
     element: tooltip,
@@ -239,7 +239,7 @@ export const addCrosshairTooltip = spec => {
      * @param {Object} series - A time series data for a graph where tooltip will be displayed on
      */
     updateSeries (series) {
-      self.seriesData = series
+      self.seriesData = series;
     },
 
     /**
@@ -249,16 +249,16 @@ export const addCrosshairTooltip = spec => {
      * @param {Object} dataPoint.value value
      */
     select (dataPoint) {
-      const data = dataPoint
-      tooltip.style('display', null)
-      tooltip.attr('transform', translate(xscale(data.timestamp), yscale(data.value)))
-      tooltip.select('.x-hover-line').attr('y2', yMax - yscale(data.value))
+      const data = dataPoint;
+      tooltip.style('display', null);
+      tooltip.attr('transform', translate(xscale(data.timestamp), yscale(data.value)));
+      tooltip.select('.x-hover-line').attr('y2', yMax - yscale(data.value));
       tooltip.select('.line-chart-tooltip-text')
-        .text(`${valueFormatter(data.value)} (${dateFormatter(data.timestamp, 'YYYY-MMM')})`)
-    }
-  }
-  return self
-}
+        .text(`${valueFormatter(data.value)} (${dateFormatter(data.timestamp, 'YYYY-MMM')})`);
+    },
+  };
+  return self;
+};
 
 /**
  * Add style attributes to given d3 selection
@@ -266,11 +266,11 @@ export const addCrosshairTooltip = spec => {
  * @param {Object} style - A style object
  */
 export const style = (selection, style = {}) => {
-  Object.entries(style)
+  Object.entries(style);
   for (const [key, value] of Object.entries(style)) {
-    selection.style(key, value)
+    selection.style(key, value);
   }
-}
+};
 
 /**
  * Calculate the ticks to display for a time-series chart
@@ -278,25 +278,25 @@ export const style = (selection, style = {}) => {
  * @param {Object} tickInterval - interval between ticks (number of months)
  */
 export const calculateTicks = (xextent, tickInterval) => {
-  const start = moment.utc(xextent[0])
-  const end = moment.utc(xextent[1])
+  const start = moment.utc(xextent[0]);
+  const end = moment.utc(xextent[1]);
 
-  let ticks = xextent
-  let startFormatted = moment.utc(start)
-  const endFormatted = moment.utc(end)
+  let ticks = xextent;
+  let startFormatted = moment.utc(start);
+  const endFormatted = moment.utc(end);
   while (moment(startFormatted).isBefore(endFormatted, 'month')) {
-    startFormatted = moment(startFormatted).add(tickInterval, 'M')
-    ticks.push(startFormatted.valueOf())
+    startFormatted = moment(startFormatted).add(tickInterval, 'M');
+    ticks.push(startFormatted.valueOf());
   }
   // Sort timestamps
-  ticks = _.orderBy(ticks)
+  ticks = _.orderBy(ticks);
   // Remove the last timestamp added after checking the condition
-  const last = moment.utc(_.last(ticks))
+  const last = moment.utc(_.last(ticks));
   if (moment(last).isSame(endFormatted, 'month')) {
-    ticks.pop()
+    ticks.pop();
   }
-  return _.sortBy(ticks)
-}
+  return _.sortBy(ticks);
+};
 
 /**
  * Truncate the text in an svg text element to fit within a target width
@@ -304,36 +304,36 @@ export const calculateTicks = (xextent, tickInterval) => {
  * @param {Object} targetWidth - maximum width of rendered text
  */
 export const truncateTextToWidth = (svgTextEl, targetWidth) => {
-  const d3elem = d3.select(svgTextEl)
-  let numberOfCharacters = d3elem.text().length
+  const d3elem = d3.select(svgTextEl);
+  let numberOfCharacters = d3elem.text().length;
   do {
-    d3elem.text(stringUtil.truncateString(d3elem.text(), numberOfCharacters--))
-  } while (svgTextEl.getComputedTextLength() > targetWidth && numberOfCharacters > 0)
-}
+    d3elem.text(stringUtil.truncateString(d3elem.text(), numberOfCharacters--));
+  } while (svgTextEl.getComputedTextLength() > targetWidth && numberOfCharacters > 0);
+};
 
 export const hideTooltip = (domlocation) => {
-  domlocation.selectAll('.svg-tooltip').remove()
-}
+  domlocation.selectAll('.svg-tooltip').remove();
+};
 
 export const showTooltip = (domlocation, text, position) => {
-  hideTooltip(domlocation)
+  hideTooltip(domlocation);
 
   const svgTooltip = domlocation.append('g')
     .classed('svg-tooltip', true)
-    .attr('transform', translate(position[0], position[1]))
+    .attr('transform', translate(position[0], position[1]));
 
   const svgTooltipRect = svgTooltip
     .append('rect')
     .attr('y', 15)
     .style('rx', '4px')
     .style('opacity', '0.8')
-    .style('background-color', 'black')
+    .style('background-color', 'black');
 
   svgTooltip
     .append('polygon')
     .attr('points', '0,10 -5,15 5,15')
     .style('opacity', '0.8')
-    .style('background-color', 'black')
+    .style('background-color', 'black');
 
   const svgTooltipText = svgTooltip
     .append('text')
@@ -341,18 +341,18 @@ export const showTooltip = (domlocation, text, position) => {
     .style('font-weight', 600)
     .style('font-size', '10px')
     .style('fill', 'white')
-    .text(text)
+    .text(text);
 
-  const svgTooltipTextHeight = 20
-  const svgTooltipTextWidth = svgTooltipText.node().getComputedTextLength()
+  const svgTooltipTextHeight = 20;
+  const svgTooltipTextWidth = svgTooltipText.node().getComputedTextLength();
 
-  svgTooltipText.attr('x', -svgTooltipTextWidth / 2)
+  svgTooltipText.attr('x', -svgTooltipTextWidth / 2);
 
   svgTooltipRect
     .attr('x', -svgTooltipTextWidth / 1.7)
     .attr('width', svgTooltipTextWidth * 1.2)
-    .attr('height', svgTooltipTextHeight * 1.2)
-}
+    .attr('height', svgTooltipTextHeight * 1.2);
+};
 
 /**
  * Get closest point on an svg path, copied from: https://bl.ocks.org/mbostock/8027637
@@ -360,65 +360,65 @@ export const showTooltip = (domlocation, text, position) => {
  * @param {Object} point - position, for example mouse position [x,y]
  */
 function closestPointOnPath (pathNode, point) {
-  const pathLength = pathNode.getTotalLength()
-  let precision = 8
-  let best
-  let bestLength
-  let bestDistance = Infinity
+  const pathLength = pathNode.getTotalLength();
+  let precision = 8;
+  let best;
+  let bestLength;
+  let bestDistance = Infinity;
 
   // linear scan for coarse approximation
   for (let scan, scanLength = 0, scanDistance; scanLength <= pathLength; scanLength += precision) {
     if ((scanDistance = distance2(scan = pathNode.getPointAtLength(scanLength))) < bestDistance) {
-      best = scan
-      bestLength = scanLength
-      bestDistance = scanDistance
+      best = scan;
+      bestLength = scanLength;
+      bestDistance = scanDistance;
     }
   }
 
   // binary search for precise estimate
-  precision /= 2
+  precision /= 2;
   while (precision > 0.5) {
     let before,
       after,
       beforeLength,
       afterLength,
       beforeDistance,
-      afterDistance
+      afterDistance;
     if ((beforeLength = bestLength - precision) >= 0 && (beforeDistance = distance2(before = pathNode.getPointAtLength(beforeLength))) < bestDistance) {
-      best = before
-      bestLength = beforeLength
-      bestDistance = beforeDistance
+      best = before;
+      bestLength = beforeLength;
+      bestDistance = beforeDistance;
     } else if ((afterLength = bestLength + precision) <= pathLength && (afterDistance = distance2(after = pathNode.getPointAtLength(afterLength))) < bestDistance) {
-      best = after
-      bestLength = afterLength
-      bestDistance = afterDistance
+      best = after;
+      bestLength = afterLength;
+      bestDistance = afterDistance;
     } else {
-      precision /= 2
+      precision /= 2;
     }
   }
 
-  best = [best.x, best.y]
-  best.distance = Math.sqrt(bestDistance)
-  return best
+  best = [best.x, best.y];
+  best.distance = Math.sqrt(bestDistance);
+  return best;
 
   function distance2 (p) {
-    const dx = p.x - point[0]
-    const dy = p.y - point[1]
-    return dx * dx + dy * dy
+    const dx = p.x - point[0];
+    const dy = p.y - point[1];
+    return dx * dx + dy * dy;
   }
 }
 
 // Pre-canned path/glyphs, we assume all paths are bounded by a 10x10 grid and centered at (0, 0)
 // - Arrows point left-to-right
-export const MARKER_VIEWBOX = '-5 -5 10 10'
-export const ARROW = 'M 0,-3.25 L 5 ,0 L 0,3.25'
-export const ARROW_SHARP = 'M 0,-3 L 5 ,0 L 0,3 L 1 0'
+export const MARKER_VIEWBOX = '-5 -5 10 10';
+export const ARROW = 'M 0,-3.25 L 5 ,0 L 0,3.25';
+export const ARROW_SHARP = 'M 0,-3 L 5 ,0 L 0,3 L 1 0';
 
 export const POLARITY_ICON_SVG_SETTINGS = Object.freeze({
   '-1': { text: '\uf063', x: -3, y: 2.5, 'font-size': '6.5px' },
   0: { text: '\uf128', x: -2.5, y: 3, 'font-size': '8px' },
-  1: { text: '\uf062', x: -3, y: 2.2, 'font-size': '6.5px' }
-})
+  1: { text: '\uf062', x: -3, y: 2.2, 'font-size': '6.5px' },
+});
 
 export default {
   createChart,
@@ -446,5 +446,5 @@ export default {
   MARKER_VIEWBOX,
   ARROW,
   ARROW_SHARP,
-  POLARITY_ICON_SVG_SETTINGS
-}
+  POLARITY_ICON_SVG_SETTINGS,
+};

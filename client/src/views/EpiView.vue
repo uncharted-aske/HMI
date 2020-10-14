@@ -14,7 +14,7 @@
     <div class="content">
       <search-bar />
       <counters />
-      <epi-graph />
+      <epi-graph :graph="selectedModel.graph"/>
     </div>
   </div>
 </template>
