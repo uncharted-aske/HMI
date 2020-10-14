@@ -102,13 +102,14 @@
 
     onCloseDrilldownPanel ():void {
       this.isOpenDrilldown = false;
+      this.drilldownPaneTitle = '';
+      this.drilldownMetadata = null;
     }
 
     onNodeClick (node):void {
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.label;
       this.drilldownMetadata = node.data.metadata;
-      console.log(this.drilldownPaneTitle);
     }
   }
 </script>

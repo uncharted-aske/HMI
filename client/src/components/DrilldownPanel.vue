@@ -29,14 +29,6 @@
     @Prop({ default: '' })
     paneTitle: string;
 
-    @Watch('paneTitle')
-    onPropertyChanged (value: string, oldValue: string) {
-      console.log(value);
-    }
-    refresh(){
-      console.log('refresh');
-    }
-
     onClose (): void {
       this.$emit('close-pane');
     }
