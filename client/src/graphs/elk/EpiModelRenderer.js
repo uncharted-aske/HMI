@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import * as d3 from 'd3'
 
-import ELKBaseRenderer from '@/graphs/elk/ElkBaseRenderer'
-import svgUtil from '@/utils/SVGUtil'
+import ELKBaseRenderer from '@/graphs/elk/ElkBaseRenderer.js'
+import svgUtil from '@/utils/SVGUtil.js'
 
 const pathFn = svgUtil.pathFn.curve(d3.curveBasis)
 

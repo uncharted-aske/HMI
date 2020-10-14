@@ -4,8 +4,8 @@
 </template>
 
 <script>
-  import EpiModelRenderer from '@/graphs/elk/EpiModelRenderer';
-  import { layered } from '@/graphs/elk/ElkStrategies';
+  import EpiModelRenderer from '@/graphs/elk/EpiModelRenderer.js';
+  import { layered } from '@/graphs/elk/ElkStrategies.js';
 
   import CHIME from '@/assets/uncharted_chime.json';
 
@@ -44,7 +44,6 @@
 .epi-graph-container {
   width: 100%;
   height: 800px;
-  border: 1px solid red;
 }
 
 </style>

@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import * as d3 from 'd3';
-import ELK from 'elkjs/lib/elk.bundled';
+import ELK from 'elkjs/lib/elk.bundled.js';
 
-import svgUtil from '@/utils/SVGUtil'
+import svgUtil from '@/utils/SVGUtil.js';
 
-import { removeChildren } from '@/utils/DOMUtil'
-import { createGraph } from '@/graphs/elk/ElkData'
-import GraphRenderer from '@/graphs/GraphRenderer'
+import { removeChildren } from '@/utils/DOMUtil.js';
+import { createGraph } from '@/graphs/elk/ElkData.js';
+import GraphRenderer from '@/graphs/GraphRenderer.js';
 
 const pathFn = svgUtil.pathFn.curve(d3.curveBasis)
 
