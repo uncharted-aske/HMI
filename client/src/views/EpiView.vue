@@ -14,7 +14,7 @@
     <div class="content">
       <search-bar />
       <counters :node-count="nodeCount" :edge-count="edgeCount"/>
-      <hierarchy-slider />
+      <hierarchy-slider @hierarchy-change="onHierarchyChange"/>
       <epi-graph v-if="selectedModel" :graph="selectedModel.graph" @node-click="onNodeClick"/>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" >
@@ -108,6 +108,10 @@
       this.isOpenDrilldown = false;
       this.drilldownPaneTitle = '';
       this.drilldownMetadata = null;
+    }
+
+    onHierarchyChange (level): void {
+      
     }
 
     onNodeClick (node):void {
