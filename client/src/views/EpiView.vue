@@ -16,7 +16,7 @@
       <counters :node-count="nodeCount" :edge-count="edgeCount"/>
       <epi-graph v-if="selectedModel" :graph="selectedModel.graph" @node-click="onNodeClick"/>
     </div>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" v-if="isOpenDrilldown" :pane-title="drilldownPaneTitle" >
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" >
       <div slot="content">
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
       </div>
@@ -65,8 +65,8 @@
     isOpenDrilldown = false;
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
-    drilldownPaneTitle: '';
-    drilldownMetadata: ModelComponentMetadataInterface;
+    drilldownPaneTitle = '';
+    drilldownMetadata: ModelComponentMetadataInterface = null;
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
@@ -108,6 +108,7 @@
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.label;
       this.drilldownMetadata = node.data.metadata;
+      console.log(this.drilldownPaneTitle);
     }
   }
 </script>

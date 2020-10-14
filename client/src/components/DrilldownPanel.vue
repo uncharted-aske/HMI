@@ -1,5 +1,5 @@
 <template>
-  <div class="drilldown-panel-container">
+  <div class="drilldown-panel-container" v-if="isOpen">
       <div class="panel-header">
         <h5>{{paneTitle}}</h5>
       </div>
@@ -29,10 +29,13 @@
     @Prop({ default: '' })
     paneTitle: string;
 
-    // @Watch('paneTitle')
-    // onPropertyChanged (value: string, oldValue: string) {
-    //   console.log(value);
-    // }
+    @Watch('paneTitle')
+    onPropertyChanged (value: string, oldValue: string) {
+      console.log(value);
+    }
+    refresh(){
+      console.log('refresh');
+    }
 
     onClose (): void {
       this.$emit('close-pane');
