@@ -10,11 +10,11 @@
             <facets-pane v-if="activePane === actions[0].paneId" />
             <metadata-pane v-if="activePane ===  actions[1].paneId && selectedModel" :metadata="selectedModel.metadata"/>
           </div>
-        </left-side-panel>
+    </left-side-panel>
     <div class="content">
       <search-bar />
       <counters />
-      <epi-graph :graph="selectedModel.graph"/>
+      <epi-graph v-if="selectedModel" :graph="selectedModel.graph"/>
     </div>
   </div>
 </template>
