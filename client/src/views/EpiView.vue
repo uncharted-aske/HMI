@@ -69,7 +69,6 @@
     }
 
     onSetActive (actionName: string): void {
-      console.log(actionName);
       let activePane = '';
       if (actionName !== '') {
         activePane = this.actions.find(a => a.name === actionName).paneId;
