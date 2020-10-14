@@ -72,6 +72,7 @@
 .epi-graph-container {
   width: 60%;
   height: 800px;
+  border: 1px solid red;
 }
 
 </style>

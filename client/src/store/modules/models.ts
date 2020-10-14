@@ -4,7 +4,6 @@ import { ModelsState } from '../../types/types';
 import CHIME from '../../assets/uncharted_chime.json';
 import SIR from '../../assets/uncharted_sir.json';
 
-
 const state: ModelsState = {
   selectedModelId: null,
   modelsList: [

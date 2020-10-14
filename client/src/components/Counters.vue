@@ -14,12 +14,10 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
-
   @Component
   export default class Counters extends Vue {
     @Prop({ default: 0 }) nodeCount: number;
     @Prop({ default: 0 }) edgeCount: number;
-
   }
 </script>
 

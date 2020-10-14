@@ -29,10 +29,10 @@
     @Prop({ default: '' })
     paneTitle: string;
 
-    @Watch('paneTitle')
-    onPropertyChanged(value: string, oldValue: string) {
-      console.log(value);
-    }
+    // @Watch('paneTitle')
+    // onPropertyChanged (value: string, oldValue: string) {
+    //   console.log(value);
+    // }
 
     onClose (): void {
       this.$emit('close-pane');

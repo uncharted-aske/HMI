@@ -19,8 +19,8 @@
     <drilldown-panel @close-pane="onCloseDrilldownPanel" v-if="isOpenDrilldown" :pane-title="drilldownPaneTitle" >
       <div slot="content">
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
-      </div>  
-    </drilldown-panel>  
+      </div>
+    </drilldown-panel>
   </div>
 </template>
 
@@ -41,8 +41,6 @@
   import EpiGraph from '@/components/EpiGraph.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/components/DrilldownMetadataPane.vue';
-
-
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -91,7 +89,6 @@
     }
 
     onSetActive (actionName: string): void {
-
       let activePane = '';
       if (actionName !== '') {
         activePane = this.actions.find(a => a.name === actionName).paneId;
@@ -102,11 +99,12 @@
     onCloseLeftSidePanel ():void {
       this.activePane = '';
     }
+
     onCloseDrilldownPanel ():void {
       this.isOpenDrilldown = false;
     }
 
-    onNodeClick(node):void {
+    onNodeClick (node):void {
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.label;
       this.drilldownMetadata = node.data.metadata;
