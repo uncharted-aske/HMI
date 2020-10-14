@@ -13,7 +13,7 @@
     </left-side-panel>
     <div class="content">
       <search-bar />
-      <counters />
+      <counters :node-count="nodeCount" :edge-count="edgeCount"/>
       <epi-graph v-if="selectedModel" :graph="selectedModel.graph"/>
     </div>
   </div>
@@ -24,7 +24,7 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { ActionColumnInterface, ModelMetadataInterface } from '../types/types';
+  import { ActionColumnInterface, ModelInterface } from '../types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
@@ -59,9 +59,17 @@
     @Getter getSelectedModelId;
     @Getter getModelsList;
 
-    get selectedModel (): ModelMetadataInterface {
+    get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
       return modelsList.find(model => model.id === this.getSelectedModelId);
+    }
+
+    get nodeCount (): number {
+      return this.selectedModel.graph.nodes.length;
+    }
+
+    get edgeCount (): number {
+      return this.selectedModel.graph.edges.length;
     }
 
     get currentAction (): string {
@@ -69,6 +77,7 @@
     }
 
     onSetActive (actionName: string): void {
+
       let activePane = '';
       if (actionName !== '') {
         activePane = this.actions.find(a => a.name === actionName).paneId;
