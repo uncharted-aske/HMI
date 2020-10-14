@@ -14,6 +14,7 @@
     <div class="content">
       <search-bar />
       <counters :node-count="nodeCount" :edge-count="edgeCount"/>
+      <hierarchy-slider />
       <epi-graph v-if="selectedModel" :graph="selectedModel.graph" @node-click="onNodeClick"/>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" >
@@ -41,6 +42,8 @@
   import EpiGraph from '@/components/EpiGraph.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/components/DrilldownMetadataPane.vue';
+  import HierarchySlider from '@/components/HierarchySlider.vue';
+
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -58,6 +61,7 @@
     EpiGraph,
     DrilldownPanel,
     DrilldownMetadataPane,
+    HierarchySlider,
   };
 
   @Component({ components })

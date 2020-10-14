@@ -1,5 +1,7 @@
 <template>
-  <div class="epi-graph-container" ref="graph">
+  <div>
+    <div class="epi-graph-container" ref="graph">
+    </div>
   </div>
 </template>
 
