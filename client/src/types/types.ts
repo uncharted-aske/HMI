@@ -1,3 +1,18 @@
+interface ModelMetadataInterface {
+  name: string,
+  description: string,
+  created: string,
+  source: string,
+  version: string,
+  knowledge: string,
+}
+
+interface ModelInterface {
+  id: number;
+  metadata: ModelMetadataInterface,
+  type: string
+}
+
 interface ActionColumnInterface {
     name: string;
     icon: string;
@@ -12,7 +27,15 @@ interface CardInterface {
   type: string;
 }
 
+interface ModelsState {
+  selectedModelId: string,
+  modelsList: ModelInterface[]
+}
+
 export {
   ActionColumnInterface,
   CardInterface,
+  ModelInterface,
+  ModelMetadataInterface,
+  ModelsState,
 };

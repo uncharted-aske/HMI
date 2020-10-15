@@ -2,7 +2,7 @@
   <div class="view-container">
     <action-column>
       <div slot="actions">
-        <action-column-nav-bar :actions="actions" :current-action="currentAction" @set-active="onSetActive" />
+        <action-column-nav-bar :actions="actions" :current-action="currentAction" @set-active-pane="onSetActivePane" />
       </div>
     </action-column>
     <left-side-panel @close-pane="onClosePane" v-if="activePane">
@@ -15,7 +15,7 @@
       <search-bar />
       <start-screen
           :open-section-header="`Models`"
-          :cards="models"
+          :cards="modelsCards"
           @open-card="onOpenCard"
       />
     </div>
@@ -25,6 +25,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
+  import { Getter, Mutation } from 'vuex-class';
 
   import { ActionColumnInterface, CardInterface } from '../types/types';
 
@@ -37,26 +38,6 @@
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
-  ];
-
-  // Just for test purposes
-  const MODELS = [
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'qualitative' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-    { id: 1, previewImageSrc: null, title: 'test', subtitle: 'test', type: 'computational' },
-
   ];
 
   const components = {
@@ -72,18 +53,27 @@
   export default class Home extends Vue {
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
-    models: CardInterface[] = MODELS;
+
+    @Getter getModelsList; // FIXME: We need to explore another options for this to avoid using decorators.
+    @Mutation setSelectedModel;
 
     get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
     }
 
+    get modelsCards (): CardInterface[] {
+      const modelsList = this.getModelsList;
+      const modelsCards = modelsList.map(model => Object.assign({}, model, { previewImageSrc: null, title: model.metadata.name, subtitle: model.metadata.source }));
+      return modelsCards;
+    }
+
     onOpenCard (card: CardInterface): void {
       const view = card.type === 'computational' ? 'epiView' : 'bioView';
+      this.setSelectedModel(card.id);
       this.$router.push({ name: view });
     }
 
-    onSetActive (actionName: string): void {
+    onSetActivePane (actionName: string): void {
       let activePane = '';
       if (actionName !== '') {
         activePane = this.actions.find(a => a.name === actionName).paneId;
