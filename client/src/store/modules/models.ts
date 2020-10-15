@@ -1,7 +1,10 @@
+import _ from 'lodash';
 import { GetterTree, MutationTree } from 'vuex';
+
 import { ModelsState } from '../../types/types';
 
 import CHIME from '../../assets/uncharted_chime.json';
+import CHIMEGrFN from '../../assets/formatted-CHIME-SIR-GrFN-metadata.json';
 
 import SIR from '../../assets/uncharted_sir.json';
 
@@ -12,8 +15,8 @@ const state: ModelsState = {
       id: 1,
       metadata: CHIME.metadata,
       graph: {
-        abstract: { nodes: CHIME.nodes, edges: CHIME.edges, groups: CHIME.groups }, 
-        detailed: null
+        abstract: _.pick(CHIME, ['nodes', 'edges', 'groups']), 
+        detailed: _.pick(CHIMEGrFN, ['nodes', 'edges', 'groups'])
       },
       type: 'computational',
     },
