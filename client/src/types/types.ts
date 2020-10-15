@@ -81,5 +81,5 @@ export {
   GraphNodeInterface,
   GraphEdgeInterface,
   GraphInterface,
-  ModelsState
+  ModelsState,
 };

@@ -36,10 +36,9 @@
   import FacetsPane from '@/components/FacetsPane.vue';
   import StartScreen from '@/components/StartScreen.vue';
 
-  //Screenshots
+  // Screenshots
   import CHIMEScreenshot from '@/assets/img/CHIME.png';
   import SIRScreenshot from '@/assets/img/SIR.png';
-
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },

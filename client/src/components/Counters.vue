@@ -1,5 +1,5 @@
 <template>
-  <div class="counters-container"> 
+  <div class="counters-container">
     <div>
     {{nodeCount}} Nodes
     </div>
@@ -20,7 +20,6 @@
   export default class Counters extends Vue {
     @Prop({ default: 0 }) nodeCount: number;
     @Prop({ default: 0 }) edgeCount: number;
-
   }
 </script>
 
@@ -40,7 +39,7 @@
     content: "|";
     margin: 5px;
   }
- 
+
 }
 
 </style>
