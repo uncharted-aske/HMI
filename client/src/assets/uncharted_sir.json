@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "source": "W. O. Kermack, A. G. McKendrick; Laboratory of the Royal College of Physicians,Edinburgh",
+    "source": "W. O. Kermack, A. G. McKendrick; Laboratory of the Royal College of Physicians, Edinburgh",
     "version": "1.0",
-    "knowledge": "Kermack, W. O., & McKendrick, A. G. (1927). A contribution to themathematical theory of epidemics. Proceedings of the Royal Society of London. Series A,Containing papers of a mathematical and physical character, 115(772), 700-721.",
+    "knowledge": "Kermack, W. O., & McKendrick, A. G. (1927). A contribution to the mathematical theory of epidemics. Proceedings of the Royal Society of London. Series A, Containing papers of a mathematical and physical character, 115(772), 700-721.",
     "name": "SIR Model",
     "created": "1927-08-01",
     "description": "S, I and R represent the number of susceptible, infected, and recovered individuals, and N = S + I + R is the total population. The infectious rate, β, controls the rate of spread which represents the probability of transmitting disease between a susceptible and an infectious individual. Recovery rate, γ = 1/D, is determined by the average duration, D, of infection."
@@ -53,8 +53,8 @@
       "label": "gamma",
       "type": "constant",
       "metadata": {
-        "name": "Gamma",
-        "description": "",
+        "name": "Recovery Rate",
+        "description": "The recovery rate, 1/D, determined by the average duration, D, of infection.",
         "expression": "",
         "units": "",
         "knowledge": ""
@@ -66,8 +66,8 @@
       "label": "beta",
       "type": "constant",
       "metadata": {
-        "name": "Beta",
-        "description": "",
+        "name": "Rate of Spread",
+        "description": "The probability of transmitting disease between a susceptible and an infectious individual.",
         "expression": "",
         "units": "",
         "knowledge": ""

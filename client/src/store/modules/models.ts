@@ -9,11 +9,22 @@ import CHIMEGrFN from '../../assets/formatted-CHIME-SIR-GrFN-metadata.json';
 import SIR from '../../assets/uncharted_sir.json';
 import SIRGrFN from '../../assets/formatted-SIR-simple-GrFN-metadata.json';
 
+import DoubleEpi from '../../assets/uncharted_double_epi.json';
+
 const state: ModelsState = {
   selectedModelId: null,
   modelsList: [
     {
       id: 1,
+      metadata: SIR.metadata,
+      graph: {
+        abstract: _.pick(SIR, ['nodes', 'edges', 'groups']),
+        detailed: _.pick(SIRGrFN, ['nodes', 'edges', 'groups']),
+      },
+      type: 'computational',
+    },
+    {
+      id: 2,
       metadata: CHIME.metadata,
       graph: {
         abstract: _.pick(CHIME, ['nodes', 'edges', 'groups']),
@@ -22,11 +33,11 @@ const state: ModelsState = {
       type: 'computational',
     },
     {
-      id: 2,
-      metadata: SIR.metadata,
+      id: 3,
+      metadata: DoubleEpi.metadata,
       graph: {
-        abstract: _.pick(SIR, ['nodes', 'edges', 'groups']),
-        detailed: _.pick(SIRGrFN, ['nodes', 'edges', 'groups']),
+        abstract: _.pick(DoubleEpi, ['nodes', 'edges', 'groups']),
+        detailed: null,
       },
       type: 'computational',
     },

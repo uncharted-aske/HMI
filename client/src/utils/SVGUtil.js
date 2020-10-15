@@ -88,4 +88,8 @@ export default {
 
   hideTooltip,
   showTooltip,
+
+  MARKER_VIEWBOX,
+  ARROW,
+  ARROW_SHARP,
 };
