@@ -15,7 +15,7 @@
     @Prop({ default: 1 }) hierarchyLevel: number;
 
     setHierarchyLevel (e):void {
-      this.$emit('hierarchy-change', e.target.value);
+      this.$emit('hierarchy-change', +e.target.value);
     }
   }
 </script>
