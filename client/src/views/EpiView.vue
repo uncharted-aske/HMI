@@ -17,7 +17,7 @@
       <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
       <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
     </div>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" >
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
       </div>
@@ -69,6 +69,7 @@
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
     drilldownPaneTitle = '';
+    drilldownPaneSubtitle = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
     hierarchyLevel = 1;
 
@@ -121,6 +122,7 @@
     onNodeClick (node): void {
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.label;
+      this.drilldownPaneSubtitle = node.data.type;
       this.drilldownMetadata = node.data.metadata;
     }
   }
