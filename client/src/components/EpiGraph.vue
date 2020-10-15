@@ -52,7 +52,7 @@
       this.renderer.setCallback('nodeMouseEnter', (node) => {
         const nodeData = node.datum();
         let nodeCoords = [];
-        const metadata = JSON.stringify(nodeData.data.metadata);
+        const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.data.type;
         if (_.isNil(nodeData.group)) {
           nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)];
         } else {
@@ -61,7 +61,7 @@
           const group = groups.find(g => g.id === nodeData.group);
           nodeCoords = [group.x + nodeData.x, group.y + nodeData.y];
         }
-        showTooltip(this.renderer.chart, metadata, nodeCoords);
+        showTooltip(this.renderer.chart, tooltipText, nodeCoords);
       });
 
       this.renderer.setCallback('nodeMouseLeave', (node) => {
