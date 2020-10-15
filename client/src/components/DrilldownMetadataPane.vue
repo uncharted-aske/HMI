@@ -28,7 +28,6 @@
   @Component
   export default class DrilldownMetadataPane extends Vue {
     @Prop({ default: null }) metadata: ModelComponentMetadataInterface;
-
   }
 </script>
 

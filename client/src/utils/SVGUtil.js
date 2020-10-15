@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import * as d3 from 'd3';
 
 /* SVG Utility functions */
@@ -32,7 +31,6 @@ export const translate = (x, y) => { return `translate(${x}, ${y})`; };
 export const pathFn = d3.line()
   .x(d => d.x)
   .y(d => d.y);
-
 
 export const hideTooltip = (domlocation) => {
   domlocation.selectAll('.svg-tooltip').remove();
@@ -77,22 +75,17 @@ export const showTooltip = (domlocation, text, position) => {
     .attr('height', svgTooltipTextHeight * 1.2);
 };
 
-
-
 // Pre-canned path/glyphs, we assume all paths are bounded by a 10x10 grid and centered at (0, 0)
 // - Arrows point left-to-right
 export const MARKER_VIEWBOX = '-5 -5 10 10';
 export const ARROW = 'M 0,-3.25 L 5 ,0 L 0,3.25';
 export const ARROW_SHARP = 'M 0,-3 L 5 ,0 L 0,3 L 1 0';
 
-
-
 export default {
   createChart,
   translate,
   pathFn,
 
- 
   hideTooltip,
   showTooltip,
 };
