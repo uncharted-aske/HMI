@@ -1,11 +1,13 @@
 <template>
   <div class="counters-container">
     <div>
+    </div>  
+    <!-- <div>
     {{nodeCount}} Nodes
     </div>
     <div>
     {{edgeCount}} Links
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -14,10 +16,11 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
+  import { ModelInterface } from '../types/types';
+
   @Component
   export default class Counters extends Vue {
-    @Prop({ default: 0 }) nodeCount: number;
-    @Prop({ default: 0 }) edgeCount: number;
+    @Prop({ default: null }) selectedModel: number;
   }
 </script>
 

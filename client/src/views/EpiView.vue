@@ -13,7 +13,7 @@
     </left-side-panel>
     <div class="content">
       <search-bar />
-      <!-- <counters :node-count="nodeCount" :edge-count="edgeCount"/> -->
+      <counters :selected-model="selectedModel"/>
       <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
       <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
     </div>
@@ -83,14 +83,6 @@
     get selectedGraph (): GraphInterface {
       return this.hierarchyLevel === 1 ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
     }
-
-    // get nodeCount (): number {
-    //   return this.selectedModel && this.selectedModel.graph.nodes.length;
-    // }
-
-    // get edgeCount (): number {
-    //   return this.selectedModel && this.selectedModel.graph.edges.length;
-    // }
 
     get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
