@@ -15,8 +15,8 @@ const state: ModelsState = {
       id: 1,
       metadata: CHIME.metadata,
       graph: {
-        abstract: _.pick(CHIME, ['nodes', 'edges', 'groups']), 
-        detailed: _.pick(CHIMEGrFN, ['nodes', 'edges', 'groups'])
+        abstract: _.pick(CHIME, ['nodes', 'edges', 'groups']),
+        detailed: _.pick(CHIMEGrFN, ['nodes', 'edges', 'groups']),
       },
       type: 'computational',
     },
@@ -24,8 +24,8 @@ const state: ModelsState = {
       id: 2,
       metadata: SIR.metadata,
       graph: {
-        abstract:  { nodes: SIR.nodes, edges: SIR.edges, groups: SIR.groups }, 
-        detailed: null
+        abstract: { nodes: SIR.nodes, edges: SIR.edges, groups: SIR.groups },
+        detailed: null,
       },
       type: 'computational',
     },

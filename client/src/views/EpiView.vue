@@ -82,7 +82,7 @@
 
     get selectedGraph (): GraphInterface {
       return this.hierarchyLevel === 1 ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
-    } 
+    }
 
     // get nodeCount (): number {
     //   return this.selectedModel && this.selectedModel.graph.nodes.length;

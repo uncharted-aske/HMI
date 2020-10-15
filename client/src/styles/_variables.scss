@@ -16,7 +16,8 @@ $content-full-height: calc(100vh - #{$navbar-outer-height});
 $secondary-bar-width: 50px;
 
 $z-index-order: (
-  hierarchy-slider: 500
+  hierarchy-slider: 500,
+  left-side-panel: 600
 );
 
 
