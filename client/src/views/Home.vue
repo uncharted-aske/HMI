@@ -59,7 +59,7 @@
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
 
-    @Getter getModelsList;
+    @Getter getModelsList; // FIXME: We need to explore another options for this to avoid using decorators.
     @Mutation setSelectedModel;
 
     get currentAction (): string {
