@@ -73,7 +73,7 @@ export default class EpiModelRenderer extends ELKBaseRenderer {
         .attr('height', d => d.height)
         .style('fill', '#e0ecf4')
         .style('stroke', '#888')
-        .style('stroke-width', 2);
+        .style('stroke-width', 1);
 
       // Distinguish constants from variables
       rect.filter(d => !_.isNil(d.data.type))
@@ -81,8 +81,8 @@ export default class EpiModelRenderer extends ELKBaseRenderer {
           if (d.data.type === 'constant' || d.data.type === 'function' || d.data.type === 'transition') {
             return '#9ebcda';
           } else if (d.data.type === 'variable') {
-            return '#e0ecf4';
-          } else return '#e0ecf4';
+            return '#ffffff';
+          } else return '#ffffff';
         });
 
       node
@@ -125,7 +125,7 @@ export default class EpiModelRenderer extends ELKBaseRenderer {
         return pathFn(d.points);
       })
       .style('fill', 'none')
-      .style('stroke', 'black')
+      .style('stroke', '#6c757d')
       .style('stroke-width', 2)
       .attr('marker-end', d => {
         const source = d.data.source.replace(/\s/g, '');

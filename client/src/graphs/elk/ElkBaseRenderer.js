@@ -189,7 +189,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
       .attr('xoverflow', 'visible')
       .append('svg:path')
       .attr('d', svgUtil.ARROW)
-      .style('fill', '#000')
+      .style('fill', '#6c757d')
       .style('stroke', 'none');
   }
 
