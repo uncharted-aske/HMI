@@ -13,9 +13,9 @@
     </left-side-panel>
     <div class="content">
       <search-bar />
-      <counters :node-count="nodeCount" :edge-count="edgeCount"/>
-      <hierarchy-slider @hierarchy-change="onHierarchyChange"/>
-      <epi-graph v-if="selectedModel" :graph="selectedModel.graph" @node-click="onNodeClick"/>
+      <!-- <counters :node-count="nodeCount" :edge-count="edgeCount"/> -->
+      <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
+      <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" >
       <div slot="content">
@@ -30,7 +30,7 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { ActionColumnInterface, ModelInterface, ModelComponentMetadataInterface } from '../types/types';
+  import { ActionColumnInterface, ModelInterface, ModelComponentMetadataInterface, GraphInterface } from '../types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
@@ -70,6 +70,7 @@
     actions: ActionColumnInterface[] = ACTIONS;
     drilldownPaneTitle = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
+    hierarchyLevel = 1;
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
@@ -79,13 +80,17 @@
       return modelsList.find(model => model.id === this.getSelectedModelId);
     }
 
-    get nodeCount (): number {
-      return this.selectedModel && this.selectedModel.graph.nodes.length;
-    }
+    get selectedGraph (): GraphInterface {
+      return this.hierarchyLevel === 1 ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
+    } 
 
-    get edgeCount (): number {
-      return this.selectedModel && this.selectedModel.graph.edges.length;
-    }
+    // get nodeCount (): number {
+    //   return this.selectedModel && this.selectedModel.graph.nodes.length;
+    // }
+
+    // get edgeCount (): number {
+    //   return this.selectedModel && this.selectedModel.graph.edges.length;
+    // }
 
     get currentAction (): string {
       return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
@@ -110,7 +115,7 @@
     }
 
     onHierarchyChange (level): void {
-
+      this.hierarchyLevel = level;
     }
 
     onNodeClick (node): void {

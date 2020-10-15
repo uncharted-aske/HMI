@@ -34,10 +34,15 @@ interface GraphGroupInterface {
   members: string[]
 }
 
-interface ModelGraphInterface {
+interface GraphInterface {
   nodes: GraphNodeInterface[],
   edges: GraphEdgeInterface[],
   groups: GraphGroupInterface[]
+}
+
+interface ModelGraphInterface {
+  abstract: GraphInterface,
+  detailed: GraphInterface
 }
 
 interface ModelInterface {
@@ -71,9 +76,10 @@ export {
   CardInterface,
   ModelInterface,
   ModelMetadataInterface,
-  ModelsState,
   ModelGraphInterface,
   ModelComponentMetadataInterface,
   GraphNodeInterface,
   GraphEdgeInterface,
+  GraphInterface,
+  ModelsState,
 };

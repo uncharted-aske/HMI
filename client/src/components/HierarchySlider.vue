@@ -1,6 +1,6 @@
 <template>
   <div class="hierarchy-slider-container">
-    <input type="range" min="1" max="2" step="1" :value="value" class="slider" @change="setHierarchyLevel">
+    <input type="range" min="1" max="2" step="1" :value="hierarchyLevel" class="slider" @change="setHierarchyLevel">
   </div>
 </template>
 
@@ -8,14 +8,15 @@
 
   import Component from 'vue-class-component';
   import Vue from 'vue';
+  import { Prop } from 'vue-property-decorator';
 
   @Component
   export default class HierarchySlider extends Vue {
-      value = 1;
+    @Prop({ default: 1 }) hierarchyLevel: number;
 
-      setHierarchyLevel (e):void {
-        this.$emit('hierarchy-change', e.target.value);
-      }
+    setHierarchyLevel (e):void {
+      this.$emit('hierarchy-change', e.target.value);
+    }
   }
 </script>
 

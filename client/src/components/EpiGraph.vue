@@ -28,6 +28,11 @@
     data: () => ({
       renderingOptions: DEFAULT_RENDERING_OPTIONS,
     }),
+    watch: {
+      graph() {
+        this.refresh();
+      }
+    },
     created () {
       this.renderer = null;
     },
@@ -67,6 +72,13 @@
       this.renderer.setData(this.graph, { groups });
       this.renderer.render();
     },
+    methods: { 
+      refresh() {
+        const groups = this.graph.groups || [];
+        this.renderer.setData(this.graph, { groups });
+        this.renderer.render();
+      }
+    }
   };
 </script>
 
@@ -74,7 +86,6 @@
 .epi-graph-container {
   width: 60%;
   height: 800px;
-  border: 1px solid red;
 }
 
 </style>

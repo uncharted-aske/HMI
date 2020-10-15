@@ -11,13 +11,19 @@ const state: ModelsState = {
     {
       id: 1,
       metadata: CHIME.metadata,
-      graph: { nodes: CHIME.nodes, edges: CHIME.edges, groups: CHIME.groups },
+      graph: {
+        abstract: { nodes: CHIME.nodes, edges: CHIME.edges, groups: CHIME.groups }, 
+        detailed: null
+      },
       type: 'computational',
     },
     {
       id: 2,
       metadata: SIR.metadata,
-      graph: { nodes: SIR.nodes, edges: SIR.edges, groups: SIR.groups },
+      graph: {
+        abstract:  { nodes: SIR.nodes, edges: SIR.edges, groups: SIR.groups }, 
+        detailed: null
+      },
       type: 'computational',
     },
   ],
