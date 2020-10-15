@@ -1,13 +1,11 @@
 <template>
-  <div class="counters-container">
+  <div class="counters-container"> 
     <div>
-    </div>  
-    <!-- <div>
     {{nodeCount}} Nodes
     </div>
     <div>
     {{edgeCount}} Links
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -20,7 +18,9 @@
 
   @Component
   export default class Counters extends Vue {
-    @Prop({ default: null }) selectedModel: number;
+    @Prop({ default: 0 }) nodeCount: number;
+    @Prop({ default: 0 }) edgeCount: number;
+
   }
 </script>
 
@@ -33,10 +33,14 @@
   border: 1px solid rgba(207, 216, 220, .5);
   display: flex;
   align-items: center;
+  div:first-child {
+    margin: 5px;
+  }
   div:not(:first-child)::before {
     content: "|";
     margin: 5px;
   }
+ 
 }
 
 </style>
