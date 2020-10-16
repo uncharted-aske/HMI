@@ -49,13 +49,14 @@
   background-color: $secondary-bar-bg;
   border: 1px solid $border;
   padding: 10px;
+  // flex-grow: 0;
+  // flex-shrink: 0;
   .panel-header {
     text-align: left;
     border-bottom: 1px solid $border;
   }
   .panel-body {
     margin-top: 5px;
-
   }
 }
 

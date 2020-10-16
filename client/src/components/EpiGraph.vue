@@ -1,8 +1,6 @@
 <template>
-  <div>
     <div class="epi-graph-container" ref="graph">
     </div>
-  </div>
 </template>
 
 <script>
@@ -83,9 +81,11 @@
 </script>
 
 <style lang="scss" scoped>
+@import "../styles/variables";
+
 .epi-graph-container {
-  width: 60%;
-  height: 800px;
+  height: calc(#{$content-full-height} - #{$secondary-bar-width} - 25px);
+  width: 80%;
 }
 
 </style>
