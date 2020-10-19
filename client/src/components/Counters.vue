@@ -14,8 +14,6 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
-  import { ModelInterface } from '../types/types';
-
   @Component
   export default class Counters extends Vue {
     @Prop({ default: 0 }) nodeCount: number;

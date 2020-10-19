@@ -62,7 +62,7 @@
         showTooltip(this.renderer.chart, tooltipText, nodeCoords);
       });
 
-      this.renderer.setCallback('nodeMouseLeave', (node) => {
+      this.renderer.setCallback('nodeMouseLeave', () => {
         hideTooltip(this.renderer.chart);
       });
 
