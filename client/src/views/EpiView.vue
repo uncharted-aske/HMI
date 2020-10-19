@@ -13,7 +13,7 @@
     </left-side-panel>
     <div class="content">
       <search-bar />
-      <counters :node-count="nodeCount" :edge-count="edgeCount"/>
+      <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
       <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
       <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
     </div>
