@@ -48,7 +48,6 @@
         this.renderer.hideNeighbourhood();
       });
 
-
       this.renderer.setCallback('nodeClick', (node) => {
         this.$emit('node-click', node.datum());
         const neighborhood = calculateNeighborhood(this.graph, node.datum().id);

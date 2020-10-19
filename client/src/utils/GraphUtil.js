@@ -6,14 +6,14 @@ import _ from 'lodash';
  * @param {string} node - a node id
  */
 
-export function calculateNeighborhood(graph, node) {
+export function calculateNeighborhood (graph, node) {
   const neighborEdges = graph.edges.filter(edge => {
     return edge.target === node || edge.source === node;
   }).map(edge => {
     return { source: edge.source, target: edge.target };
   });
 
-  //Reverse-engineer nodes from edges
+  // Reverse-engineer nodes from edges
   const neighborNodes = _.uniq(_.flatten(neighborEdges.map(edge => {
     return [edge.source, edge.target];
   })).concat(node)).map(id => ({ id })); // Include the selected node (added into .uniq)
@@ -22,5 +22,5 @@ export function calculateNeighborhood(graph, node) {
 }
 
 export default {
-  calculateNeighborhood
+  calculateNeighborhood,
 };

@@ -16,11 +16,8 @@
   import Vue from 'vue';
 
   export default class NavBar extends Vue {
-
     get currentView () : string {
       return this.$route.name;
     }
   }
 </script>
-
-

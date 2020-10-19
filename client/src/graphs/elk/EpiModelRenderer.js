@@ -164,13 +164,13 @@ export default class EpiModelRenderer extends ELKBaseRenderer {
       .style('opacity', 1.0);
   }
 
-  hideNeighbourhood() {
+  hideNeighbourhood () {
     const chart = this.chart;
     chart.selectAll('.node').style('opacity', 1);
     chart.selectAll('.edge').style('opacity', 1);
   }
 
-  showNeighborhood({nodes, edges}) {
+  showNeighborhood ({ nodes, edges }) {
     const chart = this.chart;
     // FIXME: not very efficient
     const nonNeighborNodes = chart.selectAll('.node').filter(d => {
@@ -180,5 +180,5 @@ export default class EpiModelRenderer extends ELKBaseRenderer {
 
     const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.data.source && edge.target === d.data.target));
     nonNeighborEdges.style('opacity', 0.1);
-  }  
+  }
 }
