@@ -71,10 +71,6 @@ interface ModelsState {
   modelsList: ModelInterface[]
 }
 
-interface AppState {
-  currentView: string,
-}
-
 export {
   ActionColumnInterface,
   CardInterface,
@@ -86,5 +82,4 @@ export {
   GraphEdgeInterface,
   GraphInterface,
   ModelsState,
-  AppState
 };
