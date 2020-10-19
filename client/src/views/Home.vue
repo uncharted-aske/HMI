@@ -68,9 +68,9 @@
 
     get modelsCards (): CardInterface[] {
       const modelsList = this.getModelsList;
-      const modelsCards = modelsList.map(model => { 
+      const modelsCards = modelsList.map(model => {
         let previewImageSrc = null;
-        switch(model.id) {
+        switch (model.id) {
         case 1:
             previewImageSrc = CHIMEScreenshot;
             break;
@@ -83,7 +83,7 @@
           default:
             previewImageSrc = null;
         }
-        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.source }) 
+        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.source });
       });
       return modelsCards;
     }
