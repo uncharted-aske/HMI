@@ -10,6 +10,7 @@ import SIR from '../../assets/uncharted_sir.json';
 import SIRGrFN from '../../assets/formatted-SIR-simple-GrFN-metadata.json';
 
 import DoubleEpi from '../../assets/uncharted_double_epi.json';
+import DoubleEpiGrFN from '../../assets/formatted-SARS-COV1-SEIRP-GrFN.json';
 
 const state: ModelsState = {
   selectedModelId: null,
@@ -37,7 +38,7 @@ const state: ModelsState = {
       metadata: DoubleEpi.metadata,
       graph: {
         abstract: _.pick(DoubleEpi, ['nodes', 'edges', 'groups']),
-        detailed: null,
+        detailed: _.pick(DoubleEpiGrFN, ['nodes', 'edges', 'groups']),
       },
       type: 'computational',
     },
