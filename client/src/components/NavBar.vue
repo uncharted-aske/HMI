@@ -1,8 +1,13 @@
 <template>
-<nav class="navbar fixed-top navbar-dark bg-dark">
-  <a class="navbar-brand" href="#/">
-    ASKE-E Prototype
-  </a>
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+  <a class="navbar-brand" href="#/">Uncharted HMI</a>
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav">
+      <li class="nav-item underlined">
+        <a class="nav-link" href="#">Models</a>
+      </li>
+    </ul>
+  </div>
 </nav>
 
 </template>
@@ -12,3 +17,5 @@
 
   export default class NavBar extends Vue {}
 </script>
+
+
