@@ -9,6 +9,7 @@
   import EpiModelRenderer from '@/graphs/elk/EpiModelRenderer.js';
   import { layered } from '@/graphs/elk/ElkStrategies.js';
   import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
+  import { calculateNeighborhood } from '@/utils/GraphUtil.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -43,8 +44,15 @@
         edgeControlOffset: -20,
       }, this.renderingOptions));
 
+      this.renderer.setCallback('backgroundDblClick', () => {
+        this.renderer.hideNeighbourhood();
+      });
+
+
       this.renderer.setCallback('nodeClick', (node) => {
         this.$emit('node-click', node.datum());
+        const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
+        this.renderer.showNeighborhood(neighborhood);
       });
 
       this.renderer.setCallback('nodeMouseEnter', (node) => {

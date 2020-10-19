@@ -164,17 +164,21 @@ export default class EpiModelRenderer extends ELKBaseRenderer {
       .style('opacity', 1.0);
   }
 
-  hideSubgraph (subgraph) {
+  hideNeighbourhood() {
     const chart = this.chart;
-
-    const subgraphNodes = chart.selectAll('.node').filter(d => {
-      return subgraph.nodes.map(node => node.id).includes(d.id);
-    });
-    subgraphNodes.style('opacity', 0);
-
-    const subgraphEdges = chart.selectAll('.edge').filter(d => _.some(subgraph.edges, edge => edge.source === d.data.source && edge.target === d.data.target));
-    subgraphEdges.style('opacity', 0);
-
-    // chart.selectAll('.container').style('opacity', 0)
+    chart.selectAll('.node').style('opacity', 1);
+    chart.selectAll('.edge').style('opacity', 1);
   }
+
+  showNeighborhood({nodes, edges}) {
+    const chart = this.chart;
+    // FIXME: not very efficient
+    const nonNeighborNodes = chart.selectAll('.node').filter(d => {
+      return !nodes.map(node => node.id).includes(d.id);
+    });
+    nonNeighborNodes.style('opacity', 0.1);
+
+    const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.data.source && edge.target === d.data.target));
+    nonNeighborEdges.style('opacity', 0.1);
+  }  
 }
