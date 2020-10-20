@@ -16,8 +16,8 @@ const CovidModelMetadata = {
   name:'Covid-19 Model',
   description:'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.',
   version:'N/A',
-  source:'EMMA',
-  created: 'N/A',
+  source:'EMMAA',
+  created: '2020-10-19',
   knowledge:'pubmed, biorxiv'
 }
 
