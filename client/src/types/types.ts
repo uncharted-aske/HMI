@@ -20,7 +20,7 @@ interface GraphNodeInterface {
   concept: string,
   label: string,
   type: string,
-  metadata: ModelComponentMetadataInterface
+  metadata: any
 }
 
 interface GraphEdgeInterface {

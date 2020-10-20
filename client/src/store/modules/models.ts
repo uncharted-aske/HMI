@@ -4,7 +4,7 @@ import { GetterTree, MutationTree } from 'vuex';
 import { ModelsState } from '../../types/types';
 
 import CHIME from '../../assets/uncharted_chime.json';
-import CHIMEGrFN from '../../assets/formatted-CHIME-SIR-GrFN-metadata.json';
+import CHIMEGrFN from '../../assets/formatted-CHIME-SIR-GrFN-metadata.1.json';
 
 import SIR from '../../assets/uncharted_sir.json';
 import SIRGrFN from '../../assets/formatted-SIR-simple-GrFN-metadata.json';
