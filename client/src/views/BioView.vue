@@ -13,8 +13,7 @@
         </left-side-panel>
     <div class="content">
       <search-bar />
-      <counters :model-name="selectedModel.metadata.name"/>
-
+      <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
       <sigma-grapher />
     </div>
   </div>
@@ -35,6 +34,8 @@
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
   import SigmaGrapher from '@/components/SigmaGrapher.vue';
+
+
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -67,6 +68,18 @@
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
       return modelsList.find(model => model.id === this.getSelectedModelId);
+    }
+
+    get selectedGraph (): any {
+      return this.selectedModel.graph;
+    }
+
+    get nodeCount (): number {
+      return this.selectedGraph && this.selectedGraph.nodes.length;
+    }
+
+    get edgeCount (): number {
+      return this.selectedGraph && this.selectedGraph.edges.length;
     }
 
 

@@ -1,7 +1,7 @@
 <template>
-  <div id="sigma-container">
-
-  </div>
+  <div class="sigma-container">
+    <div id="graph" />
+  </div>  
 </template>
 
 <script lang="ts">
@@ -17,7 +17,7 @@
   export default class SigmaGrapher extends Vue {
     mounted () {
       sigma.parsers.json('/covid_w095_forceatlas2.json', {
-                           container: 'sigma-container',
+                           container: 'graph',
                            settings: {
                              minEdgeSize: 0.07,
                              maxEdgeSize: 0.07,
@@ -97,15 +97,31 @@
 </script>
 
 <style lang="scss" scoped>
-  #sigma-container {
-    background-color: white;
-    width: 100%;
-    height: 100%;
-    margin: auto;
-
-    canvas {
-        width: 100%;
-        height: 100%;
-    }
+@import "../styles/variables";
+.sigma-container {
+  height: calc(#{$content-full-height} - #{$secondary-bar-width} - 25px);
+  width: 100%;
+  position: relative;
+  #graph {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
   }
+}
+
+::v-deep .sigma-scene {
+  left: 0;
+}
+
+::v-deep .sigma-labels {
+  left: 0;
+}
+
+::v-deep .sigma-mouse {
+  left: 0;
+}
+
 </style>

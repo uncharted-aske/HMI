@@ -12,6 +12,8 @@ import SIRGrFN from '../../assets/formatted-SIR-simple-GrFN-metadata.json';
 import DoubleEpi from '../../assets/uncharted_double_epi.json';
 import DoubleEpiGrFN from '../../assets/formatted-SARS-COV1-SEIRP-GrFN.json';
 
+import Covid19 from  '../../assets/covid_w095_forceatlas2.json';
+
 const CovidModelMetadata = {
   name:'Covid-19 Model',
   description:'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.',
@@ -54,7 +56,7 @@ const state: ModelsState = {
     {
       id: 4,
       metadata: CovidModelMetadata,
-      graph: null,
+      graph: Covid19,
       type: 'biological',
     },
   ],
