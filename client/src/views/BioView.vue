@@ -13,6 +13,8 @@
         </left-side-panel>
     <div class="content">
       <search-bar />
+      <counters />
+
       <sigma-grapher />
     </div>
   </div>
@@ -27,6 +29,7 @@
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
+  import Counters from '@/components/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
@@ -41,6 +44,7 @@
     ActionColumn,
     ActionColumnNavBar,
     SearchBar,
+    Counters,
     LeftSidePanel,
     MetadataPane,
     FacetsPane,
