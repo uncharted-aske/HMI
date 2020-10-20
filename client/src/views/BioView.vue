@@ -13,6 +13,7 @@
         </left-side-panel>
     <div class="content">
       <search-bar />
+      <sigma-grapher />
     </div>
   </div>
 </template>
@@ -29,6 +30,7 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/components/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
+  import SigmaGrapher from '@/components/SigmaGrapher.vue';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -42,6 +44,7 @@
     LeftSidePanel,
     MetadataPane,
     FacetsPane,
+    SigmaGrapher,
   };
 
   @Component({ components })
