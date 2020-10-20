@@ -74,7 +74,7 @@ export default class Modal extends Vue {
 
 .modal-container {
   position: relative;
-  width: 500px;
+  width: 1000px;
   margin: 0px auto;
   background-color: #fff;
   border-radius: 2px;

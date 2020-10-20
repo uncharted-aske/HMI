@@ -6,6 +6,7 @@
     <div
       slot="body"
     >
+    <img :src="chimePDF">
     </div>
   </modal>
 </template>
@@ -16,16 +17,15 @@ import Vue from 'vue';
 
 import Modal from '@/components/Modal.vue';
 
-// import ChimePDF from '@/assets/CHIME.pdf';
+import ChimePDF from '@/assets/img/ChimePDF.png';
 
 const components = {
   Modal,
-  // pdf
 };
 
 @Component({ components })
 export default class ModalKnowledge extends Vue {
-  // chimePDF: string = ChimePDF;
+  chimePDF: string = ChimePDF;
 
   close(): void {
     this.$emit('close', null);

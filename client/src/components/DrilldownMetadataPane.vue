@@ -6,7 +6,7 @@
         <div :class="{'expression': key === 'expression' || key === 'eqn_source', '': key !== 'expression' || key !== 'eqn_source' }">{{value}} </div>
       </div>
      <div v-else>
-       <div class="key"> {{key | capital-letters-formatter | underscore-remover-formatter}} </div>
+       <div class="key"> {{key | capital-letters-formatter | underscore-remover-formatter}} (2) </div>
        <div class="snippet" @click="showModal = true">
         <img :src="firstSnippet" />
        </div>
