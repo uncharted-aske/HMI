@@ -7,10 +7,16 @@ import App from './App.vue';
 import { createRouter } from './router';
 import { store } from './store';
 
+import capitalLettersFormatter from './filters/CapitalLettersFormatter';
+
+
 library.add(faExclamationTriangle, faTimes, faFilter, faInfo, faBook, faChartLine);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 // Vue.config.productionTip = false
+
+Vue.filter('capitalLettersFormatter', capitalLettersFormatter);
+
 
 async function main (): Promise<void> {
   const app = new Vue({
