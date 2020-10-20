@@ -34,21 +34,21 @@
 /**
  * Simple modal wrapper
 */
-import Component from 'vue-class-component';
-import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
 
-import CloseButton from '@/components/widgets/CloseButton.vue';
+  import CloseButton from '@/components/widgets/CloseButton.vue';
 
-const components = {
-  CloseButton
-};
+  const components = {
+    CloseButton,
+  };
 
 @Component({ components })
-export default class Modal extends Vue {
-  close(): void {
-    this.$emit('close', null);
+  export default class Modal extends Vue {
+    close (): void {
+      this.$emit('close', null);
+    }
   }
-}
 
 </script>
 
@@ -81,7 +81,6 @@ export default class Modal extends Vue {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
 }
-
 
 /*
  * The following styles are auto-applied to elements with

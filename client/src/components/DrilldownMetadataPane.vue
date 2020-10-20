@@ -11,7 +11,7 @@
         <img :src="firstSnippet" />
        </div>
        <div class="snippet" @click="showModal = true"> <img :src="secondSnippet" /></div>
-     </div> 
+     </div>
     </div>
     <modal-knowledge
       v-if="showModal"
@@ -31,7 +31,7 @@
   import SecondSnippet from '@/assets/img/SnippetKnowledge2.png';
 
   const components = {
-    ModalKnowledge
+    ModalKnowledge,
   };
 
   @Component({ components })

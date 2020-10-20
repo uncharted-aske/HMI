@@ -12,25 +12,25 @@
 </template>
 
 <script lang="ts">
-import Component from 'vue-class-component';
-import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
 
-import Modal from '@/components/Modal.vue';
+  import Modal from '@/components/Modal.vue';
 
-import ChimePDF from '@/assets/img/ChimePDF.png';
+  import ChimePDF from '@/assets/img/ChimePDF.png';
 
-const components = {
-  Modal,
-};
+  const components = {
+    Modal,
+  };
 
 @Component({ components })
-export default class ModalKnowledge extends Vue {
+  export default class ModalKnowledge extends Vue {
   chimePDF: string = ChimePDF;
 
-  close(): void {
+  close (): void {
     this.$emit('close', null);
   }
-}
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -41,6 +41,5 @@ img {
         width: 100%;
         height: 100%
       }
-
 
 </style>
