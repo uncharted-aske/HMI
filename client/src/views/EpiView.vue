@@ -121,8 +121,7 @@
 
     onNodeClick (node): void {
       this.isOpenDrilldown = true;
-      const units = node.data.metadata.units ? node.data.metadata.units : node.data.metadata.type;
-      this.drilldownPaneTitle = node.label + ' (' + units + ')';
+      this.drilldownPaneTitle = node.data.metadata.units ? node.label + ' (' + node.data.metadata.units + ')' : node.label;
       this.drilldownPaneSubtitle = node.data.type;
       this.drilldownMetadata = node.data.metadata;
     }
