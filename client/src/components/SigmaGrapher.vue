@@ -71,7 +71,7 @@
                                var size = nodesToHighlight[n][prefix + 'size'];
                                var fontSize = (embedSettings('labelSize') === 'fixed') ? embedSettings('defaultLabelSize') : embedSettings('labelSizeRatio') * size;
                                if (nodesToHighlight[n].label && typeof nodesToHighlight[n].label === 'string') {
-                                 hoverContext.fillStyle = '#fff';
+                                 hoverContext.fillStyle = '#000';
 
                                  var origFont = hoverContext.font;
                                  hoverContext.font = '11px arial';
@@ -98,9 +98,14 @@
 
 <style lang="scss" scoped>
   #sigma-container {
-    background-color: black;
-    max-width: 2000px;
-    height: 2000px;
+    background-color: white;
+    width: 100%;
+    height: 100%;
     margin: auto;
+
+    canvas {
+        width: 100%;
+        height: 100%;
+    }
   }
 </style>
