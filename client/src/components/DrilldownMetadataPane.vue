@@ -1,13 +1,13 @@
 <template>
-  <div class="drilldown-metadata-pane-container">
-    <div v-if="metadata" v-for="(value, key) in metadata" :key="key" class="metadata-item">
+  <div class="drilldown-metadata-pane-container" v-if="metadata">
+    <div v-for="(value, key) in metadata" :key="key" class="metadata-item">
       <div class="key"> {{key | capital-letters-formatter | underscore-remover-formatter}} </div>
       <div :class="{'expression': key === 'expression' || key === 'eqn_source', '': key !== 'expression' || key !== 'eqn_source' }">{{value}} </div>
      </div>
-     <div v-else>
+  </div>
+      <div v-else>
        Empty metadata
      </div>
-  </div>
 </template>
 
 <script lang="ts">

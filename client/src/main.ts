@@ -10,7 +10,6 @@ import { store } from './store';
 import capitalLettersFormatter from './filters/CapitalLettersFormatter';
 import underscoreRemoverFormatter from './filters/UnderscoreRemoverFormatter';
 
-
 library.add(faExclamationTriangle, faTimes, faFilter, faInfo, faBook, faChartLine);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -18,7 +17,6 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.filter('capitalLettersFormatter', capitalLettersFormatter);
 Vue.filter('underscoreRemoverFormatter', underscoreRemoverFormatter);
-
 
 async function main (): Promise<void> {
   const app = new Vue({
