@@ -16,7 +16,7 @@
   @Component
   export default class SigmaGrapher extends Vue {
     mounted () {
-      sigma.parsers.json('/covid_w095_forceatlas2.json', {
+      sigma.parsers.json('/covid_w09_forceatlas2_tested_annot.json', {
                            container: 'graph',
                            settings: {
                              minEdgeSize: 0.07,
@@ -35,6 +35,31 @@
                              options,
                              { prefix: s.renderers[0] instanceof sigma.renderers.webgl ? 'cam0:' : options.prefix },
                            );
+
+                          s.graph.nodes().forEach(function(n) {
+                          var numTested = 0;
+                          var adjacentEdges = s.graph.adjacentEdges(n.id);
+                          for (var i = 0; i < adjacentEdges.length; i++) {
+                            var edge = adjacentEdges[i];
+                            if (edge.attributes.tested == "true") {
+                              numTested++;
+                            }
+                          }
+                          if (numTested == 0) {
+                            n.color = "#C0C0C0";
+                          } else {
+                            n.color = '#ff6500';
+                          }
+
+                        });
+                        s.graph.edges().forEach(function(e) {
+                          if (e.attributes.tested == "false") {
+                            e.color = "#C0C0C0";
+                          } else {
+                            e.color = '#ff6500';
+                          }
+                        });
+                        s.refresh();
 
                            s.bind('overNode', function (event) {
                              var node = event.data.node;

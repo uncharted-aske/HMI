@@ -12,7 +12,7 @@ import SIRGrFN from '../../assets/formatted-SIR-simple-GrFN-metadata.json';
 import DoubleEpi from '../../assets/uncharted_double_epi.json';
 import DoubleEpiGrFN from '../../assets/formatted-SARS-COV1-SEIRP-GrFN-metadata.json';
 
-import Covid19 from  '../../assets/covid_w095_forceatlas2.json';
+import Covid19 from  '../../assets/covid_w09_forceatlas2_tested_annot.json';
 
 const CovidModelMetadata = {
   name:'Covid-19 Model',
