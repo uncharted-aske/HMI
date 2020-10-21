@@ -48,7 +48,7 @@ interface ModelGraphInterface {
 interface ModelInterface {
   id: number;
   metadata: ModelMetadataInterface,
-  graph: ModelGraphInterface,
+  graph: any,
   type: string
 }
 
