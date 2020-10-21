@@ -1,7 +1,7 @@
 <template>
   <div class="sigma-container">
     <div id="graph" />
-  </div>  
+  </div>
 </template>
 
 <script lang="ts">
@@ -36,30 +36,29 @@
                              { prefix: s.renderers[0] instanceof sigma.renderers.webgl ? 'cam0:' : options.prefix },
                            );
 
-                          s.graph.nodes().forEach(function(n) {
-                          var numTested = 0;
-                          var adjacentEdges = s.graph.adjacentEdges(n.id);
-                          for (var i = 0; i < adjacentEdges.length; i++) {
-                            var edge = adjacentEdges[i];
-                            if (edge.attributes.tested == "true") {
-                              numTested++;
-                            }
-                          }
-                          if (numTested == 0) {
-                            n.color = "#C0C0C0";
-                          } else {
-                            n.color = '#ff6500';
-                          }
-
-                        });
-                        s.graph.edges().forEach(function(e) {
-                          if (e.attributes.tested == "false") {
-                            e.color = "#C0C0C0";
-                          } else {
-                            e.color = '#ff6500';
-                          }
-                        });
-                        s.refresh();
+                           s.graph.nodes().forEach(function (n) {
+                             var numTested = 0;
+                             var adjacentEdges = s.graph.adjacentEdges(n.id);
+                             for (var i = 0; i < adjacentEdges.length; i++) {
+                               var edge = adjacentEdges[i];
+                               if (edge.attributes.tested == 'true') {
+                                 numTested++;
+                               }
+                             }
+                             if (numTested === 0) {
+                               n.color = '#C0C0C0';
+                             } else {
+                               n.color = '#ff6500';
+                             }
+                           });
+                           s.graph.edges().forEach(function (e) {
+                             if (e.attributes.tested === 'false') {
+                               e.color = '#C0C0C0';
+                             } else {
+                               e.color = '#ff6500';
+                             }
+                           });
+                           s.refresh();
 
                            s.bind('overNode', function (event) {
                              var node = event.data.node;
@@ -133,7 +132,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    
+
   }
 }
 

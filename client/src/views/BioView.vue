@@ -35,8 +35,6 @@
   import FacetsPane from '@/components/FacetsPane.vue';
   import SigmaGrapher from '@/components/SigmaGrapher.vue';
 
-
-
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
     { name: 'Metadata', icon: 'info', paneId: 'metadata' },
@@ -81,7 +79,6 @@
     get edgeCount (): number {
       return this.selectedGraph && this.selectedGraph.edges.length;
     }
-
 
     onSetActive (actionName: string): void {
       let activePane = '';

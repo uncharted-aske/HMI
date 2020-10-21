@@ -12,16 +12,16 @@ import SIRGrFN from '../../assets/formatted-SIR-simple-GrFN-metadata.json';
 import DoubleEpi from '../../assets/uncharted_double_epi.json';
 import DoubleEpiGrFN from '../../assets/formatted-SARS-COV1-SEIRP-GrFN-metadata.json';
 
-import Covid19 from  '../../assets/covid_w09_forceatlas2_tested_annot.json';
+import Covid19 from '../../assets/covid_w09_forceatlas2_tested_annot.json';
 
 const CovidModelMetadata = {
-  name:'Covid-19 Model',
-  description:'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.',
-  version:'N/A',
-  source:'EMMAA',
+  name: 'Covid-19 Model',
+  description: 'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.',
+  version: 'N/A',
+  source: 'EMMAA',
   created: '2020-10-19',
-  knowledge:'pubmed, biorxiv'
-}
+  knowledge: 'pubmed, biorxiv',
+};
 
 const state: ModelsState = {
   selectedModelId: null,
