@@ -30,7 +30,7 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { ActionColumnInterface, ModelInterface, ModelComponentMetadataInterface, GraphInterface } from '../types/types';
+  import { ActionColumnInterface, ModelInterface, ModelComponentMetadataInterface, GraphInterface, GraphNodeInterface } from '../types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
@@ -119,11 +119,11 @@
       this.hierarchyLevel = level;
     }
 
-    onNodeClick (node: any): void {
+    onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
-      this.drilldownPaneTitle = node.data.metadata.units ? node.label + ' (' + node.data.metadata.units + ')' : node.label;
-      this.drilldownPaneSubtitle = node.data.type;
-      this.drilldownMetadata = node.data.metadata;
+      this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
+      this.drilldownPaneSubtitle = node.type;
+      this.drilldownMetadata = node.metadata;
     }
   }
 </script>

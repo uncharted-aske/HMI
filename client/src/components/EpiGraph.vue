@@ -38,7 +38,6 @@
     }
 
     mounted (): void {
-      console.log('mounted');
       this.renderer = new EpiModelRenderer(Object.assign({}, {
         el: this.$refs.graph,
         strategy: layered,
@@ -52,7 +51,7 @@
       });
 
       this.renderer.setCallback('nodeClick', (node) => {
-        this.$emit('node-click', node.datum());
+        this.$emit('node-click', node.datum().data);
         const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
         this.renderer.showNeighborhood(neighborhood);
       });

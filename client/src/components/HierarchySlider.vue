@@ -14,7 +14,7 @@
   export default class HierarchySlider extends Vue {
     @Prop({ default: 1 }) hierarchyLevel: number;
 
-    setHierarchyLevel (e):void {
+    setHierarchyLevel (e: { target: HTMLInputElement }):void {
       this.$emit('hierarchy-change', +e.target.value);
     }
   }
