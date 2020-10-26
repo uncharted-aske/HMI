@@ -115,11 +115,11 @@
       this.drilldownMetadata = null;
     }
 
-    onHierarchyChange (level): void {
+    onHierarchyChange (level: number): void {
       this.hierarchyLevel = level;
     }
 
-    onNodeClick (node): void {
+    onNodeClick (node: any): void {
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.data.metadata.units ? node.label + ' (' + node.data.metadata.units + ')' : node.label;
       this.drilldownPaneSubtitle = node.data.type;

@@ -15,7 +15,7 @@
 
   @Component
   export default class SigmaGrapher extends Vue {
-    mounted () {
+    mounted (): void {
       sigma.parsers.json('/covid_w09_forceatlas2_tested_annot.json', {
                            container: 'graph',
                            settings: {
@@ -41,7 +41,7 @@
                              var adjacentEdges = s.graph.adjacentEdges(n.id);
                              for (var i = 0; i < adjacentEdges.length; i++) {
                                var edge = adjacentEdges[i];
-                               if (edge.attributes.tested == 'true') {
+                               if (edge.attributes.tested === 'true') {
                                  numTested++;
                                }
                              }
@@ -67,7 +67,7 @@
                              // loop through the edges and highlight each of them; also highlight
                              //   all corresponding nodes, otherwise edges would be drawn in front of them
                              var nodesToHighlight = {};
-                             adjacentEdges.forEach(function (e, i) {
+                             adjacentEdges.forEach(function (e) {
                                var source = s.graph.nodes(e.source);
                                var target = s.graph.nodes(e.target);
                                nodesToHighlight[source.id] = source;
