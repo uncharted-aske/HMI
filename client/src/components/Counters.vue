@@ -1,5 +1,8 @@
 <template>
   <div class="counters-container">
+    <div class="name">
+    {{modelName}}
+    </div>
     <div>
     {{nodeCount}} Nodes
     </div>
@@ -16,6 +19,7 @@
 
   @Component
   export default class Counters extends Vue {
+    @Prop({ default: '' }) modelName: string;
     @Prop({ default: 0 }) nodeCount: number;
     @Prop({ default: 0 }) edgeCount: number;
   }
@@ -36,6 +40,9 @@
   div:not(:first-child)::before {
     content: "|";
     margin: 5px;
+  }
+  .name {
+    font-weight: bold;
   }
 
 }

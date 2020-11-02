@@ -13,7 +13,7 @@
     </left-side-panel>
     <div class="content">
       <search-bar />
-      <counters :node-count="nodeCount" :edge-count="edgeCount"/>
+      <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
       <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
       <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
     </div>
@@ -30,7 +30,7 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { ActionColumnInterface, ModelInterface, ModelComponentMetadataInterface, GraphInterface } from '../types/types';
+  import { ActionColumnInterface, ModelInterface, ModelComponentMetadataInterface, GraphInterface, GraphNodeInterface } from '../types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
@@ -115,16 +115,15 @@
       this.drilldownMetadata = null;
     }
 
-    onHierarchyChange (level): void {
+    onHierarchyChange (level: number): void {
       this.hierarchyLevel = level;
     }
 
-    onNodeClick (node): void {
+    onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
-      const units = node.data.metadata.units ? node.data.metadata.units : 'unknown';
-      this.drilldownPaneTitle = node.label + ' (' + units + ')';
-      this.drilldownPaneSubtitle = node.data.type;
-      this.drilldownMetadata = node.data.metadata;
+      this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
+      this.drilldownPaneSubtitle = node.type;
+      this.drilldownMetadata = node.metadata;
     }
   }
 </script>

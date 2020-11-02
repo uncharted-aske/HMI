@@ -11,6 +11,8 @@ import {
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterFormatter';
+import UnderscoreRemoverFormatter from './filters/UnderscoreRemoverFormatter';
 
 import App from './App.vue';
 import { createRouter } from './router';
@@ -35,6 +37,9 @@ dom.watch();
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 // Vue.config.productionTip = false
+
+Vue.filter('CapitalizeFirstLetterFormatter', CapitalizeFirstLetterFormatter);
+Vue.filter('UnderscoreRemoverFormatter', UnderscoreRemoverFormatter);
 
 async function main (): Promise<void> {
   const app = new Vue({

@@ -3,38 +3,41 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
   import _ from 'lodash';
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
+  import { Prop, Watch } from 'vue-property-decorator';
 
-  import EpiModelRenderer from '@/graphs/elk/EpiModelRenderer.js';
-  import { layered } from '@/graphs/elk/ElkStrategies.js';
-  import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
+  import { GraphInterface } from '../types/types';
+
+  import EpiModelRenderer from '../graphs/elk/EpiModelRenderer.js';
+  import { layered } from '../graphs/elk/ElkStrategies.js';
+  import { showTooltip, hideTooltip } from '../utils/SVGUtil.js';
+  import { calculateNeighborhood } from '../utils/GraphUtil.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
     nodeHeight: 30,
   };
 
-  export default {
-    name: 'EpiGraph',
-    props: {
-      graph: {
-        type: Object,
-        default: null,
-      },
-    },
-    data: () => ({
-      renderingOptions: DEFAULT_RENDERING_OPTIONS,
-    }),
-    watch: {
-      graph () {
-        this.refresh();
-      },
-    },
-    created () {
+  @Component
+  export default class EpiGraph extends Vue {
+    @Prop({ default: null }) graph: GraphInterface;
+
+    renderingOptions = DEFAULT_RENDERING_OPTIONS;
+    renderer = null;
+
+    @Watch('graph')
+    graphChanged (): void {
+      this.refresh();
+    }
+
+    created (): void {
       this.renderer = null;
-    },
-    mounted () {
+    }
+
+    mounted (): void {
       this.renderer = new EpiModelRenderer(Object.assign({}, {
         el: this.$refs.graph,
         strategy: layered,
@@ -43,8 +46,14 @@
         edgeControlOffset: -20,
       }, this.renderingOptions));
 
+      this.renderer.setCallback('backgroundDblClick', () => {
+        this.renderer.hideNeighbourhood();
+      });
+
       this.renderer.setCallback('nodeClick', (node) => {
-        this.$emit('node-click', node.datum());
+        this.$emit('node-click', node.datum().data);
+        const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
+        this.renderer.showNeighborhood(neighborhood);
       });
 
       this.renderer.setCallback('nodeMouseEnter', (node) => {
@@ -69,15 +78,14 @@
       const groups = this.graph.groups || [];
       this.renderer.setData(this.graph, { groups });
       this.renderer.render();
-    },
-    methods: {
-      refresh () {
-        const groups = this.graph.groups || [];
-        this.renderer.setData(this.graph, { groups });
-        this.renderer.render();
-      },
-    },
-  };
+    }
+
+    refresh (): void {
+       const groups = this.graph.groups || [];
+      this.renderer.setData(this.graph, { groups });
+      this.renderer.render();
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
