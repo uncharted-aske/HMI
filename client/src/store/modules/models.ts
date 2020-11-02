@@ -12,17 +12,6 @@ import SIRGrFN from '../../static/formatted-SIR-simple-GrFN-metadata.json';
 import DoubleEpi from '../../static/uncharted_double_epi.json';
 import DoubleEpiGrFN from '../../static/formatted-SARS-COV1-SEIRP-GrFN-metadata.json';
 
-import Covid19 from '../../static/covid_w09_forceatlas2_tested_annot.json';
-
-const CovidModelMetadata = {
-  name: 'Covid-19 Model',
-  description: 'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.',
-  version: 'N/A',
-  source: 'EMMAA',
-  created: '2020-10-19',
-  knowledge: 'pubmed, biorxiv',
-};
-
 const state: ModelsState = {
   selectedModelId: null,
   modelsList: [
@@ -52,12 +41,6 @@ const state: ModelsState = {
         detailed: _.pick(DoubleEpiGrFN, ['nodes', 'edges', 'groups']),
       },
       type: 'computational',
-    },
-    {
-      id: 4,
-      metadata: CovidModelMetadata,
-      graph: Covid19,
-      type: 'biological',
     },
   ],
 };
