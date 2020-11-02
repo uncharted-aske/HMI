@@ -7,10 +7,16 @@ import App from './App.vue';
 import { createRouter } from './router';
 import { store } from './store';
 
+import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterFormatter';
+import UnderscoreRemoverFormatter from './filters/UnderscoreRemoverFormatter';
+
 library.add(faExclamationTriangle, faTimes, faFilter, faInfo, faBook, faChartLine);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 // Vue.config.productionTip = false
+
+Vue.filter('CapitalizeFirstLetterFormatter', CapitalizeFirstLetterFormatter);
+Vue.filter('UnderscoreRemoverFormatter', UnderscoreRemoverFormatter);
 
 async function main (): Promise<void> {
   const app = new Vue({

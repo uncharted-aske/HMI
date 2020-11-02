@@ -1,0 +1,8 @@
+//Navigation tabs
+.nav-item.underlined {
+    border-bottom: 2px solid $selection;
+    color: #ffffff;
+    .nav-link {
+      color: #ffffff;
+    }
+  }

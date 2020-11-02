@@ -44,6 +44,7 @@
   height: 100%;
   background-color: $secondary-bar-bg;
   border: 1px solid $border;
+  z-index: map-get($z-index-order, left-side-panel);
 }
 
 </style>

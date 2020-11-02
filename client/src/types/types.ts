@@ -4,12 +4,51 @@ interface ModelMetadataInterface {
   created: string,
   source: string,
   version: string,
-  knowledge: string,
+  knowledge: string
+}
+
+interface ModelComponentMetadataInterface {
+  name: string,
+  description: string,
+  expression: string,
+  units: string,
+  knowledge: string
+}
+
+interface GraphNodeInterface {
+  id: string,
+  concept: string,
+  label: string,
+  type: string,
+  metadata: any
+}
+
+interface GraphEdgeInterface {
+  id: string,
+  source: string,
+  target: string
+}
+
+interface GraphGroupInterface {
+  id: string,
+  members: string[]
+}
+
+interface GraphInterface {
+  nodes: GraphNodeInterface[],
+  edges: GraphEdgeInterface[],
+  groups: GraphGroupInterface[]
+}
+
+interface ModelGraphInterface {
+  abstract: GraphInterface,
+  detailed: GraphInterface
 }
 
 interface ModelInterface {
   id: number;
   metadata: ModelMetadataInterface,
+  graph: any,
   type: string
 }
 
@@ -37,5 +76,10 @@ export {
   CardInterface,
   ModelInterface,
   ModelMetadataInterface,
+  ModelGraphInterface,
+  ModelComponentMetadataInterface,
+  GraphNodeInterface,
+  GraphEdgeInterface,
+  GraphInterface,
   ModelsState,
 };

@@ -36,6 +36,11 @@
   import FacetsPane from '@/components/FacetsPane.vue';
   import StartScreen from '@/components/StartScreen.vue';
 
+  // Screenshots
+  import CHIMEScreenshot from '@/assets/img/CHIME.png';
+  import SIRScreenshot from '@/assets/img/SIR.png';
+  import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
+
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
   ];
@@ -63,7 +68,23 @@
 
     get modelsCards (): CardInterface[] {
       const modelsList = this.getModelsList;
-      const modelsCards = modelsList.map(model => Object.assign({}, model, { previewImageSrc: null, title: model.metadata.name, subtitle: model.metadata.source }));
+      const modelsCards = modelsList.map(model => {
+        let previewImageSrc = null;
+        switch (model.id) {
+        case 1:
+            previewImageSrc = CHIMEScreenshot;
+            break;
+          case 2:
+            previewImageSrc = SIRScreenshot;
+            break;
+          case 3:
+            previewImageSrc = DoubleEpiScreenshot;
+            break;
+          default:
+            previewImageSrc = null;
+        }
+        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.source });
+      });
       return modelsCards;
     }
 

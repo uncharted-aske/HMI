@@ -7,6 +7,7 @@ const commonjs = require('@rollup/plugin-commonjs');
 const resolve = require('@rollup/plugin-node-resolve').nodeResolve;
 const replace = require('@rollup/plugin-replace');
 const json = require('@rollup/plugin-json');
+const image = require('@rollup/plugin-image');
 const globby = require('globby');
 const server = require('live-server');
 const copy = require('rollup-plugin-copy');
@@ -145,6 +146,7 @@ function pluginsForType (type, env) {
         },
       }),
       json(),
+      image(),
     ],
   };
 }
