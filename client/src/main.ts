@@ -13,8 +13,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import App from './App.vue';
-import router from './router';
+import { createRouter } from './router';
 import { store } from './store';
+
+const router = createRouter(Vue);
 
 // Add sync'd route state to store
 sync(store, router);
