@@ -41,6 +41,9 @@
   import SIRScreenshot from '@/assets/img/SIR.png';
   import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
 
+  // Services
+  import modelsService from '../services/ModelsService';
+
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
   ];
@@ -59,7 +62,8 @@
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
 
-    @Getter getModelsList; // FIXME: We need to explore another options for this to avoid using decorators.
+    @Getter getFilters;
+    @Getter getModelsList;
     @Mutation setSelectedModel;
 
     get currentAction (): string {
@@ -67,7 +71,7 @@
     }
 
     get modelsCards (): CardInterface[] {
-      const modelsList = this.getModelsList;
+      const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
       const modelsCards = modelsList.map(model => {
         let previewImageSrc = null;
         switch (model.id) {

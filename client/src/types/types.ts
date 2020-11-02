@@ -71,6 +71,10 @@ interface ModelsState {
   modelsList: ModelInterface[]
 }
 
+interface QueryState {
+  [filters: string]: string, // JSON
+}
+
 export {
   ActionColumnInterface,
   CardInterface,
@@ -82,4 +86,5 @@ export {
   GraphEdgeInterface,
   GraphInterface,
   ModelsState,
+  QueryState,
 };
