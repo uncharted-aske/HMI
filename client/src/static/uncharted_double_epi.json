@@ -1,0 +1,313 @@
+{
+  "metadata": {
+    "source": "T. W. Ng, G. Turinici, A. Danchin; The University of Hong Kong; Inria Rocquencourt Domaine de Voluceau; Centre d'Enseignement et de Recherche en Mathématiques, Informatique et Calcul Scientifique-ENPC; Génétique des Génomes Bactériens, Institut Pasteur",
+    "version": "1.0",
+    "knowledge": "Ng, T. W., Turinici, G., & Danchin, A. (2003). A double epidemic model for the SARS propagation. BMC Infectious Diseases, 3(1), 19.",
+    "name": "Double Epidemic SEIRP Model",
+    "created": "2010-09-10",
+    "description": "This new model will be called SEIRP model (E stands for the Exposed class while P stands for protection) which can be considered as a variant of the standard SIR. We assume that two groups of infected individuals are introduced into a large population. One group is infected by virus A and the other group by virus B. The class of Susceptibles, S, are those who can catch the disease A or disease B. A susceptible who catches the disease A first will enter the Exposed class E which includes those in the latent period, who are infected by disease A but not yet infectious. After the latent period ends, the individual enters the class I of infectives, which includes those who have the disease A and can transmit it. When the infectious period ends, the individual enters the Removed class R, namely those who are either recovered from disease A, immune or isolated until recovered from disease. A susceptible who catches the disease B first will enter the class Ip of infectives and then the Removed class Rp. It is assumed that catching disease B first will protect the individual from catching disease A."
+  },
+  "nodes": [
+    {
+      "id": "1",
+      "concept": "E",
+      "label": "E",
+      "type": "variable",
+      "metadata": {
+        "name": "Exposed",
+        "units": "number of people",
+        "knowledge": "",
+        "description": "The number of individuals in the latent period, who are infected by disease A but not yet infectious.",
+        "expression": "r * (S * I) / N - beta * E"
+      }
+    },
+    {
+      "id": "2",
+      "concept": "Rp",
+      "label": "Rp",
+      "type": "variable",
+      "metadata": {
+        "name": "Protected from disease A",
+        "units": "number of people",
+        "knowledge": "",
+        "description": "The number of individuals who are either recovered from disease B, immune or isolated until recovered from disease.",
+        "expression": "sigma * Ip"
+      }
+    },
+    {
+      "id": "3",
+      "concept": "I",
+      "label": "I",
+      "type": "variable",
+      "metadata": {
+        "name": "Infected with Disease A",
+        "units": "number of people",
+        "knowledge": "",
+        "description": "The number of individuals who have the disease A and can transmit it.",
+        "expression": "beta * E - alpha * I"
+      }
+    },
+    {
+      "id": "4",
+      "concept": "Ip",
+      "label": "Ip",
+      "type": "variable",
+      "metadata": {
+        "name": "Infected with Disease B",
+        "units": "number of people",
+        "knowledge": "",
+        "description": "The number of individuals who catch the disease B first and can transmit it.",
+        "expression": "rp * (S * Ip) / N - sigma * Ip"
+      }
+    },
+    {
+      "id": "5",
+      "concept": "R",
+      "label": "R",
+      "type": "variable",
+      "metadata": {
+        "name": "Removed",
+        "units": "number of people",
+        "knowledge": "",
+        "description": "The number of individuals who are either recovered from disease A, immune or isolated until recovered from disease.",
+        "expression": "alpha * I"
+      }
+    },
+    {
+      "id": "6",
+      "concept": "S",
+      "label": "S",
+      "type": "variable",
+      "metadata": {
+        "name": "Susceptible",
+        "units": "number of people",
+        "knowledge": "",
+        "description": "The number of susceptible individuals who can catch disease A or B.",
+        "expression": "-r * (S * I) / N - rp * (S * Ip) / N"
+      }
+    },
+    {
+      "id": "7",
+      "concept": "rp",
+      "label": "rp",
+      "type": "constant",
+      "metadata": {
+        "name": "Rate of Spread of Disease B",
+        "description": "The probability of transmitting disease B between a susceptible and an infectious individual",
+        "expression": "",
+        "units": "",
+        "knowledge": ""
+      }
+    },
+    {
+      "id": "8",
+      "concept": "r",
+      "label": "r",
+      "type": "constant",
+      "metadata": {
+        "name": "Rate of Spread of Disease A",
+        "description": "The probability of transmitting disease A between a susceptible and an infectious individual",
+        "expression": "",
+        "units": "",
+        "knowledge": ""
+      }
+    },
+    {
+      "id": "9",
+      "concept": "alpha",
+      "label": "alpha",
+      "type": "constant",
+      "metadata": {
+        "name": "Rate of Removal of Individuals in Class I",
+        "description": "The rate at which individuals with disease A recover.",
+        "expression": "",
+        "units": "",
+        "knowledge": ""
+      }
+    },
+    {
+      "id": "10",
+      "concept": "beta",
+      "label": "beta",
+      "type": "constant",
+      "metadata": {
+        "name": "Rate of Removal of Individuals in Class E",
+        "description": "The rate at which individuals exposed to disease A become infectious.",
+        "expression": "",
+        "units": "",
+        "knowledge": ""
+      }
+    },
+    {
+      "id": "11",
+      "concept": "sigma",
+      "label": "sigma",
+      "type": "constant",
+      "metadata": {
+        "name": "Rate of Removal of Individuals in Class Ip",
+        "description": "The rate at which individuals with disease B recover.",
+        "expression": "",
+        "units": "",
+        "knowledge": ""
+      }
+    },
+    {
+      "id": "12",
+      "concept": "N",
+      "label": "N",
+      "type": "constant",
+      "metadata": {
+        "name": "Total population",
+        "description": "The total population of individuals.",
+        "expression": "",
+        "units": "number of people",
+        "knowledge": ""
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "1",
+      "source": "4",
+      "target": "2"
+    },
+    {
+      "id": "2",
+      "source": "11",
+      "target": "2"
+    },
+    {
+      "id": "3",
+      "source": "12",
+      "target": "4"
+    },
+    {
+      "id": "4",
+      "source": "6",
+      "target": "4"
+    },
+    {
+      "id": "5",
+      "source": "7",
+      "target": "4"
+    },
+    {
+      "id": "6",
+      "source": "11",
+      "target": "4"
+    },
+    {
+      "id": "7",
+      "source": "4",
+      "target": "4"
+    },
+    {
+      "id": "8",
+      "source": "3",
+      "target": "5"
+    },
+    {
+      "id": "9",
+      "source": "9",
+      "target": "5"
+    },
+    {
+      "id": "10",
+      "source": "3",
+      "target": "1"
+    },
+    {
+      "id": "11",
+      "source": "12",
+      "target": "1"
+    },
+    {
+      "id": "12",
+      "source": "6",
+      "target": "1"
+    },
+    {
+      "id": "13",
+      "source": "10",
+      "target": "1"
+    },
+    {
+      "id": "14",
+      "source": "8",
+      "target": "1"
+    },
+    {
+      "id": "15",
+      "source": "1",
+      "target": "1"
+    },
+    {
+      "id": "16",
+      "source": "3",
+      "target": "6"
+    },
+    {
+      "id": "17",
+      "source": "12",
+      "target": "6"
+    },
+    {
+      "id": "18",
+      "source": "6",
+      "target": "6"
+    },
+    {
+      "id": "19",
+      "source": "7",
+      "target": "6"
+    },
+    {
+      "id": "20",
+      "source": "4",
+      "target": "6"
+    },
+    {
+      "id": "21",
+      "source": "8",
+      "target": "6"
+    },
+    {
+      "id": "22",
+      "source": "3",
+      "target": "3"
+    },
+    {
+      "id": "23",
+      "source": "10",
+      "target": "3"
+    },
+    {
+      "id": "24",
+      "source": "9",
+      "target": "3"
+    },
+    {
+      "id": "25",
+      "source": "1",
+      "target": "3"
+    }
+  ],
+  "groups": [
+    {
+      "id": "population",
+      "members": [
+        "6",
+        "1",
+        "5",
+        "2"
+      ]
+    },
+    {
+      "id": "patient",
+      "members": [
+        "3",
+        "4"
+      ]
+    }
+  ]
+}
