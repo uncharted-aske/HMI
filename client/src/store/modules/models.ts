@@ -3,25 +3,14 @@ import { GetterTree, MutationTree } from 'vuex';
 
 import { ModelsState } from '../../types/types';
 
-import CHIME from '../../assets/uncharted_chime.json';
-import CHIMEGrFN from '../../assets/formatted-CHIME-SIR-GrFN-metadata.json';
+import CHIME from '../../static/uncharted_chime.json';
+import CHIMEGrFN from '../../static/formatted-CHIME-SIR-GrFN-metadata.json';
 
-import SIR from '../../assets/uncharted_sir.json';
-import SIRGrFN from '../../assets/formatted-SIR-simple-GrFN-metadata.json';
+import SIR from '../../static/uncharted_sir.json';
+import SIRGrFN from '../../static/formatted-SIR-simple-GrFN-metadata.json';
 
-import DoubleEpi from '../../assets/uncharted_double_epi.json';
-import DoubleEpiGrFN from '../../assets/formatted-SARS-COV1-SEIRP-GrFN-metadata.json';
-
-import Covid19 from '../../assets/covid_w09_forceatlas2_tested_annot.json';
-
-const CovidModelMetadata = {
-  name: 'Covid-19 Model',
-  description: 'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.',
-  version: 'N/A',
-  source: 'EMMAA',
-  created: '2020-10-19',
-  knowledge: 'pubmed, biorxiv',
-};
+import DoubleEpi from '../../static/uncharted_double_epi.json';
+import DoubleEpiGrFN from '../../static/formatted-SARS-COV1-SEIRP-GrFN-metadata.json';
 
 const state: ModelsState = {
   selectedModelId: null,
@@ -52,12 +41,6 @@ const state: ModelsState = {
         detailed: _.pick(DoubleEpiGrFN, ['nodes', 'edges', 'groups']),
       },
       type: 'computational',
-    },
-    {
-      id: 4,
-      metadata: CovidModelMetadata,
-      graph: Covid19,
-      type: 'biological',
     },
   ],
 };

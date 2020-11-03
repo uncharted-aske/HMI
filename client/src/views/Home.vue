@@ -40,7 +40,6 @@
   import CHIMEScreenshot from '@/assets/img/CHIME.png';
   import SIRScreenshot from '@/assets/img/SIR.png';
   import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
-  import Covid19Screenshot from '@/assets/img/Covid19.png';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -80,9 +79,6 @@
             break;
           case 3:
             previewImageSrc = DoubleEpiScreenshot;
-            break;
-          case 4:
-            previewImageSrc = Covid19Screenshot;
             break;
           default:
             previewImageSrc = null;
