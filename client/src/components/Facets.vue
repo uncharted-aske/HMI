@@ -2,9 +2,9 @@
   <div class="facet-container">
     <facet-terms
       ref="facet"
-      :data.prop="fdata"
-      :selection.prop="fselection"
-      :subselection.prop="fsubselection"
+      :data.prop="data"
+      :selection.prop="selection"
+      :subselection.prop="subselection"
       @facet-element-updated="handleFacetUpdated" />
   </div>
 </template>
@@ -21,15 +21,15 @@
   // eslint-disable-next-line import/no-duplicates
   import { FacetTerms } from '@uncharted.software/facets-core';
   import { FacetTermsData, FacetTermsSelection, FacetTermsSubselection } from '@uncharted.software/facets-core/dist/types/facet-terms/FacetTerms';
-  import { CODE_TABLE } from '../utils/CodeUtil';
+  import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
   import { MODEL_TYPE_INDEX } from '../utils/ModelTypeUtil';
 
   @Component
   export default class Facets extends Vue {
-    @Prop(Object) private fdata: FacetTermsData;
-    @Prop(Object) private fselection: FacetTermsSelection;
-    @Prop(Array) private fsubselection: FacetTermsSubselection;
-    @Prop(String) private field: string; // TODO: What should be passed to Prop(??)
+    @Prop({ required: true, type: Object }) private data: FacetTermsData;
+    @Prop({ required: true, type: Object }) private selection: FacetTermsSelection;
+    @Prop({ required: true, type: Array }) private subselection: FacetTermsSubselection;
+    @Prop({ required: true, type: String }) private field: string;
 
     @Action addTerm;
     @Action removeTerm;
@@ -38,14 +38,14 @@
       const changedProperties: Map<string, any> = event.detail.changedProperties;
       if (changedProperties.has('selection')) {
         const facet: FacetTerms = this.$refs.facet as FacetTerms;
-        const oldSelection: FacetTermsSelection = event.detail.changedProperties.get('selection') || [];
-        const newSelection = facet.selection || [];
+        const oldSelection: FacetTermsSelection = event.detail.changedProperties.get('selection') || {};
+        const newSelection: FacetTermsSelection = facet.selection || {};
         const added = Object.keys(newSelection).filter(x => !Object.keys(oldSelection).includes(x));
         const removed = Object.keys(oldSelection).filter(x => !Object.keys(newSelection).includes(x));
         if (!_.isEmpty(added)) {
-          this.addTerm({ field: CODE_TABLE.MODEL_TYPE.field, term: MODEL_TYPE_INDEX[added[0]] });
+          this.addTerm({ field: QUERY_FIELDS_MAP.MODEL_TYPE.field, term: MODEL_TYPE_INDEX[added[0]] });
         } else if (!_.isEmpty(removed)) {
-          this.removeTerm({ field: CODE_TABLE.MODEL_TYPE.field, term: MODEL_TYPE_INDEX[removed[0]] });
+          this.removeTerm({ field: QUERY_FIELDS_MAP.MODEL_TYPE.field, term: MODEL_TYPE_INDEX[removed[0]] });
         }
       }
     }

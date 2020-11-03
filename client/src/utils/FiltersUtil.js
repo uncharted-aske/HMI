@@ -1,5 +1,5 @@
 import _ from 'lodash';
-// import { CODE_TABLE } from '@/utils/code-util';
+// import { QUERY_FIELDS_MAP } from '@/utils/code-util';
 // import ConceptUtil from '@/utils/concept-util';
 /**
  * Constructs search queries to pass through the API.

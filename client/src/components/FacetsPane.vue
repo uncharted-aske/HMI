@@ -1,10 +1,10 @@
 <template>
   <div class="facets-pane-container">
     <facets
-      :field="codeTable.MODEL_TYPE.field"
-      :fdata="facetData"
-      :fselection="facetSelection"
-      :fsubselection="facetSubselection"
+      :field="queryFieldsMap.MODEL_TYPE.field"
+      :data="facetData[queryFieldsMap.MODEL_TYPE.field]"
+      :selection="facetSelection[queryFieldsMap.MODEL_TYPE.field]"
+      :subselection="facetSubselection[queryFieldsMap.MODEL_TYPE.field]"
     />
   </div>
 </template>
@@ -16,10 +16,10 @@
   import { Getter } from 'vuex-class';
   import _ from 'lodash';
   import Facets from '@/components/Facets.vue';
-  import { FacetTermsData, FacetTermsSelection, FacetTermsSubselection } from '@uncharted.software/facets-core/dist/types/facet-terms/FacetTerms';
   import facetsService from '../services/FacetsService';
   import filtersUtil from '../utils/FiltersUtil';
-  import { CODE_TABLE } from '../utils/CodeUtil';
+  import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
+  import { FacetTermsDataMap, FacetTermsSelectionMap, FacetTermsSubselectionMap } from '../types/types';
 
   const components = {
     Facets,
@@ -30,32 +30,51 @@
     @Getter getModelsList;
     @Getter getFilters;
 
-    public get codeTable (): any {
-      return CODE_TABLE;
+    public get queryFieldsMap (): any {
+      return QUERY_FIELDS_MAP;
     }
 
-    public get facetSelection (): FacetTermsSelection {
-      const selection: FacetTermsSelection = {};
-      const facetClause = filtersUtil.findPositiveFacetClause(this.getFilters, CODE_TABLE.MODEL_TYPE.field);
-      if (!_.isEmpty(facetClause)) {
-        facetClause.values.forEach(value => {
-          selection[value] = true;
-        });
-      }
-      return selection;
+    public get facets (): any {
+      return Object.keys(QUERY_FIELDS_MAP).map(queryFieldKey => QUERY_FIELDS_MAP[queryFieldKey].field);
     }
 
-    public get facetSubselection (): FacetTermsSubselection {
-      const subselection = facetsService.fetchFacets(this.getModelsList, this.getFilters)[CODE_TABLE.MODEL_TYPE.field].map(group => group.ratio);
-      return subselection;
+    public get facetSelection (): FacetTermsSelectionMap {
+      const selectionMap = {};
+      this.facets.forEach(facet => {
+        const selection = {};
+        const facetClause = filtersUtil.findPositiveFacetClause(this.getFilters, facet);
+        if (!_.isEmpty(facetClause)) {
+          facetClause.values.forEach(value => {
+            selection[value] = true;
+          });
+        }
+        selectionMap[facet] = selection;
+      });
+      return selectionMap;
     }
 
-    public get facetData (): FacetTermsData {
-      const values = facetsService.fetchFacets(this.getModelsList, [])[CODE_TABLE.MODEL_TYPE.field];
-      return {
-        values,
-        label: 'Model Types',
-      };
+    public get facetSubselection (): FacetTermsSubselectionMap {
+      const subselectionMap = {};
+      const facetAggs = facetsService.fetchFacets(this.getModelsList, this.getFilters);
+      this.facets.forEach(facet => {
+        const subselection = facetAggs[facet].map(group => group.ratio);
+        subselectionMap[facet] = subselection;
+      });
+      return subselectionMap;
+    }
+
+    public get facetData (): FacetTermsDataMap {
+      const dataMap = {};
+      const facetAggs = facetsService.fetchFacets(this.getModelsList, []);
+      this.facets.forEach(facet => {
+        const values = facetAggs[facet];
+        const data = {
+          values,
+          label: 'Model Types',
+        };
+        dataMap[facet] = data;
+      });
+      return dataMap;
     }
   }
 </script>

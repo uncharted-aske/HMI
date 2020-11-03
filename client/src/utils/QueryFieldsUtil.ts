@@ -1,3 +1,5 @@
+import { QueryFieldMap } from '../types/types';
+
 /**
  * Marking a field as searchable makes known to LEX.
  * Note a ranged search is more restrictive as the application allows one
@@ -7,7 +9,7 @@
  * @param {string} searchDisplay - text display
  * @param {boolean} ranged - if the search is ranged or not
  */
-const _searchable = (searchDisplay, ranged) => {
+const _searchable = (searchDisplay, ranged): any => {
   return {
     searchable: true, ranged, searchDisplay,
   };
@@ -21,7 +23,7 @@ const _searchable = (searchDisplay, ranged) => {
  * @param {string} field - field name
  * @param {string} display - human readable display
  */
-const _field = (field, display, icon = null, iconText = '') => {
+const _field = (field, display, icon = null, iconText = ''): any => {
   return { field, display, icon, iconText };
 };
 
@@ -31,7 +33,7 @@ const _field = (field, display, icon = null, iconText = '') => {
  * Note lexType and baseType defines the value translation needed to go to/from LEX. LEX by default
  * uses string-types while fields can have heterogeneous types.
 */
-export const CODE_TABLE = {
+export const QUERY_FIELDS_MAP: QueryFieldMap = {
   // MODELS
   MODEL_TYPE: {
     ..._field('modelType', 'Model Type'),
@@ -42,5 +44,5 @@ export const CODE_TABLE = {
 };
 
 export default {
-  CODE_TABLE,
+  QUERY_FIELDS_MAP,
 };

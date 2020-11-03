@@ -1,9 +1,9 @@
-import { CODE_TABLE } from '../utils/CodeUtil';
+import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
 import modelsService from './ModelsService';
 
 const fetchFacets = (models: Array<any>, filters = []): any => {
   const result = {};
-  result[CODE_TABLE.MODEL_TYPE.field] = modelsService.fetchModelTypesAgg(models, filters);
+  result[QUERY_FIELDS_MAP.MODEL_TYPE.field] = modelsService.fetchModelTypesAgg(models, filters);
   return result;
 };
 

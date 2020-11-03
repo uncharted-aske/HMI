@@ -13,11 +13,9 @@
   import _ from 'lodash';
   import { Lex, ValueState } from '@uncharted.software/lex/dist/lex';
   import KeyValuePill from '../search/pills/KeyValuePill';
-  import codeUtil from '../utils/CodeUtil';
+  import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
   import filtersUtil from '../utils/FiltersUtil';
   import modelTypeUtil from '../utils/ModelTypeUtil';
-
-  const CODE_TABLE = codeUtil.CODE_TABLE;
 
   @Component
   export default class SearchBar extends Vue {
@@ -37,7 +35,7 @@
       // FIXME: Pass this into the component
       this.pills = [
         new KeyValuePill(
-          CODE_TABLE.MODEL_TYPE,
+          QUERY_FIELDS_MAP.MODEL_TYPE,
           modelTypeUtil.MODEL_TYPE_OPTIONS,
           'Select model type..',
         ),
