@@ -20,7 +20,7 @@
   @Component
   export default class SearchBar extends Vue {
     private lex: any = null;
-    private pills: any = []; // FIXME: TYPE
+    private pills: any = [];
 
     @Getter getFilters;
     @Action setFilters;
@@ -74,8 +74,6 @@
 
         if (filtersUtil.isEqual(this.getFilters, newFilters) === false) {
           this.setFilters(newFilters);
-        } else {
-          console.log('Same query model detected ... skipping');
         }
       });
 
