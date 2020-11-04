@@ -25,14 +25,11 @@
     @Getter getFilters;
     @Action setFilters;
 
-    @Watch('getFilters') onGetFiltersChanged (n: string, o: string): void {
-      // TODO: Ensure filter has changed
-      // if (filtersUtil.isEqual(n, o)) return;
+    @Watch('getFilters') onGetFiltersChanged (): void {
       this.setQuery();
     }
 
     mounted (): void {
-      // FIXME: Pass this into the component
       this.pills = [
         new KeyValuePill(
           QUERY_FIELDS_MAP.MODEL_TYPE,

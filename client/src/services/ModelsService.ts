@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
 import { MODEL_TYPE_OPTIONS } from '../utils/ModelTypeUtil';
+import { ModelInterface } from '../types/types';
 
-const isModelFiltered = (model: any, filters: any): boolean => {
+const isModelFiltered = (model: ModelInterface, filters: any): boolean => {
   if (!filters) return false;
   return _.some(filters.clauses, clause => {
     if (clause.field === QUERY_FIELDS_MAP.MODEL_TYPE.field) {
@@ -17,11 +18,11 @@ const isModelFiltered = (model: any, filters: any): boolean => {
   });
 };
 
-const fetchModels = (models: Array<any>, filters: Array<any>): any => {
+const fetchModels = (models: Array<ModelInterface>, filters: Array<any>): any => {
   return models.filter(model => !isModelFiltered(model, filters));
 };
 
-const fetchModelTypesAgg = (models: Array<any>, filters: Array<any>): any => {
+const fetchModelTypesAgg = (models: Array<ModelInterface>, filters: Array<any>): any => {
   const result = _(models)
     .groupBy('type')
     .map((modelGroup, type) => {

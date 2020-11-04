@@ -1,49 +1,27 @@
 import _ from 'lodash';
-// import { QUERY_FIELDS_MAP } from '@/utils/code-util';
-// import ConceptUtil from '@/utils/concept-util';
-/**
- * Constructs search queries to pass through the API.
- *
- * Queries are made of 3 parts:
- * - filters: filters data
- * - pageStart/pageLimit: pagination
- * - orderBy: sort options
- *
- * Filters consist of an array of sub-filters, each of which are expected to define these attributes
- * - field: the logical-field to filter
- * - values: an array of matching values
- * - operand: specifies either 'and' or 'or' operations
- * - isNot: specifies whether the sub-filter should be negated, expect true|false
- *
- * Note: Currently there is a 'clauses' object, used to get around encoding issues. This is subjected
- * to change and so "clauses" should not be exposed outside of this module.
- *
-*/
+import { FilterOperand, Filter, Filters, QueryFieldKey } from '../types/types';
 
 /**
- * Filters object.
- * @typedef {Object} Filters
- * @property {Filter[]} clauses - A list of filters
+ * Utility to construct search queries to pass through components, store and route.
  */
 
+const isEmpty = (filters: Filters): boolean => {
+  return _.isEmpty(filters) || _.isEmpty(filters.clauses);
+};
+
 /**
-  * A filter object
-  * @typedef {Object} Filter
-  * @property {string} field - the logical-field to filter
-  * @property {string[]|number[]} values - an array of matching values
-  * @property {string} operand -  specifies either 'and' or 'or' operations
-  * @property {boolean} isNot - specifies whether the sub-filter should be negated, expect true|false
-  */
+ * Return empty filters object
+ */
+const newFilters = (): Filters => {
+  return { clauses: [] };
+};
 
 /**
  * Custom equality to check if two filters are the same, this is needed
  * as the clauses is an array of object and in some cases we cannot ensure
  * order.
- *
- * @param {Filters} a - first filter
- * @param {Filters} b - second filters
  */
-function isEqual (a, b) {
+const isEqual = (a: Filters, b: Filters): boolean => {
   if (isEmpty(a) && isEmpty(b)) return true;
   if (a.clauses.length !== b.clauses.length) return false;
 
@@ -55,15 +33,15 @@ function isEqual (a, b) {
     if (_.isNil(foundItem)) return false;
   }
   return true;
-}
+};
 
-function findPositiveFacetClause (filters, field) {
+const findPositiveFacetClause = (filters: Filters, field: QueryFieldKey): Filter => {
   return _.find(filters.clauses, clause => {
     return clause.field === field && clause.isNot === false;
   });
-}
+};
 
-function addSearchTerm (filters, field, term, operand, isNot) {
+const addSearchTerm = (filters: Filters, field: QueryFieldKey, term: string | number, operand: FilterOperand, isNot: boolean): void => {
   const existingClause = _.find(filters.clauses, clause => {
     return clause.field === field &&
       clause.operand === operand &&
@@ -86,9 +64,9 @@ function addSearchTerm (filters, field, term, operand, isNot) {
       values: [term],
     });
   }
-}
+};
 
-function removeSearchTerm (filters, field, term, operand, isNot) {
+const removeSearchTerm = (filters: Filters, field: QueryFieldKey, term: string | number, operand: FilterOperand, isNot: boolean): void => {
   const existingClause = _.find(filters.clauses, clause => {
     return clause.field === field &&
       clause.operand === operand &&
@@ -109,18 +87,7 @@ function removeSearchTerm (filters, field, term, operand, isNot) {
       });
     }
   }
-}
-
-function isEmpty (filters) {
-  return _.isEmpty(filters) || _.isEmpty(filters.clauses);
-}
-
-/**
- * @returns {Filters}
- */
-function newFilters () {
-  return { clauses: [] };
-}
+};
 
 export default {
   findPositiveFacetClause,
