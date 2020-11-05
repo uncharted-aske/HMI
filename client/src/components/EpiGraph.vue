@@ -5,6 +5,7 @@
 
 <script lang="ts">
   import _ from 'lodash';
+  import * as d3 from 'd3';
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
@@ -14,6 +15,7 @@
   import NewEpiModelRenderer from '../graphs/svg/NewEpiModelRenderer.js';
   import ELKAdapter from '../graphs/svg/elk/adapter.js';
   import { layered } from '../graphs/elk/ElkStrategies.js';
+  import { traverse } from '../graphs/svg/util.js';
   import { showTooltip, hideTooltip } from '../utils/SVGUtil.js';
   import { calculateNeighborhood } from '../utils/GraphUtil.js';
 
@@ -22,41 +24,98 @@
     nodeHeight: 30,
   };
 
-  const lazy = (s) => { return { id: s, concept: s, label: s }; };
+  // const lazy = (s) => { return { id: s, concept: s, label: s }; };
+  // const DATA_1 = {
+  //   nodes: [
+  //     lazy('Node 0'),
+  //     lazy('Node 1'),
+  //     lazy('Node 2'),
+  //     {
+  //       ...lazy('Group'),
+  //       nodes: [
+  //         lazy('Sub 1'),
+  //         lazy('Sub 2')
+  //       ]
+  //     },
+  //     lazy('Node 3'),
+  //     {
+  //       ...lazy('Node 4'),
+  //       nodes: [
+  //         {
+  //           ...lazy('Sub 3'),
+  //           nodes: [
+  //             lazy('Sub-sub')
+  //           ]
+  //         }
+  //       ]
+  //     }
+  //   ],
+  //   edges: [
+  //     { id: '0', source: 'Node 0', target: 'Node 1' },
+  //     { id: '1', source: 'Node 1', target: 'Node 2' },
+  //     { id: '2', source: 'Node 2', target: 'Sub 1' },
+  //     { id: '3', source: 'Node 2', target: 'Sub 2' },
+  //     { id: '4', source: 'Sub 2', target: 'Node 3' },
+  //     { id: '5', source: 'Node 0', target: 'Node 3' },
+  //     { id: '6', source: 'Node 3', target: 'Node 4' }
+  //   ]
+  // };
   const DATA = {
-    nodes: [
-      lazy('Node 0'),
-      lazy('Node 1'),
-      lazy('Node 2'),
-      {
-        ...lazy('Group'),
-        nodes: [
-          lazy('Sub 1'),
-          lazy('Sub 2')
-        ]
-      },
-      lazy('Node 3'),
-      {
-        ...lazy('Node 4'),
-        nodes: [
-          {
-            ...lazy('Sub 3'),
-            nodes: [
-              lazy('Sub-sub')
-            ]
-          }
-        ]
-      }
-    ],
-    edges: [
-      { id: '0', source: 'Node 0', target: 'Node 1' },
-      { id: '1', source: 'Node 1', target: 'Node 2' },
-      { id: '2', source: 'Node 2', target: 'Sub 1' },
-      { id: '3', source: 'Node 2', target: 'Sub 2' },
-      { id: '4', source: 'Sub 2', target: 'Node 3' },
-      { id: '5', source: 'Node 0', target: 'Node 3' },
-      { id: '6', source: 'Node 3', target: 'Node 4' }
-    ]
+    nodes: [{
+      id: 'get_growth_rate.IF_0',
+      concept: 'IF_0',
+      label: 'IF_0',
+      parent_name: 'get_growth_rate',
+    }, {
+      id: 'get_growth_rate',
+      concept: 'get_growth_rate',
+      label: 'get_growth_rate',
+      parent_name: 'root',
+    }, {
+      id: 'main.loop$3',
+      concept: 'loop$3',
+      label: 'loop$3',
+      parent_name: 'main',
+    }, {
+      id: 'get_beta',
+      concept: 'get_beta',
+      label: 'get_beta',
+      parent_name: 'root',
+    }, {
+      id: 'main',
+      concept: 'main',
+      label: 'main',
+      parent_name: 'root',
+    }, {
+      id: 'sir',
+      concept: 'sir',
+      label: 'sir',
+      parent_name: 'root',
+    }, {
+      id: 'sim_sir.loop$0.loop$1',
+      concept: 'loop$1',
+      label: 'loop$1',
+      parent_name: 'loop$0',
+    }, {
+      id: 'sim_sir.loop$0',
+      concept: 'loop$0',
+      label: 'loop$0',
+      parent_name: 'sim_sir',
+    }, {
+      id: 'sim_sir',
+      concept: 'sim_sir',
+      label: 'sim_sir',
+      parent_name: 'root',
+    }, {
+      id: 'sim_sir.loop$2',
+      concept: 'loop$2',
+      label: 'loop$2',
+      parent_name: 'sim_sir',
+    }, {
+      concept: 'root',
+      parent_name: '',
+    }],
+    edges: [],
   };
 
   @Component
@@ -76,15 +135,48 @@
     }
 
     mounted (): void {
-      console.log(DATA);
-      this.renderer = new NewEpiModelRenderer({
-        el: this.$refs.graph,
-        adapter: new ELKAdapter({ nodeWidth: 100, nodeHeight: 50, layout: layered }),
-        renderMode: 'basic',
-      });
+    // convert the flat data into a hierarchy
+    const treeData = d3.stratify()
+      .id((d) => d.concept)
+      .parentId((d) => d.parent_name)
+      (DATA.nodes);
 
-      this.renderer.setData(DATA);
-      this.renderer.render();
+    console.log(treeData);
+
+    for (let node in treeData.nodes) {
+      console.log(node);
+    }
+
+  //   const formattedNodes = [];
+  //  function deepIterator (target) {
+  //     if (typeof target === 'object') {
+  //       for (const key in target) {
+  //         deepIterator(target[key]);
+  //       }
+  //     } else {
+  //       console.log(target);
+  //     }
+  //   }
+  //   // const formatHierarchy = (node) => {
+  //   //   if (_.has(node, 'children')) {
+  //   //     const obj = Object.assign({}, node.data, node.children);
+  //   //     console.log(obj);
+  //   //     for (let n in node.children) {
+  //   //       formatHierarchy(n);
+  //   //     }
+  //   //   }
+  //   // };
+
+    // deepIterator(treeData);
+
+      // this.renderer = new NewEpiModelRenderer({
+      //   el: this.$refs.graph,
+      //   adapter: new ELKAdapter({ nodeWidth: 100, nodeHeight: 50, layout: layered }),
+      //   renderMode: 'basic',
+      // });
+
+      // this.renderer.setData(DATA);
+      // this.renderer.render();
       // this.renderer = new EpiModelRenderer(Object.assign({}, {
       //   el: this.$refs.graph,
       //   strategy: layered,
