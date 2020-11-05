@@ -76,6 +76,7 @@
     }
 
     mounted (): void {
+      console.log(DATA);
       this.renderer = new NewEpiModelRenderer({
         el: this.$refs.graph,
         adapter: new ELKAdapter({ nodeWidth: 100, nodeHeight: 50, layout: layered }),
