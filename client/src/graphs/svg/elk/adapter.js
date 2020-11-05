@@ -2,7 +2,6 @@ import _ from 'lodash';
 import ELK from 'elkjs/lib/elk.bundled';
 import { makeEdgeMaps, traverse } from '../util';
 
-
 /**
  * Convert graph data structure to a basic graph structure that can be used by the renderer
  *
@@ -17,7 +16,7 @@ const buildRenderGraph = (root) => {
       depth: depth,
       type: 'normal',
       parent: parent,
-      data: node
+      data: node,
     };
 
     // Build edges
@@ -31,7 +30,7 @@ const buildRenderGraph = (root) => {
           id: source + ':' + target,
           source: source,
           target: target,
-          data: edge
+          data: edge,
         });
       }
     }
@@ -44,7 +43,6 @@ const buildRenderGraph = (root) => {
   };
   return _walk(root, 0, null);
 };
-
 
 /**
  * Add ELK engine specific data so we can run layout
@@ -142,7 +140,7 @@ const postProcess = (layout) => {
     edge.points = [startPoint, ...bendPoints, endPoint].map(p => {
       return {
         x: p.x + tx,
-        y: p.y + ty
+        y: p.y + ty,
       };
     });
 
@@ -163,7 +161,7 @@ const postProcess = (layout) => {
     for (let i = 1; i < t.length - 1; i++) {
       edge.points.push({
         x: 0.5 * (p.x + t[i].x),
-        y: 0.5 * (p.y + t[i].y)
+        y: 0.5 * (p.y + t[i].y),
       });
       edge.points.push(t[i]);
       p = t[i];
@@ -177,12 +175,12 @@ const postProcess = (layout) => {
     if (!node.parent) {
       nodeGlobalPosition[node.id] = {
         x: node.x,
-        y: node.y
+        y: node.y,
       };
     } else {
       nodeGlobalPosition[node.id] = {
         x: node.x + nodeGlobalPosition[node.parent.id].x,
-        y: node.y + nodeGlobalPosition[node.parent.id].y
+        y: node.y + nodeGlobalPosition[node.parent.id].y,
       };
     }
   });
@@ -199,7 +197,6 @@ const postProcess = (layout) => {
   return layout;
 };
 
-
 // ELK has a different naming convention
 const changeKey = (obj, before, after) => {
   if ({}.hasOwnProperty.call(obj, before)) {
@@ -211,13 +208,12 @@ const changeKey = (obj, before, after) => {
   }
 };
 
-
 /**
  * Handles and transforms ELK layout engine
  * https://www.eclipse.org/elk/
 */
 export default class ELKAdapter {
-  constructor(options) {
+  constructor (options) {
     this.options = options;
   }
 
@@ -225,12 +221,12 @@ export default class ELKAdapter {
    * Runs layout
    * @param {object} graphData - { nodes, edges }
    */
-  async run(graphData /*, options */) {
+  async run (graphData /*, options */) {
     const elk = new ELK();
     const renderGraph = buildRenderGraph({
       id: 'dummy',
       nodes: graphData.nodes,
-      edges: graphData.edges
+      edges: graphData.edges,
     });
     injectELKOptions(renderGraph, this.options);
     changeKey(renderGraph, 'nodes', 'children');
@@ -243,7 +239,7 @@ export default class ELKAdapter {
    * Reruns the layout
    * @param {object} renderGraph
    */
-  async rerun(renderGraph /*, options */) {
+  async rerun (renderGraph /*, options */) {
     const elk = new ELK();
     injectELKOptions(renderGraph, this.options);
     changeKey(renderGraph, 'nodes', 'children');

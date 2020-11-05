@@ -6,7 +6,6 @@ import BioView from '@/views/BioView.vue';
 import EpiView from '@/views/EpiView.vue';
 import GraphExperiment from '@/views/GraphExperiment.vue';
 
-
 export function createRouter (vue: VueConstructor): Router {
   vue.use(Router);
   return new Router({

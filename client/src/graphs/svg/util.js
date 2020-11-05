@@ -42,7 +42,7 @@ export const flatten = (root) => {
     }
   });
   return {
-    nodes, edges
+    nodes, edges,
   };
 };
 
@@ -76,7 +76,6 @@ export const makeEdgeMaps = (root) => {
 
   return {
     incoming,
-    outgoing
+    outgoing,
   };
 };
-
