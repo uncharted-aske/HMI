@@ -141,42 +141,32 @@
       .parentId((d) => d.parent_name)
       (DATA.nodes);
 
-    console.log(treeData);
 
-    for (let node in treeData.nodes) {
-      console.log(node);
-    }
+    function traverse (root) {
+      root.concept = root.data.concept;
+      root.label = root.data.label;
+      if (root.children) {
+        root['nodes'] = root['children'];
+        delete root['children'];
+        for (let i = 0; i < root.nodes.length; i++) {
+          traverse(root.nodes[i]);
+        }
+      }
+    };
 
-  //   const formattedNodes = [];
-  //  function deepIterator (target) {
-  //     if (typeof target === 'object') {
-  //       for (const key in target) {
-  //         deepIterator(target[key]);
-  //       }
-  //     } else {
-  //       console.log(target);
-  //     }
-  //   }
-  //   // const formatHierarchy = (node) => {
-  //   //   if (_.has(node, 'children')) {
-  //   //     const obj = Object.assign({}, node.data, node.children);
-  //   //     console.log(obj);
-  //   //     for (let n in node.children) {
-  //   //       formatHierarchy(n);
-  //   //     }
-  //   //   }
-  //   // };
+    traverse(treeData);
 
-    // deepIterator(treeData);
 
-      // this.renderer = new NewEpiModelRenderer({
-      //   el: this.$refs.graph,
-      //   adapter: new ELKAdapter({ nodeWidth: 100, nodeHeight: 50, layout: layered }),
-      //   renderMode: 'basic',
-      // });
+      this.renderer = new NewEpiModelRenderer({
+        el: this.$refs.graph,
+        adapter: new ELKAdapter({ nodeWidth: 100, nodeHeight: 50, layout: layered }),
+        renderMode: 'basic',
+      });
 
-      // this.renderer.setData(DATA);
-      // this.renderer.render();
+      console.log(treeData);
+
+      this.renderer.setData(treeData);
+      this.renderer.render();
       // this.renderer = new EpiModelRenderer(Object.assign({}, {
       //   el: this.$refs.graph,
       //   strategy: layered,
