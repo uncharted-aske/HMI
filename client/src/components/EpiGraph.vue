@@ -24,99 +24,6 @@
     nodeHeight: 30,
   };
 
-  // const lazy = (s) => { return { id: s, concept: s, label: s }; };
-  // const DATA_1 = {
-  //   nodes: [
-  //     lazy('Node 0'),
-  //     lazy('Node 1'),
-  //     lazy('Node 2'),
-  //     {
-  //       ...lazy('Group'),
-  //       nodes: [
-  //         lazy('Sub 1'),
-  //         lazy('Sub 2')
-  //       ]
-  //     },
-  //     lazy('Node 3'),
-  //     {
-  //       ...lazy('Node 4'),
-  //       nodes: [
-  //         {
-  //           ...lazy('Sub 3'),
-  //           nodes: [
-  //             lazy('Sub-sub')
-  //           ]
-  //         }
-  //       ]
-  //     }
-  //   ],
-  //   edges: [
-  //     { id: '0', source: 'Node 0', target: 'Node 1' },
-  //     { id: '1', source: 'Node 1', target: 'Node 2' },
-  //     { id: '2', source: 'Node 2', target: 'Sub 1' },
-  //     { id: '3', source: 'Node 2', target: 'Sub 2' },
-  //     { id: '4', source: 'Sub 2', target: 'Node 3' },
-  //     { id: '5', source: 'Node 0', target: 'Node 3' },
-  //     { id: '6', source: 'Node 3', target: 'Node 4' }
-  //   ]
-  // };
-  const DATA = {
-    nodes: [{
-      id: 'get_growth_rate.IF_0',
-      concept: 'IF_0',
-      label: 'IF_0',
-      parent_name: 'get_growth_rate',
-    }, {
-      id: 'get_growth_rate',
-      concept: 'get_growth_rate',
-      label: 'get_growth_rate',
-      parent_name: 'root',
-    }, {
-      id: 'main.loop$3',
-      concept: 'loop$3',
-      label: 'loop$3',
-      parent_name: 'main',
-    }, {
-      id: 'get_beta',
-      concept: 'get_beta',
-      label: 'get_beta',
-      parent_name: 'root',
-    }, {
-      id: 'main',
-      concept: 'main',
-      label: 'main',
-      parent_name: 'root',
-    }, {
-      id: 'sir',
-      concept: 'sir',
-      label: 'sir',
-      parent_name: 'root',
-    }, {
-      id: 'sim_sir.loop$0.loop$1',
-      concept: 'loop$1',
-      label: 'loop$1',
-      parent_name: 'loop$0',
-    }, {
-      id: 'sim_sir.loop$0',
-      concept: 'loop$0',
-      label: 'loop$0',
-      parent_name: 'sim_sir',
-    }, {
-      id: 'sim_sir',
-      concept: 'sim_sir',
-      label: 'sim_sir',
-      parent_name: 'root',
-    }, {
-      id: 'sim_sir.loop$2',
-      concept: 'loop$2',
-      label: 'loop$2',
-      parent_name: 'sim_sir',
-    }, {
-      concept: 'root',
-      parent_name: '',
-    }],
-    edges: [],
-  };
 
   @Component
   export default class EpiGraph extends Vue {
@@ -139,23 +46,21 @@
     const treeData = d3.stratify()
       .id((d) => d.concept)
       .parentId((d) => d.parent_name)
-      (DATA.nodes);
-
+      (this.graph.nodes);
 
     function traverse (root) {
       root.concept = root.data.concept;
       root.label = root.data.label;
       if (root.children) {
-        root['nodes'] = root['children'];
-        delete root['children'];
+        root.nodes = root.children;
+        delete root.children;
         for (let i = 0; i < root.nodes.length; i++) {
           traverse(root.nodes[i]);
         }
       }
-    };
+    }
 
     traverse(treeData);
-
 
       this.renderer = new NewEpiModelRenderer({
         el: this.$refs.graph,
@@ -163,17 +68,8 @@
         renderMode: 'basic',
       });
 
-      console.log(treeData);
-
-      this.renderer.setData(treeData);
+      this.renderer.setData({nodes: treeData.nodes, edges: this.graph.edges});
       this.renderer.render();
-      // this.renderer = new EpiModelRenderer(Object.assign({}, {
-      //   el: this.$refs.graph,
-      //   strategy: layered,
-      //   useEdgeControl: false,
-      //   edgeControlOffsetType: 'unit',
-      //   edgeControlOffset: -20,
-      // }, this.renderingOptions));
 
       // this.renderer.setCallback('backgroundDblClick', () => {
       //   this.renderer.hideNeighbourhood();
@@ -210,7 +106,6 @@
     }
 
     refresh (): void {
-      // const groups = this.graph.groups || [];
       // this.renderer.setData(this.graph, { groups });
       // this.renderer.render();
     }
