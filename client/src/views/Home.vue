@@ -42,7 +42,7 @@
   import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
 
   // Services
-  import modelsService from '../services/ModelsService';
+  import * as modelsService from '../services/ModelsService';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },

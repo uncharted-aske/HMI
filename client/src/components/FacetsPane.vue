@@ -16,8 +16,8 @@
   import { Getter } from 'vuex-class';
   import _ from 'lodash';
   import Facets from '@/components/Facets.vue';
-  import facetsService from '../services/FacetsService';
-  import filtersUtil from '../utils/FiltersUtil';
+  import * as facetsService from '../services/FacetsService';
+  import * as filtersUtil from '../utils/FiltersUtil';
   import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
   import { FacetTermsDataMap, FacetTermsSelectionMap, FacetTermsSubselectionMap } from '../types/types';
 
@@ -30,7 +30,7 @@
     @Getter getModelsList;
     @Getter getFilters;
 
-    public get queryFieldsMap (): any {
+    public get queryFieldsMap (): typeof QUERY_FIELDS_MAP {
       return QUERY_FIELDS_MAP;
     }
 

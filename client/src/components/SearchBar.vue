@@ -14,13 +14,13 @@
   import { Lex, ValueState } from '@uncharted.software/lex/dist/lex';
   import KeyValuePill from '../search/pills/KeyValuePill';
   import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
-  import filtersUtil from '../utils/FiltersUtil';
-  import modelTypeUtil from '../utils/ModelTypeUtil';
+  import * as filtersUtil from '../utils/FiltersUtil';
+  import * as modelTypeUtil from '../utils/ModelTypeUtil';
 
   @Component
   export default class SearchBar extends Vue {
     private lex: any = null;
-    private pills: any = [];
+    private pills: KeyValuePill[] = [];
 
     @Getter getFilters;
     @Action setFilters;

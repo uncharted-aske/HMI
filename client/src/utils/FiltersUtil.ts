@@ -89,7 +89,7 @@ const removeSearchTerm = (filters: Filters, field: QueryFieldKey, term: string |
   }
 };
 
-export default {
+export {
   findPositiveFacetClause,
   addSearchTerm,
   removeSearchTerm,

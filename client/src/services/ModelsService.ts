@@ -37,7 +37,7 @@ const fetchModelTypesAgg = (models: Array<ModelInterface>, filters: Array<any>):
   return result;
 };
 
-export default {
+export {
   fetchModels,
   fetchModelTypesAgg,
 };

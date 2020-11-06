@@ -33,7 +33,7 @@ const _field = (field, display, icon = null, iconText = ''): any => {
  * Note lexType and baseType defines the value translation needed to go to/from LEX. LEX by default
  * uses string-types while fields can have heterogeneous types.
 */
-export const QUERY_FIELDS_MAP: QueryFieldMap = {
+const QUERY_FIELDS_MAP: QueryFieldMap = {
   // MODELS
   MODEL_TYPE: {
     ..._field('modelType', 'Model Type'),
@@ -43,6 +43,6 @@ export const QUERY_FIELDS_MAP: QueryFieldMap = {
   },
 };
 
-export default {
+export {
   QUERY_FIELDS_MAP,
 };

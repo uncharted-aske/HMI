@@ -1,7 +1,7 @@
 import { GetterTree, ActionTree } from 'vuex';
 import _ from 'lodash';
 import { getRouter } from '../../router';
-import filtersUtil from '../../utils/FiltersUtil';
+import * as filtersUtil from '../../utils/FiltersUtil';
 import { QueryState, Filters } from 'src/types/types';
 import { Location } from 'vue-router';
 

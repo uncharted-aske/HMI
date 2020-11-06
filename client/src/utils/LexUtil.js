@@ -49,7 +49,7 @@ function _convertTo (values, convertType) {
   return result;
 }
 
-export default {
+export {
   mappedSuggestionBuilder,
   convertToLex,
   convertFromLex,

@@ -1,5 +1,5 @@
 import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
-import modelsService from './ModelsService';
+import * as modelsService from './ModelsService';
 
 const fetchFacets = (models: Array<any>, filters = []): any => {
   const result = {};
@@ -7,6 +7,6 @@ const fetchFacets = (models: Array<any>, filters = []): any => {
   return result;
 };
 
-export default {
+export {
   fetchFacets,
 };
