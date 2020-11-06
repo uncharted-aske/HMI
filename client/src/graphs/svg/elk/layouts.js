@@ -29,19 +29,19 @@ export const force = {
   id: 'force',
   layoutOptions: (/* nodes , edges */) => {
     const algorithmOptions = {
-      'elk.algorithm': 'force',
+      'elk.algorithm': 'force'
     };
     return Object.assign({}, algorithmOptions);
   },
   nodesLayoutOptions: (/* node */) => {
     return {
       'elk.portConstraints': 'FREE',
-      'elk.portAlignment.default': 'DISTRIBUTED',
+      'elk.portAlignment.default': 'DISTRIBUTED'
     };
   },
   portsLayoutOptions: (/* node, port */) => {
     return {};
-  },
+  }
 };
 
 export const layered = {
@@ -56,7 +56,7 @@ export const layered = {
       'elk.layered.layering.coffmanGraham.layerBound': layerBound,
       // 'elk.separateConnectedComponents': false,
       'elk.hierarchyHandling': 'INCLUDE_CHILDREN',
-      'elk.padding': '[top=25, left=25, bottom=25, right=25]',
+      'elk.padding': '[top=25, left=25, bottom=25, right=25]'
     };
     // Reduce space to make larger graphs a tighter fit
     let spacingOptions = {};
@@ -67,7 +67,7 @@ export const layered = {
         'elk.spacing.edgeEdge': 10,
         'elk.spacing.edgeNode': 10,
         'elk.layered.spacing.edgeEdgeBetweenLayers': 5,
-        'elk.layered.spacing.edgeNodeBetweenLayers': 10,
+        'elk.layered.spacing.edgeNodeBetweenLayers': 10
       };
     } else {
       spacingOptions = {
@@ -76,7 +76,7 @@ export const layered = {
         'elk.spacing.edgeEdge': 10,
         'elk.spacing.edgeNode': 25, // space between horizontal layer nodes
         'elk.layered.spacing.edgeEdgeBetweenLayers': 25, // space between vertical layer nodes
-        'elk.layered.spacing.edgeNodeBetweenLayers': 20,
+        'elk.layered.spacing.edgeNodeBetweenLayers': 20
       };
     }
     return Object.assign({}, algorithmOptions, spacingOptions);
@@ -85,7 +85,7 @@ export const layered = {
     return {
       'elk.portConstraints': 'FIXED_SIDE',
       'elk.portAlignment.default': 'DISTRIBUTED',
-      'elk.padding': '[top=25, left=25, bottom=25, right=25]', // Hierarchical padding
+      'elk.padding': '[top=25, left=25, bottom=25, right=25]' // Hierarchical padding
     };
   },
   portsLayoutOptions: (node, port) => {
@@ -94,5 +94,5 @@ export const layered = {
     } else {
       return { 'elk.port.side': 'WEST' };
     }
-  },
+  }
 };

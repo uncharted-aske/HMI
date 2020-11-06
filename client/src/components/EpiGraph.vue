@@ -65,7 +65,22 @@
       this.renderer = new NewEpiModelRenderer({
         el: this.$refs.graph,
         adapter: new ELKAdapter({ nodeWidth: 100, nodeHeight: 50, layout: layered }),
-        renderMode: 'basic',
+        renderMode: 'delta',
+      });
+
+      this.renderer.setCallback('nodeClick', (node, renderer, event) => {
+        if (!node.datum().collapsed || node.datum().collapsed === false) {
+          this.renderer.collapse(node.datum().id);
+        } else {
+          this.renderer.expand(node.datum().id);
+        }
+      });
+      this.renderer.setCallback('nodeDblClick', (node) => {
+        if (node.datum().focused === true) {
+          this.renderer.unfocus(node.datum().id);
+        } else {
+          this.renderer.focus(node.datum().id);
+        }
       });
 
       this.renderer.setData({nodes: treeData.nodes, edges: this.graph.edges});
