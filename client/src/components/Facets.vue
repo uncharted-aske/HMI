@@ -16,11 +16,8 @@
   import { Action } from 'vuex-class';
   import { Prop } from 'vue-property-decorator';
   import _ from 'lodash';
-  // eslint-disable-next-line import/no-duplicates
   import '@uncharted.software/facets-core';
-  // eslint-disable-next-line import/no-duplicates
-  import { FacetTerms } from '@uncharted.software/facets-core';
-  import { FacetTermsData, FacetTermsSelection, FacetTermsSubselection } from '@uncharted.software/facets-core/dist/types/facet-terms/FacetTerms';
+  import { FacetTerms, FacetTermsData, FacetTermsSelection, FacetTermsSubselection } from '@uncharted.software/facets-core/dist/types/facet-terms/FacetTerms';
   import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
   import { MODEL_TYPE_INDEX } from '../utils/ModelTypeUtil';
 
