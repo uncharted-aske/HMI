@@ -15,10 +15,10 @@ import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterForma
 import UnderscoreRemoverFormatter from './filters/UnderscoreRemoverFormatter';
 
 import App from './App.vue';
-import { createRouter } from './router';
+import Router from './router';
 import { store } from './store';
 
-const router = createRouter(Vue);
+const router = Router.getRouter(Vue);
 
 // Add sync'd route state to store
 sync(store, router);

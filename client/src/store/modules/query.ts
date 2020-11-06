@@ -1,6 +1,6 @@
 import { GetterTree, ActionTree } from 'vuex';
 import _ from 'lodash';
-import { getRouter } from '../../router';
+import Router from '../../router';
 import * as filtersUtil from '../../utils/FiltersUtil';
 import { QueryState, Filters } from 'src/types/types';
 import { Location } from 'vue-router';
@@ -29,7 +29,7 @@ const actions: ActionTree<QueryState, any> = {
     const query = updateQuery(getters, filters);
     const location: Location = {};
     location.query = { filters: query.filters };
-    getRouter().push(location);
+    Router.getRouter().push(location);
   },
   addTerm ({ getters }, { field, term, operand = 'or', isNot = false }) {
     const filters = _.cloneDeep(getters.getFilters);
@@ -37,7 +37,7 @@ const actions: ActionTree<QueryState, any> = {
     const query = updateQuery(getters, filters);
     const location: Location = {};
     location.query = { filters: query.filters };
-    getRouter().push(location);
+    Router.getRouter().push(location);
   },
   removeTerm ({ getters }, { field, term, operand = 'or', isNot = false }) {
     const filters = _.cloneDeep(getters.getFilters);
@@ -45,7 +45,7 @@ const actions: ActionTree<QueryState, any> = {
     const query = updateQuery(getters, filters);
     const location: Location = {};
     location.query = { filters: query.filters };
-    getRouter().push(location);
+    Router.getRouter().push(location);
   },
 };
 

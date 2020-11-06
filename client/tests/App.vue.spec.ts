@@ -2,7 +2,7 @@
 /// <reference path="../src/vue-shims.d.ts" />
 import { mount, createLocalVue } from '@vue/test-utils';
 import { sync } from 'vuex-router-sync';
-import { createRouter } from '../src/router';
+import Router from '../src/router';
 import { store } from '../src/store';
 import App from '../src/App.vue';
 
@@ -13,7 +13,7 @@ describe('App.vue.spec', function () {
 
   before(async function () {
     localVue = createLocalVue();
-    router = createRouter(localVue);
+    router = Router.getRouter(localVue);
     sync(store, router);
     wrapper = mount(App, {
       localVue,
