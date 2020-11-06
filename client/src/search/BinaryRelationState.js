@@ -1,9 +1,10 @@
 import { ValueStateValue, RelationState } from '@uncharted.software/lex/dist/lex';
 
 const options = [
-  ['is', 'is'],
-  ['not', 'not'],
-].map(o => new ValueStateValue(o[0], {}, { displayKey: o[1] }));
+  new ValueStateValue('is', {}, { displayKey: 'is' }),
+  new ValueStateValue('not', {}, { displayKey: 'not' }),
+];
+
 // Adapted from pantera
 export default class BinaryRelationState extends RelationState {
   /**
