@@ -629,14 +629,14 @@ export default class ElkBaseRenderer extends GraphRenderer {
         //   originalEdge.target = edge.target;
         //   edge.target = nodeId;
         // }
-        // if (childrenNodeIds.includes(source)) {
-        //   originalEdge.source = edge.source;
-        //   edge.source = nodeId;
-        // }
-        // if (childrenNodeIds.includes(target)) {
-        //   originalEdge.target = edge.target;
-        //   edge.target = nodeId;
-        // }
+        if (childrenNodeIds.includes(source)) {
+          originalEdge.source = edge.source;
+          edge.source = nodeId;
+        }
+        if (childrenNodeIds.includes(target)) {
+          originalEdge.target = edge.target;
+          edge.target = nodeId;
+        }
 
         if (!_.isEmpty(originalEdge)) {
           collapseTracker[nodeId].edgeMap[edge.id] = originalEdge;

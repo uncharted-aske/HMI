@@ -61,7 +61,6 @@
     }
 
     traverse(treeData);
-
       this.renderer = new NewEpiModelRenderer({
         el: this.$refs.graph,
         adapter: new ELKAdapter({ nodeWidth: 100, nodeHeight: 50, layout: layered }),
@@ -75,13 +74,13 @@
           this.renderer.expand(node.datum().id);
         }
       });
-      this.renderer.setCallback('nodeDblClick', (node) => {
-        if (node.datum().focused === true) {
-          this.renderer.unfocus(node.datum().id);
-        } else {
-          this.renderer.focus(node.datum().id);
-        }
-      });
+      // this.renderer.setCallback('nodeDblClick', (node) => {
+      //   if (node.datum().focused === true) {
+      //     this.renderer.unfocus(node.datum().id);
+      //   } else {
+      //     this.renderer.focus(node.datum().id);
+      //   }
+      // });
 
       this.renderer.setData({nodes: treeData.nodes, edges: this.graph.edges});
       this.renderer.render();
@@ -114,10 +113,6 @@
       // this.renderer.setCallback('nodeMouseLeave', () => {
       //   hideTooltip(this.renderer.chart);
       // });
-
-      // const groups = this.graph.groups || [];
-      // this.renderer.setData(this.graph, { groups });
-      // this.renderer.render();
     }
 
     refresh (): void {
