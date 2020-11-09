@@ -617,14 +617,26 @@ export default class ElkBaseRenderer extends GraphRenderer {
         const target = edge.target;
 
         const originalEdge = {};
-        if (childrenNodeIds.includes(source)) {
-          originalEdge.source = edge.source;
-          edge.source = nodeId;
-        }
-        if (childrenNodeIds.includes(target)) {
-          originalEdge.target = edge.target;
-          edge.target = nodeId;
-        }
+        // Check if edge is from nodes within the structure (source and target)
+        // if (childrenNodeIds.includes(source) && childrenNodeIds.includes(target)) {
+        //   originalEdge.source = edge.source;
+        //   originalEdge.target = edge.target;
+        //   edge.state = 'removed';
+        // } else if (childrenNodeIds.includes(source)) {
+        //   originalEdge.source = edge.source;
+        //   edge.source = nodeId;
+        // } else if (childrenNodeIds.includes(target)) {
+        //   originalEdge.target = edge.target;
+        //   edge.target = nodeId;
+        // }
+        // if (childrenNodeIds.includes(source)) {
+        //   originalEdge.source = edge.source;
+        //   edge.source = nodeId;
+        // }
+        // if (childrenNodeIds.includes(target)) {
+        //   originalEdge.target = edge.target;
+        //   edge.target = nodeId;
+        // }
 
         if (!_.isEmpty(originalEdge)) {
           collapseTracker[nodeId].edgeMap[edge.id] = originalEdge;
@@ -655,6 +667,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
         if (entry.edgeMap[edge.id]) {
           edge.target = entry.edgeMap[edge.id].target || edge.target;
           edge.source = entry.edgeMap[edge.id].source || edge.source;
+          edge.collapsed = false;
         }
       }
     });

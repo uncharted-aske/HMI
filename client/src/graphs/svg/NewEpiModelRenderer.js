@@ -133,5 +133,5 @@ export default class NewEpiModelRenderer extends SVGRenderer {
         return `url(#start-${source}-${target})`;
       });
   }
-
+  
 }
