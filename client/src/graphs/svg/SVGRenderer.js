@@ -20,10 +20,9 @@ const ensureViewportSize = (v, chartSize) => {
     x1: v.x1,
     y1: v.y1,
     x2: Math.max(v.x2, chartSize.width),
-    y2: Math.max(v.y2, chartSize.height)
+    y2: Math.max(v.y2, chartSize.height),
   };
 };
-
 
 // TODO
 // - Add/Remove without relayout
@@ -83,7 +82,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
    *   if unit then a positive value is an offset from the source, and a negative offset from the target.
    * @param {boolean} options.useDebugger - prints debugging information
    */
-  constructor(options) {
+  constructor (options) {
     super();
     this.options = options || {};
     this.options.renderMode = this.options.renderMode || 'basic';
@@ -120,7 +119,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
    * Initialize the renderer with given container element
    * @param {HTMLElement} element - container element
    */
-  initialize(element) {
+  initialize (element) {
     this.parentEl = element;
     this.chartSize.width = this.parentEl.clientWidth;
     this.chartSize.height = this.parentEl.clientHeight;
@@ -134,24 +133,23 @@ export default class ElkBaseRenderer extends GraphRenderer {
    * Set graph data
    * @param {Object} data - a graph model data
    */
-  setData(data) {
+  setData (data) {
     super.setData(data);
     this.layout = null; // clear previous layout since it needs to be updated
   }
-
 
   /**
    * Set rendering strategy
    * @param {Object} strategy
    */
-  setStrategy(/* strategy */) {
+  setStrategy (/* strategy */) {
     console.error('not supported');
   }
 
   /**
    * Renders the graph
    */
-  async render() {
+  async render () {
     const options = this.options;
     if (!this.layout) {
       this.layout = await this.runLayout();
@@ -173,7 +171,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
       const svg = d3.select(this.svgEl);
       svg.transition().call(
         this.zoom.transform,
-        d3.zoomIdentity
+        d3.zoomIdentity,
       );
 
       const maxZoom = Math.max(2, Math.floor(this.layout.width / this.chartSize.width));
@@ -203,7 +201,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
 
   // FIXME: Should provide very basic marker definitions and leave the work to the
   // implementation renderers
-  buildDefs() {
+  buildDefs () {
     const svg = d3.select(this.svgEl);
     const edges = flatten(this.layout).edges;
 
@@ -235,13 +233,12 @@ export default class ElkBaseRenderer extends GraphRenderer {
       .style('stroke', 'none');
   }
 
-
   /**
    * A fancier version of renderEdges, figure out the delta between
    * different layout runs and provide access to added, updated, and
    * removed graph elements.
    */
-  renderEdgesDelta() {
+  renderEdgesDelta () {
     const chart = this.chart;
     let allEdges = [];
 
@@ -261,17 +258,16 @@ export default class ElkBaseRenderer extends GraphRenderer {
     edgesGroup.each(d => (d.state = 'updated'));
 
     // Rebind because children point to different reference
-    chart.selectAll('.edge').filter(d => d.state === 'updated').each(function(d) {
+    chart.selectAll('.edge').filter(d => d.state === 'updated').each(function (d) {
       d3.select(this).selectAll('.edge-path').datum(d);
     });
-
 
     chart.selectAll('.edge').filter(d => d.state === 'new').call(this.renderEdgeAdded);
     chart.selectAll('.edge').filter(d => d.state === 'updated').call(this.renderEdgeUpdated);
     chart.selectAll('.edge').filter(d => d.state === 'removed').call(this.renderEdgeRemoved);
   }
 
-  renderEdges() {
+  renderEdges () {
     const chart = this.chart;
     chart.selectAll('.edge').remove();
 
@@ -292,19 +288,18 @@ export default class ElkBaseRenderer extends GraphRenderer {
     chart.selectAll('.edge').call(this.renderEdge);
   }
 
-
   /**
    * A fancier version of renderNodes, figures out the delta between
    * different layout runs and provide access to added, updated, and
    * removed graph elements.
    */
-  renderNodesDelta() {
+  renderNodesDelta () {
     const chart = this.chart;
 
     const _recursiveBuild = (selection, childrenNodes) => {
       if (!childrenNodes) return;
 
-      const nodesGroup = selection.selectAll('.node').filter(function() {
+      const nodesGroup = selection.selectAll('.node').filter(function () {
         return this.parentNode === selection.node();
       }).data(childrenNodes, d => d.id);
 
@@ -317,7 +312,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
       nodesGroup.each(d => (d.state = 'updated'));
 
       [newNodes, nodesGroup].forEach(g => {
-        g.each(function(d) {
+        g.each(function (d) {
           const selection = d3.select(this);
 
           // Allocate for the node itself
@@ -348,7 +343,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
   /**
    * Simple basic renderNodes, just wipe out all nodes and redraw
    */
-  renderNodes() {
+  renderNodes () {
     const chart = this.chart;
     chart.selectAll('.node').remove();
 
@@ -362,7 +357,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
           return svgUtil.translate(d.x, d.y);
         });
 
-      nodesGroup.each(function(d) {
+      nodesGroup.each(function (d) {
         const s = d3.select(this);
         s.append('g').classed('node-ui', true);
         _recursiveBuild(s.append('g'), d.nodes);
@@ -372,7 +367,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
     chart.selectAll('.node-ui').call(this.renderNode);
   }
 
-  calculateEdgeControlPlacement(pathNode) {
+  calculateEdgeControlPlacement (pathNode) {
     const options = this.options;
     let pos = 0;
     const total = pathNode.getTotalLength();
@@ -389,14 +384,14 @@ export default class ElkBaseRenderer extends GraphRenderer {
   /**
    * Renders a controller UI element along the edge path
    */
-  renderEdgeControls() {
+  renderEdgeControls () {
     const chart = this.chart;
     const edges = chart.selectAll('.edge');
     edges.selectAll('.edge-control').remove();
 
     const self = this;
 
-    edges.each(function() {
+    edges.each(function () {
       const pathNode = d3.select(this).select('path').node();
       const controlPoint = self.calculateEdgeControlPlacement(pathNode);
       d3.select(this).append('g')
@@ -409,7 +404,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
   /**
    * Debugging information
    */
-  renderDebug() {
+  renderDebug () {
     const chart = this.chart;
     const options = this.options;
     const chartSize = this.chartSize;
@@ -420,7 +415,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
     const halfH = 0.5 * height;
     const gridData = [
       [-5000, halfH, 5000, halfH],
-      [halfW, -5000, halfW, 5000]
+      [halfW, -5000, halfW, 5000],
     ];
 
     background.selectAll('.info').remove();
@@ -436,7 +431,6 @@ export default class ElkBaseRenderer extends GraphRenderer {
       .attr('y', (d, i) => (i + 1) * 14)
       .style('font-size', '10px');
 
-
     background.selectAll('.grid').remove();
     background.selectAll('.grid')
       .data(gridData)
@@ -450,12 +444,11 @@ export default class ElkBaseRenderer extends GraphRenderer {
       .style('opacity', 0.5);
   }
 
-  async runLayout() {
+  async runLayout () {
     const renderingGraph = this.adapter.makeRenderingGraph(this.data);
     const layout = this.adapter.run(renderingGraph);
     return layout;
   }
-
 
   /**
    * Highlight a subgraph with gaussian blur
@@ -464,7 +457,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
    * @param {string} options.color - highlight color
    * @param {number} options.duration - highlight duration
    */
-  highlight({ nodes, edges }, options) {
+  highlight ({ nodes, edges }, options) {
     const svg = d3.select(this.svgEl);
     const chart = this.chart;
 
@@ -507,14 +500,12 @@ export default class ElkBaseRenderer extends GraphRenderer {
       .attr('operator', 'in')
       .attr('result', 'offsetBlur');
 
-
     const feMerge = filter.append('feMerge');
     feMerge.append('feMergeNode')
       .attr('in', 'offsetBlur');
 
     feMerge.append('feMergeNode')
       .attr('in', 'SourceGraphic');
-
 
     // Apply filter
     // FIXME: not very efficient
@@ -536,7 +527,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
     return highlightId;
   }
 
-  unHighlight(id) {
+  unHighlight (id) {
     const svg = d3.select(this.svgEl);
     svg.select(`#${id}`).remove();
     svg.selectAll(`.${id}`).style('filter', null);
@@ -550,7 +541,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
    *
    * See: https://observablehq.com/@d3/programmatic-zoom
    */
-  moveTo(nodeId, duration) {
+  moveTo (nodeId, duration) {
     const chart = this.chart;
     const chartSize = this.chartSize;
     const svg = d3.select(this.svgEl);
@@ -580,8 +571,8 @@ export default class ElkBaseRenderer extends GraphRenderer {
       this.zoom.transform,
       d3.zoomIdentity.translate(0, 0).scale(t.k).translate(
         -dx + (0.5 * width) / t.k,
-        -dy + (0.5 * height) / t.k
-      )
+        -dy + (0.5 * height) / t.k,
+      ),
     );
   }
 
@@ -592,7 +583,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
    *
    * @param {string} nodeId - node identifier
    */
-  async collapse(nodeId) {
+  async collapse (nodeId) {
     // 1) Grab all nodes
     const node = this.chart.selectAll('.node').filter(d => d.id === nodeId);
     const childrenNodeIds = node.selectAll('.node').data().map(d => d.id);
@@ -652,7 +643,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
    *
    * @param {string} nodeId - node identifier
    */
-  async expand(nodeId) {
+  async expand (nodeId) {
     const node = this.chart.selectAll('.node').filter(d => d.id === nodeId);
     const collapseTracker = this.collapseTracker;
     const entry = collapseTracker[nodeId];
@@ -677,13 +668,12 @@ export default class ElkBaseRenderer extends GraphRenderer {
     this.render();
   }
 
-
   /**
    * Enlarge node
    *
    * @param {string} nodeId
    */
-  async focus(nodeId) {
+  async focus (nodeId) {
     const prev = this.chart.selectAll('.node').filter(d => d.focused === true);
     if (prev.size() === 1) {
       const datum = prev.datum();
@@ -705,7 +695,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
     this.render();
   }
 
-  async unfocus(nodeId) {
+  async unfocus (nodeId) {
     const node = this.chart.selectAll('.node').filter(d => d.id === nodeId);
     const datum = node.datum();
     delete datum.width;
@@ -715,14 +705,13 @@ export default class ElkBaseRenderer extends GraphRenderer {
     this.render();
   }
 
-
   /**
    * Group nodes, must be at the same level (all nodes must share the same parent)
    *
    * @param {string} groupName
    * @param {array} nodeIds - node identifiers
    */
-  async group(groupName, nodeIds) {
+  async group (groupName, nodeIds) {
     const chart = this.chart;
 
     // 0) check parent
@@ -740,7 +729,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
       type: 'custom',
       parent: nodesData[0].parent,
       nodes: [],
-      data: { label: groupName }
+      data: { label: groupName },
     };
 
     // 1) Move nodes to new group
@@ -765,7 +754,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
    * Ungroup
    * @param {string} groupName
    */
-  async ungroup(groupName) {
+  async ungroup (groupName) {
     const chart = this.chart;
     const groupData = chart.selectAll('.node').filter(d => d.id === groupName).data()[0];
     const parentData = groupData.parent;
@@ -785,9 +774,8 @@ export default class ElkBaseRenderer extends GraphRenderer {
     this.render();
   }
 
-
   // See https://github.com/d3/d3-zoom#zoomTransform
-  boundary() {
+  boundary () {
     const chart = this.chart;
     const t = d3.zoomTransform(chart.node());
     const x1 = (0 - t.x) / t.k;
@@ -802,12 +790,11 @@ export default class ElkBaseRenderer extends GraphRenderer {
     return { x1, y1, x2, y2 };
   }
 
-
-  cullEdges() {
+  cullEdges () {
     const { x1, y1, x2, y2 } = this.boundary();
 
     // Temporarily hide edges
-    this.chart.selectAll('.edge').each(function(d) {
+    this.chart.selectAll('.edge').each(function (d) {
       const source = _.first(d.points);
       const target = _.last(d.points);
 
@@ -818,22 +805,21 @@ export default class ElkBaseRenderer extends GraphRenderer {
     });
   }
 
-  uncullEdges() {
+  uncullEdges () {
     d3.selectAll('.edge').style('opacity', 1);
   }
-
 
   /**
    * Prepare the SVG and returns a chart refrence. This function will create three "layers": background,
    * data, and foreground layers. The data-layer corresponds to the chart.
    */
-  _createChart() {
+  _createChart () {
     const { width, height } = this.chartSize;
     const viewPort = {
       x1: 0,
       y1: 0,
       x2: this.layout.width,
-      y2: this.layout.height
+      y2: this.layout.height,
     };
     const svg = d3.select(this.svgEl);
     svg.selectAll('*').remove();
@@ -853,7 +839,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
     treatedSVG.append('g').classed('foreground-layer', true);
 
     const _this = this;
-    function zoomed() {
+    function zoomed () {
       chart.attr('transform', d3.event.transform);
       if (_this.options.useDebugger) {
         _this.renderDebug();
@@ -871,7 +857,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
    * that takes in two parameters: A d3 selection of the element, and a
    * reference to the renderer.
    */
-  _enableInteraction() {
+  _enableInteraction () {
     const chart = this.chart;
     const self = this;
     const registry = this.registry;
@@ -891,7 +877,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
       if (registered('backgroundClick')) {
         registry.backgroundClick(d3.select(this), self, {
           x: pointerCoords[0],
-          y: pointerCoords[1]
+          y: pointerCoords[1],
         });
       }
     });
@@ -902,12 +888,12 @@ export default class ElkBaseRenderer extends GraphRenderer {
       if (registered('backgroundDblClick')) {
         registry.backgroundDblClick(d3.select(this), self, {
           x: pointerCoords[0],
-          y: pointerCoords[1]
+          y: pointerCoords[1],
         });
       }
     });
 
-    nodes.on('dblclick', function() {
+    nodes.on('dblclick', function () {
       d3.event.stopPropagation();
       if (registered('nodeDblClick')) {
         window.clearTimeout(self.clickTimer);
@@ -915,7 +901,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
       }
     });
 
-    nodes.on('click', function() {
+    nodes.on('click', function () {
       d3.event.stopPropagation();
       if (registered('nodeClick')) {
         const _this = this;
@@ -926,35 +912,35 @@ export default class ElkBaseRenderer extends GraphRenderer {
       }
     });
 
-    nodes.on('mouseenter', function() {
+    nodes.on('mouseenter', function () {
       d3.event.stopPropagation();
       if (registered('nodeMouseEnter')) {
         registry.nodeMouseEnter(d3.select(this), self);
       }
     });
 
-    nodes.on('mouseleave', function() {
+    nodes.on('mouseleave', function () {
       d3.event.stopPropagation();
       if (registered('nodeMouseLeave')) {
         registry.nodeMouseLeave(d3.select(this), self);
       }
     });
 
-    edges.on('click', function() {
+    edges.on('click', function () {
       d3.event.stopPropagation();
       if (registered('edgeClick')) {
         registry.edgeClick(d3.select(this), self);
       }
     });
 
-    edges.on('mouseenter', function() {
+    edges.on('mouseenter', function () {
       d3.event.stopPropagation();
       if (registered('edgeMouseEnter')) {
         registry.edgeMouseEnter(d3.select(this), self);
       }
     });
 
-    edges.on('mouseleave', function() {
+    edges.on('mouseleave', function () {
       d3.event.stopPropagation();
       if (registered('edgeMouseLeave')) {
         registry.edgeMouseLeave(d3.select(this), self);
@@ -965,19 +951,19 @@ export default class ElkBaseRenderer extends GraphRenderer {
   /**
    * Enable node dragging, this will recalculate edge end points as well
    */
-  _enableDrag() {
+  _enableDrag () {
     const chart = this.chart;
     const options = this.options;
     const data = flatten(this.layout);
     const nodes = chart.selectAll('.node');
     const self = this;
 
-    function updateEdges() {
+    function updateEdges () {
       chart.selectAll('.edge').selectAll('path').attr('d', d => {
         return pathFn(d.points);
       });
       if (options.useEdgeControl) {
-        chart.selectAll('.edge').each(function() {
+        chart.selectAll('.edge').each(function () {
           const pathNode = d3.select(this).select('path').node();
           const controlPoint = self.calculateEdgeControlPlacement(pathNode);
           d3.select(this).select('.edge-control')
@@ -986,11 +972,11 @@ export default class ElkBaseRenderer extends GraphRenderer {
       }
     }
 
-    function dragStart() {
+    function dragStart () {
       d3.event.sourceEvent.stopPropagation();
     }
 
-    function dragMove() {
+    function dragMove () {
       const node = d3.select(this);
       const draggedIds = [node.datum().id, ...node.selectAll('.node').data().map(d => d.id)];
 
@@ -1038,7 +1024,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
       updateEdges();
     }
 
-    function dragEnd() {
+    function dragEnd () {
     }
 
     // FIXME: Need to disable current listeners first before assigning new ones?
@@ -1054,12 +1040,12 @@ export default class ElkBaseRenderer extends GraphRenderer {
    *
    * @param {string} id - node identifier
    */
-  _trace(nodeId) {
+  _trace (nodeId) {
     const checked = {};
     const data = this.layout || { edges: [] };
     const tracedEdges = [];
 
-    function backtrack(id) {
+    function backtrack (id) {
       if ({}.hasOwnProperty.call(checked, id)) return;
       checked[id] = 1;
 
@@ -1075,7 +1061,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
       edges: tracedEdges.map(edge => {
         return { source: edge.data.source, target: edge.data.target };
       }),
-      nodes: _.uniq([...tracedEdges.map(e => e.data.source), ...tracedEdges.map(e => e.data.target)])
+      nodes: _.uniq([...tracedEdges.map(e => e.data.source), ...tracedEdges.map(e => e.data.target)]),
     };
   }
 }

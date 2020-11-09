@@ -24,7 +24,6 @@
     nodeHeight: 30,
   };
 
-
   @Component
   export default class EpiGraph extends Vue {
     @Prop({ default: null }) graph: GraphInterface;
@@ -42,25 +41,27 @@
     }
 
     mounted (): void {
-    // convert the flat data into a hierarchy
-    const treeData = d3.stratify()
-      .id((d) => d.concept)
-      .parentId((d) => d.parent_name)
-      (this.graph.nodes);
+      // Convert the flat data into a hierarchy
+      const hierarachyData = d3.stratify()
+        .id((d) => d.concept)
+        .parentId((d) => d.parent_name)
+        (this.graph.nodes);
 
-    function traverse (root) {
-      root.concept = root.data.concept;
-      root.label = root.data.label;
-      if (root.children) {
-        root.nodes = root.children;
-        delete root.children;
-        for (let i = 0; i < root.nodes.length; i++) {
-          traverse(root.nodes[i]);
+      // FIXME: Data format outputted by d3.stratify needs to be massaged to be used by the renderer. This
+      // should be taken out to the renderer util. 
+      function formatHierarchyData (root) {
+        root.concept = root.data.concept;
+        root.label = root.data.label;
+        if (root.children) {
+          root.nodes = root.children;
+          delete root.children;
+          for (let i = 0; i < root.nodes.length; i++) {
+            formatHierarchyData(root.nodes[i]);
+          }
         }
       }
-    }
 
-    traverse(treeData);
+      formatHierarchyData(hierarachyData);
       this.renderer = new NewEpiModelRenderer({
         el: this.$refs.graph,
         adapter: new ELKAdapter({ nodeWidth: 100, nodeHeight: 50, layout: layered }),
@@ -82,7 +83,7 @@
       //   }
       // });
 
-      this.renderer.setData({nodes: treeData.nodes, edges: this.graph.edges});
+      this.renderer.setData({ nodes: hierarachyData.nodes, edges: this.graph.edges });
       this.renderer.render();
 
       // this.renderer.setCallback('backgroundDblClick', () => {

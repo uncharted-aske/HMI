@@ -6,12 +6,12 @@ import SVGUtil from '@/utils/SVGUtil.js';
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
 export default class NewEpiModelRenderer extends SVGRenderer {
-  renderEdgeRemoved(edgeSelection) {
-    edgeSelection.each(function() {
+  renderEdgeRemoved (edgeSelection) {
+    edgeSelection.each(function () {
       d3.select(this).select('path').style('stroke', '#f80');
       d3.select(this)
         .transition()
-        .on('end', function() {
+        .on('end', function () {
           d3.select(this).remove();
         })
         .duration(1500)
@@ -19,7 +19,7 @@ export default class NewEpiModelRenderer extends SVGRenderer {
     });
   }
 
-  renderEdgeUpdated(edgeSelection) {
+  renderEdgeUpdated (edgeSelection) {
     edgeSelection
       .selectAll('.edge-path')
       .attr('d', d => {
@@ -27,7 +27,7 @@ export default class NewEpiModelRenderer extends SVGRenderer {
       });
   }
 
-  renderEdgeAdded(edgeSelection) {
+  renderEdgeAdded (edgeSelection) {
     edgeSelection.append('path')
       .classed('edge-path', true)
       .attr('cursor', 'pointer')
@@ -55,7 +55,7 @@ export default class NewEpiModelRenderer extends SVGRenderer {
           d3.select(this.parentNode).remove();
         })
         .duration(1500)
-        .style('opacity', 0.2)
+        .style('opacity', 0.2);
     });
   }
 
@@ -133,5 +133,4 @@ export default class NewEpiModelRenderer extends SVGRenderer {
         return `url(#start-${source}-${target})`;
       });
   }
-  
 }
