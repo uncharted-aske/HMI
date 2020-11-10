@@ -12,16 +12,17 @@
 
   import { GraphInterface } from '../types/types';
 
-  import NewEpiModelRenderer from '../graphs/svg/NewEpiModelRenderer.js';
+  import EpiModelRenderer from '../graphs/svg/EpiModelRenderer.js';
   import ELKAdapter from '../graphs/svg/elk/adapter.js';
-  import { layered } from '../graphs/elk/ElkStrategies.js';
-  import { traverse } from '../graphs/svg/util.js';
-  import { showTooltip, hideTooltip } from '../utils/SVGUtil.js';
+  import { layered } from '../graphs/svg/elk/layouts';
+  import { traverse, formatHierarchyNodeData } from '../graphs/svg/util.js';
+  import { hierarchyFn, showTooltip, hideTooltip } from '../utils/SVGUtil.js';
   import { calculateNeighborhood } from '../utils/GraphUtil.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
     nodeHeight: 30,
+    layout: layered,
   };
 
   @Component
@@ -41,50 +42,26 @@
     }
 
     mounted (): void {
-      // Convert the flat data into a hierarchy
-      const hierarachyData = d3.stratify()
-        .id((d) => d.concept)
-        .parentId((d) => d.parent_name)
-        (this.graph.nodes);
-
-      // FIXME: Data format outputted by d3.stratify needs to be massaged to be used by the renderer. This
-      // should be taken out to the renderer util. 
-      function formatHierarchyData (root) {
-        root.concept = root.data.concept;
-        root.label = root.data.label;
-        if (root.children) {
-          root.nodes = root.children;
-          delete root.children;
-          for (let i = 0; i < root.nodes.length; i++) {
-            formatHierarchyData(root.nodes[i]);
-          }
-        }
-      }
-
-      formatHierarchyData(hierarachyData);
-      this.renderer = new NewEpiModelRenderer({
+      this.renderer = new EpiModelRenderer({
         el: this.$refs.graph,
-        adapter: new ELKAdapter({ nodeWidth: 100, nodeHeight: 50, layout: layered }),
+        adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
         renderMode: 'delta',
       });
 
-      this.renderer.setCallback('nodeClick', (node, renderer, event) => {
+     this.renderer.setCallback('nodeClick', (node, renderer, event) => {
         if (!node.datum().collapsed || node.datum().collapsed === false) {
           this.renderer.collapse(node.datum().id);
         } else {
           this.renderer.expand(node.datum().id);
         }
       });
-      // this.renderer.setCallback('nodeDblClick', (node) => {
-      //   if (node.datum().focused === true) {
-      //     this.renderer.unfocus(node.datum().id);
-      //   } else {
-      //     this.renderer.focus(node.datum().id);
-      //   }
-      // });
-
-      this.renderer.setData({ nodes: hierarachyData.nodes, edges: this.graph.edges });
-      this.renderer.render();
+      // // this.renderer.setCallback('nodeDblClick', (node) => {
+      // //   if (node.datum().focused === true) {
+      // //     this.renderer.unfocus(node.datum().id);
+      // //   } else {
+      // //     this.renderer.focus(node.datum().id);
+      // //   }
+      // // });
 
       // this.renderer.setCallback('backgroundDblClick', () => {
       //   this.renderer.hideNeighbourhood();
@@ -114,11 +91,16 @@
       // this.renderer.setCallback('nodeMouseLeave', () => {
       //   hideTooltip(this.renderer.chart);
       // });
+
+      this.refresh();
     }
 
     refresh (): void {
-      // this.renderer.setData(this.graph, { groups });
-      // this.renderer.render();
+      const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one 
+      formatHierarchyNodeData(hierarchyNodes); // Refines this hierarchical structure to a format that can be used by the renderer
+      const edges = this.graph.edges;
+      this.renderer.setData({nodes: [hierarchyNodes], edges});
+      this.renderer.render();
     }
   }
 </script>

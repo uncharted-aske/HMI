@@ -32,6 +32,10 @@ export const pathFn = d3.line()
   .x(d => d.x)
   .y(d => d.y);
 
+export const hierarchyFn = d3.stratify()
+  .id((d) => d.concept)
+  .parentId((d) => d.parent);
+
 export const hideTooltip = (domlocation) => {
   domlocation.selectAll('.svg-tooltip').remove();
 };
@@ -85,6 +89,7 @@ export default {
   createChart,
   translate,
   pathFn,
+  hierarchyFn,
 
   hideTooltip,
   showTooltip,
