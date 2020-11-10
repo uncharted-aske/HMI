@@ -578,8 +578,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
 
   /**
    * Collapse node and all children nodes.
-   * Note edges whose source and/or target are within the collapsed node are assigned
-   * to the node.
+   * Note edges whose source and/or target are within the collapsed node are collapsed as well
    *
    * @param {string} nodeId - node identifier
    */
@@ -608,18 +607,6 @@ export default class ElkBaseRenderer extends GraphRenderer {
         const target = edge.target;
 
         const originalEdge = {};
-        // Check if edge is from nodes within the structure (source and target)
-        // if (childrenNodeIds.includes(source) && childrenNodeIds.includes(target)) {
-        //   originalEdge.source = edge.source;
-        //   originalEdge.target = edge.target;
-        //   edge.state = 'removed';
-        // } else if (childrenNodeIds.includes(source)) {
-        //   originalEdge.source = edge.source;
-        //   edge.source = nodeId;
-        // } else if (childrenNodeIds.includes(target)) {
-        //   originalEdge.target = edge.target;
-        //   edge.target = nodeId;
-        // }
         if (childrenNodeIds.includes(source)) {
           originalEdge.source = edge.source;
           edge.source = nodeId;
@@ -627,6 +614,10 @@ export default class ElkBaseRenderer extends GraphRenderer {
         if (childrenNodeIds.includes(target)) {
           originalEdge.target = edge.target;
           edge.target = nodeId;
+        }
+        // HACK: If both source and target are the same that signifies the edge needs to be collapsed.
+        if (edge.source === edge.target) {
+          edge.collapsed = true;
         }
 
         if (!_.isEmpty(originalEdge)) {
