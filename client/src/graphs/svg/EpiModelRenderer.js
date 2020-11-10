@@ -6,7 +6,7 @@ import SVGUtil from '@/utils/SVGUtil.js';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
-export default class NewEpiModelRenderer extends SVGRenderer {
+export default class EpiModelRenderer extends SVGRenderer {
   renderEdgeRemoved (edgeSelection) {
     edgeSelection.each(function () {
       d3.select(this).select('path').style('stroke', '#f80');
