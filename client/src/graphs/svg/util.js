@@ -81,8 +81,16 @@ export const makeEdgeMaps = (root) => {
 };
 
 /**
- * Given a nested representation computed by d3.stratify, it formats it to one that can be used by the renderer
+ * Given a nested representation of nodes computed by d3.stratify, it formats it to one that can be used by the renderer
+* {
+ *   id:...,
+ *   nodes: [ 
+ *      id: ...,
+ *      nodes: []
+ *    ]
+ * }
  */
+
 export const formatHierarchyNodeData = (root) => {
   root.concept = root.data.concept;
   root.label = root.data.label;

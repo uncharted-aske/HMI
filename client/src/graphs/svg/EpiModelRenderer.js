@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import _ from 'lodash';
 
 import SVGRenderer from '@/graphs/svg/SVGRenderer';
 import SVGUtil from '@/utils/SVGUtil.js';
@@ -70,14 +71,22 @@ export default class NewEpiModelRenderer extends SVGRenderer {
         .attr('height', d => d.height);
 
       if (selection.datum().collapsed === true) {
+        const numChildren = selection.datum().data.nodes.length;
+        //Added number of children to the collapsed label
+        selection.select('text')
+          .style('font-weight', 'bold')
+          .text(d=> d.label + ' (' + numChildren + ')');
         selection.append('text')
           .classed('collapsed', true)
-          .attr('x', 13)
+          .attr('x', 10)
           .attr('y', 30)
           .style('font-size', 30)
           .text('+');
       } else {
         selection.select('.collapsed').remove();
+        selection.select('text') //Restore label
+        .style('font-weight', 'bold')
+        .text(d=> d.label);
       }
     });
   }
@@ -134,5 +143,24 @@ export default class NewEpiModelRenderer extends SVGRenderer {
         const target = d.data.target.replace(/\s/g, '');
         return `url(#start-${source}-${target})`;
       });
+  }
+
+  hideNeighbourhood () {
+    const chart = this.chart;
+    chart.selectAll('.node-ui').style('opacity', 1);
+    chart.selectAll('.edge').style('opacity', 1);
+  }
+
+  showNeighborhood ({ nodes, edges }) {
+    const chart = this.chart;
+    // FIXME: not very efficient
+    const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => { //Just takes into account leaf nodes
+      return !d.nodes && !nodes.map(node => node.id).includes(d.id);
+    });
+
+    nonNeighborNodes.style('opacity', 0.1);
+
+    const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.data.source && edge.target === d.data.target));
+    nonNeighborEdges.style('opacity', 0.1);
   }
 }

@@ -4,6 +4,8 @@
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
+
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
@@ -14,8 +16,8 @@
   import ELKAdapter from '../graphs/svg/elk/adapter.js';
   import { layered } from '../graphs/svg/elk/layouts';
   import { formatHierarchyNodeData } from '../graphs/svg/util.js';
-  import { hierarchyFn } from '../utils/SVGUtil.js';
-  // import { calculateNeighborhood } from '../utils/GraphUtil.js';
+  import { hierarchyFn, showTooltip, hideTooltip } from '../utils/SVGUtil.js';
+  import { calculateNeighborhood } from '../utils/GraphUtil.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -46,31 +48,27 @@
         renderMode: 'delta',
       });
 
-     this.renderer.setCallback('nodeClick', (node) => {
+      this.renderer.setCallback('nodeClick', (node) => {
+        // this.$emit('node-click', node.datum().data); // TO FIX
+        const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
+        this.renderer.showNeighborhood(neighborhood);
+      });
+
+     //Collapse/Expand 
+     this.renderer.setCallback('nodeDblClick', (node) => {
         if (!node.datum().collapsed || node.datum().collapsed === false) {
           this.renderer.collapse(node.datum().id);
         } else {
           this.renderer.expand(node.datum().id);
         }
       });
-      // // this.renderer.setCallback('nodeDblClick', (node) => {
-      // //   if (node.datum().focused === true) {
-      // //     this.renderer.unfocus(node.datum().id);
-      // //   } else {
-      // //     this.renderer.focus(node.datum().id);
-      // //   }
-      // // });
+   
+      this.renderer.setCallback('backgroundDblClick', () => {
+        this.renderer.hideNeighbourhood();
+      });
 
-      // this.renderer.setCallback('backgroundDblClick', () => {
-      //   this.renderer.hideNeighbourhood();
-      // });
-
-      // this.renderer.setCallback('nodeClick', (node) => {
-      //   this.$emit('node-click', node.datum().data);
-      //   const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
-      //   this.renderer.showNeighborhood(neighborhood);
-      // });
-
+     
+      // TO FIX
       // this.renderer.setCallback('nodeMouseEnter', (node) => {
       //   const nodeData = node.datum();
       //   let nodeCoords = [];
