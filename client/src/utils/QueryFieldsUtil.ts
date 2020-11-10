@@ -5,11 +5,13 @@ import { QueryFieldMap } from '../types/types';
  * Note a ranged search is more restrictive as the application allows one
  * ranged term per field. This is due to synchronizing against the facets,
  * which only allows a single range.
- *
- * @param {string} searchDisplay - text display
- * @param {boolean} ranged - if the search is ranged or not
  */
-const _searchable = (searchDisplay, ranged): any => {
+type SearchableHelperResponse = {
+  searchable: true,
+  searchDisplay: string,
+  ranged: boolean,
+}
+const _searchable = (searchDisplay: string, ranged: boolean): SearchableHelperResponse => {
   return {
     searchable: true, ranged, searchDisplay,
   };
@@ -19,11 +21,14 @@ const _searchable = (searchDisplay, ranged): any => {
  * This tags the code constant with the API field.
  *
  * Note the field is not the actual DB field but is the abstraction layer field.
- *
- * @param {string} field - field name
- * @param {string} display - human readable display
  */
-const _field = (field, display, icon = null, iconText = ''): any => {
+type FieldHelperResponse = {
+  field: string,
+  display: string,
+  icon: string,
+  iconText: string,
+}
+const _field = (field: string, display: string, icon = '', iconText = ''): FieldHelperResponse => {
   return { field, display, icon, iconText };
 };
 

@@ -19,7 +19,7 @@
 
   @Component
   export default class SearchBar extends Vue {
-    private lex: any = null;
+    private lex: Lex = null;
     private pills: KeyValuePill[] = [];
 
     @Getter getFilters;
