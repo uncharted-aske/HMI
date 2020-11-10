@@ -86,19 +86,20 @@ export default class NewEpiModelRenderer extends SVGRenderer {
     nodeSelection.each(function () {
       const selection = d3.select(this);
       selection.selectAll('*').remove();
-
-      selection.append('rect')
-        .attr('x', 0)
-        .attr('rx', 5)
-        .attr('y', 0)
-        .attr('width', d => d.width)
-        .attr('height', d => d.height)
-        .style('fill', d => {
-          return d.nodes ? '#F8F8F8' : '#EEE';
-        })
-        .style('stroke', '#888')
-        .style('stroke-width', 2);
-
+      
+      if (selection.datum().id !== 'root') { //Don't draw the root node
+        selection.append('rect')
+          .attr('x', 0)
+          .attr('rx', 5)
+          .attr('y', 0)
+          .attr('width', d => d.width)
+          .attr('height', d => d.height)
+          .style('fill', d => {
+            return d.nodes ? '#F8F8F8' : '#EEE';
+          })
+          .style('stroke', '#888')
+          .style('stroke-width', 2);
+      }
       if (selection.datum().type === 'custom') {
         selection.select('rect').style('stroke-dasharray', 4).style('fill', '#CCF');
       }
