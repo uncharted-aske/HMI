@@ -97,19 +97,35 @@ export default class EpiModelRenderer extends SVGRenderer {
       const selection = d3.select(this);
       selection.selectAll('*').remove();
 
-      if (selection.datum().id !== 'root') { // Don't draw the root node
-        selection.append('rect')
+      selection.append('rect')
+          .filter(d => d.id !== 'root')        // Don't draw the root node
           .attr('x', 0)
           .attr('rx', 5)
           .attr('y', 0)
           .attr('width', d => d.width)
           .attr('height', d => d.height)
           .style('fill', d => {
-            return d.nodes ? '#F8F8F8' : '#EEE';
+            let color = '#EEE';
+            if (d.data.data.varType) {
+              switch(d.data.data.varType) {
+                case 'parameter':
+                  color = 'red';
+                case 'model_variable':
+                  color = '#9ebcda';
+                // default: 
+                //   color = '#EEE';
+              }
+            }
+            console.log(color);
+            return d.nodes ? '#F8F8F8' : color;
           })
           .style('stroke', '#888')
           .style('stroke-width', 2);
+
+      if (selection.datum().data.data.varType && selection.datum().data.data.varType === 'initial_condition') {
+        selection.select('rect').style('stroke-dasharray', 4);
       }
+      
       if (selection.datum().type === 'custom') {
         selection.select('rect').style('stroke-dasharray', 4).style('fill', '#CCF');
       }
@@ -117,7 +133,7 @@ export default class EpiModelRenderer extends SVGRenderer {
 
     nodeSelection.style('cursor', 'pointer');
     
-      nodeSelection.append('text')
+    nodeSelection.append('text')
         .filter(d => d.nodes || d.data.nodeType !== NODE_TYPES.FUNCTION)
         .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
         .attr('y', d => d.nodes ? -5 : 25)
