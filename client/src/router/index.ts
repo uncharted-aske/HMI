@@ -4,7 +4,6 @@ import Home from '@/views/Home.vue';
 import NotFound from '@/views/NotFound.vue';
 import BioView from '@/views/BioView.vue';
 import EpiView from '@/views/EpiView.vue';
-import GraphExperiment from '@/views/GraphExperiment.vue';
 
 export function createRouter (vue: VueConstructor): Router {
   vue.use(Router);
@@ -25,11 +24,6 @@ export function createRouter (vue: VueConstructor): Router {
         path: '/epiView',
         name: 'epiView',
         component: EpiView,
-      },
-      {
-        path: '/graphExperiment',
-        name: 'graphExperiment',
-        component: GraphExperiment,
       },
       /* 404, this has to go last */
       {

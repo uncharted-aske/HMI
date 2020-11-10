@@ -143,7 +143,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
    * @param {Object} strategy
    */
   setStrategy (/* strategy */) {
-    console.error('not supported');
+    console.error('not supported'); // eslint-disable-line no-console
   }
 
   /**
@@ -562,7 +562,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
       temp = temp.parent;
       globalX += temp.x;
       globalY += temp.y;
-      console.log(globalX, globalY);
+      console.log(globalX, globalY); // eslint-disable-line no-console
     }
 
     const dx = globalX + 0.5 * node.width;
@@ -708,7 +708,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
     // 0) check parent
     const nodesData = chart.selectAll('.node').filter(d => nodeIds.includes(d.id)).data();
     if (_.uniq(nodesData.map(d => d.parent.id)).length !== 1) {
-      console.log('Cannot group across different levels');
+      console.log('Cannot group across different levels'); // eslint-disable-line no-console
       return;
     }
 

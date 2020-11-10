@@ -4,8 +4,6 @@
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-  import * as d3 from 'd3';
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
@@ -15,9 +13,9 @@
   import EpiModelRenderer from '../graphs/svg/EpiModelRenderer.js';
   import ELKAdapter from '../graphs/svg/elk/adapter.js';
   import { layered } from '../graphs/svg/elk/layouts';
-  import { traverse, formatHierarchyNodeData } from '../graphs/svg/util.js';
-  import { hierarchyFn, showTooltip, hideTooltip } from '../utils/SVGUtil.js';
-  import { calculateNeighborhood } from '../utils/GraphUtil.js';
+  import { formatHierarchyNodeData } from '../graphs/svg/util.js';
+  import { hierarchyFn } from '../utils/SVGUtil.js';
+  // import { calculateNeighborhood } from '../utils/GraphUtil.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -48,7 +46,7 @@
         renderMode: 'delta',
       });
 
-     this.renderer.setCallback('nodeClick', (node, renderer, event) => {
+     this.renderer.setCallback('nodeClick', (node) => {
         if (!node.datum().collapsed || node.datum().collapsed === false) {
           this.renderer.collapse(node.datum().id);
         } else {
@@ -96,10 +94,10 @@
     }
 
     refresh (): void {
-      const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one 
+      const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one
       formatHierarchyNodeData(hierarchyNodes); // Refines this hierarchical structure to a format that can be used by the renderer
       const edges = this.graph.edges;
-      this.renderer.setData({nodes: [hierarchyNodes], edges});
+      this.renderer.setData({ nodes: [hierarchyNodes], edges });
       this.renderer.render();
     }
   }

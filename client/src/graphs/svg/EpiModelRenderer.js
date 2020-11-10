@@ -25,7 +25,7 @@ export default class NewEpiModelRenderer extends SVGRenderer {
       .attr('d', d => {
         return pathFn(d.points);
       })
-      .style('opacity', d=> d.collapsed ? 0 : 1);
+      .style('opacity', d => d.collapsed ? 0 : 1);
   }
 
   renderEdgeAdded (edgeSelection) {
