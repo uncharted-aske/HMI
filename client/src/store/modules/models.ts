@@ -10,7 +10,7 @@ import SIR from '../../static/uncharted_sir.json';
 import nestedSIRGrFN from '../../static/nested-SIR-simple-GrFN.json';
 
 import DoubleEpi from '../../static/uncharted_double_epi.json';
-import nestedDoubleEpiGrFN from '../../static/nested-SARS-COV1-SEIRP-GrFN.json';
+import nestedDoubleEpiGrFN from '../../static/nested-SARS-COV1-SEIRP-model-GrFN.json';
 
 const state: ModelsState = {
   selectedModelId: null,
