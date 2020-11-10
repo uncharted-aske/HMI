@@ -35,7 +35,6 @@ const build = (root) => {
       }
     }
 
-    // Recurse children nodes
     if (node.nodes && node.nodes.length > 0) {
       nodeSpec.nodes = node.nodes.map(n => _walk(n, depth + 1, nodeSpec));
     }
