@@ -1,7 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../src/vue-shims.d.ts" />
 import { mount, createLocalVue } from '@vue/test-utils';
-import { createRouter } from '../src/router';
+import { sync } from 'vuex-router-sync';
+import Router from '../src/router';
 import { store } from '../src/store';
 import App from '../src/App.vue';
 
@@ -12,7 +13,8 @@ describe('App.vue.spec', function () {
 
   before(async function () {
     localVue = createLocalVue();
-    router = createRouter(localVue);
+    router = Router.getRouter(localVue);
+    sync(store, router);
     wrapper = mount(App, {
       localVue,
       router,
