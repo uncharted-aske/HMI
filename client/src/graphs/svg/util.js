@@ -1,3 +1,4 @@
+import _ from 'lodash';
 
 export const NODE_TYPES = {
   VARIABLE: 'variable',
@@ -100,6 +101,7 @@ export const makeEdgeMaps = (root) => {
 export const formatHierarchyNodeData = (root) => {
   root.concept = root.data.concept;
   root.label = root.data.label;
+  root.nodeType = root.data.nodeType;
   if (root.children) {
     root.nodes = root.children;
     delete root.children;

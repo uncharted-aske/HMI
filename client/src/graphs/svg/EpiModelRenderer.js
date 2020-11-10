@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import _ from 'lodash';
 
+import { NODE_TYPES } from '@/graphs/svg/util.js';
 import SVGRenderer from '@/graphs/svg/SVGRenderer';
 import SVGUtil from '@/utils/SVGUtil.js';
 
@@ -26,7 +27,7 @@ export default class EpiModelRenderer extends SVGRenderer {
       .attr('d', d => {
         return pathFn(d.points);
       })
-      .style('opacity', d => d.collapsed ? 0 : 1);
+      .style('display', d => d.collapsed ? 'none' : ''); //HACK: Hide edges for a collapsed node
   }
 
   renderEdgeAdded (edgeSelection) {
@@ -72,7 +73,7 @@ export default class EpiModelRenderer extends SVGRenderer {
 
       if (selection.datum().collapsed === true) {
         const numChildren = selection.datum().data.nodes.length;
-        // Added number of children to the collapsed label
+        //Added number of children to the collapsed label
         selection.select('text')
           .style('font-weight', 'bold')
           .text(d => d.label + ' (' + numChildren + ')');
@@ -115,14 +116,15 @@ export default class EpiModelRenderer extends SVGRenderer {
     });
 
     nodeSelection.style('cursor', 'pointer');
-
-    nodeSelection.append('text')
-      .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
-      .attr('y', d => d.nodes ? -5 : 25)
-      .style('fill', '#333')
-      .style('font-weight', '600')
-      .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-      .text(d => d.data.label);
+    
+      nodeSelection.append('text')
+        .filter(d => d.nodes || d.data.nodeType !== NODE_TYPES.FUNCTION)
+        .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
+        .attr('y', d => d.nodes ? -5 : 25)
+        .style('fill', '#333')
+        .style('font-weight', '600')
+        .style('text-anchor', d => d.nodes ? 'left' : 'middle')
+        .text(d => d.label);
   }
 
   renderEdge (edgeSelection) {
