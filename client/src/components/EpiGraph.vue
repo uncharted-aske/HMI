@@ -4,8 +4,6 @@
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
@@ -16,7 +14,7 @@
   import ELKAdapter from '../graphs/svg/elk/adapter.js';
   import { layered } from '../graphs/svg/elk/layouts';
   import { formatHierarchyNodeData } from '../graphs/svg/util.js';
-  import { hierarchyFn, showTooltip, hideTooltip } from '../utils/SVGUtil.js';
+  import { hierarchyFn } from '../utils/SVGUtil.js';
   import { calculateNeighborhood } from '../utils/GraphUtil.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
@@ -54,7 +52,7 @@
         this.renderer.showNeighborhood(neighborhood);
       });
 
-     //Collapse/Expand 
+     // Collapse/Expand
      this.renderer.setCallback('nodeDblClick', (node) => {
         if (!node.datum().collapsed || node.datum().collapsed === false) {
           this.renderer.collapse(node.datum().id);
@@ -62,12 +60,11 @@
           this.renderer.expand(node.datum().id);
         }
       });
-   
+
       this.renderer.setCallback('backgroundDblClick', () => {
         this.renderer.hideNeighbourhood();
       });
 
-     
       // TO FIX
       // this.renderer.setCallback('nodeMouseEnter', (node) => {
       //   const nodeData = node.datum();

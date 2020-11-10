@@ -84,7 +84,7 @@ export const makeEdgeMaps = (root) => {
  * Given a nested representation of nodes computed by d3.stratify, it formats it to one that can be used by the renderer
 * {
  *   id:...,
- *   nodes: [ 
+ *   nodes: [
  *      id: ...,
  *      nodes: []
  *    ]

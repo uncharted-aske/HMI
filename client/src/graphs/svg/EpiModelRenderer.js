@@ -72,10 +72,10 @@ export default class NewEpiModelRenderer extends SVGRenderer {
 
       if (selection.datum().collapsed === true) {
         const numChildren = selection.datum().data.nodes.length;
-        //Added number of children to the collapsed label
+        // Added number of children to the collapsed label
         selection.select('text')
           .style('font-weight', 'bold')
-          .text(d=> d.label + ' (' + numChildren + ')');
+          .text(d => d.label + ' (' + numChildren + ')');
         selection.append('text')
           .classed('collapsed', true)
           .attr('x', 10)
@@ -84,9 +84,9 @@ export default class NewEpiModelRenderer extends SVGRenderer {
           .text('+');
       } else {
         selection.select('.collapsed').remove();
-        selection.select('text') //Restore label
-        .style('font-weight', 'bold')
-        .text(d=> d.label);
+        selection.select('text') // Restore label
+          .style('font-weight', 'bold')
+          .text(d => d.label);
       }
     });
   }
@@ -95,8 +95,8 @@ export default class NewEpiModelRenderer extends SVGRenderer {
     nodeSelection.each(function () {
       const selection = d3.select(this);
       selection.selectAll('*').remove();
-      
-      if (selection.datum().id !== 'root') { //Don't draw the root node
+
+      if (selection.datum().id !== 'root') { // Don't draw the root node
         selection.append('rect')
           .attr('x', 0)
           .attr('rx', 5)
@@ -154,7 +154,7 @@ export default class NewEpiModelRenderer extends SVGRenderer {
   showNeighborhood ({ nodes, edges }) {
     const chart = this.chart;
     // FIXME: not very efficient
-    const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => { //Just takes into account leaf nodes
+    const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => { // Just takes into account leaf nodes
       return !d.nodes && !nodes.map(node => node.id).includes(d.id);
     });
 
