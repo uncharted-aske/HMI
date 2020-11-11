@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import _ from 'lodash';
 
-import { NODE_TYPES } from '@/graphs/svg/util.js';
+import { NODE_TYPES, VARIABLE_TYPES, VARIABLE_TYPES_COLOR_MAPPINGS } from '@/graphs/svg/util.js';
 import SVGRenderer from '@/graphs/svg/SVGRenderer';
 import SVGUtil from '@/utils/SVGUtil.js';
 
@@ -27,7 +27,7 @@ export default class EpiModelRenderer extends SVGRenderer {
       .attr('d', d => {
         return pathFn(d.points);
       })
-      .style('display', d => d.collapsed ? 'none' : ''); //HACK: Hide edges for a collapsed node
+      .style('opacity', d => d.collapsed ? 0 : 1); // FIXME: This is a hack and edges are still clickable
   }
 
   renderEdgeAdded (edgeSelection) {
@@ -73,7 +73,7 @@ export default class EpiModelRenderer extends SVGRenderer {
 
       if (selection.datum().collapsed === true) {
         const numChildren = selection.datum().data.nodes.length;
-        //Added number of children to the collapsed label
+        // Added number of children to the collapsed label
         selection.select('text')
           .style('font-weight', 'bold')
           .text(d => d.label + ' (' + numChildren + ')');
@@ -97,50 +97,68 @@ export default class EpiModelRenderer extends SVGRenderer {
       const selection = d3.select(this);
       selection.selectAll('*').remove();
 
-      selection.append('rect')
-          .filter(d => d.id !== 'root')        // Don't draw the root node
+      if (selection.datum().id !== 'root') { // Don't draw the root node
+        selection.append('rect')
           .attr('x', 0)
           .attr('rx', 5)
           .attr('y', 0)
           .attr('width', d => d.width)
           .attr('height', d => d.height)
           .style('fill', d => {
-            let color = '#EEE';
-            if (d.data.data.varType) {
-              switch(d.data.data.varType) {
-                case 'parameter':
-                  color = 'red';
-                case 'model_variable':
-                  color = '#9ebcda';
-                // default: 
-                //   color = '#EEE';
+            if (d.nodes) {
+              return '#F8F8F8';
+            } else if (d.data.nodeType === NODE_TYPES.VARIABLE) {
+              if (d.data.varType) {
+                const type = d.data.varType;
+                if (type === VARIABLE_TYPES.MODEL_VARIABLE) {
+                  return VARIABLE_TYPES_COLOR_MAPPINGS.MODEL_VARIABLE;
+                }
+                if (type === VARIABLE_TYPES.PARAMETER) {
+                  return VARIABLE_TYPES_COLOR_MAPPINGS.PARAMETER;
+                }
               }
             }
-            console.log(color);
-            return d.nodes ? '#F8F8F8' : color;
+            return '#EEE';
           })
           .style('stroke', '#888')
-          .style('stroke-width', 2);
+          .style('stroke-width', d => {
+            if (d.data.nodeType === NODE_TYPES.LOOP_CONTAINER){
+              if (d.data.data.metadata) {
+                if (d.data.data.metadata.role === 'solver') {
+                  return 8;
+                }
+              }
+            } else return 1;
+             
+          });
 
-      if (selection.datum().data.data.varType && selection.datum().data.data.varType === 'initial_condition') {
-        selection.select('rect').style('stroke-dasharray', 4);
+        // Special encodings for initial condition nodes
+        if (selection.datum().data.nodeType === NODE_TYPES.VARIABLE) {
+          const d = selection.datum();
+          if (d.data.varType) {
+            const type = d.data.varType;
+            if (type === VARIABLE_TYPES.INITIAL_CONDITION) {
+              selection.select('rect').style('stroke-dasharray', 4);
+            }
+          }
+        }
       }
-      
       if (selection.datum().type === 'custom') {
         selection.select('rect').style('stroke-dasharray', 4).style('fill', '#CCF');
       }
     });
 
     nodeSelection.style('cursor', 'pointer');
-    
+
+    // Add label for all nodes but FUNCTIONS
     nodeSelection.append('text')
-        .filter(d => d.nodes || d.data.nodeType !== NODE_TYPES.FUNCTION)
-        .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
-        .attr('y', d => d.nodes ? -5 : 25)
-        .style('fill', '#333')
-        .style('font-weight', '600')
-        .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-        .text(d => d.label);
+      .filter(d => d.data.nodeType !== NODE_TYPES.FUNCTION)
+      .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
+      .attr('y', d => d.nodes ? -5 : 25)
+      .style('fill', '#333')
+      .style('font-weight', '600')
+      .style('text-anchor', d => d.nodes ? 'left' : 'middle')
+      .text(d => d.data.label);
   }
 
   renderEdge (edgeSelection) {
