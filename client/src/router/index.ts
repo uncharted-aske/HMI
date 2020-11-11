@@ -1,9 +1,9 @@
 import { VueConstructor } from 'vue';
 import Router from 'vue-router';
-import Home from '@/views/Home/index.vue';
-import NotFound from '@/views/NotFound/index.vue';
-import BioView from '@/views/Bio/index.vue';
-import EpiView from '@/views/Epi/index.vue';
+import Home from '@/views/Home/Home.vue';
+import NotFound from '@/views/NotFound/NotFound.vue';
+import BioView from '@/views/Graphs/views/Bio/Bio.vue';
+import EpiView from '@/views/Graphs/views/Epi/Epi.vue';
 
 const RouterSingleton = ((): any => {
   let router: Router;

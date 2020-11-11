@@ -24,14 +24,14 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { ActionColumnInterface, ModelInterface } from '../../types/types';
+  import { ActionColumnInterface, ModelInterface } from '../../../../types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
-  import Counters from '@/components/Counters.vue';
+  import Counters from '../../components/Counters/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPane from '@/components/MetadataPane.vue';
+  import MetadataPane from '../../components/MetadataPane/MetadataPane.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
 
   const ACTIONS = [

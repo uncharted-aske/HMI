@@ -34,7 +34,7 @@
   import SearchBar from '@/components/SearchBar.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/components/FacetsPane.vue';
-  import StartScreen from '@/components/StartScreen.vue';
+  import StartScreen from './components/StartScreen/StartScreen.vue';
 
   // Screenshots
   import CHIMEScreenshot from '@/assets/img/CHIME.png';

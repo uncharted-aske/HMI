@@ -22,9 +22,9 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
-  import { CardInterface } from '../types/types';
+  import { CardInterface } from '../../../../types/types';
 
-  import StartScreenCard from '@/components/widgets/StartScreenCard.vue';
+  import StartScreenCard from './components/StartScreenCard/StartScreenCard.vue';
 
   const components = {
     StartScreenCard,
@@ -43,7 +43,7 @@
 </script>
 
 <style lang="scss">
-@import "../styles/variables";
+@import "../../../../styles/variables";
 
 .start-screen-container {
   height: calc(#{$content-full-height} - #{$secondary-bar-width});
