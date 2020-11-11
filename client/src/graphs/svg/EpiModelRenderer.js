@@ -122,14 +122,13 @@ export default class EpiModelRenderer extends SVGRenderer {
           })
           .style('stroke', '#888')
           .style('stroke-width', d => {
-            if (d.data.nodeType === NODE_TYPES.LOOP_CONTAINER){
+            if (d.data.nodeType === NODE_TYPES.LOOP_CONTAINER) {
               if (d.data.data.metadata) {
                 if (d.data.data.metadata.role === 'solver') {
                   return 8;
                 }
               }
             } else return 1;
-             
           });
 
         // Special encodings for initial condition nodes

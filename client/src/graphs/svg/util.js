@@ -4,6 +4,8 @@ export const NODE_TYPES = {
   VARIABLE: 'variable',
   FUNCTION: 'function',
   LOOP_CONTAINER: 'LoopContainer',
+  FUNC_CONTAINER: 'FuncContainer',
+  COND_CONTAINER: 'CondContainer',
 };
 
 export const VARIABLE_TYPES = {
