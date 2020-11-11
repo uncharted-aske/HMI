@@ -9,7 +9,7 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import { GraphInterface } from '../../../../../../types/types';
+  import { GraphInterface } from '../../../../types/types';
 
   import EpiModelRenderer from '../../../../../../graphs/elk/EpiModelRenderer.js';
   import { layered } from '../../../../../../graphs/elk/ElkStrategies.js';
