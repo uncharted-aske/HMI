@@ -2,8 +2,23 @@ import _ from 'lodash';
 
 export const NODE_TYPES = {
   VARIABLE: 'variable',
-  FUNCTION: 'function'
-}
+  FUNCTION: 'function',
+  LOOP_CONTAINER: 'LoopContainer',
+};
+
+export const VARIABLE_TYPES = {
+  INPUT: 'input',
+  OUTPUT: 'output',
+  PARAMETER: 'parameter',
+  MODEL_VARIABLE: 'model_variable',
+  INITIAL_CONDITION: 'initial_condition',
+  INTERNAL_VARIABLE: 'internal_variable',
+};
+
+export const VARIABLE_TYPES_COLOR_MAPPINGS = {
+  MODEL_VARIABLE: '#0091EA',
+  PARAMETER: '#ffc04d',
+};
 
 /**
  * Recursively traverse a graph that looks like
@@ -102,6 +117,9 @@ export const formatHierarchyNodeData = (root) => {
   root.concept = root.data.concept;
   root.label = root.data.label;
   root.nodeType = root.data.nodeType;
+  if (root.nodeType === NODE_TYPES.VARIABLE) {
+    root.varType = root.data.varType;
+  }
   if (root.children) {
     root.nodes = root.children;
     delete root.children;
@@ -110,7 +128,6 @@ export const formatHierarchyNodeData = (root) => {
     }
   }
 };
-
 
 /**
  * Get the neighborhood graph for a selected node
@@ -131,5 +148,4 @@ export const calculateNeighborhood = (graph, node) => {
   })).concat(node)).map(id => ({ id })); // Include the selected node (added into .uniq)
 
   return { nodes: neighborNodes, edges: neighborEdges };
-}
-
+};

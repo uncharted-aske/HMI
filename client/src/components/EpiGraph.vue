@@ -64,21 +64,21 @@
         this.renderer.hideNeighbourhood();
       });
 
-      // TO FIX
-      // this.renderer.setCallback('nodeMouseEnter', (node) => {
-      //   const nodeData = node.datum();
-      //   let nodeCoords = [];
-      //   const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.data.type;
-      //   if (_.isNil(nodeData.group)) {
-      //     nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)];
-      //   } else {
-      //     // For nodes inside groups
-      //     const groups = this.renderer.layout.groups;
-      //     const group = groups.find(g => g.id === nodeData.group);
-      //     nodeCoords = [group.x + nodeData.x, group.y + nodeData.y];
-      //   }
-      //   showTooltip(this.renderer.chart, tooltipText, nodeCoords);
-      // });
+      this.renderer.setCallback('nodeMouseEnter', (node) => {
+        const nodeData = node.datum();
+        // let nodeCoords = [];
+        const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.data.type;
+        // console.log(nodeData);
+        // if (_.isNil(nodeData.group)) {
+        //   nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)];
+        // } else {
+        //   // For nodes inside groups
+        //   const groups = this.renderer.layout.groups;
+        //   const group = groups.find(g => g.id === nodeData.group);
+        //   nodeCoords = [group.x + nodeData.x, group.y + nodeData.y];
+        // }
+        // showTooltip(this.renderer.chart, tooltipText, nodeCoords);
+      });
 
       // this.renderer.setCallback('nodeMouseLeave', () => {
       //   hideTooltip(this.renderer.chart);
