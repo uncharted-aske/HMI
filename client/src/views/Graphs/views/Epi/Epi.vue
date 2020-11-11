@@ -35,7 +35,7 @@
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
-  import SearchBar from '@/components/SearchBar.vue';
+  import SearchBar from './components/SearchBar/SearchBar.vue';
   import Counters from '../../components/Counters/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '../../components/MetadataPane/MetadataPane.vue';
