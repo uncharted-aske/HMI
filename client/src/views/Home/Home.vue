@@ -34,7 +34,7 @@
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import FacetsPane from '@/components/FacetsPane.vue';
+  import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import StartScreen from './components/StartScreen/StartScreen.vue';
 
   // Screenshots

@@ -16,10 +16,10 @@
   import { Getter } from 'vuex-class';
   import _ from 'lodash';
   import Facets from '@/components/Facets.vue';
-  import * as facetsService from '../services/FacetsService';
-  import * as filtersUtil from '../utils/FiltersUtil';
-  import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
-  import { FacetTermsDataMap, FacetTermsSelectionMap, FacetTermsSubselectionMap } from '../types/types';
+  import * as facetsService from '../../../../services/FacetsService';
+  import * as filtersUtil from '../../../../utils/FiltersUtil';
+  import { QUERY_FIELDS_MAP } from '../../../../utils/QueryFieldsUtil';
+  import { FacetTermsDataMap, FacetTermsSelectionMap, FacetTermsSubselectionMap } from '../../../../types/types';
 
   const components = {
     Facets,

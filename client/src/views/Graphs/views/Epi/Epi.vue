@@ -39,7 +39,7 @@
   import Counters from '../../components/Counters/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '../../components/MetadataPane/MetadataPane.vue';
-  import FacetsPane from '@/components/FacetsPane.vue';
+  import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import EpiGraph from './components/EpiGraph/EpiGraph.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '../../components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';

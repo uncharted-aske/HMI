@@ -32,7 +32,7 @@
   import Counters from '../../components/Counters/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '../../components/MetadataPane/MetadataPane.vue';
-  import FacetsPane from '@/components/FacetsPane.vue';
+  import FacetsPane from './components/FacetsPane/FacetsPane.vue';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
