@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import _ from 'lodash';
 
-import { NODE_TYPES, VARIABLE_TYPES, VARIABLE_TYPES_COLOR_MAPPINGS } from '@/graphs/svg/util.js';
+import { NODE_TYPES, VARIABLE_TYPES, calcNodeColor } from '@/graphs/svg/util.js';
 import SVGRenderer from '@/graphs/svg/SVGRenderer';
 import SVGUtil from '@/utils/SVGUtil.js';
 
@@ -10,7 +10,6 @@ const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 export default class EpiModelRenderer extends SVGRenderer {
   renderEdgeRemoved (edgeSelection) {
     edgeSelection.each(function () {
-      d3.select(this).select('path').style('stroke', '#f80');
       d3.select(this)
         .transition()
         .on('end', function () {
@@ -104,22 +103,7 @@ export default class EpiModelRenderer extends SVGRenderer {
           .attr('y', 0)
           .attr('width', d => d.width)
           .attr('height', d => d.height)
-          .style('fill', d => {
-            if (d.nodes) {
-              return '#F8F8F8';
-            } else if (d.data.nodeType === NODE_TYPES.VARIABLE) {
-              if (d.data.varType) {
-                const type = d.data.varType;
-                if (type === VARIABLE_TYPES.MODEL_VARIABLE) {
-                  return VARIABLE_TYPES_COLOR_MAPPINGS.MODEL_VARIABLE;
-                }
-                if (type === VARIABLE_TYPES.PARAMETER) {
-                  return VARIABLE_TYPES_COLOR_MAPPINGS.PARAMETER;
-                }
-              }
-            }
-            return '#EEE';
-          })
+          .style('fill', d => calcNodeColor(d))
           .style('stroke', '#888')
           .style('stroke-width', d => {
             if (d.data.nodeType === NODE_TYPES.LOOP_CONTAINER) {

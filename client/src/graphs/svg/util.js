@@ -151,3 +151,20 @@ export const calculateNeighborhood = (graph, node) => {
 
   return { nodes: neighborNodes, edges: neighborEdges };
 };
+
+export const calcNodeColor = (node) => {
+  if (node.nodes) {
+    return '#F8F8F8';
+  } else if (node.data.nodeType === NODE_TYPES.VARIABLE) {
+    if (node.data.varType) {
+      const type = node.data.varType;
+      if (type === VARIABLE_TYPES.MODEL_VARIABLE) {
+        return VARIABLE_TYPES_COLOR_MAPPINGS.MODEL_VARIABLE;
+      }
+      if (type === VARIABLE_TYPES.PARAMETER) {
+        return VARIABLE_TYPES_COLOR_MAPPINGS.PARAMETER;
+      }
+    }
+  }
+  return '#eeeeee';
+};
