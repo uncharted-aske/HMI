@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import svgUtil from '@/utils/SVGUtil.js';
 import { removeChildren } from '@/utils/DOMUtil.js';
 import GraphRenderer from '@/graphs/GraphRenderer.js';
-import { flatten, traverse } from '@/graphs/svg/util.js';
+import { flatten, traverse, EDGES_COLOR } from '@/graphs/svg/util.js';
 
 const pathFn = svgUtil.pathFn.curve(d3.curveBasis);
 
@@ -229,7 +229,7 @@ export default class ElkBaseRenderer extends GraphRenderer {
       .attr('xoverflow', 'visible')
       .append('svg:path')
       .attr('d', svgUtil.ARROW)
-      .style('fill', '#000')
+      .style('fill', EDGES_COLOR)
       .style('stroke', 'none');
   }
 

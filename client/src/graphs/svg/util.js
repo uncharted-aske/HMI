@@ -22,6 +22,8 @@ export const VARIABLE_TYPES_COLOR_MAPPINGS = {
   PARAMETER: '#ffc04d',
 };
 
+export const EDGES_COLOR = '#6c757d';
+
 /**
  * Recursively traverse a graph that looks like
  * {

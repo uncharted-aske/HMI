@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import _ from 'lodash';
 
-import { NODE_TYPES, VARIABLE_TYPES, calcNodeColor } from '@/graphs/svg/util.js';
+import { NODE_TYPES, VARIABLE_TYPES, EDGES_COLOR, calcNodeColor } from '@/graphs/svg/util.js';
 import SVGRenderer from '@/graphs/svg/SVGRenderer';
 import SVGUtil from '@/utils/SVGUtil.js';
 
@@ -35,7 +35,7 @@ export default class EpiModelRenderer extends SVGRenderer {
       .attr('cursor', 'pointer')
       .attr('d', d => pathFn(d.points))
       .style('fill', 'none')
-      .style('stroke', '#000')
+      .style('stroke', EDGES_COLOR)
       .style('stroke-width', 2)
       .attr('marker-end', d => {
         const source = d.data.source.replace(/\s/g, '');
@@ -85,6 +85,7 @@ export default class EpiModelRenderer extends SVGRenderer {
       } else {
         selection.select('.collapsed').remove();
         selection.select('text') // Restore label
+          .filter(d => d.data.nodeType !== NODE_TYPES.FUNCTION)
           .style('font-weight', 'bold')
           .text(d => d.label);
       }
