@@ -1,7 +1,5 @@
 <template>
-  <div class="search-bar-container">
-
-  </div>
+  <div class="search-bar-container"></div>
 </template>
 
 <script lang="ts">
@@ -15,7 +13,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
+@import "../../../../../../styles/variables";
 
 .search-bar-container {
   height: $secondary-bar-width;

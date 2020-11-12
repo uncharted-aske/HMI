@@ -27,19 +27,23 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
 
-  import { ActionColumnInterface, CardInterface } from '../types/types';
+  import { ActionColumnInterface } from '../../types/types';
+  import { CardInterface } from './types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
-  import SearchBar from '@/components/SearchBar.vue';
+  import SearchBar from './components/SearchBar/SearchBar.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import FacetsPane from '@/components/FacetsPane.vue';
-  import StartScreen from '@/components/StartScreen.vue';
+  import FacetsPane from './components/FacetsPane/FacetsPane.vue';
+  import StartScreen from './components/StartScreen/StartScreen.vue';
 
   // Screenshots
   import CHIMEScreenshot from '@/assets/img/CHIME.png';
   import SIRScreenshot from '@/assets/img/SIR.png';
   import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
+
+  // Services
+  import * as modelsService from '../../services/ModelsService';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -59,7 +63,8 @@
     activePane = '';
     actions: ActionColumnInterface[] = ACTIONS;
 
-    @Getter getModelsList; // FIXME: We need to explore another options for this to avoid using decorators.
+    @Getter getFilters;
+    @Getter getModelsList;
     @Mutation setSelectedModel;
 
     get currentAction (): string {
@@ -67,7 +72,7 @@
     }
 
     get modelsCards (): CardInterface[] {
-      const modelsList = this.getModelsList;
+      const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
       const modelsCards = modelsList.map(model => {
         let previewImageSrc = null;
         switch (model.id) {

@@ -1,7 +1,5 @@
 <template>
-  <div class="facets-pane-container">
-    FACETS
-  </div>
+  <div class="facets-pane-container"></div>
 </template>
 
 <script lang="ts">

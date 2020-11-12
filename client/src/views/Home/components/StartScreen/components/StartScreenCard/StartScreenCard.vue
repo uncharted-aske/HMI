@@ -58,7 +58,7 @@
   }
 </script>
 <style lang="scss" scoped>
-@import '../../styles/variables';
+@import '../../../../../../styles/variables';
 
   .card-container {
     height: 233px;
