@@ -1,5 +1,5 @@
 import { createLocalVue } from '@vue/test-utils';
-import { createRouter } from '../src/router';
+import Router from '../src/router';
 
 describe('router.spec', function () {
   it('registers the router', function () {
@@ -8,7 +8,7 @@ describe('router.spec', function () {
     chai.expect('$route' in localVue.prototype).to.equal(false);
     chai.expect('$router' in localVue.prototype).to.equal(false);
 
-    createRouter(localVue);
+    Router.getRouter(localVue);
 
     chai.expect('$route' in localVue.prototype).to.equal(true);
     chai.expect('$router' in localVue.prototype).to.equal(true);

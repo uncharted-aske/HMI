@@ -42,12 +42,23 @@ const state: ModelsState = {
       },
       type: 'computational',
     },
+    {
+      id: 4,
+      metadata: SIR.metadata,
+      graph: {
+        abstract: _.pick(SIR, ['nodes', 'edges', 'groups']),
+        detailed: _.pick(SIRGrFN, ['nodes', 'edges', 'groups']),
+      },
+      type: 'knowledge',
+    },
   ],
 };
 
 const getters: GetterTree<ModelsState, any> = {
   getSelectedModelId: state => state.selectedModelId,
-  getModelsList: state => state.modelsList,
+  getModelsList: state => {
+    return state.modelsList;
+  },
 };
 
 const mutations: MutationTree<ModelsState> = {
