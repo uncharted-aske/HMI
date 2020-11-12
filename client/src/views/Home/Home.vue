@@ -27,14 +27,15 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
 
-  import { ActionColumnInterface, CardInterface } from '../types/types';
+  import { ActionColumnInterface } from '../../types/types';
+  import { CardInterface } from './types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
-  import SearchBar from '@/components/SearchBar.vue';
+  import SearchBar from './components/SearchBar/SearchBar.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import FacetsPane from '@/components/FacetsPane.vue';
-  import StartScreen from '@/components/StartScreen.vue';
+  import FacetsPane from './components/FacetsPane/FacetsPane.vue';
+  import StartScreen from './components/StartScreen/StartScreen.vue';
 
   // Screenshots
   import CHIMEScreenshot from '@/assets/img/CHIME.png';
@@ -42,7 +43,7 @@
   import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
 
   // Services
-  import * as modelsService from '../services/ModelsService';
+  import * as modelsService from '../../services/ModelsService';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },

@@ -30,19 +30,20 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { ActionColumnInterface, ModelInterface, ModelComponentMetadataInterface, GraphInterface, GraphNodeInterface } from '../types/types';
+  import { ActionColumnInterface, ModelInterface, ModelComponentMetadataInterface } from '../../../../types/types';
+  import { GraphInterface, GraphNodeInterface } from '../../types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
-  import SearchBar from '@/components/SearchBar.vue';
-  import Counters from '@/components/Counters.vue';
+  import SearchBar from './components/SearchBar/SearchBar.vue';
+  import Counters from '../../components/Counters/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPane from '@/components/MetadataPane.vue';
-  import FacetsPane from '@/components/FacetsPane.vue';
-  import EpiGraph from '@/components/EpiGraph.vue';
+  import MetadataPane from '../../components/MetadataPane/MetadataPane.vue';
+  import FacetsPane from './components/FacetsPane/FacetsPane.vue';
+  import EpiGraph from './components/EpiGraph/EpiGraph.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import DrilldownMetadataPane from '@/components/DrilldownMetadataPane.vue';
-  import HierarchySlider from '@/components/HierarchySlider.vue';
+  import DrilldownMetadataPane from '../../components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  import HierarchySlider from './components/HierarchySlider/HierarchySlider.vue';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
