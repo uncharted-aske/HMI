@@ -127,7 +127,7 @@ export const formatHierarchyNodeData = (root) => {
   }
   if (root.metadata && root.data.metadata.attributes) {
     root.role = root.data.metadata.attributes[0].code_role;
-  }  
+  }
   if (root.children) {
     root.nodes = root.children;
     delete root.children;

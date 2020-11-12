@@ -111,8 +111,7 @@ export default class EpiModelRenderer extends SVGRenderer {
             // Emphasize model code
             if (role && role === 'model') {
               return 6;
-            }
-            else return 1;
+            } else return 1;
           });
 
         // Special encodings for initial condition nodes
