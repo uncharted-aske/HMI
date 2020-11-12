@@ -46,8 +46,8 @@ const state: ModelsState = {
       id: 4,
       metadata: SIR.metadata,
       graph: {
-        abstract: _.pick(SIR, ['nodes', 'edges', 'groups']),
-        detailed: _.pick(SIRGrFN, ['nodes', 'edges', 'groups']),
+        abstract: _.pick(nestedSIRGrFN, ['nodes', 'edges', 'groups']),
+        detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges', 'groups']),
       },
       type: 'knowledge',
     },
