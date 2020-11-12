@@ -121,9 +121,13 @@ export const formatHierarchyNodeData = (root) => {
   root.concept = root.data.concept;
   root.label = root.data.label;
   root.nodeType = root.data.nodeType;
+  root.metadata = root.data.metadata;
   if (root.nodeType === NODE_TYPES.VARIABLE) {
     root.varType = root.data.varType;
   }
+  if (root.metadata && root.data.metadata.attributes) {
+    root.role = root.data.metadata.attributes[0].code_role;
+  }  
   if (root.children) {
     root.nodes = root.children;
     delete root.children;

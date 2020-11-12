@@ -107,13 +107,12 @@ export default class EpiModelRenderer extends SVGRenderer {
           .style('fill', d => calcNodeColor(d))
           .style('stroke', '#888')
           .style('stroke-width', d => {
-            if (d.data.nodeType === NODE_TYPES.LOOP_CONTAINER) {
-              if (d.data.data.metadata) {
-                if (d.data.data.metadata.role === 'solver') {
-                  return 8;
-                }
-              }
-            } else return 1;
+            const role = d.data.role;
+            // Emphasize model code
+            if (role && role === 'model') {
+              return 6;
+            }
+            else return 1;
           });
 
         // Special encodings for initial condition nodes
