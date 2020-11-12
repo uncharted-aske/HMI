@@ -10,10 +10,11 @@
 
   import { GraphInterface } from '../../../../types/types';
 
-  import EpiModelRenderer from '../../../../../../graphs/elk/EpiModelRenderer.js';
-  import { layered } from '../../../../../../graphs/elk/ElkStrategies.js';
-  import { showTooltip, hideTooltip } from '../../../../../../utils/SVGUtil.js';
-  import { calculateNeighborhood } from '../../../../../../utils/GraphUtil.js';
+  import EpiModelRenderer from '../../../../../../graphs/svg/EpiModelRenderer.js';
+  import ELKAdapter from '../../../../../../graphs/svg/elk/adapter.js';
+  import { layered } from '../../../../../../graphs/svg//elk/layouts.js';
+  import { hierarchyFn, showTooltip, hideTooltip } from '../../../../../../utils/SVGUtil.js';
+  import { calculateNeighborhood, formatHierarchyNodeData } from '../../../../../../graphs/svg/util.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
