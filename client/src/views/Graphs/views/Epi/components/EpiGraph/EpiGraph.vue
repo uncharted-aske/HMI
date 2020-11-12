@@ -13,7 +13,7 @@
   import EpiModelRenderer from '../../../../../../graphs/svg/EpiModelRenderer.js';
   import ELKAdapter from '../../../../../../graphs/svg/elk/adapter.js';
   import { layered } from '../../../../../../graphs/svg//elk/layouts.js';
-  import { hierarchyFn, showTooltip, hideTooltip } from '../../../../../../utils/SVGUtil.js';
+  import { hierarchyFn } from '../../../../../../utils/SVGUtil.js';
   import { calculateNeighborhood, formatHierarchyNodeData } from '../../../../../../graphs/svg/util.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
@@ -64,7 +64,7 @@
         this.renderer.hideNeighbourhood();
       });
 
-      //TO FIX:
+      // TO FIX:
       // this.renderer.setCallback('nodeMouseEnter', (node) => {
       //   const nodeData = node.datum();
       //   let nodeCoords = [];
@@ -73,7 +73,7 @@
       //   //   // console.log(nodeData);
       //   //   nodeCoords = [nodeData.x, nodeData.y];
       //   //   console.log(nodeCoords);
-      //   // } 
+      //   // }
       //   // else {
       //     // // For nodes inside groups
       //     // const groups = this.renderer.layout.groups;
