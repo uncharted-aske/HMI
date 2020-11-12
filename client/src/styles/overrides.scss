@@ -1,8 +1,14 @@
+@import "variables";
+
 //Navigation tabs
 .nav-item.underlined {
-    border-bottom: 2px solid $selection;
+  border-bottom: 2px solid $selection;
+  color: #ffffff;
+  .nav-link {
     color: #ffffff;
-    .nav-link {
-      color: #ffffff;
-    }
   }
+}
+
+div#lex-assistant-box ul li.selectable.active {
+  background-color: $selection;
+}
