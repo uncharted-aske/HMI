@@ -174,8 +174,8 @@ export default class EpiModelRenderer extends SVGRenderer {
   showNeighborhood ({ nodes, edges }) {
     const chart = this.chart;
     // FIXME: not very efficient
-    const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => { // Just takes into account leaf nodes
-      return !d.nodes && !nodes.map(node => node.id).includes(d.id);
+    const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => {
+      return !nodes.map(node => node.id).includes(d.id);
     });
 
     nonNeighborNodes.style('opacity', 0.1);
