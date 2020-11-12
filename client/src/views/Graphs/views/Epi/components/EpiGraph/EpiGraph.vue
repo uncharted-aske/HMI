@@ -94,7 +94,8 @@
       const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one
       formatHierarchyNodeData(hierarchyNodes); // Refines this hierarchical structure to a format that can be used by the renderer
       const edges = this.graph.edges;
-      this.renderer.setData({ nodes: [hierarchyNodes], edges });
+      const graph = {nodes: hierarchyNodes, edges};
+      this.renderer.setData(graph);
       this.renderer.render();
     }
   }
