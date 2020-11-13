@@ -24,7 +24,7 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { ActionColumnInterface, ModelInterface } from '../../../../types/types';
+  import { ActionColumnInterface, ModelInterface } from '@/types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';

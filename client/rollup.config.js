@@ -121,7 +121,10 @@ function pluginsForType (type, env) {
       }),
       alias({
         entries: [
-          { find: /^@\/(.*)$/, replacement: path.join(__dirname, 'src/', '$1') },
+          {
+            find: '@',
+            replacement: path.resolve(__dirname, 'src'),
+          },
         ],
       }),
       resolve({
@@ -140,7 +143,15 @@ function pluginsForType (type, env) {
         style: {
           preprocessOptions: {
             scss: {
-              includePaths: env === environments.DEV ? ['../node_modules'] : ['./node_modules'],
+              importer: [
+                function (url) {
+                  return {
+                    file: url
+                      .replace(/^~/, `${env === environments.DEV ? '../node_modules' : './node_modules'}/`)
+                      .replace(/^@/, 'src'),
+                  };
+                },
+              ],
             },
           },
         },

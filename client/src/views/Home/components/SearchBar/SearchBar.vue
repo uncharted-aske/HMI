@@ -12,10 +12,10 @@
   import { Watch } from 'vue-property-decorator';
   import _ from 'lodash';
   import { Lex, ValueState } from '@uncharted.software/lex/dist/lex';
-  import KeyValuePill from '../../../../search/pills/KeyValuePill';
-  import { QUERY_FIELDS_MAP } from '../../../../utils/QueryFieldsUtil';
-  import * as filtersUtil from '../../../../utils/FiltersUtil';
-  import * as modelTypeUtil from '../../../../utils/ModelTypeUtil';
+  import KeyValuePill from '@/search/pills/KeyValuePill';
+  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
+  import * as filtersUtil from '@/utils/FiltersUtil';
+  import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   @Component
   export default class SearchBar extends Vue {
@@ -98,7 +98,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../../../../styles/variables";
+@import "@/styles/variables";
 
 .search-bar-container {
   height: $secondary-bar-width;
@@ -110,6 +110,6 @@
 
 <style lang="scss">
 // Note: Scoped imports not attached to rendered elements
-@import "@uncharted.software/lex/dist/lex.scss";
+@import "~@uncharted.software/lex/dist/lex.scss";
 
 </style>

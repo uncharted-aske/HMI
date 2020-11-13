@@ -1,4 +1,4 @@
-import { QueryFieldMap } from '../types/types';
+import { QueryFieldMap } from '@/types/types';
 
 /**
  * Marking a field as searchable makes known to LEX.

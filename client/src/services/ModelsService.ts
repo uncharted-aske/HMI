@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
-import { MODEL_TYPE_OPTIONS } from '../utils/ModelTypeUtil';
-import { ModelInterface } from '../types/types';
+import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
+import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
+import { ModelInterface } from '@/types/types';
 
 const isModelFiltered = (model: ModelInterface, filters: any): boolean => {
   if (!filters) return false;

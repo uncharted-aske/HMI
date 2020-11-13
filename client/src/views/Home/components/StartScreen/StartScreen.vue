@@ -43,7 +43,7 @@
 </script>
 
 <style lang="scss">
-@import "../../../../styles/variables";
+@import "@/styles/variables";
 
 .start-screen-container {
   height: calc(#{$content-full-height} - #{$secondary-bar-width});
