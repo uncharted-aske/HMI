@@ -7,6 +7,7 @@ import CHIME from '../../static/uncharted_chime.json';
 import nestedCHIMEGrFN from '../../static/nested-CHIME-SIR-GrFN.json';
 
 import SIR from '../../static/uncharted_sir.json';
+import nestedSIRCAG from '../../static/nested-SIR-simple-CAG.json';
 import nestedSIRGrFN from '../../static/nested-SIR-simple-GrFN.json';
 
 import DoubleEpi from '../../static/uncharted_double_epi.json';
