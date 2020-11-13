@@ -68,7 +68,8 @@ export default class EpiModelRenderer extends SVGRenderer {
         .transition()
         .duration(1000)
         .attr('width', d => d.width)
-        .attr('height', d => d.height);
+        .attr('height', d => d.height)
+        .style('fill', d => calcNodeColor(d));
 
       if (selection.datum().collapsed === true) {
         const numChildren = selection.datum().data.nodes.length;
