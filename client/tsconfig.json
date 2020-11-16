@@ -15,7 +15,7 @@
         "baseUrl": ".",
         "paths": {},
         "allowSyntheticDefaultImports": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
     },
-    "include": ["src"]
+    "include": ["src", "index.d.ts"],
 }
