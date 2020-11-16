@@ -25,7 +25,7 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-  import ModalKnowledge from './components/ModelKnowledge/ModalKnowledge.vue';
+  import ModalKnowledge from './components/ModalKnowledge/ModalKnowledge.vue';
 
   import FirstSnippet from '@/assets/img/SnippetKnowledge1.png';
   import SecondSnippet from '@/assets/img/SnippetKnowledge2.png';
