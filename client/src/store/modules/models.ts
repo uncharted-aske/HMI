@@ -1,16 +1,16 @@
 import _ from 'lodash';
 import { GetterTree, MutationTree } from 'vuex';
 
-import { ModelsState } from '../../types/types';
+import { ModelsState } from '@/types/types';
 
-import CHIME from '../../static/uncharted_chime.json';
-import nestedCHIMEGrFN from '../../static/nested-CHIME-SIR-model-GrFN.json';
+import CHIME from '@/static/uncharted_chime.json';
+import nestedCHIMEGrFN from '@/static/nested-CHIME-SIR-model-GrFN.json';
 
-import SIR from '../../static/uncharted_sir.json';
-import nestedSIRGrFN from '../../static/nested-SIR-simple-GrFN.json';
+import SIR from '@/static/uncharted_sir.json';
+import nestedSIRGrFN from '@/static/nested-SIR-simple-GrFN.json';
 
-import DoubleEpi from '../../static/uncharted_double_epi.json';
-import nestedDoubleEpiGrFN from '../../static/nested-SARS-COV1-SEIRP-GrFN.json';
+import DoubleEpi from '@/static/uncharted_double_epi.json';
+import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 
 const state: ModelsState = {
   selectedModelId: null,

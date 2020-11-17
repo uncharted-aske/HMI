@@ -21,7 +21,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../../../../../../styles/variables";
+@import "@/styles/variables";
 
 .hierarchy-slider-container {
     cursor: pointer;

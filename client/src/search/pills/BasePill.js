@@ -4,8 +4,8 @@ import {
 
 import BinaryRelationState from '../BinaryRelationState';
 
-import * as filtersUtil from '../../utils/FiltersUtil';
-import * as lexUtil from '../../utils/LexUtil';
+import * as filtersUtil from '@/utils/FiltersUtil';
+import * as lexUtil from '@/utils/LexUtil';
 
 export default class BasePill {
   /**

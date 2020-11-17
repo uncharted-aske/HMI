@@ -8,14 +8,14 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import { GraphInterface } from '../../../../types/types';
+  import { GraphInterface } from '@/views/Graphs/types/types';
 
-  import EpiModelRenderer from '../../../../../../graphs/svg/EpiModelRenderer.js';
-  import ELKAdapter from '../../../../../../graphs/svg/elk/adapter.js';
-  import { layered } from '../../../../../../graphs/svg/elk/layouts';
-  import { formatHierarchyNodeData } from '../../../../../../graphs/svg/util.js';
-  import { hierarchyFn } from '../../../../../../utils/SVGUtil.js';
-  import { calculateNeighborhood } from '../../../../../../utils/GraphUtil.js';
+  import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer.js';
+  import ELKAdapter from '@/graphs/svg/elk/adapter.js';
+  import { layered } from '@/graphs/svg/elk/layouts';
+  import { formatHierarchyNodeData } from '@/graphs/svg/util.js';
+  import { hierarchyFn } from '@/utils/SVGUtil.js';
+  import { calculateNeighborhood } from '@/utils/GraphUtil.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -99,7 +99,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../../../../../../styles/variables";
+@import "@/styles/variables";
 
 .epi-graph-container {
   height: calc(#{$content-full-height} - #{$secondary-bar-width} - 25px);
