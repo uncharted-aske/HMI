@@ -21,7 +21,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../../styles/variables";
+@import "@/styles/variables";
 
 .close-button {
   font-size: 16px;

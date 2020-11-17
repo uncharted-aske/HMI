@@ -14,7 +14,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
+@import "@/styles/variables";
 
 .action-column-container {
   position: relative;

@@ -18,8 +18,8 @@
   import _ from 'lodash';
   import '@uncharted.software/facets-core';
   import { FacetTerms, FacetTermsData, FacetTermsSelection, FacetTermsSubselection } from '@uncharted.software/facets-core/dist/types/facet-terms/FacetTerms';
-  import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
-  import { MODEL_TYPE_INDEX } from '../utils/ModelTypeUtil';
+  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
+  import { MODEL_TYPE_INDEX } from '@/utils/ModelTypeUtil';
 
   @Component
   export default class Facets extends Vue {

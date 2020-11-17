@@ -53,7 +53,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables";
+@import "@/styles/variables";
 
 .modal-mask {
   position: fixed;

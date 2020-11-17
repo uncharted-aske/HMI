@@ -99,7 +99,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../../../../../../styles/variables";
+@import "@/styles/variables";
 
 .epi-graph-container {
   height: calc(#{$content-full-height} - #{$secondary-bar-width} - 25px);

@@ -27,7 +27,7 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
 
-  import { ActionColumnInterface } from '../../types/types';
+  import { ActionColumnInterface } from '@/types/types';
   import { CardInterface } from './types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
