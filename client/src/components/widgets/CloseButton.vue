@@ -24,9 +24,10 @@
 @import "../../styles/variables";
 
 .close-button {
+  z-index: 10;
   font-size: 16px;
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
