@@ -9,6 +9,10 @@
   }
 }
 
-div#lex-assistant-box ul li.selectable.active {
-  background-color: $selection;
+div#lex-assistant-box {
+  margin-top: 7px;
+
+  ul li.selectable.active {
+    background-color: $selection;
+  }
 }

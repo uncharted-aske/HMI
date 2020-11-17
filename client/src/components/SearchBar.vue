@@ -107,6 +107,7 @@
 }
 
 .search-bar-container::v-deep .lex-box {
+  display: flex;
   height: $secondary-bar-width;
   box-shadow: none;
   border-color: $selection;
