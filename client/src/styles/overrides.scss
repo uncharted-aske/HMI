@@ -16,3 +16,24 @@ div#lex-assistant-box {
     background-color: $selection;
   }
 }
+
+.facet-container {
+  $facet-terms-muted: #{$muted};
+  $facet-terms-muted-hover: #{$muted-highlight};
+  $facet-terms-hover: #{$selection-highlight};
+  $facet-terms-selected: #{$selection};
+
+  --facet-terms-bar-0-selected: #{$facet-terms-selected};
+  --facet-terms-bar-0-selected-contrast: #{$facet-terms-selected};
+  --facet-terms-bar-0-selected-contrast-hover: #{$facet-terms-hover};
+  --facet-terms-bar-0-muted: #{$facet-terms-muted};
+  --facet-terms-bar-0-muted-contrast-hover: #{$facet-terms-muted-hover};
+
+  --facet-terms-bar-1-selected: #{$facet-terms-selected};
+  --facet-terms-bar-1-selected-contrast: #{$facet-terms-selected};
+  --facet-terms-bar-1-selected-contrast-hover: #{$facet-terms-hover};
+  --facet-terms-bar-1-muted: #{$facet-terms-muted};
+  --facet-terms-bar-1-muted-contrast-hover: #{$facet-terms-muted-hover};
+
+  --facet-terms-tick-color: #{$facet-terms-hover};
+}
