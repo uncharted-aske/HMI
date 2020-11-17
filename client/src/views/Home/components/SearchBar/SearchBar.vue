@@ -106,6 +106,17 @@
   border: 1px solid rgba(207, 216, 220, .5);
 }
 
+.search-bar-container::v-deep .lex-box {
+  display: flex;
+  height: $secondary-bar-width;
+  box-shadow: none;
+  border-color: $selection;
+}
+
+.search-bar-container::v-deep .lex-box:not(.active) {
+  border: none;
+}
+
 </style>
 
 <style lang="scss">
