@@ -29,9 +29,9 @@
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from './components/SearchBar/SearchBar.vue';
-  import Counters from '../../components/Counters/Counters.vue';
+  import Counters from '.@/views/Graphs/components/Counters/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPane from '../../components/MetadataPane/MetadataPane.vue';
+  import MetadataPane from '@/views/Graphs/components/Counters/Counters.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
 
   const ACTIONS = [
