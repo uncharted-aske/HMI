@@ -20,7 +20,6 @@ export interface GraphGroupInterface {
 export interface GraphInterface {
   nodes: GraphNodeInterface[],
   edges: GraphEdgeInterface[],
-  groups: GraphGroupInterface[]
 }
 
 export interface ModelGraphInterface {
