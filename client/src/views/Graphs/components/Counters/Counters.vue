@@ -26,7 +26,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../../../../styles/variables";
+@import "@/styles/variables";
 
 .counters-container {
   height: calc(#{$secondary-bar-width} - 15px);

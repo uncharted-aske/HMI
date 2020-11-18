@@ -13,7 +13,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../../../../../../styles/variables";
+@import "@/styles/variables";
 
 .search-bar-container {
   height: $secondary-bar-width;

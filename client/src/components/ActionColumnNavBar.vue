@@ -39,7 +39,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/variables';
+@import '@/styles/variables';
 
 .action-column-nav-bar {
   margin: 0 auto;

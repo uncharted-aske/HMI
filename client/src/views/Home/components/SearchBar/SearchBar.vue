@@ -12,10 +12,10 @@
   import { Watch } from 'vue-property-decorator';
   import _ from 'lodash';
   import { Lex, ValueState } from '@uncharted.software/lex/dist/lex';
-  import KeyValuePill from '../../../../search/pills/KeyValuePill';
-  import { QUERY_FIELDS_MAP } from '../../../../utils/QueryFieldsUtil';
-  import * as filtersUtil from '../../../../utils/FiltersUtil';
-  import * as modelTypeUtil from '../../../../utils/ModelTypeUtil';
+  import KeyValuePill from '@/search/pills/KeyValuePill';
+  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
+  import * as filtersUtil from '@/utils/FiltersUtil';
+  import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   @Component
   export default class SearchBar extends Vue {
@@ -98,7 +98,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../../../../styles/variables";
+@import "@/styles/variables";
 
 .search-bar-container {
   height: $secondary-bar-width;
@@ -106,10 +106,21 @@
   border: 1px solid rgba(207, 216, 220, .5);
 }
 
+.search-bar-container::v-deep .lex-box {
+  display: flex;
+  height: $secondary-bar-width;
+  box-shadow: none;
+  border-color: $selection;
+}
+
+.search-bar-container::v-deep .lex-box:not(.active) {
+  border: none;
+}
+
 </style>
 
 <style lang="scss">
 // Note: Scoped imports not attached to rendered elements
-@import "@uncharted.software/lex/dist/lex.scss";
+@import "~@uncharted.software/lex/dist/lex.scss";
 
 </style>

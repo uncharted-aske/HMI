@@ -1,4 +1,4 @@
-import { QUERY_FIELDS_MAP } from '../utils/QueryFieldsUtil';
+import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import * as modelsService from './ModelsService';
 
 const fetchFacets = (models: Array<any>, filters = []): any => {

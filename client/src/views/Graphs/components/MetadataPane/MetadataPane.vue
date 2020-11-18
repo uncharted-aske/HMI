@@ -32,7 +32,7 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-  import { ModelMetadataInterface } from '../../../../types/types';
+  import { ModelMetadataInterface } from '@/types/types';
 
   @Component
   export default class MetadataPane extends Vue {
