@@ -10,9 +10,6 @@
 
   import { GraphInterface } from '@/views/Graphs/types/types';
 
-  import { SVGRenderer } from 'compound-graph';
-
-
   import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
@@ -48,24 +45,24 @@
         renderMode: 'delta',
       });
 
-    //   this.renderer.setCallback('nodeClick', (node) => {
-    //     // this.$emit('node-click', node.datum().data); // TO FIX
-    //     const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
-    //     this.renderer.showNeighborhood(neighborhood);
-    //   });
+      this.renderer.setCallback('nodeClick', (node) => {
+        // this.$emit('node-click', node.datum().data); // TO FIX
+        const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
+        this.renderer.showNeighborhood(neighborhood);
+      });
 
-    //  // Collapse/Expand
-    //  this.renderer.setCallback('nodeDblClick', (node) => {
-    //     if (!node.datum().collapsed || node.datum().collapsed === false) {
-    //       this.renderer.collapse(node.datum().id);
-    //     } else {
-    //       this.renderer.expand(node.datum().id);
-    //     }
-    //   });
+     // Collapse/Expand
+     this.renderer.setCallback('nodeDblClick', (node) => {
+        if (!node.datum().collapsed || node.datum().collapsed === false) {
+          this.renderer.collapse(node.datum().id);
+        } else {
+          this.renderer.expand(node.datum().id);
+        }
+      });
 
-    //   this.renderer.setCallback('backgroundDblClick', () => {
-    //     this.renderer.hideNeighbourhood();
-    //   });
+      this.renderer.setCallback('backgroundDblClick', () => {
+        this.renderer.hideNeighbourhood();
+      });
 
       // TO FIX:
       // this.renderer.setCallback('nodeMouseEnter', (node) => {
