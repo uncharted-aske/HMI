@@ -19,12 +19,6 @@ export const VARIABLE_TYPES = {
   INTERNAL_VARIABLE: 'internal_variable',
 };
 
-export const VARIABLE_TYPES_COLOR_MAPPINGS = {
-  MODEL_VARIABLE: '#0091EA',
-  PARAMETER: '#ffc04d',
-};
-
-export const EDGES_COLOR = '#6c757d';
 
 /**
  * Recursively traverse a graph that looks like

@@ -5,7 +5,8 @@ import { SVGRenderer } from 'compound-graph';
 
 import { EpiModelRendererOptionsInterface, SubgraphInterface } from '@/graphs/svg/types/types';
 
-import { NODE_TYPES, VARIABLE_TYPES, EDGES_COLOR, calcNodeColor } from '@/graphs/svg/util.js';
+import { calcNodeColor, NODE_TYPES, VARIABLE_TYPES } from '@/graphs/svg/util.js';
+import { Colors } from '@/graphs/svg/encodings.ts';
 import SVGUtil from '@/utils/SVGUtil.js';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
@@ -42,7 +43,7 @@ export default class EPIModelRenderer extends SVGRenderer {
       .attr('cursor', 'pointer')
       .attr('d', d => pathFn(d.points))
       .style('fill', 'none')
-      .style('stroke', EDGES_COLOR)
+      .style('stroke', Colors.EDGES)
       .style('stroke-width', 2)
       .attr('marker-end', d => {
         const source = d.data.source.replace(/\s/g, '');
