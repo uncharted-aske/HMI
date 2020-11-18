@@ -9,6 +9,9 @@ import SVGUtil from '@/utils/SVGUtil.js';
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
 export default class EPIModelRenderer extends SVGRenderer {
+  constructor(any) {
+    super(any);
+  }
   renderEdgeRemoved (edgeSelection) {
     edgeSelection.each(function () {
       d3.select(this)

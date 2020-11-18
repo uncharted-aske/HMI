@@ -10,40 +10,43 @@
 
   import { GraphInterface } from '@/views/Graphs/types/types';
 
-  import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
-  // import ELKAdapter from '../../../../../../graphs/svg/elk/adapter.js';
-  // import { layered } from '../../../../../../graphs/svg//elk/layouts.js';
-  // import { hierarchyFn } from '../../../../../../utils/SVGUtil.js';
-  // import { calculateNeighborhood, formatHierarchyNodeData } from '../../../../../../graphs/svg/util.js';
+  import { SVGRenderer } from 'compound-graph';
 
-  // const DEFAULT_RENDERING_OPTIONS = {
-  //   nodeWidth: 120,
-  //   nodeHeight: 40,
-  //   layout: layered,
-  // };
+
+  import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
+  import ELKAdapter from '@/graphs/svg/elk/adapter.js';
+  import { layered } from '@/graphs/svg//elk/layouts.js';
+  import { hierarchyFn } from '@/utils/SVGUtil.js';
+  import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
+
+  const DEFAULT_RENDERING_OPTIONS = {
+    nodeWidth: 120,
+    nodeHeight: 40,
+    layout: layered,
+  };
 
   @Component
   export default class EpiGraph extends Vue {
     @Prop({ default: null }) graph: GraphInterface;
 
-    // renderingOptions = DEFAULT_RENDERING_OPTIONS;
-    // renderer = null;
+    renderingOptions = DEFAULT_RENDERING_OPTIONS;
+    renderer = null;
 
-    // @Watch('graph')
-    // graphChanged (): void {
-    //   this.refresh();
-    // }
+    @Watch('graph')
+    graphChanged (): void {
+      this.refresh();
+    }
 
-    // created (): void {
-    //   this.renderer = null;
-    // }
+    created (): void {
+      this.renderer = null;
+    }
 
     mounted (): void {
-    //   this.renderer = new EpiModelRenderer({
-    //     el: this.$refs.graph,
-    //     adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
-    //     renderMode: 'delta',
-    //   });
+      this.renderer = new EpiModelRenderer({
+        el: this.$refs.graph,
+        adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
+        renderMode: 'delta',
+      });
 
     //   this.renderer.setCallback('nodeClick', (node) => {
     //     // this.$emit('node-click', node.datum().data); // TO FIX
@@ -91,12 +94,12 @@
     }
 
     refresh (): void {
-      // const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one
-      // formatHierarchyNodeData(hierarchyNodes); // Refines this hierarchical structure to a format that can be used by the renderer
-      // const edges = this.graph.edges;
-      // const graph = { nodes: [hierarchyNodes], edges };
-      // this.renderer.setData(graph);
-      // this.renderer.render();
+      const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one
+      formatHierarchyNodeData(hierarchyNodes); // Refines this hierarchical structure to a format that can be used by the renderer
+      const edges = this.graph.edges;
+      const graph = { nodes: [hierarchyNodes], edges };
+      this.renderer.setData(graph);
+      this.renderer.render();
     }
   }
 </script>
