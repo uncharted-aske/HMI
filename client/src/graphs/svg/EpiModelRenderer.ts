@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import { SVGRenderer } from 'compound-graph';
 
-import { EpiModelRendererOptionsInterface } from '@/graphs/svg/types/types';
+import { EpiModelRendererOptionsInterface, SubgraphInterface } from '@/graphs/svg/types/types';
 
 import { NODE_TYPES, VARIABLE_TYPES, EDGES_COLOR, calcNodeColor } from '@/graphs/svg/util.js';
 import SVGUtil from '@/utils/SVGUtil.js';
@@ -11,7 +11,7 @@ import SVGUtil from '@/utils/SVGUtil.js';
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
 export default class EPIModelRenderer extends SVGRenderer {
-  constructor (options:any) {
+  constructor (options:EpiModelRendererOptionsInterface) {
     super(options);
   }
 
@@ -157,9 +157,11 @@ export default class EPIModelRenderer extends SVGRenderer {
     chart.selectAll('.edge').style('opacity', 1);
   }
 
-  showNeighborhood ({ nodes, edges }): void {
+  showNeighborhood (subgraph: SubgraphInterface): void {
     const chart = this.chart;
     // FIXME: not very efficient
+    const nodes = subgraph.nodes;
+    const edges = subgraph.edges;
     const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => {
       return !nodes.map(node => node.id).includes(d.id);
     });
