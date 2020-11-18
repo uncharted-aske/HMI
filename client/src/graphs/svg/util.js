@@ -19,7 +19,6 @@ export const VARIABLE_TYPES = {
   INTERNAL_VARIABLE: 'internal_variable',
 };
 
-
 /**
  * Recursively traverse a graph that looks like
  * {
