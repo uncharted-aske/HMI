@@ -15,7 +15,7 @@ export default class EPIModelRenderer extends SVGRenderer {
     super(options);
   }
 
-  renderEdgeRemoved (edgeSelection: any): void {
+  renderEdgeRemoved (edgeSelection: d3.Selection<any, any, any, any>): void {
     edgeSelection.each(function () {
       d3.select(this)
         .transition()
@@ -27,16 +27,16 @@ export default class EPIModelRenderer extends SVGRenderer {
     });
   }
 
-  renderEdgeUpdated (edgeSelection: any): void {
+  renderEdgeUpdated (edgeSelection: d3.Selection<any, any, any, any>): void {
     edgeSelection
       .selectAll('.edge-path')
       .attr('d', d => {
-        return pathFn(d.points);
+        return pathFn((d as any).points);
       })
-      .style('opacity', d => d.collapsed ? 0 : 1); // FIXME: This is a hack and edges are still clickable
+      .style('opacity', d => (d as any).collapsed ? 0 : 1); // FIXME: This is a hack and edges are still clickable
   }
 
-  renderEdgeAdded (edgeSelection: any): void {
+  renderEdgeAdded (edgeSelection: d3.Selection<any, any, any, any>): void {
     edgeSelection.append('path')
       .classed('edge-path', true)
       .attr('cursor', 'pointer')
@@ -56,7 +56,7 @@ export default class EPIModelRenderer extends SVGRenderer {
       });
   }
 
-  renderNodeRemoved (nodeSelection: any): void {
+  renderNodeRemoved (nodeSelection: d3.Selection<any, any, any, any>): void {
     nodeSelection.each(function () {
       d3.select(this)
         .transition()
@@ -68,7 +68,7 @@ export default class EPIModelRenderer extends SVGRenderer {
     });
   }
 
-  renderNodeUpdated (nodeSelection: any): void {
+  renderNodeUpdated (nodeSelection: d3.Selection<any, any, any, any>): void {
     nodeSelection.each(function () {
       const selection = d3.select(this);
       selection.select('rect')
@@ -100,7 +100,7 @@ export default class EPIModelRenderer extends SVGRenderer {
     });
   }
 
-  renderNodeAdded (nodeSelection: any): void {
+  renderNodeAdded (nodeSelection: d3.Selection<any, any, any, any>): void {
     nodeSelection.each(function () {
       const selection = d3.select(this);
       selection.selectAll('*').remove();
