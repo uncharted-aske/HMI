@@ -3,16 +3,19 @@ import _ from 'lodash';
 
 import { SVGRenderer } from 'compound-graph';
 
+import { EpiModelRendererOptionsInterface } from '@/graphs/svg/types/types';
+
 import { NODE_TYPES, VARIABLE_TYPES, EDGES_COLOR, calcNodeColor } from '@/graphs/svg/util.js';
 import SVGUtil from '@/utils/SVGUtil.js';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
 export default class EPIModelRenderer extends SVGRenderer {
-  constructor(any) {
-    super(any);
+  constructor (options:any) {
+    super(options);
   }
-  renderEdgeRemoved (edgeSelection) {
+
+  renderEdgeRemoved (edgeSelection: any): void {
     edgeSelection.each(function () {
       d3.select(this)
         .transition()
@@ -24,7 +27,7 @@ export default class EPIModelRenderer extends SVGRenderer {
     });
   }
 
-  renderEdgeUpdated (edgeSelection) {
+  renderEdgeUpdated (edgeSelection: any): void {
     edgeSelection
       .selectAll('.edge-path')
       .attr('d', d => {
@@ -33,7 +36,7 @@ export default class EPIModelRenderer extends SVGRenderer {
       .style('opacity', d => d.collapsed ? 0 : 1); // FIXME: This is a hack and edges are still clickable
   }
 
-  renderEdgeAdded (edgeSelection) {
+  renderEdgeAdded (edgeSelection: any): void {
     edgeSelection.append('path')
       .classed('edge-path', true)
       .attr('cursor', 'pointer')
@@ -53,7 +56,7 @@ export default class EPIModelRenderer extends SVGRenderer {
       });
   }
 
-  renderNodeRemoved (nodeSelection) {
+  renderNodeRemoved (nodeSelection: any): void {
     nodeSelection.each(function () {
       d3.select(this)
         .transition()
@@ -65,22 +68,22 @@ export default class EPIModelRenderer extends SVGRenderer {
     });
   }
 
-  renderNodeUpdated (nodeSelection) {
+  renderNodeUpdated (nodeSelection: any): void {
     nodeSelection.each(function () {
       const selection = d3.select(this);
       selection.select('rect')
         .transition()
         .duration(1000)
-        .attr('width', d => d.width)
-        .attr('height', d => d.height)
+        .attr('width', d => (d as any).width)
+        .attr('height', d => (d as any).height)
         .style('fill', d => calcNodeColor(d));
 
-      if (selection.datum().collapsed === true) {
-        const numChildren = selection.datum().data.nodes.length;
+      if ((selection.datum() as any).collapsed === true) {
+        const numChildren = (selection.datum() as any).data.nodes.length;
         // Added number of children to the collapsed label
         selection.select('text')
           .style('font-weight', 'bold')
-          .text(d => d.label + ' (' + numChildren + ')');
+          .text(d => (d as any).label + ' (' + numChildren + ')');
         selection.append('text')
           .classed('collapsed', true)
           .attr('x', 10)
@@ -90,29 +93,29 @@ export default class EPIModelRenderer extends SVGRenderer {
       } else {
         selection.select('.collapsed').remove();
         selection.select('text') // Restore label
-          .filter(d => d.data.nodeType !== NODE_TYPES.FUNCTION)
+          .filter(d => (d as any).data.nodeType !== NODE_TYPES.FUNCTION)
           .style('font-weight', 'bold')
-          .text(d => d.label);
+          .text(d => (d as any).label);
       }
     });
   }
 
-  renderNodeAdded (nodeSelection) {
+  renderNodeAdded (nodeSelection: any): void {
     nodeSelection.each(function () {
       const selection = d3.select(this);
       selection.selectAll('*').remove();
 
-      if (selection.datum().id !== 'root') { // Don't draw the root node
+      if ((selection.datum() as any).id !== 'root') { // Don't draw the root node
         selection.append('rect')
           .attr('x', 0)
           .attr('rx', 5)
           .attr('y', 0)
-          .attr('width', d => d.width)
-          .attr('height', d => d.height)
+          .attr('width', d => (d as any).width)
+          .attr('height', d => (d as any).height)
           .style('fill', d => calcNodeColor(d))
           .style('stroke', '#888')
           .style('stroke-width', d => {
-            const role = d.data.role;
+            const role = (d as any).data.role;
             // Emphasize model code
             if (role && role === 'model') {
               return 6;
@@ -120,17 +123,17 @@ export default class EPIModelRenderer extends SVGRenderer {
           });
 
         // Special encodings for initial condition nodes
-        if (selection.datum().data.nodeType === NODE_TYPES.VARIABLE) {
+        if ((selection.datum() as any).data.nodeType === NODE_TYPES.VARIABLE) {
           const d = selection.datum();
-          if (d.data.varType) {
-            const type = d.data.varType;
+          if ((d as any).data.varType) {
+            const type = (d as any).data.varType;
             if (type === VARIABLE_TYPES.INITIAL_CONDITION) {
               selection.select('rect').style('stroke-dasharray', 4);
             }
           }
         }
       }
-      if (selection.datum().type === 'custom') {
+      if ((selection.datum() as any).type === 'custom') {
         selection.select('rect').style('stroke-dasharray', 4).style('fill', '#CCF');
       }
     });
@@ -148,13 +151,13 @@ export default class EPIModelRenderer extends SVGRenderer {
       .text(d => d.data.label);
   }
 
-  hideNeighbourhood () {
+  hideNeighbourhood (): void {
     const chart = this.chart;
     chart.selectAll('.node-ui').style('opacity', 1);
     chart.selectAll('.edge').style('opacity', 1);
   }
 
-  showNeighborhood ({ nodes, edges }) {
+  showNeighborhood ({ nodes, edges }): void {
     const chart = this.chart;
     // FIXME: not very efficient
     const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => {
