@@ -91,24 +91,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/variables";
-
-.search-bar-container {
-  height: $secondary-bar-width;
-  background-color: $secondary-bar-bg;
-  border: 1px solid rgba(207, 216, 220, .5);
-}
-
-.search-bar-container::v-deep .lex-box {
-  display: flex;
-  height: $secondary-bar-width;
-  box-shadow: none;
-  border-color: $selection;
-}
-
-.search-bar-container::v-deep .lex-box:not(.active) {
-  border: none;
-}
+@import "@/styles/overrides";
 
 </style>
 
