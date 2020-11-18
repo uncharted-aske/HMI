@@ -27,7 +27,7 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
 
-  import { ActionColumnInterface } from '../../types/types';
+  import { ActionColumnInterface } from '@/types/types';
   import { CardInterface } from './types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
@@ -43,7 +43,7 @@
   import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
 
   // Services
-  import * as modelsService from '../../services/ModelsService';
+  import * as modelsService from '@/services/ModelsService';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },

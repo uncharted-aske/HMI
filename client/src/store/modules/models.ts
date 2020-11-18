@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { GetterTree, MutationTree } from 'vuex';
 
-import { ModelsState } from '../../types/types';
+import { ModelsState } from '@/types/types';
 
 import CHIME from '../../static/uncharted_chime.json';
 import nestedCHIMECAG from '../../static/nested-CHIME-SIR-CAG.json';
