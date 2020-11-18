@@ -3,15 +3,13 @@ import _ from 'lodash';
 
 import { SVGRenderer } from 'compound-graph';
 
-
 import { NODE_TYPES, VARIABLE_TYPES, EDGES_COLOR, calcNodeColor } from '@/graphs/svg/util.js';
 import SVGUtil from '@/utils/SVGUtil.js';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
-export default class EPIGraphRenderer extends SVGRenderer {
-
-    renderEdgeRemoved (edgeSelection) {
+export default class EPIModelRenderer extends SVGRenderer {
+  renderEdgeRemoved (edgeSelection) {
     edgeSelection.each(function () {
       d3.select(this)
         .transition()
@@ -52,7 +50,7 @@ export default class EPIGraphRenderer extends SVGRenderer {
       });
   }
 
-   renderNodeRemoved (nodeSelection) {
+  renderNodeRemoved (nodeSelection) {
     nodeSelection.each(function () {
       d3.select(this)
         .transition()
@@ -147,7 +145,7 @@ export default class EPIGraphRenderer extends SVGRenderer {
       .text(d => d.data.label);
   }
 
-    hideNeighbourhood () {
+  hideNeighbourhood () {
     const chart = this.chart;
     chart.selectAll('.node-ui').style('opacity', 1);
     chart.selectAll('.edge').style('opacity', 1);
@@ -165,5 +163,4 @@ export default class EPIGraphRenderer extends SVGRenderer {
     const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.data.source && edge.target === d.data.target));
     nonNeighborEdges.style('opacity', 0.1);
   }
-
 }

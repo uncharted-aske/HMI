@@ -1,5 +1,8 @@
 import _ from 'lodash';
-
+/**
+ * Node and variable types specified by AUTOMATES for their
+ * CAGs and GrFNs
+ */
 export const NODE_TYPES = {
   VARIABLE: 'variable',
   FUNCTION: 'function',
@@ -7,7 +10,6 @@ export const NODE_TYPES = {
   FUNC_CONTAINER: 'FuncContainer',
   COND_CONTAINER: 'CondContainer',
 };
-
 export const VARIABLE_TYPES = {
   INPUT: 'input',
   OUTPUT: 'output',

@@ -10,7 +10,7 @@
 
   import { GraphInterface } from '@/views/Graphs/types/types';
 
-  // import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
+  import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
   // import ELKAdapter from '../../../../../../graphs/svg/elk/adapter.js';
   // import { layered } from '../../../../../../graphs/svg//elk/layouts.js';
   // import { hierarchyFn } from '../../../../../../utils/SVGUtil.js';
