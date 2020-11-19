@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { Colors } from '@/graphs/svg/encodings.ts';
 /**
  * Node and variable types specified by AUTOMATES for their
  * CAGs and GrFNs
@@ -155,17 +156,17 @@ export const calculateNeighborhood = (graph, node) => {
 
 export const calcNodeColor = (node) => {
   if (node.nodes) {
-    return '#F8F8F8';
+    return Colors.NODES.CONTAINER;
   } else if (node.data.nodeType === NODE_TYPES.VARIABLE) {
     if (node.data.varType) {
       const type = node.data.varType;
       if (type === VARIABLE_TYPES.MODEL_VARIABLE) {
-        return VARIABLE_TYPES_COLOR_MAPPINGS.MODEL_VARIABLE;
+        return Colors.NODES.MODEL_VARIABLE;
       }
       if (type === VARIABLE_TYPES.PARAMETER) {
-        return VARIABLE_TYPES_COLOR_MAPPINGS.PARAMETER;
+        return Colors.NODES.PARAMETER;
       }
     }
   }
-  return '#eeeeee';
+  return Colors.NODES.DEFAULT;
 };
