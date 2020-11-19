@@ -140,10 +140,10 @@ export const calcNodeColor = (node) => {
     return Colors.NODES.CONTAINER;
   } else if (node.data.nodeType === NodeTypes.NODES.VARIABLE) {
     const type = node.data.varType;
-    if (type && type === NodeTypes.NODES.VARIABLES.MODEL_VARIABLE) {
+    if (type && type === NodeTypes.VARIABLES.MODEL_VARIABLE) {
       return Colors.NODES.MODEL_VARIABLE;
     }
-    if (type && type === NodeTypes.NODES.VARIABLES.PARAMETER) {
+    if (type && type === NodeTypes.VARIABLES.PARAMETER) {
       return Colors.NODES.PARAMETER;
     }
   }

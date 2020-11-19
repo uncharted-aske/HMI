@@ -5,9 +5,9 @@ import { SVGRenderer } from 'compound-graph';
 
 import { EpiModelRendererOptionsInterface, SubgraphInterface } from '@/graphs/svg/types/types';
 
-import { calcNodeColor } from '@/graphs/svg/util.js';
-import { Colors, NodeTypes } from '@/graphs/svg/encodings.ts';
-import SVGUtil from '@/utils/SVGUtil.js';
+import { calcNodeColor } from '@/graphs/svg/util';
+import { Colors, NodeTypes } from '@/graphs/svg/encodings';
+import SVGUtil from '@/utils/SVGUtil';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
@@ -133,9 +133,6 @@ export default class EPIModelRenderer extends SVGRenderer {
             }
           }
         }
-      }
-      if ((selection.datum() as any).type === 'custom') {
-        selection.select('rect').style('stroke-dasharray', 4).style('fill', '#CCF');
       }
     });
 
