@@ -1,7 +1,7 @@
 <template>
-  <div class="facet-container">
+  <div class="facet-terms-container">
     <facet-terms
-      ref="facet"
+      ref="facetTerms"
       :data.prop="data"
       :selection.prop="selection"
       :subselection.prop="subselection"
@@ -22,7 +22,7 @@
   import { MODEL_TYPE_INDEX } from '@/utils/ModelTypeUtil';
 
   @Component
-  export default class Facets extends Vue {
+  export default class HMIFacetTerms extends Vue {
     @Prop({ required: true, type: Object }) private data: FacetTermsData;
     @Prop({ required: true, type: Object }) private selection: FacetTermsSelection;
     @Prop({ required: true, type: Array }) private subselection: FacetTermsSubselection;
@@ -34,7 +34,7 @@
     private handleFacetUpdated (event: CustomEvent): void {
       const changedProperties: Map<string, any> = event.detail.changedProperties;
       if (changedProperties.has('selection')) {
-        const facet: FacetTerms = this.$refs.facet as FacetTerms;
+        const facet: FacetTerms = this.$refs.facetTerms as FacetTerms;
         const oldSelection: FacetTermsSelection = event.detail.changedProperties.get('selection') || {};
         const newSelection: FacetTermsSelection = facet.selection || {};
         const added = Object.keys(newSelection).filter(x => !Object.keys(oldSelection).includes(x));

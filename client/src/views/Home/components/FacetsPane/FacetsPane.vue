@@ -1,6 +1,6 @@
 <template>
-  <div class="facets-pane-container">
-    <facets
+  <div class="facetTerms-pane-container">
+    <facetTerms
       :field="queryFieldsMap.MODEL_TYPE.field"
       :data="facetData[queryFieldsMap.MODEL_TYPE.field]"
       :selection="facetSelection[queryFieldsMap.MODEL_TYPE.field]"
@@ -15,14 +15,14 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
   import _ from 'lodash';
-  import Facets from '@/components/Facets.vue';
+  import FacetTerms from '@/components/FacetTerms.vue';
   import * as facetsService from '@/services/FacetsService';
   import * as filtersUtil from '@/utils/FiltersUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
   import { FacetTermsDataMap, FacetTermsSelectionMap, FacetTermsSubselectionMap } from '@/types/types';
 
   const components = {
-    Facets,
+    FacetTerms,
   };
 
   @Component({ components })
@@ -34,13 +34,13 @@
       return QUERY_FIELDS_MAP;
     }
 
-    public get facets (): any {
+    public get facetTerms (): any {
       return Object.keys(QUERY_FIELDS_MAP).map(queryFieldKey => QUERY_FIELDS_MAP[queryFieldKey].field);
     }
 
     public get facetSelection (): FacetTermsSelectionMap {
       const selectionMap = {};
-      this.facets.forEach(facet => {
+      this.facetTerms.forEach(facet => {
         const selection = {};
         const facetClause = filtersUtil.findPositiveFacetClause(this.getFilters, facet);
         if (!_.isEmpty(facetClause)) {
@@ -56,7 +56,7 @@
     public get facetSubselection (): FacetTermsSubselectionMap {
       const subselectionMap = {};
       const facetAggs = facetsService.fetchFacets(this.getModelsList, this.getFilters);
-      this.facets.forEach(facet => {
+      this.facetTerms.forEach(facet => {
         const subselection = facetAggs[facet].map(group => group.ratio);
         subselectionMap[facet] = subselection;
       });
@@ -66,13 +66,13 @@
     public get facetData (): FacetTermsDataMap {
       const dataMap = {};
       const facetAggs = facetsService.fetchFacets(this.getModelsList, []);
-      this.facets.forEach(facet => {
-        const values = facetAggs[facet];
+      this.facetTerms.forEach(facetTerm => {
+        const values = facetAggs[facetTerm];
         const data = {
           values,
           label: 'Model Types',
         };
-        dataMap[facet] = data;
+        dataMap[facetTerm] = data;
       });
       return dataMap;
     }
