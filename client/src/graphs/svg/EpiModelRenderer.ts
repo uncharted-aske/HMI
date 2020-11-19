@@ -5,8 +5,8 @@ import { SVGRenderer } from 'compound-graph';
 
 import { EpiModelRendererOptionsInterface, SubgraphInterface } from '@/graphs/svg/types/types';
 
-import { calcNodeColor, NODE_TYPES, VARIABLE_TYPES } from '@/graphs/svg/util.js';
-import { Colors } from '@/graphs/svg/encodings.ts';
+import { calcNodeColor } from '@/graphs/svg/util.js';
+import { Colors, NodeTypes } from '@/graphs/svg/encodings.ts';
 import SVGUtil from '@/utils/SVGUtil.js';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
@@ -94,7 +94,7 @@ export default class EPIModelRenderer extends SVGRenderer {
       } else {
         selection.select('.collapsed').remove();
         selection.select('text') // Restore label
-          .filter(d => (d as any).data.nodeType !== NODE_TYPES.FUNCTION)
+          .filter(d => (d as any).data.nodeType !== NodeTypes.NODES.FUNCTION)
           .style('font-weight', 'bold')
           .text(d => (d as any).label);
       }
@@ -124,11 +124,11 @@ export default class EPIModelRenderer extends SVGRenderer {
           });
 
         // Special encodings for initial condition nodes
-        if ((selection.datum() as any).data.nodeType === NODE_TYPES.VARIABLE) {
+        if ((selection.datum() as any).data.nodeType === NodeTypes.NODES.VARIABLE) {
           const d = selection.datum();
           if ((d as any).data.varType) {
             const type = (d as any).data.varType;
-            if (type === VARIABLE_TYPES.INITIAL_CONDITION) {
+            if (type === NodeTypes.VARIABLES.INITIAL_CONDITION) {
               selection.select('rect').style('stroke-dasharray', 4);
             }
           }
@@ -143,7 +143,7 @@ export default class EPIModelRenderer extends SVGRenderer {
 
     // Add label for all nodes but FUNCTIONS
     nodeSelection.append('text')
-      .filter(d => d.data.nodeType !== NODE_TYPES.FUNCTION)
+      .filter(d => d.data.nodeType !== NodeTypes.NODES.FUNCTION)
       .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
       .attr('y', d => d.nodes ? -5 : 25)
       .style('fill', '#333')

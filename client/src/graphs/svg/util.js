@@ -1,24 +1,5 @@
 import _ from 'lodash';
-import { Colors } from '@/graphs/svg/encodings.ts';
-/**
- * Node and variable types specified by AUTOMATES for their
- * CAGs and GrFNs
- */
-export const NODE_TYPES = {
-  VARIABLE: 'variable',
-  FUNCTION: 'function',
-  LOOP_CONTAINER: 'LoopContainer',
-  FUNC_CONTAINER: 'FuncContainer',
-  COND_CONTAINER: 'CondContainer',
-};
-export const VARIABLE_TYPES = {
-  INPUT: 'input',
-  OUTPUT: 'output',
-  PARAMETER: 'parameter',
-  MODEL_VARIABLE: 'model_variable',
-  INITIAL_CONDITION: 'initial_condition',
-  INTERNAL_VARIABLE: 'internal_variable',
-};
+import { Colors, NodeTypes } from '@/graphs/svg/encodings.ts';
 
 /**
  * Recursively traverse a graph that looks like
@@ -118,7 +99,7 @@ export const formatHierarchyNodeData = (root) => {
   root.label = root.data.label;
   root.nodeType = root.data.nodeType;
   root.metadata = root.data.metadata;
-  if (root.nodeType === NODE_TYPES.VARIABLE) {
+  if (root.nodeType === NodeTypes.NODES.VARIABLE) {
     root.varType = root.data.varType;
   }
   if (root.metadata && root.data.metadata.attributes) {
@@ -157,15 +138,13 @@ export const calculateNeighborhood = (graph, node) => {
 export const calcNodeColor = (node) => {
   if (node.nodes) {
     return Colors.NODES.CONTAINER;
-  } else if (node.data.nodeType === NODE_TYPES.VARIABLE) {
-    if (node.data.varType) {
-      const type = node.data.varType;
-      if (type === VARIABLE_TYPES.MODEL_VARIABLE) {
-        return Colors.NODES.MODEL_VARIABLE;
-      }
-      if (type === VARIABLE_TYPES.PARAMETER) {
-        return Colors.NODES.PARAMETER;
-      }
+  } else if (node.data.nodeType === NodeTypes.NODES.VARIABLE) {
+    const type = node.data.varType;
+    if (type && type === NodeTypes.NODES.VARIABLES.MODEL_VARIABLE) {
+      return Colors.NODES.MODEL_VARIABLE;
+    }
+    if (type && type === NodeTypes.NODES.VARIABLES.PARAMETER) {
+      return Colors.NODES.PARAMETER;
     }
   }
   return Colors.NODES.DEFAULT;

@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import ELK from 'elkjs/lib/elk.bundled';
 
-import { makeEdgeMaps, traverse, NODE_TYPES } from '@/graphs/svg/util.js';
+import { makeEdgeMaps, traverse } from '@/graphs/svg/util.js';
+import { NodeTypes } from '@/graphs/svg/encodings.ts';
 
 /**
  * Convert graph data structure to a basic graph structure that can be used by the renderer
@@ -78,7 +79,7 @@ const injectELKOptions = (renderGraph, options) => {
     node.ports = ports;
 
     if (!node.nodes || node.nodes.length === 0) {
-      if (node.data.nodeType === NODE_TYPES.FUNCTION) {
+      if (node.data.nodeType === NodeTypes.NODES.FUNCTION) {
         node.width = 15;
         node.height = 15;
       } else {
