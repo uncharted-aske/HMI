@@ -33,7 +33,7 @@ export const pathFn = d3.line()
   .y(d => d.y);
 
 export const hierarchyFn = d3.stratify()
-  .id((d) => d.concept)
+  .id((d) => d.id)
   .parentId((d) => d.parent);
 
 export const hideTooltip = (domlocation) => {

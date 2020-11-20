@@ -27,6 +27,8 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
       ],
       rules: {
+        "no-useless-constructor": "off",
+        "@typescript-eslint/no-useless-constructor": "off",
         '@typescript-eslint/no-parameter-properties': 2,
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/no-var-requires': 2,
