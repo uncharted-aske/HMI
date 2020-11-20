@@ -121,7 +121,7 @@ export const formatHierarchyNodeData = (root) => {
  */
 
 export const calculateNeighborhood = (graph, node) => {
-  const neighborEdges = graph.edges.filter(edge => 
+  const neighborEdges = graph.edges.filter(edge =>
     edge.target === node || edge.source === node).map(edge => ({ source: edge.source, target: edge.target }));
 
   // Reverse-engineer nodes from edges

@@ -157,7 +157,6 @@ export default class EPIModelRenderer extends SVGRenderer {
     const edges = subgraph.edges;
     const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => !nodes.map(node => node.id).includes(d.id));
 
-
     nonNeighborNodes.style('opacity', 0.1);
 
     const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.data.source && edge.target === d.data.target));
