@@ -64,7 +64,7 @@
         this.renderer.hideNeighbourhood();
       });
 
-      // TO FIX:
+      // TO FIX: Enable back tooltip functionality
       // this.renderer.setCallback('nodeMouseEnter', (node) => {
       //   const nodeData = node.datum();
       //   let nodeCoords = [];

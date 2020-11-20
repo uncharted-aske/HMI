@@ -121,11 +121,8 @@ export const formatHierarchyNodeData = (root) => {
  */
 
 export const calculateNeighborhood = (graph, node) => {
-  const neighborEdges = graph.edges.filter(edge => {
-    return edge.target === node || edge.source === node;
-  }).map(edge => {
-    return { source: edge.source, target: edge.target };
-  });
+  const neighborEdges = graph.edges.filter(edge => 
+    edge.target === node || edge.source === node).map(edge => ({ source: edge.source, target: edge.target }));
 
   // Reverse-engineer nodes from edges
   const neighborNodes = _.uniq(_.flatten(neighborEdges.map(edge => {
@@ -140,10 +137,10 @@ export const calcNodeColor = (node) => {
     return Colors.NODES.CONTAINER;
   } else if (node.data.nodeType === NodeTypes.NODES.VARIABLE) {
     const type = node.data.varType;
-    if (type && type === NodeTypes.VARIABLES.MODEL_VARIABLE) {
+    if (type === NodeTypes.VARIABLES.MODEL_VARIABLE) {
       return Colors.NODES.MODEL_VARIABLE;
     }
-    if (type && type === NodeTypes.VARIABLES.PARAMETER) {
+    if (type === NodeTypes.VARIABLES.PARAMETER) {
       return Colors.NODES.PARAMETER;
     }
   }

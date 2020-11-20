@@ -3,17 +3,17 @@ import { GetterTree, MutationTree } from 'vuex';
 
 import { ModelsState } from '@/types/types';
 
-import CHIME from '../../static/uncharted_chime.json';
-import nestedCHIMECAG from '../../static/nested-CHIME-SIR-CAG.json';
-import nestedCHIMEGrFN from '../../static/nested-CHIME-SIR-GrFN.json';
+import CHIME from '@/static/uncharted_chime.json';
+import nestedCHIMECAG from '@/static/nested-CHIME-SIR-CAG.json';
+import nestedCHIMEGrFN from '@/static/nested-CHIME-SIR-GrFN.json';
 
-import SIR from '../../static/uncharted_sir.json';
-import nestedSIRCAG from '../../static/nested-SIR-simple-CAG.json';
-import nestedSIRGrFN from '../../static/nested-SIR-simple-GrFN.json';
+import SIR from '@/static/uncharted_sir.json';
+import nestedSIRCAG from '@/static/nested-SIR-simple-CAG.json';
+import nestedSIRGrFN from '@/static/nested-SIR-simple-GrFN.json';
 
-import DoubleEpi from '../../static/uncharted_double_epi.json';
-import nestedDoubleEpiCAG from '../../static/nested-SARS-COV1-SEIRP-CAG.json';
-import nestedDoubleEpiGrFN from '../../static/nested-SARS-COV1-SEIRP-GrFN.json';
+import DoubleEpi from '@/static/uncharted_double_epi.json';
+import nestedDoubleEpiCAG from '@/static/nested-SARS-COV1-SEIRP-CAG.json';
+import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 
 const state: ModelsState = {
   selectedModelId: null,

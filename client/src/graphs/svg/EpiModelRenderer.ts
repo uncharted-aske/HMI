@@ -118,19 +118,14 @@ export default class EPIModelRenderer extends SVGRenderer {
           .style('stroke-width', d => {
             const role = (d as any).data.role;
             // Emphasize model code
-            if (role && role === 'model') {
-              return 6;
-            } else return 1;
+            return role === 'model' ? 6 : 1;
           });
 
         // Special encodings for initial condition nodes
         if ((selection.datum() as any).data.nodeType === NodeTypes.NODES.VARIABLE) {
           const d = selection.datum();
-          if ((d as any).data.varType) {
-            const type = (d as any).data.varType;
-            if (type === NodeTypes.VARIABLES.INITIAL_CONDITION) {
-              selection.select('rect').style('stroke-dasharray', 4);
-            }
+          if ((d as any).data.varType === NodeTypes.VARIABLES.INITIAL_CONDITION) {
+            selection.select('rect').style('stroke-dasharray', 4);
           }
         }
       }
@@ -160,9 +155,8 @@ export default class EPIModelRenderer extends SVGRenderer {
     // FIXME: not very efficient
     const nodes = subgraph.nodes;
     const edges = subgraph.edges;
-    const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => {
-      return !nodes.map(node => node.id).includes(d.id);
-    });
+    const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => !nodes.map(node => node.id).includes(d.id));
+
 
     nonNeighborNodes.style('opacity', 0.1);
 
