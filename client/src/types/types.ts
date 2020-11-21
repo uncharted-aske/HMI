@@ -1,4 +1,5 @@
 import { FacetTermsData, FacetTermsSelection, FacetTermsSubselection } from '@uncharted.software/facets-core/dist/types/facet-terms/FacetTerms';
+import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
 
 interface ModelMetadataInterface {
   name: string,
@@ -34,6 +35,12 @@ interface ModelsState {
   modelsList: ModelInterface[]
 }
 
+type LexConvertType = 'integer' | 'string';
+type LexConvertTypeMapping = {
+  integer: number,
+  string: string
+}
+
 type QueryFieldKey = 'MODEL_TYPE';
 interface QueryFieldEntry {
   field: string, // id of query field entry
@@ -44,8 +51,8 @@ interface QueryFieldEntry {
   searchDisplay?: string, // text to display on search
   ranged?: boolean, // if search is ranged
   // baseType/lexType defines the type conversion required from/to base/lex types
-  baseType: string,
-  lexType: string
+  baseType: LexConvertType,
+  lexType: LexConvertType
 }
 type QueryFieldMap = Record<QueryFieldKey, QueryFieldEntry>
 
@@ -53,7 +60,7 @@ type FilterOperand = 'and' | 'or';
 
 interface Filter {
   field: QueryFieldKey, // the logical-field to filter
-  values: (string | number)[], // an array of matching values
+  values: LexConvertTypeMapping[LexConvertType][], // an array of matching values
   operand: FilterOperand,
   isNot: boolean, // specifies whether the sub-filter should be negated
 }
@@ -78,6 +85,13 @@ interface FacetTermsDataMap {
   [key: string]: FacetTermsData;
 }
 
+type MappedOptions = (typeof MODEL_TYPE_OPTIONS);
+
+interface MappedOptionStateConfig {
+  mappedOptions: MappedOptions, // Suggestions to be used as mapped options
+  [key: string]: any // Interface extends Lex's ValueState.config. TODO: Generate types for Lex
+}
+
 export {
   ActionColumnInterface,
   ModelInterface,
@@ -94,4 +108,8 @@ export {
   FilterOperand,
   Filter,
   Filters,
+  MappedOptions,
+  MappedOptionStateConfig,
+  LexConvertType,
+  LexConvertTypeMapping,
 };

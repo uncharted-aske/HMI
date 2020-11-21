@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FilterOperand, Filter, Filters, QueryFieldKey } from '@/types/types';
+import { FilterOperand, Filter, Filters, QueryFieldKey, LexConvertTypeMapping, LexConvertType } from '@/types/types';
 
 /**
  * Utility to construct search queries to pass through components, store and route.
@@ -41,7 +41,7 @@ const findPositiveFacetClause = (filters: Filters, field: QueryFieldKey): Filter
   });
 };
 
-const addSearchTerm = (filters: Filters, field: QueryFieldKey, term: string | number, operand: FilterOperand, isNot: boolean): void => {
+const addSearchTerm = (filters: Filters, field: QueryFieldKey, term: LexConvertTypeMapping[LexConvertType], operand: FilterOperand, isNot: boolean): void => {
   const existingClause = _.find(filters.clauses, clause => {
     return clause.field === field &&
       clause.operand === operand &&
@@ -66,7 +66,7 @@ const addSearchTerm = (filters: Filters, field: QueryFieldKey, term: string | nu
   }
 };
 
-const removeSearchTerm = (filters: Filters, field: QueryFieldKey, term: string | number, operand: FilterOperand, isNot: boolean): void => {
+const removeSearchTerm = (filters: Filters, field: QueryFieldKey, term: LexConvertTypeMapping[LexConvertType], operand: FilterOperand, isNot: boolean): void => {
   const existingClause = _.find(filters.clauses, clause => {
     return clause.field === field &&
       clause.operand === operand &&
