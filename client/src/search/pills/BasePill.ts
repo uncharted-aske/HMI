@@ -56,7 +56,13 @@ export default class BasePill {
     this.displayFormatter = formatter;
   }
 
-  lex2Filters (lexItem, filters: Filters): void {
+  /**
+   * Convert lex query state to filters query
+   * @param lexItem - passed from new lex model on lex's 'query changed'
+   * @param filters - Empty filters state
+   */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  lex2Filters (lexItem: any, filters: Filters): void {
     const searchKey = lexItem.field.meta.searchKey;
     const relation = lexItem.relation.key;
     const operand = 'or';
@@ -71,9 +77,9 @@ export default class BasePill {
    * Convert filter query to lex query
    * @param clause - filter clause
    * @param selectedPill - A rich lex compatible object that contains the value and associated meta
-   * @param lexQuery
+   * @param lexQuery - One or more token values (an array of objects of boxed values) to display to overwrite the current lex query with
    */
-  filters2Lex (clause: Filter, selectedPill, lexQuery): void {
+  filters2Lex (clause: Filter, selectedPill: ValueStateValue, lexQuery: any[]): void {
     const values = lexUtil.convertToLex(clause.values, this.lexType);
     const isNot = clause.isNot;
     lexQuery.push({

@@ -31,9 +31,9 @@ export default class KeyValuePill extends BasePill {
    * Convert filter query to lex query
    * @param clause - filter clause
    * @param selectedPill - A rich lex compatible object that contains the value and associated meta
-   * @param lexQuery
+   * @param lexQuery - One or more token values (an array of objects of boxed values) to display to overwrite the current lex query with
    */
-  filters2Lex (clause: Filter, selectedPill, lexQuery): void {
+  filters2Lex (clause: Filter, selectedPill: ValueStateValue, lexQuery: any[]): void {
     const isNot = clause.isNot;
     lexQuery.push({
       field: selectedPill,
