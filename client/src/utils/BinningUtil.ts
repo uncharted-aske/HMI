@@ -1,13 +1,50 @@
 //----------------------------------------------------------------------------//
+// Imports                                                                    //
+//----------------------------------------------------------------------------//
+
+////////////////////////////////////////////////////////////////////////////////
+
+import {
+  BinningDegreeConfigInterface,
+  GraphInterface,
+  EdgeInterface,
+ } from '@/types/types';
+
+
+
+//----------------------------------------------------------------------------//
+// Types                                                                      //
+//----------------------------------------------------------------------------//
+
+////////////////////////////////////////////////////////////////////////////////
+
+export interface NodeMapInterface {
+  [key: string]: number,
+}
+
+export interface BinBoundariesInterface {
+  binMin: number,
+  binMax: number,
+  binInterval: number,
+}
+
+export interface BinDataInterface {
+  binArray: Array<number>,
+  binMaxVal: number,
+}
+
+
+
+//----------------------------------------------------------------------------//
 // Generic Functions                                                          //
 //----------------------------------------------------------------------------//
 
 ////////////////////////////////////////////////////////////////////////////////
 // Ingests raw JSON graph data and returns in/out degree map on per node basis
 
-const parseGraphData = (edges, config) => {
-  let nodeInMap = {};
-  let nodeOutMap = {};
+const parseGraphData = (edges: Array<EdgeInterface>, config: BinningDegreeConfigInterface) => {
+  let nodeInMap: NodeMapInterface = {};
+  let nodeOutMap: NodeMapInterface = {};
 
   let nodeNumIn = 0;
   let nodeNumOut = 0;
@@ -48,18 +85,24 @@ const parseGraphData = (edges, config) => {
 ////////////////////////////////////////////////////////////////////////////////
 // Calculate the bin max, min, and interval given a specified dataset and bin count
 
-const binBoundaries = (args, config) => {
+const DEFAULT_BIN_BOUNDARY: BinBoundariesInterface = {
+  binMin: -1,
+  binMax: -1,
+  binInterval: -1,
+};
+
+const binBoundaries = (args: {nodeMap: NodeMapInterface}, config: {binCount: number}): BinBoundariesInterface => {
   const {nodeMap} = args;
   const {binCount} = config;
 
-  let output = {
+  let output: BinBoundariesInterface = {
     binMin: Number.MAX_SAFE_INTEGER,
     binMax: 0,
     binInterval: 0,
   }
 
   for(const node in nodeMap) {
-    const nodeVal = nodeMap[node];
+    const nodeVal: number = nodeMap[node];
     if(output.binMin > nodeVal) {
       output.binMin = nodeVal;
     }
@@ -73,13 +116,16 @@ const binBoundaries = (args, config) => {
   return output;
 }
 
-const degreeBinBoundaries = (args, config) => {
+const degreeBinBoundaries = (
+  args: {nodeInMap: NodeMapInterface, nodeOutMap: NodeMapInterface},
+  config: {binIn: boolean, binOut: boolean, binCountIn: number, binCountOut: number},
+) => {
   const {nodeInMap, nodeOutMap} = args;
   const {binIn, binOut, binCountIn, binCountOut} = config;
 
-  const binBoundariesIn = binIn ? binBoundaries({nodeMap: nodeInMap}, {binCount: binCountIn}) : {};
+  const binBoundariesIn = binIn ? binBoundaries({nodeMap: nodeInMap}, {binCount: binCountIn}) : DEFAULT_BIN_BOUNDARY;
 
-  const binBoundariesOut = binOut ? binBoundaries({nodeMap: nodeOutMap}, {binCount: binCountOut}) : {};
+  const binBoundariesOut = binOut ? binBoundaries({nodeMap: nodeOutMap}, {binCount: binCountOut}) : DEFAULT_BIN_BOUNDARY;
 
   return {
     binIntervalIn: binBoundariesIn.binInterval,
@@ -97,12 +143,20 @@ const degreeBinBoundaries = (args, config) => {
 ////////////////////////////////////////////////////////////////////////////////
 // Using dataset and binning configuration provided, generate binned data array
 
-const binData = (args, config) => {
+const DEFAULT_BIN_DATA = {
+  binArray: [],
+  binMaxVal: 0,
+};
+
+const binData = (
+  args: {nodeMap: NodeMapInterface},
+  config: {binMin: number, binMax: number, binInterval:number, binCount:number},
+) => {
   const {nodeMap} = args;
   const {binMin, binMax, binInterval, binCount} = config;
 
-  let binArray = Array(binCount).fill(0);
-  let output = {
+  let binArray: Array<number> = Array(binCount).fill(0);
+  let output: BinDataInterface = {
     binArray,
     binMaxVal: 0
   };
@@ -110,7 +164,7 @@ const binData = (args, config) => {
   for(const node in nodeMap) {
     const nodeVal = nodeMap[node];
     if(nodeVal <= binMax && nodeVal >= binMin) {
-      let binNumber = parseInt((nodeVal - binMin) / binInterval);
+      let binNumber = Math.floor((nodeVal - binMin) / binInterval);
 
       // last bin includes both the last bin range + the max bin value
       if(nodeVal === binMax) {
@@ -135,7 +189,7 @@ const binData = (args, config) => {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG: BinningDegreeConfigInterface = {
   binIn: true,
   binOut: true,
   binCountIn: 10,
@@ -149,7 +203,7 @@ const DEFAULT_CONFIG = {
   binMinOut: 0,
 }
 
-export const histogramDegree = (graph, configRaw) => {
+export const histogramDegree = (graph: GraphInterface, configRaw: BinningDegreeConfigInterface) => {
   const {edges} = graph;
   const config = {...DEFAULT_CONFIG, ...configRaw};
   const {binIn, binOut, binCountIn, binCountOut} = config;
@@ -182,8 +236,8 @@ export const histogramDegree = (graph, configRaw) => {
   } = config.binType === 'manual'
     ? {
       ...config,
-      binIntervalIn: (binMaxIn - binMinIn) / binCountIn,
-      binIntervalOut: (binMaxOut - binMinOut) / binCountOut,
+      binIntervalIn: (config.binMaxIn - config.binMinIn) / binCountIn,
+      binIntervalOut: (config.binMaxOut - config.binMinOut) / binCountOut,
     }
     : degreeBinBoundaries(
       {nodeInMap, nodeOutMap},
@@ -194,7 +248,7 @@ export const histogramDegree = (graph, configRaw) => {
   ////////////////////////////////////////////////////////////////////////////////
   // Process bin data using bin settings previously calculated
 
-  const binDataIn = binIn
+  const binDataIn: BinDataInterface = binIn
     ? binData(
       {nodeMap: nodeInMap},
       {
@@ -204,8 +258,8 @@ export const histogramDegree = (graph, configRaw) => {
         binCount: binCountIn,
       }
     )
-    : {};
-  const binDataOut = binOut
+    : DEFAULT_BIN_DATA;
+  const binDataOut: BinDataInterface = binOut
     ? binData(
       {nodeMap: nodeOutMap},
       {
@@ -215,7 +269,7 @@ export const histogramDegree = (graph, configRaw) => {
         binCount: binCountOut,
       }
     )
-    : {};
+    : DEFAULT_BIN_DATA;
 
 
   ////////////////////////////////////////////////////////////////////////////////
