@@ -90,18 +90,17 @@ interface BinningDegreeConfigInterface {
   binMinOut?: number;
 }
 
-interface GraphInterface {
-  metadata: object,
-  nodes: Array<any>,
-  edges: Array<EdgeInterface>,
-}
-
 interface EdgeInterface {
   id: number,
   source: string,
   target: string,
 }
 
+interface GraphInterface {
+  metadata: unknown,
+  nodes: Array<any>,
+  edges: Array<EdgeInterface>,
+}
 
 export {
   ActionColumnInterface,
