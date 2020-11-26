@@ -6,12 +6,21 @@ import BinaryRelationState from '../BinaryRelationState';
 
 import * as filtersUtil from '@/utils/FiltersUtil';
 import * as lexUtil from '@/utils/LexUtil';
+import { Filter, QueryFieldEntry, Filters } from '@/types/types';
 
 export default class BasePill {
+  public searchDisplay: string;
+  public searchKey: string;
+  public baseType: ('integer' | 'string');
+  public lexType: ('integer' | 'string');
+  public icon: string;
+  public iconText: string;
+  public displayFormatter: (v: string) => string
+
   /**
-   * @param {object} config - a CodeTable entry that defines a field configuration
+   * @param config - a CodeTable entry that defines a field configuration
    */
-  constructor (config) {
+  constructor (config: QueryFieldEntry) {
     this.searchDisplay = config.searchDisplay;
     this.searchKey = config.field;
     this.baseType = config.baseType;
@@ -19,35 +28,41 @@ export default class BasePill {
     this.icon = config.icon || null;
     this.iconText = config.iconText || '';
 
-    this.displayFormatter = (v) => v; // default pass-thru
+    this.displayFormatter = (v):string => v; // default pass-thru
   }
 
-  makeOption () {
+  makeOption (): ValueStateValue {
     return new ValueStateValue(this.searchDisplay, {
       searchKey: this.searchKey,
     });
   }
 
-  makeIcon () {
+  makeIcon (): string {
     if (this.icon) {
       return `<i class="fa ${this.icon}">${this.iconText}</i>`;
     }
     return '<i class="fa fa-search"></i>';
   }
 
-  makeBranch () {
+  makeBranch (): Error {
     throw new Error('Must be implemented by child');
   }
 
   /**
    * Set display formatter
-   * @param {function} formatter - formatter function
+   * @param formatter - formatter function
    */
-  setFormatter (formatter) {
+  setFormatter (formatter: (v: string) => string): void {
     this.displayFormatter = formatter;
   }
 
-  lex2Filters (lexItem, filters) {
+  /**
+   * Convert lex query state to filters query
+   * @param lexItem - passed from new lex model on lex's 'query changed'
+   * @param filters - Empty filters state
+   */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  lex2Filters (lexItem: any, filters: Filters): void {
     const searchKey = lexItem.field.meta.searchKey;
     const relation = lexItem.relation.key;
     const operand = 'or';
@@ -60,17 +75,17 @@ export default class BasePill {
 
   /**
    * Convert filter query to lex query
-   * @param {object} clause - filter clause
-   * @param {object} selectedPill - A rich lex compatible object that contains the value and associated meta
-   * @param {array} lexQuery
+   * @param clause - filter clause
+   * @param selectedPill - A rich lex compatible object that contains the value and associated meta
+   * @param lexQuery - One or more token values (an array of objects of boxed values) to display to overwrite the current lex query with
    */
-  filters2Lex (clause, selectedPill, lexQuery) {
+  filters2Lex (clause: Filter, selectedPill: ValueStateValue, lexQuery: any[]): void {
     const values = lexUtil.convertToLex(clause.values, this.lexType);
     const isNot = clause.isNot;
     lexQuery.push({
       field: selectedPill,
       relation: isNot === true ? BinaryRelationState.IS_NOT : BinaryRelationState.IS,
-      value: values.map((v) => new ValueStateValue(v, {}, { displayKey: this.displayFormatter(v) })),
+      value: values.map(v => new ValueStateValue(v, {}, { displayKey: this.displayFormatter(String(v)) })),
     });
   }
 }

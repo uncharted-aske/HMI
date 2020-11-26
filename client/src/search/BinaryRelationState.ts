@@ -5,24 +5,26 @@ const options = [
   new ValueStateValue('not', {}, { displayKey: 'not' }),
 ];
 
-// Adapted from pantera
 export default class BinaryRelationState extends RelationState {
   /**
    * The "is" option.
    */
-  static get IS () {
+  static get IS (): ValueStateValue {
     return options[0];
   }
 
   /**
    * The "is not" option.
    */
-  static get IS_NOT () {
+  static get IS_NOT (): ValueStateValue {
     return options[1];
   }
 
-  constructor (config) {
+  // TODO: Generate Lex types to retrieve type for RelationState.config
+  constructor (config: RelationState.config) {
     if (config.name === undefined) config.name = 'Choose a search relation';
+    // TODO: Generate Lex types to retrieve type for RelationState.config.options
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     config.options = function () {
       return options;
     };
