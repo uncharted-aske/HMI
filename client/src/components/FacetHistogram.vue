@@ -25,24 +25,92 @@
     FacetBars,
   };
 
+  const binFromValue = (
+    args: {value: number, binInterval:number, binMax:number, binMin:number}
+  ): number => {
+    const {value, binInterval, binMax, binMin} = args;
+
+    let binNumber = Math.floor((value - binMin) / binInterval);
+
+    // last bin includes both the last bin range + the max bin value
+    if (value === binMax) {
+      binNumber--;
+    }
+
+    return binNumber;
+  }
+
+  const binFromValueMap = (
+    args: {valueArr: Array<number>, binInterval:number, binMax:number, binMin:number}
+  ): Array<number> =>
+    args.valueArr.map(value =>
+      binFromValue({
+        binInterval: args.binInterval,
+        binMax: args.binMax,
+        binMin: args.binMin,
+        value,
+      })
+    )
+
+  const valuesFromBin = (
+    args: {bin: number, binInterval:number, binMin:number}
+  ): number => {
+    const {bin, binInterval, binMin} = args;
+    return binMin + (bin * binInterval);
+  }
+
+  const valuesFromBinMap = (
+    args: {binArr: Array<number>, binInterval:number, binMin:number}
+  ): Array<number> =>
+    args.binArr.map(bin =>
+      valuesFromBin({
+        binInterval: args.binInterval,
+        binMin: args.binMin,
+        bin,
+      })
+    )
+
   @Component({ components })
   export default class FacetHistogram extends Vue {
-    @Prop({ required: false, type: String }) private label: string;
+    @Prop({ required: true, type: String }) private label: string;
     @Prop({ required: false, type: String }) private field: string;
     @Prop({ required: true, type: Array }) private data: FacetBarsBaseData;
     @Prop({ required: false, type: Array }) private selection: Array<number>;
     @Prop({ required: false, type: Boolean }) private disabled: boolean;
 
+    @Prop({ required: false, type: Boolean }) private normalized: boolean;
+    @Prop({ required: false, type: Number }) private binMin: number;
+    @Prop({ required: false, type: Number }) private binMax: number;
+    @Prop({ required: false, type: Number }) private binInterval: number;
+
     @Action addTerm;
     @Action removeTerm;
+
+    public get getSelection(): Array<number> {
+      return this.normalized
+        ? binFromValueMap({
+          binInterval: this.binInterval,
+          binMax: this.binMax,
+          binMin: this.binMin,
+          valueArr: this.selection,
+        })
+        : this.selection;
+    }
 
     public handleFacetUpdated (facetEvent: CustomEvent, facet: FacetsFacetBars): void {
       const changedProperties: Map<string, any> = facetEvent.detail.changedProperties;
       if (changedProperties.has('selection')) {
-        const oldSelection: [number, number] = facetEvent.detail.changedProperties.get('selection') || {};
-        const newSelection: [number, number] = facet.selection;
+        let oldSelection: Array<number> = facetEvent.detail.changedProperties.get('selection') || {};
+        let newSelection: Array<number> = facet.selection;
 
         if (_.isArray(newSelection) && newSelection.length === 2) {
+          if(this.normalized) {
+            newSelection = valuesFromBinMap({binArr: newSelection, binInterval: this.binInterval, binMin: this.binMin});
+            oldSelection = _.isArray(oldSelection)
+              ? valuesFromBinMap({binArr: oldSelection, binInterval: this.binInterval, binMin: this.binMin})
+              : oldSelection;
+          }
+
           const field = this.field || 'histogram';
           this.removeTerm({ field, term: oldSelection });
           this.addTerm({ field, term: newSelection });
