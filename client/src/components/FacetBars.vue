@@ -23,7 +23,7 @@
   export default class HMIFacetBars extends Vue {
     @Prop({ required: false, type: String }) private label: string;
     @Prop({ required: true, type: Array }) private data: FacetBarsBaseData;
-    @Prop({ required: false, type: Array }) private selection: Array<number>;
+    @Prop({ required: false, type: Array }) private selection: [number, number];
     @Prop({ required: false, type: Boolean }) private disabled: boolean;
 
     get facetsData () : FacetBarsData {

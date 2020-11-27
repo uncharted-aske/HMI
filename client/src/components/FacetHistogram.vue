@@ -25,12 +25,12 @@
     FacetBars,
   };
 
-  const fixFloatingPoint = (val:number):number => Number.parseFloat(val.toPrecision(15))
+  const fixFloatingPoint = (val:number):number => Number.parseFloat(val.toPrecision(15));
 
   const binFromValue = (
-    args: {value: number, binInterval:number, binMax:number, binMin:number}
+    args: {value: number, binInterval:number, binMax:number, binMin:number},
   ): number => {
-    const {value, binInterval, binMax, binMin} = args;
+    const { value, binInterval, binMax, binMin } = args;
 
     let binNumber = Math.floor(fixFloatingPoint(fixFloatingPoint(value - binMin) / binInterval));
 
@@ -40,10 +40,10 @@
     }
 
     return binNumber;
-  }
+  };
 
   const binFromValueMap = (
-    args: {valueArr: Array<number>, binInterval:number, binMax:number, binMin:number}
+    args: {valueArr: Array<number>, binInterval:number, binMax:number, binMin:number},
   ): Array<number> =>
     args.valueArr.map(value =>
       binFromValue({
@@ -51,26 +51,26 @@
         binMax: args.binMax,
         binMin: args.binMin,
         value,
-      })
-    )
+      }),
+    );
 
   const valuesFromBin = (
-    args: {bin: number, binInterval:number, binMin:number}
+    args: {bin: number, binInterval:number, binMin:number},
   ): number => {
-    const {bin, binInterval, binMin} = args;
+    const { bin, binInterval, binMin } = args;
     return fixFloatingPoint(binMin + fixFloatingPoint(bin * binInterval));
-  }
+  };
 
   const valuesFromBinMap = (
-    args: {binArr: Array<number>, binInterval:number, binMin:number}
+    args: {binArr: Array<number>, binInterval:number, binMin:number},
   ): Array<number> =>
     args.binArr.map(bin =>
       valuesFromBin({
         binInterval: args.binInterval,
         binMin: args.binMin,
         bin,
-      })
-    )
+      }),
+    );
 
   @Component({ components })
   export default class FacetHistogram extends Vue {
@@ -88,7 +88,7 @@
     @Action addTerm;
     @Action removeTerm;
 
-    public get getSelection(): Array<number> {
+    public get getSelection (): Array<number> {
       return this.normalized
         ? binFromValueMap({
           binInterval: this.binInterval,
@@ -106,10 +106,10 @@
         let newSelection: Array<number> = facet.selection;
 
         if (_.isArray(newSelection) && newSelection.length === 2) {
-          if(this.normalized) {
-            newSelection = valuesFromBinMap({binArr: newSelection, binInterval: this.binInterval, binMin: this.binMin});
+          if (this.normalized) {
+            newSelection = valuesFromBinMap({ binArr: newSelection, binInterval: this.binInterval, binMin: this.binMin });
             oldSelection = _.isArray(oldSelection)
-              ? valuesFromBinMap({binArr: oldSelection, binInterval: this.binInterval, binMin: this.binMin})
+              ? valuesFromBinMap({ binArr: oldSelection, binInterval: this.binInterval, binMin: this.binMin })
               : oldSelection;
           }
 
