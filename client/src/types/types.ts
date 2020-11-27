@@ -78,30 +78,6 @@ interface FacetTermsDataMap {
   [key: string]: FacetTermsData;
 }
 
-interface BinningDegreeConfigInterface {
-  binIn?: boolean;
-  binOut?: boolean;
-  binCountIn?: number;
-  binCountOut?: number;
-  binType?: string;
-  binMaxIn?: number;
-  binMaxOut?: number;
-  binMinIn?: number;
-  binMinOut?: number;
-}
-
-interface EdgeInterface {
-  id: number,
-  source: string,
-  target: string,
-}
-
-interface GraphInterface {
-  metadata: unknown,
-  nodes: Array<any>,
-  edges: Array<EdgeInterface>,
-}
-
 export {
   ActionColumnInterface,
   ModelInterface,
@@ -112,9 +88,6 @@ export {
   FacetTermsSubselectionMap,
   FacetTermsSelectionMap,
   FacetTermsDataMap,
-  BinningDegreeConfigInterface,
-  GraphInterface,
-  EdgeInterface,
   QueryFieldKey,
   QueryFieldEntry,
   QueryFieldMap,
