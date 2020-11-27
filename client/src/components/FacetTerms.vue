@@ -19,7 +19,6 @@
   import '@uncharted.software/facets-core';
   import { FacetTerms, FacetTermsData, FacetTermsSelection, FacetTermsSubselection } from '@uncharted.software/facets-core/dist/types/facet-terms/FacetTerms';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
-  import { MODEL_TYPE_INDEX } from '@/utils/ModelTypeUtil';
 
   @Component
   export default class HMIFacetTerms extends Vue {
@@ -37,12 +36,15 @@
         const facet: FacetTerms = this.$refs.facetTerms as FacetTerms;
         const oldSelection: FacetTermsSelection = event.detail.changedProperties.get('selection') || {};
         const newSelection: FacetTermsSelection = facet.selection || {};
-        const added = Object.keys(newSelection).filter(x => !Object.keys(oldSelection).includes(x));
-        const removed = Object.keys(oldSelection).filter(x => !Object.keys(newSelection).includes(x));
+
+        // Add/remove terms that have been changed by selection
+        // Note: Must convert added/removed terms to Number type to be consistent with the type Lex search uses to set filters
+        const added = Object.keys(newSelection).filter(x => !Object.keys(oldSelection).includes(x)).map(x => +x);
+        const removed = Object.keys(oldSelection).filter(x => !Object.keys(newSelection).includes(x)).map(x => +x);
         if (!_.isEmpty(added)) {
-          this.addTerm({ field: QUERY_FIELDS_MAP.MODEL_TYPE.field, term: MODEL_TYPE_INDEX[added[0]] });
+          this.addTerm({ field: QUERY_FIELDS_MAP.MODEL_TYPE.field, term: added[0] });
         } else if (!_.isEmpty(removed)) {
-          this.removeTerm({ field: QUERY_FIELDS_MAP.MODEL_TYPE.field, term: MODEL_TYPE_INDEX[removed[0]] });
+          this.removeTerm({ field: QUERY_FIELDS_MAP.MODEL_TYPE.field, term: removed[0] });
         }
       }
     }

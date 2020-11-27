@@ -10,16 +10,15 @@
 
   import { GraphInterface } from '@/views/Graphs/types/types';
 
-  import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer.js';
+  import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
-  import { layered } from '@/graphs/svg/elk/layouts';
-  import { formatHierarchyNodeData } from '@/graphs/svg/util.js';
+  import { layered } from '@/graphs/svg//elk/layouts.js';
   import { hierarchyFn } from '@/utils/SVGUtil.js';
-  import { calculateNeighborhood } from '@/utils/GraphUtil.js';
+  import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
-    nodeHeight: 30,
+    nodeHeight: 40,
     layout: layered,
   };
 
@@ -65,19 +64,22 @@
         this.renderer.hideNeighbourhood();
       });
 
-      // TO FIX
+      // TO FIX: Enable back tooltip functionality
       // this.renderer.setCallback('nodeMouseEnter', (node) => {
       //   const nodeData = node.datum();
       //   let nodeCoords = [];
-      //   const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.data.type;
-      //   if (_.isNil(nodeData.group)) {
-      //     nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)];
-      //   } else {
-      //     // For nodes inside groups
-      //     const groups = this.renderer.layout.groups;
-      //     const group = groups.find(g => g.id === nodeData.group);
-      //     nodeCoords = [group.x + nodeData.x, group.y + nodeData.y];
-      //   }
+      //   const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.data.nodeType;
+      //   // if (!nodeData.nodes) {
+      //   //   // console.log(nodeData);
+      //   //   nodeCoords = [nodeData.x, nodeData.y];
+      //   //   console.log(nodeCoords);
+      //   // }
+      //   // else {
+      //     // // For nodes inside groups
+      //     // const groups = this.renderer.layout.groups;
+      //     // const group = groups.find(g => g.id === nodeData.group);
+      //     // nodeCoords = [group.x + nodeData.x, group.y + nodeData.y];
+      //   //}
       //   showTooltip(this.renderer.chart, tooltipText, nodeCoords);
       // });
 
@@ -92,7 +94,8 @@
       const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one
       formatHierarchyNodeData(hierarchyNodes); // Refines this hierarchical structure to a format that can be used by the renderer
       const edges = this.graph.edges;
-      this.renderer.setData({ nodes: [hierarchyNodes], edges });
+      const graph = { nodes: [hierarchyNodes], edges };
+      this.renderer.setData(graph);
       this.renderer.render();
     }
   }
