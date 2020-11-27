@@ -25,12 +25,14 @@
     FacetBars,
   };
 
+  const fixFloatingPoint = (val:number):number => Number.parseFloat(val.toPrecision(15))
+
   const binFromValue = (
     args: {value: number, binInterval:number, binMax:number, binMin:number}
   ): number => {
     const {value, binInterval, binMax, binMin} = args;
 
-    let binNumber = Math.floor((value - binMin) / binInterval);
+    let binNumber = Math.floor(fixFloatingPoint(fixFloatingPoint(value - binMin) / binInterval));
 
     // last bin includes both the last bin range + the max bin value
     if (value === binMax) {
@@ -56,7 +58,7 @@
     args: {bin: number, binInterval:number, binMin:number}
   ): number => {
     const {bin, binInterval, binMin} = args;
-    return binMin + (bin * binInterval);
+    return fixFloatingPoint(binMin + fixFloatingPoint(bin * binInterval));
   }
 
   const valuesFromBinMap = (
