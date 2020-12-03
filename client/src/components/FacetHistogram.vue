@@ -2,7 +2,7 @@
   <facetBars
     :label="label"
     :data="data"
-    :selection="selection"
+    :selection="getSelection"
     :disabled="disabled"
     @handleUpdate="handleFacetUpdated"
   />
@@ -20,57 +20,11 @@
   import { FacetBarsBaseData } from '@uncharted.software/facets-core/dist/types/facet-bars-base/FacetBarsBase';
 
   import FacetBars from '@/components/FacetBars.vue';
+  import { binFromValueMap, valuesFromBinMap } from '@/utils/BinUtil';
 
   const components = {
     FacetBars,
   };
-
-  const fixFloatingPoint = (val:number):number => Number.parseFloat(val.toPrecision(15));
-
-  const binFromValue = (
-    args: {value: number, binInterval:number, binMax:number, binMin:number},
-  ): number => {
-    const { value, binInterval, binMax, binMin } = args;
-
-    let binNumber = Math.floor(fixFloatingPoint(fixFloatingPoint(value - binMin) / binInterval));
-
-    // last bin includes both the last bin range + the max bin value
-    if (value === binMax) {
-      binNumber--;
-    }
-
-    return binNumber;
-  };
-
-  const binFromValueMap = (
-    args: {valueArr: Array<number>, binInterval:number, binMax:number, binMin:number},
-  ): Array<number> =>
-    args.valueArr.map(value =>
-      binFromValue({
-        binInterval: args.binInterval,
-        binMax: args.binMax,
-        binMin: args.binMin,
-        value,
-      }),
-    );
-
-  const valuesFromBin = (
-    args: {bin: number, binInterval:number, binMin:number},
-  ): number => {
-    const { bin, binInterval, binMin } = args;
-    return fixFloatingPoint(binMin + fixFloatingPoint(bin * binInterval));
-  };
-
-  const valuesFromBinMap = (
-    args: {binArr: Array<number>, binInterval:number, binMin:number},
-  ): Array<number> =>
-    args.binArr.map(bin =>
-      valuesFromBin({
-        binInterval: args.binInterval,
-        binMin: args.binMin,
-        bin,
-      }),
-    );
 
   @Component({ components })
   export default class FacetHistogram extends Vue {
