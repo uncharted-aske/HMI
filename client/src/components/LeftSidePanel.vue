@@ -38,7 +38,6 @@
 
   @Component
   export default class LeftSidePanel extends Vue {
-
     @Prop({ default: [] })
     tabs: TabInterface[];
 
@@ -47,7 +46,7 @@
 
     isOpen: boolean = false;
 
-    get navigationIcon(): string {
+    get navigationIcon (): string {
       return this.isOpen === true ? 'angle-double-left' : 'angle-double-right';
     }
 
@@ -98,7 +97,6 @@
     }
   }
 
- 
 }
 
 </style>

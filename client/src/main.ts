@@ -34,7 +34,7 @@ library.add(
   faChartLine,
   faSearch,
   faAngleDoubleRight,
-  faAngleDoubleLeft
+  faAngleDoubleLeft,
 );
 // Enable automatic font awesome icon transformations
 dom.watch();
