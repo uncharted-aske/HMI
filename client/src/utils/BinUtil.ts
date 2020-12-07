@@ -1,7 +1,11 @@
 const fixFloatingPoint = (val:number):number => Number.parseFloat(val.toPrecision(15));
 
+export const binIntervalFromData = (binNum: number, binMax: number, binMin: number):number => {
+  return fixFloatingPoint(fixFloatingPoint(binMax - binMin) / binNum);
+};
+
 export const binFromValue = (
-  args: {value: number, binInterval:number, binMax:number, binMin:number},
+  args: {value:number, binInterval:number, binMax:number, binMin:number},
 ): number => {
   const { value, binInterval, binMax, binMin } = args;
 
@@ -16,7 +20,7 @@ export const binFromValue = (
 };
 
 export const binFromValueMap = (
-  args: {valueArr: Array<number>, binInterval:number, binMax:number, binMin:number},
+  args: {valueArr:Array<number>, binInterval:number, binMax:number, binMin:number},
 ): Array<number> =>
   args.valueArr.map(value =>
     binFromValue({

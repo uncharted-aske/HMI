@@ -20,7 +20,7 @@
   import { FacetBarsBaseData } from '@uncharted.software/facets-core/dist/types/facet-bars-base/FacetBarsBase';
 
   import FacetBars from '@/components/FacetBars.vue';
-  import { binFromValueMap, valuesFromBinMap } from '@/utils/BinUtil';
+  import { binIntervalFromData, binFromValueMap, valuesFromBinMap } from '@/utils/BinUtil';
 
   const components = {
     FacetBars,
@@ -34,18 +34,24 @@
     @Prop({ required: false, type: Array }) private selection: Array<number>;
     @Prop({ required: false, type: Boolean }) private disabled: boolean;
 
-    @Prop({ required: false, type: Boolean }) private normalized: boolean;
-    @Prop({ required: false, type: Number }) private binMin: number;
-    @Prop({ required: false, type: Number }) private binMax: number;
-    @Prop({ required: false, type: Number }) private binInterval: number;
+    @Prop({ required: false, type: Boolean }) private normalized?: boolean;
+    @Prop({ required: false, type: Number }) private binMin?: number;
+    @Prop({ required: false, type: Number }) private binMax?: number;
+    @Prop({ required: false, type: Number }) private binInterval?: number;
 
     @Action addTerm;
     @Action removeTerm;
 
+    private get _binInterval (): number {
+      // eslint-disable-next-line
+      // @ts-ignore
+      return this.binInterval || binIntervalFromData(_.isArray(this.data) ? this.data.length : 0, this.binMax, this.binMin);
+    }
+
     public get getSelection (): Array<number> {
-      return this.normalized
+      return this.normalized && _.isArray(this.selection)
         ? binFromValueMap({
-          binInterval: this.binInterval,
+          binInterval: this._binInterval,
           binMax: this.binMax,
           binMin: this.binMin,
           valueArr: this.selection,
@@ -61,9 +67,9 @@
 
         if (_.isArray(newSelection) && newSelection.length === 2) {
           if (this.normalized) {
-            newSelection = valuesFromBinMap({ binArr: newSelection, binInterval: this.binInterval, binMin: this.binMin });
+            newSelection = valuesFromBinMap({ binArr: newSelection, binInterval: this._binInterval, binMin: this.binMin });
             oldSelection = _.isArray(oldSelection)
-              ? valuesFromBinMap({ binArr: oldSelection, binInterval: this.binInterval, binMin: this.binMin })
+              ? valuesFromBinMap({ binArr: oldSelection, binInterval: this._binInterval, binMin: this.binMin })
               : oldSelection;
           }
 

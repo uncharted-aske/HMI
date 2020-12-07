@@ -46,6 +46,12 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'string',
   },
+  HISTOGRAM: {
+    ..._field('histogram', 'Histogram'),
+    ..._searchable('Histogram', false),
+    baseType: 'integer',
+    lexType: 'string',
+  },
 };
 
 export {

@@ -41,12 +41,21 @@
     public get facetSelection (): FacetTermsSelectionMap {
       const selectionMap = {};
       this.facetTerms.forEach(facet => {
-        const selection = {};
+        let selection = {};
         const facetClause = filtersUtil.findPositiveFacetClause(this.getFilters, facet);
         if (!_.isEmpty(facetClause)) {
-          facetClause.values.forEach(value => {
-            selection[value] = true;
-          });
+          switch (facetClause.field) {
+            case 'modelType': {
+              facetClause.values.forEach(value => {
+                selection[value] = true;
+              });
+              break;
+            }
+            case 'histogram': {
+              selection = facetClause.values;
+              break;
+            }
+          }
         }
         selectionMap[facet] = selection;
       });
