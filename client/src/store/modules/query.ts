@@ -45,7 +45,10 @@ const actions: ActionTree<QueryState, any> = {
     const query = updateQuery(getters, filters);
     const location: Location = {};
     location.query = { filters: query.filters };
-    Router.getRouter().push(location);
+    const routerInstance = Router.getRouter();
+    if (routerInstance.currentRoute.query.filters !== query.filters) {
+      routerInstance.push(location);
+    }
   },
 };
 
