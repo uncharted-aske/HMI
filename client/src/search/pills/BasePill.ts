@@ -6,13 +6,13 @@ import BinaryRelationState from '../BinaryRelationState';
 
 import * as filtersUtil from '@/utils/FiltersUtil';
 import * as lexUtil from '@/utils/LexUtil';
-import { Filter, QueryFieldEntry, Filters } from '@/types/types';
+import { LexConvertType, QueryFieldEntry, Filter, Filters } from '@/types/types';
 
 export default class BasePill {
   public searchDisplay: string;
   public searchKey: string;
-  public baseType: ('integer' | 'string');
-  public lexType: ('integer' | 'string');
+  public baseType: LexConvertType;
+  public lexType: LexConvertType;
   public icon: string;
   public iconText: string;
   public displayFormatter: (v: string) => string

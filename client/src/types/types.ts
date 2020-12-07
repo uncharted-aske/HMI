@@ -41,7 +41,7 @@ type LexConvertTypeMapping = {
   string: string
 }
 
-type QueryFieldKey = 'MODEL_TYPE';
+type QueryFieldKey = string;
 interface QueryFieldEntry {
   field: string, // id of query field entry
   display: string, // human readable field name,
