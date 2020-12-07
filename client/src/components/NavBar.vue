@@ -3,7 +3,7 @@
   <a class="navbar-brand" href="#/">Uncharted HMI</a>
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav">
-      <li v-if="currentView === 'bioView' || currentView === 'epiView'" class="nav-item"  :class="{underlined: currentView === 'epiView' || currentView === 'bioView'}">
+      <li class="nav-item"  :class="{underlined: currentView === 'home' || currentView === 'epiView' || currentView === 'bioView'}">
         <a class="nav-link" href="#">Models</a>
       </li>
     </ul>
