@@ -24,7 +24,7 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { ActionColumnInterface, ModelInterface } from '@/types/types';
+  import { TabInterface, ModelInterface } from '@/types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
@@ -35,8 +35,8 @@
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
 
   const ACTIONS = [
-    { name: 'Facets', icon: 'filter', paneId: 'facets' },
-    { name: 'Metadata', icon: 'info', paneId: 'metadata' },
+    { name: 'Facets', icon: 'filter', id: 'facets' },
+    { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
   const components = {
@@ -52,13 +52,13 @@
   @Component({ components })
   export default class BioView extends Vue {
     activePane = '';
-    actions: ActionColumnInterface[] = ACTIONS;
+    actions: TabInterface[] = ACTIONS;
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
 
     get currentAction (): string {
-      return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
+      return this.activePane && this.actions.find(a => a.id === this.activePane).name;
     }
 
     get selectedModel (): ModelInterface {
@@ -81,7 +81,7 @@
     onSetActive (actionName: string): void {
       let activePane = '';
       if (actionName !== '') {
-        activePane = this.actions.find(a => a.name === actionName).paneId;
+        activePane = this.actions.find(a => a.name === actionName).id;
       }
       this.activePane = activePane;
     }

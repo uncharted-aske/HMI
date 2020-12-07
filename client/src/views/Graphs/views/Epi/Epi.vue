@@ -30,7 +30,7 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { ActionColumnInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
+  import { TabInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
 
   import ActionColumn from '@/components/ActionColumn.vue';
@@ -46,8 +46,8 @@
   import HierarchySlider from './components/HierarchySlider/HierarchySlider.vue';
 
   const ACTIONS = [
-    { name: 'Facets', icon: 'filter', paneId: 'facets' },
-    { name: 'Metadata', icon: 'info', paneId: 'metadata' },
+    { name: 'Facets', icon: 'filter', id: 'facets' },
+    { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
   const components = {
@@ -68,7 +68,7 @@
   export default class EpiView extends Vue {
     isOpenDrilldown = false;
     activePane = '';
-    actions: ActionColumnInterface[] = ACTIONS;
+    actions: TabInterface[] = ACTIONS;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
@@ -87,7 +87,7 @@
     }
 
     get currentAction (): string {
-      return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
+      return this.activePane && this.actions.find(a => a.id === this.activePane).name;
     }
 
     get nodeCount (): number {
@@ -101,7 +101,7 @@
     onSetActive (actionName: string): void {
       let activePane = '';
       if (actionName !== '') {
-        activePane = this.actions.find(a => a.name === actionName).paneId;
+        activePane = this.actions.find(a => a.name === actionName).id;
       }
       this.activePane = activePane;
     }
