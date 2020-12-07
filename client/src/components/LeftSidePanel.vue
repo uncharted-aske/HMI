@@ -13,13 +13,15 @@
     </div>
 
     <div class="tab-panel">
-        <ul class="nav">
+        <ul class="nav nav-tabs">
             <li class="nav-item"
                 v-for="tab in tabs"
                 :key="tab.id"
-                :class="{active: activeTabId === tab.id}"
+                @click="onTabClick(tab.id)"
             >
-                <a class="nav-link" href="#">{{tab.name}}</a>
+                <a class="nav-link" 
+                  :class="{'active': activeTabId === tab.id}"
+                  href="#">{{tab.name}}</a>
             </li>
         </ul>
     </div>
@@ -53,6 +55,10 @@
     togglePanel (): void {
         this.isOpen = !this.isOpen;
     }
+
+    onTabClick(tabId: string): void {
+      this.$emit('tab-click', tabId);
+    }
   }
 </script>
 
@@ -68,10 +74,12 @@
   flex-direction: column;
   background-color: #ffffff;
   box-sizing: border-box;
+  padding: 5px;
   z-index: map-get($z-index-order, side-panel);
 
   &.closed {
     width: 0px;
+    padding:0px;
 
     .tab-panel, .panel-content {
       display: none;

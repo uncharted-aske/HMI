@@ -1,14 +1,9 @@
 <template>
   <div class="view-container">
-    <action-column>
-      <div slot="actions">
-        <action-column-nav-bar :actions="actions" :currentAction="currentAction" @set-active-pane="onSetActive" />
-      </div>
-    </action-column>
-    <left-side-panel @close-pane="onCloseLeftSidePanel"  v-if="activePane">
+    <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
           <div slot="content">
-            <facets-pane v-if="activePane === actions[0].paneId" />
-            <metadata-pane v-if="activePane ===  actions[1].paneId && selectedModel" :metadata="selectedModel.metadata"/>
+            <metadata-pane v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/>
+            <facets-pane v-if="activeTabId === 'facets'" />
           </div>
     </left-side-panel>
     <div class="content">
@@ -33,8 +28,6 @@
   import { TabInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
 
-  import ActionColumn from '@/components/ActionColumn.vue';
-  import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import Counters from '@/views/Graphs/components/Counters/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
@@ -45,14 +38,12 @@
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
   import HierarchySlider from './components/HierarchySlider/HierarchySlider.vue';
 
-  const ACTIONS = [
+  const TABS = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
   const components = {
-    ActionColumn,
-    ActionColumnNavBar,
     SearchBar,
     Counters,
     LeftSidePanel,
@@ -66,9 +57,9 @@
 
   @Component({ components })
   export default class EpiView extends Vue {
+    tabs: TabInterface[] = TABS;
+    activeTabId: string = 'metadata';
     isOpenDrilldown = false;
-    activePane = '';
-    actions: TabInterface[] = ACTIONS;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
@@ -86,10 +77,6 @@
       return this.hierarchyLevel === 1 ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
     }
 
-    get currentAction (): string {
-      return this.activePane && this.actions.find(a => a.id === this.activePane).name;
-    }
-
     get nodeCount (): number {
       return this.selectedGraph && this.selectedGraph.nodes.length;
     }
@@ -98,16 +85,8 @@
       return this.selectedGraph && this.selectedGraph.edges.length;
     }
 
-    onSetActive (actionName: string): void {
-      let activePane = '';
-      if (actionName !== '') {
-        activePane = this.actions.find(a => a.name === actionName).id;
-      }
-      this.activePane = activePane;
-    }
-
-    onCloseLeftSidePanel ():void {
-      this.activePane = '';
+    onTabClick (tabId: string): void {
+      this.activeTabId = tabId;
     }
 
     onCloseDrilldownPanel ():void {
