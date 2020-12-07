@@ -89,7 +89,7 @@
 
 .navigation-control {
   width: 20px;
-  height: 50px;
+  height: 75px;
   position: absolute;
   right: -1vw;
   bottom: 50vh;
@@ -97,6 +97,7 @@
   flex-direction: row;
   align-items: center;
   .btn {
+    height: 100%;
     background-color: #ffffff;
     padding: 5px;
     box-shadow: 0 -1px 0 #e5e5e5, 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
