@@ -5,7 +5,7 @@
             <metadata-pane v-if="activeTabId ===  'metadata' && selectedModel" :metadata="selectedModel.metadata" />
             <facets-pane v-if="activeTabId === 'facets'" />
         </div>
-    </left-side-panel> 
+    </left-side-panel>
     <div class="content">
       <search-bar />
       <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
@@ -44,7 +44,6 @@
   export default class BioView extends Vue {
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
-
 
     @Getter getSelectedModelId;
     @Getter getModelsList;

@@ -19,7 +19,7 @@
                 :key="tab.id"
                 @click="onTabClick(tab.id)"
             >
-                <a class="nav-link" 
+                <a class="nav-link"
                   :class="{'active': activeTabId === tab.id}"
                   href="#">{{tab.name}}</a>
             </li>
@@ -56,7 +56,7 @@
         this.isOpen = !this.isOpen;
     }
 
-    onTabClick(tabId: string): void {
+    onTabClick (tabId: string): void {
       this.$emit('tab-click', tabId);
     }
   }
