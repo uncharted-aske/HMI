@@ -24,10 +24,10 @@ interface ModelInterface {
   type: string
 }
 
-interface ActionColumnInterface {
+interface TabInterface {
     name: string;
     icon: string;
-    paneId: string;
+    id: string;
 }
 
 interface ModelsState {
@@ -93,7 +93,7 @@ interface MappedOptionStateConfig {
 }
 
 export {
-  ActionColumnInterface,
+  TabInterface,
   ModelInterface,
   ModelMetadataInterface,
   ModelComponentMetadataInterface,

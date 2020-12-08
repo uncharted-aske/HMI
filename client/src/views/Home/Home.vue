@@ -1,13 +1,8 @@
 <template>
   <div class="view-container">
-    <action-column>
-      <div slot="actions">
-        <action-column-nav-bar :actions="actions" :current-action="currentAction" @set-active-pane="onSetActivePane" />
-      </div>
-    </action-column>
-    <left-side-panel @close-pane="onClosePane" v-if="activePane">
+    <left-side-panel :tabs="tabs" :activeTabId="activeTabId">
       <div slot="content">
-        <facets-pane v-if="activePane === actions[0].paneId" />
+        <facets-pane />
       </div>
     </left-side-panel>
 
@@ -27,13 +22,12 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
 
-  import { ActionColumnInterface } from '@/types/types';
+  import { TabInterface } from '@/types/types';
   import { CardInterface } from './types/types';
 
-  import ActionColumn from '@/components/ActionColumn.vue';
-  import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
+
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import StartScreen from './components/StartScreen/StartScreen.vue';
 
@@ -45,13 +39,11 @@
   // Services
   import * as modelsService from '@/services/ModelsService';
 
-  const ACTIONS = [
-    { name: 'Facets', icon: 'filter', paneId: 'facets' },
+  const TABS = [
+    { name: 'Facets', icon: 'filter', id: 'facets' },
   ];
 
   const components = {
-    ActionColumn,
-    ActionColumnNavBar,
     SearchBar,
     LeftSidePanel,
     FacetsPane,
@@ -60,16 +52,12 @@
 
   @Component({ components })
   export default class Home extends Vue {
-    activePane = '';
-    actions: ActionColumnInterface[] = ACTIONS;
+    tabs: TabInterface[] = TABS;
+    activeTabId: string = 'facets';
 
     @Getter getFilters;
     @Getter getModelsList;
     @Mutation setSelectedModel;
-
-    get currentAction (): string {
-      return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
-    }
 
     get modelsCards (): CardInterface[] {
       const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
@@ -97,18 +85,6 @@
       const view = card.type === 'computational' ? 'epiView' : 'bioView';
       this.setSelectedModel(card.id);
       this.$router.push({ name: view });
-    }
-
-    onSetActivePane (actionName: string): void {
-      let activePane = '';
-      if (actionName !== '') {
-        activePane = this.actions.find(a => a.name === actionName).paneId;
-      }
-      this.activePane = activePane;
-    }
-
-    onClosePane ():void {
-      this.activePane = '';
     }
   }
 </script>

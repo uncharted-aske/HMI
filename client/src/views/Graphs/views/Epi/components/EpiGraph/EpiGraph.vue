@@ -106,7 +106,7 @@
 
 .epi-graph-container {
   height: calc(#{$content-full-height} - #{$secondary-bar-width} - 25px);
-  width: 80%;
+  width: 100%;
 }
 
 </style>
