@@ -45,15 +45,14 @@
         const facetClause = filtersUtil.findPositiveFacetClause(this.getFilters, facet);
         if (!_.isEmpty(facetClause)) {
           switch (facetClause.field) {
-            case 'modelType': {
+            case QUERY_FIELDS_MAP.MODEL_TYPE.field: {
               facetClause.values.forEach(value => {
                 selection[value] = true;
               });
               break;
             }
-            case 'histogram': {
+            default: {
               selection = facetClause.values;
-              break;
             }
           }
         }

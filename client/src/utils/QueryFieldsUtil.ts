@@ -52,6 +52,12 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'string',
   },
+  TEXT: {
+    ..._field('text', 'TEXT'),
+    ..._searchable('Text', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
 };
 
 export {
