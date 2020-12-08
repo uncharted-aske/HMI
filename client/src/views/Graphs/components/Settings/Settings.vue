@@ -10,7 +10,7 @@
           <button type="button" class="btn btn-light" :class="{'active': view.id === viewId}" @click="onViewSelection(view.id)">{{view.name}}</button>
         </div>
       </div>
-    </dropdown>  
+    </dropdown>
     <button type="button" class="btn btn-secondary mr-1" disabled>Layouts</button>
     <button type="button" class="btn btn-secondary mr-1" disabled>Settings</button>
   </div>
@@ -32,17 +32,18 @@
   export default class Settings extends Vue {
     @Prop({ default: [] })
     views: ViewInterface;
+
     @Prop({ default: 1 })
     viewId: number;
 
     showDropdownViews: boolean = false;
 
-    toggleViews(): void {
+    toggleViews (): void {
       this.showDropdownViews = !this.showDropdownViews;
     }
 
-    onViewSelection(view:number):void {
-      this.$emit('view-change', view)
+    onViewSelection (view:number):void {
+      this.$emit('view-change', view);
     }
   }
 </script>
