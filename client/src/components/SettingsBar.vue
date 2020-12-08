@@ -1,11 +1,7 @@
 <template>
   <div class="settings-bar-container">
-    <div class="counters">
-        <slot name="counters" />
-    </div>
-    <div class="settings">
-        <slot name="settings" />
-    </div>
+    <slot name="counters" />
+    <slot name="settings" />
   </div>
 </template>
 
@@ -14,7 +10,7 @@
   import Component from 'vue-class-component';
 
   @Component
-  export default class Counters extends Vue {
+  export default class SettingsBar extends Vue {
   }
 </script>
 

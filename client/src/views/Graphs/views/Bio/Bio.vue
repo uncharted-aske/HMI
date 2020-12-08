@@ -27,7 +27,7 @@
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
 
-  const TABS = [
+  const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];

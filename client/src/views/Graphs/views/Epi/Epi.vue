@@ -8,8 +8,14 @@
     </left-side-panel>
     <div class="content">
       <search-bar />
-      <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
-      <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
+      <settings-bar>
+        <div slot="counters">
+          <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
+        </div>
+        <div slot="settings">
+          <settings @view-change="onSetView" :views="views" :view-id="viewId"/>
+        </div>
+      </settings-bar>
       <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
@@ -25,45 +31,54 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { TabInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
+  import { TabInterface, ViewInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
+  import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/views/Graphs/components/Counters/Counters.vue';
+  import Settings from '@/views/Graphs/components/Settings/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import EpiGraph from './components/EpiGraph/EpiGraph.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
-  import HierarchySlider from './components/HierarchySlider/HierarchySlider.vue';
 
-  const TABS = [
+  const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
+  const VIEWS: ViewInterface[] = [
+    { name: 'Summary', id: 0 },
+    { name: 'Causal', id: 1 },
+    { name: 'Functional', id: 2 },
+  ];
+
   const components = {
     SearchBar,
+    SettingsBar,
     Counters,
+    Settings,
     LeftSidePanel,
     MetadataPane,
     FacetsPane,
     EpiGraph,
     DrilldownPanel,
     DrilldownMetadataPane,
-    HierarchySlider,
   };
 
   @Component({ components })
   export default class EpiView extends Vue {
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
+    views: ViewInterface[] = VIEWS;
+    viewId = 1;
     isOpenDrilldown = false;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
-    hierarchyLevel = 1;
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
@@ -74,7 +89,7 @@
     }
 
     get selectedGraph (): GraphInterface {
-      return this.hierarchyLevel === 1 ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
+      return this.viewId === 1 ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
     }
 
     get nodeCount (): number {
@@ -95,8 +110,8 @@
       this.drilldownMetadata = null;
     }
 
-    onHierarchyChange (level: number): void {
-      this.hierarchyLevel = level;
+    onSetView (viewId: number): void {
+      this.viewId = viewId;
     }
 
     onNodeClick (node: GraphNodeInterface): void {

@@ -19,9 +19,14 @@
 
   @Component
   export default class Counters extends Vue {
-    @Prop({ default: '' }) modelName: string;
-    @Prop({ default: 0 }) nodeCount: number;
-    @Prop({ default: 0 }) edgeCount: number;
+    @Prop({ default: '' }) 
+    modelName: string;
+
+    @Prop({ default: 0 }) 
+    nodeCount: number;
+
+    @Prop({ default: 0 }) 
+    edgeCount: number;
   }
 </script>
 
