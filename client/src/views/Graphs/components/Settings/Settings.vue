@@ -9,11 +9,11 @@
       <div slot="content">
         <div class="btn-group btn-group-sm"  v-for="view in views" :key="view.id">
           <!-- Disabled visual summary temporarily -->
-          <button 
-          type="button" 
-          class="btn btn-light" 
-          :class="{'active': view.id === selectedViewId}" 
-          :disabled="view.id === 'summary' || view.id === 'clustered'" 
+          <button
+          type="button"
+          class="btn btn-light"
+          :class="{'active': view.id === selectedViewId}"
+          :disabled="view.id === 'summary' || view.id === 'clustered'"
           @click="onViewSelection(view.id)" >
           {{view.name}}
           </button>

@@ -40,7 +40,7 @@
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
-   const VIEWS: ViewInterface[] = [
+  const VIEWS: ViewInterface[] = [
     { name: 'Ontological', id: 'ontological' },
     { name: 'Clustered', id: 'clustered' },
   ];
