@@ -32,7 +32,7 @@ interface TabInterface {
 
 interface ViewInterface {
   name: string;
-  id: number;
+  id: string;
 }
 
 interface ModelsState {

@@ -51,9 +51,9 @@
   ];
 
   const VIEWS: ViewInterface[] = [
-    { name: 'Summary', id: 0 },
-    { name: 'Causal', id: 1 },
-    { name: 'Functional', id: 2 },
+    { name: 'Summary', id: 'summary' },
+    { name: 'Causal', id: 'causal' },
+    { name: 'Functional', id: 'functional' },
   ];
 
   const components = {
@@ -74,7 +74,7 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
     views: ViewInterface[] = VIEWS;
-    selectedViewId = 1;
+    selectedViewId = 'causal';
     isOpenDrilldown = false;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
@@ -89,7 +89,7 @@
     }
 
     get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 1 ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
+      return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
     }
 
     get nodeCount (): number {
@@ -110,7 +110,7 @@
       this.drilldownMetadata = null;
     }
 
-    onSetView (viewId: number): void {
+    onSetView (viewId: string): void {
       this.selectedViewId = viewId;
     }
 
