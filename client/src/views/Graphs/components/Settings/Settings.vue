@@ -84,7 +84,6 @@
   align-items: center;
   position: absolute;
   top: calc(#{$navbar-outer-height} * 2.5);
-  right: 110px;
   height: calc(#{$secondary-bar-width});
   padding: 10px;
 }
