@@ -1,13 +1,22 @@
 <template>
   <div class="settings-container">
     <button type="button" class="btn btn-secondary mr-1" @click="toggleViews">
-      Views
+      Views:
+      <span class="view-name">{{views[selectedViewId].name}} </span>
       <font-awesome-icon :icon="['fas', 'caret-down' ]" />
     </button>
     <dropdown v-if="showDropdownViews" class="dropdown-settings">
       <div slot="content">
         <div class="btn-group btn-group-sm"  v-for="view in views" :key="view.id">
-          <button type="button" class="btn btn-light" :class="{'active': view.id === viewId}" @click="onViewSelection(view.id)">{{view.name}}</button>
+          <!-- Disabled visual summary temporarily -->
+          <button 
+          type="button" 
+          class="btn btn-light" 
+          :class="{'active': view.id === selectedViewId}" 
+          :disabled="view.id === 0" 
+          @click="onViewSelection(view.id)" >
+          {{view.name}}
+          </button>
         </div>
       </div>
     </dropdown>
@@ -34,7 +43,7 @@
     views: ViewInterface;
 
     @Prop({ default: 1 })
-    viewId: number;
+    selectedViewId: number;
 
     showDropdownViews: boolean = false;
 
@@ -42,8 +51,8 @@
       this.showDropdownViews = !this.showDropdownViews;
     }
 
-    onViewSelection (view:number):void {
-      this.$emit('view-change', view);
+    onViewSelection (viewId:number):void {
+      this.$emit('view-change', viewId);
     }
   }
 </script>
@@ -59,6 +68,10 @@
     display: flex;
     align-items: center;
     height: calc(#{$secondary-bar-width} - 20px);
+    .view-name {
+      font-weight: bold;
+      margin: 5px;
+    }
   }
 }
 

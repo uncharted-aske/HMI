@@ -36,7 +36,6 @@
 .counters-container {
   height: calc(#{$secondary-bar-width} - 15px);
   background-color: $secondary-bar-bg;
-  border: 1px solid rgba(207, 216, 220, .5);
   display: flex;
   align-items: center;
   div:first-child {

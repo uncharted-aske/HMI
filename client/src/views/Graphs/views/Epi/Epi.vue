@@ -13,7 +13,7 @@
           <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
         </div>
         <div slot="settings">
-          <settings @view-change="onSetView" :views="views" :view-id="viewId"/>
+          <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
         </div>
       </settings-bar>
       <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
@@ -74,7 +74,7 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
     views: ViewInterface[] = VIEWS;
-    viewId = 1;
+    selectedViewId = 1;
     isOpenDrilldown = false;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
@@ -89,7 +89,7 @@
     }
 
     get selectedGraph (): GraphInterface {
-      return this.viewId === 1 ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
+      return this.selectedViewId === 1 ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
     }
 
     get nodeCount (): number {
@@ -111,7 +111,7 @@
     }
 
     onSetView (viewId: number): void {
-      this.viewId = viewId;
+      this.selectedViewId = viewId;
     }
 
     onNodeClick (node: GraphNodeInterface): void {
