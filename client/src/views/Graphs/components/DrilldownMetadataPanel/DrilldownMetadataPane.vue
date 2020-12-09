@@ -42,12 +42,17 @@
 .drilldown-metadata-pane-container {
   padding: 5px;
   .metadata-item {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
     text-align: left;
     margin-top: 5px;
     .key {
       font-weight: bold;
       padding-top: 5px;
     }
+
+    //FIXME: Put back when we have document artifacts from Wisconsin
     // .expression {
     //     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
     // }
