@@ -10,11 +10,11 @@
       <search-bar />
       <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
       <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
-      <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
+      <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick" @background-dbl-click="onCloseDrilldownPanel"/>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
-        <drilldown-metadata-pane :metadata="drilldownMetadata"/>
+        <!-- <drilldown-metadata-pane :metadata="drilldownMetadata"/> -->
       </div>
     </drilldown-panel>
   </div>
@@ -101,9 +101,11 @@
 
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
-      this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
+      this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = node.type;
-      this.drilldownMetadata = node.metadata;
+      // this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
+      // this.drilldownPaneSubtitle = node.type;
+      // this.drilldownMetadata = node.metadata;
     }
   }
 </script>

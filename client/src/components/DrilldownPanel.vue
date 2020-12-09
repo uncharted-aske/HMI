@@ -43,17 +43,22 @@
 @import "@/styles/variables";
 
 .drilldown-panel-container {
-  position: relative;
-  width: 20%;
-  height: 100%;
-  background-color: $secondary-bar-bg;
-  border: 1px solid $border;
-  padding: 10px;
-  // flex-grow: 0;
-  // flex-shrink: 0;
+  width: 25vw;
+  height: $content-full-height;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  position: absolute;
+  right:0;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  padding: 5px;
+  z-index: map-get($z-index-order, side-panel);
+ 
   .panel-header {
     text-align: left;
     border-bottom: 1px solid $border;
+    padding: 5px;
   }
   .panel-body {
     margin-top: 5px;

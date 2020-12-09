@@ -46,9 +46,13 @@
       });
 
       this.renderer.setCallback('nodeClick', (node) => {
-        // this.$emit('node-click', node.datum().data); // TO FIX
+        //Clear previous highlights
+        this.renderer.hideNeighbourhood();
+        //Show neighborhood
         const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
         this.renderer.showNeighborhood(neighborhood);
+
+        this.$emit('node-click', node.datum().data); 
       });
 
      // Collapse/Expand
@@ -62,6 +66,8 @@
 
       this.renderer.setCallback('backgroundDblClick', () => {
         this.renderer.hideNeighbourhood();
+
+        this.$emit('background-dbl-click');
       });
 
       // TO FIX: Enable back tooltip functionality
