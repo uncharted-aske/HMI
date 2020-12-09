@@ -39,7 +39,7 @@
   // Services
   import * as modelsService from '@/services/ModelsService';
 
-  const TABS = [
+  const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
   ];
 
