@@ -132,12 +132,12 @@ export const calculateNeighborhood = (graph, node) => {
 export const calcNodeColor = (node) => {
   if (node.nodes) {
     return Colors.NODES.CONTAINER;
-  } else if (node.data.nodeType === NodeTypes.NODES.VARIABLE) {
-    const type = node.data.varType;
-    if (type === NodeTypes.VARIABLES.MODEL_VARIABLE) {
+  } else if (node.nodeType === NodeTypes.NODES.VARIABLE) {
+    const nodeSubType = node.nodeSubType;
+    if (nodeSubType === NodeTypes.VARIABLES.MODEL_VARIABLE) {
       return Colors.NODES.MODEL_VARIABLE;
     }
-    if (type === NodeTypes.VARIABLES.PARAMETER) {
+    if (nodeSubType === NodeTypes.VARIABLES.PARAMETER) {
       return Colors.NODES.PARAMETER;
     }
   }
