@@ -11,7 +11,6 @@ import { NodeTypes } from '@/graphs/svg/encodings.ts';
  */
 const build = (root) => {
   const _walk = (node, depth, parent) => {
-
     const nodeSpec = {
       id: node.id,
       concept: node.concept,
@@ -22,7 +21,6 @@ const build = (root) => {
       type: 'normal',
       parent: parent,
       data: node,
-      metadata: node.metadata,
     };
 
     // Build edges

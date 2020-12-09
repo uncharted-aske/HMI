@@ -102,6 +102,10 @@ export const formatHierarchyNodeData = (root) => {
   root.nodeSubType = data.nodeSubType;
   root.metadata = data.metadata;
 
+  if (root.metadata && root.metadata.attributes) {
+    root.role = root.metadata.attributes[0].code_role;
+  }
+
   if (root.children) {
     root.nodes = root.children;
     delete root.children;

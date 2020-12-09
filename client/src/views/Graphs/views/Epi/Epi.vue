@@ -103,8 +103,7 @@
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = node.type;
-      // this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
-      // this.drilldownPaneSubtitle = node.type;
+      console.log(node.metadata);
       // this.drilldownMetadata = node.metadata;
     }
   }

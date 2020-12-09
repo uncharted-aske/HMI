@@ -80,7 +80,7 @@ export default class EPIModelRenderer extends SVGRenderer {
         .style('fill', d => calcNodeColor(d));
 
       if ((selection.datum() as any).collapsed === true) {
-        const numChildren = (selection.datum() as any).nodes.length;
+        const numChildren = (selection.datum() as any).data.nodes.length;
         // Added number of children to the collapsed label
         selection.select('text')
           .style('font-weight', 'bold')
@@ -116,7 +116,7 @@ export default class EPIModelRenderer extends SVGRenderer {
           .style('fill', d => calcNodeColor(d))
           .style('stroke', '#888')
           .style('stroke-width', d => {
-            const role = (d as any).data.role;
+            const role = (d as any).data.metadata.role;
             // Emphasize model code
             return role === 'model' ? 6 : 1;
           });
