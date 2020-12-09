@@ -31,7 +31,7 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { TabInterface, ViewInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
+  import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
   import { NodeTypes } from '@/graphs/svg/encodings';
 
@@ -80,7 +80,6 @@
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
-    hierarchyLevel = 1;
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
