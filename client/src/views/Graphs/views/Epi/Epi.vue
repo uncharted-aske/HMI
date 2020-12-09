@@ -14,7 +14,7 @@
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
-        <!-- <drilldown-metadata-pane :metadata="drilldownMetadata"/> -->
+        <drilldown-metadata-pane :metadata="drilldownMetadata"/>
       </div>
     </drilldown-panel>
   </div>
@@ -25,7 +25,7 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { TabInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
+  import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
   import { NodeTypes } from '@/graphs/svg/encodings';
 
@@ -63,7 +63,7 @@
     isOpenDrilldown = false;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
-    drilldownMetadata: ModelComponentMetadataInterface = null;
+    drilldownMetadata: any = null;
     hierarchyLevel = 1;
 
     @Getter getSelectedModelId;
@@ -105,8 +105,7 @@
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = node.nodeType;
-      console.log(node.metadata);
-      // this.drilldownMetadata = node.metadata;
+      this.drilldownMetadata = node.metadata;
     }
   }
 </script>
