@@ -34,10 +34,12 @@
 @import "@/styles/variables";
 
 .counters-container {
+  height: 100%;
   display: flex;
   align-items: center;
+
   div:first-child {
-    margin: 5px;
+    margin-right: 5px;
   }
   div:not(:first-child)::before {
     content: "|";
