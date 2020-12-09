@@ -47,7 +47,6 @@ Vue.filter('CapitalizeFirstLetterFormatter', CapitalizeFirstLetterFormatter);
 Vue.filter('UnderscoreRemoverFormatter', UnderscoreRemoverFormatter);
 Vue.filter('RemoveBracesFormatter', RemoveBracesFormatter);
 
-
 async function main (): Promise<void> {
   const app = new Vue({
     router,
