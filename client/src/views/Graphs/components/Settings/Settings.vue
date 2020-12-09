@@ -65,13 +65,15 @@
 @import "@/styles/variables";
 
 .settings-container {
+  position: relative;
   display: flex;
   align-items: center;
-  padding:5px;
+  height: 100%;
+  padding: 2px 5px;
   .btn {
     display: flex;
     align-items: center;
-    height: calc(#{$secondary-bar-width} - 20px);
+    height: 100%;
     .view-name {
       font-weight: bold;
       margin: 5px;
@@ -83,7 +85,7 @@
   display: flex;
   align-items: center;
   position: absolute;
-  top: calc(#{$navbar-outer-height} * 2.5);
+  top: calc(#{$secondary-bar-width} - 15px);
   height: calc(#{$secondary-bar-width});
   padding: 10px;
 }
