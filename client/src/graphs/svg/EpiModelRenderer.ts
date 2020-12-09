@@ -116,8 +116,7 @@ export default class EPIModelRenderer extends SVGRenderer {
           .style('fill', d => calcNodeColor(d))
           .style('stroke', '#888')
           .style('stroke-width', d => {
-            const role = (d as any).data.metadata.role;
-            // Emphasize model code
+            const role = (d as any).data.role;
             return role === 'model' ? 6 : 1;
           });
 
