@@ -54,7 +54,7 @@
   box-sizing: border-box;
   padding: 5px;
   z-index: map-get($z-index-order, side-panel);
- 
+
   .panel-header {
     text-align: left;
     border-bottom: 1px solid $border;

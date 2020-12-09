@@ -46,13 +46,13 @@
       });
 
       this.renderer.setCallback('nodeClick', (node) => {
-        //Clear previous highlights
+        // Clear previous highlights
         this.renderer.hideNeighbourhood();
-        //Show neighborhood
+        // Show neighborhood
         const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
         this.renderer.showNeighborhood(neighborhood);
 
-        this.$emit('node-click', node.datum().data); 
+        this.$emit('node-click', node.datum().data);
       });
 
      // Collapse/Expand
