@@ -14,9 +14,9 @@
       </div>
     </div>
 
-    <div class="navigation-control"
+    <div class="divider"
       v-bind:style="{
-        display: this.left || this.right ? 'flex' : 'none',
+        display: displayDivider ? 'flex' : 'none',
         left: getWidth(false),
       }"
     >
@@ -66,6 +66,14 @@
     isDraggable: boolean = false;
     borderPosition: number = this.getDocWidth() / 2;
     clickOffset: number = 0;
+
+    get displayDivider (): boolean {
+      if (this.alwaysFull) {
+        return this.left && this.right;
+      } else {
+        return this.left || this.right;
+      }
+    }
 
     mounted (): void {
       document.addEventListener('mouseup', this.onMouseup);
@@ -157,7 +165,7 @@
   overflow: hidden;
 }
 
-.navigation-control {
+.divider {
   width: 1px;
   height: $content-full-height;
   position: absolute;
