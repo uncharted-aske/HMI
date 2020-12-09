@@ -6,12 +6,23 @@
             <facets-pane v-if="activeTabId === 'facets'" />
           </div>
     </left-side-panel>
-    <div class="content">
-      <search-bar />
-      <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
-      <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
-      <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
-    </div>
+    <resizable-divider :left="true" :right="isSplitView">
+      <div slot="content-left" class="content global">
+        <div class="search-row">
+          <search-bar />
+          <button class="btn" @click="onSplitView">
+            Split
+          </button>
+        </div>
+        <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
+        <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
+        <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
+      </div>
+      <div slot="content-right" class="content local">
+        <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
+        <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
+      </div>
+    </resizable-divider>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
@@ -34,6 +45,7 @@
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import EpiGraph from './components/EpiGraph/EpiGraph.vue';
+  import ResizableDivider from '@/components/ResizableDivider.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
   import HierarchySlider from './components/HierarchySlider/HierarchySlider.vue';
@@ -50,6 +62,7 @@
     MetadataPane,
     FacetsPane,
     EpiGraph,
+    ResizableDivider,
     DrilldownPanel,
     DrilldownMetadataPane,
     HierarchySlider,
@@ -60,6 +73,7 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
     isOpenDrilldown = false;
+    isSplitView = false;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
@@ -83,6 +97,10 @@
 
     get edgeCount (): number {
       return this.selectedGraph && this.selectedGraph.edges.length;
+    }
+
+    onSplitView (): void {
+      this.isSplitView = !this.isSplitView;
     }
 
     onTabClick (tabId: string): void {
@@ -109,5 +127,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+  .search-row {
+    display: flex;
+  }
 </style>

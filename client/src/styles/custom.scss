@@ -1,6 +1,7 @@
 @import "variables";
 
 .view-container {
+    position: relative;
     height: $content-full-height;
     display: flex;
     flex-flow: row nowrap;
