@@ -27,6 +27,7 @@
 
   import { TabInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
+  import { NodeTypes } from '@/graphs/svg/encodings';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import Counters from '@/views/Graphs/components/Counters/Counters.vue';
@@ -78,7 +79,8 @@
     }
 
     get nodeCount (): number {
-      return this.selectedGraph && this.selectedGraph.nodes.length;
+      const leafNodesCount = this.selectedGraph.nodes.filter(n => n.nodeType && n.nodeType !== NodeTypes.NODES.CONTAINER).length;
+      return leafNodesCount;
     }
 
     get edgeCount (): number {
@@ -102,7 +104,7 @@
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.label;
-      this.drilldownPaneSubtitle = node.type;
+      this.drilldownPaneSubtitle = node.nodeType;
       console.log(node.metadata);
       // this.drilldownMetadata = node.metadata;
     }
