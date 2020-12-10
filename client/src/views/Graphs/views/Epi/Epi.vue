@@ -6,14 +6,14 @@
             <facets-pane v-if="activeTabId === 'facets'" />
           </div>
     </left-side-panel>
+    <div class="search-row">
+      <search-bar />
+      <button class="btn" @click="onSplitView">
+        Split
+      </button>
+    </div>
     <resizable-divider :left="true" :right="isSplitView">
       <div slot="content-left" class="content global">
-        <div class="search-row">
-          <search-bar />
-          <button class="btn" @click="onSplitView">
-            Split
-          </button>
-        </div>
         <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
         <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
         <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
@@ -127,7 +127,10 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/styles/variables";
+
   .search-row {
     display: flex;
+    border-bottom: 1px solid $border;
   }
 </style>

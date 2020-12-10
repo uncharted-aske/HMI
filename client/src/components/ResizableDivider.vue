@@ -3,10 +3,7 @@
     <div
       class="resizable-divider left"
       :class="[isDraggable ? 'active' : '']"
-      v-bind:style="{
-        display: Boolean(this.left) ? 'flex' : 'none',
-        width: getWidth(false),
-      }"
+      :style="dividerLeftStyle"
     >
 
       <div class="panel-content">
@@ -15,10 +12,7 @@
     </div>
 
     <div class="divider"
-      v-bind:style="{
-        display: displayDivider ? 'flex' : 'none',
-        left: getWidth(false),
-      }"
+      :style="dividerStyle"
     >
       <button
         class="btn"
@@ -31,10 +25,7 @@
     <div
       class="resizable-divider right"
       :class="[isDraggable ? 'active' : '']"
-      v-bind:style="{
-        display: Boolean(this.right) ? 'flex' : 'none',
-        width: getWidth(true),
-      }"
+      :style="dividerRightStyle"
     >
 
       <div class="panel-content">
@@ -50,7 +41,7 @@
   import { Prop } from 'vue-property-decorator';
 
   @Component
-  export default class LeftSidePanel extends Vue {
+  export default class ResizableDivider extends Vue {
     @Prop({ default: true })
     left: boolean;
 
@@ -73,6 +64,27 @@
       } else {
         return this.left || this.right;
       }
+    }
+
+    get dividerLeftStyle (): any {
+      return {
+        display: this.left ? 'flex' : 'none',
+        width: this.getWidth(false),
+      };
+    }
+
+    get dividerStyle (): any {
+      return {
+        display: this.displayDivider ? 'flex' : 'none',
+        left: this.getWidth(false),
+      };
+    }
+
+    get dividerRightStyle (): any {
+      return {
+        display: this.right ? 'flex' : 'none',
+        width: this.getWidth(true),
+      };
     }
 
     mounted (): void {
@@ -152,6 +164,7 @@
   flex-direction: column;
   background-color: #ffffff;
   box-sizing: border-box;
+  z-index: map-get($z-index-order, resizable-divider);
   will-change: transform;
   &.left {
     left: 0;
@@ -172,13 +185,14 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  z-index: 1;
-  background-color: rgba(0,0,0,0.25);
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  z-index: map-get($z-index-order, resizable-divider) + 1;
+  background-color: $border;
+  box-shadow: 0 4px 8px 0 $border;
   will-change: transform;
   .btn {
     height: 75px;
     min-width: 20px;
+    margin-top: -37.5px;
     margin-left: -10px;
     display: flex;
     align-items: center;
