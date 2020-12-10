@@ -11,6 +11,7 @@ import {
   faSearch,
   faAngleDoubleRight,
   faAngleDoubleLeft,
+  faArrowsAltH,
   faCaretDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -37,6 +38,7 @@ library.add(
   faSearch,
   faAngleDoubleRight,
   faAngleDoubleLeft,
+  faArrowsAltH,
   faCaretDown,
 );
 // Enable automatic font awesome icon transformations

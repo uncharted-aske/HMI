@@ -35,11 +35,11 @@
 
 .counters-container {
   height: calc(#{$secondary-bar-width} - 15px);
-  background-color: $secondary-bar-bg;
   display: flex;
   align-items: center;
+
   div:first-child {
-    margin: 5px;
+    margin-right: 5px;
   }
   div:not(:first-child)::before {
     content: "|";

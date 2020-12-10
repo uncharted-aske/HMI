@@ -1,9 +1,10 @@
 @import "variables";
 
 .view-container {
+    position: relative;
     height: $content-full-height;
     display: flex;
-    flex-flow: row nowrap;
+    flex-direction: column;
     flex: 1;
     overflow: hidden;
     box-sizing: border-box;

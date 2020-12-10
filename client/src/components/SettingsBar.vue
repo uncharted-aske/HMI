@@ -20,11 +20,15 @@
 .settings-bar-container {
   height: calc(#{$secondary-bar-width} - 15px);
   background-color: $secondary-bar-bg;
-  border: 1px solid rgba(207, 216, 220, .5);
+  border-bottom: 1px solid $border;
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 0 10px;
   justify-content: space-between;
+
+  ::v-deep > div {
+    height: 100%;
+  }
 }
 
 </style>
