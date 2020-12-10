@@ -119,7 +119,8 @@
     }
 
     onResize (): void {
-      this.$forceUpdate();
+      // hack to force re-render
+      this.borderPosition = this.borderPosition + Math.random()*0.0001;
     }
 
     getDocWidth (): number {
