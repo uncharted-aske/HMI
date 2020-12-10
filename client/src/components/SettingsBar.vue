@@ -23,8 +23,12 @@
   border: 1px solid rgba(207, 216, 220, .5);
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 0 10px;
   justify-content: space-between;
+
+  ::v-deep > div {
+    height: 100%;
+  }
 }
 
 </style>
