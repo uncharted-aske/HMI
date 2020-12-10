@@ -154,5 +154,6 @@
   .search-row {
     display: flex;
     border-bottom: 1px solid $border;
+    background-color: $secondary-bar-bg;
   }
 </style>
