@@ -46,6 +46,7 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'string',
   },
+  // Placeholders for testing purposes
   HISTOGRAM: {
     ..._field('histogram', 'Histogram'),
     ..._searchable('Histogram', false),

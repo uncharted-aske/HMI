@@ -65,8 +65,10 @@
       const subselectionMap = {};
       const facetAggs = facetsService.fetchFacets(this.getModelsList, this.getFilters);
       this.facetTerms.forEach(facet => {
-        const subselection = facetAggs[facet].map(group => group.ratio);
-        subselectionMap[facet] = subselection;
+        if (facetAggs[facet]) {
+          const subselection = facetAggs[facet].map(group => group.ratio);
+          subselectionMap[facet] = subselection;
+        }
       });
       return subselectionMap;
     }
