@@ -34,7 +34,7 @@
 @import "@/styles/variables";
 
 .counters-container {
-  height: 100%;
+  height: calc(#{$secondary-bar-width} - 15px);
   display: flex;
   align-items: center;
 

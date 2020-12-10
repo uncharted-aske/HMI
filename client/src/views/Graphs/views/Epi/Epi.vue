@@ -6,18 +6,36 @@
             <facets-pane v-if="activeTabId === 'facets'" />
           </div>
     </left-side-panel>
-    <div class="content">
+    <div class="search-row">
       <search-bar />
-      <settings-bar>
-        <div slot="counters">
-          <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
-        </div>
-        <div slot="settings">
-          <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-        </div>
-      </settings-bar>
-      <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
+      <button class="btn" @click="onSplitView">
+        Split
+      </button>
     </div>
+    <resizable-divider :left="true" :right="isSplitView">
+      <div slot="content-left" class="content global">
+        <settings-bar>
+          <div slot="counters">
+            <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
+          </div>
+          <div slot="settings">
+            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
+          </div>
+        </settings-bar>
+        <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
+      </div>
+      <div slot="content-right" class="content local">
+        <settings-bar>
+          <div slot="counters">
+            <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
+          </div>
+          <div slot="settings">
+            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
+          </div>
+        </settings-bar>
+        <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
+      </div>
+    </resizable-divider>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
@@ -42,6 +60,7 @@
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import EpiGraph from './components/EpiGraph/EpiGraph.vue';
+  import ResizableDivider from '@/components/ResizableDivider.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
 
@@ -65,6 +84,7 @@
     MetadataPane,
     FacetsPane,
     EpiGraph,
+    ResizableDivider,
     DrilldownPanel,
     DrilldownMetadataPane,
   };
@@ -76,6 +96,7 @@
     views: ViewInterface[] = VIEWS;
     selectedViewId = 'causal';
     isOpenDrilldown = false;
+    isSplitView = false;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
@@ -98,6 +119,10 @@
 
     get edgeCount (): number {
       return this.selectedGraph && this.selectedGraph.edges.length;
+    }
+
+    onSplitView (): void {
+      this.isSplitView = !this.isSplitView;
     }
 
     onTabClick (tabId: string): void {
@@ -124,5 +149,11 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/styles/variables";
 
+  .search-row {
+    display: flex;
+    border-bottom: 1px solid $border;
+    background-color: $secondary-bar-bg;
+  }
 </style>
