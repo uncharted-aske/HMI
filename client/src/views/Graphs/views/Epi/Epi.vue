@@ -14,12 +14,25 @@
     </div>
     <resizable-divider :left="true" :right="isSplitView">
       <div slot="content-left" class="content global">
-        <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
-        <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
+        <settings-bar>
+          <div slot="counters">
+            <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
+          </div>
+          <div slot="settings">
+            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
+          </div>
+        </settings-bar>
         <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
       </div>
       <div slot="content-right" class="content local">
-        <hierarchy-slider @hierarchy-change="onHierarchyChange" :hierarchy-level="hierarchyLevel"/>
+        <settings-bar>
+          <div slot="counters">
+            <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
+          </div>
+          <div slot="settings">
+            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
+          </div>
+        </settings-bar>
         <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
       </div>
     </resizable-divider>
@@ -36,11 +49,13 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { TabInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
+  import { TabInterface, ViewInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
+  import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/views/Graphs/components/Counters/Counters.vue';
+  import Settings from '@/views/Graphs/components/Settings/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
@@ -48,16 +63,23 @@
   import ResizableDivider from '@/components/ResizableDivider.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
-  import HierarchySlider from './components/HierarchySlider/HierarchySlider.vue';
 
-  const TABS = [
+  const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
+  const VIEWS: ViewInterface[] = [
+    { name: 'Summary', id: 'summary' },
+    { name: 'Causal', id: 'causal' },
+    { name: 'Functional', id: 'functional' },
+  ];
+
   const components = {
     SearchBar,
+    SettingsBar,
     Counters,
+    Settings,
     LeftSidePanel,
     MetadataPane,
     FacetsPane,
@@ -65,19 +87,19 @@
     ResizableDivider,
     DrilldownPanel,
     DrilldownMetadataPane,
-    HierarchySlider,
   };
 
   @Component({ components })
   export default class EpiView extends Vue {
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
+    views: ViewInterface[] = VIEWS;
+    selectedViewId = 'causal';
     isOpenDrilldown = false;
     isSplitView = false;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
-    hierarchyLevel = 1;
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
@@ -88,7 +110,7 @@
     }
 
     get selectedGraph (): GraphInterface {
-      return this.hierarchyLevel === 1 ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
+      return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
     }
 
     get nodeCount (): number {
@@ -113,8 +135,8 @@
       this.drilldownMetadata = null;
     }
 
-    onHierarchyChange (level: number): void {
-      this.hierarchyLevel = level;
+    onSetView (viewId: string): void {
+      this.selectedViewId = viewId;
     }
 
     onNodeClick (node: GraphNodeInterface): void {

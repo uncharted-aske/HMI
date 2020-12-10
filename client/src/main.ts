@@ -12,6 +12,7 @@ import {
   faAngleDoubleRight,
   faAngleDoubleLeft,
   faArrowsAltH,
+  faCaretDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterFormatter';
@@ -37,6 +38,7 @@ library.add(
   faAngleDoubleRight,
   faAngleDoubleLeft,
   faArrowsAltH,
+  faCaretDown,
 );
 // Enable automatic font awesome icon transformations
 dom.watch();

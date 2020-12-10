@@ -30,6 +30,11 @@ interface TabInterface {
     id: string;
 }
 
+interface ViewInterface {
+  name: string;
+  id: string;
+}
+
 interface ModelsState {
   selectedModelId: string,
   modelsList: ModelInterface[]
@@ -94,6 +99,7 @@ interface MappedOptionStateConfig {
 
 export {
   TabInterface,
+  ViewInterface,
   ModelInterface,
   ModelMetadataInterface,
   ModelComponentMetadataInterface,
