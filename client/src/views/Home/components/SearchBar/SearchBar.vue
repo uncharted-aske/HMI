@@ -57,6 +57,7 @@
       this.lex = new Lex({
         language: language,
         tokenXIcon: '<i class="fas fa-times"></i>',
+        placeholder: 'Search models, model types...',
       });
 
       this.lex.on('query changed', (...args /* [newModel, oldModel, newUnboxedModel, oldUnboxedModel, nextTokenStarted] */) => {
