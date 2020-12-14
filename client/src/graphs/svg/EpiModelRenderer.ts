@@ -33,8 +33,7 @@ export default class EPIModelRenderer extends SVGRenderer {
       .selectAll('.edge-path')
       .attr('d', d => {
         return pathFn((d as any).points);
-      })
-      .style('opacity', d => (d as any).collapsed ? 0 : 1); // FIXME: This is a hack and edges are still clickable
+      });
   }
 
   renderEdgeAdded (edgeSelection: d3.Selection<any, any, any, any>): void {
