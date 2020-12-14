@@ -50,6 +50,7 @@
       this.lex = new Lex({
         language: language,
         tokenXIcon: '<i class="fas fa-times"></i>',
+        placeholder: 'Search model components, paths...',
       });
 
       this.lex.on('query changed', (...args /* [newModel, oldModel, newUnboxedModel, oldUnboxedModel, nextTokenStarted] */) => {
