@@ -47,9 +47,6 @@
   // Screenshots
   import data from './example.json';
 
-  // Services
-  import * as modelsService from '@/services/ModelsService';
-
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
   ];
@@ -75,11 +72,6 @@
     @Getter getFilters;
     @Getter getModelsList;
     @Mutation setSelectedModel;
-
-    constructor(x) {
-        super(x);
-        console.log(data);
-    }
 
     get countersValues (): Array<number> {
       return [data.total, data.page + 1];

@@ -19,7 +19,6 @@
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
@@ -49,7 +48,7 @@
     }
 
     get imageStyle (): any {
-      return {backgroundImage: this.hasImage ? `url(${this.previewImageSrc})` : 'none'};
+      return { backgroundImage: this.hasImage ? `url(${this.previewImageSrc})` : 'none' };
     }
 
     onCardClick (): void {

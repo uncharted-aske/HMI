@@ -29,11 +29,12 @@
   export default class NavBar extends Vue {
     get displayNav () : boolean {
       const { currentView } = this;
-      return currentView === 'home'
-        || currentView === 'bioView'
-        || currentView === 'epiView'
-        || currentView === 'knowledge';
+      return currentView === 'home' ||
+        currentView === 'bioView' ||
+        currentView === 'epiView' ||
+        currentView === 'knowledge';
     }
+
     get currentView () : string {
       return this.$route && this.$route.name;
     }
