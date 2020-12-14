@@ -3,21 +3,17 @@
     <div
       class="recent-card"
     >
-      <div
-        class="preview"
-        :class="{ 'no-image': !hasImage }"
-      >
-        <img
+        <div
           v-if="hasImage"
-          :src="previewImageSrc"
-          :alt="'Preview of ' + title"
-        >
-      </div>
-      <h5>{{ title }}</h5>
-      <h6 class="subtitle">{{ subtitle }}</h6>
-      <div class="icon">
-        <font-awesome-icon :icon="['fas', iconType]" />
-      </div>
+          :class="['preview-img', hasImage ? '' : 'no-image']"
+          :style="imageStyle"
+          :title="'Preview of ' + title"
+        />
+        <h5 class="title">{{ title }}</h5>
+        <h6 class="subtitle">{{ subtitle }}</h6>
+        <div class="icon">
+          <font-awesome-icon :icon="['fas', iconType]" />
+        </div>
     </div>
   </card>
 </template>
@@ -45,11 +41,15 @@
     @Prop({ default: 'faExclamationTriangle' }) icon: string;
 
     get hasImage (): boolean {
-      return !_.isNil(this.previewImageSrc);
+      return this.previewImageSrc !== '';
     }
 
     get iconType (): string {
       return this.icon === 'computational' ? 'chart-line' : 'book';
+    }
+
+    get imageStyle (): any {
+      return {backgroundImage: this.hasImage ? `url(${this.previewImageSrc})` : 'none'};
     }
 
     onCardClick (): void {
@@ -61,10 +61,11 @@
 @import '@/styles/variables';
 
   .card-container {
-    height: 233px;
     min-width: 233px;
-    width: calc(25vw - (2 * 32px));
+    width: 350px;
     padding: 8px;
+    max-height: 30vh;
+    min-height: 300px;
   }
 
   * {
@@ -75,33 +76,38 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    overflow: hidden;
 
-    .preview {
-      flex: 1 1 0;
+    .preview-img {
       width: 100%;
-      margin-bottom: 8px;
-      // Allow flex item to be smaller than it's children
-      //  (in case child image is too big)
-      min-height: 0;
+      height: 0;
+      padding-top: 56%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: #EAEBEC;
+    }
 
-      img {
-        // Clip images that are too big, but maintain aspect ratio
-        object-fit: cover;
-        width: 100%;
-        height: 100%
-      }
-
-      &.no-image {
-        // Fallback value; previews should always be provided an image
-        background: #EAEBEC;
-      }
+    .title {
+      max-height: 26%;
+      overflow-y: hidden;
+      margin-bottom: 10px;
     }
 
     .subtitle {
+      flex: 1;
       font-size: 12px;
       color: #6c757d;
       font-weight: normal;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: scroll;
+
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+
+    .subtitle::-webkit-scrollbar {
+      display: none;
     }
 
     .icon {

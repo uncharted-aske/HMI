@@ -16,7 +16,11 @@
       <div slot="content-left" class="content global">
         <settings-bar>
           <div slot="counters">
-            <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
+            <counters
+              :title="selectedModel.metadata.name"
+              :labels="['Nodes', 'Edges']"
+              :values="[nodeCount, edgeCount]"
+            />
           </div>
           <div slot="settings">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
@@ -151,9 +155,4 @@
 <style lang="scss" scoped>
   @import "@/styles/variables";
 
-  .search-row {
-    display: flex;
-    border-bottom: 1px solid $border;
-    background-color: $secondary-bar-bg;
-  }
 </style>

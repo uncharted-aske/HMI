@@ -63,6 +63,7 @@
     .card-list {
       display: flex;
       flex-wrap: wrap;
+      padding-bottom:36px;
       .card-container {
         margin: 0 10px 20px 10px;
       }

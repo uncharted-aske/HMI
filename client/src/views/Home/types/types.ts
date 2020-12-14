@@ -1,6 +1,6 @@
 export interface CardInterface {
   id: number;
-  previewImageSrc: string,
+  previewImageSrc?: string,
   title: string;
   subtitle: string;
   type: string;

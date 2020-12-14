@@ -13,6 +13,8 @@
   import _ from 'lodash';
   import { Lex, ValueState } from '@uncharted.software/lex/dist/lex';
   import KeyValuePill from '@/search/pills/KeyValuePill';
+  import RangePill from '@/search/pills/RangePill';
+  import TextPill from '@/search/pills/TextPill';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
   import * as filtersUtil from '@/utils/FiltersUtil';
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
@@ -20,7 +22,7 @@
   @Component
   export default class SearchBar extends Vue {
     private lex: Lex = null;
-    private pills: KeyValuePill[] = [];
+    private pills: KeyValuePill[] | RangePill[] | TextPill[] = [];
 
     @Getter getFilters;
     @Action setFilters;
@@ -36,6 +38,8 @@
           modelTypeUtil.MODEL_TYPE_OPTIONS,
           'Select model type..',
         ),
+        new RangePill(QUERY_FIELDS_MAP.HISTOGRAM),
+        new TextPill(QUERY_FIELDS_MAP.TEXT),
       ];
 
       const language = Lex.from('field', ValueState, {
