@@ -1,6 +1,6 @@
 <template>
   <div class="counters-container">
-    <div class="title">
+    <div class="title" v-if="title">
     {{title}}
     </div>
     <div v-for="(label, index) in labels" :key="label">
