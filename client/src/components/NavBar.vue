@@ -6,7 +6,7 @@
       <li
         v-if="displayNav"
         class="nav-item"
-        :class="{underlined: currentView === 'epiView' || currentView === 'bioView'}"
+        :class="{underlined: currentView === 'epiView' || currentView === 'bioView' || currentView === 'home'}"
       >
         <a class="nav-link" href="#/epiView">Models</a>
       </li>
