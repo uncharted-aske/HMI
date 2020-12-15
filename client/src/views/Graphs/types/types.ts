@@ -2,7 +2,9 @@ export interface GraphNodeInterface {
   id: string,
   concept: string,
   label: string,
-  type: string,
+  nodeType: string,
+  nodeSubType: string,
+  dataType:string,
   metadata: any
 }
 

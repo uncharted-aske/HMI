@@ -46,9 +46,12 @@
       });
 
       this.renderer.setCallback('nodeClick', (node) => {
-        // this.$emit('node-click', node.datum().data); // TO FIX
+        // Clear previous highlights
+        this.renderer.hideNeighbourhood();
+        // Show neighborhood
         const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
         this.renderer.showNeighborhood(neighborhood);
+        this.$emit('node-click', node.datum().data);
       });
 
      // Collapse/Expand
@@ -62,6 +65,7 @@
 
       this.renderer.setCallback('backgroundDblClick', () => {
         this.renderer.hideNeighbourhood();
+        this.$emit('background-dbl-click');
       });
 
       // TO FIX: Enable back tooltip functionality
@@ -92,7 +96,7 @@
 
     refresh (): void {
       const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one
-      formatHierarchyNodeData(hierarchyNodes); // Refines this hierarchical structure to a format that can be used by the renderer
+      formatHierarchyNodeData(hierarchyNodes);
       const edges = this.graph.edges;
       const graph = { nodes: [hierarchyNodes], edges };
       this.renderer.setData(graph);

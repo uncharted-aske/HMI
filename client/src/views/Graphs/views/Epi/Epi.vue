@@ -49,8 +49,9 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { TabInterface, ViewInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
+  import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
+  import { NodeTypes } from '@/graphs/svg/encodings';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -99,7 +100,7 @@
     isSplitView = false;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
-    drilldownMetadata: ModelComponentMetadataInterface = null;
+    drilldownMetadata: any = null;
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
@@ -114,7 +115,8 @@
     }
 
     get nodeCount (): number {
-      return this.selectedGraph && this.selectedGraph.nodes.length;
+      const leafNodesCount = this.selectedGraph.nodes.filter(n => n.nodeType && n.nodeType !== NodeTypes.NODES.CONTAINER).length;
+      return leafNodesCount;
     }
 
     get edgeCount (): number {
@@ -141,8 +143,8 @@
 
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
-      this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
-      this.drilldownPaneSubtitle = node.type;
+      this.drilldownPaneTitle = node.label;
+      this.drilldownPaneSubtitle = node.nodeType;
       this.drilldownMetadata = node.metadata;
     }
   }

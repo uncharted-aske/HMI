@@ -95,16 +95,17 @@ export const makeEdgeMaps = (root) => {
  */
 
 export const formatHierarchyNodeData = (root) => {
-  root.concept = root.data.concept;
-  root.label = root.data.label;
-  root.nodeType = root.data.nodeType;
-  root.metadata = root.data.metadata;
-  if (root.nodeType === NodeTypes.NODES.VARIABLE) {
-    root.varType = root.data.varType;
+  const data = root.data;
+  root.concept = data.concept;
+  root.label = data.label;
+  root.nodeType = data.nodeType;
+  root.nodeSubType = data.nodeSubType;
+  root.metadata = data.metadata;
+
+  if (root.metadata && root.metadata.attributes) {
+    root.role = root.metadata.attributes[0].code_role;
   }
-  if (root.metadata && root.data.metadata.attributes) {
-    root.role = root.data.metadata.attributes[0].code_role;
-  }
+
   if (root.children) {
     root.nodes = root.children;
     delete root.children;
@@ -135,12 +136,12 @@ export const calculateNeighborhood = (graph, node) => {
 export const calcNodeColor = (node) => {
   if (node.nodes) {
     return Colors.NODES.CONTAINER;
-  } else if (node.data.nodeType === NodeTypes.NODES.VARIABLE) {
-    const type = node.data.varType;
-    if (type === NodeTypes.VARIABLES.MODEL_VARIABLE) {
+  } else if (node.nodeType === NodeTypes.NODES.VARIABLE) {
+    const nodeSubType = node.nodeSubType;
+    if (nodeSubType === NodeTypes.VARIABLES.MODEL_VARIABLE) {
       return Colors.NODES.MODEL_VARIABLE;
     }
-    if (type === NodeTypes.VARIABLES.PARAMETER) {
+    if (nodeSubType === NodeTypes.VARIABLES.PARAMETER) {
       return Colors.NODES.PARAMETER;
     }
   }
