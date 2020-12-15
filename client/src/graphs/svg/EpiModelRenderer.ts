@@ -209,11 +209,13 @@ export default class EPIModelRenderer extends SVGRenderer {
     // Apply filter
     // FIXME: not very efficient
     const hEdges = chart.selectAll('.edge').filter(d => {
-      return _.some(subgraph.edges, edge => edge.source === d.source && edge.target === d.target);
+      return _.some(subgraph.edges, edge => edge.source === d.source || edge.target === d.target);
     });
     hEdges.style('filter', `url(#${highlightId})`).classed(`${highlightId}`, true);
 
-    // const hNodes = chart.selectAll('.node-ui').filter(d => { console.log(d); return subgraph.nodes.includes(d.id); });
-    // hNodes.style('filter', `url(#${highlightId})`).classed(`${highlightId}`, true);
+    const hNodes = chart.selectAll('.node-ui').filter(d => { 
+      return subgraph.nodes.map(node=> node.id).includes(d.id); 
+    });
+    hNodes.style('filter', `url(#${highlightId})`).classed(`${highlightId}`, true);
   }
 }

@@ -19,7 +19,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div> -->
         </settings-bar>
-        <epi-graph :graph="getModelsList[0].graph.abstract" :subgraph="getModelsList[0].subgraph"/>
+        <epi-graph :graph="getModelsList[0].graph.detailed" :subgraph="getModelsList[0].subgraph"/>
       </div>
       <div slot="content-right" class="content local">
         <settings-bar>
@@ -30,7 +30,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div> -->
         </settings-bar>
-        <epi-graph :graph="getModelsList[1].graph.abstract" :subgraph="getModelsList[1].subgraph"/>
+        <epi-graph :graph="getModelsList[1].graph.detailed" :subgraph="getModelsList[1].subgraph"/>
       </div>
     </resizable-divider>
     <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
