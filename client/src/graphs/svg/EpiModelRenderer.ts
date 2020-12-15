@@ -93,7 +93,7 @@ export default class EPIModelRenderer extends SVGRenderer {
       } else {
         selection.select('.collapsed').remove();
         selection.select('text') // Restore label
-          .filter(d => (d as any).data.nodeType !== NodeTypes.NODES.FUNCTION)
+          .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION)
           .style('font-weight', 'bold')
           .text(d => (d as any).label);
       }
@@ -116,14 +116,13 @@ export default class EPIModelRenderer extends SVGRenderer {
           .style('stroke', '#888')
           .style('stroke-width', d => {
             const role = (d as any).data.role;
-            // Emphasize model code
             return role === 'model' ? 6 : 1;
           });
 
         // Special encodings for initial condition nodes
-        if ((selection.datum() as any).data.nodeType === NodeTypes.NODES.VARIABLE) {
+        if ((selection.datum() as any).nodeType === NodeTypes.NODES.VARIABLE) {
           const d = selection.datum();
-          if ((d as any).data.varType === NodeTypes.VARIABLES.INITIAL_CONDITION) {
+          if ((d as any).nodeSubType === NodeTypes.VARIABLES.INITIAL_CONDITION) {
             selection.select('rect').style('stroke-dasharray', 4);
           }
         }
@@ -134,13 +133,13 @@ export default class EPIModelRenderer extends SVGRenderer {
 
     // Add label for all nodes but FUNCTIONS
     nodeSelection.append('text')
-      .filter(d => d.data.nodeType !== NodeTypes.NODES.FUNCTION)
+      .filter(d => d.nodeType !== NodeTypes.NODES.FUNCTION)
       .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
       .attr('y', d => d.nodes ? -5 : 25)
       .style('fill', '#333')
       .style('font-weight', '600')
       .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-      .text(d => d.data.label);
+      .text(d => d.label);
   }
 
   hideNeighbourhood (): void {
@@ -155,10 +154,9 @@ export default class EPIModelRenderer extends SVGRenderer {
     const nodes = subgraph.nodes;
     const edges = subgraph.edges;
     const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => !nodes.map(node => node.id).includes(d.id));
-
     nonNeighborNodes.style('opacity', 0.1);
 
-    const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.data.source && edge.target === d.data.target));
+    const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.source && edge.target === d.target));
     nonNeighborEdges.style('opacity', 0.1);
   }
 

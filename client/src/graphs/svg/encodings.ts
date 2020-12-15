@@ -13,9 +13,7 @@ export abstract class NodeTypes {
   static readonly NODES: Record<string, any> = {
     VARIABLE: 'variable',
     FUNCTION: 'function',
-    LOOP_CONTAINER: 'LoopContainer',
-    FUNC_CONTAINER: 'FuncContainer',
-    COND_CONTAINER: 'CondContainer',
+    CONTAINER: 'container',
   }
 
   static readonly VARIABLES: Record<string, any> = {

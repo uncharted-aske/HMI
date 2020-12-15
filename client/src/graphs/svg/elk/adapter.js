@@ -15,10 +15,13 @@ const build = (root) => {
       id: node.id,
       concept: node.concept,
       label: node.label,
+      nodeType: node.nodeType,
+      nodeSubType: node.nodeSubType,
       depth: depth,
       type: 'normal',
       parent: parent,
-      data: node,
+      data: node.data,
+      metadata: node.metadata,
     };
 
     // Build edges
