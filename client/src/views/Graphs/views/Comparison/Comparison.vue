@@ -13,24 +13,24 @@
       <div slot="content-left" class="content global">
         <settings-bar>
           <div slot="counters">
-            <counters :model-name="getModelsList[0].metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
+            <counters :model-name="getModelsList[0].metadata.name"/>
           </div>
-          <div slot="settings">
+          <!-- <div slot="settings">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div>
+          </div> -->
         </settings-bar>
-        <epi-graph :graph="getModelsList[0].graph.abstract"/>
+        <epi-graph :graph="getModelsList[0].graph.abstract" :subgraph="getModelsList[0].subgraph"/>
       </div>
       <div slot="content-right" class="content local">
         <settings-bar>
           <div slot="counters">
-            <counters :model-name="getModelsList[1].metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
+            <counters :model-name="getModelsList[1].metadata.name"/>
           </div>
-          <div slot="settings">
+          <!-- <div slot="settings">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div>
+          </div> -->
         </settings-bar>
-        <epi-graph :graph="getModelsList[1].graph.abstract"/>
+        <epi-graph :graph="getModelsList[1].graph.abstract" :subgraph="getModelsList[1].subgraph"/>
       </div>
     </resizable-divider>
     <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
@@ -60,7 +60,8 @@
   import ResizableDivider from '@/components/ResizableDivider.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
-import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
+  import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
+
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -73,7 +74,7 @@ import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
     { name: 'Functional', id: 'functional' },
   ];
 
-  const MODELS_TO_COMPARE = [{id: 1}, {id: 2}]; //SIR and CHIME
+  const MODELS_TO_COMPARE = [{ id: 1 }, { id: 2 }]; // SIR and CHIME
 
   const components = {
     SearchBar,
@@ -104,53 +105,53 @@ import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
     @Getter getSelectedModelId;
     @Getter getModelsList;
 
-    // get selectedModels(): ModelInterface[] {
-    //   const modelsList = this.getModelsList;
-    //   console.log(modelsList.filter(model => MODELS_TO_COMPARE.includes(model.id)));
-    //   return modelsList.filter(model => MODELS_TO_COMPARE.includes(model.id) );
-    // }
+  // get selectedModels(): ModelInterface[] {
+  //   const modelsList = this.getModelsList;
+  //   console.log(modelsList.filter(model => MODELS_TO_COMPARE.includes(model.id)));
+  //   return modelsList.filter(model => MODELS_TO_COMPARE.includes(model.id) );
+  // }
 
-    // get selectedModel (): ModelInterface {
-    //   const modelsList = this.getModelsList;
-    //   return modelsList.find(model => model.id === this.getSelectedModelId);
-    // }
+  // get selectedModel (): ModelInterface {
+  //   const modelsList = this.getModelsList;
+  //   return modelsList.find(model => model.id === this.getSelectedModelId);
+  // }
 
-    // get selectedGraph (): GraphInterface {
-    //   return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
-    // }
+  // get selectedGraph (): GraphInterface {
+  //   return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
+  // }
 
-    // get nodeCount (): number {
-    //   return this.selectedGraph && this.selectedGraph.nodes.length;
-    // }
+  // get nodeCount (): number {
+  //   return this.selectedGraph && this.selectedGraph.nodes.length;
+  // }
 
-    // get edgeCount (): number {
-    //   return this.selectedGraph && this.selectedGraph.edges.length;
-    // }
+  // get edgeCount (): number {
+  //   return this.selectedGraph && this.selectedGraph.edges.length;
+  // }
 
-    // onSplitView (): void {
-    //   this.isSplitView = !this.isSplitView;
-    // }
+  // onSplitView (): void {
+  //   this.isSplitView = !this.isSplitView;
+  // }
 
-    // onTabClick (tabId: string): void {
-    //   this.activeTabId = tabId;
-    // }
+  // onTabClick (tabId: string): void {
+  //   this.activeTabId = tabId;
+  // }
 
-    // onCloseDrilldownPanel ():void {
-    //   this.isOpenDrilldown = false;
-    //   this.drilldownPaneTitle = '';
-    //   this.drilldownMetadata = null;
-    // }
+  // onCloseDrilldownPanel ():void {
+  //   this.isOpenDrilldown = false;
+  //   this.drilldownPaneTitle = '';
+  //   this.drilldownMetadata = null;
+  // }
 
-    // onSetView (viewId: string): void {
-    //   this.selectedViewId = viewId;
-    // }
+  // onSetView (viewId: string): void {
+  //   this.selectedViewId = viewId;
+  // }
 
-    // onNodeClick (node: GraphNodeInterface): void {
-    //   this.isOpenDrilldown = true;
-    //   this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
-    //   this.drilldownPaneSubtitle = node.type;
-    //   this.drilldownMetadata = node.metadata;
-    // }
+  // onNodeClick (node: GraphNodeInterface): void {
+  //   this.isOpenDrilldown = true;
+  //   this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
+  //   this.drilldownPaneSubtitle = node.type;
+  //   this.drilldownMetadata = node.metadata;
+  // }
   }
 </script>
 

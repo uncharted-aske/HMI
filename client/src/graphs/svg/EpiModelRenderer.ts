@@ -161,4 +161,65 @@ export default class EPIModelRenderer extends SVGRenderer {
     const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.data.source && edge.target === d.data.target));
     nonNeighborEdges.style('opacity', 0.1);
   }
+
+  highlight(subgraph: SubgraphInterface): void {
+    const svg = d3.select(this.svgEl);
+    const chart = this.chart;
+
+    const color = 'orange';
+
+    const highlightId = `glow${(new Date()).getTime()}`;
+
+    // Add temporary filter definition
+    const filter = svg.select('defs')
+      .append('filter')
+      .attr('id', highlightId)
+      .attr('width', '200%')
+      .attr('filterUnits', 'userSpaceOnUse');
+
+    filter.append('feGaussianBlur')
+      .attr('stdDeviation', 4.5)
+      .attr('result', 'blur');
+
+    filter.append('feOffset')
+      .attr('in', 'blur')
+      .attr('result', 'offsetBlur')
+      .attr('dx', 0)
+      .attr('dy', 0)
+      .attr('x', -10)
+      .attr('y', -10);
+
+    filter.append('feFlood')
+      .attr('in', 'offsetBlur')
+      .attr('flood-color', color)
+      .attr('flood-opacity', 0.95)
+      .attr('result', 'offsetColor');
+
+    filter.append('feComposite')
+      .attr('in', 'offsetColor')
+      .attr('in2', 'offsetBlur')
+      .attr('operator', 'in')
+      .attr('result', 'offsetBlur');
+
+
+    const feMerge = filter.append('feMerge');
+    feMerge.append('feMergeNode')
+      .attr('in', 'offsetBlur');
+
+    feMerge.append('feMergeNode')
+      .attr('in', 'SourceGraphic');
+
+
+    // Apply filter
+    // FIXME: not very efficient
+    const hEdges = chart.selectAll('.edge').filter(d => {
+      return _.some(subgraph.edges, edge => edge.source === d.source && edge.target === d.target);
+    });
+    hEdges.style('filter', `url(#${highlightId})`).classed(`${highlightId}`, true);
+
+    // const hNodes = chart.selectAll('.node-ui').filter(d => { console.log(d); return subgraph.nodes.includes(d.id); });
+    // hNodes.style('filter', `url(#${highlightId})`).classed(`${highlightId}`, true);
+
+
+  }
 }

@@ -21,6 +21,7 @@ interface ModelInterface {
   id: number;
   metadata: ModelMetadataInterface,
   graph: any,
+  subgraph?: any,
   type: string
 }
 

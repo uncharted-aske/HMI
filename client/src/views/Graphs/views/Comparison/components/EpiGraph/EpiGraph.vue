@@ -4,11 +4,15 @@
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
+
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
   import { GraphInterface } from '@/views/Graphs/types/types';
+  import { SubgraphInterface } from '@/graphs/svg/types/types';
+
 
   import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
@@ -25,12 +29,19 @@
   @Component
   export default class EpiGraph extends Vue {
     @Prop({ default: null }) graph: GraphInterface;
+    @Prop({ default: null }) subgraph: SubgraphInterface;
+
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
 
     @Watch('graph')
     graphChanged (): void {
+      this.refresh();
+    }
+
+    @Watch('subgraph')
+    subgraphChanged (): void {
       this.refresh();
     }
 
@@ -90,13 +101,14 @@
       this.refresh();
     }
 
-    refresh (): void {
+    async refresh (): Promise<void> {
       const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one
       formatHierarchyNodeData(hierarchyNodes); // Refines this hierarchical structure to a format that can be used by the renderer
       const edges = this.graph.edges;
       const graph = { nodes: [hierarchyNodes], edges };
       this.renderer.setData(graph);
-      this.renderer.render();
+      await this.renderer.render();
+      this.renderer.highlight(this.subgraph);
     }
   }
 </script>
