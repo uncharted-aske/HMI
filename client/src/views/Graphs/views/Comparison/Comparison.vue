@@ -15,9 +15,9 @@
           <div slot="counters">
             <counters :model-name="getModelsList[0].metadata.name"/>
           </div>
-          <!-- <div slot="settings">
+          <div slot="settings">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div> -->
+          </div>
         </settings-bar>
         <epi-graph :graph="getModelsList[0].graph.detailed" :subgraph="getModelsList[0].subgraph"/>
       </div>
@@ -26,9 +26,9 @@
           <div slot="counters">
             <counters :model-name="getModelsList[1].metadata.name"/>
           </div>
-          <!-- <div slot="settings">
+          <div slot="settings">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div> -->
+          </div>
         </settings-bar>
         <epi-graph :graph="getModelsList[1].graph.detailed" :subgraph="getModelsList[1].subgraph"/>
       </div>
@@ -94,7 +94,7 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
     views: ViewInterface[] = VIEWS;
-    selectedViewId = 'causal';
+    selectedViewId = 'functional';
     isOpenDrilldown = false;
     isSplitView = true;
     drilldownPaneTitle = '';
@@ -141,9 +141,9 @@
   //   this.drilldownMetadata = null;
   // }
 
-  // onSetView (viewId: string): void {
-  //   this.selectedViewId = viewId;
-  // }
+  onSetView (viewId: string): void {
+    this.selectedViewId = viewId;
+  }
 
   // onNodeClick (node: GraphNodeInterface): void {
   //   this.isOpenDrilldown = true;
