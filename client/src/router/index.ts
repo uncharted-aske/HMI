@@ -4,7 +4,7 @@ import Home from '@/views/Home/Home.vue';
 import NotFound from '@/views/NotFound/NotFound.vue';
 import BioView from '@/views/Graphs/views/Bio/Bio.vue';
 import EpiView from '@/views/Graphs/views/Epi/Epi.vue';
-import Knowledge from '@/views/Knowledge/Knowledge.vue';
+import Knowledge from '@/views/Graphs/views/Knowledge/Knowledge.vue';
 
 const RouterSingleton = ((): any => {
   let router: Router;
