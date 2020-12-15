@@ -1,8 +1,8 @@
 <template>
   <div class="view-container">
-    <left-side-panel @close-pane="onClosePane" v-if="activePane">
+    <left-side-panel @close-pane="onClosePane">
       <div slot="content">
-        <facets-pane v-if="activePane === actions[0].paneId" />
+        <facets-pane />
       </div>
     </left-side-panel>
 
