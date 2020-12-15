@@ -162,7 +162,7 @@ export default class EPIModelRenderer extends SVGRenderer {
     nonNeighborEdges.style('opacity', 0.1);
   }
 
-  highlight(subgraph: SubgraphInterface): void {
+  highlight (subgraph: SubgraphInterface): void {
     const svg = d3.select(this.svgEl);
     const chart = this.chart;
 
@@ -201,14 +201,12 @@ export default class EPIModelRenderer extends SVGRenderer {
       .attr('operator', 'in')
       .attr('result', 'offsetBlur');
 
-
     const feMerge = filter.append('feMerge');
     feMerge.append('feMergeNode')
       .attr('in', 'offsetBlur');
 
     feMerge.append('feMergeNode')
       .attr('in', 'SourceGraphic');
-
 
     // Apply filter
     // FIXME: not very efficient
@@ -219,7 +217,5 @@ export default class EPIModelRenderer extends SVGRenderer {
 
     // const hNodes = chart.selectAll('.node-ui').filter(d => { console.log(d); return subgraph.nodes.includes(d.id); });
     // hNodes.style('filter', `url(#${highlightId})`).classed(`${highlightId}`, true);
-
-
   }
 }

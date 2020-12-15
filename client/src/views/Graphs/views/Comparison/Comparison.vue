@@ -62,7 +62,6 @@
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
   import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
 
-
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },

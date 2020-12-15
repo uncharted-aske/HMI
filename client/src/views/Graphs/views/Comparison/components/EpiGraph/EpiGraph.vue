@@ -13,7 +13,6 @@
   import { GraphInterface } from '@/views/Graphs/types/types';
   import { SubgraphInterface } from '@/graphs/svg/types/types';
 
-
   import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
@@ -30,7 +29,6 @@
   export default class EpiGraph extends Vue {
     @Prop({ default: null }) graph: GraphInterface;
     @Prop({ default: null }) subgraph: SubgraphInterface;
-
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
