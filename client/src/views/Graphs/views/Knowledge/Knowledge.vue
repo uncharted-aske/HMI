@@ -8,7 +8,7 @@
 
     <div class="content">
       <div class="search-row">
-        <search-bar />
+        <search-bar :pills="searchPills" />
       </div>
       <settings-bar>
         <div slot="counters">
@@ -34,9 +34,12 @@
 
   import { CardInterface } from '@/views/Home/types/types';
 
+  import SearchBar from '@/components/SearchBar.vue';
+  import TextPill from '@/search/pills/TextPill';
+  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
+
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
-  import SearchBar from '@/views/Home/components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from './Settings/Settings.vue';
   import Counters from '@/views/Graphs/components/Counters/Counters.vue';
@@ -72,6 +75,12 @@
     @Getter getFilters;
     @Getter getModelsList;
     @Mutation setSelectedModel;
+
+    get searchPills (): any {
+      return [
+        new TextPill(QUERY_FIELDS_MAP.TEXT),
+      ];
+    }
 
     get countersValues (): Array<number> {
       return [data.total, data.page + 1];

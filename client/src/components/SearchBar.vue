@@ -9,20 +9,23 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Getter, Action } from 'vuex-class';
-  import { Watch } from 'vue-property-decorator';
+  import { Prop, Watch } from 'vue-property-decorator';
   import _ from 'lodash';
   import { Lex, ValueState } from '@uncharted.software/lex/dist/lex';
   import KeyValuePill from '@/search/pills/KeyValuePill';
   import RangePill from '@/search/pills/RangePill';
   import TextPill from '@/search/pills/TextPill';
-  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
   import * as filtersUtil from '@/utils/FiltersUtil';
-  import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   @Component
   export default class SearchBar extends Vue {
+    @Prop({ default: [] })
+    pills: (KeyValuePill | RangePill | TextPill)[];
+
+    @Prop({ default: 30 })
+    suggestionLimit: number;
+
     private lex: Lex = null;
-    private pills: KeyValuePill[] | RangePill[] | TextPill[] = [];
 
     @Getter getFilters;
     @Action setFilters;
@@ -32,22 +35,12 @@
     }
 
     mounted (): void {
-      this.pills = [
-        new KeyValuePill(
-          QUERY_FIELDS_MAP.MODEL_TYPE,
-          modelTypeUtil.MODEL_TYPE_OPTIONS,
-          'Select model type..',
-        ),
-        new RangePill(QUERY_FIELDS_MAP.HISTOGRAM),
-        new TextPill(QUERY_FIELDS_MAP.TEXT),
-      ];
-
       const language = Lex.from('field', ValueState, {
         name: 'Choose a field to search',
         suggestions: _.sortBy(this.pills, p => p.searchDisplay).map(pill =>
           pill.makeOption(),
         ),
-        suggestionLimit: 30,
+        suggestionLimit: this.suggestionLimit,
         icon: v => {
           if (_.isNil(v)) return '<i class="fas fa-search"></i>';
           const pill = this.pills.find(
