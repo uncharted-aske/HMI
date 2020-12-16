@@ -163,10 +163,12 @@ export default class EPIModelRenderer extends SVGRenderer {
     const chart = this.chart;
     const color = '#ffa500';
 
-    const hEdges = chart.selectAll('.edge').filter(d => {
+    const hEdges = chart.selectAll('.edge-path').filter(d => {
       return _.some(subgraph.edges, edge => edge.source === d.source || edge.target === d.target);
     });
     hEdges.style('stroke', color);
+    hEdges.style('stroke-width', 3);
+
 
     const hNodes = chart.selectAll('.node-ui rect').filter(d => { 
       return subgraph.nodes.map(node=> node.id).includes(d.id); 
