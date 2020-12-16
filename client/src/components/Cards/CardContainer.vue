@@ -44,14 +44,13 @@
 @import "@/styles/variables";
 
 .card-container {
-  // TO DO: Find better way to calculate height for this component
-  height: calc(#{$content-full-height} - #{$secondary-bar-width});
+  flex: 1;
   display: flex;
   flex-direction: column;
   // Use 22px instead of 32px to account for cards' 10px horizontal margin
   padding: 16px 22px 16px 22px;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
 
   .section-header {
     // Match cards' 10px horizontal margin
@@ -62,7 +61,6 @@
   .card-list {
     display: flex;
     flex-wrap: wrap;
-    padding-bottom:36px;
     .card {
       margin: 0 10px 20px 10px;
     }
