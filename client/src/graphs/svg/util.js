@@ -141,7 +141,14 @@ export const calcNodeColor = (node) => {
       if (node.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE)) {
         return Colors.NODES.MODEL_VARIABLE;
       }
+      if (node.nodeSubType.includes(NodeTypes.VARIABLES.INITIAL_CONDITION)) {
+        return Colors.NODES.INITIAL_CONDITION;
+      }
     }
   }
   return Colors.NODES.DEFAULT;
+};
+
+export const calcLabelColor = (node) => {
+  return node.nodeSubType && node.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE) ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
 };

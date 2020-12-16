@@ -6,6 +6,11 @@ export abstract class Colors {
     INITIAL_CONDITION: '#A6CEE3',
   };
 
+  static readonly LABELS: Record<string, any> = {
+    DARK: '#333333',
+    LIGHT: '#FFFFFF',
+  };
+
   static readonly EDGES: string = '#6C757D';
 }
 
