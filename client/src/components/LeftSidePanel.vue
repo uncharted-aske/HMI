@@ -40,7 +40,7 @@
 
   @Component
   export default class LeftSidePanel extends Vue {
-    @Prop({ default: [] })
+    @Prop({ default: () => [] })
     tabs: TabInterface[];
 
     @Prop({ default: '' })

@@ -1,14 +1,19 @@
 @import "variables";
 
 .view-container {
-    position: relative;
-    height: $content-full-height;
+  position: relative;
+  height: $content-full-height;
+  overflow: hidden;
+  .content {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    overflow: hidden;
-    box-sizing: border-box;
-    .content {
-      flex: 1;
-    }
+    height: 100%;
+  }
+}
+
+.search-row {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid $border;
+  background-color: $secondary-bar-bg;
 }
