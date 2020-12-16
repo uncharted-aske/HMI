@@ -122,9 +122,9 @@ export default class EPIModelRenderer extends SVGRenderer {
         // Special encodings for different types of variable nodes
         if ((selection.datum() as any).nodeType === NodeTypes.NODES.VARIABLE) {
           const d = selection.datum();
-          // if ((d as any).nodeSubType === NodeTypes.VARIABLES.INITIAL_CONDITION) {
-          //   selection.select('rect').style('stroke-dasharray', 4);
-          // }
+          if ((d as any).nodeSubType === NodeTypes.VARIABLES.INTERNAL_VARIABLE) {
+            selection.select('rect').style('stroke-dasharray', 4);
+          }
         }
       }
     });
@@ -136,8 +136,10 @@ export default class EPIModelRenderer extends SVGRenderer {
       .filter(d => d.nodeType !== NodeTypes.NODES.FUNCTION)
       .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
       .attr('y', d => d.nodes ? -5 : 25)
-      .style('fill', '#333')
-      .style('font-weight', '600')
+      .style('fill', d => {
+        return (d.nodeSubType && d.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE)) ? '#FFFFFF' : '#333333';
+      })
+      .style('font-weight', d=> d.nodes ? '800' : '500')
       .style('text-anchor', d => d.nodes ? 'left' : 'middle')
       .text(d => d.label);
   }

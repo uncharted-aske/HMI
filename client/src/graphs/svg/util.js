@@ -141,9 +141,6 @@ export const calcNodeColor = (node) => {
       if (node.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE)) {
         return Colors.NODES.MODEL_VARIABLE;
       }
-    // if (nodeSubType === NodeTypes.VARIABLES.PARAMETER) {
-    //   return Colors.NODES.PARAMETER;
-    // }
     }
   }
   return Colors.NODES.DEFAULT;

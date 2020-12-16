@@ -2,8 +2,8 @@ export abstract class Colors {
   static readonly NODES: Record<string, any> = {
     DEFAULT: '#EEEEEE',
     CONTAINER: '#F8F8F8',
-    MODEL_VARIABLE: '#0091EA',
-    PARAMETER: '#FFC04D',
+    MODEL_VARIABLE: '#1F78B4',
+    INITIAL_CONDITION: '#A6CEE3',
   };
 
   static readonly EDGES: string = '#6C757D';
