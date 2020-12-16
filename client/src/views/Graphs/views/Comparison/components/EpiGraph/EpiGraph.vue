@@ -38,11 +38,6 @@
       this.refresh();
     }
 
-    @Watch('subgraph')
-    subgraphChanged (): void {
-      this.refresh();
-    }
-
     created (): void {
       this.renderer = null;
     }
@@ -55,7 +50,7 @@
       });
 
       this.renderer.setCallback('nodeClick', (node) => {
-        // this.$emit('node-click', node.datum().data); // TO FIX
+        this.$emit('node-click', node.datum().data); // TO FIX
         const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
         this.renderer.showNeighborhood(neighborhood);
       });

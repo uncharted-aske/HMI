@@ -19,7 +19,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <epi-graph :graph="getModelsList[0].graph.detailed" :subgraph="getModelsList[0].subgraph"/>
+        <epi-graph :graph="getModelsList[0].graph.detailed" :subgraph="getModelsList[0].subgraph" @node-click="onNodeClick"/>
       </div>
       <div slot="content-right" class="content local">
         <settings-bar>
@@ -60,7 +60,6 @@
   import ResizableDivider from '@/components/ResizableDivider.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
-  import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -145,12 +144,13 @@
     this.selectedViewId = viewId;
   }
 
-  // onNodeClick (node: GraphNodeInterface): void {
-  //   this.isOpenDrilldown = true;
-  //   this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
-  //   this.drilldownPaneSubtitle = node.type;
-  //   this.drilldownMetadata = node.metadata;
-  // }
+  onNodeClick (node: GraphNodeInterface): void {
+    console.log(node);
+    // this.isOpenDrilldown = true;
+    // this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
+    // this.drilldownPaneSubtitle = node.type;
+    // this.drilldownMetadata = node.metadata;
+  }
   }
 </script>
 
