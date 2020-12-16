@@ -1,7 +1,7 @@
 <template>
   <div class="settings-container">
-    <button type="button" class="btn btn-secondary mr-1" disabled>Entity Based Views</button>
-    <button type="button" class="btn btn-secondary mr-1" disabled>Document Based Views</button>
+    <button type="button" class="btn btn-secondary mr-1" disabled>Entity-based Views</button>
+    <button type="button" class="btn btn-secondary mr-1" disabled>Document-based Views</button>
     <button type="button" class="btn btn-secondary mr-1" disabled>Layouts</button>
     <button type="button" class="btn btn-secondary mr-1" disabled>Settings</button>
   </div>
