@@ -79,11 +79,11 @@ export default class EPIModelRenderer extends SVGRenderer {
         .style('fill', d => calcNodeColor(d));
 
       if ((selection.datum() as any).collapsed === true) {
-        const numChildren = (selection.datum() as any).data.nodes.length;
-        // Added number of children to the collapsed label
+        // TODO: Investigate ways to add number of children to the collapsed label. 
+        // When the node is collapsed, there is no access to the children nodes at the moment.
         selection.select('text')
           .style('font-weight', 'bold')
-          .text(d => (d as any).label + ' (' + numChildren + ')');
+          .text(d => (d as any).label);
         selection.append('text')
           .classed('collapsed', true)
           .attr('x', 10)
