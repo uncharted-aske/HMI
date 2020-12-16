@@ -6,7 +6,9 @@
       :style="imageStyle"
       :title="'Preview of ' + title"
     />
-    <h5 class="title">{{ title }}</h5>
+    <div class="title-wrapper">
+      <h5 class="title">{{ title }}</h5>
+    </div>
     <h6 class="subtitle">{{ subtitle }}</h6>
     <div class="icon">
       <font-awesome-icon :icon="['fas', iconType]" />
@@ -38,7 +40,20 @@
     }
 
     get imageStyle (): any {
-      return { backgroundImage: this.hasImage ? `url(${this.previewImageSrc})` : 'none' };
+      let backgroundImage = 'none';
+      if (this.hasImage) {
+        let isBase64 = true;
+        try {
+          window.atob(this.previewImageSrc);
+        } catch (e) {
+          if (e.code === 5) {
+            isBase64 = false;
+          }
+        }
+        backgroundImage = isBase64 ? `url(data:image/gif;base64,${this.previewImageSrc})` : `url(${this.previewImageSrc})`;
+      }
+
+      return { backgroundImage };
     }
 
     onCardClick (): void {
@@ -67,6 +82,7 @@
 
   .title {
     max-height: 50px;
+    overflow-y: hidden;
   }
 
   .subtitle {
@@ -78,7 +94,7 @@
     min-height: 0;
     overflow-x: hidden;
     overflow-y: scroll;
-    padding-top: 10px;
+    margin-top: 10px;
 
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */

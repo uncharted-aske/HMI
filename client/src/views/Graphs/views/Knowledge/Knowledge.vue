@@ -96,6 +96,7 @@
         title: item.bibjson.title,
         subtitle: item.children[0].content,
         type: item.bibjson.type,
+        previewImageSrc: item.children[0].bytes,
       }));
     }
 
