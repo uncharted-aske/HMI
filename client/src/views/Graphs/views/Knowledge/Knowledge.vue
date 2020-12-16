@@ -18,8 +18,8 @@
           <settings />
         </div>
       </settings-bar>
-      <start-screen
-          :open-section-header="`Knowledge`"
+      <card-container
+          :header="`Knowledge`"
           :cards="modelsCards"
           @open-card="onOpenCard"
       />
@@ -45,7 +45,7 @@
   import Counters from '@/views/Graphs/components/Counters/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/views/Home/components/FacetsPane/FacetsPane.vue';
-  import StartScreen from '@/views/Home/components/StartScreen/StartScreen.vue';
+  import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
   import data from './example.json';
@@ -63,7 +63,7 @@
     Counters,
     LeftSidePanel,
     FacetsPane,
-    StartScreen,
+    CardContainer,
   };
 
   @Component({ components })

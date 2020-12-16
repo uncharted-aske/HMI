@@ -8,8 +8,8 @@
 
     <div class="content">
       <search-bar :pills="searchPills" />
-      <start-screen
-          :open-section-header="`Models`"
+      <card-container
+          :header="`Models`"
           :cards="modelsCards"
           @open-card="onOpenCard"
       />
@@ -35,7 +35,7 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
 
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
-  import StartScreen from './components/StartScreen/StartScreen.vue';
+  import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
   import CHIMEScreenshot from '@/assets/img/CHIME.png';
@@ -53,7 +53,7 @@
     SearchBar,
     LeftSidePanel,
     FacetsPane,
-    StartScreen,
+    CardContainer,
   };
 
   @Component({ components })
