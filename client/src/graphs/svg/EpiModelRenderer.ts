@@ -160,73 +160,19 @@ export default class EPIModelRenderer extends SVGRenderer {
   }
 
   highlight (subgraph: SubgraphInterface): void {
-    const svg = d3.select(this.svgEl);
     const chart = this.chart;
-
     const color = '#ffa500';
 
-    const highlightId = `glow${(new Date()).getTime()}`;
-
-    // Add temporary filter definition
-    const filter = svg.select('defs')
-      .append('filter')
-      .attr('id', highlightId)
-      .attr('width', '200%')
-      .attr('filterUnits', 'userSpaceOnUse');
-
-    filter.append('feGaussianBlur')
-      .attr('stdDeviation', 4.5)
-      .attr('result', 'blur');
-
-    filter.append('feOffset')
-      .attr('in', 'blur')
-      .attr('result', 'offsetBlur')
-      .attr('dx', 0)
-      .attr('dy', 0)
-      .attr('x', -10)
-      .attr('y', -10);
-
-    filter.append('feFlood')
-      .attr('in', 'offsetBlur')
-      .attr('flood-color', color)
-      .attr('flood-opacity', 1)
-      .attr('result', 'offsetColor');
-
-    filter.append('feComposite')
-      .attr('in', 'offsetColor')
-      .attr('in2', 'offsetBlur')
-      .attr('operator', 'in')
-      .attr('result', 'offsetBlur');
-
-    const feMerge = filter.append('feMerge');
-    feMerge.append('feMergeNode')
-      .attr('in', 'offsetBlur');
-
-    feMerge.append('feMergeNode')
-      .attr('in', 'SourceGraphic');
-
-    //Apply filter
-    // FIXME: not very efficient
     const hEdges = chart.selectAll('.edge').filter(d => {
       return _.some(subgraph.edges, edge => edge.source === d.source || edge.target === d.target);
     });
-    hEdges.style('filter', `url(#${highlightId})`).classed(`${highlightId}`, true);
+    hEdges.style('stroke', color);
 
-    const hNodes = chart.selectAll('.node-ui').filter(d => { 
+    const hNodes = chart.selectAll('.node-ui rect').filter(d => { 
       return subgraph.nodes.map(node=> node.id).includes(d.id); 
     });
-    hNodes.style('filter', `url(#${highlightId})`).classed(`${highlightId}`, true);
-
-    // const hEdges = chart.selectAll('.edge').filter(d => {
-    //   return _.some(subgraph.edges, edge => edge.source === d.source || edge.target === d.target);
-    // });
-    // hEdges.style('stroke', color);
-
-    // const hNodes = chart.selectAll('.node-ui rect').filter(d => { 
-    //   return subgraph.nodes.map(node=> node.id).includes(d.id); 
-    // });
-    // hNodes.style('stroke', color);
-    // hNodes.style('stroke-width', 3);
+    hNodes.style('stroke', color);
+    hNodes.style('stroke-width', 3);
 
 
   }
