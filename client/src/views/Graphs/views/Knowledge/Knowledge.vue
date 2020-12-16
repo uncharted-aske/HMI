@@ -94,7 +94,16 @@
       return data.objects.map((item, index) => ({
         id: index,
         title: item.bibjson.title,
-        subtitle: item.children[0].content,
+        subtitle: `${item.bibjson.year ?? 'Unknown Year'} - ${item.bibjson.author.length === 0
+          ? 'Unknown Author'
+          : item.bibjson.author.reduce((acc, author, index) => {
+            acc += author.name;
+            if (index !== item.bibjson.author.length - 1) {
+              acc += ', ';
+            }
+            return acc;
+          }, '')}
+        `,
         type: item.bibjson.type,
         previewImageSrc: item.children[0].bytes,
       }));

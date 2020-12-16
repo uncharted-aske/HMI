@@ -25,9 +25,9 @@
   export default class Card extends Vue {
     @Prop({ default: '' }) previewImageSrc: string;
 
-    @Prop({ default: 'Card title' }) title: string;
+    @Prop({ default: '' }) title: string;
 
-    @Prop({ default: 'Card subtitle' }) subtitle: string;
+    @Prop({ default: '' }) subtitle: string;
 
     @Prop({ default: 'faExclamationTriangle' }) icon: string;
 
@@ -115,7 +115,7 @@
     min-width: 233px;
     width: 350px;
     padding: 8px;
-    max-height: 30vh;
+    max-height: 40vh;
     min-height: 300px;
 
     background-color: white;
