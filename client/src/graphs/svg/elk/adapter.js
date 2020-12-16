@@ -194,12 +194,54 @@ const postProcess = (layout) => {
     }
   });
 
+  const moveInputsOutputs = (node) => { 
+    if (node.nodeSubType) {
+      const parentWidth = node.parent.width;
+      //Input nodes
+      if (node.nodeSubType.includes('input')) {
+        node.x = -10;
+      } else if (node.nodeSubType.includes('output')) {
+        console.log(node.label);
+        node.x = parentWidth - 10;
+      } 
+    }
+  }
+
+
+  // traverse(layout, (node) => {
+  //   nodeParent[node.id] = node.parent ? node.parent.id : null;
+  //   if (!node.parent) {
+  //     nodeGlobalPosition[node.id] = {
+  //       x: node.x,
+  //       y: node.y,
+  //     };
+  //   } else {
+  //     if ((!node.nodes) && (node.nodeType === NodeTypes.NODES.VARIABLE)) {
+  //         //Check if the variable is either an input or an output
+  //         if (node.nodeSubtype) {
+  //           if (node.nodeSubType.includes('input')) {
+  //             console.log(node.x);
+  //           }
+  //         }
+        
+  //     } else {
+  //       nodeGlobalPosition[node.id] = {
+  //         x: node.x + nodeGlobalPosition[node.parent.id].x,
+  //         y: node.y + nodeGlobalPosition[node.parent.id].y,
+  //       };
+  //     }
+  //   }
+  // });
+
   traverse(layout, (node) => {
     if (node.edges) {
       for (const edge of node.edges) {
         convertPointsToGlobalXY(edge);
         splitLineSegments(edge);
       }
+    }
+    if ((!node.nodes) && (node.nodeType === NodeTypes.NODES.VARIABLE)) {
+      moveInputsOutputs(node);
     }
   });
 

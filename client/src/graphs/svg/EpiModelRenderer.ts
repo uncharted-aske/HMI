@@ -119,7 +119,7 @@ export default class EPIModelRenderer extends SVGRenderer {
             return role === 'model' ? 6 : 1;
           });
 
-        // Special encodings for initial condition nodes
+        // Special encodings for different types of variable nodes
         if ((selection.datum() as any).nodeType === NodeTypes.NODES.VARIABLE) {
           const d = selection.datum();
           if ((d as any).nodeSubType === NodeTypes.VARIABLES.INITIAL_CONDITION) {
