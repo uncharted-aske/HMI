@@ -5,7 +5,7 @@ import { SVGRenderer } from 'compound-graph';
 
 import { EpiModelRendererOptionsInterface, SubgraphInterface } from '@/graphs/svg/types/types';
 
-import { calcNodeColor } from '@/graphs/svg/util';
+import { calcNodeColor, calcLabelColor } from '@/graphs/svg/util';
 import { Colors, NodeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 
@@ -72,12 +72,17 @@ export default class EPIModelRenderer extends SVGRenderer {
     nodeSelection.each(function () {
       const selection = d3.select(this);
       selection.select('rect')
+        .filter(d=> { 
+          return (!(d as any).nodeSubType ||
+          ((d as any).nodeSubType && (!(d as any).nodeSubType.includes('input') && !(d as any).nodeSubType.includes('output'))))
+        })
         .transition()
         .duration(1000)
         .attr('width', d => (d as any).width)
         .attr('height', d => (d as any).height)
         .style('fill', d => calcNodeColor(d));
 
+     
       if ((selection.datum() as any).collapsed === true) {
         // TODO: Investigate ways to add number of children to the collapsed label.
         // When the node is collapsed, there is no access to the children nodes at the moment.
@@ -94,6 +99,7 @@ export default class EPIModelRenderer extends SVGRenderer {
         selection.select('.collapsed').remove();
         selection.select('text') // Restore label
           .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION)
+          .style('fill', d => calcLabelColor(d))
           .style('font-weight', 'bold')
           .text(d => (d as any).label);
       }
@@ -107,6 +113,10 @@ export default class EPIModelRenderer extends SVGRenderer {
 
       if ((selection.datum() as any).id !== 'root') { // Don't draw the root node
         selection.append('rect')
+          .filter(d=> { 
+            return (!(d as any).nodeSubType ||
+            ((d as any).nodeSubType && (!(d as any).nodeSubType.includes('input') && !(d as any).nodeSubType.includes('output'))))
+          })
           .attr('x', 0)
           .attr('rx', 5)
           .attr('y', 0)
@@ -118,6 +128,18 @@ export default class EPIModelRenderer extends SVGRenderer {
             const role = (d as any).data.role;
             return role === 'model' ? 6 : 1;
           });
+
+        // Draw ellipses for input and output nodes
+        selection.append('ellipse')
+            .filter(d=> { 
+              return (d as any).nodeSubType && ((d as any).nodeSubType.includes('input') || (d as any).nodeSubType.includes('output'))
+            })
+            .attr("cx", (d) => ((d as any).width * 0.5))
+            .attr("cy", (d) =>  25)
+            .attr("rx", (d) => (d as any).width * 0.5)
+            .attr("ry", (d) => 25)
+            .style('fill', d => calcNodeColor(d))
+            .style('stroke', '#888');
 
         // Special encodings for different types of variable nodes
         if ((selection.datum() as any).nodeType === NodeTypes.NODES.VARIABLE) {
@@ -136,10 +158,8 @@ export default class EPIModelRenderer extends SVGRenderer {
       .filter(d => d.nodeType !== NodeTypes.NODES.FUNCTION)
       .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
       .attr('y', d => d.nodes ? -5 : 25)
-      .style('fill', d => {
-        return (d.nodeSubType && d.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE)) ? '#FFFFFF' : '#333333';
-      })
-      .style('font-weight', d=> d.nodes ? '800' : '500')
+      .style('fill', d => calcLabelColor(d))
+      .style('font-weight', d => d.nodes ? '800' : '500')
       .style('text-anchor', d => d.nodes ? 'left' : 'middle')
       .text(d => d.label);
   }
