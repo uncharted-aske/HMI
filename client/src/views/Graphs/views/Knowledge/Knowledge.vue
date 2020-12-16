@@ -12,7 +12,7 @@
       </div>
       <settings-bar>
         <div slot="counters">
-          <counters :labels="['Total', 'Page']" :values="countersValues"/>
+          <counters :labels="['Documents', 'Page']" :values="countersValues"/>
         </div>
         <div slot="settings">
           <settings />
