@@ -122,9 +122,9 @@ export default class EPIModelRenderer extends SVGRenderer {
         // Special encodings for different types of variable nodes
         if ((selection.datum() as any).nodeType === NodeTypes.NODES.VARIABLE) {
           const d = selection.datum();
-          if ((d as any).nodeSubType === NodeTypes.VARIABLES.INITIAL_CONDITION) {
-            selection.select('rect').style('stroke-dasharray', 4);
-          }
+          // if ((d as any).nodeSubType === NodeTypes.VARIABLES.INITIAL_CONDITION) {
+          //   selection.select('rect').style('stroke-dasharray', 4);
+          // }
         }
       }
     });
