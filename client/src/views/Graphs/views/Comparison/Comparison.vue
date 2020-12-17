@@ -150,10 +150,10 @@
     this.drilldownMetadata = node.metadata;
   }
 
-  onNodeHover(node: any):void {
+  onNodeHover (node: any):void {
     this.reference = node['linked-to'][0]['node-id'];
   }
-}
+  }
 </script>
 
 <style lang="scss" scoped>

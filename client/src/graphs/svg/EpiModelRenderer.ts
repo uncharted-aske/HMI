@@ -170,12 +170,12 @@ export default class EPIModelRenderer extends SVGRenderer {
 
     hEdges.style('stroke', color);
     hEdges.style('stroke-width', 3);
-    
+
     hNodes.style('stroke', color);
     hNodes.style('stroke-width', 3);
   }
 
-  highlightReference(referenceId: string, color: string): void {
+  highlightReference (referenceId: string, color: string): void {
     const svg = d3.select(this.svgEl);
     const chart = this.chart;
 
@@ -189,7 +189,7 @@ export default class EPIModelRenderer extends SVGRenderer {
       .attr('filterUnits', 'userSpaceOnUse');
 
     filter.append('feGaussianBlur')
-      .attr('stdDeviation', 4.5)
+      .attr('stdDeviation', 8)
       .attr('result', 'blur');
 
     filter.append('feOffset')
@@ -203,7 +203,7 @@ export default class EPIModelRenderer extends SVGRenderer {
     filter.append('feFlood')
       .attr('in', 'offsetBlur')
       .attr('flood-color', color)
-      .attr('flood-opacity', 0.95)
+      .attr('flood-opacity', 1)
       .attr('result', 'offsetColor');
 
     filter.append('feComposite')
@@ -211,7 +211,6 @@ export default class EPIModelRenderer extends SVGRenderer {
       .attr('in2', 'offsetBlur')
       .attr('operator', 'in')
       .attr('result', 'offsetBlur');
-
 
     const feMerge = filter.append('feMerge');
     feMerge.append('feMergeNode')
@@ -227,9 +226,9 @@ export default class EPIModelRenderer extends SVGRenderer {
     hNode.style('filter', `url(#${highlightId})`).classed(`${highlightId}`, true);
   }
 
-  unHighlightReference(referenceId: string):void {
+  unHighlightReference (referenceId: string):void {
     const highlightId = `glow${referenceId}`;
     d3.select(`#${highlightId}`).remove();
     d3.selectAll(`.${highlightId}`).style('filter', null);
-  };
+  }
 }

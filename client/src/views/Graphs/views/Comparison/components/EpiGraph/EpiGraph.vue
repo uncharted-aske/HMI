@@ -16,9 +16,9 @@
   import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
-  import { hierarchyFn } from '@/utils/SVGUtil.js';
+  import { hierarchyFn, showTooltip } from '@/utils/SVGUtil.js';
   import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
-  import { showTooltip } from '@/utils/SVGUtil.js';
+
   import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
@@ -43,7 +43,9 @@
 
     @Watch('reference')
     referenceChanged (): void {
-      this.renderer.highlightReference(this.reference, 'blue');
+      this.renderer.highlightReference(this.reference, Colors.HIGHLIGHT);
+      this.renderer.moveTo(this.reference, 3000);
+      // this.renderer.centerGraph();
     }
 
     created (): void {
@@ -79,7 +81,7 @@
       // TO FIX: Enable back tooltip functionality
       this.renderer.setCallback('nodeMouseEnter', (node) => {
         const nodeData = node.datum();
-        //Highlight linked nodes/edges
+        // Highlight linked nodes/edges
         if (!nodeData.nodes) {
           const found = this.subgraph.nodes.find(node => node.id === nodeData.id);
           if (found) {
@@ -98,7 +100,7 @@
           // const groups = this.renderer.layout.groups;
           // const group = groups.find(g => g.id === nodeData.group);
           // nodeCoords = [group.x + nodeData.x, group.y + nodeData.y];
-        //}
+        // }
         // showTooltip(this.renderer.chart, tooltipText, nodeCoords);
       });
 
