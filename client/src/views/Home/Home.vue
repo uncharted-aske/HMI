@@ -7,9 +7,9 @@
     </left-side-panel>
 
     <div class="content">
-      <search-bar />
-      <start-screen
-          :open-section-header="`Models`"
+      <search-bar :pills="searchPills" />
+      <card-container
+          :header="`Models`"
           :cards="modelsCards"
           @open-card="onOpenCard"
       />
@@ -25,11 +25,17 @@
   import { TabInterface } from '@/types/types';
   import { CardInterface } from './types/types';
 
-  import SearchBar from './components/SearchBar/SearchBar.vue';
+  import SearchBar from '@/components/SearchBar.vue';
+  import KeyValuePill from '@/search/pills/KeyValuePill';
+  import RangePill from '@/search/pills/RangePill';
+  import TextPill from '@/search/pills/TextPill';
+  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
+  import * as modelTypeUtil from '@/utils/ModelTypeUtil';
+
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
 
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
-  import StartScreen from './components/StartScreen/StartScreen.vue';
+  import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
   import CHIMEScreenshot from '@/assets/img/CHIME.png';
@@ -47,7 +53,7 @@
     SearchBar,
     LeftSidePanel,
     FacetsPane,
-    StartScreen,
+    CardContainer,
   };
 
   @Component({ components })
@@ -58,6 +64,18 @@
     @Getter getFilters;
     @Getter getModelsList;
     @Mutation setSelectedModel;
+
+    get searchPills (): any {
+      return [
+        new KeyValuePill(
+          QUERY_FIELDS_MAP.MODEL_TYPE,
+          modelTypeUtil.MODEL_TYPE_OPTIONS,
+          'Select model type..',
+        ),
+        new RangePill(QUERY_FIELDS_MAP.HISTOGRAM),
+        new TextPill(QUERY_FIELDS_MAP.TEXT),
+      ];
+    }
 
     get modelsCards (): CardInterface[] {
       const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);

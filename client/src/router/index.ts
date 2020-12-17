@@ -5,6 +5,7 @@ import NotFound from '@/views/NotFound/NotFound.vue';
 import BioView from '@/views/Graphs/views/Bio/Bio.vue';
 import EpiView from '@/views/Graphs/views/Epi/Epi.vue';
 import ComparisonView from '@/views/Graphs/views/Comparison/Comparison.vue';
+import Knowledge from '@/views/Graphs/views/Knowledge/Knowledge.vue';
 
 const RouterSingleton = ((): any => {
   let router: Router;
@@ -33,6 +34,10 @@ const RouterSingleton = ((): any => {
           path: '/comparisonView',
           name: 'comparisonView',
           component: ComparisonView,
+        },{
+          path: '/knowledge',
+          name: 'knowledge',
+          component: Knowledge,
         },
         /* 404, this has to go last */
         {

@@ -1,13 +1,10 @@
 <template>
   <div class="counters-container">
-    <div class="name">
-    {{modelName}}
+    <div class="title" v-if="title">
+    {{title}}
     </div>
-    <div>
-    {{nodeCount}} Nodes
-    </div>
-    <div>
-    {{edgeCount}} Links
+    <div v-for="(label, index) in labels" :key="label">
+      {{values[index]}} {{label}}
     </div>
   </div>
 </template>
@@ -20,13 +17,13 @@
   @Component
   export default class Counters extends Vue {
     @Prop({ default: '' })
-    modelName: string;
+    title: string;
 
-    @Prop({ default: 0 })
-    nodeCount: number;
+    @Prop({ default: () => ([]) })
+    labels: Array<string>;
 
-    @Prop({ default: 0 })
-    edgeCount: number;
+    @Prop({ default: () => ([]) })
+    values: Array<number>;
   }
 </script>
 
@@ -45,7 +42,7 @@
     content: "|";
     margin: 5px;
   }
-  .name {
+  .title {
     font-weight: bold;
   }
 
