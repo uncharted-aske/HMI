@@ -8,6 +8,7 @@ export abstract class Colors {
   };
 
   static readonly EDGES: string = '#6C757D';
+  static readonly HIGHLIGHT: string = '#FFA500';
 }
 
 export abstract class NodeTypes {

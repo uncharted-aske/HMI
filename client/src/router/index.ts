@@ -34,7 +34,7 @@ const RouterSingleton = ((): any => {
           path: '/comparisonView',
           name: 'comparisonView',
           component: ComparisonView,
-        },{
+        }, {
           path: '/knowledge',
           name: 'knowledge',
           component: Knowledge,

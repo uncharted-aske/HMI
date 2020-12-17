@@ -13,7 +13,7 @@
       <div slot="content-left" class="content global">
         <settings-bar>
           <div slot="counters">
-            <counters :model-name="getModelsList[0].metadata.name"/>
+            <counters :labels="[getModelsList[0].metadata.name]"/>
           </div>
           <div slot="settings">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
@@ -24,7 +24,7 @@
       <div slot="content-right" class="content local">
         <settings-bar>
           <div slot="counters">
-            <counters :model-name="getModelsList[1].metadata.name"/>
+            <counters :labels="[getModelsList[1].metadata.name]"/>
           </div>
           <div slot="settings">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
@@ -33,11 +33,11 @@
         <epi-graph :graph="getModelsList[1].graph.detailed" :subgraph="getModelsList[1].subgraph"/>
       </div>
     </resizable-divider>
-    <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
       </div>
-    </drilldown-panel> -->
+    </drilldown-panel>
   </div>
 </template>
 
@@ -46,8 +46,8 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { TabInterface, ViewInterface, ModelInterface, ModelComponentMetadataInterface } from '@/types/types';
-  import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
+  import { TabInterface, ViewInterface, ModelComponentMetadataInterface } from '@/types/types';
+  import { GraphNodeInterface } from '@/views/Graphs/types/types';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -71,8 +71,6 @@
     { name: 'Causal', id: 'causal' },
     { name: 'Functional', id: 'functional' },
   ];
-
-  const MODELS_TO_COMPARE = [{ id: 1 }, { id: 2 }]; // SIR and CHIME
 
   const components = {
     SearchBar,
@@ -134,22 +132,21 @@
   //   this.activeTabId = tabId;
   // }
 
-  // onCloseDrilldownPanel ():void {
-  //   this.isOpenDrilldown = false;
-  //   this.drilldownPaneTitle = '';
-  //   this.drilldownMetadata = null;
-  // }
+  onCloseDrilldownPanel ():void {
+    this.isOpenDrilldown = false;
+    this.drilldownPaneTitle = '';
+    this.drilldownMetadata = null;
+  }
 
   onSetView (viewId: string): void {
     this.selectedViewId = viewId;
   }
 
   onNodeClick (node: GraphNodeInterface): void {
-    console.log(node);
-    // this.isOpenDrilldown = true;
-    // this.drilldownPaneTitle = node.metadata.units ? node.label + ' (' + node.metadata.units + ')' : node.label;
-    // this.drilldownPaneSubtitle = node.type;
-    // this.drilldownMetadata = node.metadata;
+    this.isOpenDrilldown = true;
+    this.drilldownPaneTitle = node.label;
+    this.drilldownPaneSubtitle = node.nodeType;
+    this.drilldownMetadata = node.metadata;
   }
   }
 </script>

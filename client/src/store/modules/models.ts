@@ -15,7 +15,7 @@ import DoubleEpi from '@/static/uncharted_double_epi.json';
 import nestedDoubleEpiCAG from '@/static/nested-SARS-COV1-SEIRP-CAG.json';
 import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 
-import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME.json';
+import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
 
 const state: ModelsState = {
   selectedModelId: null,
