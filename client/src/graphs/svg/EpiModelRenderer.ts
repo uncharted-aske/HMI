@@ -159,19 +159,77 @@ export default class EPIModelRenderer extends SVGRenderer {
     nonNeighborEdges.style('opacity', 0.1);
   }
 
-  highlight (subgraph: SubgraphInterface): void {
+  highlightSubgraph (subgraph: SubgraphInterface, color: string): void {
     const chart = this.chart;
-
     const hEdges = chart.selectAll('.edge-path').filter(d => {
       return _.some(subgraph.edges, edge => edge.source === d.source || edge.target === d.target);
     });
-    hEdges.style('stroke', Colors.HIGHLIGHT);
-    hEdges.style('stroke-width', 3);
-
     const hNodes = chart.selectAll('.node-ui rect').filter(d => {
       return subgraph.nodes.map(node => node.id).includes(d.id);
     });
-    hNodes.style('stroke', Colors.HIGHLIGHT);
+
+    hEdges.style('stroke', color);
+    hEdges.style('stroke-width', 3);
+    
+    hNodes.style('stroke', color);
     hNodes.style('stroke-width', 3);
   }
+
+  highlightReference(referenceId: string, color: string): void {
+    const svg = d3.select(this.svgEl);
+    const chart = this.chart;
+
+    const highlightId = `glow-${referenceId}`;
+
+    // Add temporary filter definition
+    const filter = svg.select('defs')
+      .append('filter')
+      .attr('id', highlightId)
+      .attr('width', '200%')
+      .attr('filterUnits', 'userSpaceOnUse');
+
+    filter.append('feGaussianBlur')
+      .attr('stdDeviation', 4.5)
+      .attr('result', 'blur');
+
+    filter.append('feOffset')
+      .attr('in', 'blur')
+      .attr('result', 'offsetBlur')
+      .attr('dx', 0)
+      .attr('dy', 0)
+      .attr('x', -10)
+      .attr('y', -10);
+
+    filter.append('feFlood')
+      .attr('in', 'offsetBlur')
+      .attr('flood-color', color)
+      .attr('flood-opacity', 0.95)
+      .attr('result', 'offsetColor');
+
+    filter.append('feComposite')
+      .attr('in', 'offsetColor')
+      .attr('in2', 'offsetBlur')
+      .attr('operator', 'in')
+      .attr('result', 'offsetBlur');
+
+
+    const feMerge = filter.append('feMerge');
+    feMerge.append('feMergeNode')
+      .attr('in', 'offsetBlur');
+
+    feMerge.append('feMergeNode')
+      .attr('in', 'SourceGraphic');
+
+    const hNode = chart.selectAll('.node-ui rect').filter(d => {
+      return d.id === referenceId;
+    });
+
+    hNode.style('filter', `url(#${highlightId})`).classed(`${highlightId}`, true);
+  }
+
+  unHighlightReference(referenceId: string):void {
+    const svg = d3.select(this.svgEl);
+    svg.select(`#glow-${referenceId}`).remove();
+    svg.selectAll(`.glow-${referenceId}`).style('filter', null);
+  };
 }

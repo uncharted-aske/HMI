@@ -18,6 +18,8 @@
   import { layered } from '@/graphs/svg//elk/layouts.js';
   import { hierarchyFn } from '@/utils/SVGUtil.js';
   import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
+  import { showTooltip } from '@/utils/SVGUtil.js';
+  import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -29,6 +31,7 @@
   export default class EpiGraph extends Vue {
     @Prop({ default: null }) graph: GraphInterface;
     @Prop({ default: null }) subgraph: SubgraphInterface;
+    @Prop({ default: '' }) reference: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
@@ -36,6 +39,11 @@
     @Watch('graph')
     graphChanged (): void {
       this.refresh();
+    }
+
+    @Watch('reference')
+    referenceChanged (): void {
+      this.renderer.highlightReference(this.reference, Colors.HIGHLIGHT);
     }
 
     created (): void {
@@ -69,27 +77,41 @@
       });
 
       // TO FIX: Enable back tooltip functionality
-      // this.renderer.setCallback('nodeMouseEnter', (node) => {
-      //   const nodeData = node.datum();
-      //   let nodeCoords = [];
-      //   const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.data.nodeType;
-      //   // if (!nodeData.nodes) {
-      //   //   // console.log(nodeData);
-      //   //   nodeCoords = [nodeData.x, nodeData.y];
-      //   //   console.log(nodeCoords);
-      //   // }
-      //   // else {
-      //     // // For nodes inside groups
-      //     // const groups = this.renderer.layout.groups;
-      //     // const group = groups.find(g => g.id === nodeData.group);
-      //     // nodeCoords = [group.x + nodeData.x, group.y + nodeData.y];
-      //   //}
-      //   showTooltip(this.renderer.chart, tooltipText, nodeCoords);
-      // });
+      this.renderer.setCallback('nodeMouseEnter', (node) => {
+        const nodeData = node.datum();
 
-      // this.renderer.setCallback('nodeMouseLeave', () => {
-      //   hideTooltip(this.renderer.chart);
-      // });
+        //Highlight linked nodes/edges
+        if (!nodeData.nodes) {
+          const found = this.subgraph.nodes.find(node => node.id === nodeData.id);
+          if (found) {
+            this.$emit('node-hover', found);
+          }
+        }
+
+
+
+
+        // let nodeCoords = [];
+        // const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.nodeType;
+        // if (!nodeData.nodes) {
+        //   console.log(nodeData.x, nodeData.y);
+        //   nodeCoords = [nodeData.x, nodeData.y];
+        // }
+        // else {
+          // // For nodes inside groups
+          // const groups = this.renderer.layout.groups;
+          // const group = groups.find(g => g.id === nodeData.group);
+          // nodeCoords = [group.x + nodeData.x, group.y + nodeData.y];
+        //}
+        // showTooltip(this.renderer.chart, tooltipText, nodeCoords);
+      });
+
+      this.renderer.setCallback('nodeMouseLeave', () => {
+        if (this.reference) {
+          this.renderer.unHighlightReference(this.reference);
+        }
+        // hideTooltip(this.renderer.chart);
+      });
 
       this.refresh();
     }
@@ -101,7 +123,9 @@
       const graph = { nodes: [hierarchyNodes], edges };
       this.renderer.setData(graph);
       await this.renderer.render();
-      this.renderer.highlight(this.subgraph);
+      if (this.subgraph) {
+        this.renderer.highlightSubgraph(this.subgraph, Colors.HIGHLIGHT);
+      }
     }
   }
 </script>

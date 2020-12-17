@@ -19,7 +19,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <epi-graph :graph="getModelsList[0].graph.detailed" :subgraph="getModelsList[0].subgraph" @node-click="onNodeClick"/>
+        <epi-graph :graph="getModelsList[0].graph.detailed" :subgraph="getModelsList[0].subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
       </div>
       <div slot="content-right" class="content local">
         <settings-bar>
@@ -30,7 +30,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <epi-graph :graph="getModelsList[1].graph.detailed" :subgraph="getModelsList[1].subgraph"/>
+        <epi-graph :graph="getModelsList[1].graph.detailed" :subgraph="getModelsList[1].subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
       </div>
     </resizable-divider>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
@@ -91,12 +91,13 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
     views: ViewInterface[] = VIEWS;
-    selectedViewId = 'functional';
-    isOpenDrilldown = false;
-    isSplitView = true;
-    drilldownPaneTitle = '';
-    drilldownPaneSubtitle = '';
+    selectedViewId: string = 'functional';
+    isOpenDrilldown: boolean = false;
+    isSplitView: boolean = true;
+    drilldownPaneTitle: string = '';
+    drilldownPaneSubtitle: string = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
+    reference: string = ''
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
@@ -148,7 +149,11 @@
     this.drilldownPaneSubtitle = node.nodeType;
     this.drilldownMetadata = node.metadata;
   }
+
+  onNodeHover(node: any):void {
+    this.reference = node['linked-to'][0]['node-id'];
   }
+}
 </script>
 
 <style lang="scss" scoped>
