@@ -43,7 +43,7 @@
 
     @Watch('reference')
     referenceChanged (): void {
-      this.renderer.highlightReference(this.reference, Colors.HIGHLIGHT);
+      this.renderer.highlightReference(this.reference, 'blue');
     }
 
     created (): void {
@@ -79,7 +79,6 @@
       // TO FIX: Enable back tooltip functionality
       this.renderer.setCallback('nodeMouseEnter', (node) => {
         const nodeData = node.datum();
-
         //Highlight linked nodes/edges
         if (!nodeData.nodes) {
           const found = this.subgraph.nodes.find(node => node.id === nodeData.id);
@@ -87,9 +86,6 @@
             this.$emit('node-hover', found);
           }
         }
-
-
-
 
         // let nodeCoords = [];
         // const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.nodeType;
@@ -107,9 +103,8 @@
       });
 
       this.renderer.setCallback('nodeMouseLeave', () => {
-        if (this.reference) {
-          this.renderer.unHighlightReference(this.reference);
-        }
+        this.renderer.unHighlightReference(this.reference);
+
         // hideTooltip(this.renderer.chart);
       });
 

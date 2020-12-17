@@ -179,7 +179,7 @@ export default class EPIModelRenderer extends SVGRenderer {
     const svg = d3.select(this.svgEl);
     const chart = this.chart;
 
-    const highlightId = `glow-${referenceId}`;
+    const highlightId = `glow${referenceId}`;
 
     // Add temporary filter definition
     const filter = svg.select('defs')
@@ -228,8 +228,8 @@ export default class EPIModelRenderer extends SVGRenderer {
   }
 
   unHighlightReference(referenceId: string):void {
-    const svg = d3.select(this.svgEl);
-    svg.select(`#glow-${referenceId}`).remove();
-    svg.selectAll(`.glow-${referenceId}`).style('filter', null);
+    const highlightId = `glow${referenceId}`;
+    d3.select(`#${highlightId}`).remove();
+    d3.selectAll(`.${highlightId}`).style('filter', null);
   };
 }
