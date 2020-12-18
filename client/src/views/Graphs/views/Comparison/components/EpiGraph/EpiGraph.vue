@@ -120,7 +120,7 @@
       this.renderer.setData(graph);
       await this.renderer.render();
       if (this.subgraph) {
-        this.renderer.highlightSubgraph(this.subgraph, Colors.HIGHLIGHT);
+        this.renderer.highlightSubgraph(this.subgraph, Colors.SUBGRAPH);
       }
     }
   }

@@ -187,7 +187,7 @@ export default class EPIModelRenderer extends SVGRenderer {
     const hEdges = chart.selectAll('.edge-path').filter(d => {
       return _.some(subgraph.edges, edge => edge.source === d.source || edge.target === d.target);
     });
-    const hNodes = chart.selectAll('.node-ui rect').filter(d => {
+    const hNodes = chart.selectAll('.node-ui ellipse, rect').filter(d => {
       return subgraph.nodes.map(node => node.id).includes(d.id);
     });
 
@@ -242,7 +242,7 @@ export default class EPIModelRenderer extends SVGRenderer {
     feMerge.append('feMergeNode')
       .attr('in', 'SourceGraphic');
 
-    const hNode = chart.selectAll('.node-ui rect').filter(d => {
+    const hNode = chart.selectAll('.node-ui ellipse, rect').filter(d => {
       return d.id === referenceId;
     });
 
