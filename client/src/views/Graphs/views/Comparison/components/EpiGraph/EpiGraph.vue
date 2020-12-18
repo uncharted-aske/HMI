@@ -45,7 +45,6 @@
     referenceChanged (): void {
       this.renderer.highlightReference(this.reference, Colors.HIGHLIGHT);
       this.renderer.moveTo(this.reference, 3000);
-      // this.renderer.centerGraph();
     }
 
     created (): void {
