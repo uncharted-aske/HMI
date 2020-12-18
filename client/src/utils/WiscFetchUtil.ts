@@ -32,7 +32,6 @@ export const wiscFetch = async (paramObj: URLSearchParams): Promise<any> => {
   };
   // TypeScript URL type incorrect
   // eslint-disable-next-line
-  // @ts-ignore
   const url: any = new URL(WISC_API_URL);
   url.search = new URLSearchParams(paramObj).toString();
   try {

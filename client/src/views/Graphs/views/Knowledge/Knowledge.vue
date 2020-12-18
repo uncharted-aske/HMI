@@ -12,7 +12,7 @@
       </div>
       <settings-bar>
         <div slot="counters">
-          <counters :labels="['Documents', 'Page']" :values="countersValues"/>
+          <counters :data="countersData"/>
         </div>
         <div slot="settings">
           <settings />
@@ -163,10 +163,10 @@
       ];
     }
 
-    get countersValues (): Array<number> {
+    get countersData (): Array<string> {
       const { data } = this;
       if (data && data.total !== undefined && data.page !== undefined) {
-        return [data.total, data.page + 1];
+        return [`${data.total} Documents`, `Page ${data.page + 1}`];
       }
     }
 
