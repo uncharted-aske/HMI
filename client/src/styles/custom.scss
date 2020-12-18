@@ -13,7 +13,9 @@
 
 .search-row {
   display: flex;
-  flex-direction: column;
   border-bottom: 1px solid $border;
   background-color: $secondary-bar-bg;
+  > .search-bar-container {
+    flex: 1;
+  }
 }

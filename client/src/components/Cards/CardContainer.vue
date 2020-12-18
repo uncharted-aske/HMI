@@ -50,7 +50,7 @@
   // Use 22px instead of 32px to account for cards' 10px horizontal margin
   padding: 16px 22px 16px 22px;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   .section-header {
     // Match cards' 10px horizontal margin
