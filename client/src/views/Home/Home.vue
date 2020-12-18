@@ -28,7 +28,6 @@
   import SearchBar from '@/components/SearchBar.vue';
   import KeyValuePill from '@/search/pills/KeyValuePill';
   import RangePill from '@/search/pills/RangePill';
-  import TextPill from '@/search/pills/TextPill';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
@@ -73,7 +72,6 @@
           'Select model type..',
         ),
         new RangePill(QUERY_FIELDS_MAP.HISTOGRAM),
-        new TextPill(QUERY_FIELDS_MAP.TEXT),
       ];
     }
 

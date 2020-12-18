@@ -32,7 +32,7 @@
   export default class CardContainer extends Vue {
     @Prop({ default: '' }) header: string;
 
-    @Prop({ default: [] }) cards: CardInterface[];
+    @Prop({ default: () => [] }) cards: CardInterface[];
 
     onOpen (card: CardInterface): void {
       this.$emit('open-card', card);
