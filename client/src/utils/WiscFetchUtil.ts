@@ -3,6 +3,8 @@ import { COSMOS_TYPE_OPTIONS } from './ModelTypeUtil';
 
 const WISC_API_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/cosmos/api/search';
 
+const memoizedStore = new Map();
+
 export const filterToParamObj = (filterObj: {[key: string]: any}): any => {
   const output: any = {};
   if (!_.isEmpty(filterObj.cosmosQuery)) {
@@ -39,5 +41,20 @@ export const wiscFetch = async (paramObj: URLSearchParams): Promise<any> => {
     return await response.json();
   } catch (e) {
     return e;
+  }
+};
+
+export const wiscFetchMem = async (paramObj: URLSearchParams): Promise<any> => {
+  const paramHash = JSON.stringify(paramObj);
+  if (memoizedStore.has(paramHash)) {
+    return Promise.resolve(memoizedStore.get(paramHash));
+  } else {
+    try {
+      const result = await wiscFetch(paramObj);
+      memoizedStore.set(paramHash, result);
+      return result;
+    } catch (e) {
+      return e;
+    }
   }
 };

@@ -46,7 +46,7 @@
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   import * as filtersUtil from '@/utils/FiltersUtil';
-  import { filterToParamObj, wiscFetch } from '@/utils/WiscFetchUtil';
+  import { filterToParamObj, wiscFetchMem } from '@/utils/WiscFetchUtil';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
@@ -103,7 +103,7 @@
         this.filterHash = filterHashNew;
         try {
           this.dataLoading = true;
-          const response = await wiscFetch(filterToParamObj(this.facetSelection));
+          const response = await wiscFetchMem(filterToParamObj(this.facetSelection));
           this.data = response;
         } catch (e) {
           throw Error(e);
