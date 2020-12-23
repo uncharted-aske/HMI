@@ -177,6 +177,7 @@
 
 .panel-content {
   overflow: hidden;
+  flex: 1;
 }
 
 .divider {
