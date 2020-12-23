@@ -27,6 +27,7 @@
         <div class="loader">Loading...</div>
       </div>
     </div>
+    <knowledge-drilldown :card="openCard" @close-card="onCloseCard"/>
   </div>
 </template>
 
@@ -37,7 +38,8 @@
   import { Getter, Mutation } from 'vuex-class';
   import _ from 'lodash';
 
-  import { CardInterface } from '@/views/Home/types/types';
+  import { WiscSearchInterface, WiscSearchObjectsInterface } from '@/types/typesWisc';
+  import { CardInterface } from '@/components/Cards/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import TextPill from '@/search/pills/TextPill';
@@ -47,6 +49,7 @@
 
   import * as filtersUtil from '@/utils/FiltersUtil';
   import { filterToParamObj, wiscFetchMem } from '@/utils/WiscFetchUtil';
+  import { getAuthorList } from '@/utils/WiscDataUtil';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
@@ -56,6 +59,7 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/views/Home/components/FacetsPane/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
+  import KnowledgeDrilldown from './KnowledgeDrilldown.vue';
 
   import { FacetTermsSelectionMap } from '@/types/types';
 
@@ -73,6 +77,7 @@
     LeftSidePanel,
     FacetsPane,
     CardContainer,
+    KnowledgeDrilldown,
   };
 
   @Component({ components })
@@ -80,8 +85,9 @@
     activePane = '';
     actions: any = ACTIONS;
     dataLoading = false;
-    data: any = {};
+    data: WiscSearchInterface | Record<any, never> = {};
     filterHash: string = '';
+    openCard: WiscSearchObjectsInterface | Record<any, never> = {};
 
     @Getter getFilters;
     @Getter getModelsList;
@@ -141,7 +147,7 @@
       return selectionMap;
     }
 
-    get searchPills (): any {
+    get searchPills (): (KeyValuePill | TextPill)[] {
       return [
         new TextPill(QUERY_FIELDS_MAP.COSMOS_QUERY),
         new KeyValuePill(
@@ -168,7 +174,7 @@
     }
 
     get countersData (): Array<string> {
-      const { data } = this;
+      const data = this.data as WiscSearchInterface;
       if (data && data.total !== undefined && data.page !== undefined) {
         return [`${data.total} Documents`, `Page ${data.page + 1}`];
       }
@@ -179,28 +185,24 @@
     }
 
     get modelsCards (): CardInterface[] {
-      return this.data.objects && this.data.objects.map((item, index) => ({
+      const data = this.data as WiscSearchInterface;
+      return data.objects && data.objects.map((item, index) => ({
         id: index,
         title: item.bibjson.title,
-        subtitle: `${item.bibjson.year ?? 'Unknown Year'} - ${item.bibjson.author.length === 0
-          ? 'Unknown Author'
-          : item.bibjson.author.reduce((acc, author, index) => {
-            acc += author.name;
-            if (index !== item.bibjson.author.length - 1) {
-              acc += ', ';
-            }
-            return acc;
-          }, '')}
+        subtitle: `${item.bibjson.year ?? 'Unknown Year'} - ${getAuthorList(item)}
         `,
         type: item.bibjson.type,
         previewImageSrc: item.children[0].bytes,
+        raw: item,
       }));
     }
 
-    onOpenCard (card: CardInterface): void {
-      const view = card.type === 'computational' ? 'epiView' : 'bioView';
-      this.setSelectedModel(card.id);
-      this.$router.push({ name: view });
+    onOpenCard (card: WiscSearchObjectsInterface): void {
+      this.openCard = card;
+    }
+
+    onCloseCard (): void {
+      this.openCard = {};
     }
 
     onSetActivePane (actionName: string): void {

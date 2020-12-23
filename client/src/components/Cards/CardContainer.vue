@@ -20,9 +20,8 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
-  import { CardInterface } from '@/views/Home/types/types';
-
   import Card from '@/components/Cards/Card.vue';
+  import { CardInterface } from '@/components/Cards/types';
 
   const components = {
     Card,

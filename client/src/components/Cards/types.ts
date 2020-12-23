@@ -4,4 +4,5 @@ export interface CardInterface {
   title: string;
   subtitle: string;
   type: string;
+  raw: any;
 }

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { COSMOS_TYPE_OPTIONS } from './ModelTypeUtil';
+import { WiscSearchInterface } from '@/types/typesWisc';
 
 const WISC_API_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/cosmos/api/search';
 
@@ -26,7 +27,7 @@ export const filterToParamObj = (filterObj: {[key: string]: any}): any => {
   return output;
 };
 
-export const wiscFetch = async (paramObj: URLSearchParams): Promise<any> => {
+export const wiscFetch = async (paramObj: URLSearchParams): Promise<WiscSearchInterface> => {
   const init: RequestInit = {
     method: 'GET',
     mode: 'cors',
@@ -44,7 +45,7 @@ export const wiscFetch = async (paramObj: URLSearchParams): Promise<any> => {
   }
 };
 
-export const wiscFetchMem = async (paramObj: URLSearchParams): Promise<any> => {
+export const wiscFetchMem = async (paramObj: URLSearchParams): Promise<WiscSearchInterface> => {
   const paramHash = JSON.stringify(paramObj);
   if (memoizedStore.has(paramHash)) {
     return Promise.resolve(memoizedStore.get(paramHash));
