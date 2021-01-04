@@ -63,7 +63,7 @@
       padding-top: 5px;
     }
 
-    //FIXME: Put back when we have document artifacts from Wisconsin
+    //FIXME: Put back when we have document artifacts from Cosmosonsin
     // .expression {
     //     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
     // }

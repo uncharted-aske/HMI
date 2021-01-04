@@ -18,8 +18,7 @@
           <div slot="counters">
             <counters
               :title="selectedModel.metadata.name"
-              :labels="['Nodes', 'Edges']"
-              :values="[nodeCount, edgeCount]"
+              :data="[`${nodeCount} Nodes`, `${edgeCount} Edges`]"
             />
           </div>
           <div slot="settings">

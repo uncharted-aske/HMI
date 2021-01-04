@@ -23,14 +23,13 @@
   import { Getter, Mutation } from 'vuex-class';
 
   import { TabInterface } from '@/types/types';
-  import { CardInterface } from './types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import KeyValuePill from '@/search/pills/KeyValuePill';
   import RangePill from '@/search/pills/RangePill';
-  import TextPill from '@/search/pills/TextPill';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
+  import { CardInterface } from '@/components/Cards/types';
 
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
 
@@ -73,7 +72,6 @@
           'Select model type..',
         ),
         new RangePill(QUERY_FIELDS_MAP.HISTOGRAM),
-        new TextPill(QUERY_FIELDS_MAP.TEXT),
       ];
     }
 
