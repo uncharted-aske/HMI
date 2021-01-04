@@ -1,6 +1,6 @@
 /* eslint camelcase: 0 */
 
-export interface WiscSearchChildrenInterface {
+export interface CosmosSearchChildrenInterface {
   id: string;
   bytes: string;
   cls: string;
@@ -10,7 +10,7 @@ export interface WiscSearchChildrenInterface {
   header_content: string | null;
 }
 
-export interface WiscSearchBibjsonInterface {
+export interface CosmosSearchBibjsonInterface {
   type: string;
   _gddid: string;
   title: string;
@@ -33,16 +33,16 @@ export interface WiscSearchBibjsonInterface {
   year: string;
 }
 
-export interface WiscSearchObjectsInterface {
+export interface CosmosSearchObjectsInterface {
   header: any;
   pdf_name: string;
-  children: WiscSearchChildrenInterface[];
-  bibjson: WiscSearchBibjsonInterface;
+  children: CosmosSearchChildrenInterface[];
+  bibjson: CosmosSearchBibjsonInterface;
 }
 
-export interface WiscSearchInterface {
+export interface CosmosSearchInterface {
   v: string;
   total: number;
   page: number;
-  objects: WiscSearchObjectsInterface[];
+  objects: CosmosSearchObjectsInterface[];
 }

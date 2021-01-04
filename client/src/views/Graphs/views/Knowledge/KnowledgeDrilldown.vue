@@ -36,7 +36,7 @@
   import { Prop } from 'vue-property-decorator';
   import _ from 'lodash';
 
-  import { getAuthorList } from '@/utils/WiscDataUtil';
+  import { getAuthorList } from '@/utils/CosmosDataUtil';
 
   const components = {
 

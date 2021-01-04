@@ -48,14 +48,14 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
   },
   // COSMOS
   COSMOS_QUERY: {
-    ..._field('cosmosQuery', 'Query'),
-    ..._searchable('Query', false),
+    ..._field('cosmosQuery', 'Keyword'),
+    ..._searchable('Keyword', false),
     baseType: 'string',
     lexType: 'string',
   },
   COSMOS_TYPE: {
-    ..._field('cosmosType', 'Type'),
-    ..._searchable('Type', false),
+    ..._field('cosmosType', 'Doc Artifact Type'),
+    ..._searchable('Doc Artifact Type', false),
     baseType: 'integer',
     lexType: 'string',
   },

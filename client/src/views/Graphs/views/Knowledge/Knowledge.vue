@@ -38,7 +38,7 @@
   import { Getter, Mutation } from 'vuex-class';
   import _ from 'lodash';
 
-  import { WiscSearchInterface, WiscSearchObjectsInterface } from '@/types/typesWisc';
+  import { CosmosSearchInterface, CosmosSearchObjectsInterface } from '@/types/typesCosmos';
   import { CardInterface } from '@/components/Cards/types';
 
   import SearchBar from '@/components/SearchBar.vue';
@@ -48,8 +48,8 @@
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   import * as filtersUtil from '@/utils/FiltersUtil';
-  import { filterToParamObj, wiscFetchMem } from '@/utils/WiscFetchUtil';
-  import { getAuthorList } from '@/utils/WiscDataUtil';
+  import { filterToParamObj, cosmosFetchMem } from '@/utils/CosmosFetchUtil';
+  import { getAuthorList } from '@/utils/CosmosDataUtil';
 
   import ActionColumn from '@/components/ActionColumn.vue';
   import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
@@ -85,23 +85,23 @@
     activePane = '';
     actions: any = ACTIONS;
     dataLoading = false;
-    data: WiscSearchInterface | Record<any, never> = {};
+    data: CosmosSearchInterface | Record<any, never> = {};
     filterHash: string = '';
-    openCard: WiscSearchObjectsInterface | Record<any, never> = {};
+    openCard: CosmosSearchObjectsInterface | Record<any, never> = {};
 
     @Getter getFilters;
     @Getter getModelsList;
     @Mutation setSelectedModel;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
-      this.fetchWisc();
+      this.fetchCosmos();
     }
 
     mounted (): void {
-      this.fetchWisc();
+      this.fetchCosmos();
     }
 
-    async fetchWisc (): Promise<void> {
+    async fetchCosmos (): Promise<void> {
       const facetSelection = this.facetSelection;
       const filterHashNew = JSON.stringify(facetSelection);
 
@@ -109,7 +109,7 @@
         this.filterHash = filterHashNew;
         try {
           this.dataLoading = true;
-          const response = await wiscFetchMem(filterToParamObj(this.facetSelection));
+          const response = await cosmosFetchMem(filterToParamObj(this.facetSelection));
           this.data = response;
         } catch (e) {
           throw Error(e);
@@ -174,7 +174,7 @@
     }
 
     get countersData (): Array<string> {
-      const data = this.data as WiscSearchInterface;
+      const data = this.data as CosmosSearchInterface;
       if (data && data.total !== undefined && data.page !== undefined) {
         return [`${data.total} Documents`, `Page ${data.page + 1}`];
       }
@@ -185,7 +185,7 @@
     }
 
     get modelsCards (): CardInterface[] {
-      const data = this.data as WiscSearchInterface;
+      const data = this.data as CosmosSearchInterface;
       return data.objects && data.objects.map((item, index) => ({
         id: index,
         title: item.bibjson.title,
@@ -197,7 +197,7 @@
       }));
     }
 
-    onOpenCard (card: WiscSearchObjectsInterface): void {
+    onOpenCard (card: CosmosSearchObjectsInterface): void {
       this.openCard = card;
     }
 
