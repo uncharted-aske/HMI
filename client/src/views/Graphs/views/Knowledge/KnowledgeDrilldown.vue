@@ -3,7 +3,8 @@
     v-if="show"
     @click="onClickClose"
   >
-    <div class="d-flex flex-column py-3 pr-0 rounded shadow container" @click="onClickStop">
+    <div class="position-relative d-flex flex-column py-3 pr-0 rounded shadow container" @click="onClickStop">
+      <close-button @close="onClickClose"/>
       <h3>{{card.title}}</h3>
       <h5>{{card.raw.bibjson.identifier[0].id}}</h5>
       <div class="d-flex flex-grow-1">
@@ -37,10 +38,12 @@
   import _ from 'lodash';
 
   import { getAuthorList } from '@/utils/CosmosDataUtil';
+  import CloseButton from '@/components/widgets/CloseButton.vue';
 
   const components = {
-
+    CloseButton,
   };
+
   @Component({ components })
   export default class KnowledgeDrilldown extends Vue {
     @Prop({ required: false }) private card: any;
