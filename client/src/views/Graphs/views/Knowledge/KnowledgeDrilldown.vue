@@ -5,7 +5,9 @@
   >
     <div class="position-relative d-flex flex-column py-3 pr-0 rounded shadow container" @click="onClickStop">
       <close-button @close="onClickClose"/>
-      <h3>{{card.title}}</h3>
+      <a :href="card.raw.bibjson.link[0].url" target="_blank">
+        <h3>{{card.title}}</h3>
+      </a>
       <h5>{{card.raw.bibjson.identifier[0].id}}</h5>
       <div class="d-flex flex-grow-1">
           <div class="d-flex col-7">
