@@ -72,9 +72,9 @@ export default class EPIModelRenderer extends SVGRenderer {
     nodeSelection.each(function () {
       const selection = d3.select(this);
       selection.select('rect')
-        .filter(d=> { 
+        .filter(d => {
           return (!(d as any).nodeSubType ||
-          ((d as any).nodeSubType && (!(d as any).nodeSubType.includes('input') && !(d as any).nodeSubType.includes('output'))))
+          ((d as any).nodeSubType && (!(d as any).nodeSubType.includes('input') && !(d as any).nodeSubType.includes('output'))));
         })
         .transition()
         .duration(1000)
@@ -82,7 +82,6 @@ export default class EPIModelRenderer extends SVGRenderer {
         .attr('height', d => (d as any).height)
         .style('fill', d => calcNodeColor(d));
 
-     
       if ((selection.datum() as any).collapsed === true) {
         // TODO: Investigate ways to add number of children to the collapsed label.
         // When the node is collapsed, there is no access to the children nodes at the moment.
@@ -113,9 +112,9 @@ export default class EPIModelRenderer extends SVGRenderer {
 
       if ((selection.datum() as any).id !== 'root') { // Don't draw the root node
         selection.append('rect')
-          .filter(d=> { 
+          .filter(d => {
             return (!(d as any).nodeSubType ||
-            ((d as any).nodeSubType && (!(d as any).nodeSubType.includes('input') && !(d as any).nodeSubType.includes('output'))))
+            ((d as any).nodeSubType && (!(d as any).nodeSubType.includes('input') && !(d as any).nodeSubType.includes('output'))));
           })
           .attr('x', 0)
           .attr('rx', 5)
@@ -131,15 +130,15 @@ export default class EPIModelRenderer extends SVGRenderer {
 
         // Draw ellipses for input and output nodes
         selection.append('ellipse')
-            .filter(d=> { 
-              return (d as any).nodeSubType && ((d as any).nodeSubType.includes('input') || (d as any).nodeSubType.includes('output'))
-            })
-            .attr("cx", (d) => ((d as any).width * 0.5))
-            .attr("cy", (d) =>  25)
-            .attr("rx", (d) => (d as any).width * 0.5)
-            .attr("ry", (d) => 25)
-            .style('fill', d => calcNodeColor(d))
-            .style('stroke', '#888');
+          .filter(d => {
+            return (d as any).nodeSubType && ((d as any).nodeSubType.includes('input') || (d as any).nodeSubType.includes('output'));
+          })
+          .attr('cx', (d) => ((d as any).width * 0.5))
+          .attr('cy', () => 25)
+          .attr('rx', (d) => (d as any).width * 0.5)
+          .attr('ry', () => 25)
+          .style('fill', d => calcNodeColor(d))
+          .style('stroke', '#888');
 
         // Special encodings for different types of variable nodes
         if ((selection.datum() as any).nodeType === NodeTypes.NODES.VARIABLE) {

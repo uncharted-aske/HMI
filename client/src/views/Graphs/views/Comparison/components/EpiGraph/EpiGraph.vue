@@ -4,8 +4,6 @@
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
@@ -16,7 +14,7 @@
   import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
-  import { hierarchyFn, showTooltip } from '@/utils/SVGUtil.js';
+  import { hierarchyFn } from '@/utils/SVGUtil.js';
   import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
 
   import { Colors } from '@/graphs/svg/encodings';
@@ -87,26 +85,10 @@
             this.$emit('node-hover', found);
           }
         }
-
-        // let nodeCoords = [];
-        // const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.nodeType;
-        // if (!nodeData.nodes) {
-        //   console.log(nodeData.x, nodeData.y);
-        //   nodeCoords = [nodeData.x, nodeData.y];
-        // }
-        // else {
-          // // For nodes inside groups
-          // const groups = this.renderer.layout.groups;
-          // const group = groups.find(g => g.id === nodeData.group);
-          // nodeCoords = [group.x + nodeData.x, group.y + nodeData.y];
-        // }
-        // showTooltip(this.renderer.chart, tooltipText, nodeCoords);
       });
 
       this.renderer.setCallback('nodeMouseLeave', () => {
         this.renderer.unHighlightReference(this.reference);
-
-        // hideTooltip(this.renderer.chart);
       });
 
       this.refresh();

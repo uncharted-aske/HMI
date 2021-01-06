@@ -150,7 +150,7 @@
     this.drilldownMetadata = node.metadata;
   }
 
-  onNodeHover (node: any):void {
+  onNodeHover (node: GraphNodeInterface):void {
     this.reference = node['linked-to'][0]['node-id'];
   }
   }
