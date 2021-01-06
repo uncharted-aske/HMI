@@ -194,19 +194,6 @@ const postProcess = (layout) => {
     }
   });
 
-  // const moveInputsOutputs = (node) => { 
-  //   if (node.nodeSubType) {
-  //     const parentWidth = node.parent.width;
-  //     //Input nodes
-  //     if (node.nodeSubType.includes('input')) {
-  //       node.x = -10;
-  //     } else if (node.nodeSubType.includes('output')) {
-  //       console.log(node.label);
-  //       node.x = parentWidth - 10;
-  //     } 
-  //   }
-  // }
-
   traverse(layout, (node) => {
     if (node.edges) {
       for (const edge of node.edges) {
@@ -214,9 +201,6 @@ const postProcess = (layout) => {
         splitLineSegments(edge);
       }
     }
-    // if ((!node.nodes) && (node.nodeType === NodeTypes.NODES.VARIABLE)) {
-    //   moveInputsOutputs(node);
-    // }
   });
 
   return layout;
