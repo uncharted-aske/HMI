@@ -48,7 +48,7 @@
 
       // Initialize lex instance
       this.lex = new Lex({
-        language: language,
+        language,
         tokenXIcon: '<i class="fas fa-times"></i>',
         placeholder: 'Search model components, paths...',
       });

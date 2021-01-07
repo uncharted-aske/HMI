@@ -55,7 +55,6 @@
   import Settings from '@/views/Graphs/components/Settings/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
-  import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import EpiGraph from './components/EpiGraph/EpiGraph.vue';
   import ResizableDivider from '@/components/ResizableDivider.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
@@ -79,7 +78,6 @@
     Settings,
     LeftSidePanel,
     MetadataPane,
-    FacetsPane,
     EpiGraph,
     ResizableDivider,
     DrilldownPanel,
