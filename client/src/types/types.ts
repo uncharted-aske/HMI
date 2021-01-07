@@ -1,5 +1,5 @@
 import { FacetTermsData, FacetTermsSelection, FacetTermsSubselection } from '@uncharted.software/facets-core/dist/types/facet-terms/FacetTerms';
-import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
+import { MODEL_TYPE_OPTIONS, COSMOS_TYPE_OPTIONS, COSMOS_INCLUSIVE_OPTIONS } from '@/utils/ModelTypeUtil';
 
 interface ModelMetadataInterface {
   name: string,
@@ -91,7 +91,11 @@ interface FacetTermsDataMap {
   [key: string]: FacetTermsData;
 }
 
-type MappedOptions = (typeof MODEL_TYPE_OPTIONS);
+type MappedOptions = (
+  typeof MODEL_TYPE_OPTIONS |
+  typeof COSMOS_TYPE_OPTIONS |
+  typeof COSMOS_INCLUSIVE_OPTIONS
+);
 
 interface MappedOptionStateConfig {
   mappedOptions: MappedOptions, // Suggestions to be used as mapped options

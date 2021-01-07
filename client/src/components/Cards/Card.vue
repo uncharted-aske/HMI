@@ -63,7 +63,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables';
+  @import '@/styles/variables';
 
   * {
     margin: 0;

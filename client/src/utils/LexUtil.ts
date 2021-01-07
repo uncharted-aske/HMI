@@ -58,7 +58,10 @@ const convertFromLex = (values: unknown, baseType: LexConvertType): LexConvertTy
     const flattened = [valuesObject.key] as LexConvertTypeMapping[LexConvertType][];
     return _convertTo(flattened, baseType);
   } else {
-    throw Error('No conversion implemented for convert types');
+    // Handle lex single typed values
+    const valuesArray = [values] as any;
+    const flattened = valuesArray.map(v => v.key) as LexConvertTypeMapping[LexConvertType][];
+    return _convertTo(flattened, baseType);
   }
 };
 

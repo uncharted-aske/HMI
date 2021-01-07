@@ -3,8 +3,8 @@
     <div class="title" v-if="title">
     {{title}}
     </div>
-    <div v-for="(label, index) in labels" :key="label">
-      {{values[index]}} {{label}}
+    <div v-for="(counter) in processedData" :key="counter">
+      {{counter}}
     </div>
   </div>
 </template>
@@ -19,11 +19,17 @@
     @Prop({ default: '' })
     title: string;
 
-    @Prop({ default: () => ([]) })
-    labels: Array<string>;
+    @Prop({ default: () => [] })
+    data: Array<string>;
 
-    @Prop({ default: () => ([]) })
-    values: Array<number>;
+    get processedData () : any {
+      return this.data.reduce((acc: string[], val: string) => {
+        if (val) {
+          acc.push(val);
+        }
+        return acc;
+      }, []);
+    }
   }
 </script>
 

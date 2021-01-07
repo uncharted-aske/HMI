@@ -20,9 +20,8 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
-  import { CardInterface } from '@/views/Home/types/types';
-
   import Card from '@/components/Cards/Card.vue';
+  import { CardInterface } from '@/components/Cards/types';
 
   const components = {
     Card,
@@ -32,7 +31,7 @@
   export default class CardContainer extends Vue {
     @Prop({ default: '' }) header: string;
 
-    @Prop({ default: [] }) cards: CardInterface[];
+    @Prop({ default: () => [] }) cards: CardInterface[];
 
     onOpen (card: CardInterface): void {
       this.$emit('open-card', card);
@@ -50,7 +49,7 @@
   // Use 22px instead of 32px to account for cards' 10px horizontal margin
   padding: 16px 22px 16px 22px;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   .section-header {
     // Match cards' 10px horizontal margin

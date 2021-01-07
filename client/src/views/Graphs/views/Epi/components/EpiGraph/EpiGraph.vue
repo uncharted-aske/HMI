@@ -109,8 +109,12 @@
 @import "@/styles/variables";
 
 .epi-graph-container {
-  height: calc(#{$content-full-height} - #{$secondary-bar-width} - 25px);
-  width: 100%;
+  flex: 1;
+
+  ::v-deep > svg {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 </style>

@@ -2,6 +2,7 @@ import { Lex, TransitionFactory, ValueStateValue } from '@uncharted.software/lex
 import { StateTemplate } from '@uncharted.software/lex/src/lib/state.js';
 
 import BinaryRelationState from '../BinaryRelationState';
+import SingleRelationState from '../SingleRelationState';
 import MappedOptionState from '../MappedOptionState';
 import BasePill from './BasePill';
 
@@ -15,15 +16,21 @@ import { QueryFieldEntry, MappedOptions, MappedOptionStateConfig, Filter } from 
 export default class KeyValuePill extends BasePill {
   private branchConfig: MappedOptionStateConfig;
   private keyMap: MappedOptions;
+  private args: {single: boolean, multiValue: boolean};
 
-  constructor (config: QueryFieldEntry, map: MappedOptions, msg: string) {
+  constructor (config: QueryFieldEntry, map: MappedOptions, msg: string, args?: {single?: boolean, multiValue?: boolean}) {
     super(config);
-    this.branchConfig = lexUtil.mappedSuggestionBuilder(msg, true, map);
+    this.args = { ...{ single: false, multiValue: true }, ...args };
+    this.branchConfig = lexUtil.mappedSuggestionBuilder(msg, this.args.multiValue, map);
     this.keyMap = map;
   }
 
   makeBranch (): StateTemplate {
-    return Lex.from('relation', BinaryRelationState, TransitionFactory.valueMetaCompare({ searchKey: this.searchKey }))
+    return Lex.from(
+      'relation',
+      this.args.single ? SingleRelationState : BinaryRelationState,
+      TransitionFactory.valueMetaCompare({ searchKey: this.searchKey }),
+    )
       .to('value', MappedOptionState, this.branchConfig);
   }
 
@@ -37,7 +44,7 @@ export default class KeyValuePill extends BasePill {
     const isNot = clause.isNot;
     lexQuery.push({
       field: selectedPill,
-      relation: isNot ? BinaryRelationState.IS_NOT : BinaryRelationState.IS,
+      relation: !this.args.single && isNot ? BinaryRelationState.IS_NOT : BinaryRelationState.IS,
       value: clause.values.map((v) => new ValueStateValue(v, {}, { displayKey: this.displayFormatter(this.keyMap[v]) })),
     });
   }

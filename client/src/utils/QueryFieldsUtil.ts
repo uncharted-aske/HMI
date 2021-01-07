@@ -46,17 +46,42 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'string',
   },
+  // COSMOS
+  COSMOS_QUERY: {
+    ..._field('cosmosQuery', 'Keyword'),
+    ..._searchable('Keyword', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
+  COSMOS_TYPE: {
+    ..._field('cosmosType', 'Doc Artifact Type'),
+    ..._searchable('Doc Artifact Type', false),
+    baseType: 'integer',
+    lexType: 'string',
+  },
+  COSMOS_INCLUSIVE: {
+    ..._field('cosmosInclusive', 'Inclusive'),
+    ..._searchable('Inclusive', false),
+    baseType: 'integer',
+    lexType: 'string',
+  },
+  COSMOS_BASE_CONFIDENCE: {
+    ..._field('cosmosBaseConf', 'Base Confidence'),
+    ..._searchable('Base Confidence', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
+  COSMOS_POSTPROCESSING_CONFIDENCE: {
+    ..._field('cosmosPostProcConf', 'Post-Processing Confidence'),
+    ..._searchable('Post-Processing Confidence', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
   // Placeholders for testing purposes
   HISTOGRAM: {
     ..._field('histogram', 'Histogram'),
     ..._searchable('Histogram', false),
     baseType: 'integer',
-    lexType: 'string',
-  },
-  TEXT: {
-    ..._field('text', 'TEXT'),
-    ..._searchable('Text', false),
-    baseType: 'string',
     lexType: 'string',
   },
 };
