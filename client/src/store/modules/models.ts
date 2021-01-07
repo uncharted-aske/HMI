@@ -15,6 +15,8 @@ import DoubleEpi from '@/static/uncharted_double_epi.json';
 import nestedDoubleEpiCAG from '@/static/nested-SARS-COV1-SEIRP-CAG.json';
 import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 
+import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
+
 const state: ModelsState = {
   selectedModelId: null,
   modelsList: [
@@ -25,6 +27,7 @@ const state: ModelsState = {
         abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
         detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
       },
+      subgraph: _.pick(comparisonJSON.subgraphs[0], ['nodes', 'edges']),
       type: 'computational',
     },
     {
@@ -34,6 +37,7 @@ const state: ModelsState = {
         abstract: _.pick(nestedCHIMECAG, ['nodes', 'edges']),
         detailed: _.pick(nestedCHIMEGrFN, ['nodes', 'edges']),
       },
+      subgraph: _.pick(comparisonJSON.subgraphs[1], ['nodes', 'edges']),
       type: 'computational',
     },
     {

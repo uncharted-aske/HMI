@@ -137,13 +137,18 @@ export const calcNodeColor = (node) => {
   if (node.nodes) {
     return Colors.NODES.CONTAINER;
   } else if (node.nodeType === NodeTypes.NODES.VARIABLE) {
-    const nodeSubType = node.nodeSubType;
-    if (nodeSubType === NodeTypes.VARIABLES.MODEL_VARIABLE) {
-      return Colors.NODES.MODEL_VARIABLE;
-    }
-    if (nodeSubType === NodeTypes.VARIABLES.PARAMETER) {
-      return Colors.NODES.PARAMETER;
+    if (node.nodeSubType) {
+      if (node.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE)) {
+        return Colors.NODES.MODEL_VARIABLE;
+      }
+      if (node.nodeSubType.includes(NodeTypes.VARIABLES.INITIAL_CONDITION)) {
+        return Colors.NODES.INITIAL_CONDITION;
+      }
     }
   }
   return Colors.NODES.DEFAULT;
+};
+
+export const calcLabelColor = (node) => {
+  return node.nodeSubType && node.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE) ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
 };

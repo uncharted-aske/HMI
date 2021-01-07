@@ -4,6 +4,7 @@ import Home from '@/views/Home/Home.vue';
 import NotFound from '@/views/NotFound/NotFound.vue';
 import BioView from '@/views/Graphs/views/Bio/Bio.vue';
 import EpiView from '@/views/Graphs/views/Epi/Epi.vue';
+import ComparisonView from '@/views/Graphs/views/Comparison/Comparison.vue';
 import Knowledge from '@/views/Graphs/views/Knowledge/Knowledge.vue';
 
 const RouterSingleton = ((): any => {
@@ -30,6 +31,10 @@ const RouterSingleton = ((): any => {
           component: EpiView,
         },
         {
+          path: '/comparisonView',
+          name: 'comparisonView',
+          component: ComparisonView,
+        }, {
           path: '/knowledge',
           name: 'knowledge',
           component: Knowledge,
