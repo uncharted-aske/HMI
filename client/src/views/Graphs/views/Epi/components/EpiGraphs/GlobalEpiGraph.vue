@@ -4,6 +4,8 @@
 </template>
 
 <script lang="ts">
+  import * as d3 from 'd3';
+
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
@@ -13,8 +15,10 @@
   import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
-  import { hierarchyFn } from '@/utils/SVGUtil.js';
+  import { hierarchyFn, showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
   import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
+import { nodeMarker } from 'lit-html/lib/template';
+import { stringify } from 'querystring';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -68,28 +72,18 @@
         this.$emit('background-dbl-click');
       });
 
-      // TO FIX: Enable back tooltip functionality
-      // this.renderer.setCallback('nodeMouseEnter', (node) => {
-      //   const nodeData = node.datum();
-      //   let nodeCoords = [];
-      //   const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.data.nodeType;
-      //   // if (!nodeData.nodes) {
-      //   //   // console.log(nodeData);
-      //   //   nodeCoords = [nodeData.x, nodeData.y];
-      //   //   console.log(nodeCoords);
-      //   // }
-      //   // else {
-      //     // // For nodes inside groups
-      //     // const groups = this.renderer.layout.groups;
-      //     // const group = groups.find(g => g.id === nodeData.group);
-      //     // nodeCoords = [group.x + nodeData.x, group.y + nodeData.y];
-      //   //}
-      //   showTooltip(this.renderer.chart, tooltipText, nodeCoords);
-      // });
+      this.renderer.setCallback('nodeMouseEnter', (node) => {
+        const nodeData = node.datum();
+        let nodeCoords = [nodeData.x, nodeData.y]; // TO FIX: It seems there is an issue with coordinates for deeply nested nodes. 
+        
+        const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.data.nodeType;
 
-      // this.renderer.setCallback('nodeMouseLeave', () => {
-      //   hideTooltip(this.renderer.chart);
-      // });
+        showTooltip(this.renderer.chart, tooltipText, nodeCoords);
+      });
+
+      this.renderer.setCallback('nodeMouseLeave', () => {
+        hideTooltip(this.renderer.chart);
+      });
 
       this.refresh();
     }
@@ -97,8 +91,10 @@
     refresh (): void {
       const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one
       formatHierarchyNodeData(hierarchyNodes);
+      
       const edges = this.graph.edges;
       const graph = { nodes: [hierarchyNodes], edges };
+      
       this.renderer.setData(graph);
       this.renderer.render();
     }
