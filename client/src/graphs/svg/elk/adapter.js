@@ -22,6 +22,7 @@ const build = (root) => {
       parent: parent,
       data: node.data,
       metadata: node.metadata,
+      role: node.role,
     };
 
     // Build edges

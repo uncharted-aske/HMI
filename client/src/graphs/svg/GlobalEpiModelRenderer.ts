@@ -129,8 +129,8 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           })
           .style('stroke', '#888')
           .style('stroke-width', d => {
-            const role = (d as any).data.role;
-            return role === 'model' ? 6 : 2;
+            const role = (d as any).role;
+            return role === 'model' ? 5 : 2;
           });
 
         // Draw ellipses for input and output nodes
