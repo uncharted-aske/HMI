@@ -25,7 +25,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
+        <global-epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
       </div>
       <div slot="content-right" class="content local">
         <settings-bar>
@@ -36,7 +36,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
+        <global-epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
       </div>
     </resizable-divider>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
@@ -63,7 +63,7 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
-  import EpiGraph from './components/EpiGraph/EpiGraph.vue';
+  import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
   import ResizableDivider from '@/components/ResizableDivider.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
@@ -87,7 +87,7 @@
     LeftSidePanel,
     MetadataPane,
     FacetsPane,
-    EpiGraph,
+    GlobalEpiGraph,
     ResizableDivider,
     DrilldownPanel,
     DrilldownMetadataPane,
