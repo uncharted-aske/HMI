@@ -11,7 +11,7 @@ import SVGUtil from '@/utils/SVGUtil';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
-export default class EPIModelRenderer extends SVGRenderer {
+export default class GlobalEPIModelRenderer extends SVGRenderer {
   constructor (options:EpiModelRendererOptionsInterface) {
     super(options);
   }
@@ -139,14 +139,6 @@ export default class EPIModelRenderer extends SVGRenderer {
           .attr('ry', () => 25)
           .style('fill', d => calcNodeColor(d))
           .style('stroke', '#888');
-
-        // Special encodings for different types of variable nodes
-        if ((selection.datum() as any).nodeType === NodeTypes.NODES.VARIABLE) {
-          const d = selection.datum();
-          if ((d as any).nodeSubType === NodeTypes.VARIABLES.INTERNAL_VARIABLE) {
-            selection.select('rect').style('stroke-dasharray', 4);
-          }
-        }
       }
     });
 

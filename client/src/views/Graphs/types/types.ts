@@ -14,7 +14,6 @@ export interface GraphEdgeInterface {
   target: string
 }
 
-
 export interface GraphInterface {
   nodes: GraphNodeInterface[],
   edges: GraphEdgeInterface[],

@@ -4,21 +4,17 @@
 </template>
 
 <script lang="ts">
-  import * as d3 from 'd3';
-
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
   import { GraphInterface } from '@/views/Graphs/types/types';
 
-  import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
+  import GlobalEpiModelRenderer from '@/graphs/svg/GlobalEpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
   import { hierarchyFn, showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
   import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
-import { nodeMarker } from 'lit-html/lib/template';
-import { stringify } from 'querystring';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -43,7 +39,7 @@ import { stringify } from 'querystring';
     }
 
     mounted (): void {
-      this.renderer = new EpiModelRenderer({
+      this.renderer = new GlobalEpiModelRenderer({
         el: this.$refs.graph,
         adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
         renderMode: 'delta',
@@ -74,8 +70,8 @@ import { stringify } from 'querystring';
 
       this.renderer.setCallback('nodeMouseEnter', (node) => {
         const nodeData = node.datum();
-        let nodeCoords = [nodeData.x, nodeData.y]; // TO FIX: It seems there is an issue with coordinates for deeply nested nodes. 
-        
+        const nodeCoords = [nodeData.x, nodeData.y]; // TO FIX: It seems there is an issue with coordinates for deeply nested nodes.
+
         const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.data.nodeType;
 
         showTooltip(this.renderer.chart, tooltipText, nodeCoords);
@@ -91,10 +87,10 @@ import { stringify } from 'querystring';
     refresh (): void {
       const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one
       formatHierarchyNodeData(hierarchyNodes);
-      
+
       const edges = this.graph.edges;
       const graph = { nodes: [hierarchyNodes], edges };
-      
+
       this.renderer.setData(graph);
       this.renderer.render();
     }
