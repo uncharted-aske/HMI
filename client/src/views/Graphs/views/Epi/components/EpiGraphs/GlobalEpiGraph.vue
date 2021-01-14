@@ -1,5 +1,5 @@
 <template>
-    <div class="epi-graph-container" ref="graph">
+    <div class="global-epi-graph-container" ref="graph">
     </div>
 </template>
 
@@ -108,7 +108,7 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.epi-graph-container {
+.global-epi-graph-container {
   flex: 1;
 
   ::v-deep > svg {
