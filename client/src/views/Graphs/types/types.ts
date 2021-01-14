@@ -14,10 +14,6 @@ export interface GraphEdgeInterface {
   target: string
 }
 
-export interface GraphGroupInterface {
-  id: string,
-  members: string[]
-}
 
 export interface GraphInterface {
   nodes: GraphNodeInterface[],
