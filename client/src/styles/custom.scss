@@ -1,14 +1,11 @@
 @import "variables";
 
 .view-container {
+  display: flex;
+  flex-direction: column;
   position: relative;
   height: $content-full-height;
   overflow: hidden;
-  .content {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
 }
 
 .search-row {

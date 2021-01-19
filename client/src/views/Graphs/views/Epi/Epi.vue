@@ -12,8 +12,10 @@
         Split
       </button>
     </div>
-    <resizable-divider :left="true" :right="isSplitView">
-      <div slot="content-left" class="content global">
+    <resizable-divider :map="[
+      ['1', '3', '2'],
+    ]">
+      <div slot="1" class="content global">
         <settings-bar>
           <div slot="counters">
             <counters
@@ -27,7 +29,7 @@
         </settings-bar>
         <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
       </div>
-      <div slot="content-right" class="content local">
+      <div slot="2" class="content local">
         <settings-bar>
           <div slot="counters">
             <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
