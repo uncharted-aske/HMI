@@ -19,16 +19,16 @@
     id: string;
 
     @Prop({ default: 0 })
-    left: number;
+    left: string;
 
     @Prop({ default: 0 })
-    top: number;
+    top: string;
 
     @Prop({ default: 0 })
-    width: number;
+    width: string;
 
     @Prop({ default: 0 })
-    height: number;
+    height: string;
 
     get style (): any {
       const { left, top, width, height } = this;
