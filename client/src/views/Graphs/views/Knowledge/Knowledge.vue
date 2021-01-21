@@ -21,13 +21,18 @@
       <card-container
           :header="`Knowledge`"
           :cards="modelsCards"
-          @open-card="onOpenCard"
+          @open-card="onOpenPanel"
       />
       <div class="loader-container" v-if="dataLoading">
         <div class="loader">Loading...</div>
       </div>
     </div>
-    <knowledge-drilldown :card="openCard" @close-card="onCloseCard"/>
+    <knowledge-drilldown :card="openDrilldown" @close-card="onCloseDrilldown"/>
+    <drilldown-panel @close-pane="onClosePanel" :is-open="isOpenPanel">
+      <div slot="content">
+        <drilldown-knowledge-panel @close-card="onOpenDrilldown" :card="openPanel"/>
+      </div>
+    </drilldown-panel>
   </div>
 </template>
 
@@ -60,6 +65,8 @@
   import FacetsPane from '@/views/Home/components/FacetsPane/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
   import KnowledgeDrilldown from './KnowledgeDrilldown.vue';
+  import DrilldownPanel from '@/components/DrilldownPanel.vue';
+  import DrilldownKnowledgePanel from './KnowledgePanel.vue';
 
   import { FacetTermsSelectionMap } from '@/types/types';
 
@@ -78,6 +85,8 @@
     FacetsPane,
     CardContainer,
     KnowledgeDrilldown,
+    DrilldownPanel,
+    DrilldownKnowledgePanel,
   };
 
   @Component({ components })
@@ -87,7 +96,8 @@
     dataLoading = false;
     data: CosmosSearchInterface | Record<any, never> = {};
     filterHash: string = '';
-    openCard: CosmosSearchObjectsInterface | Record<any, never> = {};
+    openPanel: CosmosSearchObjectsInterface | Record<any, never> = {};
+    openDrilldown: CosmosSearchObjectsInterface | Record<any, never> = {};
 
     @Getter getFilters;
     @Getter getModelsList;
@@ -197,12 +207,26 @@
       }));
     }
 
-    onOpenCard (card: CosmosSearchObjectsInterface): void {
-      this.openCard = card;
+    get isOpenPanel (): boolean {
+      return !_.isEmpty(this.openPanel);
     }
 
-    onCloseCard (): void {
-      this.openCard = {};
+    onOpenPanel (card: CosmosSearchObjectsInterface): void {
+      this.openPanel = card;
+      this.openDrilldown = {};
+    }
+
+    onClosePanel (): void {
+      this.openPanel = {};
+    }
+
+    onOpenDrilldown (card: CosmosSearchObjectsInterface): void {
+      this.openDrilldown = card || this.openPanel;
+      this.openPanel = {};
+    }
+
+    onCloseDrilldown (): void {
+      this.openDrilldown = {};
     }
 
     onSetActivePane (actionName: string): void {
