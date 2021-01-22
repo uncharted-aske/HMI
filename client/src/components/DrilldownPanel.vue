@@ -1,6 +1,6 @@
 <template>
   <div class="drilldown-panel-container" v-if="isOpen">
-      <div class="panel-header">
+      <div class="panel-header" v-if="displayHeader">
         <h5>{{paneTitle}}</h5>
         <h6>{{paneSubtitle}}</h6>
       </div>
@@ -33,6 +33,10 @@
     @Prop({ default: '' })
     paneSubtitle: string;
 
+    get displayHeader (): boolean {
+      return Boolean(this.paneTitle || this.paneSubtitle);
+    }
+
     onClose (): void {
       this.$emit('close-pane');
     }
@@ -47,7 +51,8 @@
   height: $content-full-height;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   position: absolute;
-  right:0;
+  top: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
