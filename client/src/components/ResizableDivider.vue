@@ -36,7 +36,7 @@
     height: number,
   }
 
-  function swap (json: Record<string, any>): Record<string, any> {
+  function invertObject (json: Record<string, any>): Record<string, any> {
     var ret = {};
     for (var key in json) {
       (ret[json[key]] = ret[json[key]] !== undefined ? ret[json[key]] : []).push(key);
@@ -44,7 +44,7 @@
     return ret;
   }
 
-  function commonKeys (obj1: Record<string, any>, obj2: Record<string, any>): Record<string, any> {
+  function unionObject (obj1: Record<string, any>, obj2: Record<string, any>): Record<string, any> {
     var keys = [];
     for (var i in obj1) {
       if (i in obj2) {
@@ -61,12 +61,6 @@
   @Component({ components })
   export default class ResizableDivider extends Vue {
     @Prop({ })
-    rows: number;
-
-    @Prop({ })
-    cols: number;
-
-    @Prop({ })
     map: string[][];
 
     @Prop({ default: 10 })
@@ -76,11 +70,13 @@
 
     idSet: Set<string> = new Set();
 
+    // cell positioning/displacement
     cellTopLeftX: cellPositionInterface = {};
     cellTopLeftY: cellPositionInterface = {};
     cellBotRightX: cellPositionInterface = {};
     cellBotRightY: cellPositionInterface = {};
 
+    // cell neighbors
     cellLeft: cellBorderInterface = {};
     cellRight: cellBorderInterface = {};
     cellTop: cellBorderInterface = {};
@@ -88,10 +84,7 @@
 
     contentArray: contentInterface[] = [];
 
-    clickInitPosX: number = 0;
-    clickInitPosY: number = 0;
-    clickDispPosX: number = 0;
-    clickDispPosY: number = 0;
+    activeBorder: any = {};
 
     get containerDim (): {width: number, height: number, top: number, left: number} {
       const { width, height, top, left } = this.$el
@@ -153,7 +146,7 @@
       }
 
       const [cellLeft, cellRight] = this.findCommonBorders(this.cellTopLeftX, this.cellBotRightX, this.cellTopLeftY, this.cellBotRightY);
-      const [cellTop, cellBot] = this.findCommonBorders(this.cellTopLeftX, this.cellBotRightX, this.cellTopLeftY, this.cellBotRightY);
+      const [cellTop, cellBot] = this.findCommonBorders(this.cellTopLeftY, this.cellBotRightY, this.cellTopLeftX, this.cellBotRightX);
       this.cellLeft = cellLeft;
       this.cellRight = cellRight;
       this.cellTop = cellTop;
@@ -163,31 +156,28 @@
     }
 
     findCommonBorders (
-      cellTopLeftA: cellPositionInterface,
-      cellBotRightA: cellPositionInterface,
-      cellTopLeftB: cellPositionInterface,
-      cellBotRightB: cellPositionInterface,
+      primaryCellTopLeft: cellPositionInterface,
+      primaryCellBotRight: cellPositionInterface,
+      secondaryCellTopLeft: cellPositionInterface,
+      secondaryCellBotRight: cellPositionInterface,
     ): [{[key: string]: string[]}, {[key: string]: string[]}] {
-      const cellTopLeftXInvert = swap(cellTopLeftA);
-      const cellBotRightXInvert = swap(cellBotRightA);
+      const primaryCellTopLeftInvert = invertObject(primaryCellTopLeft);
+      const primaryCellBotRightInvert = invertObject(primaryCellBotRight);
 
-      const cellA: {[key: string]: string[]} = {};
-      const cellB: {[key: string]: string[]} = {};
+      const primaryCell: {[key: string]: string[]} = {};
+      const secondaryCell: {[key: string]: string[]} = {};
 
-      commonKeys(cellTopLeftXInvert, cellBotRightXInvert).map(val => {
-        const leftBorderMap = cellTopLeftXInvert[val];
-        const rightBorderMap = cellBotRightXInvert[val];
-
-        leftBorderMap.map(leftBorderId => rightBorderMap.map(rightBorderId => {
-          if (cellTopLeftB[leftBorderId] < cellBotRightB[rightBorderId] &&
-            cellTopLeftB[rightBorderId] < cellBotRightB[leftBorderId]) {
-              (cellA[leftBorderId] = cellA[leftBorderId] ? cellA[leftBorderId] : []).push(rightBorderId);
-              (cellB[rightBorderId] = cellB[rightBorderId] ? cellB[rightBorderId] : []).push(leftBorderId);
-            }
+      unionObject(primaryCellTopLeftInvert, primaryCellBotRightInvert).map(val => {
+        primaryCellTopLeftInvert[val].map(leftBorderId => primaryCellBotRightInvert[val].map(rightBorderId => {
+          if (secondaryCellTopLeft[leftBorderId] < secondaryCellBotRight[rightBorderId] &&
+            secondaryCellTopLeft[rightBorderId] < secondaryCellBotRight[leftBorderId]) {
+            (primaryCell[leftBorderId] = primaryCell[leftBorderId] ? primaryCell[leftBorderId] : []).push(rightBorderId);
+            (secondaryCell[rightBorderId] = secondaryCell[rightBorderId] ? secondaryCell[rightBorderId] : []).push(leftBorderId);
+          }
         }));
       });
 
-      return [cellA, cellB];
+      return [primaryCell, secondaryCell];
     }
 
     isTopLeftCorner (col: number, row: number): boolean {
@@ -209,56 +199,47 @@
 
     onMousedown (e: MouseEvent, id: string, position: string): void {
         this.isDraggable = true;
-        const { left, top } = this.containerDim;
-        this.clickInitPosX = e.clientX - left;
-        this.clickInitPosY = e.clientY - top;
-        this.clickDispPosX = 0;
-        this.clickDispPosY = 0;
 
-        this.findActiveBorders(id, position);
+        const { positive, negative } = this.findActiveBorders(id, position);
+        this.activeBorder = {
+          position,
+          positive,
+          negative,
+        };
     }
 
-    // incomplete - part of the border resize logic
     findActiveBorders (id: string, position: string): any {
       const positiveBorders = [];
       const negativeBorders = [];
 
-      if (position === 'left') {
-        positiveBorders.push(id);
-        let state = 1;
-        let unprocessedIds = new Set();
-        unprocessedIds.add(id);
-        const traversedIds = new Set();
-        while (state) {
-          if (state === 1) {
-            state = 0;
-            const queuedIds = new Set();
-            unprocessedIds.forEach((leftId: string) => {
-              if (!traversedIds.has(leftId)) {
-                state = -1;
-                negativeBorders.push(leftId);
-                traversedIds.add(leftId);
-                if (this.cellLeft[leftId]) this.cellLeft[leftId].map(val => queuedIds.add(val));
-                unprocessedIds.delete(leftId);
-              }
-            });
-            unprocessedIds = queuedIds;
-          } else if (state === -1) {
-            state = 0;
-            const queuedIds = new Set();
-            unprocessedIds.forEach((leftId: string) => {
-              if (!traversedIds.has(leftId)) {
-                state = 1;
-                positiveBorders.push(leftId);
-                traversedIds.add(leftId);
-                if (this.cellRight[leftId]) this.cellRight[leftId].map(val => queuedIds.add(val));
-                unprocessedIds.delete(leftId);
-              }
-            });
-            unprocessedIds = queuedIds;
+      switch (position) {
+        case 'left':
+          if (this.cellLeft[id]) {
+            positiveBorders.push(id);
+            this.cellLeft[id].map(negId => negativeBorders.push(negId));
           }
-        }
+          break;
+        case 'right':
+          if (this.cellRight[id]) {
+            positiveBorders.push(id);
+            this.cellRight[id].map(negId => negativeBorders.push(negId));
+          }
+          break;
+        case 'top':
+          if (this.cellTop[id]) {
+            positiveBorders.push(id);
+            this.cellTop[id].map(negId => negativeBorders.push(negId));
+          }
+          break;
+        case 'bottom':
+          if (this.cellBot[id]) {
+            positiveBorders.push(id);
+            this.cellBot[id].map(negId => negativeBorders.push(negId));
+          }
+          break;
       }
+
+      return { positive: positiveBorders, negative: negativeBorders };
     }
 
     onMouseup (): void {
@@ -267,8 +248,31 @@
 
     onMousemove (e: MouseEvent): void {
       if (this.isDraggable) {
-        this.clickDispPosX += e.movementX;
-        this.clickDispPosY += e.movementY;
+        const { position, positive, negative } = this.activeBorder;
+        const { movementX, movementY } = e;
+
+        if (movementX === 0 && movementY === 0) {
+          return;
+        }
+
+        if (position === 'left') {
+          positive.map(id => { this.cellTopLeftX[id] += movementX; });
+          negative.map(id => { this.cellBotRightX[id] += movementX; });
+        }
+        if (position === 'right') {
+          positive.map(id => { this.cellBotRightX[id] += movementX; });
+          negative.map(id => { this.cellTopLeftX[id] += movementX; });
+        }
+        if (position === 'top') {
+          positive.map(id => { this.cellTopLeftY[id] += movementY; });
+          negative.map(id => { this.cellBotRightY[id] += movementY; });
+        }
+        if (position === 'bottom') {
+          positive.map(id => { this.cellBotRightY[id] += movementY; });
+          negative.map(id => { this.cellTopLeftY[id] += movementY; });
+        }
+
+        this.contentArray = this.generateContentArray();
       }
     }
 
