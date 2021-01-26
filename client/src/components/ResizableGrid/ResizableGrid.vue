@@ -21,30 +21,7 @@
 
   import ResizableGridContent from './ResizableGridContent.vue';
 
-  interface dimensionsInterface {
-    [key: string]: {
-      width: string,
-      widthFixed: boolean,
-      // height: string,
-      // heightFixed: boolean,
-    }
-  }
-
-  interface cellPositionInterface {
-    [key: string]: number,
-  }
-
-  interface cellBorderInterface {
-    [key: string]: string[],
-  }
-
-  interface contentInterface {
-    id: string,
-    left: number,
-    top: number,
-    width: number,
-    height: number,
-  }
+  import { DimensionsInterface, CellPositionInterface, CellBorderInterface, ContentInterface } from '@/types/types';
 
   function invertObject (json: Record<string, any>): Record<string, any> {
     var ret = {};
@@ -83,14 +60,14 @@
       }
     }
 
-    @Watch('dimensions') onDimensionsChange (newDim: dimensionsInterface, oldDim: dimensionsInterface): any {
+    @Watch('dimensions') onDimensionsChange (newDim: DimensionsInterface, oldDim: DimensionsInterface): any {
       if (!isEqual(newDim, oldDim)) {
         this.initializeMap();
       }
     }
 
     @Prop({ default: {} })
-    dimensions: dimensionsInterface;
+    dimensions: DimensionsInterface;
 
     @Prop({ default: 10 })
     edgeBuffer: number;
@@ -100,18 +77,18 @@
     idSet: Set<string>;
 
     // cell positioning/displacement
-    cellTopLeftX: cellPositionInterface;
-    cellTopLeftY: cellPositionInterface;
-    cellBotRightX: cellPositionInterface;
-    cellBotRightY: cellPositionInterface;
+    cellTopLeftX: CellPositionInterface;
+    cellTopLeftY: CellPositionInterface;
+    cellBotRightX: CellPositionInterface;
+    cellBotRightY: CellPositionInterface;
 
     // cell neighbors
-    cellLeft: cellBorderInterface;
-    cellRight: cellBorderInterface;
-    cellTop: cellBorderInterface;
-    cellBot: cellBorderInterface;
+    cellLeft: CellBorderInterface;
+    cellRight: CellBorderInterface;
+    cellTop: CellBorderInterface;
+    cellBot: CellBorderInterface;
 
-    contentArray: contentInterface[] = [];
+    contentArray: ContentInterface[] = [];
 
     activeBorder: any;
 
@@ -127,7 +104,7 @@
       return { width, height, top, left };
     }
 
-    generateContentArray (): contentInterface[] {
+    generateContentArray (): ContentInterface[] {
       const output = [];
       for (const id of this.idSet) {
         output.push({
@@ -237,10 +214,10 @@
     }
 
     findCommonBorders (
-      primaryCellTopLeft: cellPositionInterface,
-      primaryCellBotRight: cellPositionInterface,
-      secondaryCellTopLeft: cellPositionInterface,
-      secondaryCellBotRight: cellPositionInterface,
+      primaryCellTopLeft: CellPositionInterface,
+      primaryCellBotRight: CellPositionInterface,
+      secondaryCellTopLeft: CellPositionInterface,
+      secondaryCellBotRight: CellPositionInterface,
     ): [{[key: string]: string[]}, {[key: string]: string[]}] {
       const primaryCellTopLeftInvert = invertObject(primaryCellTopLeft);
       const primaryCellBotRightInvert = invertObject(primaryCellBotRight);
