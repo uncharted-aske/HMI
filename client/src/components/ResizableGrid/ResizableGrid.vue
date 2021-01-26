@@ -23,6 +23,8 @@
 
   import { DimensionsInterface, CellPositionInterface, CellBorderInterface, ContentInterface } from '@/types/types';
 
+  // reverse the position of the key and values in an object, placing the former keys in an array
+  // e.g. invertObject({x: 1, y: 1, z: 2}) ---> {1: ["x","y"], 2:["z"]}
   function invertObject (json: Record<string, any>): Record<string, any> {
     var ret = {};
     for (var key in json) {
@@ -31,7 +33,9 @@
     return ret;
   }
 
-  function unionObject (obj1: Record<string, any>, obj2: Record<string, any>): Record<string, any> {
+  // finds all the keys which two objects have in common
+  // e.g. unionObject({x: 1, y: 1, z: 2}, {x: 1, y: 2, a: 1}) ---> ["x", "y"]
+  function commonObjectKeys (obj1: Record<string, any>, obj2: Record<string, any>): Record<string, any> {
     var keys = [];
     for (var i in obj1) {
       if (i in obj2) {
@@ -51,7 +55,7 @@
 
   @Component({ components })
   export default class ResizableGrid extends Vue {
-    @Prop({ })
+    @Prop({ default: [[]] })
     map: string[][];
 
     @Watch('map') onMapChange (newMap: string[][], oldMap: string[][]): any {
@@ -225,7 +229,7 @@
       const primaryCell: {[key: string]: string[]} = {};
       const secondaryCell: {[key: string]: string[]} = {};
 
-      unionObject(primaryCellTopLeftInvert, primaryCellBotRightInvert).map(val => {
+      commonObjectKeys(primaryCellTopLeftInvert, primaryCellBotRightInvert).map(val => {
         primaryCellTopLeftInvert[val].map(leftBorderId => primaryCellBotRightInvert[val].map(rightBorderId => {
           if (secondaryCellTopLeft[leftBorderId] < secondaryCellBotRight[rightBorderId] &&
             secondaryCellTopLeft[rightBorderId] < secondaryCellBotRight[leftBorderId]) {

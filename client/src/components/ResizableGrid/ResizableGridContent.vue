@@ -49,7 +49,7 @@
 @import "@/styles/variables";
 
 $border-select-margin: 10px;
-$border: 1px solid $icon-color;
+$border-grid: 1px solid $border;
 
 .panel-content-border {
   position: absolute;
@@ -60,28 +60,28 @@ $border: 1px solid $icon-color;
   left: 0;
   width: $border-select-margin;
   height: 100%;
-  border-left: $border;
+  border-left: $border-grid;
   cursor: col-resize;
 }
 .panel-content-border-right {
   right: 0;
   width: $border-select-margin;
   height: 100%;
-  border-right: $border;
+  border-right: $border-grid;
   cursor: col-resize;
 }
 .panel-content-border-top {
   top: 0;
   width: 100%;
   height: $border-select-margin;
-  border-top: $border;
+  border-top: $border-grid;
   cursor: row-resize;
 }
 .panel-content-border-bottom {
   bottom: 0;
   width: 100%;
   height: $border-select-margin;
-  border-bottom: $border;
+  border-bottom: $border-grid;
   cursor: row-resize;
 }
 </style>
