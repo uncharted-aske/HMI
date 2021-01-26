@@ -15,10 +15,18 @@
           </div>
           <div class="d-flex flex-column col">
             <div class="font-weight-bolder">Authors</div>
-            <div class="authors">
+            <div>
               {{authorList}}
             </div>
-            <div class="font-weight-bolder pt-2">Excerpt</div>
+            <div class="font-weight-bolder mt-3">Publication Year</div>
+            <div>
+              {{card.raw.bibjson.year || 'None'}}
+            </div>
+            <div class="font-weight-bolder mt-3">Publisher</div>
+            <div>
+              {{card.raw.bibjson.publisher || 'None'}}
+            </div>
+            <div class="font-weight-bolder mt-3">Excerpt</div>
             <div class="position-relative flex-grow-1">
               <div class="position-absolute h-100 w-100 pr-1 overflow-auto">
                 {{excerpt}}
