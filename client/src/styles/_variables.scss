@@ -19,7 +19,7 @@ $content-full-height: calc(100vh - #{$navbar-outer-height});
 $secondary-bar-width: 50px;
 
 $z-index-order: (
-  resizable-divider: 0,
+  resizable-grid: 0,
   hierarchy-slider: 500,
   side-panel: 600,
   modal:1000,

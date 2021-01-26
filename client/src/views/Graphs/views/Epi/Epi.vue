@@ -12,10 +12,8 @@
         Split
       </button>
     </div>
-    <resizable-divider :map="[
-      ['1', '3', '2'],
-    ]">
-      <div slot="1" class="content global">
+    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '100px', widthFixed: true }}">
+      <div slot="1" class="h-100 w-100 content global">
         <settings-bar>
           <div slot="counters">
             <counters
@@ -29,7 +27,7 @@
         </settings-bar>
         <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
       </div>
-      <div slot="2" class="content local">
+      <div slot="2" class="h-100 w-100 content local">
         <settings-bar>
           <div slot="counters">
             <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
@@ -40,7 +38,7 @@
         </settings-bar>
         <epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
       </div>
-    </resizable-divider>
+    </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
@@ -66,7 +64,7 @@
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import EpiGraph from './components/EpiGraph/EpiGraph.vue';
-  import ResizableDivider from '@/components/ResizableDivider.vue';
+  import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
 
@@ -90,7 +88,7 @@
     MetadataPane,
     FacetsPane,
     EpiGraph,
-    ResizableDivider,
+    ResizableGrid,
     DrilldownPanel,
     DrilldownMetadataPane,
   };
@@ -126,6 +124,10 @@
 
     get edgeCount (): number {
       return this.selectedGraph && this.selectedGraph.edges.length;
+    }
+
+    get gridMap (): string[][] {
+      return this.isSplitView ? [['1', '3', '2']] : [['1']];
     }
 
     onSplitView (): void {

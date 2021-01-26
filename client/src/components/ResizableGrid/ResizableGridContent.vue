@@ -14,7 +14,7 @@
   import { Prop } from 'vue-property-decorator';
 
   @Component
-  export default class ResizableDivider extends Vue {
+  export default class ResizableGridContent extends Vue {
     @Prop({ default: 0 })
     id: string;
 
@@ -60,7 +60,6 @@ $border: 1px solid $icon-color;
 
 .panel-content-border {
   position: absolute;
-  cursor: col-resize;
   user-select: none;
 }
 
@@ -69,23 +68,27 @@ $border: 1px solid $icon-color;
   width: $border-select-margin;
   height: 100%;
   border-left: $border;
+  cursor: col-resize;
 }
 .panel-content-border-right {
   right: 0;
   width: $border-select-margin;
   height: 100%;
   border-right: $border;
+  cursor: col-resize;
 }
 .panel-content-border-top {
   top: 0;
   width: 100%;
   height: $border-select-margin;
   border-top: $border;
+  cursor: row-resize;
 }
 .panel-content-border-bottom {
   bottom: 0;
   width: 100%;
   height: $border-select-margin;
   border-bottom: $border;
+  cursor: row-resize;
 }
 </style>
