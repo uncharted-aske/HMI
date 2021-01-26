@@ -17,6 +17,7 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
+  import { uniq } from 'lodash';
 
   import ResizableDividerContent from './ResizableDividerContent.vue';
 
@@ -54,6 +55,10 @@
     return keys;
   }
 
+  function containsLetter (str) {
+    return /[A-Za-z]+$/.test(str);
+  }
+
   const components = {
     ResizableDividerContent,
   };
@@ -62,6 +67,13 @@
   export default class ResizableDivider extends Vue {
     @Prop({ })
     map: string[][];
+
+    @Prop({ default: {} })
+    dimensions: { [key: string]: {
+      width: string,
+      widthFixed: boolean,
+      // height: string,
+    } };
 
     @Prop({ default: 10 })
     edgeBuffer: number;
@@ -123,23 +135,44 @@
       window.addEventListener('resize', this.onResize);
 
       const { width, height } = this.containerDim;
-      const rowNum = this.map ? this.map.length : 0;
-      const colNum = this.map && this.map[0] ? this.map[0].length : 0;
-      const rowUnit = height / rowNum;
-      const colUnit = width / colNum;
+
+      // TO-DO: Add equivalent colAccumulatingTotal block for height
+      const rowAccumulatingTotal = [];
+      for (let rowInd = 0; rowInd < this.map.length; rowInd++) {
+        rowAccumulatingTotal[rowInd] = [{ fixed: 0, variable: 0 }];
+        let fixed = 0;
+        let variable = 0;
+        for (let colInd = 0; colInd < this.map[rowInd].length; colInd++) {
+          const cellId = this.map[rowInd][colInd];
+          const dimensionExists = this.dimensions[cellId];
+          if (dimensionExists && this.dimensions[cellId].width && containsLetter(this.dimensions[cellId].width)) {
+            fixed += parseFloat(this.dimensions[cellId].width);
+          } else {
+            variable += dimensionExists && this.dimensions[cellId].width !== undefined
+              ? parseFloat(this.dimensions[cellId].width)
+              : 1;
+          }
+          rowAccumulatingTotal[rowInd].push({ fixed, variable });
+        }
+      }
 
       for (let rowInd = 0; rowInd < this.map.length; rowInd++) {
+        const rowUnit = height / (this.map ? this.map.length : 0);
+        const colTotalNum = rowAccumulatingTotal[rowInd].length - 1;
+        const colUnit = (width - rowAccumulatingTotal[rowInd][colTotalNum].fixed) / (rowAccumulatingTotal[rowInd][colTotalNum].variable);
         for (let colInd = 0; colInd < this.map[rowInd].length; colInd++) {
           const id = this.map[rowInd][colInd];
           if (!this.idSet.has(id)) {
             this.idSet.add(id);
           }
           if (this.isTopLeftCorner(colInd, rowInd)) {
-            this.cellTopLeftX[id] = colInd * colUnit;
+            const widthTotal = rowAccumulatingTotal[rowInd][colInd];
+            this.cellTopLeftX[id] = widthTotal.fixed + widthTotal.variable * colUnit;
             this.cellTopLeftY[id] = rowInd * rowUnit;
           }
           if (this.isBottomRightCorner(colInd, rowInd)) {
-            this.cellBotRightX[id] = (colInd + 1) * colUnit;
+            const widthTotal = rowAccumulatingTotal[rowInd][colInd + 1];
+            this.cellBotRightX[id] = widthTotal.fixed + widthTotal.variable * colUnit;
             this.cellBotRightY[id] = (rowInd + 1) * rowUnit;
           }
         }
@@ -198,31 +231,61 @@
     }
 
     onMousedown (e: MouseEvent, id: string, position: string): void {
-        this.isDraggable = true;
+      this.isDraggable = true;
 
-        const { positive, negative } = this.findActiveBorders(id, position);
-        this.activeBorder = {
-          position,
-          positive,
-          negative,
-        };
+      const { positive, negative } = this.findActiveBorders(id, position);
+      this.activeBorder = {
+        position,
+        positive,
+        negative,
+      };
     }
 
-    findActiveBorders (id: string, position: string): any {
-      const positiveBorders = [];
-      const negativeBorders = [];
+    isWidthFixed (id: string): boolean {
+      return this.dimensions[id] && this.dimensions[id].widthFixed;
+    }
+
+    findActiveBorders (id: string, position: string, _selfCall?: boolean): any {
+      let positiveBorders = [];
+      let negativeBorders = [];
 
       switch (position) {
         case 'left':
           if (this.cellLeft[id]) {
             positiveBorders.push(id);
-            this.cellLeft[id].map(negId => negativeBorders.push(negId));
+            this.cellLeft[id].map(negId => {
+              if (this.isWidthFixed(negId)) {
+                const opposingBorders = this.findActiveBorders(negId, 'right');
+                positiveBorders = positiveBorders.concat(opposingBorders.negative);
+                negativeBorders = negativeBorders.concat(opposingBorders.positive);
+              } else {
+                negativeBorders.push(negId);
+              }
+            });
+            if (this.isWidthFixed(id) && !_selfCall) {
+              const opposingBorders = this.findActiveBorders(id, 'right', true);
+              positiveBorders = positiveBorders.concat(opposingBorders.negative);
+              negativeBorders = negativeBorders.concat(opposingBorders.positive);
+            }
           }
           break;
         case 'right':
           if (this.cellRight[id]) {
             positiveBorders.push(id);
-            this.cellRight[id].map(negId => negativeBorders.push(negId));
+            this.cellRight[id].map(negId => {
+              if (this.isWidthFixed(negId)) {
+                const opposingBorders = this.findActiveBorders(negId, 'left');
+                positiveBorders = positiveBorders.concat(opposingBorders.negative);
+                negativeBorders = negativeBorders.concat(opposingBorders.positive);
+              } else {
+                negativeBorders.push(negId);
+              }
+            });
+            if (this.isWidthFixed(id) && !_selfCall) {
+              const opposingBorders = this.findActiveBorders(id, 'left', true);
+              positiveBorders = positiveBorders.concat(opposingBorders.negative);
+              negativeBorders = negativeBorders.concat(opposingBorders.positive);
+            }
           }
           break;
         case 'top':
@@ -239,7 +302,7 @@
           break;
       }
 
-      return { positive: positiveBorders, negative: negativeBorders };
+      return { positive: uniq(positiveBorders), negative: uniq(negativeBorders) };
     }
 
     onMouseup (): void {
