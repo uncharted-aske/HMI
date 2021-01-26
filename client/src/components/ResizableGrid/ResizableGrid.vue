@@ -397,13 +397,13 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.resizable-divider {
+.resizable-grid {
   height: $content-full-height;
   position: absolute;
   flex-direction: column;
   background-color: #ffffff;
   box-sizing: border-box;
-  z-index: map-get($z-index-order, resizable-divider);
+  z-index: map-get($z-index-order, resizable-grid);
 }
 
 .panel-content {
@@ -418,7 +418,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  z-index: map-get($z-index-order, resizable-divider) + 1;
+  z-index: map-get($z-index-order, resizable-grid) + 1;
   background-color: $border;
   box-shadow: 0 4px 8px 0 $border;
   .btn {
