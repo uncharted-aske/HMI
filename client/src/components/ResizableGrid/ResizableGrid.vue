@@ -397,45 +397,4 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.resizable-grid {
-  height: $content-full-height;
-  position: absolute;
-  flex-direction: column;
-  background-color: #ffffff;
-  box-sizing: border-box;
-  z-index: map-get($z-index-order, resizable-grid);
-}
-
-.panel-content {
-  overflow: hidden;
-  flex: 1;
-}
-
-.divider {
-  width: 1px;
-  height: $content-full-height;
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  z-index: map-get($z-index-order, resizable-grid) + 1;
-  background-color: $border;
-  box-shadow: 0 4px 8px 0 $border;
-  .btn {
-    height: 75px;
-    min-width: 20px;
-    margin-top: -37.5px;
-    margin-left: -10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;
-    padding: 5px;
-    box-shadow: 0 -1px 0 #e5e5e5, 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
-    &:hover {
-      background-color: $muted-highlight;
-    }
-  }
-}
-
 </style>

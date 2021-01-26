@@ -51,13 +51,6 @@
 $border-select-margin: 10px;
 $border: 1px solid $icon-color;
 
-.panel-content-container {
-  position: absolute;
-  margin: 10px;
-  width: 100%;
-  height: 100%;
-}
-
 .panel-content-border {
   position: absolute;
   user-select: none;
