@@ -11,7 +11,7 @@
   import { GraphInterface } from '@/views/Graphs/types/types';
   import { SubgraphInterface } from '@/graphs/svg/types/types';
 
-  import EpiModelRenderer from '@/graphs/svg/EpiModelRenderer';
+  import GlobalEpiModelRenderer from '@/graphs/svg/GlobalEpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
   import { hierarchyFn } from '@/utils/SVGUtil.js';
@@ -50,7 +50,7 @@
     }
 
     mounted (): void {
-      this.renderer = new EpiModelRenderer({
+      this.renderer = new GlobalEpiModelRenderer({
         el: this.$refs.graph,
         adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
         renderMode: 'delta',

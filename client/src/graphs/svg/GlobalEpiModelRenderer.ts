@@ -11,7 +11,7 @@ import SVGUtil from '@/utils/SVGUtil';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
-export default class EPIModelRenderer extends SVGRenderer {
+export default class GlobalEPIModelRenderer extends SVGRenderer {
   constructor (options:EpiModelRendererOptionsInterface) {
     super(options);
   }
@@ -122,10 +122,15 @@ export default class EPIModelRenderer extends SVGRenderer {
           .attr('width', d => (d as any).width)
           .attr('height', d => (d as any).height)
           .style('fill', d => calcNodeColor(d))
+          .attr('fill-opacity', d => {
+            if ((d as any).nodes) {
+              return ((d as any).depth) * 0.2;
+            } else return 1;
+          })
           .style('stroke', '#888')
           .style('stroke-width', d => {
-            const role = (d as any).data.role;
-            return role === 'model' ? 6 : 1;
+            const role = (d as any).role;
+            return role === 'model' ? 5 : 2;
           });
 
         // Draw ellipses for input and output nodes
@@ -139,14 +144,6 @@ export default class EPIModelRenderer extends SVGRenderer {
           .attr('ry', () => 25)
           .style('fill', d => calcNodeColor(d))
           .style('stroke', '#888');
-
-        // Special encodings for different types of variable nodes
-        if ((selection.datum() as any).nodeType === NodeTypes.NODES.VARIABLE) {
-          const d = selection.datum();
-          if ((d as any).nodeSubType === NodeTypes.VARIABLES.INTERNAL_VARIABLE) {
-            selection.select('rect').style('stroke-dasharray', 4);
-          }
-        }
       }
     });
 

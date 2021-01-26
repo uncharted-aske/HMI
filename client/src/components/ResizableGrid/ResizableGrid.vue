@@ -21,31 +21,10 @@
 
   import ResizableGridContent from './ResizableGridContent.vue';
 
-  interface dimensionsInterface {
-    [key: string]: {
-      width: string,
-      widthFixed: boolean,
-      // height: string,
-      // heightFixed: boolean,
-    }
-  }
+  import { DimensionsInterface, CellPositionInterface, CellBorderInterface, ContentInterface } from '@/types/types';
 
-  interface cellPositionInterface {
-    [key: string]: number,
-  }
-
-  interface cellBorderInterface {
-    [key: string]: string[],
-  }
-
-  interface contentInterface {
-    id: string,
-    left: number,
-    top: number,
-    width: number,
-    height: number,
-  }
-
+  // reverse the position of the key and values in an object, placing the former keys in an array
+  // e.g. invertObject({x: 1, y: 1, z: 2}) ---> {1: ["x","y"], 2:["z"]}
   function invertObject (json: Record<string, any>): Record<string, any> {
     var ret = {};
     for (var key in json) {
@@ -54,7 +33,9 @@
     return ret;
   }
 
-  function unionObject (obj1: Record<string, any>, obj2: Record<string, any>): Record<string, any> {
+  // finds all the keys which two objects have in common
+  // e.g. unionObject({x: 1, y: 1, z: 2}, {x: 1, y: 2, a: 1}) ---> ["x", "y"]
+  function commonObjectKeys (obj1: Record<string, any>, obj2: Record<string, any>): Record<string, any> {
     var keys = [];
     for (var i in obj1) {
       if (i in obj2) {
@@ -74,7 +55,7 @@
 
   @Component({ components })
   export default class ResizableGrid extends Vue {
-    @Prop({ })
+    @Prop({ default: [[]] })
     map: string[][];
 
     @Watch('map') onMapChange (newMap: string[][], oldMap: string[][]): any {
@@ -83,14 +64,14 @@
       }
     }
 
-    @Watch('dimensions') onDimensionsChange (newDim: dimensionsInterface, oldDim: dimensionsInterface): any {
+    @Watch('dimensions') onDimensionsChange (newDim: DimensionsInterface, oldDim: DimensionsInterface): any {
       if (!isEqual(newDim, oldDim)) {
         this.initializeMap();
       }
     }
 
     @Prop({ default: {} })
-    dimensions: dimensionsInterface;
+    dimensions: DimensionsInterface;
 
     @Prop({ default: 10 })
     edgeBuffer: number;
@@ -100,18 +81,18 @@
     idSet: Set<string>;
 
     // cell positioning/displacement
-    cellTopLeftX: cellPositionInterface;
-    cellTopLeftY: cellPositionInterface;
-    cellBotRightX: cellPositionInterface;
-    cellBotRightY: cellPositionInterface;
+    cellTopLeftX: CellPositionInterface;
+    cellTopLeftY: CellPositionInterface;
+    cellBotRightX: CellPositionInterface;
+    cellBotRightY: CellPositionInterface;
 
     // cell neighbors
-    cellLeft: cellBorderInterface;
-    cellRight: cellBorderInterface;
-    cellTop: cellBorderInterface;
-    cellBot: cellBorderInterface;
+    cellLeft: CellBorderInterface;
+    cellRight: CellBorderInterface;
+    cellTop: CellBorderInterface;
+    cellBot: CellBorderInterface;
 
-    contentArray: contentInterface[] = [];
+    contentArray: ContentInterface[] = [];
 
     activeBorder: any;
 
@@ -127,7 +108,7 @@
       return { width, height, top, left };
     }
 
-    generateContentArray (): contentInterface[] {
+    generateContentArray (): ContentInterface[] {
       const output = [];
       for (const id of this.idSet) {
         output.push({
@@ -237,10 +218,10 @@
     }
 
     findCommonBorders (
-      primaryCellTopLeft: cellPositionInterface,
-      primaryCellBotRight: cellPositionInterface,
-      secondaryCellTopLeft: cellPositionInterface,
-      secondaryCellBotRight: cellPositionInterface,
+      primaryCellTopLeft: CellPositionInterface,
+      primaryCellBotRight: CellPositionInterface,
+      secondaryCellTopLeft: CellPositionInterface,
+      secondaryCellBotRight: CellPositionInterface,
     ): [{[key: string]: string[]}, {[key: string]: string[]}] {
       const primaryCellTopLeftInvert = invertObject(primaryCellTopLeft);
       const primaryCellBotRightInvert = invertObject(primaryCellBotRight);
@@ -248,7 +229,7 @@
       const primaryCell: {[key: string]: string[]} = {};
       const secondaryCell: {[key: string]: string[]} = {};
 
-      unionObject(primaryCellTopLeftInvert, primaryCellBotRightInvert).map(val => {
+      commonObjectKeys(primaryCellTopLeftInvert, primaryCellBotRightInvert).map(val => {
         primaryCellTopLeftInvert[val].map(leftBorderId => primaryCellBotRightInvert[val].map(rightBorderId => {
           if (secondaryCellTopLeft[leftBorderId] < secondaryCellBotRight[rightBorderId] &&
             secondaryCellTopLeft[rightBorderId] < secondaryCellBotRight[leftBorderId]) {
@@ -396,46 +377,5 @@
 
 <style lang="scss" scoped>
 @import "@/styles/variables";
-
-.resizable-grid {
-  height: $content-full-height;
-  position: absolute;
-  flex-direction: column;
-  background-color: #ffffff;
-  box-sizing: border-box;
-  z-index: map-get($z-index-order, resizable-grid);
-}
-
-.panel-content {
-  overflow: hidden;
-  flex: 1;
-}
-
-.divider {
-  width: 1px;
-  height: $content-full-height;
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  z-index: map-get($z-index-order, resizable-grid) + 1;
-  background-color: $border;
-  box-shadow: 0 4px 8px 0 $border;
-  .btn {
-    height: 75px;
-    min-width: 20px;
-    margin-top: -37.5px;
-    margin-left: -10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;
-    padding: 5px;
-    box-shadow: 0 -1px 0 #e5e5e5, 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
-    &:hover {
-      background-color: $muted-highlight;
-    }
-  }
-}
 
 </style>
