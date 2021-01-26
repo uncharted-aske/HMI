@@ -16,10 +16,19 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Prop } from 'vue-property-decorator';
-  import { uniq } from 'lodash';
+  import { Prop, Watch } from 'vue-property-decorator';
+  import { isEqual, uniq } from 'lodash';
 
   import ResizableGridContent from './ResizableGridContent.vue';
+
+  interface dimensionsInterface {
+    [key: string]: {
+      width: string,
+      widthFixed: boolean,
+      // height: string,
+      // heightFixed: boolean,
+    }
+  }
 
   interface cellPositionInterface {
     [key: string]: number,
@@ -68,35 +77,48 @@
     @Prop({ })
     map: string[][];
 
+    @Watch('map') onMapChange (newMap: string[][], oldMap: string[][]): any {
+      if (!isEqual(newMap, oldMap)) {
+        this.initializeMap();
+      }
+    }
+
+    @Watch('dimensions') onDimensionsChange (newDim: dimensionsInterface, oldDim: dimensionsInterface): any {
+      if (!isEqual(newDim, oldDim)) {
+        this.initializeMap();
+      }
+    }
+
     @Prop({ default: {} })
-    dimensions: { [key: string]: {
-      width: string,
-      widthFixed: boolean,
-      // height: string,
-    } };
+    dimensions: dimensionsInterface;
 
     @Prop({ default: 10 })
     edgeBuffer: number;
 
     isDraggable: boolean = false;
 
-    idSet: Set<string> = new Set();
+    idSet: Set<string>;
 
     // cell positioning/displacement
-    cellTopLeftX: cellPositionInterface = {};
-    cellTopLeftY: cellPositionInterface = {};
-    cellBotRightX: cellPositionInterface = {};
-    cellBotRightY: cellPositionInterface = {};
+    cellTopLeftX: cellPositionInterface;
+    cellTopLeftY: cellPositionInterface;
+    cellBotRightX: cellPositionInterface;
+    cellBotRightY: cellPositionInterface;
 
     // cell neighbors
-    cellLeft: cellBorderInterface = {};
-    cellRight: cellBorderInterface = {};
-    cellTop: cellBorderInterface = {};
-    cellBot: cellBorderInterface = {};
+    cellLeft: cellBorderInterface;
+    cellRight: cellBorderInterface;
+    cellTop: cellBorderInterface;
+    cellBot: cellBorderInterface;
 
     contentArray: contentInterface[] = [];
 
-    activeBorder: any = {};
+    activeBorder: any;
+
+    constructor (...args: unknown[]) {
+      super(...args);
+      this.resetMapVariables();
+    }
 
     get containerDim (): {width: number, height: number, top: number, left: number} {
       const { width, height, top, left } = this.$el
@@ -126,13 +148,39 @@
     }
 
     mounted (): void {
+      window.addEventListener('mouseup', this.onMouseup);
+      this.$el.addEventListener('mousemove', this.onMousemove);
+      window.addEventListener('resize', this.onResize);
+
+      this.initializeMap();
+    }
+
+    private resetMapVariables () {
+      this.idSet = new Set();
+
+      // cell positioning/displacement
+      this.cellTopLeftX = {};
+      this.cellTopLeftY = {};
+      this.cellBotRightX = {};
+      this.cellBotRightY = {};
+
+      // cell neighbors
+      this.cellLeft = {};
+      this.cellRight = {};
+      this.cellTop = {};
+      this.cellBot = {};
+
+      this.contentArray = [];
+
+      this.activeBorder = {};
+    }
+
+    private initializeMap () {
       if (!this.isMapValid()) {
         throw new Error('Invalid map detected');
       }
 
-      window.addEventListener('mouseup', this.onMouseup);
-      this.$el.addEventListener('mousemove', this.onMousemove);
-      window.addEventListener('resize', this.onResize);
+      this.resetMapVariables();
 
       const { width, height } = this.containerDim;
 
