@@ -1,6 +1,6 @@
 <template>
   <div class="position-relative flex-grow-1" ref="container">
-    <resizable-divider-content v-for="(content) in contentArray" :key="content.id"
+    <resizable-grid-content v-for="(content) in contentArray" :key="content.id"
       :id="content.id"
       :left="content.left + 'px'"
       :top="content.top + 'px'"
@@ -9,7 +9,7 @@
       @mousedown-border="onMousedown"
     >
       <slot :name="content.id"/>
-    </resizable-divider-content>
+    </resizable-grid-content>
   </div>
 </template>
 
@@ -19,7 +19,7 @@
   import { Prop } from 'vue-property-decorator';
   import { uniq } from 'lodash';
 
-  import ResizableDividerContent from './ResizableDividerContent.vue';
+  import ResizableGridContent from './ResizableGridContent.vue';
 
   interface cellPositionInterface {
     [key: string]: number,
@@ -60,11 +60,11 @@
   }
 
   const components = {
-    ResizableDividerContent,
+    ResizableGridContent,
   };
 
   @Component({ components })
-  export default class ResizableDivider extends Vue {
+  export default class ResizableGrid extends Vue {
     @Prop({ })
     map: string[][];
 

@@ -14,7 +14,7 @@
   import { Prop } from 'vue-property-decorator';
 
   @Component
-  export default class ResizableDivider extends Vue {
+  export default class ResizableGridContent extends Vue {
     @Prop({ default: 0 })
     id: string;
 
