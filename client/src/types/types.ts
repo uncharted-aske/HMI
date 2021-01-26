@@ -102,6 +102,31 @@ interface MappedOptionStateConfig {
   [key: string]: any // Interface extends Lex's ValueState.config. TODO: Generate types for Lex
 }
 
+interface DimensionsInterface {
+  [key: string]: {
+    width: string,
+    widthFixed: boolean,
+    // height: string,
+    // heightFixed: boolean,
+  }
+}
+
+interface CellPositionInterface {
+  [key: string]: number,
+}
+
+interface CellBorderInterface {
+  [key: string]: string[],
+}
+
+interface ContentInterface {
+  id: string,
+  left: number,
+  top: number,
+  width: number,
+  height: number,
+}
+
 export {
   TabInterface,
   ViewInterface,
@@ -123,4 +148,8 @@ export {
   MappedOptionStateConfig,
   LexConvertType,
   LexConvertTypeMapping,
+  DimensionsInterface,
+  CellPositionInterface,
+  CellBorderInterface,
+  ContentInterface,
 };

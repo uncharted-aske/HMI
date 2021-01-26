@@ -9,8 +9,8 @@
     <div class="search-row">
       <search-bar />
     </div>
-    <resizable-divider :left="true" :right="isSplitView">
-      <div slot="content-left" class="content global">
+    <resizable-grid :map="gridMap">
+      <div slot="left" class="content global">
         <settings-bar>
           <div slot="counters">
             <counters :labels="[getModelsList[0].metadata.name]"/>
@@ -21,7 +21,7 @@
         </settings-bar>
         <epi-graph :graph="getModelsList[0].graph.detailed" :subgraph="getModelsList[0].subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
       </div>
-      <div slot="content-right" class="content local">
+      <div slot="right" class="content local">
         <settings-bar>
           <div slot="counters">
             <counters :labels="[getModelsList[1].metadata.name]"/>
@@ -32,7 +32,7 @@
         </settings-bar>
         <epi-graph :graph="getModelsList[1].graph.detailed" :subgraph="getModelsList[1].subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
       </div>
-    </resizable-divider>
+    </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
@@ -56,7 +56,7 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import EpiGraph from './components/EpiGraph/EpiGraph.vue';
-  import ResizableDivider from '@/components/ResizableDivider.vue';
+  import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
 
@@ -79,7 +79,7 @@
     LeftSidePanel,
     MetadataPane,
     EpiGraph,
-    ResizableDivider,
+    ResizableGrid,
     DrilldownPanel,
     DrilldownMetadataPane,
   };
@@ -99,6 +99,10 @@
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
+
+    get gridMap (): string[][] {
+      return this.isSplitView ? [['left', 'right']] : [['left']];
+    }
 
   // get selectedModels(): ModelInterface[] {
   //   const modelsList = this.getModelsList;
