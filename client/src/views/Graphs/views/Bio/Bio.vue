@@ -67,7 +67,7 @@
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
-      return modelsList.find(model => model.id === this.getSelectedModelId);
+      return modelsList.find(model => model.id === (this.getSelectedModelId && this.getSelectedModelId[0]));
     }
 
     // get selectedGraph (): any {

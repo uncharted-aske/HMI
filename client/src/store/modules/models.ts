@@ -18,7 +18,7 @@ import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
 
 const state: ModelsState = {
-  selectedModelId: null,
+  selectedModelId: new Set(),
   modelsList: [
     {
       id: 1,
@@ -62,7 +62,7 @@ const state: ModelsState = {
 };
 
 const getters: GetterTree<ModelsState, any> = {
-  getSelectedModelId: state => state.selectedModelId,
+  getSelectedModelId: state => [...state.selectedModelId],
   getModelsList: state => {
     return state.modelsList;
   },
@@ -70,7 +70,7 @@ const getters: GetterTree<ModelsState, any> = {
 
 const mutations: MutationTree<ModelsState> = {
   setSelectedModel (state, newSelectedModelId) {
-    state.selectedModelId = newSelectedModelId;
+    state.selectedModelId = new Set(newSelectedModelId.constructor === Array ? newSelectedModelId : [newSelectedModelId]);
   },
 };
 

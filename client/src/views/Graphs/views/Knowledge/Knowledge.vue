@@ -99,7 +99,6 @@
 
     @Getter getFilters;
     @Getter getModelsList;
-    @Mutation setSelectedModel;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.fetchCosmos();
