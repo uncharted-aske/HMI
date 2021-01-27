@@ -13,7 +13,7 @@
       </button>
     </div>
     <resizable-grid :map="gridMap" :dimensions="{'3': { width: '100px', widthFixed: true }}">
-      <div slot="1" class="h-100 w-100 content global">
+      <div slot="1" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
           <div slot="counters">
             <counters
@@ -27,7 +27,7 @@
         </settings-bar>
         <global-epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
       </div>
-      <div slot="2" class="h-100 w-100 content local">
+      <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
           <div slot="counters">
             <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
