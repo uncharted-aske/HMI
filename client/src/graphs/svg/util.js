@@ -118,18 +118,24 @@ export const formatHierarchyNodeData = (root) => {
 /**
  * Get the neighborhood graph for a selected node
  * @param {object} graph - an object of nodes/edges arrays
- * @param {string} node - a node id
+ * @param {string} node - a node object
  */
 
 export const calculateNeighborhood = (graph, node) => {
+  console.log(node.id);
   const neighborEdges = graph.edges.filter(edge =>
-    edge.target === node || edge.source === node).map(edge => ({ source: edge.source, target: edge.target }));
+    edge.target === node.id || edge.source === node.id).map(edge => ({ source: edge.source, target: edge.target }));
 
   // Reverse-engineer nodes from edges
-  const neighborNodes = _.uniq(_.flatten(neighborEdges.map(edge => {
+  let neighborNodes = [];
+  // if (node.nodes) {
+  //   neighborNodes = flatten(node).nodes.map(n => n.id).concat(node.id);
+  // } else {
+    neighborNodes = _.uniq(_.flatten(neighborEdges.map(edge => {
     return [edge.source, edge.target];
-  })).concat(node)).map(id => ({ id })); // Include the selected node (added into .uniq)
-
+    })).concat(node)).map(id => ({ id })); // Include the selected node (added into .uniq)
+  //}
+  
   return { nodes: neighborNodes, edges: neighborEdges };
 };
 
