@@ -8,8 +8,8 @@
     </left-side-panel>
     <div class="search-row">
       <search-bar />
-      <button class="btn" @click="onSplitView">
-        Split
+      <button class="btn btn-primary m-1" @click="onSplitView">
+        Add Subgraph
       </button>
     </div>
     <resizable-grid :map="gridMap" :dimensions="{'3': { width: '100px', widthFixed: true }}">
@@ -36,7 +36,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <global-epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/>
+        <local-epi-graph v-if="isSplitView" :graph="subgraph" @node-click="onNodeClick"/>
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
@@ -64,9 +64,11 @@
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
+  import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+import { readlinkSync } from 'fs';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -74,7 +76,6 @@
   ];
 
   const VIEWS: ViewInterface[] = [
-    { name: 'Summary', id: 'summary' },
     { name: 'Causal', id: 'causal' },
     { name: 'Functional', id: 'functional' },
   ];
@@ -88,6 +89,7 @@
     MetadataPane,
     FacetsPane,
     GlobalEpiGraph,
+    LocalEpiGraph,
     ResizableGrid,
     DrilldownPanel,
     DrilldownMetadataPane,
@@ -104,6 +106,7 @@
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
+    subgraph: GraphInterface = null;
 
     @Getter getSelectedModelId;
     @Getter getModelsList;
@@ -132,6 +135,26 @@
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
+
+      //Get the CHIME GrFN subgraph
+      const modelsList = this.getModelsList;
+      const selectedModel =  modelsList.find(model => model.id === 2); //Get CHIME model
+      const GrFN = selectedModel.graph.detailed;
+      //Get nodes only corresponding to the SIR plate
+      const nodes = GrFN.nodes.filter(n => n.parent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9'); //sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
+      const nodesMap = new Map();
+      //Creates a map of nodes and its corresponding parents
+      nodes.forEach(n => {
+        nodesMap[n.id] = n.parent;
+      });
+      const edges = GrFN.edges.filter(e => {
+        const sourceParent = nodesMap[e.source];
+        const targetParent = nodesMap[e.target];
+        return ((sourceParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9') && (targetParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9')) 
+      })
+
+
+      this.subgraph = { nodes, edges};
     }
 
     onTabClick (tabId: string): void {
