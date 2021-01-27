@@ -83,7 +83,7 @@ const injectELKOptions = (renderGraph, options) => {
     node.ports = ports;
 
     if (!node.nodes || node.nodes.length === 0) {
-      if (node.data.nodeType === NodeTypes.NODES.FUNCTION) {
+      if (node.nodeType === NodeTypes.NODES.FUNCTION) {
         node.width = 15;
         node.height = 15;
       } else {
