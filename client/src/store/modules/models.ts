@@ -17,6 +17,8 @@ import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 
 import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
 
+import subgraphJSON from '@/static/subgraph.json';
+
 const state: ModelsState = {
   selectedModelId: null,
   modelsList: [
@@ -56,6 +58,7 @@ const state: ModelsState = {
         abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
         detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
       },
+      subgraph: subgraphJSON,
       type: 'knowledge',
     },
   ],

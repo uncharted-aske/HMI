@@ -37,7 +37,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div> -->
         </settings-bar>
-        <!-- <local-epi-graph v-if="isSplitView" :graph="subgraph" @node-click="onNodeClick"/> -->
+        <local-epi-graph v-if="isSplitView" :graph="subgraph"/>
       </div>
     </resizable-grid>
     <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
@@ -65,7 +65,7 @@
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   // import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
-  // import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
+  import LocalEpiGraph from './components/BioGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
@@ -89,7 +89,7 @@
     MetadataPane,
     FacetsPane,
     // GlobalEpiGraph,
-    // LocalEpiGraph,
+    LocalEpiGraph,
     ResizableGrid,
     DrilldownPanel,
     DrilldownMetadataPane,
@@ -106,10 +106,10 @@
     // drilldownPaneTitle = '';
     // drilldownPaneSubtitle = '';
     // drilldownMetadata: any = null;
-    // subgraph: GraphInterface = null;
+    subgraph: GraphInterface = null;
 
-    // @Getter getSelectedModelId;
-    // @Getter getModelsList;
+    @Getter getSelectedModelId;
+    @Getter getModelsList;
 
     // get selectedModel (): ModelInterface {
     //   const modelsList = this.getModelsList;
@@ -136,24 +136,12 @@
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
 
-      // // Get the CHIME GrFN subgraph
-      // const modelsList = this.getModelsList;
-      // const selectedModel = modelsList.find(model => model.id === 2); // Get CHIME model
-      // const GrFN = selectedModel.graph.detailed;
-      // // Get nodes only corresponding to the SIR plate
-      // const nodes = GrFN.nodes.filter(n => n.parent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9'); // sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
-      // const nodesMap = new Map();
-      // // Creates a map of nodes and its corresponding parents
-      // nodes.forEach(n => {
-      //   nodesMap[n.id] = n.parent;
-      // });
-      // const edges = GrFN.edges.filter(e => {
-      //   const sourceParent = nodesMap[e.source];
-      //   const targetParent = nodesMap[e.target];
-      //   return ((sourceParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9') && (targetParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9'));
-      // });
+      // Get the COVID-19 model subgraph
+      const modelsList = this.getModelsList;
+      const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
 
-      // this.subgraph = { nodes, edges };
+
+      this.subgraph = selectedModel.subgraph;
     }
 
     onTabClick (tabId: string): void {
