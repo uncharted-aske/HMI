@@ -13,8 +13,8 @@
   import LocalEpiModelRenderer from '@/graphs/svg/LocalEpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
-  import { hierarchyFn, showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
-  import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
+  // import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
+  // import { calculateNeighborhood } from '@/graphs/svg/util.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -84,7 +84,7 @@
       this.refresh();
     }
 
-    refresh (): void { 
+    refresh (): void {
       this.renderer.setData(this.graph);
       this.renderer.render();
     }

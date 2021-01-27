@@ -68,7 +68,6 @@
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
-import { readlinkSync } from 'fs';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -136,25 +135,24 @@ import { readlinkSync } from 'fs';
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
 
-      //Get the CHIME GrFN subgraph
+      // Get the CHIME GrFN subgraph
       const modelsList = this.getModelsList;
-      const selectedModel =  modelsList.find(model => model.id === 2); //Get CHIME model
+      const selectedModel = modelsList.find(model => model.id === 2); // Get CHIME model
       const GrFN = selectedModel.graph.detailed;
-      //Get nodes only corresponding to the SIR plate
-      const nodes = GrFN.nodes.filter(n => n.parent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9'); //sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
+      // Get nodes only corresponding to the SIR plate
+      const nodes = GrFN.nodes.filter(n => n.parent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9'); // sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
       const nodesMap = new Map();
-      //Creates a map of nodes and its corresponding parents
+      // Creates a map of nodes and its corresponding parents
       nodes.forEach(n => {
         nodesMap[n.id] = n.parent;
       });
       const edges = GrFN.edges.filter(e => {
         const sourceParent = nodesMap[e.source];
         const targetParent = nodesMap[e.target];
-        return ((sourceParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9') && (targetParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9')) 
-      })
+        return ((sourceParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9') && (targetParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9'));
+      });
 
-
-      this.subgraph = { nodes, edges};
+      this.subgraph = { nodes, edges };
     }
 
     onTabClick (tabId: string): void {
