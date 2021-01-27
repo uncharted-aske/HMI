@@ -49,7 +49,7 @@
         // Clear previous highlights
         this.renderer.hideNeighbourhood();
         // Show neighborhood
-        const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
+        const neighborhood = calculateNeighborhood(this.graph, node.datum());
         this.renderer.showNeighborhood(neighborhood);
         this.$emit('node-click', node.datum());
       });
