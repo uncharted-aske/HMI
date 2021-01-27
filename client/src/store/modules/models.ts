@@ -70,7 +70,13 @@ const getters: GetterTree<ModelsState, any> = {
 
 const mutations: MutationTree<ModelsState> = {
   setSelectedModel (state, newSelectedModelId) {
-    state.selectedModelId = new Set(newSelectedModelId.constructor === Array ? newSelectedModelId : [newSelectedModelId]);
+    if (state.selectedModelId.has(newSelectedModelId)) {
+      state.selectedModelId.delete(newSelectedModelId);
+    } else {
+      state.selectedModelId.add(newSelectedModelId);
+    }
+    // Trigger change by providing new Set instance
+    state.selectedModelId = new Set(state.selectedModelId);
   },
 };
 

@@ -15,13 +15,13 @@
     <resizable-grid :map="gridMap" :dimensions="{'3': { width: '100px', widthFixed: true }}">
       <div slot="1" class="h-100 w-100 content global">
         <settings-bar>
-          <div slot="counters">
+          <div slot="left">
             <counters
               :title="selectedModel.metadata.name"
               :data="[`${nodeCount} Nodes`, `${edgeCount} Edges`]"
             />
           </div>
-          <div slot="settings">
+          <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
@@ -29,10 +29,10 @@
       </div>
       <div slot="2" class="h-100 w-100 content local">
         <settings-bar>
-          <div slot="counters">
+          <div slot="left">
             <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
           </div>
-          <div slot="settings">
+          <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>

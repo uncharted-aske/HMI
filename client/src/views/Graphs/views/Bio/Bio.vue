@@ -9,10 +9,10 @@
     <div class="content">
       <search-bar />
       <settings-bar>
-        <div slot="counters">
+        <div slot="left">
           <counters :model-name="selectedModel.metadata.name"/>
         </div>
-        <div slot="settings">
+        <div slot="right">
           <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
         </div>
       </settings-bar>

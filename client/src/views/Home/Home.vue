@@ -7,11 +7,24 @@
     </left-side-panel>
 
     <div class="content">
-      <search-bar :pills="searchPills" />
+      <div class="search-row">
+        <search-bar :pills="searchPills" />
+      </div>
+      <settings-bar>
+        <div slot="left">
+          <counters :data="countersData"/>
+        </div>
+        <div slot="middle" class="d-flex align-items-center" role="button" @click="onClickCompare">
+          {{selectedButtonContent}}
+        </div>
+        <div slot="right">
+          <settings/>
+        </div>
+      </settings-bar>
       <card-container
           :header="`Models`"
           :cards="modelsCards"
-          @open-card="onOpenCard"
+          @click-card="onClickCard"
       />
     </div>
   </div>
@@ -25,6 +38,9 @@
   import { TabInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
+  import Counters from '@/views/Graphs/components/Counters/Counters.vue';
+  import SettingsBar from '@/components/SettingsBar.vue';
+  import Settings from './Settings/Settings.vue';
   import KeyValuePill from '@/search/pills/KeyValuePill';
   import RangePill from '@/search/pills/RangePill';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
@@ -50,6 +66,9 @@
 
   const components = {
     SearchBar,
+    Counters,
+    SettingsBar,
+    Settings,
     LeftSidePanel,
     FacetsPane,
     CardContainer,
@@ -62,6 +81,7 @@
 
     @Getter getFilters;
     @Getter getModelsList;
+    @Getter getSelectedModelId;
     @Mutation setSelectedModel;
 
     get searchPills (): any {
@@ -75,8 +95,27 @@
       ];
     }
 
+    get countersData (): Array<string> {
+      const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
+      if (modelsList) {
+        return [`${modelsList.length} Models`];
+      }
+    }
+
+    get selectedButtonContent (): string {
+      const selectedModelIdLength = this.getSelectedModelId.length;
+      if (selectedModelIdLength === 0) {
+        return '';
+      } else if (selectedModelIdLength === 1) {
+        return 'View';
+      } else {
+        return 'Compare';
+      }
+    }
+
     get modelsCards (): CardInterface[] {
       const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
+      const selectedModelsList = new Set(this.getSelectedModelId);
       const modelsCards = modelsList.map(model => {
         let previewImageSrc = null;
         switch (model.id) {
@@ -92,14 +131,18 @@
           default:
             previewImageSrc = null;
         }
-        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.source });
+        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.source, checked: selectedModelsList.has(model.id) });
       });
       return modelsCards;
     }
 
-    onOpenCard (card: CardInterface): void {
-      const view = card.type === 'computational' ? 'epiView' : 'bioView';
+    onClickCard (card: CardInterface): void {
       this.setSelectedModel(card.id);
+    }
+
+    onClickCompare (): void {
+      const card = this.getModelsList.find(model => model.id === this.getSelectedModelId[0]);
+      const view = card.type === 'computational' ? 'epiView' : 'bioView';
       this.$router.push({ name: view });
     }
   }

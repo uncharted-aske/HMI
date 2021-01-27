@@ -12,10 +12,10 @@
     <resizable-grid :map="gridMap">
       <div slot="left" class="content global">
         <settings-bar>
-          <div slot="counters">
+          <div slot="left">
             <counters :labels="[getModelsList[0].metadata.name]"/>
           </div>
-          <div slot="settings">
+          <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
@@ -23,10 +23,10 @@
       </div>
       <div slot="right" class="content local">
         <settings-bar>
-          <div slot="counters">
+          <div slot="left">
             <counters :labels="[getModelsList[1].metadata.name]"/>
           </div>
-          <div slot="settings">
+          <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
