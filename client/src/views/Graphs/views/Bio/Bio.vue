@@ -1,10 +1,9 @@
 <template>
   <div class="view-container">
-    
     <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
           <div slot="content">
-            <!-- <metadata-pane v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/> -->
-            <facets-pane v-if="activeTabId === 'facets'" />
+            <metadata-pane v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/>
+            <!-- <facets-pane v-if="activeTabId === 'facets'" /> -->
           </div>
     </left-side-panel>
     <div class="search-row">
@@ -77,10 +76,10 @@
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
-  const VIEWS: ViewInterface[] = [
-    { name: 'Causal', id: 'causal' },
-    { name: 'Functional', id: 'functional' },
-  ];
+  // const VIEWS: ViewInterface[] = [
+  //   { name: 'Causal', id: 'causal' },
+  //   { name: 'Functional', id: 'functional' },
+  // ];
 
   const components = {
     SearchBar,
@@ -145,12 +144,9 @@
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
-
       // Get the COVID-19 model subgraph
       const modelsList = this.getModelsList;
       const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
-
-
       this.subgraph = selectedModel.subgraph;
     }
 
