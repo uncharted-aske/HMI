@@ -52,7 +52,7 @@ const state: ModelsState = {
     },
     {
       id: 4,
-      metadata: { name: 'COVID-19 model', source: 'EMMAA', version: '', knowledge: 'https://emmaa.indra.bio/dashboard/covid19?tab=model', created: '', description: 'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.'},
+      metadata: { name: 'COVID-19 model', source: 'EMMAA', version: '', knowledge: 'https://emmaa.indra.bio/dashboard/covid19?tab=model', created: '', description: 'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.' },
       graph: {
         abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
         detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),

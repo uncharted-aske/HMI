@@ -57,7 +57,6 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
       });
   }
 
-
   hideNeighbourhood (): void {
     const chart = this.chart;
     chart.selectAll('.node-ui').style('opacity', 1);

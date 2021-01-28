@@ -54,7 +54,6 @@
         this.$emit('node-click', node.datum());
       });
 
-
       this.renderer.setCallback('backgroundDblClick', () => {
         this.renderer.hideNeighbourhood();
         this.$emit('background-dbl-click');

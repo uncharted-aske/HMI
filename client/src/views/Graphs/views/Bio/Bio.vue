@@ -54,9 +54,8 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
-  import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
-  import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
-  import { NodeTypes } from '@/graphs/svg/encodings';
+  import { TabInterface, ModelInterface } from '@/types/types';
+  import { GraphInterface } from '@/views/Graphs/types/types';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -66,7 +65,7 @@
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   // import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
-  import LocalEpiGraph from './components/BioGraphs/LocalEpiGraph.vue';
+  import LocalBioGraph from './components/BioGraphs/LocalBioGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
@@ -90,7 +89,7 @@
     MetadataPane,
     FacetsPane,
     // GlobalEpiGraph,
-    LocalEpiGraph,
+    LocalBioGraph,
     ResizableGrid,
     DrilldownPanel,
     DrilldownMetadataPane,
@@ -109,13 +108,12 @@
     // drilldownMetadata: any = null;
     subgraph: GraphInterface = null;
 
-    @Getter getSelectedModelId;
     @Getter getModelsList;
 
-    // get selectedModel (): ModelInterface {
-    //   const modelsList = this.getModelsList;
-    //   return modelsList.find(model => model.id === this.getSelectedModelId);
-    // }
+    get selectedModel (): ModelInterface {
+      const modelsList = this.getModelsList;
+      return modelsList.find(model => model.id === 4); // Only COVID-19 model for now
+    }
 
     // get selectedGraph (): GraphInterface {
     //   return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
@@ -154,22 +152,22 @@
       this.activeTabId = tabId;
     }
 
-    // onCloseDrilldownPanel ():void {
-    //   this.isOpenDrilldown = false;
-    //   this.drilldownPaneTitle = '';
-    //   this.drilldownMetadata = null;
-    // }
+  // onCloseDrilldownPanel ():void {
+  //   this.isOpenDrilldown = false;
+  //   this.drilldownPaneTitle = '';
+  //   this.drilldownMetadata = null;
+  // }
 
-    // onSetView (viewId: string): void {
-    //   this.selectedViewId = viewId;
-    // }
+  // onSetView (viewId: string): void {
+  //   this.selectedViewId = viewId;
+  // }
 
-    // onNodeClick (node: GraphNodeInterface): void {
-    //   this.isOpenDrilldown = true;
-    //   this.drilldownPaneTitle = node.label;
-    //   this.drilldownPaneSubtitle = node.nodeType;
-    //   this.drilldownMetadata = node.metadata;
-    // }
+  // onNodeClick (node: GraphNodeInterface): void {
+  //   this.isOpenDrilldown = true;
+  //   this.drilldownPaneTitle = node.label;
+  //   this.drilldownPaneSubtitle = node.nodeType;
+  //   this.drilldownMetadata = node.metadata;
+  // }
   }
 </script>
 
