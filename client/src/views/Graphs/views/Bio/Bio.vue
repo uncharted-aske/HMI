@@ -38,7 +38,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <local-epi-graph v-if="isSplitView" :graph="subgraph"/>
+        <local-bio-graph v-if="isSplitView" :graph="subgraph"/>
       </div>
     </resizable-grid>
     <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
