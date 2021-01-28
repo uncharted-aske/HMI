@@ -30,12 +30,14 @@
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
-          <!-- <div slot="counters">
-            <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
-          </div>
+          <div slot="counters">
+            <counters
+              :title="`Subgraph`"
+              :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
+            />          </div>
           <div slot="settings">
-            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div> -->
+            <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
+          </div>
         </settings-bar>
         <local-epi-graph v-if="isSplitView" :graph="subgraph"/>
       </div>
@@ -96,7 +98,7 @@
   };
 
   @Component({ components })
-  export default class EpiView extends Vue {
+  export default class BioView extends Vue {
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
     // views: ViewInterface[] = VIEWS;
@@ -128,6 +130,14 @@
     // get edgeCount (): number {
     //   return this.selectedGraph && this.selectedGraph.edges.length;
     // }
+
+    get subgraphNodeCount (): number {
+      return this.subgraph && this.subgraph.nodes.length;
+    }
+
+    get subgraphEdgeCount (): number {
+      return this.subgraph && this.subgraph.edges.length;
+    }
 
     get gridMap (): string[][] {
       return this.isSplitView ? [['1', '3', '2']] : [['1']];
