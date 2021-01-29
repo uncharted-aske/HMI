@@ -60,6 +60,48 @@ const state: ModelsState = {
       subgraph: subgraphJSON,
       type: 'knowledge',
     },
+    {
+      id: 5,
+      metadata: { name: 'Model N', description: 'Unknown'},
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 6,
+      metadata: { name: 'Model N', description: 'Unknown'},
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 7,
+      metadata: { name: 'Model N', description: 'Unknown'},
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 8,
+      metadata: { name: 'Model N', description: 'Unknown'},
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 9,
+      metadata: { name: 'Model N', description: 'Unknown'},
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 10,
+      metadata: { name: 'Model N', description: 'Unknown'},
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
   ],
 };
 
