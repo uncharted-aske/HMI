@@ -5,12 +5,31 @@
 .navbar {
   background-color:$bg-primary;
   .navbar-brand, .nav-link {
-    color: $text-color;
+    color: $text-color-light;
   }
   //Navigation tabs
   .nav-item.underlined {
     border-bottom: 2px solid $selection;
   }
+}
+
+.btn-primary {
+  color: $text-color-dark;
+  background-color: $nord4 !important;
+  border-color: $nord4;
+}
+.btn-primary:hover {
+  color: $text-color-dark;
+  background-color: $nord5 !important;
+  border-color: $nord5;
+}
+
+.btn-secondary {
+  background-color: $nord1 !important;
+}
+
+.text-link {
+  color: $selection;
 }
 
 div#lex-assistant-box {

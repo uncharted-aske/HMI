@@ -3,8 +3,8 @@ export abstract class Colors {
     DEFAULT: '#D8DEE9',
     ROOT_CONTAINER: '#4C566A',
     CONTAINER: '#2E3440',
-    MODEL_VARIABLE: '#3498db',
-    INITIAL_CONDITION: '#A6CEE3',
+    MODEL_VARIABLE: '#88C0D0',
+    INITIAL_CONDITION: '#81A1C1',
   };
 
   static readonly LABELS: Record<string, any> = {

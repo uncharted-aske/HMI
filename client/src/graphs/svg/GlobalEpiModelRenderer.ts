@@ -189,7 +189,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           .style('fill', d => calcNodeColor(d))
           .attr('fill-opacity', d => {
             if ((d as any).nodes) {
-              return ((d as any).depth) * 0.2;
+              return ((d as any).depth) * 0.3;
             } else return 1;
           })
           .style('stroke', d => {
@@ -201,18 +201,6 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
             return role === 'model' ? 5 : 3;
           })
           .style('filter', d => (d as any).nodes ? 'url(#drop-shadow)' : '');
-
-        // Draw ellipses for input and output nodes
-        selection.append('ellipse')
-          .filter(d => {
-            return (d as any).nodeSubType && ((d as any).nodeSubType.includes('input') || (d as any).nodeSubType.includes('output'));
-          })
-          .attr('cx', (d) => ((d as any).width * 0.5))
-          .attr('cy', () => 25)
-          .attr('rx', (d) => (d as any).width * 0.5)
-          .attr('ry', () => 25)
-          .style('fill', d => calcNodeColor(d))
-          .style('stroke', '#D8DEE9');
 
         // Labels
         selection.append('text')

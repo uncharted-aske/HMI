@@ -54,8 +54,6 @@
   import { filterToParamObj, cosmosFetchMem } from '@/utils/CosmosFetchUtil';
   import { getAuthorList } from '@/utils/CosmosDataUtil';
 
-  import ActionColumn from '@/components/ActionColumn.vue';
-  import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from './Settings/Settings.vue';
   import Counters from '@/views/Graphs/components/Counters/Counters.vue';
@@ -73,8 +71,6 @@
   ];
 
   const components = {
-    ActionColumn,
-    ActionColumnNavBar,
     SearchBar,
     Settings,
     SettingsBar,

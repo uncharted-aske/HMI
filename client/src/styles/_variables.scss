@@ -6,15 +6,15 @@ $bg-secondary: $nord1;
 $bg-tertiary: $nord2;
 $bg-body: $nord3;
 
-$secondary-bar-bg: #FFFFFF;
 $border: darkgray;
 
-$text-color: $nord6;
+$text-color-light: $nord6;
+$text-color-dark: $nord1;
 $text-background-color-hovered: rgba(38,50,56, 0.5);
 $icon-color: $nord4; 
 
-$selection: #0091EA;
-$selection-highlight: #006AEB;
+$selection: $nord10;
+$selection-highlight: $nord9;
 $muted: #B6C3CE;
 $muted-highlight: #86B3D0;
 // Main navbar height

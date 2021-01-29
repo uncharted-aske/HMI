@@ -55,7 +55,7 @@
     // Match cards' 10px horizontal margin
     margin-left: 10px;
     font-weight: normal;
-    color: $text-color;
+    color: $text-color-light;
   }
 
   .card-list {
