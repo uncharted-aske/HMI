@@ -6,7 +6,7 @@
       </div>
     </left-side-panel>
 
-    <div class="content">
+    <div class="d-flex flex-column h-100">
       <div class="search-row">
         <search-bar :pills="searchPills" />
       </div>

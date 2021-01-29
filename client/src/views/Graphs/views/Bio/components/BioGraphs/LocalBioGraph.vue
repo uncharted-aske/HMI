@@ -1,5 +1,5 @@
 <template>
-    <div class="global-epi-graph-container" ref="graph">
+    <div class="local-epi-graph-container" ref="graph">
     </div>
 </template>
 
@@ -10,11 +10,11 @@
 
   import { GraphInterface } from '@/views/Graphs/types/types';
 
-  import GlobalEpiModelRenderer from '@/graphs/svg/GlobalEpiModelRenderer';
+  import LocalEpiModelRenderer from '@/graphs/svg/LocalEpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
-  import { hierarchyFn, showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
-  import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
+  import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
+  import { calculateNeighborhood } from '@/graphs/svg/util.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -23,7 +23,7 @@
   };
 
   @Component
-  export default class GlobalEpiGraph extends Vue {
+  export default class LocalBioGraph extends Vue {
     @Prop({ default: null }) graph: GraphInterface;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -39,10 +39,10 @@
     }
 
     mounted (): void {
-      this.renderer = new GlobalEpiModelRenderer({
+      this.renderer = new LocalEpiModelRenderer({
         el: this.$refs.graph,
         adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
-        renderMode: 'delta',
+        renderMode: 'basic',
       });
 
       this.renderer.setCallback('nodeClick', (node) => {
@@ -51,16 +51,7 @@
         // Show neighborhood
         const neighborhood = calculateNeighborhood(this.graph, node.datum());
         this.renderer.showNeighborhood(neighborhood);
-        // this.$emit('node-click', node.datum().data);
-      });
-
-     // Collapse/Expand
-     this.renderer.setCallback('nodeDblClick', (node) => {
-        if (!node.datum().collapsed || node.datum().collapsed === false) {
-          this.renderer.collapse(node.datum().id);
-        } else {
-          this.renderer.expand(node.datum().id);
-        }
+        this.$emit('node-click', node.datum());
       });
 
       this.renderer.setCallback('backgroundDblClick', () => {
@@ -70,9 +61,9 @@
 
       this.renderer.setCallback('nodeMouseEnter', (node) => {
         const nodeData = node.datum();
-        const nodeCoords = [nodeData.x, nodeData.y]; // TO FIX: It seems there is an issue with coordinates for deeply nested nodes.
+        const nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)]; // TO FIX: It seems there is an issue with coordinates for deeply nested nodes.
 
-        const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.data.nodeType;
+        const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.nodeType;
 
         showTooltip(this.renderer.chart, tooltipText, nodeCoords);
       });
@@ -85,13 +76,7 @@
     }
 
     refresh (): void {
-      const hierarchyNodes = hierarchyFn(this.graph.nodes); // Transform the flat nodes structure into a hierarchical one
-      formatHierarchyNodeData(hierarchyNodes);
-
-      const edges = this.graph.edges;
-      const graph = { nodes: [hierarchyNodes], edges };
-
-      this.renderer.setData(graph);
+      this.renderer.setData(this.graph);
       this.renderer.render();
     }
   }
@@ -100,7 +85,7 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.global-epi-graph-container {
+.local-epi-graph-container {
   flex: 1;
 
   ::v-deep > svg {

@@ -45,13 +45,13 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
       .style('stroke', Colors.EDGES)
       .style('stroke-width', 2)
       .attr('marker-end', d => {
-        const source = d.data.source.replace(/\s/g, '');
-        const target = d.data.target.replace(/\s/g, '');
+        const source = d.source.replace(/\s/g, '');
+        const target = d.target.replace(/\s/g, '');
         return `url(#arrowhead-${source}-${target})`;
       })
       .attr('marker-start', d => {
-        const source = d.data.source.replace(/\s/g, '');
-        const target = d.data.target.replace(/\s/g, '');
+        const source = d.source.replace(/\s/g, '');
+        const target = d.target.replace(/\s/g, '');
         return `url(#start-${source}-${target})`;
       });
   }
