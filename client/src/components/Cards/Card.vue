@@ -96,7 +96,7 @@
     flex: 1;
     font-size: 12px;
     color: $text-color-light;
-    background-color: $bg-secondary;
+    background-color: $bg-body;
     font-weight: normal;
     min-height: 0;
     overflow-x: hidden;
@@ -122,7 +122,7 @@
     max-height: 40vh;
     min-height: 300px;
 
-    background-color: $bg-secondary;
+    background-color: $bg-body;
     color: $text-color-light;
     position: relative;
     border-radius: 3px;
