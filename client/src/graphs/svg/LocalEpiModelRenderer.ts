@@ -5,7 +5,7 @@ import { SVGRenderer } from 'compound-graph';
 
 import { EpiModelRendererOptionsInterface, SubgraphInterface } from '@/graphs/svg/types/types';
 
-import { calcNodeColor, calcLabelColor } from '@/graphs/svg/util';
+import { calcNodeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors, NodeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 
@@ -14,6 +14,38 @@ const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 export default class LocalEpiModelRenderer extends SVGRenderer {
   constructor (options:EpiModelRendererOptionsInterface) {
     super(options);
+  }
+
+  buildDefs() {
+    const svg = d3.select(this.svgEl);
+    const edges = flatten(this.layout).edges;
+
+    // // Clean up
+    svg.select('defs').selectAll('.edge-marker-end').remove();
+
+    svg.select('defs')
+      .selectAll('.edge-marker-end')
+      .data(edges)
+      .enter()
+      .append('marker')
+      .classed('edge-marker-end', true)
+      .attr('id', d => {
+        const source = (d as any).source.replace(/\s/g, '');
+        const target = (d as any).target.replace(/\s/g, '');
+        return `arrowhead-${source}-${target}`;
+      })
+      .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
+      .attr('refX', 2)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', 15)
+      .attr('markerHeight', 15)
+      .attr('markerUnits', 'userSpaceOnUse')
+      .attr('xoverflow', 'visible')
+      .append('svg:path')
+      .attr('d', SVGUtil.ARROW)
+      .style('fill', Colors.EDGES)
+      .style('stroke', 'none');
   }
 
   renderNode (nodeSelection: d3.Selection<any, any, any, any>):void {

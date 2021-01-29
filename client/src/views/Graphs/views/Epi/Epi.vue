@@ -30,8 +30,10 @@
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
           <div slot="counters">
-            <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
-          </div>
+            <counters
+              :title="`Subgraph`"
+              :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
+            />          </div>
           <div slot="settings">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
@@ -126,6 +128,14 @@
 
     get edgeCount (): number {
       return this.selectedGraph && this.selectedGraph.edges.length;
+    }
+
+    get subgraphNodeCount (): number {
+      return this.subgraph && this.subgraph.nodes.length;
+    }
+
+    get subgraphEdgeCount (): number {
+      return this.subgraph && this.subgraph.edges.length;
     }
 
     get gridMap (): string[][] {
