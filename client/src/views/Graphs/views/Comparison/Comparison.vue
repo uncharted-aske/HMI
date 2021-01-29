@@ -1,36 +1,19 @@
 <template>
   <div class="view-container">
-    <!-- <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
-          <div slot="content">
-            <metadata-pane v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/>
-            <facets-pane v-if="activeTabId === 'facets'" />
-          </div>
-    </left-side-panel> -->
     <div class="search-row">
       <search-bar />
     </div>
     <resizable-grid :map="gridMap">
-      <div slot="left" class="content global">
+      <div :slot="model.id" class="h-100 w-100 d-flex flex-column" v-for="(model) in selectedModels" :key="model.id">
         <settings-bar>
-          <div slot="counters">
-            <counters :labels="[getModelsList[0].metadata.name]"/>
+          <div slot="left">
+            <counters :labels="[model.metadata.name]"/>
           </div>
-          <div slot="settings">
+          <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <epi-graph :graph="getModelsList[0].graph.detailed" :subgraph="getModelsList[0].subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
-      </div>
-      <div slot="right" class="content local">
-        <settings-bar>
-          <div slot="counters">
-            <counters :labels="[getModelsList[1].metadata.name]"/>
-          </div>
-          <div slot="settings">
-            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div>
-        </settings-bar>
-        <epi-graph :graph="getModelsList[1].graph.detailed" :subgraph="getModelsList[1].subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
+        <epi-graph :graph="model.graph.detailed" :subgraph="model.subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
@@ -97,43 +80,18 @@
     drilldownMetadata: ModelComponentMetadataInterface = null;
     reference: string = ''
 
-    @Getter getSelectedModelId;
+    @Getter getSelectedModelIds;
     @Getter getModelsList;
 
     get gridMap (): string[][] {
-      return this.isSplitView ? [['left', 'right']] : [['left']];
+      return [this.selectedModels.map(model => model.id)];
     }
 
-  // get selectedModels(): ModelInterface[] {
-  //   const modelsList = this.getModelsList;
-  //   console.log(modelsList.filter(model => MODELS_TO_COMPARE.includes(model.id)));
-  //   return modelsList.filter(model => MODELS_TO_COMPARE.includes(model.id) );
-  // }
-
-  // get selectedModel (): ModelInterface {
-  //   const modelsList = this.getModelsList;
-  //   return modelsList.find(model => model.id === this.getSelectedModelId);
-  // }
-
-  // get selectedGraph (): GraphInterface {
-  //   return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
-  // }
-
-  // get nodeCount (): number {
-  //   return this.selectedGraph && this.selectedGraph.nodes.length;
-  // }
-
-  // get edgeCount (): number {
-  //   return this.selectedGraph && this.selectedGraph.edges.length;
-  // }
-
-  // onSplitView (): void {
-  //   this.isSplitView = !this.isSplitView;
-  // }
-
-  // onTabClick (tabId: string): void {
-  //   this.activeTabId = tabId;
-  // }
+  get selectedModels (): any[] {
+    const modelsList = this.getModelsList;
+    const selectedIds = new Set(this.getSelectedModelIds);
+    return modelsList.filter(model => selectedIds.has(model.id));
+  }
 
   onCloseDrilldownPanel ():void {
     this.isOpenDrilldown = false;

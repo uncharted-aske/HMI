@@ -1,7 +1,8 @@
 <template>
   <div class="settings-bar-container">
-    <slot name="counters" />
-    <slot name="settings" />
+    <slot name="left" />
+    <slot name="middle" />
+    <slot name="right" />
   </div>
 </template>
 

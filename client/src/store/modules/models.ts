@@ -19,7 +19,7 @@ import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
 import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
 
 const state: ModelsState = {
-  selectedModelId: null,
+  selectedModelIds: new Set(),
   modelsList: [
     {
       id: 1,
@@ -141,15 +141,21 @@ const state: ModelsState = {
 };
 
 const getters: GetterTree<ModelsState, any> = {
-  getSelectedModelId: state => state.selectedModelId,
+  getSelectedModelIds: state => [...state.selectedModelIds],
   getModelsList: state => {
     return state.modelsList;
   },
 };
 
 const mutations: MutationTree<ModelsState> = {
-  setSelectedModel (state, newSelectedModelId) {
-    state.selectedModelId = newSelectedModelId;
+  setSelectedModels (state, newSelectedModelId) {
+    if (state.selectedModelIds.has(newSelectedModelId)) {
+      state.selectedModelIds.delete(newSelectedModelId);
+    } else {
+      state.selectedModelIds.add(newSelectedModelId);
+    }
+    // Trigger change by providing new Set instance
+    state.selectedModelIds = new Set(state.selectedModelIds);
   },
 };
 

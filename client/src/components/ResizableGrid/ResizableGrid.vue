@@ -70,7 +70,7 @@
       }
     }
 
-    @Prop({ default: {} })
+    @Prop({ default: () => ({}) })
     dimensions: DimensionsInterface;
 
     @Prop({ default: 10 })
