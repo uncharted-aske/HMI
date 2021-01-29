@@ -1,11 +1,5 @@
 <template>
   <div class="view-container">
-    <!-- <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
-          <div slot="content">
-            <metadata-pane v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/>
-            <facets-pane v-if="activeTabId === 'facets'" />
-          </div>
-    </left-side-panel> -->
     <div class="search-row">
       <search-bar />
     </div>
@@ -98,31 +92,6 @@
     const selectedIds = new Set(this.getSelectedModelIds);
     return modelsList.filter(model => selectedIds.has(model.id));
   }
-
-  // get selectedModel (): ModelInterface {
-  //   const modelsList = this.getModelsList;
-  //   return modelsList.find(model => model.id === this.getSelectedModelIds);
-  // }
-
-  // get selectedGraph (): GraphInterface {
-  //   return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
-  // }
-
-  // get nodeCount (): number {
-  //   return this.selectedGraph && this.selectedGraph.nodes.length;
-  // }
-
-  // get edgeCount (): number {
-  //   return this.selectedGraph && this.selectedGraph.edges.length;
-  // }
-
-  // onSplitView (): void {
-  //   this.isSplitView = !this.isSplitView;
-  // }
-
-  // onTabClick (tabId: string): void {
-  //   this.activeTabId = tabId;
-  // }
 
   onCloseDrilldownPanel ():void {
     this.isOpenDrilldown = false;
