@@ -19,7 +19,6 @@
 
 .settings-bar-container {
   height: calc(#{$secondary-bar-width} - 15px);
-  background-color: $secondary-bar-bg;
   border-bottom: 1px solid $border;
   display: flex;
   align-items: center;

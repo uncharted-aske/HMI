@@ -1,5 +1,5 @@
 <template>
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg fixed-top text-light">
   <a class="navbar-brand" href="#/">Uncharted HMI</a>
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav">
@@ -40,3 +40,11 @@
     }
   }
 </script>
+
+<style lang="scss">
+@import "@/styles/aske";
+.navbar {
+  background-color:$nord0;
+}
+</style>
+

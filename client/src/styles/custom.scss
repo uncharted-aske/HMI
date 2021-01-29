@@ -1,4 +1,5 @@
 @import "variables";
+@import "nord";
 
 .view-container {
   display: flex;
@@ -6,12 +7,12 @@
   position: relative;
   height: $content-full-height;
   overflow: hidden;
+  background-color: $nord3 !important;
 }
 
 .search-row {
   display: flex;
-  border-bottom: 1px solid $border;
-  background-color: $secondary-bar-bg;
+  background-color: $nord1;
   > .search-bar-container {
     flex: 1;
   }

@@ -41,6 +41,7 @@
 
 <style lang="scss">
 @import "@/styles/variables";
+@import "@/styles/nord";
 
 .card-container {
   flex: 1;
@@ -55,6 +56,7 @@
     // Match cards' 10px horizontal margin
     margin-left: 10px;
     font-weight: normal;
+    color: $nord4;
   }
 
   .card-list {

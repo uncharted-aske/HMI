@@ -7,7 +7,9 @@
     </left-side-panel>
 
     <div class="content">
-      <search-bar :pills="searchPills" />
+      <div class="search-row">
+        <search-bar :pills="searchPills" />
+      </div>
       <card-container
           :header="`Models`"
           :cards="modelsCards"
