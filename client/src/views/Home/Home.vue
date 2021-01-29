@@ -8,7 +8,7 @@
 
     <div class="content">
       <div class="search-row">
-        <search-bar :pills="searchPills" />
+        <search-bar :pills="searchPills" :placeholder="`Search for models...`"/>
       </div>
       <card-container
           :header="`Models`"

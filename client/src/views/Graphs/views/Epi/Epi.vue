@@ -7,12 +7,12 @@
           </div>
     </left-side-panel>
     <div class="search-row">
-      <search-bar />
+      <search-bar :placeholder="`Search for model components...`"/>
       <button class="btn btn-primary m-1" @click="onSplitView">
         Add Subgraph
       </button>
     </div>
-    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '100px', widthFixed: true }}">
+    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
       <div slot="1" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
           <div slot="counters">

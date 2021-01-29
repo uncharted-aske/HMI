@@ -19,7 +19,7 @@
 
 .settings-bar-container {
   height: calc(#{$secondary-bar-width} - 15px);
-  border-bottom: 1px solid $border;
+  // border-bottom: 1px solid $border;
   display: flex;
   align-items: center;
   padding: 0 10px;
