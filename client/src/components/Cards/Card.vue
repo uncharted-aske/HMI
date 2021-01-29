@@ -1,5 +1,5 @@
 <template>
-  <div class="card" @click="onCardClick">
+  <div :class="['card', checked ? 'checked' : '']" @click="onCardClick">
     <div
       v-if="hasImage"
       :class="['preview-img', hasImage ? '' : 'no-image']"
@@ -32,7 +32,7 @@
 
     @Prop({ default: 'faExclamationTriangle' }) icon: string;
 
-    @Prop({ }) checked: boolean | undefined;
+    @Prop({ default: undefined }) checked: boolean;
 
     get classCheckbox (): string {
       return this.checked === undefined ? 'invisible' : 'visible';

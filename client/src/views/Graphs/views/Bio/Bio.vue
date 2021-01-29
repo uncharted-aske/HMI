@@ -62,12 +62,12 @@
     views: ViewInterface[] = VIEWS;
     selectedViewId = 'ontological';
 
-    @Getter getSelectedModelId;
+    @Getter getSelectedModelIds;
     @Getter getModelsList;
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
-      return modelsList.find(model => model.id === (this.getSelectedModelId && this.getSelectedModelId[0]));
+      return modelsList.find(model => model.id === (this.getSelectedModelIds && this.getSelectedModelIds[0]));
     }
 
     // get selectedGraph (): any {

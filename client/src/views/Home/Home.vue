@@ -14,14 +14,17 @@
         <div slot="left">
           <counters :data="countersData"/>
         </div>
-        <div slot="middle" class="d-flex align-items-center" role="button" @click="onClickCompare">
-          {{selectedButtonContent}}
+        <div slot="middle" class="view-button" v-if="selectedButtonContent">
+          <button type="button" class="btn btn-primary h-100 d-flex align-items-center" @click="onClickCompare">
+            {{selectedButtonContent}}
+          </button>
         </div>
         <div slot="right">
           <settings/>
         </div>
       </settings-bar>
       <card-container
+          class="model-cards"
           :header="`Models`"
           :cards="modelsCards"
           @click-card="onClickCard"
@@ -81,8 +84,8 @@
 
     @Getter getFilters;
     @Getter getModelsList;
-    @Getter getSelectedModelId;
-    @Mutation setSelectedModel;
+    @Getter getSelectedModelIds;
+    @Mutation setSelectedModels;
 
     get searchPills (): any {
       return [
@@ -103,7 +106,7 @@
     }
 
     get selectedButtonContent (): string {
-      const selectedModelIdLength = this.getSelectedModelId.length;
+      const selectedModelIdLength = this.getSelectedModelIds.length;
       if (selectedModelIdLength === 0) {
         return '';
       } else if (selectedModelIdLength === 1) {
@@ -115,7 +118,7 @@
 
     get modelsCards (): CardInterface[] {
       const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
-      const selectedModelsList = new Set(this.getSelectedModelId);
+      const selectedModelsList = new Set(this.getSelectedModelIds);
       const modelsCards = modelsList.map(model => {
         let previewImageSrc = null;
         switch (model.id) {
@@ -137,16 +140,32 @@
     }
 
     onClickCard (card: CardInterface): void {
-      this.setSelectedModel(card.id);
+      this.setSelectedModels(card.id);
     }
 
     onClickCompare (): void {
-      const card = this.getModelsList.find(model => model.id === this.getSelectedModelId[0]);
-      const view = card.type === 'computational' ? 'epiView' : 'bioView';
-      this.$router.push({ name: view });
+      if (this.getSelectedModelIds.length > 1) {
+        this.$router.push({ name: 'comparisonView' });
+      } else {
+        const card = this.getModelsList.find(model => model.id === this.getSelectedModelIds[0]);
+        this.$router.push({ name: card.type === 'computational' ? 'epiView' : 'bioView' });
+      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/variables";
+
+.view-button {
+  padding: 2px 5px;
+}
+
+.model-cards ::v-deep .card {
+  border: transparent solid 1px;
+}
+
+.model-cards ::v-deep .card.checked {
+  border-color: $selection;
+}
 </style>

@@ -18,7 +18,7 @@ import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
 
 const state: ModelsState = {
-  selectedModelId: new Set(),
+  selectedModelIds: new Set(),
   modelsList: [
     {
       id: 1,
@@ -62,21 +62,21 @@ const state: ModelsState = {
 };
 
 const getters: GetterTree<ModelsState, any> = {
-  getSelectedModelId: state => [...state.selectedModelId],
+  getSelectedModelIds: state => [...state.selectedModelIds],
   getModelsList: state => {
     return state.modelsList;
   },
 };
 
 const mutations: MutationTree<ModelsState> = {
-  setSelectedModel (state, newSelectedModelId) {
-    if (state.selectedModelId.has(newSelectedModelId)) {
-      state.selectedModelId.delete(newSelectedModelId);
+  setSelectedModels (state, newSelectedModelId) {
+    if (state.selectedModelIds.has(newSelectedModelId)) {
+      state.selectedModelIds.delete(newSelectedModelId);
     } else {
-      state.selectedModelId.add(newSelectedModelId);
+      state.selectedModelIds.add(newSelectedModelId);
     }
     // Trigger change by providing new Set instance
-    state.selectedModelId = new Set(state.selectedModelId);
+    state.selectedModelIds = new Set(state.selectedModelIds);
   },
 };
 
