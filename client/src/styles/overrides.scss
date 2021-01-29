@@ -9,7 +9,7 @@
   }
   //Navigation tabs
   .nav-item.underlined {
-    border-bottom: 2px solid $selection;
+    border-bottom: 2px solid $selection-dark;
   }
 }
 
@@ -26,10 +26,6 @@
 
 .btn-secondary {
   background-color: $nord1 !important;
-}
-
-.text-link {
-  color: $selection;
 }
 
 div#lex-assistant-box {

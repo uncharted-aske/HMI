@@ -13,8 +13,12 @@ $text-color-dark: $nord1;
 $text-background-color-hovered: rgba(38,50,56, 0.5);
 $icon-color: $nord4; 
 
-$selection: $nord10;
-$selection-highlight: $nord9;
+$selection-dark: $nord10;
+$selection-highlight-dark: $nord9;
+
+
+$selection: #0091EA;
+$selection-highlight: #006AEB;
 $muted: #B6C3CE;
 $muted-highlight: #86B3D0;
 // Main navbar height

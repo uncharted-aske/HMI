@@ -177,10 +177,6 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
 
       if ((selection.datum() as any).id !== 'root') { // Don't draw the root node
         selection.append('rect')
-          .filter(d => {
-            return (!(d as any).nodeSubType ||
-            ((d as any).nodeSubType && (!(d as any).nodeSubType.includes('input') && !(d as any).nodeSubType.includes('output'))));
-          })
           .attr('x', 0)
           .attr('rx', 5)
           .attr('y', 0)
