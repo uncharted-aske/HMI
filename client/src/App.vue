@@ -26,6 +26,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin-top: $navbar-outer-height;
-  background-color: $nord3;
+  background-color: $bg-body;
 }
 </style>

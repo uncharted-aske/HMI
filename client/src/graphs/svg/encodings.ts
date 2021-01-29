@@ -1,18 +1,18 @@
 export abstract class Colors {
   static readonly NODES: Record<string, any> = {
     DEFAULT: '#EEEEEE',
-    ROOT_CONTAINER: '#FFFFFF',
-    CONTAINER: '#F6F2EF',
+    ROOT_CONTAINER: '#2E3440',
+    CONTAINER: '#3B4252',
     MODEL_VARIABLE: '#1F78B4',
     INITIAL_CONDITION: '#A6CEE3',
   };
 
   static readonly LABELS: Record<string, any> = {
-    DARK: '#333333',
-    LIGHT: '#FFFFFF',
+    DARK: '#2E3440',
+    LIGHT: '#ECEFF4',
   };
 
-  static readonly EDGES: string = '#6C757D';
+  static readonly EDGES: string = '#ECEFF4';
   static readonly SUBGRAPH: string = '#FFA500';
   static readonly HIGHLIGHT: string = '#F03B20';
 }

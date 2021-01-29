@@ -1,13 +1,18 @@
-
 // Colors (based on https://material.io/design/color/the-color-system.html#tools-for-picking-colors)
+@import "nord";
 
-$body-bg: #ECEFF1;
+$bg-nav-bar: $nord0;
+$bg-search: $nord1;
+$bg-secondary: $nord2;
+$bg-body: $nord3;
+
+
 $secondary-bar-bg: #FFFFFF;
-$border: #CFD8DC;
+$border: $nord4;
 
-$text-color: #263238;
+$text-color: $nord6;
 $text-background-color-hovered: rgba(38,50,56, 0.5);
-$icon-color: #6c757d; 
+$icon-color: $nord4; 
 
 $selection: #0091EA;
 $selection-highlight: #006AEB;

@@ -2,12 +2,14 @@
 @import "nord";
 
 
-//Navigation tabs
-.nav-item.underlined {
-  border-bottom: 2px solid $selection;
-  color: #ffffff;
-  .nav-link {
-    color: $nord4;
+.navbar {
+  background-color:$bg-nav-bar;
+  .navbar-brand, .nav-link {
+    color: $text-color;
+  }
+  //Navigation tabs
+  .nav-item.underlined {
+    border-bottom: 2px solid $selection;
   }
 }
 

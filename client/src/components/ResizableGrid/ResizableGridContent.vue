@@ -74,14 +74,14 @@ $border-grid: 1px solid $border;
   top: 0;
   width: 100%;
   height: $border-select-margin;
-  border-top: $border-grid;
+  // border-top: $border-grid;
   cursor: row-resize;
 }
 .panel-content-border-bottom {
   bottom: 0;
   width: 100%;
   height: $border-select-margin;
-  border-bottom: $border-grid;
+  // border-bottom: $border-grid;
   cursor: row-resize;
 }
 </style>

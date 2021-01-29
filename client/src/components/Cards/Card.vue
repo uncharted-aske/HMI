@@ -88,8 +88,8 @@
   .subtitle {
     flex: 1;
     font-size: 12px;
-    color: #6c757d;
-    background-color: white;
+    color: $text-color;
+    background-color: $bg-secondary;
     font-weight: normal;
     min-height: 0;
     overflow-x: hidden;
@@ -118,7 +118,8 @@
     max-height: 40vh;
     min-height: 300px;
 
-    background-color: white;
+    background-color: $bg-secondary;
+    color: $text-color;
     position: relative;
     border-radius: 3px;
     transition: all 0.15s;

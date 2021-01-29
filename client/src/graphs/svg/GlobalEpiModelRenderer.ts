@@ -90,6 +90,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           .text(d => (d as any).label);
         selection.append('text')
           .classed('collapsed', true)
+          .style('fill', Colors.LABELS.LIGHT)
           .attr('x', 10)
           .attr('y', 30)
           .style('font-size', 30)
@@ -127,7 +128,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
               return ((d as any).depth) * 0.2;
             } else return 1;
           })
-          .style('stroke', '#888')
+          .style('stroke', '#D8DEE9')
           .style('stroke-width', d => {
             const role = (d as any).role;
             return role === 'model' ? 5 : 2;
@@ -143,7 +144,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           .attr('rx', (d) => (d as any).width * 0.5)
           .attr('ry', () => 25)
           .style('fill', d => calcNodeColor(d))
-          .style('stroke', '#888');
+          .style('stroke', '##D8DEE9');
       }
     });
 
