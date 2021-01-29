@@ -69,7 +69,7 @@
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  import DrilldownMetadataPane from './components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
