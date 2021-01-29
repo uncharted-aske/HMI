@@ -10,7 +10,7 @@
       <search-bar />
     </div>
     <resizable-grid :map="gridMap">
-      <div :slot="model.id" class="h-100 w-100" v-for="(model) in selectedModels" :key="model.id">
+      <div :slot="model.id" class="h-100 w-100 d-flex flex-column" v-for="(model) in selectedModels" :key="model.id">
         <settings-bar>
           <div slot="left">
             <counters :labels="[model.metadata.name]"/>
