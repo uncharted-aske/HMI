@@ -1,6 +1,6 @@
 <template>
-<nav class="navbar navbar-expand-lg fixed-top text-light">
-  <a class="navbar-brand" href="#/">Uncharted HMI</a>
+<nav class="navbar navbar-expand-lg fixed-top">
+  <a class="navbar-brand" href="#/">ASKE-E HMI</a>
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav">
       <li
@@ -8,7 +8,7 @@
         class="nav-item"
         :class="{underlined: currentView === 'epiView' || currentView === 'bioView' || currentView === 'home'}"
       >
-        <a class="nav-link" href="#/epiView">Models</a>
+        <a class="nav-link" href="#/">Models</a>
       </li>
       <li
         v-if="displayNav"
@@ -42,9 +42,5 @@
 </script>
 
 <style lang="scss">
-@import "@/styles/aske";
-.navbar {
-  background-color:$nord0;
-}
 </style>
 
