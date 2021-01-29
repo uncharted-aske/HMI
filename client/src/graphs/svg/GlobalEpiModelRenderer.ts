@@ -166,7 +166,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           })
           .style('stroke-width', d => {
             const role = (d as any).role;
-            return role === 'model' ? 5 : 2;
+            return role === 'model' ? 5 : 3;
           });
 
         // Draw ellipses for input and output nodes
@@ -180,20 +180,43 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           .attr('ry', () => 25)
           .style('fill', d => calcNodeColor(d))
           .style('stroke', '#D8DEE9');
+
+        //Labels 
+        selection.append('text')
+        .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION)
+        .attr('x', d => (d as any).nodes ? 5 : 0.5 * (d as any).width)
+        .attr('y', d => (d as any).nodes ? (-0.5 * 25) : 25)
+        .style('fill', d => calcLabelColor(d))
+        .style('font-weight', d => (d as any).nodes ? '800' : '500')
+        .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+        .text(d => (d as any).label)
+        .each(function(d) {
+          (d as any).textWidth = this.getBBox().width + 10; // Property to be able to adjust the rect to the label size
+        });
+
+        selection.append('rect')
+            .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION && (d as any).nodes)
+            .attr('x', -5)
+            .attr('y', -25)
+            .attr('rx', 5)
+            .attr('width', d => (d as any).textWidth)
+            .attr('height', d => 25)
+            .style('fill', Colors.LABELS.BACKGROUND)
+            .style('stroke', Colors.LABELS.STROKE)
+
+        selection.append('text')
+          .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION)
+          .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
+          .attr('y', d => (d as any).nodes ? -5 : 25)
+          .style('fill', d => calcLabelColor(d))
+          .style('font-weight', d => (d as any).nodes ? '800' : '500')
+          .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+          .text(d => (d as any).label);
+
+        selection.style('cursor', 'pointer');
+    
       }
     });
-
-    nodeSelection.style('cursor', 'pointer');
-
-    // Add label for all nodes but FUNCTIONS
-    nodeSelection.append('text')
-      .filter(d => d.nodeType !== NodeTypes.NODES.FUNCTION)
-      .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
-      .attr('y', d => d.nodes ? -5 : 25)
-      .style('fill', d => calcLabelColor(d))
-      .style('font-weight', d => d.nodes ? '800' : '500')
-      .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-      .text(d => d.label);
   }
 
   hideNeighbourhood (): void {

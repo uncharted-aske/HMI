@@ -10,11 +10,13 @@ export abstract class Colors {
   static readonly LABELS: Record<string, any> = {
     DARK: '#2E3440',
     LIGHT: '#ECEFF4',
+    BACKGROUND: '#D08770',
+    STROKE: '#BF616A'
   };
 
-  static readonly EDGES: string = '#81A1C1';
+  static readonly EDGES: string = '#ECEFF4';
   static readonly SUBGRAPH: string = '#FFA500';
-  static readonly HIGHLIGHT: string = '#E67E22';
+  static readonly HIGHLIGHT: string = '#D08770';
   static readonly STROKE: string = '#81A1C1';
 }
 
