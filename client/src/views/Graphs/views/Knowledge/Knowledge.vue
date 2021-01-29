@@ -51,7 +51,7 @@
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   import * as filtersUtil from '@/utils/FiltersUtil';
-  import { filterToParamObj, cosmosFetchMem } from '@/utils/CosmosFetchUtil';
+  import { filterToParamObj, cosmosSearch } from '@/utils/CosmosFetchUtil';
   import { getAuthorList } from '@/utils/CosmosDataUtil';
 
   import ActionColumn from '@/components/ActionColumn.vue';
@@ -116,7 +116,7 @@
         this.filterHash = filterHashNew;
         try {
           this.dataLoading = true;
-          const response = await cosmosFetchMem(filterToParamObj(this.facetSelection));
+          const response = await cosmosSearch(filterToParamObj(this.facetSelection));
           this.data = response;
         } catch (e) {
           throw Error(e);
