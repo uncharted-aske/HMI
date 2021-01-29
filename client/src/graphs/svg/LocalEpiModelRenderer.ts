@@ -16,7 +16,7 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
     super(options);
   }
 
-  buildDefs() {
+  buildDefs (): void {
     const svg = d3.select(this.svgEl);
     const edges = flatten(this.layout).edges;
 

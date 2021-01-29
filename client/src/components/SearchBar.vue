@@ -25,9 +25,8 @@
     @Prop({ default: 30 })
     suggestionLimit: number;
 
-    @Prop({ default: 'Search...'})
+    @Prop({ default: 'Search...' })
     placeholder: string;
-
 
     private lex: Lex = null;
 

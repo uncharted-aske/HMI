@@ -16,7 +16,6 @@ export abstract class Colors {
   static readonly SUBGRAPH: string = '#FFA500';
   static readonly HIGHLIGHT: string = '#E67E22';
   static readonly STROKE: string = '#81A1C1';
-
 }
 
 export abstract class NodeTypes {
