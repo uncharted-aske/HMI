@@ -11,17 +11,17 @@
         <search-bar :pills="searchPills" />
       </div>
       <settings-bar>
-        <div slot="counters">
+        <div slot="left">
           <counters :data="countersData"/>
         </div>
-        <div slot="settings">
+        <div slot="right">
           <settings />
         </div>
       </settings-bar>
       <card-container
           :header="`Knowledge`"
           :cards="modelsCards"
-          @open-card="onOpenPanel"
+          @click-card="onOpenPanel"
       />
       <div class="loader-container" v-if="dataLoading">
         <div class="loader">Loading...</div>
@@ -38,7 +38,7 @@
   import Component from 'vue-class-component';
   import { Watch } from 'vue-property-decorator';
   import Vue from 'vue';
-  import { Getter, Mutation } from 'vuex-class';
+  import { Getter } from 'vuex-class';
   import _ from 'lodash';
 
   import { CosmosSearchInterface, CosmosSearchObjectsInterface } from '@/types/typesCosmos';
@@ -99,7 +99,6 @@
 
     @Getter getFilters;
     @Getter getModelsList;
-    @Mutation setSelectedModel;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.fetchCosmos();

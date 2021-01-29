@@ -37,7 +37,7 @@ interface ViewInterface {
 }
 
 interface ModelsState {
-  selectedModelId: string,
+  selectedModelIds: Set<string>,
   modelsList: ModelInterface[]
 }
 

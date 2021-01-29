@@ -108,6 +108,7 @@
     // drilldownMetadata: any = null;
     subgraph: GraphInterface = null;
 
+    @Getter getSelectedModelIds;
     @Getter getModelsList;
 
     get selectedModel (): ModelInterface {

@@ -15,13 +15,13 @@
     <resizable-grid :map="gridMap" :dimensions="{'3': { width: '100px', widthFixed: true }}">
       <div slot="1" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
-          <div slot="counters">
+          <div slot="left">
             <counters
               :title="selectedModel.metadata.name"
               :data="[`${nodeCount} Nodes`, `${edgeCount} Edges`]"
             />
           </div>
-          <div slot="settings">
+          <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
@@ -29,10 +29,10 @@
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
-          <div slot="counters">
+          <div slot="left">
             <counters :model-name="selectedModel.metadata.name" :node-count="nodeCount" :edge-count="edgeCount"/>
           </div>
-          <div slot="settings">
+          <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
@@ -107,12 +107,12 @@
     drilldownMetadata: any = null;
     subgraph: GraphInterface = null;
 
-    @Getter getSelectedModelId;
+    @Getter getSelectedModelIds;
     @Getter getModelsList;
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
-      return modelsList.find(model => model.id === this.getSelectedModelId);
+      return modelsList.find(model => model.id === (this.getSelectedModelIds && this.getSelectedModelIds[0]));
     }
 
     get selectedGraph (): GraphInterface {
