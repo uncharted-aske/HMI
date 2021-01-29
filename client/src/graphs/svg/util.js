@@ -158,5 +158,4 @@ export const calcNodeColor = (node) => {
 
 export const calcLabelColor = (node) => {
   return node.nodes ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
-  // return node.nodeSubType && node.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE) ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
 };

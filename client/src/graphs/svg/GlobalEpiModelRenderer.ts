@@ -20,7 +20,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
     const svg = d3.select(this.svgEl);
     const edges = flatten(this.layout).edges;
 
-    // // Clean up
+    // Clean up
     svg.select('defs').selectAll('.edge-marker-end').remove();
 
     svg.select('defs')
