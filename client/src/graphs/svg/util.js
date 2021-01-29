@@ -142,7 +142,7 @@ export const calcNodeColor = (node) => {
   if (node.nodes) {
     // Distinction between the main container and the rest
     return node.depth === 2 ? Colors.NODES.ROOT_CONTAINER : Colors.NODES.CONTAINER;
-  } else 
+  } else
   if (node.nodeType === NodeTypes.NODES.VARIABLE) {
     if (node.nodeSubType) {
       if (node.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE)) {
