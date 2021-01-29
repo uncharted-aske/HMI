@@ -22,7 +22,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
 
     // // Clean up
     svg.select('defs').selectAll('.edge-marker-end').remove();
-
+   
     svg.select('defs')
       .selectAll('.edge-marker-end')
       .data(edges)
@@ -46,6 +46,38 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
       .attr('d', SVGUtil.ARROW)
       .style('fill', Colors.EDGES)
       .style('stroke', 'none');
+
+    // Vreate filter with id #drop-shadow
+    // height=130% so that the shadow is not clipped
+    let filter = svg.select('defs').append("filter")
+          .attr("id", "drop-shadow")
+          .attr("height", "130%");
+
+    // SourceAlpha refers to opacity of graphic that this filter will be applied to
+    // convolve that with a Gaussian with standard deviation 3 and store result
+    // in blur
+    filter.append("feGaussianBlur")
+    .attr("in", "SourceAlpha")
+    .attr("stdDeviation", 10)
+    .attr("result", "blur");
+
+    // translate output of Gaussian blur to the right and downwards with 2px
+    // store result in offsetBlur
+    filter.append("feOffset")
+    .attr("in", "blur")
+    .attr("dx", 5)
+    .attr("dy", 5)
+    .attr("result", "offsetBlur");
+
+    // overlay original SourceGraphic over translated blurred opacity by using
+    // feMerge filter. Order of specifying inputs is important!
+    let feMerge = filter.append("feMerge");
+
+    feMerge.append("feMergeNode")
+        .attr("in", "offsetBlur")
+    feMerge.append("feMergeNode")
+        .attr("in", "SourceGraphic")
+        .attr("color", "SourceGraphic");
   }
 
   renderEdgeRemoved (edgeSelection: d3.Selection<any, any, any, any>): void {
@@ -167,7 +199,9 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           .style('stroke-width', d => {
             const role = (d as any).role;
             return role === 'model' ? 5 : 3;
-          });
+          })
+          .style("filter", d => (d as any).nodes ? "url(#drop-shadow)" : '')
+
 
         // Draw ellipses for input and output nodes
         selection.append('ellipse')
@@ -181,28 +215,28 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           .style('fill', d => calcNodeColor(d))
           .style('stroke', '#D8DEE9');
 
-        //Labels 
+        // Labels
         selection.append('text')
-        .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION)
-        .attr('x', d => (d as any).nodes ? 5 : 0.5 * (d as any).width)
-        .attr('y', d => (d as any).nodes ? (-0.5 * 25) : 25)
-        .style('fill', d => calcLabelColor(d))
-        .style('font-weight', d => (d as any).nodes ? '800' : '500')
-        .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
-        .text(d => (d as any).label)
-        .each(function(d) {
-          (d as any).textWidth = this.getBBox().width + 10; // Property to be able to adjust the rect to the label size
-        });
+          .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION)
+          .attr('x', d => (d as any).nodes ? 5 : 0.5 * (d as any).width)
+          .attr('y', d => (d as any).nodes ? (-0.5 * 25) : 25)
+          .style('fill', d => calcLabelColor(d))
+          .style('font-weight', d => (d as any).nodes ? '800' : '500')
+          .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+          .text(d => (d as any).label)
+          .each(function (d) {
+            (d as any).textWidth = this.getBBox().width + 10; // Property to be able to adjust the rect to the label size
+          });
 
         selection.append('rect')
-            .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION && (d as any).nodes)
-            .attr('x', -5)
-            .attr('y', -25)
-            .attr('rx', 5)
-            .attr('width', d => (d as any).textWidth)
-            .attr('height', d => 25)
-            .style('fill', Colors.LABELS.BACKGROUND)
-            .style('stroke', Colors.LABELS.STROKE)
+          .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION && (d as any).nodes)
+          .attr('x', -5)
+          .attr('y', -25)
+          .attr('rx', 5)
+          .attr('width', d => (d as any).textWidth)
+          .attr('height', 25)
+          .style('fill', Colors.LABELS.BACKGROUND)
+          .style('stroke', Colors.LABELS.STROKE);
 
         selection.append('text')
           .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION)
@@ -214,7 +248,6 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           .text(d => (d as any).label);
 
         selection.style('cursor', 'pointer');
-    
       }
     });
   }
