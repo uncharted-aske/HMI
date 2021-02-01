@@ -19,7 +19,6 @@ import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
 import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
 import paramsData from '@/static/xdd_parameters_table.json'; // Boutique subgraph for COVID-19 model.
 
-
 const state: ModelsState = {
   selectedModelIds: new Set(),
   parameters: paramsData,
@@ -145,7 +144,7 @@ const state: ModelsState = {
 
 const getters: GetterTree<ModelsState, any> = {
   getSelectedModelIds: state => [...state.selectedModelIds],
-  getParameters: state =>  state.parameters,
+  getParameters: state => state.parameters,
   getModelsList: state => state.modelsList,
 };
 

@@ -1,8 +1,7 @@
 <template>
   <div class="drilldown-parameters-pane-container">
     <div v-if="!isEmptyMetadata" >
-     
-        
+
     </div>
 
     <div v-else class="alert alert-info" role="alert">
@@ -25,11 +24,9 @@
 
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
 
-
   const components = {
     CollapsibleItem,
   };
-
 
   @Component({ components })
   export default class DrilldownParametersPane extends Vue {
@@ -42,12 +39,10 @@
     get isEmptyMetadata (): boolean {
       return _.isEmpty(this.metadata);
     }
-  
   }
 </script>
 
 <style lang="scss" scoped>
 @import "@/styles/variables";
-
 
 </style>
