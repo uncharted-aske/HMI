@@ -1,6 +1,25 @@
 <template>
   <div class="drilldown-panel-container" v-if="isOpen">
       <div class="panel-header" v-if="displayHeader">
+        <div
+          v-if="tabs.length > 1"
+        >
+          <ul
+            class="nav nav-tabs">
+            <li
+              v-for="tab in tabs"
+              :key="tab.id"
+              class="nav-item"
+             >
+              <a
+                 class="nav-link"
+                  :class="{active: activeTabId === tab.id}"
+                @click.stop.prevent="onTabClick(tab.id)">
+                {{tab.name}}
+              </a>
+            </li>
+          </ul>
+        </div>
         <h5>{{paneTitle}}</h5>
         <h6>{{paneSubtitle}}</h6>
       </div>
@@ -16,6 +35,8 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
+  import { TabInterface } from '@/types/types';
+
   import CloseButton from '@/components/widgets/CloseButton.vue';
 
   const components = {
@@ -26,6 +47,12 @@
   export default class DrilldownPanel extends Vue {
     @Prop({ default: false })
     isOpen: boolean;
+
+    @Prop({ default: [] })
+    tabs: TabInterface[];
+
+    @Prop({ default: '' })
+    activeTabId: string;
 
     @Prop({ default: '' })
     paneTitle: string;
@@ -39,6 +66,10 @@
 
     onClose (): void {
       this.$emit('close-pane');
+    }
+
+    onTabClick (tabId: string): void {
+      this.$emit('tab-click', tabId);
     }
   }
 </script>
@@ -64,6 +95,9 @@
     text-align: left;
     border-bottom: 1px solid $border;
     padding: 5px;
+    .nav-tabs {
+      cursor: pointer;
+    }
   }
   .panel-body {
     margin-top: 5px;

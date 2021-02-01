@@ -41,9 +41,9 @@
         <local-epi-graph v-if="isSplitView" :graph="subgraph" @node-click="onNodeClick"/>
       </div>
     </resizable-grid>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
       <div slot="content">
-        <drilldown-metadata-pane :metadata="drilldownMetadata"/>
+        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata"/>
       </div>
     </drilldown-panel>
   </div>
@@ -76,6 +76,11 @@
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
+  const TABS_DRILLDOWN: TabInterface[] = [
+    { name: 'Metadata', icon: 'filter', id: 'metadata' },
+    { name: 'Parameters', icon: 'info', id: 'parameters' },
+  ];
+
   const VIEWS: ViewInterface[] = [
     { name: 'Causal', id: 'causal' },
     { name: 'Functional', id: 'functional' },
@@ -99,7 +104,9 @@
   @Component({ components })
   export default class EpiView extends Vue {
     tabs: TabInterface[] = TABS;
+    tabsDrilldown: TabInterface[] = TABS_DRILLDOWN;
     activeTabId: string = 'metadata';
+    activeTabIdDrilldown: string = 'metadata';
     views: ViewInterface[] = VIEWS;
     selectedViewId = 'causal';
     isOpenDrilldown = false;
@@ -167,6 +174,10 @@
 
     onTabClick (tabId: string): void {
       this.activeTabId = tabId;
+    }
+
+    onTabClickDrilldown (tabId: string): void {
+      this.activeTabIdDrilldown = tabId;
     }
 
     onCloseDrilldownPanel ():void {

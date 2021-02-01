@@ -1,7 +1,6 @@
 <template>
   <div class="drilldown-metadata-pane-container">
     <div v-if="!isEmptyMetadata" >
-
       <collapsible-item>
         <div slot="title">Type</div>
         <div slot="content">
@@ -90,7 +89,6 @@
 @import "@/styles/variables";
 
 .drilldown-metadata-pane-container {
-  padding: 5px;
   .metadata-header {
     padding: 5px;
     color: $text-color-dark;
