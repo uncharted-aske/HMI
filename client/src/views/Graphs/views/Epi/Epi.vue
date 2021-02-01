@@ -44,6 +44,7 @@
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
       <div slot="content">
         <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata"/>
+        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/>
       </div>
     </drilldown-panel>
   </div>
@@ -70,6 +71,7 @@
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from './components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  import DrilldownParametersPane from './components/DrilldownMetadataPanel/DrilldownParametersPane.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -99,6 +101,7 @@
     ResizableGrid,
     DrilldownPanel,
     DrilldownMetadataPane,
+    DrilldownParametersPane,
   };
 
   @Component({ components })

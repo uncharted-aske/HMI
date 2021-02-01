@@ -17,9 +17,12 @@ import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 
 import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
 import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
+import paramsData from '@/static/xdd_parameters_table.json'; // Boutique subgraph for COVID-19 model.
+
 
 const state: ModelsState = {
   selectedModelIds: new Set(),
+  parameters: paramsData,
   modelsList: [
     {
       id: 1,
@@ -142,9 +145,8 @@ const state: ModelsState = {
 
 const getters: GetterTree<ModelsState, any> = {
   getSelectedModelIds: state => [...state.selectedModelIds],
-  getModelsList: state => {
-    return state.modelsList;
-  },
+  getParameters: state =>  state.parameters,
+  getModelsList: state => state.modelsList,
 };
 
 const mutations: MutationTree<ModelsState> = {
