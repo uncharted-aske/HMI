@@ -48,7 +48,7 @@
     @Prop({ default: false })
     isOpen: boolean;
 
-    @Prop({ default: [] })
+    @Prop({ default: () => [] })
     tabs: TabInterface[];
 
     @Prop({ default: '' })
