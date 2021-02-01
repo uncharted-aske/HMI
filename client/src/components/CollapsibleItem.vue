@@ -32,10 +32,10 @@ import { Prop } from 'vue-property-decorator';
  * For example:
  *   <collapsible-item>
  *      <div slot="title"> This replaces the header slot in template</div>
- *      <p slot="content">
+ *      <div slot="content">
  *          This paragraph replaces the content slot in template
  *          <img src="something"/>
- *      </p>
+ *      </div>
  *   </collapsible-item>
  *
 */
@@ -79,25 +79,19 @@ import { Prop } from 'vue-property-decorator';
     display: flex;
     flex-direction: row;
     padding: 2px 0;
-    .item-controls {
-      align-items: baseline;
-      flex: 1;
-      margin-top: auto;
-      margin-bottom: auto;
-    }
     .item-title {
       display: flex;
       flex-direction: row;
       align-items: baseline;
       padding: 5px;
+      font-weight: bold;
       cursor: pointer;
       flex: 16;
       min-width: 0px;
       background-color: $drilldown-header;
-    //   .icon {
-    //     color: $icon-color-dark;
-    //     padding: 5px;
-    //   }
+      div {
+        padding: 5px;
+      }
     }
   }
 }
