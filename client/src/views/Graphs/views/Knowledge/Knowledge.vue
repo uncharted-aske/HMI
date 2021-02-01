@@ -51,7 +51,7 @@
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   import * as filtersUtil from '@/utils/FiltersUtil';
-  import { filterToParamObj, cosmosFetchMem } from '@/utils/CosmosFetchUtil';
+  import { filterToParamObj, cosmosSearch } from '@/utils/CosmosFetchUtil';
   import { getAuthorList } from '@/utils/CosmosDataUtil';
 
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -112,7 +112,7 @@
         this.filterHash = filterHashNew;
         try {
           this.dataLoading = true;
-          const response = await cosmosFetchMem(filterToParamObj(this.facetSelection));
+          const response = await cosmosSearch(filterToParamObj(this.facetSelection));
           this.data = response;
         } catch (e) {
           throw Error(e);
@@ -252,14 +252,14 @@
 .loader,
 .loader:before,
 .loader:after {
-  background: #263238;
+  background: $icon-color;
   -webkit-animation: load1 1s infinite ease-in-out;
   animation: load1 1s infinite ease-in-out;
   width: 1em;
   height: 4em;
 }
 .loader {
-  color: #263238;
+  color: $icon-color;
   text-indent: -9999em;
   margin: 88px auto;
   position: relative;

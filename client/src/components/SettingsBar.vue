@@ -20,6 +20,7 @@
 
 .settings-bar-container {
   height: calc(#{$secondary-bar-width} - 15px);
+  min-height: calc(#{$secondary-bar-width} - 15px);
   // border-bottom: 1px solid $border;
   display: flex;
   align-items: center;

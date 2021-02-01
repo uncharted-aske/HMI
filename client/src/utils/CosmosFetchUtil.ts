@@ -2,9 +2,9 @@ import _ from 'lodash';
 import { COSMOS_TYPE_OPTIONS } from './ModelTypeUtil';
 import { CosmosSearchInterface } from '@/types/typesCosmos';
 
-const COSMOS_API_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/cosmos/api/search';
+import { getUtilMem } from './FetchUtil';
 
-const memoizedStore = new Map();
+const COSMOS_API_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/cosmos/api/search';
 
 export const filterToParamObj = (filterObj: {[key: string]: any}): any => {
   const output: any = {};
@@ -27,35 +27,6 @@ export const filterToParamObj = (filterObj: {[key: string]: any}): any => {
   return output;
 };
 
-export const cosmosFetch = async (paramObj: URLSearchParams): Promise<CosmosSearchInterface> => {
-  const init: RequestInit = {
-    method: 'GET',
-    mode: 'cors',
-    cache: 'default',
-  };
-  // TypeScript URL type incorrect
-  // eslint-disable-next-line
-  const url: any = new URL(COSMOS_API_URL);
-  url.search = new URLSearchParams(paramObj).toString();
-  try {
-    const response = await fetch(url, init);
-    return await response.json();
-  } catch (e) {
-    return e;
-  }
-};
-
-export const cosmosFetchMem = async (paramObj: URLSearchParams): Promise<CosmosSearchInterface> => {
-  const paramHash = JSON.stringify(paramObj);
-  if (memoizedStore.has(paramHash)) {
-    return Promise.resolve(memoizedStore.get(paramHash));
-  } else {
-    try {
-      const result = await cosmosFetch(paramObj);
-      memoizedStore.set(paramHash, result);
-      return result;
-    } catch (e) {
-      return e;
-    }
-  }
+export const cosmosSearch = (paramObj: URLSearchParams): Promise<CosmosSearchInterface> => {
+  return getUtilMem(COSMOS_API_URL, paramObj);
 };
