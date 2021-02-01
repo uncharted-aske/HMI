@@ -15,17 +15,26 @@
 
 .btn-primary {
   color: $text-color-dark;
-  background-color: $nord4 !important;
+  background-color: $nord4;
   border-color: $nord4;
 }
 .btn-primary:hover {
   color: $text-color-dark;
-  background-color: $nord5 !important;
+  background-color: $nord5;
   border-color: $nord5;
 }
 
 .btn-secondary {
-  background-color: $nord1 !important;
+  background-color: $nord1;
+}
+
+.btn-secondary:hover {
+  background-color: $nord2;
+}
+
+.btn-secondary:disabled {
+  background-color: $nord1;
+  opacity: 0.5;
 }
 
 div#lex-assistant-box {
