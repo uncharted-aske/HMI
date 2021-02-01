@@ -15,12 +15,9 @@
 </template>
 
 <script lang="ts">
-
-import _ from 'lodash';
-
-import Component from 'vue-class-component';
-import Vue from 'vue';
-import { Prop } from 'vue-property-decorator';
+  import Component from 'vue-class-component';
+  import Vue from 'vue';
+  import { Prop } from 'vue-property-decorator';
 
 /**
  * A collapsible wrapper component that allows the injection of two external
@@ -42,26 +39,24 @@ import { Prop } from 'vue-property-decorator';
 
   @Component
   export default class CollapsibleItem extends Vue {
-
     @Prop({ default: false }) defaultExpand: boolean;
-    expanded: boolean = false; 
+    expanded: boolean = false;
 
-    get getIcon():string {
+    get getIcon ():string {
         return this.expanded ? 'caret-up' : 'caret-down';
     }
 
-    expand(): void {
+    expand (): void {
       this.expanded = true;
     }
 
-    collapse(): void {
+    collapse (): void {
       this.expanded = false;
     }
 
-    toggle(): void {
+    toggle (): void {
       this.expanded = !this.expanded;
-    }  
-
+    }
   }
 
 </script>
@@ -95,6 +90,5 @@ import { Prop } from 'vue-property-decorator';
     }
   }
 }
-
 
 </style>

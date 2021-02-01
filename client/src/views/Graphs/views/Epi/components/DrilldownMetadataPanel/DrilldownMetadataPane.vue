@@ -15,12 +15,12 @@
           <div v-for="(value, key) in getProvenance" :key="key">
             <div class="key">{{key | capitalize-first-letter-formatter}}</div>
             <div v-if="key !== 'sources'">{{value}}</div>
-            <div v-else> 
+            <div v-else>
               <div v-for="(source, key) in value[0]" :key="key">
                   {{source}}
-                </div> 
+                </div>
             </div>
-          </div> 
+          </div>
         </div>
         </div>
       </collapsible-item>
@@ -33,8 +33,8 @@
             <div v-for="(value, key) in item" :key="key">
             <div class="key">{{key | capitalize-first-letter-formatter}}</div>
               {{value}}
-            </div> 
-          </div>   
+            </div>
+          </div>
         </div>      </div>
       </collapsible-item>
 
@@ -68,7 +68,7 @@
     @Prop({ default: null }) metadata: any;
 
     showModal: boolean = false;
-    
+
     get isEmptyMetadata (): boolean {
       return _.isEmpty(this.metadata);
     }
@@ -76,9 +76,11 @@
     get getType (): string {
       return !_.isEmpty(this.metadata) && this.metadata.type;
     }
+
     get getProvenance (): any {
       return !_.isEmpty(this.metadata) && this.metadata.provenance;
     }
+
     get getAttributes (): any {
       return !_.isEmpty(this.metadata) && this.metadata.attributes;
     }
