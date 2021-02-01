@@ -12,6 +12,12 @@ const globby = require('globby');
 const server = require('live-server');
 const copy = require('rollup-plugin-copy');
 const alias = require('@rollup/plugin-alias');
+const dotenv = require('dotenv');
+
+const dotenvResult = dotenv.config();
+if (dotenvResult.error) {
+  throw dotenvResult.error;
+}
 
 const buildDir = path.resolve(__dirname, 'build');
 const distDir = path.resolve(__dirname, 'dist');
@@ -113,12 +119,22 @@ function pluginsForType (type, env) {
     };
   }
 
+  function replaceObject () {
+    const output = {
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL),
+    };
+
+    Object.keys(dotenvResult.parsed).map(key => {
+      output[`process.env.${key}`] = JSON.stringify(dotenvResult.parsed[key]);
+    });
+
+    return output;
+  }
+
   return {
     plugins: [
-      replace({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-        'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL),
-      }),
+      replace(replaceObject()),
       alias({
         entries: [
           {
