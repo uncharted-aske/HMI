@@ -52,20 +52,20 @@ export const showTooltip = (domlocation, text, position) => {
     .attr('y', 15)
     .style('rx', '4px')
     .style('opacity', '0.8')
-    .style('background-color', 'black');
+    .style('background-color', '#4C566A');
 
   svgTooltip
     .append('polygon')
     .attr('points', '0,10 -5,15 5,15')
     .style('opacity', '0.8')
-    .style('background-color', 'black');
+    .style('background-color', '#4C566A');
 
   const svgTooltipText = svgTooltip
     .append('text')
     .attr('y', 30)
     .style('font-weight', 600)
     .style('font-size', '10px')
-    .style('fill', 'white')
+    .style('fill', '#ECEFF4')
     .text(text);
 
   const svgTooltipTextHeight = 20;

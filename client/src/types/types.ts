@@ -3,11 +3,11 @@ import { MODEL_TYPE_OPTIONS, COSMOS_TYPE_OPTIONS, COSMOS_INCLUSIVE_OPTIONS } fro
 
 interface ModelMetadataInterface {
   name: string,
-  description: string,
-  created: string,
-  source: string,
-  version: string,
-  knowledge: string
+  description?: string,
+  created?: string,
+  source?: string,
+  version?: string,
+  knowledge?: string
 }
 interface ModelComponentMetadataInterface {
   name: string,

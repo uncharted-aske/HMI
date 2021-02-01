@@ -6,9 +6,9 @@
       </div>
     </left-side-panel>
 
-    <div class="content">
+    <div class="d-flex flex-column h-100">
       <div class="search-row">
-        <search-bar :pills="searchPills" />
+        <search-bar :pills="searchPills" :placeholder="`Search for models...`"/>
       </div>
       <settings-bar>
         <div slot="left">

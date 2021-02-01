@@ -142,7 +142,8 @@ export const calcNodeColor = (node) => {
   if (node.nodes) {
     // Distinction between the main container and the rest
     return node.depth === 2 ? Colors.NODES.ROOT_CONTAINER : Colors.NODES.CONTAINER;
-  } else if (node.nodeType === NodeTypes.NODES.VARIABLE) {
+  } else
+  if (node.nodeType === NodeTypes.NODES.VARIABLE) {
     if (node.nodeSubType) {
       if (node.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE)) {
         return Colors.NODES.MODEL_VARIABLE;
@@ -156,5 +157,5 @@ export const calcNodeColor = (node) => {
 };
 
 export const calcLabelColor = (node) => {
-  return node.nodeSubType && node.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE) ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
+  return node.nodes ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
 };

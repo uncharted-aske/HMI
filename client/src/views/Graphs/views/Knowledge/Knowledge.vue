@@ -8,7 +8,7 @@
 
     <div class="d-flex flex-column h-100">
       <div class="search-row">
-        <search-bar :pills="searchPills" />
+        <search-bar :pills="searchPills" :placeholder="`Search for documents including a specific keyword (e.g. IL-6)...`" />
       </div>
       <settings-bar>
         <div slot="left">
@@ -54,8 +54,6 @@
   import { filterToParamObj, cosmosSearch } from '@/utils/CosmosFetchUtil';
   import { getAuthorList } from '@/utils/CosmosDataUtil';
 
-  import ActionColumn from '@/components/ActionColumn.vue';
-  import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from './Settings/Settings.vue';
   import Counters from '@/views/Graphs/components/Counters/Counters.vue';
@@ -73,8 +71,6 @@
   ];
 
   const components = {
-    ActionColumn,
-    ActionColumnNavBar,
     SearchBar,
     Settings,
     SettingsBar,
@@ -256,14 +252,14 @@
 .loader,
 .loader:before,
 .loader:after {
-  background: #263238;
+  background: $icon-color;
   -webkit-animation: load1 1s infinite ease-in-out;
   animation: load1 1s infinite ease-in-out;
   width: 1em;
   height: 4em;
 }
 .loader {
-  color: #263238;
+  color: $icon-color;
   text-indent: -9999em;
   margin: 88px auto;
   position: relative;

@@ -1,20 +1,23 @@
 export abstract class Colors {
   static readonly NODES: Record<string, any> = {
-    DEFAULT: '#EEEEEE',
-    ROOT_CONTAINER: '#FFFFFF',
-    CONTAINER: '#F6F2EF',
-    MODEL_VARIABLE: '#1F78B4',
-    INITIAL_CONDITION: '#A6CEE3',
+    DEFAULT: '#ECEFF4',
+    ROOT_CONTAINER: '#4C566A',
+    CONTAINER: '#2E3440',
+    MODEL_VARIABLE: '#88C0D0',
+    INITIAL_CONDITION: '#81A1C1',
   };
 
   static readonly LABELS: Record<string, any> = {
-    DARK: '#333333',
-    LIGHT: '#FFFFFF',
+    DARK: '#2E3440',
+    LIGHT: '#ECEFF4',
+    BACKGROUND: '#D08770',
+    STROKE: '#BF616A',
   };
 
-  static readonly EDGES: string = '#6C757D';
+  static readonly EDGES: string = '#c2c7d1';
   static readonly SUBGRAPH: string = '#FFA500';
-  static readonly HIGHLIGHT: string = '#F03B20';
+  static readonly HIGHLIGHT: string = '#D08770';
+  static readonly STROKE: string = '#81A1C1';
 }
 
 export abstract class NodeTypes {

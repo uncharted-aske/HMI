@@ -7,7 +7,7 @@
           </div>
     </left-side-panel>
     <div class="search-row">
-      <search-bar />
+      <search-bar :placeholder="`Search for model components...`"/>
       <button class="btn btn-primary m-1" @click="onSplitView">
         Add Subgraph
       </button>
