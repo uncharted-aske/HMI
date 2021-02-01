@@ -1,12 +1,12 @@
 <template>
   <div class="drilldown-parameters-pane-container">
-    <div v-if="!isEmptyMetadata" >
-      <histogram />
+    <div >
+      <histogram :data="getParameters"/>
     </div>
 
-    <div v-else class="alert alert-info" role="alert">
+    <!-- <div v-else class="alert alert-info" role="alert">
       No parameters at the moment
-    </div>
+    </div> -->
     <!-- <modal-knowledge
       v-if="showModal"
       @close="showModal = false"
@@ -39,9 +39,15 @@
     @Getter getSelectedModelIds;
     @Getter getParameters;
 
-    get isEmptyMetadata (): boolean {
-      return _.isEmpty(this.metadata);
+    get formatParametersData(): any {
+      let parametersArray = [];
+      Object.keys(this.getParameters).forEach(key => {
+        parametersArray.push(this.getParameters[key]);
+      })
+      return parametersArray;
     }
+
+   
   }
 </script>
 

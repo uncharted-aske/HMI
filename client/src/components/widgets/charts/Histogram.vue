@@ -17,12 +17,8 @@ import moment from 'moment';
 import Component from 'vue-class-component';
 import Vue from 'vue';
 import { Prop } from 'vue-property-decorator';
-// import svgUtil from '@/utils/svg-util';
-// import dateFormatter from '@/filters/date-formatter';
-// import indicatorValueFormatter from '@/filters/indicator-value-formatter';
-// import { DEFAULT_COLOR, SELECTED_COLOR, MARKER_COLOR } from '@/utils/colors-util';
+import svgUtil from '@/utils/SVGUtil';
 
-// const RESIZE_DELAY = 50;
 
 const DEFAULT_CONFIG = {
   margin: {
@@ -64,13 +60,66 @@ const DEFAULT_CONFIG = {
  */
 @Component
 export default class Histogram extends Vue {
+    @Prop({ default: null }) data: any;
 
     mounted(): void {
         this.refresh();
     }    
 
     refresh():void {
-        console.log('test');
+      if (_.isEmpty(this.data)) return;
+      const data = this.data;
+      const svg = d3.select(this.$refs.container as any);
+
+      // Set the dimensions and margins of the chart
+      const margin = {top: 20, right: 20, bottom: 50, left: 100},
+                      width = 460 - margin.left - margin.right,
+                      height = 400 - margin.top - margin.bottom;
+
+      svg.selectAll('*').remove();
+      const chart = svgUtil.createChart(svg, width, height)
+        .append('g')
+        .attr('transform', svgUtil.translate(margin.left, margin.top));
+
+      //Define the scales
+      let x = d3.scaleBand()
+        .rangeRound([0, width])
+        .padding(0.1);
+
+      let y = d3.scaleLinear()
+        .rangeRound([height, 0]);
+
+
+      // x.domain(data.map((d)=> {
+      //   console.log(d);
+      // }));
+      // y.domain([0, d3.max(data, function (d) {
+      //       return Number(d.Speed);
+      // })]);
+
+
+
+
+      // const xaxis = d3.axisBottom()
+      //   .scale(xscale)
+      //   .tickSizeOuter(0)
+      //   .tickValues(ticksXaxis);
+
+      // const yaxis = d3.axisLeft()
+      //   .scale(yscale)
+      //   .tickValues(ticksYAxis)
+      //   .tickFormat(indicatorValueFormatter);
+
+      // // Add the X axis
+      // this.chart.append('g')
+      //   .call(xaxis)
+      //   .attr('class', 'x-axis')
+      //   .attr('transform', svgUtil.translate(0, yscale(0)))
+      //   .attr('stroke-opacity', 0.5);
+
+
+
+      
     }
 
 
