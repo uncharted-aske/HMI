@@ -5,7 +5,7 @@
         <h6>{{paneSubtitle}}</h6>
       </div>
       <close-button @close="onClose"/>
-      <div class="panel-body">
+      <div class="panel-body h-100">
          <slot name="content" />
       </div>
   </div>

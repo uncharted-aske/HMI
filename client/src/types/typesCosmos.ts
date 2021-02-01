@@ -41,6 +41,7 @@ export interface CosmosSearchObjectsInterface {
 }
 
 export interface CosmosSearchInterface {
+  /** Cosmos API version */
   v: string;
   total: number;
   page: number;
@@ -62,5 +63,6 @@ export interface CosmosArtifactInterface {
   objects: CosmosArtifactObjectInterface[],
   page: number,
   total: number,
+  /** Cosmos API version */
   v: string,
 }

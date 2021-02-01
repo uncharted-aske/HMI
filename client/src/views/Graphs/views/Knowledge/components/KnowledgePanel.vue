@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="h-100 d-flex flex-column">
   <ul class="nav nav-tabs">
     <li class="nav-item">
       <a class="nav-link active">Preview</a>
@@ -11,7 +11,7 @@
       <a class="nav-link disabled">Entities</a>
     </li>
   </ul>
-  <div class="mt-3 mx-1 d-flex flex-column" v-if="displaySummary">
+  <div class="mt-3 mx-1 d-flex flex-column flex-grow-1" v-if="displaySummary">
     <div class="border-bottom">
       <a :href="card.raw.bibjson.link[0].url" target="_blank">
         <h5>{{card.title}}</h5>
@@ -30,15 +30,17 @@
       <h6>Publisher</h6>
       <div>{{card.raw.bibjson.publisher || 'None'}}</div>
     </div>
-    <div class="mt-3">
-      <h6>{{artifactHeader}}</h6>
-      <div v-for="(artifact) in artifactList" :key="artifact.id"
-        class="artifact-img"
-        :style="imageStyle(artifact.bytes)"
-        :title="artifact.header_content"
-      />
+    <div class="mt-3 flex-grow-1 position-relative overflow-hidden">
+      <div class="position-absolute h-100 w-100">
+        <h6>{{artifactHeader}}</h6>
+        <div v-for="(artifact) in artifactList" :key="artifact.id"
+          class="shadow artifact-img"
+          :style="imageStyle(artifact.bytes)"
+          :title="artifact.header_content"
+        />
+      </div>
     </div>
-    <div class="mt-5">
+    <div class="my-3">
       <a @click="showMoreHandler" href="/">Show more...</a>
     </div>
   </div>
@@ -133,6 +135,7 @@
     background-position: center;
     background-color: #EAEBEC;
     float: left;
+    border: $icon-color solid 1px;
     border-radius: 10px;
     margin: 2.5%;
   }
