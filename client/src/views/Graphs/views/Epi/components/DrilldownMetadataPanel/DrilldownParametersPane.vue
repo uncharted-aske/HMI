@@ -1,7 +1,7 @@
 <template>
   <div class="drilldown-parameters-pane-container">
     <div v-if="!isEmptyMetadata" >
-
+      <histogram />
     </div>
 
     <div v-else class="alert alert-info" role="alert">
@@ -23,9 +23,12 @@
   import { Getter } from 'vuex-class';
 
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
+  import Histogram from '@/components/widgets/charts/Histogram.vue';
+
 
   const components = {
     CollapsibleItem,
+    Histogram,
   };
 
   @Component({ components })
