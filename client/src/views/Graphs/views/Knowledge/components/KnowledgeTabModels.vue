@@ -17,15 +17,11 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { Prop, Watch } from 'vue-property-decorator';
+  import { Prop } from 'vue-property-decorator';
 
   @Component({ })
   export default class KnowledgeTabPreview extends Vue {
     @Prop({ required: false }) private card: any;
-
-    @Watch('card') onCardChange (): any {
-      console.log('change');
-    }
 
     get doi (): string {
       return this.card.raw.bibjson.identifier[0].id;
