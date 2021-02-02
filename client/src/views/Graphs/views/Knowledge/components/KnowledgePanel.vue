@@ -8,14 +8,19 @@
     </li>
   </ul>
   <knowledge-tab-preview
-    class="mt-3 mx-1 d-flex flex-column flex-grow-1"
+    class="mt-3 mx-1 d-flex flex-column flex-grow-1 overflow-hidden"
     v-if="activeTab === 0"
     @open-drilldown="$emit('open-drilldown')"
     :card="card"
   />
   <knowledge-tab-models
-    class="mt-3 mx-1 d-flex flex-column flex-grow-1"
+    class="mt-3 mx-1 d-flex flex-column flex-grow-1 overflow-hidden"
     v-if="activeTab === 1"
+    :card="card"
+  />
+  <knowledge-tab-entities
+    class="mt-3 mx-1 d-flex flex-column flex-grow-1 overflow-hidden"
+    v-if="activeTab === 2"
     :card="card"
   />
 </div>
@@ -28,10 +33,12 @@
 
   import KnowledgeTabPreview from './KnowledgeTabPreview.vue';
   import KnowledgeTabModels from './KnowledgeTabModels.vue';
+  import KnowledgeTabEntities from './KnowledgeTabEntities.vue';
 
   const components = {
     KnowledgeTabPreview,
     KnowledgeTabModels,
+    KnowledgeTabEntities,
   };
 
   @Component({ components })
