@@ -21,18 +21,17 @@
 
   const DEFAULT_CONFIG = {
     margin: {
-      top: 20,
+      top: 25,
       right: 10,
       bottom: 30,
       left: 10,
     },
   };
-// const BAND_WIDTH = 30;
 
-// const RIGHT_ARROW_EVENT_CODE = 39;
-// const LEFT_ARROW_EVENT_CODE = 37;
-
-// const MARKER_RADIUS = 2.5;
+  const COLORS = {
+    positive: '#5E81AC',
+    negative: '#BF616A',
+  }
 /**
  * Histogram chart
  *
@@ -60,7 +59,7 @@
 @Component
   export default class BarChart extends Vue {
     @Prop({ default: null }) data: any;
-    @Prop({ default: () => [450, 600] }) size: Array<number>;
+    @Prop({ default: () => [450, 500] }) size: Array<number>;
 
     mounted (): void {
         this.refresh();
@@ -68,7 +67,9 @@
 
     refresh ():void {
       if (_.isEmpty(this.data)) return;
+      const data = this.data;
       const svg = d3.select(this.$refs.container as any);
+      svg.selectAll('*').remove();
 
       // Set the dimensions and margins of the chart
       const margin = DEFAULT_CONFIG.margin;
@@ -77,36 +78,35 @@
       const innerWidth = outerWidth - margin.left - margin.right;
       const innerHeight = outerHeight - margin.top - margin.bottom;
 
-      svg.selectAll('*').remove();
       const chart = svgUtil.createChart(svg, outerWidth, outerHeight)
         .append('g')
         .attr('transform', svgUtil.translate(margin.left, margin.top));
 
-      const data = this.data;
-
+      // Define scales
       const xscale = d3.scaleLinear()
             .rangeRound([0, innerWidth]);
-            
       const yscale = d3.scaleBand()
           .rangeRound([innerHeight, 0])
           .padding(0.1);
 
-      yscale.domain(data.map(function(d) { return d.location; }));
-      xscale.domain(d3.extent(data, function(d) { return Number((d as any).value); }));
+      yscale.domain(data.map((d) => d.location ));
+      xscale.domain(d3.extent(data, (d) => Number((d as any).value) ));
 
       let yAxis = chart.append("g")
       	.attr("class", "y-axis")
       	.attr("transform", svgUtil.translate(xscale(0), 0))
       	.append("line")
           .attr("y1", 0)
-          .attr("y2", innerHeight);
+          .attr("y2", innerHeight)
+          .attr("stroke-width", "2");
 
        let xAxis = chart.append("g")
         .attr("class", "x-axis")
-        .attr("transform", svgUtil.translate(0, innerHeight + margin.bottom ))
-        .call(d3.axisBottom(xscale).tickSizeOuter(0));
+        .attr("transform", svgUtil.translate(0, -margin.top))
+        .call(d3.axisBottom(xscale).tickSizeOuter(0).tickFormat(d => d3.format(".2s")(d)));
         
 
+      // Draw bars
       let bars = chart.append("g")
       	.attr("class", "bars")
       
@@ -114,41 +114,32 @@
       	.data(data)
       .enter().append("rect")
       	.attr("class", ".bar")
-      	.attr("x", function(d) {
-       		return xscale(Math.min(0, d.value));
-      	})
-      	.attr("y", function(d) { return yscale(d.location); })
+      	.attr("x", (d) => xscale(Math.min(0, d.value)))
+      	.attr("y", (d)=> yscale(d.location))
       	.attr("height", yscale.bandwidth())
-      	.attr("width", function(d) { 
-        	return Math.abs(xscale(d.value) - xscale(0))
-      	})
+      	.attr("width", (d) => Math.abs(xscale(d.value) - xscale(0)) )
         .style("fill", d => {
-          return (d as any).value > 0 ? "#5E81AC" : "#BF616A";
+          return (d as any).value > 0 ? COLORS.positive : COLORS.negative;
         })
-        .style("stroke", '#ECEFF4');
         
-        
-
-      let labels = svg.append("g")
+      // Draw labels
+      let labels = chart.append("g")
       	.attr("class", "labels");
       
       labels.selectAll("text")
       	.data(data)
       .enter().append("text")
       	.attr("class", "bar-label")
-      	.attr("x", function(d) {
-       		return xscale(Math.min(0, (d as any).value));
-      	})
-      	.attr("y", function(d) { return yscale((d as any).location )})
-      	.attr("dx", function(d) {
-        	return (d as any).value < 0 ? 5 : -5;
-      	})
+      	.attr("x", xscale(0))
+      	.attr("y", (d) => yscale((d as any).location ))
+      	.attr("dx", (d) => (d as any).value < 0 ? 10 : -10 )
       	.attr("dy", yscale.bandwidth())
-      	.attr("text-anchor", function(d) {
-        	return (d as any).value < 0 ? "start" : "end";
-      	})
-      	.text(function(d) { return (d as any).location })
-        .style("font-size", "8px")
+      	.attr("text-anchor", (d) => (d as any).value < 0 ? "start" : "end")
+      	.text((d) => (d as any).location )
+        .style("font-size", "9px")
+        .style("fill", d => {
+          return (d as any).value > 0 ? COLORS.positive : COLORS.negative;
+        })
 
       
     
