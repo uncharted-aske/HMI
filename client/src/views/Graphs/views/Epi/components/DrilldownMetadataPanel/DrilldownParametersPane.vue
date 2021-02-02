@@ -25,7 +25,6 @@
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
   import BarChart from '@/components/widgets/charts/BarChart.vue';
 
-
   const components = {
     CollapsibleItem,
     BarChart,
@@ -39,11 +38,11 @@
     @Getter getSelectedModelIds;
     @Getter getParameters;
 
-    get formatParametersData(): any {
-      let parametersArray = [];
+    get formatParametersData (): any {
+      const parametersArray = [];
       Object.keys(this.getParameters).forEach(key => {
         parametersArray.push(this.getParameters[key]);
-      })
+      });
       return parametersArray;
     }
   }
