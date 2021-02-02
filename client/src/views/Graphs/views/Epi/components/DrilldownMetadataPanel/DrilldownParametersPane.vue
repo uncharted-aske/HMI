@@ -3,14 +3,6 @@
     <div >
       <bar-chart :data="formatParametersData"/>
     </div>
-
-    <!-- <div v-else class="alert alert-info" role="alert">
-      No parameters at the moment
-    </div> -->
-    <!-- <modal-knowledge
-      v-if="showModal"
-      @close="showModal = false"
-     /> -->
   </div>
 </template>
 
@@ -32,9 +24,6 @@
 
   @Component({ components })
   export default class DrilldownParametersPane extends Vue {
-    @Prop({ default: null }) metadata: any;
-    showModal: boolean = false;
-
     @Getter getSelectedModelIds;
     @Getter getParameters;
 
