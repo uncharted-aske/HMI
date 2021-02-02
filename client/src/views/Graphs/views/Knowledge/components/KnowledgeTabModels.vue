@@ -7,9 +7,11 @@
       <h6>{{doi}}</h6>
     </div>
     <div class="mt-3">
-      <div class="px-2 py-4 d-flex shadow rounded-lg" role="button" @click="$router.push({ name: 'bioView' })">
+      <div class="px-2 py-4 d-flex justify-content-center border rounded-lg" role="button" @click="$router.push({ name: 'bioView' })">
         <div>COVID-19 Model</div>
       </div>
+      <div class="my-4 d-flex justify-content-center font-weight-bold">⋮</div>
+      <button type="button" class="btn btn-primary w-100 px-2 py-4" @click="$router.push({ name: 'home' })">Go to Models</button>
     </div>
   </div>
 </template>
