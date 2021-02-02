@@ -1,5 +1,8 @@
 <template>
-  <canvas class="grafer-canvas" ref="canvas"></canvas>
+  <div class="grafer-container">
+    <canvas class="grafer-canvas" ref="canvas"></canvas>
+    <div v-show="loading" class="loading" ref="loading">LOADING...</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -10,6 +13,7 @@
 
   @Component
   export default class Grafer extends Vue {
+    private loading: boolean = true;
     private controller: GraferController;
 
     public mounted (): void {
@@ -40,6 +44,7 @@
 
       this.loadGraph().then(data => {
         this.controller = new GraferController(this.$refs.canvas, data);
+        this.loading = false;
       });
     }
 
@@ -187,8 +192,23 @@
 </script>
 
 <style scoped>
+  .grafer-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
   .grafer-canvas {
     width: 100%;
     height: 100%;
+  }
+
+  .loading {
+    position: absolute;
+    user-select: none;
+    color: #d8dee9;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 </style>

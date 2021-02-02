@@ -26,6 +26,7 @@
           </div> -->
         </settings-bar>
         <!-- <global-epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/> -->
+        <grafer class="grafer"></grafer>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -69,6 +70,7 @@
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  import Grafer from './components/Grafer.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -93,6 +95,7 @@
     ResizableGrid,
     DrilldownPanel,
     DrilldownMetadataPane,
+    Grafer,
   };
 
   @Component({ components })
