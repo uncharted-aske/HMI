@@ -9,11 +9,8 @@
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Prop } from 'vue-property-decorator';
   import { Getter } from 'vuex-class';
 
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
@@ -45,10 +42,8 @@
 .drilldown-parameters-pane-container {
   padding: 5px;
   .parameter-title {
-    font-weight: bold;  
+    font-weight: bold;
   }
 }
-
-
 
 </style>

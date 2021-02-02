@@ -96,12 +96,12 @@
           .style('fill', d => {
             return (d as any).value > 0 ? COLORS.positive : COLORS.negative;
           })
-          .on('mouseover', function(d) {
+          .on('mouseover', function (d) {
             const coords = [xscale(d.value), yscale(d.location)];
             const tooltipText = 'Value: ' + d.value + ' ' + 'Date: ' + d.date;
             svgUtil.showTooltip(chart, tooltipText, coords);
           })
-          .on('mouseout', function(d) {
+          .on('mouseout', () => {
             svgUtil.hideTooltip(chart);
           });
 
