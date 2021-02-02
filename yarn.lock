@@ -37,6 +37,32 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@dekkai/data-source@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@dekkai/data-source/-/data-source-0.1.0.tgz#cce59bda9eb54722a90ab5081c641b7c5af72644"
+  integrity sha512-XhCDInhqoHkV1NlUqj+aKof/KLoakKt54h3AnHGNmp8EnOKSs5PVNnATtufmyCXPCg35iyr62QH2n4GLfY4ZNQ==
+  dependencies:
+    "@dekkai/env" "^1.0.1"
+    "@dekkai/event-emitter" "^1.0.2"
+
+"@dekkai/data-source@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.npmjs.org/@dekkai/data-source/-/data-source-0.2.0.tgz#d9a0354abc4ae8c45ddd824716cb757ae2b1a99d"
+  integrity sha512-ORCLlzYtTlAffkXuwPXjJ71udNE3dhysM0pMYcv6DnkVuPCMzI9HXMbEAMkVz4Oio0j+9CEpjxrqNxlqK9w6rw==
+  dependencies:
+    "@dekkai/env" "^1.0.1"
+    "@dekkai/event-emitter" "^1.1.0"
+
+"@dekkai/env@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/@dekkai/env/-/env-1.0.1.tgz#b91ce8e3cbcab71420301688df983e156a687692"
+  integrity sha512-dE9y9DVIVZYJ2xq7FWNK4zo61ZZLR/LPR4FTtEp4VgbaNBLMtm5VkD5ZECwtY/0ey7XvWrEocvxHtiiaglYv+w==
+
+"@dekkai/event-emitter@^1.0.2", "@dekkai/event-emitter@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/@dekkai/event-emitter/-/event-emitter-1.1.0.tgz#82bf46f9b8cc1443320567f57f377dc2cc8f007f"
+  integrity sha512-wQkAuh4p96ZZvCuOA1XRi8FiYE2Nbsozzv8y8mRq2JwN7fSJS0DtMCsLvfcpEF4wdFo2Hum0u3vpxoAv0rY5Eg==
+
 "@eslint/eslintrc@^0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.1.3.tgz#7d1a2b2358552cc04834c0979bd4275362e37085"
@@ -570,6 +596,21 @@
     "@uncharted.software/facets-core" "^3.1.0"
     lit-element "^2.2.1"
     lit-html "^1.1.2"
+
+"@uncharted.software/grafer@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/@uncharted.software/grafer/-/grafer-0.1.2.tgz#457625d5d25fe87026757a3a98dd5153f208d0e1"
+  integrity sha512-5q3OLhdJq6iajlI55tWG2BNsjAAMs3X2rcZAqg+kZtth74K7k8fzixfVOdwRZCxmQSCzdhGxf3cKNgmyCSy0nQ==
+  dependencies:
+    "@dekkai/data-source" "^0.1.0"
+    "@dekkai/event-emitter" "^1.1.0"
+    chroma-js "^2.1.0"
+    dekkai "^0.3.6"
+    gl-matrix "^3.3.0"
+    lit-element "^2.4.0"
+    lit-html "^1.3.0"
+    picogl "git+https://github.com/darionco/picogl.js.git#local/aske-grafer"
+    potpack "^1.0.1"
 
 "@uncharted.software/lex@^1.0.0":
   version "1.0.0"
@@ -1364,6 +1405,13 @@ chokidar@^2.0.4:
   optionalDependencies:
     fsevents "^1.2.7"
 
+chroma-js@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/chroma-js/-/chroma-js-2.1.0.tgz#c0be48a21fe797ef8965608c1c4f911ef2da49d5"
+  integrity sha512-uiRdh4ZZy+UTPSrAdp8hqEdVb1EllLtTHOt5TMaOjJUvi+O54/83Fc5K2ld1P+TJX+dw5B+8/sCgzI6eaur/lg==
+  dependencies:
+    cross-env "^6.0.3"
+
 ci-info@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-2.0.0.tgz#67a9e964be31a51e15e5010d58e6f12834002f46"
@@ -1648,6 +1696,13 @@ create-hmac@^1.1.0, create-hmac@^1.1.4, create-hmac@^1.1.7:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+cross-env@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.npmjs.org/cross-env/-/cross-env-6.0.3.tgz#4256b71e49b3a40637a0ce70768a6ef5c72ae941"
+  integrity sha512-+KqxF6LCvfhWvADcDPqo64yVIB31gv/jQulX2NGzKS/g3GEVz6/pt4wjHFtFWsHMddebWD/sDthJemzM4MaAag==
+  dependencies:
+    cross-spawn "^7.0.0"
+
 cross-spawn@^6.0.5:
   version "6.0.5"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-6.0.5.tgz#4a5ec7c64dfae22c3a14124dbacdee846d80cbc4"
@@ -1659,7 +1714,7 @@ cross-spawn@^6.0.5:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-cross-spawn@^7.0.2:
+cross-spawn@^7.0.0, cross-spawn@^7.0.2:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
   integrity sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==
@@ -2071,6 +2126,13 @@ define-property@^2.0.2:
   dependencies:
     is-descriptor "^1.0.2"
     isobject "^3.0.1"
+
+dekkai@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.npmjs.org/dekkai/-/dekkai-0.3.6.tgz#3d39bcd4ccbe2c33fbd353fd71fbec1080ba87c3"
+  integrity sha512-vt09G84+RgAgbBE2/IMrQj3sHl3o59UZpW70TP9CpbgwjxqmjQvB71XXMrGeVIH13k5iP2TpgEvX5kmM1Khq/g==
+  dependencies:
+    webcpu "^0.4.7"
 
 depd@~1.1.2:
   version "1.1.2"
@@ -2954,6 +3016,11 @@ get-value@^2.0.3, get-value@^2.0.6:
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
   integrity sha1-3BXKHGcjh8p2vTesCjlbogQqLCg=
 
+gl-matrix@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.npmjs.org/gl-matrix/-/gl-matrix-3.3.0.tgz#232eef60b1c8b30a28cbbe75b2caf6c48fd6358b"
+  integrity sha512-COb7LDz+SXaHtl/h4LeaFcNdJdAQSDeVqjiIihSXNrkWObZLhDI4hIkZC11Aeqp7bcE72clzB0BnDXr2SmslRA==
+
 glob-parent@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-3.1.0.tgz#9e6af6299d8d3bd2bd40430832bd113df906c5ae"
@@ -3806,14 +3873,14 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-lit-element@^2.2.1:
+lit-element@^2.2.1, lit-element@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/lit-element/-/lit-element-2.4.0.tgz#b22607a037a8fc08f5a80736dddf7f3f5d401452"
   integrity sha512-pBGLglxyhq/Prk2H91nA0KByq/hx/wssJBQFiYqXhGDvEnY31PRGYf1RglVzyLeRysu0IHm2K0P196uLLWmwFg==
   dependencies:
     lit-html "^1.1.1"
 
-lit-html@^1.1.1, lit-html@^1.1.2:
+lit-html@^1.1.1, lit-html@^1.1.2, lit-html@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-1.3.0.tgz#c80f3cc5793a6dea6c07172be90a70ab20e56034"
   integrity sha512-0Q1bwmaFH9O14vycPHw8C/IeHMk/uSDldVLIefu/kfbTBGIc44KGH6A8p1bDfxUfHdc8q6Ct7kQklWoHgr4t1Q==
@@ -4680,6 +4747,10 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+"picogl@git+https://github.com/darionco/picogl.js.git#local/aske-grafer":
+  version "0.17.6"
+  resolved "git+https://github.com/darionco/picogl.js.git#ab5b24b87e4add709441dd6de361507f1f67a942"
+
 picomatch@^2.0.4, picomatch@^2.0.5, picomatch@^2.2.1, picomatch@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.2.2.tgz#21f333e9b6b8eaff02468f5146ea406d345f4dad"
@@ -4849,6 +4920,11 @@ postcss@^7.0.14, postcss@^7.0.32, postcss@^7.0.5, postcss@^7.0.6:
     chalk "^2.4.2"
     source-map "^0.6.1"
     supports-color "^6.1.0"
+
+potpack@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/potpack/-/potpack-1.0.1.tgz#d1b1afd89e4c8f7762865ec30bd112ab767e2ebf"
+  integrity sha512-15vItUAbViaYrmaB/Pbw7z6qX2xENbFSTA7Ii4tgbPtasxm5v6ryKhKtL91tpWovDJzTiZqdwzhcFBCwiMVdVw==
 
 preact@8.x:
   version "8.5.3"
@@ -6071,6 +6147,11 @@ tty-browserify@0.0.0:
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
   integrity sha1-oVe6QC2iTpv5V/mqadUk7tQpAaY=
 
+tweakpane@^1.5.8:
+  version "1.5.8"
+  resolved "https://registry.npmjs.org/tweakpane/-/tweakpane-1.5.8.tgz#6ef193ca5c2a313ac276de874a0ed5bf36c113e2"
+  integrity sha512-iU32wh/PxzPLVeaoXbywBQJMRFxC5hn0cLqCZrv73peXkWJDz8hcpFW1rDu1abLtpcf4MkEwtuy7XfEUB+ynEg==
+
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/type-check/-/type-check-0.4.0.tgz#07b8203bfa7056c0657050e3ccd2c37730bab8f1"
@@ -6310,6 +6391,11 @@ vuex@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.5.1.tgz#f1b8dcea649bc25254cf4f4358081dbf5da18b3d"
   integrity sha512-w7oJzmHQs0FM9LXodfskhw9wgKBiaB+totOdb8sNzbTB2KDCEEwEs29NzBZFh/lmEK1t5tDmM1vtsO7ubG1DFw==
+
+webcpu@^0.4.7:
+  version "0.4.8"
+  resolved "https://registry.npmjs.org/webcpu/-/webcpu-0.4.8.tgz#bfc4b07503abbbed91943cd85096f5fabd22afdc"
+  integrity sha512-mwa4vbDhDOiXyoOWXQ9Dk+3EvrmM38zK1n+yja1ta4bFEs1AHminoCerQr36JGVncjfYVD1xn8I8GvUBRD32Qw==
 
 websocket-driver@>=0.5.1:
   version "0.7.4"

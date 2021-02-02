@@ -16,6 +16,7 @@
           <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
         </div>
       </settings-bar>
+      <grafer class="grafer"></grafer>
     </div>
   </div>
 </template>
@@ -34,6 +35,7 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
+  import Grafer from './components/Grafer.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -53,6 +55,7 @@
     LeftSidePanel,
     MetadataPane,
     FacetsPane,
+    Grafer,
   };
 
   @Component({ components })
@@ -93,4 +96,14 @@
 </script>
 
 <style lang="scss" scoped>
+  .content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  .grafer {
+    flex-grow: 1;
+  }
 </style>
