@@ -215,7 +215,6 @@
 
     onOpenDrilldown (card: CosmosSearchObjectsInterface): void {
       this.openDrilldown = card || this.openPanel;
-      this.openPanel = {};
     }
 
     onCloseDrilldown (): void {
