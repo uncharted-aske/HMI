@@ -1,6 +1,8 @@
 <template>
   <div class="drilldown-parameters-pane-container">
-    <div >
+    <div>
+      <div class="parameter-title">Doubling Time (days) </div>
+      <div class="parameter-desc">The time required for the number of infections to double </div>
       <bar-chart :data="formatParametersData"/>
     </div>
   </div>
@@ -39,5 +41,14 @@
 
 <style lang="scss" scoped>
 @import "@/styles/variables";
+
+.drilldown-parameters-pane-container {
+  padding: 5px;
+  .parameter-title {
+    font-weight: bold;  
+  }
+}
+
+
 
 </style>
