@@ -3,6 +3,7 @@
       <div class="panel-header" v-if="displayHeader">
         <div
           v-if="tabs.length > 1"
+          class="mb-2"
         >
           <ul
             class="nav nav-tabs">
