@@ -29,12 +29,12 @@
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
-          <div slot="counters">
+          <div slot="left">
             <counters
               :title="`Subgraph`"
               :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
             />          </div>
-          <div slot="settings">
+          <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
@@ -160,7 +160,7 @@
       const selectedModel = modelsList.find(model => model.id === 2); // Get CHIME model
       const GrFN = selectedModel.graph.detailed;
       // Get nodes only corresponding to the SIR plate
-      const nodes = GrFN.nodes.filter(n => n.parent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9'); // sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
+      const nodes = GrFN.nodes.filter(n => n.parent === 'bac81b1a-3a6d-45ad-9725-947e507f6930'); // sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
       const nodesMap = new Map();
       // Creates a map of nodes and its corresponding parents
       nodes.forEach(n => {
@@ -169,7 +169,7 @@
       const edges = GrFN.edges.filter(e => {
         const sourceParent = nodesMap[e.source];
         const targetParent = nodesMap[e.target];
-        return ((sourceParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9') && (targetParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9'));
+        return ((sourceParent === 'bac81b1a-3a6d-45ad-9725-947e507f6930') && (targetParent === 'bac81b1a-3a6d-45ad-9725-947e507f6930'));
       });
 
       this.subgraph = { nodes, edges };
