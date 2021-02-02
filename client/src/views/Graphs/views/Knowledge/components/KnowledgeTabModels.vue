@@ -1,0 +1,39 @@
+<template>
+  <div>
+    <div class="border-bottom">
+      <a :href="card.raw.bibjson.link[0].url" target="_blank">
+        <h5>{{card.title}}</h5>
+      </a>
+      <h6>{{doi}}</h6>
+    </div>
+    <div class="mt-3">
+      <div class="px-2 py-4 d-flex shadow rounded-lg" role="button" @click="$router.push({ name: 'bioView' })">
+        <div>COVID-19 Model</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+  import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { Prop, Watch } from 'vue-property-decorator';
+
+  @Component({ })
+  export default class KnowledgeTabPreview extends Vue {
+    @Prop({ required: false }) private card: any;
+
+    @Watch('card') onCardChange (): any {
+      console.log('change');
+    }
+
+    get doi (): string {
+      return this.card.raw.bibjson.identifier[0].id;
+    }
+  }
+</script>
+
+<style lang="scss" scoped>
+@import "@/styles/variables";
+
+</style>

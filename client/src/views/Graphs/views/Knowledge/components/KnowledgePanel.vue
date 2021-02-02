@@ -1,20 +1,21 @@
 <template>
 <div class="h-100 d-flex flex-column">
   <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link active">Preview</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link disabled">Models</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link disabled">Entities</a>
+    <li v-for="(tabName, index) in tabList" class="nav-item" @click="setActiveTab(index)" :key="index">
+      <div :class="`nav-link ${activeTab === index ? 'active' : ''}`">
+        {{tabName}}
+      </div>
     </li>
   </ul>
   <knowledge-tab-preview
     class="mt-3 mx-1 d-flex flex-column flex-grow-1"
     v-if="activeTab === 0"
     @open-drilldown="$emit('open-drilldown')"
+    :card="card"
+  />
+  <knowledge-tab-models
+    class="mt-3 mx-1 d-flex flex-column flex-grow-1"
+    v-if="activeTab === 1"
     :card="card"
   />
 </div>
@@ -26,20 +27,33 @@
   import { Prop } from 'vue-property-decorator';
 
   import KnowledgeTabPreview from './KnowledgeTabPreview.vue';
+  import KnowledgeTabModels from './KnowledgeTabModels.vue';
 
   const components = {
     KnowledgeTabPreview,
+    KnowledgeTabModels,
   };
 
   @Component({ components })
   export default class KnowledgePanel extends Vue {
     @Prop({ required: false }) private card: any;
 
+    tabList: string[] = ['Preview', 'Models', 'Entities'];
     activeTab: number = 0;
+
+    setActiveTab (tabNum: number): void {
+      this.activeTab = tabNum;
+    }
   }
 </script>
 
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
+.nav-link.active {
+  cursor: default;
+}
+.nav-link:not(.active) {
+  cursor: pointer;
+}
 </style>
