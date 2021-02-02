@@ -6,12 +6,28 @@
       </div>
     </left-side-panel>
 
-    <div class="content">
-      <search-bar :pills="searchPills" />
+    <div class="d-flex flex-column h-100">
+      <div class="search-row">
+        <search-bar :pills="searchPills" :placeholder="`Search for models...`"/>
+      </div>
+      <settings-bar>
+        <div slot="left">
+          <counters :data="countersData"/>
+        </div>
+        <div slot="middle" class="view-button" v-if="selectedButtonContent">
+          <button type="button" class="btn btn-primary h-100 d-flex align-items-center" @click="onClickCompare">
+            {{selectedButtonContent}}
+          </button>
+        </div>
+        <div slot="right">
+          <settings/>
+        </div>
+      </settings-bar>
       <card-container
+          class="model-cards"
           :header="`Models`"
           :cards="modelsCards"
-          @open-card="onOpenCard"
+          @click-card="onClickCard"
       />
     </div>
   </div>
@@ -25,6 +41,9 @@
   import { TabInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
+  import Counters from '@/views/Graphs/components/Counters/Counters.vue';
+  import SettingsBar from '@/components/SettingsBar.vue';
+  import Settings from './Settings/Settings.vue';
   import KeyValuePill from '@/search/pills/KeyValuePill';
   import RangePill from '@/search/pills/RangePill';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
@@ -50,6 +69,9 @@
 
   const components = {
     SearchBar,
+    Counters,
+    SettingsBar,
+    Settings,
     LeftSidePanel,
     FacetsPane,
     CardContainer,
@@ -62,7 +84,8 @@
 
     @Getter getFilters;
     @Getter getModelsList;
-    @Mutation setSelectedModel;
+    @Getter getSelectedModelIds;
+    @Mutation setSelectedModels;
 
     get searchPills (): any {
       return [
@@ -75,8 +98,27 @@
       ];
     }
 
+    get countersData (): Array<string> {
+      const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
+      if (modelsList) {
+        return [`${modelsList.length} Models`];
+      }
+    }
+
+    get selectedButtonContent (): string {
+      const selectedModelIdLength = this.getSelectedModelIds.length;
+      if (selectedModelIdLength === 0) {
+        return '';
+      } else if (selectedModelIdLength === 1) {
+        return 'View';
+      } else {
+        return 'Compare';
+      }
+    }
+
     get modelsCards (): CardInterface[] {
       const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
+      const selectedModelsList = new Set(this.getSelectedModelIds);
       const modelsCards = modelsList.map(model => {
         let previewImageSrc = null;
         switch (model.id) {
@@ -92,18 +134,38 @@
           default:
             previewImageSrc = null;
         }
-        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.source });
+        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.source, checked: selectedModelsList.has(model.id) });
       });
       return modelsCards;
     }
 
-    onOpenCard (card: CardInterface): void {
-      const view = card.type === 'computational' ? 'epiView' : 'bioView';
-      this.setSelectedModel(card.id);
-      this.$router.push({ name: view });
+    onClickCard (card: CardInterface): void {
+      this.setSelectedModels(card.id);
+    }
+
+    onClickCompare (): void {
+      if (this.getSelectedModelIds.length > 1) {
+        this.$router.push({ name: 'comparisonView' });
+      } else {
+        const card = this.getModelsList.find(model => model.id === this.getSelectedModelIds[0]);
+        this.$router.push({ name: card.type === 'computational' ? 'epiView' : 'bioView' });
+      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/variables";
+
+.view-button {
+  padding: 2px 5px;
+}
+
+.model-cards ::v-deep .card {
+  border: transparent solid 1px;
+}
+
+.model-cards ::v-deep .card.checked {
+  border-color: $selection;
+}
 </style>

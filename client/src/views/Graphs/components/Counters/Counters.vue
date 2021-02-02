@@ -40,6 +40,7 @@
   height: calc(#{$secondary-bar-width} - 15px);
   display: flex;
   align-items: center;
+  color: $text-color-light;
 
   div:first-child {
     margin-right: 5px;

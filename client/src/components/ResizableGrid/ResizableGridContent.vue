@@ -60,28 +60,24 @@ $border-grid: 1px solid $border;
   left: 0;
   width: $border-select-margin;
   height: 100%;
-  border-left: $border-grid;
   cursor: col-resize;
 }
 .panel-content-border-right {
   right: 0;
   width: $border-select-margin;
   height: 100%;
-  border-right: $border-grid;
   cursor: col-resize;
 }
 .panel-content-border-top {
   top: 0;
   width: 100%;
   height: $border-select-margin;
-  border-top: $border-grid;
   cursor: row-resize;
 }
 .panel-content-border-bottom {
   bottom: 0;
   width: 100%;
   height: $border-select-margin;
-  border-bottom: $border-grid;
   cursor: row-resize;
 }
 </style>

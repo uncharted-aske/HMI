@@ -9,7 +9,8 @@
         :title="card.title"
         :subtitle="card.subtitle"
         :icon="card.type"
-        @click="onOpen(card)"
+        :checked="card.checked"
+        @click="onClick(card)"
       />
     </div>
   </div>
@@ -33,8 +34,8 @@
 
     @Prop({ default: () => [] }) cards: CardInterface[];
 
-    onOpen (card: CardInterface): void {
-      this.$emit('open-card', card);
+    onClick (card: CardInterface): void {
+      this.$emit('click-card', card);
     }
   }
 </script>
@@ -55,6 +56,7 @@
     // Match cards' 10px horizontal margin
     margin-left: 10px;
     font-weight: normal;
+    color: $text-color-light;
   }
 
   .card-list {

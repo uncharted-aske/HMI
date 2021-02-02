@@ -6,22 +6,22 @@
       </div>
     </left-side-panel>
 
-    <div class="content">
+    <div class="d-flex flex-column h-100">
       <div class="search-row">
-        <search-bar :pills="searchPills" />
+        <search-bar :pills="searchPills" :placeholder="`Search for documents including a specific keyword (e.g. IL-6)...`" />
       </div>
       <settings-bar>
-        <div slot="counters">
+        <div slot="left">
           <counters :data="countersData"/>
         </div>
-        <div slot="settings">
+        <div slot="right">
           <settings />
         </div>
       </settings-bar>
       <card-container
           :header="`Knowledge`"
           :cards="modelsCards"
-          @open-card="onOpenPanel"
+          @click-card="onOpenPanel"
       />
       <div class="loader-container" v-if="dataLoading">
         <div class="loader">Loading...</div>
@@ -38,7 +38,7 @@
   import Component from 'vue-class-component';
   import { Watch } from 'vue-property-decorator';
   import Vue from 'vue';
-  import { Getter, Mutation } from 'vuex-class';
+  import { Getter } from 'vuex-class';
   import _ from 'lodash';
 
   import { CosmosSearchInterface, CosmosSearchObjectsInterface } from '@/types/typesCosmos';
@@ -51,11 +51,9 @@
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   import * as filtersUtil from '@/utils/FiltersUtil';
-  import { filterToParamObj, cosmosFetchMem } from '@/utils/CosmosFetchUtil';
+  import { filterToParamObj, cosmosSearch } from '@/utils/CosmosFetchUtil';
   import { getAuthorList } from '@/utils/CosmosDataUtil';
 
-  import ActionColumn from '@/components/ActionColumn.vue';
-  import ActionColumnNavBar from '@/components/ActionColumnNavBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from './Settings/Settings.vue';
   import Counters from '@/views/Graphs/components/Counters/Counters.vue';
@@ -73,8 +71,6 @@
   ];
 
   const components = {
-    ActionColumn,
-    ActionColumnNavBar,
     SearchBar,
     Settings,
     SettingsBar,
@@ -99,7 +95,6 @@
 
     @Getter getFilters;
     @Getter getModelsList;
-    @Mutation setSelectedModel;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.fetchCosmos();
@@ -117,7 +112,7 @@
         this.filterHash = filterHashNew;
         try {
           this.dataLoading = true;
-          const response = await cosmosFetchMem(filterToParamObj(this.facetSelection));
+          const response = await cosmosSearch(filterToParamObj(this.facetSelection));
           this.data = response;
         } catch (e) {
           throw Error(e);
@@ -257,14 +252,14 @@
 .loader,
 .loader:before,
 .loader:after {
-  background: #263238;
+  background: $icon-color;
   -webkit-animation: load1 1s infinite ease-in-out;
   animation: load1 1s infinite ease-in-out;
   width: 1em;
   height: 4em;
 }
 .loader {
-  color: #263238;
+  color: $icon-color;
   text-indent: -9999em;
   margin: 88px auto;
   position: relative;

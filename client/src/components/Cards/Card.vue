@@ -1,5 +1,5 @@
 <template>
-  <div class="card" @click="onCardClick">
+  <div :class="['card', checked ? 'checked' : '']" @click="onCardClick">
     <div
       v-if="hasImage"
       :class="['preview-img', hasImage ? '' : 'no-image']"
@@ -10,8 +10,9 @@
       <h5 class="title">{{ title }}</h5>
     </div>
     <h6 class="subtitle">{{ subtitle }}</h6>
-    <div class="icon">
-      <font-awesome-icon :icon="['fas', iconType]" />
+    <div class="mt-2 d-flex justify-content-between align-items-center">
+      <input :class="classCheckbox" type="checkbox" :checked="checked"/>
+      <font-awesome-icon class="icon" :icon="['fas', iconType]"/>
     </div>
   </div>
 </template>
@@ -30,6 +31,12 @@
     @Prop({ default: '' }) subtitle: string;
 
     @Prop({ default: 'faExclamationTriangle' }) icon: string;
+
+    @Prop({ default: undefined }) checked: boolean;
+
+    get classCheckbox (): string {
+      return this.checked === undefined ? 'invisible' : 'visible';
+    }
 
     get hasImage (): boolean {
       return this.previewImageSrc !== '';
@@ -88,8 +95,8 @@
   .subtitle {
     flex: 1;
     font-size: 12px;
-    color: #6c757d;
-    background-color: white;
+    color: $text-color-light;
+    background-color: $bg-secondary;
     font-weight: normal;
     min-height: 0;
     overflow-x: hidden;
@@ -105,9 +112,6 @@
   }
 
   .icon {
-    position: absolute;
-    right: 8px;
-    bottom: 8px;
     color: $icon-color;
   }
 
@@ -118,7 +122,8 @@
     max-height: 40vh;
     min-height: 300px;
 
-    background-color: white;
+    background-color: $bg-secondary;
+    color: $text-color-light;
     position: relative;
     border-radius: 3px;
     transition: all 0.15s;

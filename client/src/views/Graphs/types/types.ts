@@ -1,11 +1,11 @@
 export interface GraphNodeInterface {
   id: string,
-  concept: string,
+  concept?: string,
   label: string,
-  nodeType: string,
-  nodeSubType: string,
-  dataType:string,
-  metadata: any
+  nodeType?: string,
+  nodeSubType?: string,
+  dataType?:string,
+  metadata?: any
 }
 
 export interface GraphEdgeInterface {

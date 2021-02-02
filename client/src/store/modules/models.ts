@@ -16,9 +16,10 @@ import nestedDoubleEpiCAG from '@/static/nested-SARS-COV1-SEIRP-CAG.json';
 import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 
 import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
+import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
 
 const state: ModelsState = {
-  selectedModelId: null,
+  selectedModelIds: new Set(),
   modelsList: [
     {
       id: 1,
@@ -51,26 +52,110 @@ const state: ModelsState = {
     },
     {
       id: 4,
-      metadata: SIR.metadata,
+      metadata: { name: 'COVID-19 model', source: 'EMMAA', version: '', knowledge: 'https://emmaa.indra.bio/dashboard/covid19?tab=model', created: '', description: 'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.' },
       graph: {
         abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
         detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
       },
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 5,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 6,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 7,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 8,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 9,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 10,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 11,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 12,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 13,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 14,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'knowledge',
+    },
+    {
+      id: 15,
+      metadata: { name: 'Model N', description: 'Unknown' },
+      graph: null,
+      subgraph: subgraphJSON,
       type: 'knowledge',
     },
   ],
 };
 
 const getters: GetterTree<ModelsState, any> = {
-  getSelectedModelId: state => state.selectedModelId,
+  getSelectedModelIds: state => [...state.selectedModelIds],
   getModelsList: state => {
     return state.modelsList;
   },
 };
 
 const mutations: MutationTree<ModelsState> = {
-  setSelectedModel (state, newSelectedModelId) {
-    state.selectedModelId = newSelectedModelId;
+  setSelectedModels (state, newSelectedModelId) {
+    if (state.selectedModelIds.has(newSelectedModelId)) {
+      state.selectedModelIds.delete(newSelectedModelId);
+    } else {
+      state.selectedModelIds.add(newSelectedModelId);
+    }
+    // Trigger change by providing new Set instance
+    state.selectedModelIds = new Set(state.selectedModelIds);
   },
 };
 

@@ -1,7 +1,8 @@
 <template>
   <div class="settings-bar-container">
-    <slot name="counters" />
-    <slot name="settings" />
+    <slot name="left" />
+    <slot name="middle" />
+    <slot name="right" />
   </div>
 </template>
 
@@ -19,8 +20,8 @@
 
 .settings-bar-container {
   height: calc(#{$secondary-bar-width} - 15px);
-  background-color: $secondary-bar-bg;
-  border-bottom: 1px solid $border;
+  min-height: calc(#{$secondary-bar-width} - 15px);
+  // border-bottom: 1px solid $border;
   display: flex;
   align-items: center;
   padding: 0 10px;

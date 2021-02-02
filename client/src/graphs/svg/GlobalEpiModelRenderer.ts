@@ -5,7 +5,7 @@ import { SVGRenderer } from 'compound-graph';
 
 import { EpiModelRendererOptionsInterface, SubgraphInterface } from '@/graphs/svg/types/types';
 
-import { calcNodeColor, calcLabelColor } from '@/graphs/svg/util';
+import { calcNodeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors, NodeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 
@@ -14,6 +14,70 @@ const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 export default class GlobalEPIModelRenderer extends SVGRenderer {
   constructor (options:EpiModelRendererOptionsInterface) {
     super(options);
+  }
+
+  buildDefs (): void {
+    const svg = d3.select(this.svgEl);
+    const edges = flatten(this.layout).edges;
+
+    // Clean up
+    svg.select('defs').selectAll('.edge-marker-end').remove();
+
+    svg.select('defs')
+      .selectAll('.edge-marker-end')
+      .data(edges)
+      .enter()
+      .append('marker')
+      .classed('edge-marker-end', true)
+      .attr('id', d => {
+        const source = (d as any).source.replace(/\s/g, '');
+        const target = (d as any).target.replace(/\s/g, '');
+        return `arrowhead-${source}-${target}`;
+      })
+      .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
+      .attr('refX', 2)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', 15)
+      .attr('markerHeight', 15)
+      .attr('markerUnits', 'userSpaceOnUse')
+      .attr('xoverflow', 'visible')
+      .append('svg:path')
+      .attr('d', SVGUtil.ARROW)
+      .style('fill', Colors.EDGES)
+      .style('stroke', 'none');
+
+    // Vreate filter with id #drop-shadow
+    // height=130% so that the shadow is not clipped
+    const filter = svg.select('defs').append('filter')
+      .attr('id', 'drop-shadow')
+      .attr('height', '130%');
+
+    // SourceAlpha refers to opacity of graphic that this filter will be applied to
+    // convolve that with a Gaussian with standard deviation 3 and store result
+    // in blur
+    filter.append('feGaussianBlur')
+      .attr('in', 'SourceAlpha')
+      .attr('stdDeviation', 10)
+      .attr('result', 'blur');
+
+    // translate output of Gaussian blur to the right and downwards with 2px
+    // store result in offsetBlur
+    filter.append('feOffset')
+      .attr('in', 'blur')
+      .attr('dx', 5)
+      .attr('dy', 5)
+      .attr('result', 'offsetBlur');
+
+    // overlay original SourceGraphic over translated blurred opacity by using
+    // feMerge filter. Order of specifying inputs is important!
+    const feMerge = filter.append('feMerge');
+
+    feMerge.append('feMergeNode')
+      .attr('in', 'offsetBlur');
+    feMerge.append('feMergeNode')
+      .attr('in', 'SourceGraphic')
+      .attr('color', 'SourceGraphic');
   }
 
   renderEdgeRemoved (edgeSelection: d3.Selection<any, any, any, any>): void {
@@ -45,13 +109,13 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
       .style('stroke', Colors.EDGES)
       .style('stroke-width', 2)
       .attr('marker-end', d => {
-        const source = d.data.source.replace(/\s/g, '');
-        const target = d.data.target.replace(/\s/g, '');
+        const source = d.source.replace(/\s/g, '');
+        const target = d.target.replace(/\s/g, '');
         return `url(#arrowhead-${source}-${target})`;
       })
       .attr('marker-start', d => {
-        const source = d.data.source.replace(/\s/g, '');
-        const target = d.data.target.replace(/\s/g, '');
+        const source = d.source.replace(/\s/g, '');
+        const target = d.target.replace(/\s/g, '');
         return `url(#start-${source}-${target})`;
       });
   }
@@ -90,6 +154,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           .text(d => (d as any).label);
         selection.append('text')
           .classed('collapsed', true)
+          .style('fill', Colors.LABELS.LIGHT)
           .attr('x', 10)
           .attr('y', 30)
           .style('font-size', 30)
@@ -112,10 +177,6 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
 
       if ((selection.datum() as any).id !== 'root') { // Don't draw the root node
         selection.append('rect')
-          .filter(d => {
-            return (!(d as any).nodeSubType ||
-            ((d as any).nodeSubType && (!(d as any).nodeSubType.includes('input') && !(d as any).nodeSubType.includes('output'))));
-          })
           .attr('x', 0)
           .attr('rx', 5)
           .attr('y', 0)
@@ -124,40 +185,54 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
           .style('fill', d => calcNodeColor(d))
           .attr('fill-opacity', d => {
             if ((d as any).nodes) {
-              return ((d as any).depth) * 0.2;
+              return ((d as any).depth) * 0.3;
             } else return 1;
           })
-          .style('stroke', '#888')
+          .style('stroke', d => {
+            const role = (d as any).role;
+            return role === 'model' ? Colors.HIGHLIGHT : Colors.STROKE;
+          })
           .style('stroke-width', d => {
             const role = (d as any).role;
-            return role === 'model' ? 5 : 2;
+            return role === 'model' ? 5 : 3;
+          })
+          .style('filter', d => (d as any).nodes ? 'url(#drop-shadow)' : '');
+
+        // Labels
+        selection.append('text')
+          .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION)
+          .attr('x', d => (d as any).nodes ? 5 : 0.5 * (d as any).width)
+          .attr('y', d => (d as any).nodes ? (-0.5 * 25) : 25)
+          .style('fill', d => calcLabelColor(d))
+          .style('font-weight', d => (d as any).nodes ? '800' : '500')
+          .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+          .text(d => (d as any).label)
+          .each(function (d) {
+            (d as any).textWidth = this.getBBox().width + 10; // Property to be able to adjust the rect to the label size
           });
 
-        // Draw ellipses for input and output nodes
-        selection.append('ellipse')
-          .filter(d => {
-            return (d as any).nodeSubType && ((d as any).nodeSubType.includes('input') || (d as any).nodeSubType.includes('output'));
-          })
-          .attr('cx', (d) => ((d as any).width * 0.5))
-          .attr('cy', () => 25)
-          .attr('rx', (d) => (d as any).width * 0.5)
-          .attr('ry', () => 25)
-          .style('fill', d => calcNodeColor(d))
-          .style('stroke', '#888');
+        selection.append('rect')
+          .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION && (d as any).nodes)
+          .attr('x', -5)
+          .attr('y', -25)
+          .attr('rx', 5)
+          .attr('width', d => (d as any).textWidth)
+          .attr('height', 25)
+          .style('fill', Colors.LABELS.BACKGROUND)
+          .style('stroke', Colors.LABELS.STROKE);
+
+        selection.append('text')
+          .filter(d => (d as any).nodeType !== NodeTypes.NODES.FUNCTION)
+          .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
+          .attr('y', d => (d as any).nodes ? -5 : 25)
+          .style('fill', d => calcLabelColor(d))
+          .style('font-weight', d => (d as any).nodes ? '800' : '500')
+          .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+          .text(d => (d as any).label);
+
+        selection.style('cursor', 'pointer');
       }
     });
-
-    nodeSelection.style('cursor', 'pointer');
-
-    // Add label for all nodes but FUNCTIONS
-    nodeSelection.append('text')
-      .filter(d => d.nodeType !== NodeTypes.NODES.FUNCTION)
-      .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
-      .attr('y', d => d.nodes ? -5 : 25)
-      .style('fill', d => calcLabelColor(d))
-      .style('font-weight', d => d.nodes ? '800' : '500')
-      .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-      .text(d => d.label);
   }
 
   hideNeighbourhood (): void {

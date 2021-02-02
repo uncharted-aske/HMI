@@ -1,12 +1,40 @@
 @import "variables";
+@import "nord";
 
-//Navigation tabs
-.nav-item.underlined {
-  border-bottom: 2px solid $selection;
-  color: #ffffff;
-  .nav-link {
-    color: #ffffff;
+
+.navbar {
+  background-color:$bg-primary;
+  .navbar-brand, .nav-link {
+    color: $text-color-light;
   }
+  //Navigation tabs
+  .nav-item.underlined {
+    border-bottom: 2px solid $selection-dark;
+  }
+}
+
+.btn-primary {
+  color: $text-color-dark;
+  background-color: $nord4;
+  border-color: $nord4;
+}
+.btn-primary:hover {
+  color: $text-color-dark;
+  background-color: $nord5;
+  border-color: $nord5;
+}
+
+.btn-secondary {
+  background-color: $nord1;
+}
+
+.btn-secondary:hover {
+  background-color: $nord2;
+}
+
+.btn-secondary:disabled {
+  background-color: $nord1;
+  opacity: 0.5;
 }
 
 div#lex-assistant-box {
@@ -40,7 +68,6 @@ div#lex-assistant-box {
 
 .search-bar-container {
   height: $secondary-bar-width;
-  background-color: $secondary-bar-bg;
 }
 
 .search-bar-container::v-deep .lex-box {

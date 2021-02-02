@@ -6,12 +6,12 @@
   position: relative;
   height: $content-full-height;
   overflow: hidden;
+  background-color: $bg-body;
 }
 
 .search-row {
   display: flex;
-  border-bottom: 1px solid $border;
-  background-color: $secondary-bar-bg;
+  background-color: $bg-secondary;
   > .search-bar-container {
     flex: 1;
   }

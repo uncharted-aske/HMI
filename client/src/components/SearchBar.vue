@@ -25,6 +25,9 @@
     @Prop({ default: 30 })
     suggestionLimit: number;
 
+    @Prop({ default: 'Search...' })
+    placeholder: string;
+
     private lex: Lex = null;
 
     @Getter getFilters;
@@ -54,7 +57,7 @@
       this.lex = new Lex({
         language: language,
         tokenXIcon: '<i class="fas fa-times"></i>',
-        placeholder: 'Search models, model types...',
+        placeholder: this.placeholder,
       });
 
       this.lex.on('query changed', (...args /* [newModel, oldModel, newUnboxedModel, oldUnboxedModel, nextTokenStarted] */) => {
