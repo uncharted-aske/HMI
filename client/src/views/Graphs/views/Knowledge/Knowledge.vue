@@ -29,7 +29,7 @@
     </div>
     <knowledge-drilldown :card="openDrilldown" @close-card="onCloseDrilldown"/>
     <drilldown-panel @close-pane="onClosePanel" :is-open="isOpenPanel">
-      <knowledge-panel slot="content" @close-card="onOpenDrilldown" :card="openPanel"/>
+      <knowledge-panel slot="content" @open-drilldown="onOpenDrilldown" :card="openPanel"/>
     </drilldown-panel>
   </div>
 </template>
