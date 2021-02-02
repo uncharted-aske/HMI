@@ -1,7 +1,7 @@
 <template>
   <div class="drilldown-parameters-pane-container">
     <div >
-      <histogram :data="getParameters"/>
+      <bar-chart :data="formatParametersData"/>
     </div>
 
     <!-- <div v-else class="alert alert-info" role="alert">
@@ -23,12 +23,12 @@
   import { Getter } from 'vuex-class';
 
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
-  import Histogram from '@/components/widgets/charts/Histogram.vue';
+  import BarChart from '@/components/widgets/charts/BarChart.vue';
 
 
   const components = {
     CollapsibleItem,
-    Histogram,
+    BarChart,
   };
 
   @Component({ components })
@@ -46,8 +46,6 @@
       })
       return parametersArray;
     }
-
-   
   }
 </script>
 
