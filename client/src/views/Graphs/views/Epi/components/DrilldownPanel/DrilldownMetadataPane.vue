@@ -45,7 +45,7 @@
         <div slot="content" class="knowledge-container">
           <div v-for="(item, index) in getKnowledge" :key="index" class="snippet-container" @click="showMoreHandler(item.doi)">
             <div class="snippet-title">
-              <a target="_blank" :href="item.URL">{{item.title}}</a>
+              <a target="_blank" :href="item.URL">{{item.title}}</a>         
             </div>
             <span v-for="(snippet, index) in item.highlight" :key="index" v-html="snippet" class="snippet-highlights"/>
           </div>

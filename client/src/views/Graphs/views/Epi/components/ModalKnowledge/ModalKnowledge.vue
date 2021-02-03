@@ -38,6 +38,7 @@
             </div>
           </div>
       </div>
+      <h5> Related Documents</h5>
     </div>
   </modal>
 </template>
@@ -93,11 +94,9 @@
 
 <style lang="scss" scoped>
 
-img {
-  // Clip images that are too big, but maintain aspect ratio
-  object-fit: cover;
-  width: 100%;
-  height: 100%
+.image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-
 </style>
