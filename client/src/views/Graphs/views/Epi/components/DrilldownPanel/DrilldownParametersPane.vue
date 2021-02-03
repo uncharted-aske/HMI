@@ -3,8 +3,10 @@
     <div>
       <div class="parameter-title">Doubling Time (days) </div>
       <div class="parameter-desc">The time required for the number of infections to double </div>
-      <bar-chart :data="formatParametersData"/>
+      <bar-chart :data="formatParametersData" @bar-click="onBarClick"/>
     </div>
+    <div>
+    </div>  
   </div>
 </template>
 
@@ -32,6 +34,10 @@
         parametersArray.push(this.getParameters[key]);
       });
       return parametersArray;
+    }
+
+    onBarClick(doi:string): void {
+      this.$emit('open-modal', doi);
     }
   }
 </script>
