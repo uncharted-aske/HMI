@@ -43,7 +43,6 @@
 
     refresh ():void {
       if (_.isEmpty(this.data)) return;
-      const that = this;
       const data = this.data;
       const svg = d3.select(this.$refs.container as any);
       svg.selectAll('*').remove();
@@ -97,7 +96,7 @@
           .style('fill', d => {
             return (d as any).value > 0 ? COLORS.positive : COLORS.negative;
           })
-          .on('mouseover', function (d) {
+          .on('mouseover', (d) => {
             const coords = [xscale(0), yscale(d.location)];
             const tooltipText = 'Value: ' + d.value + ' ' + 'Date: ' + d.date;
             svgUtil.showTooltip(chart, tooltipText, coords);
@@ -105,8 +104,8 @@
           .on('mouseout', () => {
             svgUtil.hideTooltip(chart);
           })
-          .on('click', function (d) {
-            that.$emit('bar-click', d.doi);
+          .on('click', (d) => {
+            this.$emit('bar-click', d.doi);
           });
 
       // Draw labels

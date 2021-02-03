@@ -44,7 +44,7 @@
                 type="button"
                 class="btn btn-link"
                 @click="openKnowledgeView()"
-              >            
+              >
                 Explore All         <font-awesome-icon class="icon" :icon="['fas', 'search']"/>
 </button>
       </div>
@@ -95,8 +95,8 @@
       this.$emit('close', null);
     }
 
-    openKnowledgeView() : void {
-      this.$router.push({name: 'knowledge'});
+    openKnowledgeView () : void {
+      this.$router.push({ name: 'knowledge' });
     }
   }
 </script>
