@@ -43,18 +43,15 @@
       <collapsible-item>
         <div slot="title">Knowledge</div>
         <div slot="content" class="knowledge-container">
-          <div v-for="(item, index) in formattedData" :key="index" class="snippet-container">
+          <div v-for="(item, index) in getKnowledge" :key="index" class="snippet-container" @click="showMoreHandler(item.doi)">
             <div class="snippet-title">
               <a target="_blank" :href="item.URL">{{item.title}}</a>
             </div>
             <span v-for="(snippet, index) in item.highlight" :key="index" v-html="snippet" class="snippet-highlights"/>
-          </div>  
-          <div class="my-3">
-            <button type="button" class="btn btn-primary mr-1" @click="showMoreHandler">Show more...</button>
           </div>
         </div>
       </collapsible-item>
-    </div>     
+    </div>
 
     <div v-else class="alert alert-info" role="alert">
       No metadata at the moment
@@ -70,33 +67,12 @@
   import { Prop } from 'vue-property-decorator';
 
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
+  import { CosmosTextSnippet } from '@/types/typesCosmos';
 
-  import { CosmosSearchInterface, CosmosSearchObjectsInterface, CosmosTextSnippet } from '@/types/typesCosmos';
-  import { cosmosSearch, filterToParamObj } from '@/utils/CosmosFetchUtil';
 
   const components = {
     CollapsibleItem,
   };
-
-  const bakedData =  {
-    	"success": {
-    		"v": 1,
-    		"next_page": "",
-    		"scrollId": "",
-    		"hits": 1,
-    		"data": [{
-    			"pubname": "Chaos, Solitons & Fractals",
-    			"publisher": "Elsevier",
-    			"_gddid": "5ef5fd21a58f1dfd520aec60",
-    			"title": "FORECASTING COVID-19 PANDEMIC: A DATA-DRIVEN ANALYSIS",
-    			"doi": "10.1016/j.chaos.2020.110046",
-    			"coverDate": "Available online 25 June 2020",
-    			"URL": "https://www.sciencedirect.com/science/article/pii/S0960077920304434?v=s5",
-    			"authors": "",
-    			"highlight": ["carriers, our analysis estimates the value of the <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em>", "estimates the value of the <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> (R0 ) as", "<em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> (R0 ) as of May 11, 2020 was found to be", "0) 0  181 182 183 184 185 186 187  188 189  190 191  3.2. <em class=\"hl\">Basic</em> <em class=\"hl\">Reproduction</em> <em class=\"hl\">Number</em>", "0) 0  181 182 183 184 185 186 187  188 189  190 191  3.2. <em class=\"hl\">Basic</em> <em class=\"hl\">Reproduction</em> <em class=\"hl\">Number</em> for Proposed", "<em class=\"hl\">Basic</em> <em class=\"hl\">Reproduction</em> <em class=\"hl\">Number</em> for Proposed Model Using the next generation", "= −σ1 k γ + φD −σ2 k 0 φU + δU   The associated <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em>,", "+ δU   The associated <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em>, denoted", "<em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em>, denoted by R0 is then given by, R0 = ρ (FV", "represents the robustness of the model forecasting. The <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em>", "model forecasting. The <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> is 4.234", "<em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> is 4.234 as of May 08, which lies in prior", "peak around June 11 with about 26.449K cases. The <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em>", "about 26.449K cases. The <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> is estimated", "<em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> is estimated about 5.3467 as of May 11, which", "about 5.3467 as of May 11, which is in between the observed <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> for", "in between the observed <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> for COVID-19,", "<em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> for COVID-19, estimated about 2-7 for COVID-19", "peak around June 15 with about 9.504K cases. The <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em>", "about 9.504K cases. The <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> is 5.218", "<em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> is 5.218 as of May 11, which lies between", "of COVID-19 dynamics. According to our calculation, the <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em>", "to our calculation, the <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> is around", "<em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> is around 4.649 as of May 09, which lies", "control the disease burden of COVID-19. Otherwise, this <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em>", "COVID-19. Otherwise, this <em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> could increase", "<em class=\"hl\">basic</em> <em class=\"hl\">reproduction</em> <em class=\"hl\">number</em> could increase upto 5.7 within 20 days and"]
-    		}]
-    	}
-    };
 
   @Component({ components })
   export default class DrilldownMetadataPane extends Vue {
@@ -104,11 +80,7 @@
 
     showModal: boolean = false;
     dataLoading = false;
-    knowledgeResults: CosmosSearchInterface | Record<any, never> = {};
-    knowledgeResultsDisplayed: CosmosSearchObjectsInterface[];
-    knowledgeResultsCounter: number;
-
-
+   
     get isEmptyMetadata (): boolean {
       return _.isEmpty(this.metadata);
     }
@@ -129,13 +101,17 @@
       return (!_.isEmpty(this.metadata) && !_.isEmpty(this.metadata.attributes[0].text_definition)) && this.metadata.attributes[0].text_definition;
     }
 
-    get knowledgeSectionHeader (): string {
-      return !_.isEmpty(this.knowledgeResults) &&  `Artifacts  ${this.knowledgeResultsDisplayed.length}/${this.knowledgeResultsCounter}`;
+    get getKnowledge (): CosmosTextSnippet[] {
+      return !_.isEmpty(this.metadata) && this.metadata.knowledge && this.metadata.knowledge.map(d => _.pick(d, [ 'doi', 'title', 'URL', 'highlight', 'doi']));;
     }
 
-    get formattedData (): any {
-      return  bakedData.success.data.map(d=> _.pick(d, ['title', 'URL', 'highlight']));
-    }
+    // get knowledgeSectionHeader (): string {
+    //   return !_.isEmpty(this.knowledgeResults) && `Artifacts  ${this.knowledgeResultsDisplayed.length}/${this.knowledgeResultsCounter}`;
+    // }
+
+    // get formattedData (): any {
+    //   return bakedData.success.data.map(d => _.pick(d, [ 'doi', 'title', 'URL', 'highlight', 'doi']));
+    // }
 
     // mounted (): void {
     //   this.fetchCosmos();
@@ -157,9 +133,8 @@
     //     this.dataLoading = false;
     //   }
     // }
-    showMoreHandler (e: Event): void {
-      this.$emit('open-modal');
-      e.preventDefault();
+    showMoreHandler (doi: string): void {
+      this.$emit('open-modal', doi);
     }
   }
 </script>
@@ -186,7 +161,6 @@
     }
   }
 
-
   .knowledge-container {
     display: flex;
     flex-direction: column;
@@ -198,16 +172,15 @@
       border: 1px solid $border;
       padding: 4px 8px;
       box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      cursor: pointer;
       .snippet-highlights {
         font-size: 14px;
         em {
           font-weight: bold;
         }
       }
-
     }
   }
-
 
   .artifact-img {
     width: 45%;
