@@ -20,7 +20,7 @@
       <h6>{{paneSubtitle}}</h6>
     </div>
     <close-button @close="onClose"/>
-    <div class="panel-body h-100">
+    <div class="flex-grow-1 position-relative panel-body">
       <slot name="content"/>
       <slot :name="activeTab"/>
     </div>
@@ -100,7 +100,7 @@
 
 .drilldown-panel-container {
   width: 25vw;
-  height: $content-full-height;
+  height: 100%;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   position: absolute;
   top: 0;

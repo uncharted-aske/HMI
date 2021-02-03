@@ -1,19 +1,19 @@
 <template>
 <drilldown-panel @close-pane="$emit('close-pane')" :is-open="isOpen" :tabs="tabsList">
   <knowledge-tab-preview
-    class="mt-3 mx-1 d-flex flex-column h-100 overflow-hidden"
     slot="0"
+    :class="tabClass"
     @open-drilldown="$emit('open-drilldown')"
     :card="card"
   />
   <knowledge-tab-models
-    class="mt-3 mx-1 d-flex flex-column h-100 overflow-hidden"
     slot="1"
+    :class="tabClass"
     :card="card"
   />
   <knowledge-tab-entities
-    class="mt-3 mx-1 d-flex flex-column h-100 overflow-hidden"
     slot="2"
+    :class="tabClass"
     :card="card"
   />
 </drilldown-panel>
@@ -50,6 +50,8 @@
       { id: '1', name: 'Models', icon: '' },
       { id: '2', name: 'Entities', icon: '' },
     ];
+
+    tabClass: string = 'pt-3 px-1 d-flex flex-column position-absolute h-100 w-100 overflow-hidden';
   }
 </script>
 
