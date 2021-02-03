@@ -4,11 +4,11 @@
       v-if="tabs.length > 1"
       class="mb-2"
     >
-      <ul class="nav nav-tabs" :key="activeTab">
+      <ul class="nav nav-tabs">
         <li v-for="(tab) in tabs" :key="tab.id" class="nav-item">
           <div
-            :class="activeTab === tab.id ? 'nav-link active' : 'nav-link'"
-            @click.stop.prevent="onTabClick(tab.id)"
+            :class="_activeTabId === tab.id ? 'nav-link active' : 'nav-link'"
+            @click="onTabClick(tab.id)"
           >
             {{tab.name}}
           </div>
@@ -22,7 +22,7 @@
     <close-button @close="onClose"/>
     <div class="flex-grow-1 position-relative panel-body">
       <slot name="content"/>
-      <slot :name="activeTab"/>
+      <slot :name="_activeTabId"/>
     </div>
   </div>
 </template>
@@ -59,11 +59,11 @@
 
     @Watch('activeTabId')
     onActiveTabIdChanged (): void {
-      this.activeTab = this.activeTabId;
+      this._activeTabId = this.activeTabId;
     }
 
     rerenderKey: number = 0;
-    activeTab: string;
+    _activeTabId: string;
 
     forceRerender (): void {
       this.rerenderKey += 1;
@@ -71,9 +71,9 @@
 
     created (): void {
       if (this.activeTabId !== undefined) {
-        this.activeTab = this.activeTabId;
+        this._activeTabId = this.activeTabId;
       } else if (this.tabs.constructor === Array && this.tabs.length > 0) {
-        this.activeTab = this.tabs[0].id;
+        this._activeTabId = this.tabs[0].id;
       }
     }
 
@@ -88,7 +88,7 @@
     onTabClick (tabId: string): void {
       this.$emit('tab-click', tabId);
       if (this.activeTabId === undefined) {
-        this.activeTab = tabId;
+        this._activeTabId = tabId;
         this.forceRerender();
       }
     }

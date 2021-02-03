@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="border-bottom">
-      <a :href="card.raw.bibjson.link[0].url" target="_blank">
-        <h5>{{card.title}}</h5>
+      <a :href="data.raw.bibjson.link[0].url" target="_blank">
+        <h5>{{data.title}}</h5>
       </a>
       <h6>{{doi}}</h6>
     </div>
@@ -28,11 +28,11 @@
 
   @Component({ })
   export default class KnowledgeTabEntities extends Vue {
-    @Prop({ required: false }) private card: any;
+    @Prop({ required: false }) private data: any;
 
     drugsList: CosmosRelatedEntitiesDrugsInterface[] = [];
 
-    @Watch('card') onCardChange (): any {
+    @Watch('data') onDataChange (): any {
       this.getRelatedEntities();
     }
 
@@ -47,7 +47,7 @@
     }
 
     get doi (): string {
-      return this.card.raw.bibjson.identifier[0].id;
+      return this.data.raw.bibjson.identifier[0].id;
     }
   }
 </script>

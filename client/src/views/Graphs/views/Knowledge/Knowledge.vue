@@ -32,7 +32,7 @@
       @close-pane="onClosePanel"
       :is-open="isOpenPanel"
       @open-drilldown="onOpenDrilldown"
-      :card="openPanel"
+      :data="openPanel"
     />
   </div>
 </template>
