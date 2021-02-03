@@ -26,9 +26,9 @@
 
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
 
-  import KnowledgeTabPreview from './KnowledgeTabPreview.vue';
-  import KnowledgeTabModels from './KnowledgeTabModels.vue';
-  import KnowledgeTabEntities from './KnowledgeTabEntities.vue';
+  import KnowledgeTabPreview from './components/KnowledgeTabPreview.vue';
+  import KnowledgeTabModels from './components/KnowledgeTabModels.vue';
+  import KnowledgeTabEntities from './components/KnowledgeTabEntities.vue';
 
   import { TabInterface } from '@/types/types';
 
