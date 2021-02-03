@@ -1,40 +1,36 @@
 <template>
-  <div class="drilldown-panel-container" v-if="isOpen">
-      <div class="panel-header" v-if="displayHeader">
-        <div
-          v-if="tabs.length > 1"
-          class="mb-2"
-        >
-          <ul
-            class="nav nav-tabs">
-            <li
-              v-for="tab in tabs"
-              :key="tab.id"
-              class="nav-item"
-             >
-              <a
-                 class="nav-link"
-                  :class="{active: activeTabId === tab.id}"
-                @click.stop.prevent="onTabClick(tab.id)">
-                {{tab.name}}
-              </a>
-            </li>
-          </ul>
-        </div>
-        <h5>{{paneTitle}}</h5>
-        <h6>{{paneSubtitle}}</h6>
-      </div>
-      <close-button @close="onClose"/>
-      <div class="panel-body h-100">
-         <slot name="content" />
-      </div>
+  <div class="drilldown-panel-container" v-if="isOpen" :key="rerenderKey">
+    <div
+      v-if="tabs.length > 1"
+      class="mb-2"
+    >
+      <ul class="nav nav-tabs" :key="activeTab">
+        <li v-for="(tab) in tabs" :key="tab.id" class="nav-item">
+          <div
+            :class="activeTab === tab.id ? 'nav-link active' : 'nav-link'"
+            @click.stop.prevent="onTabClick(tab.id)"
+          >
+            {{tab.name}}
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="panel-header" v-if="displayHeader">
+      <h5>{{paneTitle}}</h5>
+      <h6>{{paneSubtitle}}</h6>
+    </div>
+    <close-button @close="onClose"/>
+    <div class="panel-body h-100">
+      <slot name="content"/>
+      <slot :name="activeTab"/>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Prop } from 'vue-property-decorator';
+  import { Prop, Watch } from 'vue-property-decorator';
 
   import { TabInterface } from '@/types/types';
 
@@ -52,7 +48,7 @@
     @Prop({ default: () => [] })
     tabs: TabInterface[];
 
-    @Prop({ default: '' })
+    @Prop({ required: false })
     activeTabId: string;
 
     @Prop({ default: '' })
@@ -60,6 +56,26 @@
 
     @Prop({ default: '' })
     paneSubtitle: string;
+
+    @Watch('activeTabId')
+    onActiveTabIdChanged (): void {
+      this.activeTab = this.activeTabId;
+    }
+
+    rerenderKey: number = 0;
+    activeTab: string;
+
+    forceRerender (): void {
+      this.rerenderKey += 1;
+    }
+
+    created (): void {
+      if (this.activeTabId !== undefined) {
+        this.activeTab = this.activeTabId;
+      } else if (this.tabs.constructor === Array && this.tabs.length > 0) {
+        this.activeTab = this.tabs[0].id;
+      }
+    }
 
     get displayHeader (): boolean {
       return Boolean(this.paneTitle || this.paneSubtitle);
@@ -71,6 +87,10 @@
 
     onTabClick (tabId: string): void {
       this.$emit('tab-click', tabId);
+      if (this.activeTabId === undefined) {
+        this.activeTab = tabId;
+        this.forceRerender();
+      }
     }
   }
 </script>
@@ -103,6 +123,13 @@
   .panel-body {
     margin-top: 5px;
   }
+}
+
+.nav-link.active {
+  cursor: default;
+}
+.nav-link:not(.active) {
+  cursor: pointer;
 }
 
 </style>
