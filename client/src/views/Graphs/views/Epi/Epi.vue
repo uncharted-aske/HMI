@@ -62,7 +62,7 @@
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
-  import { CosmosArtifactInterface, CosmosArtifactObjectInterface } from '@/types/typesCosmos';
+  import { CosmosArtifactInterface } from '@/types/typesCosmos';
   import { cosmosArtifactsMem } from '@/utils/CosmosFetchUtil';
   import { NodeTypes } from '@/graphs/svg/encodings';
 
@@ -81,7 +81,6 @@
   import DrilldownParametersPane from './components/DrilldownPanel/DrilldownParametersPane.vue';
   import ModalKnowledge from './components/ModalKnowledge/ModalKnowledge.vue';
 
-
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
@@ -97,8 +96,8 @@
     { name: 'Functional', id: 'functional' },
   ];
 
-  /** 
-  Temporary hack for workshop 
+  /**
+  Temporary hack for workshop
   **/
   const bakedData = {
     success: {
@@ -237,10 +236,10 @@
       this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
     }
 
-    async getArtifactsList (doi: string):Promise<CosmosArtifactInterface> { 
+    async getArtifactsList (doi: string):Promise<CosmosArtifactInterface> {
       const response = await cosmosArtifactsMem({ doi });
       return response;
-    } 
+    }
 
     async onOpenModal (doi: string):Promise<void> {
       const response = await this.getArtifactsList(doi);

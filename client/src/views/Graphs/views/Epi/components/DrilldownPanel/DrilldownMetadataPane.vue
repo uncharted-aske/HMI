@@ -45,7 +45,7 @@
         <div slot="content" class="knowledge-container">
           <div v-for="(item, index) in getKnowledge" :key="index" class="snippet-container" @click="showMoreHandler(item.doi)">
             <div class="snippet-title">
-              <a target="_blank" :href="item.URL">{{item.title}}</a>         
+              <a target="_blank" :href="item.URL">{{item.title}}</a>
             </div>
             <span v-for="(snippet, index) in item.highlight" :key="index" v-html="snippet" class="snippet-highlights"/>
           </div>
@@ -69,7 +69,6 @@
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
   import { CosmosTextSnippet } from '@/types/typesCosmos';
 
-
   const components = {
     CollapsibleItem,
   };
@@ -80,7 +79,7 @@
 
     showModal: boolean = false;
     dataLoading = false;
-   
+
     get isEmptyMetadata (): boolean {
       return _.isEmpty(this.metadata);
     }
@@ -102,8 +101,9 @@
     }
 
     get getKnowledge (): CosmosTextSnippet[] {
-      return !_.isEmpty(this.metadata) && this.metadata.knowledge && this.metadata.knowledge.map(d => _.pick(d, [ 'doi', 'title', 'URL', 'highlight', 'doi']));;
+      return !_.isEmpty(this.metadata) && this.metadata.knowledge && this.metadata.knowledge.map(d => _.pick(d, ['doi', 'title', 'URL', 'highlight', 'doi']));
     }
+
     // async fetchCosmos (): Promise<void> {
     //   if (this.getTextDefinition) {
     //     try {

@@ -44,8 +44,6 @@
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
@@ -53,7 +51,6 @@
   import Modal from '@/components/Modal.vue';
 
   import { getAuthorList } from '@/utils/CosmosDataUtil';
-
 
   const components = {
     Modal,
