@@ -43,7 +43,7 @@
 
     refresh ():void {
       if (_.isEmpty(this.data)) return;
-      const _this = this;
+      const that = this;
       const data = this.data;
       const svg = d3.select(this.$refs.container as any);
       svg.selectAll('*').remove();
@@ -106,9 +106,8 @@
             svgUtil.hideTooltip(chart);
           })
           .on('click', function (d) {
-            _this.$emit('bar-click', d.doi);
-          })
-
+            that.$emit('bar-click', d.doi);
+          });
 
       // Draw labels
       const labels = chart.append('g')

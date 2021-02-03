@@ -6,7 +6,7 @@
       <bar-chart :data="formatParametersData" :size="[450, 600]" @bar-click="onBarClick"/>
     </div>
     <div>
-    </div>  
+    </div>
   </div>
 </template>
 
@@ -36,7 +36,7 @@
       return parametersArray;
     }
 
-    onBarClick(doi:string): void {
+    onBarClick (doi:string): void {
       this.$emit('open-modal', doi);
     }
   }
