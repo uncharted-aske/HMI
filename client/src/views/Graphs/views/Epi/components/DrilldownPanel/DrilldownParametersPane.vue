@@ -3,7 +3,7 @@
     <div>
       <div class="parameter-title">Doubling Time (days) </div>
       <div class="parameter-desc">The time required for the number of infections to double </div>
-      <bar-chart :data="formatParametersData" @bar-click="onBarClick"/>
+      <bar-chart :data="formatParametersData" :size="[450, 600]" @bar-click="onBarClick"/>
     </div>
     <div>
     </div>  
