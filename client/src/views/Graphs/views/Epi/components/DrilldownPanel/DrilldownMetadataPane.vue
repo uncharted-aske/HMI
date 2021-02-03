@@ -104,19 +104,6 @@
     get getKnowledge (): CosmosTextSnippet[] {
       return !_.isEmpty(this.metadata) && this.metadata.knowledge && this.metadata.knowledge.map(d => _.pick(d, [ 'doi', 'title', 'URL', 'highlight', 'doi']));;
     }
-
-    // get knowledgeSectionHeader (): string {
-    //   return !_.isEmpty(this.knowledgeResults) && `Artifacts  ${this.knowledgeResultsDisplayed.length}/${this.knowledgeResultsCounter}`;
-    // }
-
-    // get formattedData (): any {
-    //   return bakedData.success.data.map(d => _.pick(d, [ 'doi', 'title', 'URL', 'highlight', 'doi']));
-    // }
-
-    // mounted (): void {
-    //   this.fetchCosmos();
-    // }
-
     // async fetchCosmos (): Promise<void> {
     //   if (this.getTextDefinition) {
     //     try {
