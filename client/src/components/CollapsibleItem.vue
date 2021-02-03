@@ -43,7 +43,7 @@
     expanded: boolean = false;
 
     get getIcon (): string {
-        return this.expanded ? 'caret-up' : 'caret-down';
+        return this.expanded ? 'caret-down' : 'caret-up';
     }
 
     expand (): void {

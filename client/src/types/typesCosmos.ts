@@ -66,3 +66,15 @@ export interface CosmosArtifactInterface {
   /** Cosmos API version */
   v: string,
 }
+
+export interface CosmosTextSnippet {
+  pubname: string,
+  publisher: string,
+  _gddid: string,
+  title: string,
+  doi: string,
+  coverDate: string,
+  URL: string,
+  authors: string,
+  highlight: string[]
+}

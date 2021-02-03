@@ -43,10 +43,14 @@
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
       <div slot="content">
-        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata"/>
+        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata" @open-modal="onOpenModal"/>
         <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/>
       </div>
     </drilldown-panel>
+    <modal-knowledge
+      v-if="showModal"
+      @close="showModal = false"
+     />
   </div>
 </template>
 
@@ -70,8 +74,10 @@
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import DrilldownMetadataPane from './components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
-  import DrilldownParametersPane from './components/DrilldownMetadataPanel/DrilldownParametersPane.vue';
+  import DrilldownMetadataPane from './components/DrilldownPanel/DrilldownMetadataPane.vue';
+  import DrilldownParametersPane from './components/DrilldownPanel/DrilldownParametersPane.vue';
+  import ModalKnowledge from './components/ModalKnowledge/ModalKnowledge.vue';
+
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -102,6 +108,7 @@
     DrilldownPanel,
     DrilldownMetadataPane,
     DrilldownParametersPane,
+    ModalKnowledge,
   };
 
   @Component({ components })
@@ -118,6 +125,7 @@
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
     subgraph: GraphInterface = null;
+    showModal: boolean = false;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -198,6 +206,9 @@
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = node.nodeType;
       this.drilldownMetadata = node.metadata;
+    }
+    onOpenModal (): void {
+      this.showModal = true;
     }
   }
 </script>
