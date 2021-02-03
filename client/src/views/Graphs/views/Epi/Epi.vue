@@ -41,9 +41,9 @@
         <local-epi-graph v-if="isSplitView" :graph="subgraph" @node-click="onNodeClick"/>
       </div>
     </resizable-grid>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
       <div slot="content">
-        <drilldown-metadata-pane :metadata="drilldownMetadata"/>
+        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata"/>
       </div>
     </drilldown-panel>
   </div>
@@ -69,11 +69,16 @@
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  import DrilldownMetadataPane from './components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
+  ];
+
+  const TABS_DRILLDOWN: TabInterface[] = [
+    { name: 'Metadata', icon: 'filter', id: 'metadata' },
+    { name: 'Parameters', icon: 'info', id: 'parameters' },
   ];
 
   const VIEWS: ViewInterface[] = [
@@ -99,7 +104,9 @@
   @Component({ components })
   export default class EpiView extends Vue {
     tabs: TabInterface[] = TABS;
+    tabsDrilldown: TabInterface[] = TABS_DRILLDOWN;
     activeTabId: string = 'metadata';
+    activeTabIdDrilldown: string = 'metadata';
     views: ViewInterface[] = VIEWS;
     selectedViewId = 'causal';
     isOpenDrilldown = false;
@@ -167,6 +174,10 @@
 
     onTabClick (tabId: string): void {
       this.activeTabId = tabId;
+    }
+
+    onTabClickDrilldown (tabId: string): void {
+      this.activeTabIdDrilldown = tabId;
     }
 
     onCloseDrilldownPanel ():void {

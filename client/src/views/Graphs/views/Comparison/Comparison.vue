@@ -40,8 +40,8 @@
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import EpiGraph from './components/EpiGraph/EpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
-  import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  // import DrilldownPanel from '@/components/DrilldownPanel.vue';
+  // import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -63,8 +63,8 @@
     MetadataPane,
     EpiGraph,
     ResizableGrid,
-    DrilldownPanel,
-    DrilldownMetadataPane,
+    // DrilldownPanel,
+    // DrilldownMetadataPane,
   };
 
   @Component({ components })
