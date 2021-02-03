@@ -97,7 +97,7 @@
             return (d as any).value > 0 ? COLORS.positive : COLORS.negative;
           })
           .on('mouseover', function (d) {
-            const coords = [xscale(d.value), yscale(d.location)];
+            const coords = [xscale(0), yscale(d.location)];
             const tooltipText = 'Value: ' + d.value + ' ' + 'Date: ' + d.date;
             svgUtil.showTooltip(chart, tooltipText, coords);
           })
@@ -132,7 +132,6 @@
 .bar-chart-container {
   position: relative;
   display: flex;
-  flex-direction: row;
   padding: 5px;
   box-sizing: border-box;
   cursor: pointer;
