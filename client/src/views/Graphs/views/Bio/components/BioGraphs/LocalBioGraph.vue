@@ -87,7 +87,7 @@
 
 .local-epi-graph-container {
   flex: 1;
-  background-color: $bg-secondary;
+  background-color: $bg-primary;
 
   ::v-deep > svg {
     width: 100%;
