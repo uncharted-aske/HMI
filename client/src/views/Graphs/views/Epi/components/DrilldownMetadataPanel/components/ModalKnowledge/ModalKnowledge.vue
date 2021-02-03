@@ -36,10 +36,10 @@
 <style lang="scss" scoped>
 
 img {
-        // Clip images that are too big, but maintain aspect ratio
-        object-fit: cover;
-        width: 100%;
-        height: 100%
-      }
+  // Clip images that are too big, but maintain aspect ratio
+  object-fit: cover;
+  width: 100%;
+  height: 100%
+}
 
 </style>

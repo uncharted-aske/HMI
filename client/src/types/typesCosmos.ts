@@ -41,8 +41,28 @@ export interface CosmosSearchObjectsInterface {
 }
 
 export interface CosmosSearchInterface {
+  /** Cosmos API version */
   v: string;
   total: number;
   page: number;
   objects: CosmosSearchObjectsInterface[];
+}
+
+export interface CosmosArtifactObjectInterface {
+  base_confidence: number,
+  cls: string,
+  content: string,
+  header_content: string | null;
+  postprocessing_confidence: number,
+  bytes: string,
+}
+
+export interface CosmosArtifactInterface {
+  bibjson: CosmosSearchBibjsonInterface,
+  license: string,
+  objects: CosmosArtifactObjectInterface[],
+  page: number,
+  total: number,
+  /** Cosmos API version */
+  v: string,
 }

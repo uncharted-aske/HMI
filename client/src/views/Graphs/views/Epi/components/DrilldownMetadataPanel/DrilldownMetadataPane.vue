@@ -4,7 +4,9 @@
       <collapsible-item>
         <div slot="title">Type</div>
         <div slot="content">
+          <div class="metadata-item">
               {{getType}}
+          </div>
         </div>
       </collapsible-item>
 

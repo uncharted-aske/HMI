@@ -8,6 +8,8 @@ Uncharted's Human Machine Interface for the DARPA ASKE program is designed to su
 yarn install
 ```
 
+A `.env` file containing environment variables necessary for the application's operation must be placed under `./client/`. The repository contains a template `.env` file containing all the keys the application expects with dummy values. The fully populated `.env` file must not be be pushed to the repository.
+
 ## Local Docker Swarm Deployment
 Build docker images:
 ```shell script

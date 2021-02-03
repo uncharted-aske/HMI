@@ -8,7 +8,7 @@
         <slot name="title" />
       </div>
     </div>
-    <div v-if="expanded === true">
+    <div v-if="expanded">
       <slot name="content" />
     </div>
   </div>
@@ -42,7 +42,7 @@
     @Prop({ default: false }) defaultExpand: boolean;
     expanded: boolean = false;
 
-    get getIcon ():string {
+    get getIcon (): string {
         return this.expanded ? 'caret-up' : 'caret-down';
     }
 
@@ -64,25 +64,16 @@
 <style lang="scss">
 @import "@/styles/variables";
 .collapsible-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  box-sizing: border-box;
   margin: 2px 0;
 
   .item-container {
-    display: flex;
-    flex-direction: row;
     padding: 2px 0;
     .item-title {
       display: flex;
-      flex-direction: row;
       align-items: baseline;
       padding: 5px;
       font-weight: bold;
       cursor: pointer;
-      flex: 16;
-      min-width: 0px;
       background-color: $drilldown-header;
       div {
         padding: 5px;

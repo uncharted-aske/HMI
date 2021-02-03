@@ -3,6 +3,7 @@
       <div class="panel-header" v-if="displayHeader">
         <div
           v-if="tabs.length > 1"
+          class="mb-2"
         >
           <ul
             class="nav nav-tabs">
@@ -24,7 +25,7 @@
         <h6>{{paneSubtitle}}</h6>
       </div>
       <close-button @close="onClose"/>
-      <div class="panel-body">
+      <div class="panel-body h-100">
          <slot name="content" />
       </div>
   </div>

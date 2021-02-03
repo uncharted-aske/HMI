@@ -1,10 +1,12 @@
 import _ from 'lodash';
 import { COSMOS_TYPE_OPTIONS } from './ModelTypeUtil';
-import { CosmosSearchInterface } from '@/types/typesCosmos';
+import { CosmosSearchInterface, CosmosArtifactInterface } from '@/types/typesCosmos';
+
+import { getUtilMem } from './FetchUtil';
+
+/// /////////////////////////////////////////////
 
 const COSMOS_API_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/cosmos/api/search';
-
-const memoizedStore = new Map();
 
 export const filterToParamObj = (filterObj: {[key: string]: any}): any => {
   const output: any = {};
@@ -27,35 +29,32 @@ export const filterToParamObj = (filterObj: {[key: string]: any}): any => {
   return output;
 };
 
-export const cosmosFetch = async (paramObj: URLSearchParams): Promise<CosmosSearchInterface> => {
-  const init: RequestInit = {
-    method: 'GET',
-    mode: 'cors',
-    cache: 'default',
-  };
-  // TypeScript URL type incorrect
-  // eslint-disable-next-line
-  const url: any = new URL(COSMOS_API_URL);
-  url.search = new URLSearchParams(paramObj).toString();
-  try {
-    const response = await fetch(url, init);
-    return await response.json();
-  } catch (e) {
-    return e;
-  }
+export const cosmosSearch = (paramObj: URLSearchParams): Promise<CosmosSearchInterface> => {
+  return getUtilMem(COSMOS_API_URL, paramObj);
 };
 
-export const cosmosFetchMem = async (paramObj: URLSearchParams): Promise<CosmosSearchInterface> => {
-  const paramHash = JSON.stringify(paramObj);
-  if (memoizedStore.has(paramHash)) {
-    return Promise.resolve(memoizedStore.get(paramHash));
-  } else {
-    try {
-      const result = await cosmosFetch(paramObj);
-      memoizedStore.set(paramHash, result);
-      return result;
-    } catch (e) {
-      return e;
-    }
-  }
+/// /////////////////////////////////////////////
+
+const COSMOS_API_KEY = process.env.COSMOS_API_KEY;
+const COSMOS_ARTIFACT_SRC_URL = 'https://xdddev.chtc.io/sets/xdd-covid-19/cosmos/api/object/';
+
+// eslint-disable-next-line camelcase
+export const cosmosArtifactSrc = (id: string): Promise<CosmosSearchInterface> => {
+  const paramObj = { api_key: COSMOS_API_KEY };
+  return getUtilMem(COSMOS_ARTIFACT_SRC_URL + id, paramObj as unknown as URLSearchParams);
+};
+
+/// /////////////////////////////////////////////
+
+const COSMOS_ARTIFACT_URL = 'https://xdddev.chtc.io/sets/xdd-covid-19/cosmos/api/document';
+
+// eslint-disable-next-line camelcase
+export const cosmosArtifactsMem = async (paramObj: {doi: string, api_key?: string}): Promise<CosmosArtifactInterface> => {
+  paramObj.api_key = COSMOS_API_KEY;
+  const artifactList = await getUtilMem(COSMOS_ARTIFACT_URL, paramObj as unknown as URLSearchParams);
+  await Promise.all(artifactList.objects.map(async (artifact, index) => {
+    const response = await cosmosArtifactSrc(artifact.id);
+    artifactList.objects[index].bytes = response.objects[0].children[0].bytes;
+  }));
+  return artifactList;
 };
