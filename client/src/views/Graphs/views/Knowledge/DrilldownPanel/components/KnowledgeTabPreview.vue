@@ -1,20 +1,8 @@
 <template>
-<div class="h-100 d-flex flex-column">
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link active">Preview</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link disabled">Models</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link disabled">Entities</a>
-    </li>
-  </ul>
-  <div class="mt-3 mx-1 d-flex flex-column flex-grow-1" v-if="displaySummary">
+  <div>
     <div class="border-bottom">
-      <a :href="card.raw.bibjson.link[0].url" target="_blank">
-        <h5>{{card.title}}</h5>
+      <a :href="data.raw.bibjson.link[0].url" target="_blank">
+        <h5>{{data.title}}</h5>
       </a>
       <h6>{{doi}}</h6>
     </div>
@@ -24,11 +12,11 @@
     </div>
     <div class="mt-3">
       <h6>Publication Year</h6>
-      <div>{{card.raw.bibjson.year || 'None'}}</div>
+      <div>{{data.raw.bibjson.year || 'None'}}</div>
     </div>
     <div class="mt-3">
       <h6>Publisher</h6>
-      <div>{{card.raw.bibjson.publisher || 'None'}}</div>
+      <div>{{data.raw.bibjson.publisher || 'None'}}</div>
     </div>
     <div class="mt-3 flex-grow-1 position-relative overflow-hidden">
       <div class="position-absolute h-100 w-100">
@@ -44,7 +32,6 @@
       <a @click="showMoreHandler" href="/">Show more...</a>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -60,10 +47,10 @@
   const ARTIFACT_DISPLAY_LIMIT = 4;
 
   @Component({ })
-  export default class KnowledgePanel extends Vue {
-    @Prop({ required: false }) private card: any;
+  export default class KnowledgeTabPreview extends Vue {
+    @Prop({ required: false }) private data: any;
 
-    @Watch('card') onCardChange (): any {
+    @Watch('data') onDataChange (): any {
       this.getArtifactList();
     }
 
@@ -80,7 +67,7 @@
     }
 
     async getArtifactList (): Promise<void> {
-      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi: this.card.raw.bibjson.identifier[0].id });
+      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi: this.data.raw.bibjson.identifier[0].id });
       this.artifactTotal = response.objects.length;
       let numArtifactDisplayed = 0;
       this.artifactList = response.objects.filter(artifact =>
@@ -105,19 +92,15 @@
     }
 
     get doi (): string {
-      return this.card.raw.bibjson.identifier[0].id;
-    }
-
-    get displaySummary (): boolean {
-      return true;
+      return this.data.raw.bibjson.identifier[0].id;
     }
 
     get authorList (): string {
-      return getAuthorList(this.card.raw);
+      return getAuthorList(this.data.raw);
     }
 
     showMoreHandler (e: Event): void {
-        this.$emit('close-card');
+        this.$emit('open-drilldown');
         e.preventDefault();
     }
   }
