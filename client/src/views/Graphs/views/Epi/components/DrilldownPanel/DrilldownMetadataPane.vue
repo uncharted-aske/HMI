@@ -41,7 +41,7 @@
       </collapsible-item>
 
       <collapsible-item>
-        <div slot="title">Knowledge</div>
+        <div slot="title">Text Snippets</div>
         <div slot="content" class="knowledge-container">
           <div v-for="(item, index) in getKnowledge" :key="index" class="snippet-container" @click="showMoreHandler(item.doi)">
             <div class="snippet-title">
