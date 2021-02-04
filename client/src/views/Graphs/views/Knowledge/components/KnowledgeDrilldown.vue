@@ -35,9 +35,12 @@
           </div>
       </div>
       <div class="d-flex flex-column m-3">
+        <h3 v-if="similarDocList.length > 0">Related documents</h3>
         <div class="row mr-0">
           <div class="col" v-for="(similarDoc) in similarDocList" :key="similarDoc.bibjson._gddid">
-            <h6>{{similarDoc.bibjson.title}}</h6>
+            <a :href="similarDoc.bibjson.link[0].url" target="_blank">
+              <h6>{{similarDoc.bibjson.title}}</h6>
+            </a>
           </div>
         </div>
         <div class="row mr-0">
