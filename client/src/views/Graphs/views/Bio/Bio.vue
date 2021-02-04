@@ -30,12 +30,12 @@
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
-          <div slot="counters">
+          <div slot="left">
             <counters
               :title="`Subgraph`"
               :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
             />          </div>
-          <div slot="settings">
+          <div slot="right">
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
@@ -69,7 +69,7 @@
   import LocalBioGraph from './components/BioGraphs/LocalBioGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  import DrilldownMetadataPane from './components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
   import Grafer from './components/BioGraphs/Grafer.vue';
 
   const TABS: TabInterface[] = [

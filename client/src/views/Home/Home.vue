@@ -162,10 +162,10 @@
 }
 
 .model-cards ::v-deep .card {
-  border: transparent solid 1px;
+  border: transparent solid 2px;
 }
 
 .model-cards ::v-deep .card.checked {
-  border-color: $selection;
+  border-color: $selection-dark;
 }
 </style>

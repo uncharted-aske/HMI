@@ -38,7 +38,8 @@ interface ViewInterface {
 
 interface ModelsState {
   selectedModelIds: Set<string>,
-  modelsList: ModelInterface[]
+  modelsList: ModelInterface[],
+  parameters: any,
 }
 
 type LexConvertType = 'integer' | 'string';

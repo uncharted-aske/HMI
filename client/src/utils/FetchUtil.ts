@@ -1,6 +1,6 @@
 const memoizedStore = new Map();
 
-export const getUtil = async (urlStr: string, paramObj: URLSearchParams): Promise<any> => {
+export const getUtil = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
   const init: RequestInit = {
     method: 'GET',
     mode: 'cors',
@@ -18,7 +18,7 @@ export const getUtil = async (urlStr: string, paramObj: URLSearchParams): Promis
   }
 };
 
-export const getUtilMem = async (urlStr: string, paramObj: URLSearchParams): Promise<any> => {
+export const getUtilMem = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
   const hash = urlStr + JSON.stringify(paramObj);
   if (memoizedStore.has(hash)) {
     return Promise.resolve(memoizedStore.get(hash));

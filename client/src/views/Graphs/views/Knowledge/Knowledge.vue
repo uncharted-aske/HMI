@@ -28,9 +28,12 @@
       </div>
     </div>
     <knowledge-drilldown :card="openDrilldown" @close-card="onCloseDrilldown"/>
-    <drilldown-panel @close-pane="onClosePanel" :is-open="isOpenPanel">
-      <knowledge-panel slot="content" @close-card="onOpenDrilldown" :card="openPanel"/>
-    </drilldown-panel>
+    <knowledgePanel
+      @close-pane="onClosePanel"
+      :is-open="isOpenPanel"
+      @open-drilldown="onOpenDrilldown"
+      :data="openPanel"
+    />
   </div>
 </template>
 
@@ -60,9 +63,8 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/views/Home/components/FacetsPane/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
-  import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import KnowledgeDrilldown from './components/KnowledgeDrilldown.vue';
-  import knowledgePanel from './components/KnowledgePanel.vue';
+  import knowledgePanel from './DrilldownPanel/KnowledgePanel.vue';
 
   import { FacetTermsSelectionMap } from '@/types/types';
 
@@ -79,7 +81,6 @@
     FacetsPane,
     CardContainer,
     KnowledgeDrilldown,
-    DrilldownPanel,
     knowledgePanel,
   };
 
@@ -215,7 +216,6 @@
 
     onOpenDrilldown (card: CosmosSearchObjectsInterface): void {
       this.openDrilldown = card || this.openPanel;
-      this.openPanel = {};
     }
 
     onCloseDrilldown (): void {

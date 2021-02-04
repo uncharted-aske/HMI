@@ -29,21 +29,22 @@
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
-          <div slot="counters">
+          <div slot="left">
             <counters
               :title="`Subgraph`"
               :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
             />          </div>
-          <div slot="settings">
+          <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
         <local-epi-graph v-if="isSplitView" :graph="subgraph" @node-click="onNodeClick"/>
       </div>
     </resizable-grid>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
       <div slot="content">
-        <drilldown-metadata-pane :metadata="drilldownMetadata"/>
+        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata"/>
+        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/>
       </div>
     </drilldown-panel>
   </div>
@@ -69,11 +70,17 @@
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  import DrilldownMetadataPane from './components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  import DrilldownParametersPane from './components/DrilldownMetadataPanel/DrilldownParametersPane.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
+  ];
+
+  const TABS_DRILLDOWN: TabInterface[] = [
+    { name: 'Metadata', icon: 'filter', id: 'metadata' },
+    { name: 'Parameters', icon: 'info', id: 'parameters' },
   ];
 
   const VIEWS: ViewInterface[] = [
@@ -94,12 +101,15 @@
     ResizableGrid,
     DrilldownPanel,
     DrilldownMetadataPane,
+    DrilldownParametersPane,
   };
 
   @Component({ components })
   export default class EpiView extends Vue {
     tabs: TabInterface[] = TABS;
+    tabsDrilldown: TabInterface[] = TABS_DRILLDOWN;
     activeTabId: string = 'metadata';
+    activeTabIdDrilldown: string = 'metadata';
     views: ViewInterface[] = VIEWS;
     selectedViewId = 'causal';
     isOpenDrilldown = false;
@@ -150,7 +160,7 @@
       const selectedModel = modelsList.find(model => model.id === 2); // Get CHIME model
       const GrFN = selectedModel.graph.detailed;
       // Get nodes only corresponding to the SIR plate
-      const nodes = GrFN.nodes.filter(n => n.parent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9'); // sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
+      const nodes = GrFN.nodes.filter(n => n.parent === 'bac81b1a-3a6d-45ad-9725-947e507f6930'); // sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
       const nodesMap = new Map();
       // Creates a map of nodes and its corresponding parents
       nodes.forEach(n => {
@@ -159,7 +169,7 @@
       const edges = GrFN.edges.filter(e => {
         const sourceParent = nodesMap[e.source];
         const targetParent = nodesMap[e.target];
-        return ((sourceParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9') && (targetParent === '2bfc84bb-f036-4420-a68c-4ef6d72928e9'));
+        return ((sourceParent === 'bac81b1a-3a6d-45ad-9725-947e507f6930') && (targetParent === 'bac81b1a-3a6d-45ad-9725-947e507f6930'));
       });
 
       this.subgraph = { nodes, edges };
@@ -167,6 +177,10 @@
 
     onTabClick (tabId: string): void {
       this.activeTabId = tabId;
+    }
+
+    onTabClickDrilldown (tabId: string): void {
+      this.activeTabIdDrilldown = tabId;
     }
 
     onCloseDrilldownPanel ():void {

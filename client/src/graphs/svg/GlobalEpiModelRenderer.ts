@@ -58,7 +58,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
     // in blur
     filter.append('feGaussianBlur')
       .attr('in', 'SourceAlpha')
-      .attr('stdDeviation', 10)
+      .attr('stdDeviation', 8)
       .attr('result', 'blur');
 
     // translate output of Gaussian blur to the right and downwards with 2px
