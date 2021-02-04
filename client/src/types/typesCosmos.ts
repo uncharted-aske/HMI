@@ -78,6 +78,17 @@ export interface CosmosTextSnippet {
   authors: string,
   highlight: string[]
 }
+export interface CosmosSimilarDataInterface {
+  bibson: CosmosSearchBibjsonInterface;
+  objects: CosmosArtifactObjectInterface[];
+  score: number;
+}
+
+export interface CosmosSimilarInterface {
+  status: number;
+  data: CosmosSimilarDataInterface[];
+}
+
 export interface CosmosRelatedEntitiesDrugsInterface {
   hits: number;
   exclude_from_druglist: string;
