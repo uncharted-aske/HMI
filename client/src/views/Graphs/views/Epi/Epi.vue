@@ -159,23 +159,29 @@
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
+      if (!this.highlights) return;
 
-      // Get the CHIME GrFN subgraph
-      const modelsList = this.getModelsList;
-      const selectedModel = modelsList.find(model => model.id === 2); // Get CHIME model
-      const GrFN = selectedModel.graph.detailed;
-      // Get nodes only corresponding to the SIR plate
-      const nodes = GrFN.nodes.filter(n => n.parent === 'bac81b1a-3a6d-45ad-9725-947e507f6930'); // sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
-      const nodesMap = new Map();
-      // Creates a map of nodes and its corresponding parents
-      nodes.forEach(n => {
-        nodesMap[n.id] = n.parent;
-      });
-      const edges = GrFN.edges.filter(e => {
-        const sourceParent = nodesMap[e.source];
-        const targetParent = nodesMap[e.target];
-        return ((sourceParent === 'bac81b1a-3a6d-45ad-9725-947e507f6930') && (targetParent === 'bac81b1a-3a6d-45ad-9725-947e507f6930'));
-      });
+      // Get path from highlights
+      const path = this.highlights;
+      const edges = path.edges;
+      const nodes = path.nodes.map(node => this.selectedGraph.nodes.find(n => n.id === node.id));
+
+      // // Get the CHIME GrFN subgraph
+      // const modelsList = this.getModelsList;
+      // const selectedModel = modelsList.find(model => model.id === 2); // Get CHIME model
+      // const GrFN = selectedModel.graph.detailed;
+      // // Get nodes only corresponding to the SIR plate
+      // const nodes = GrFN.nodes.filter(n => n.parent === 'bac81b1a-3a6d-45ad-9725-947e507f6930'); // sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
+      // const nodesMap = new Map();
+      // // Creates a map of nodes and its corresponding parents
+      // nodes.forEach(n => {
+      //   nodesMap[n.id] = n.parent;
+      // });
+      // const edges = GrFN.edges.filter(e => {
+      //   const sourceParent = nodesMap[e.source];
+      //   const targetParent = nodesMap[e.target];
+      //   return ((sourceParent === 'bac81b1a-3a6d-45ad-9725-947e507f6930') && (targetParent === 'bac81b1a-3a6d-45ad-9725-947e507f6930'));
+      // });
 
       this.subgraph = { nodes, edges };
     }

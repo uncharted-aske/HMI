@@ -1,9 +1,5 @@
 <template>
   <div class="settings-container">
-    <button type="button" class="btn btn-secondary mr-1" @click="runQuery">
-      Path Query:
-    </button>
-
     <button type="button" class="btn btn-secondary mr-1" @click="toggleViews">
       Views:
       <span class="view-name">{{selectedViewName}} </span>
