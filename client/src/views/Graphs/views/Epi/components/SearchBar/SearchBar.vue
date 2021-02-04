@@ -32,7 +32,7 @@
 
     mounted (): void {
       /* add pills here */
-      this.pills = [ new RangePill(QUERY_FIELDS_MAP.PATH_QUERY) ];
+      this.pills = [new RangePill(QUERY_FIELDS_MAP.PATH_QUERY)];
 
       const language = Lex.from('field', ValueState, {
         name: 'Choose a field to search',
