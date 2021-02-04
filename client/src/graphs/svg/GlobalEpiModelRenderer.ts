@@ -253,7 +253,6 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
     nonNeighborEdges.style('opacity', 0.1);
   }
 
-
   highlightSubgraph (subgraph: SubgraphInterface, color: string): void {
     const chart = this.chart;
     const hEdges = chart.selectAll('.edge-path').filter(d => {
