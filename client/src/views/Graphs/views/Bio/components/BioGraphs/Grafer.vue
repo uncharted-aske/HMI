@@ -1,7 +1,7 @@
 <template>
   <div class="grafer-container">
     <canvas class="grafer-canvas" ref="canvas"></canvas>
-    <div v-show="loading" class="loading" ref="loading">LOADING...</div>
+    <div v-if="loading" class="loading" ref="loading">LOADING...</div>
   </div>
 </template>
 
