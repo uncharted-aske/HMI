@@ -14,7 +14,7 @@
   import { Lex, ValueState } from '@uncharted.software/lex/dist/lex';
   import * as filtersUtil from '@/utils/FiltersUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
-  import RangePill from '@/search/pills/RangePill';
+  import PathQueryPill from '@/search/pills/PathQueryPill';
 
   @Component
   export default class SearchBar extends Vue {
@@ -32,7 +32,7 @@
 
     mounted (): void {
       /* add pills here */
-      this.pills = [new RangePill(QUERY_FIELDS_MAP.PATH_QUERY)];
+      this.pills = [new PathQueryPill(QUERY_FIELDS_MAP.PATH_QUERY)];
 
       const language = Lex.from('field', ValueState, {
         name: 'Choose a field to search',

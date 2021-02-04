@@ -4,11 +4,11 @@ const options = [
   new ValueStateValue('from', {}, { displayKey: 'from' }),
 ];
 
-export default class BetweenRelationState extends RelationState {
+export default class FromToState extends RelationState {
   /**
    * The "is" option.
    */
-  static get BETWEEN (): ValueStateValue {
+  static get FROMTO (): ValueStateValue {
     return options[0];
   }
 
