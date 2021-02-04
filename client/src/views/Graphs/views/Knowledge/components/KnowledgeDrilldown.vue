@@ -34,7 +34,7 @@
             </div>
           </div>
       </div>
-      <div class="d-flex flex-column mt-3">
+      <div class="d-flex flex-column m-3">
         <div class="row mr-0">
           <div class="col" v-for="(similarDoc) in similarDocList" :key="similarDoc.bibjson._gddid">
             <h6>{{similarDoc.bibjson.title}}</h6>
