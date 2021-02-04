@@ -6,16 +6,16 @@
       <li
         v-if="displayNav"
         class="nav-item"
-        :class="{underlined: currentView === 'epiView' || currentView === 'bioView' || currentView === 'home'}"
+        :class="{underlined: currentView === 'knowledge'}"
       >
-        <a class="nav-link" href="#/">Models</a>
+        <a class="nav-link" href="#/knowledge">Knowledge</a>
       </li>
       <li
         v-if="displayNav"
         class="nav-item"
-        :class="{underlined: currentView === 'knowledge'}"
+        :class="{underlined: currentView === 'epiView' || currentView === 'bioView' || currentView === 'home'}"
       >
-        <a class="nav-link" href="#/knowledge">Knowledge</a>
+        <a class="nav-link" href="#/">Models</a>
       </li>
     </ul>
   </div>
