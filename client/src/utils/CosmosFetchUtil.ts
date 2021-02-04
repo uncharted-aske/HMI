@@ -7,7 +7,7 @@ import {
   CosmosRelatedEntitiesInterface,
 } from '@/types/typesCosmos';
 
-import { getUtilMemUnsafe, getUtilMem } from './FetchUtil';
+import { getUtilMem } from './FetchUtil';
 
 /// /////////////////////////////////////////////
 
@@ -69,8 +69,8 @@ export const cosmosArtifactsMem = async (paramObj: {doi: string, api_key?: strin
 const COSMOS_SIMILAR_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/doc2vec/api/similar';
 
 // eslint-disable-next-line camelcase
-export const cosmosSimilar = async (paramObj: string): Promise<CosmosSimilarInterface> => {
-  const similarList = await getUtilMemUnsafe(COSMOS_SIMILAR_URL + '?doi=' + paramObj);
+export const cosmosSimilar = async (doi: string): Promise<CosmosSimilarInterface> => {
+  const similarList = await getUtilMem(COSMOS_SIMILAR_URL, { doi });
   await Promise.all(similarList.data.map(async (similar, index) => {
     const response = await cosmosArtifactsMem({ doi: similar.bibjson.identifier[0].id });
     similarList.data[index].objects = response.objects;
