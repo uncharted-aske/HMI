@@ -108,7 +108,7 @@
 @import "@/styles/variables";
 
 .global-epi-graph-container {
-  background-color: $bg-primary;
+  background-color: $bg-graphs;
   flex: 1;
 
   ::v-deep > svg {
