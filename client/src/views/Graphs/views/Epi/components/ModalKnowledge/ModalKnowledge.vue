@@ -38,8 +38,16 @@
             </div>
           </div>
       </div>
-      <h5> Related Documents</h5>
     </div>
+      <div slot="footer" class="related-docs">
+        <button
+                type="button"
+                class="btn btn-link"
+                @click="openKnowledgeView()"
+              >
+                Explore All         <font-awesome-icon class="icon" :icon="['fas', 'search']"/>
+</button>
+      </div>
   </modal>
 </template>
 
@@ -86,6 +94,10 @@
     close (): void {
       this.$emit('close', null);
     }
+
+    openKnowledgeView () : void {
+      this.$router.push({ name: 'knowledge' });
+    }
   }
 </script>
 
@@ -95,5 +107,10 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.related-docs {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

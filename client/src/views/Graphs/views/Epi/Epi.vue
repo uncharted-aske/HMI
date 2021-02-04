@@ -44,7 +44,7 @@
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
       <div slot="content">
         <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata" @open-modal="onOpenModal"/>
-        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/>
+        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'" @open-modal="onOpenModal"/>
       </div>
     </drilldown-panel>
     <modal-knowledge
