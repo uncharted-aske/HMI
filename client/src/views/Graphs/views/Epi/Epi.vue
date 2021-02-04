@@ -62,8 +62,8 @@
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
-  import { CosmosArtifactInterface, CosmosSearchInterface } from '@/types/typesCosmos';
-  import { cosmosArtifactsMem, cosmosArtifactSrc } from '@/utils/CosmosFetchUtil';
+  import { CosmosSearchInterface } from '@/types/typesCosmos';
+  import { cosmosArtifactSrc } from '@/utils/CosmosFetchUtil';
   import { NodeTypes } from '@/graphs/svg/encodings';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';

@@ -34,7 +34,7 @@
             <div class="position-relative flex-grow-1">
               <div class="position-absolute h-100 w-100 pr-1 overflow-auto">
                 {{excerpt}}
-              </div> 
+              </div>
             </div> -->
           </div>
       </div>
