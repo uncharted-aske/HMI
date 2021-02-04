@@ -62,6 +62,7 @@
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
+  import { SubgraphInterface } from '@/graphs/svg/types/types';
   import { CosmosArtifactInterface } from '@/types/typesCosmos';
   import { cosmosArtifactsMem } from '@/utils/CosmosFetchUtil';
   import { NodeTypes } from '@/graphs/svg/encodings';
@@ -77,15 +78,9 @@
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
-<<<<<<< HEAD
-  import DrilldownMetadataPane from './components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
-  import DrilldownParametersPane from './components/DrilldownMetadataPanel/DrilldownParametersPane.vue';
-  import { SubgraphInterface } from '@/graphs/svg/types/types';
-=======
   import DrilldownMetadataPane from './components/DrilldownPanel/DrilldownMetadataPane.vue';
   import DrilldownParametersPane from './components/DrilldownPanel/DrilldownParametersPane.vue';
   import ModalKnowledge from './components/ModalKnowledge/ModalKnowledge.vue';
->>>>>>> add-text-snippet-epi-drilldown
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -102,9 +97,6 @@
     { name: 'Functional', id: 'functional' },
   ];
 
-<<<<<<< HEAD
-  const pathSubgraph: SubgraphInterface = { nodes: [{ id: '4f8f229a-aab4-4db4-844b-64f68920dfad' }, { id: '4a8eb129-c503-4592-8cc2-e45b93bd8c26' }, { id: '024f553a-5070-482f-a94f-82b97dbdd88d' }, { id: 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd' }, { id: '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a' }, { id: '7ce1948c-b271-42d8-9b4b-29df3da5fdde' }, { id: '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa' }, { id: 'e1d3a02d-12f9-4b77-b35c-80695a219a5e' }, { id: 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3' }, { id: '620874cf-3a25-43e1-9848-dde986bcad1f' }, { id: 'aa94c3cc-5193-4122-b0ed-e83faefc214d' }, { id: 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d' }, { id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1' }, { id: '4e9f2344-29a6-4457-93cf-da8589382e3d' }, { id: '9d2259db-62cc-444f-a4d4-03f5769ba39b' }], edges: [{ source: '4f8f229a-aab4-4db4-844b-64f68920dfad', target: '4a8eb129-c503-4592-8cc2-e45b93bd8c26' }, { source: '4a8eb129-c503-4592-8cc2-e45b93bd8c26', target: '024f553a-5070-482f-a94f-82b97dbdd88d' }, { source: '024f553a-5070-482f-a94f-82b97dbdd88d', target: 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd' }, { source: 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd', target: '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a' }, { source: '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a', target: '7ce1948c-b271-42d8-9b4b-29df3da5fdde' }, { source: '7ce1948c-b271-42d8-9b4b-29df3da5fdde', target: '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa' }, { source: '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa', target: 'e1d3a02d-12f9-4b77-b35c-80695a219a5e' }, { source: 'e1d3a02d-12f9-4b77-b35c-80695a219a5e', target: 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3' }, { source: 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3', target: '620874cf-3a25-43e1-9848-dde986bcad1f' }, { source: '620874cf-3a25-43e1-9848-dde986bcad1f', target: 'aa94c3cc-5193-4122-b0ed-e83faefc214d' }, { source: 'aa94c3cc-5193-4122-b0ed-e83faefc214d', target: 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d' }, { source: 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d', target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1' }, { source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1', target: '4e9f2344-29a6-4457-93cf-da8589382e3d' }, { source: '4e9f2344-29a6-4457-93cf-da8589382e3d', target: '9d2259db-62cc-444f-a4d4-03f5769ba39b' }] };
-=======
   /**
   Temporary hack for workshop
   **/
@@ -127,7 +119,8 @@
       }],
     },
   };
->>>>>>> add-text-snippet-epi-drilldown
+
+  const pathSubgraph = {'nodes': [{'id': '4f8f229a-aab4-4db4-844b-64f68920dfad'}, {'id': '4a8eb129-c503-4592-8cc2-e45b93bd8c26'}, {'id': '024f553a-5070-482f-a94f-82b97dbdd88d'}, {'id': 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd'}, {'id': '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a'}, {'id': '7ce1948c-b271-42d8-9b4b-29df3da5fdde'}, {'id': '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa'}, {'id': 'e1d3a02d-12f9-4b77-b35c-80695a219a5e'}, {'id': 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3'}, {'id': '620874cf-3a25-43e1-9848-dde986bcad1f'}, {'id': 'aa94c3cc-5193-4122-b0ed-e83faefc214d'}, {'id': 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d'}, {'id': 'a414982f-51fb-4d41-abf8-b736e9fc6ac1'}, {'id': '4e9f2344-29a6-4457-93cf-da8589382e3d'}, {'id': '9d2259db-62cc-444f-a4d4-03f5769ba39b'}], 'edges': [{'source': '4f8f229a-aab4-4db4-844b-64f68920dfad', 'target': '4a8eb129-c503-4592-8cc2-e45b93bd8c26'}, {'source': '4a8eb129-c503-4592-8cc2-e45b93bd8c26', 'target': '024f553a-5070-482f-a94f-82b97dbdd88d'}, {'source': '024f553a-5070-482f-a94f-82b97dbdd88d', 'target': 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd'}, {'source': 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd', 'target': '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a'}, {'source': '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a', 'target': '7ce1948c-b271-42d8-9b4b-29df3da5fdde'}, {'source': '7ce1948c-b271-42d8-9b4b-29df3da5fdde', 'target': '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa'}, {'source': '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa', 'target': 'e1d3a02d-12f9-4b77-b35c-80695a219a5e'}, {'source': 'e1d3a02d-12f9-4b77-b35c-80695a219a5e', 'target': 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3'}, {'source': 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3', 'target': '620874cf-3a25-43e1-9848-dde986bcad1f'}, {'source': '620874cf-3a25-43e1-9848-dde986bcad1f', 'target': 'aa94c3cc-5193-4122-b0ed-e83faefc214d'}, {'source': 'aa94c3cc-5193-4122-b0ed-e83faefc214d', 'target': 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d'}, {'source': 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d', 'target': 'a414982f-51fb-4d41-abf8-b736e9fc6ac1'}, {'source': 'a414982f-51fb-4d41-abf8-b736e9fc6ac1', 'target': '4e9f2344-29a6-4457-93cf-da8589382e3d'}, {'source': '4e9f2344-29a6-4457-93cf-da8589382e3d', 'target': '9d2259db-62cc-444f-a4d4-03f5769ba39b'}]}
 
   const components = {
     SearchBar,
