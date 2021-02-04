@@ -12,20 +12,19 @@
         Add Subgraph
       </button>
     </div>
-    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '100px', widthFixed: true }}">
+    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
       <div slot="1" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
-          <!-- <div slot="counters">
-            <counters
+          <div slot="counters">
+            <!-- <counters
               :title="selectedModel.metadata.name"
               :data="[`${nodeCount} Nodes`, `${edgeCount} Edges`]"
-            />
+            /> -->
           </div>
           <div slot="settings">
-            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div> -->
+            <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
+          </div>
         </settings-bar>
-        <!-- <global-epi-graph v-if="selectedModel" :graph="selectedGraph" @node-click="onNodeClick"/> -->
         <grafer class="grafer"></grafer>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
@@ -65,7 +64,6 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
-  // import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
   import LocalBioGraph from './components/BioGraphs/LocalBioGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
@@ -77,11 +75,6 @@
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
-  // const VIEWS: ViewInterface[] = [
-  //   { name: 'Causal', id: 'causal' },
-  //   { name: 'Functional', id: 'functional' },
-  // ];
-
   const components = {
     SearchBar,
     SettingsBar,
@@ -90,7 +83,6 @@
     LeftSidePanel,
     MetadataPane,
     FacetsPane,
-    // GlobalEpiGraph,
     LocalBioGraph,
     ResizableGrid,
     DrilldownPanel,
@@ -102,8 +94,6 @@
   export default class BioView extends Vue {
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
-    // views: ViewInterface[] = VIEWS;
-    // selectedViewId = 'causal';
     // isOpenDrilldown = false;
     isSplitView = false;
     // drilldownPaneTitle = '';
@@ -118,10 +108,6 @@
       const modelsList = this.getModelsList;
       return modelsList.find(model => model.id === 4); // Only COVID-19 model for now
     }
-
-    // get selectedGraph (): GraphInterface {
-    //   return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
-    // }
 
     // get nodeCount (): number {
     //   const leafNodesCount = this.selectedGraph.nodes.filter(n => n.nodeType && n.nodeType !== NodeTypes.NODES.CONTAINER).length;
