@@ -78,3 +78,45 @@ export interface CosmosTextSnippet {
   authors: string,
   highlight: string[]
 }
+export interface CosmosRelatedEntitiesDrugsInterface {
+  hits: number;
+  exclude_from_druglist: string;
+  drugs: string;
+  drugID: string;
+  preferred: string;
+}
+
+export interface CosmosRelatedEntitiesDataInterface {
+  // Extends CosmosSearchBibjsonInterface
+  type: string;
+  _gddid: string;
+  title: string;
+  volume: string;
+  journal: string;
+  link: {
+    url: string;
+    type: string;
+  }[];
+  publisher: string;
+  author: {
+    name: string;
+  }[];
+  pages: string;
+  number: string;
+  identifier: {
+    type: string;
+    id: string;
+  }[];
+  year: string;
+  // End Extends CosmosSearchBibjsonInterface
+  known_entities: {
+    drugs?: CosmosRelatedEntitiesDrugsInterface[];
+  }
+}
+
+export interface CosmosRelatedEntitiesInterface {
+  success: {
+    v: number;
+    data: CosmosRelatedEntitiesDataInterface[];
+  }
+}
