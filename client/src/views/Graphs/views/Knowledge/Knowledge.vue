@@ -27,7 +27,7 @@
         <div class="loader">Loading...</div>
       </div>
     </div>
-    <knowledge-drilldown :card="openDrilldown" @close-card="onCloseDrilldown"/>
+    <knowledge-drilldown :data="openDrilldown" @close-drilldown="onCloseDrilldown"/>
     <knowledgePanel
       @close-pane="onClosePanel"
       :is-open="isOpenPanel"
