@@ -14,21 +14,29 @@
   import { Lex, ValueState } from '@uncharted.software/lex/dist/lex';
   import KeyValuePill from '@/search/pills/KeyValuePill';
   import * as filtersUtil from '@/utils/FiltersUtil';
+  import RangePill from '@/search/pills/RangePill';
+  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 
   @Component
   export default class SearchBar extends Vue {
     private lex: Lex = null;
-    private pills: KeyValuePill[] = [];
+    private pills: any = [];
 
     @Getter getFilters;
     @Action setFilters;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.setQuery();
+      //HACK FOR DEMO IN FEB.12TH
+      this.$emit('run-query');
     }
 
     mounted (): void {
       /* add pills here */
+    this.pills = [
+      new RangePill(QUERY_FIELDS_MAP.PATH_QUERY),
+    ];
+    
       // this.pills = [ new KeyValuePill( ... ) ];
 
       const language = Lex.from('field', ValueState, {

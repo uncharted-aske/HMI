@@ -7,7 +7,7 @@
           </div>
     </left-side-panel>
     <div class="search-row">
-      <search-bar :placeholder="`Search for model components...`"/>
+      <search-bar :placeholder="`Search for model components...`" @run-query="onRunQuery"/>
       <button class="btn btn-primary m-1" @click="onSplitView">
         Add Subgraph
       </button>
@@ -22,10 +22,10 @@
             />
           </div>
           <div slot="right">
-            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId" @run-query="onRunQuery"/>
+            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <global-epi-graph v-if="selectedModel" :graph="selectedGraph" :highlights="pathQuery" @node-click="onNodeClick"/>
+        <global-epi-graph v-if="selectedModel" :graph="selectedGraph" :highlights="highlights" @node-click="onNodeClick"/>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -122,7 +122,7 @@
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
     subgraph: GraphInterface = null;
-    pathQuery: SubgraphInterface = null;
+    highlights: SubgraphInterface = null;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -205,7 +205,7 @@
       this.drilldownMetadata = node.metadata;
     }
     onRunQuery (): void {
-      this.pathQuery = pathSubgraph;
+      this.highlights = pathSubgraph;
     }
   }
 </script>
