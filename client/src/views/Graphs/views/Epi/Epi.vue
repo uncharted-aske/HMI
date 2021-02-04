@@ -62,8 +62,8 @@
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
-  import { CosmosArtifactInterface } from '@/types/typesCosmos';
-  import { cosmosArtifactsMem } from '@/utils/CosmosFetchUtil';
+  import { CosmosArtifactInterface, CosmosSearchInterface } from '@/types/typesCosmos';
+  import { cosmosArtifactsMem, cosmosArtifactSrc } from '@/utils/CosmosFetchUtil';
   import { NodeTypes } from '@/graphs/svg/encodings';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
@@ -151,7 +151,7 @@
     drilldownMetadata: any = null;
     subgraph: GraphInterface = null;
     showModal: boolean = false;
-    modalData: CosmosArtifactInterface = null;
+    modalData: any = null;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -236,14 +236,14 @@
       this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
     }
 
-    async getArtifactsList (doi: string):Promise<CosmosArtifactInterface> {
-      const response = await cosmosArtifactsMem({ doi });
+     async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
+      const response = await cosmosArtifactSrc(id);
       return response;
     }
 
-    async onOpenModal (doi: string):Promise<void> {
-      const response = await this.getArtifactsList(doi);
-      this.modalData = response;
+    async onOpenModal (d: any):Promise<void> {
+      const artifact = await this.getSingleArtifact(d.object_id);
+      this.modalData = artifact;
       this.showModal = true;
     }
   }
