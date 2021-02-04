@@ -104,22 +104,6 @@
       return !_.isEmpty(this.metadata) && this.metadata.knowledge && this.metadata.knowledge.map(d => _.pick(d, ['doi', 'title', 'URL', 'highlight', 'doi']));
     }
 
-    // async fetchCosmos (): Promise<void> {
-    //   if (this.getTextDefinition) {
-    //     try {
-    //       this.dataLoading = true;
-    //       const filter = { cosmosQuery: this.getTextDefinition};
-    //       const response = await cosmosSearch(filterToParamObj(filter));
-    //       this.knowledgeResults = response;
-    //       this.knowledgeResultsCounter = this.knowledgeResults.total;
-    //       this.knowledgeResultsDisplayed = response.objects.slice(0,5); //Just get the first 5 objects
-    //       console.log(this.knowledgeResultsDisplayed);
-    //     } catch (e) {
-    //       throw Error(e);
-    //     }
-    //     this.dataLoading = false;
-    //   }
-    // }
     showMoreHandler (doi: string): void {
       this.$emit('open-modal', doi);
     }
