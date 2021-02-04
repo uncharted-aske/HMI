@@ -43,10 +43,15 @@
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
       <div slot="content">
-        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata"/>
+        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata" @open-modal="onOpenModal"/>
         <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/>
       </div>
     </drilldown-panel>
+    <modal-knowledge
+      v-if="showModal"
+      :data="modalData"
+      @close="showModal = false"
+     />
   </div>
 </template>
 
@@ -57,6 +62,8 @@
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
+  import { CosmosArtifactInterface } from '@/types/typesCosmos';
+  import { cosmosArtifactsMem } from '@/utils/CosmosFetchUtil';
   import { NodeTypes } from '@/graphs/svg/encodings';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
@@ -70,9 +77,15 @@
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
+<<<<<<< HEAD
   import DrilldownMetadataPane from './components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
   import DrilldownParametersPane from './components/DrilldownMetadataPanel/DrilldownParametersPane.vue';
   import { SubgraphInterface } from '@/graphs/svg/types/types';
+=======
+  import DrilldownMetadataPane from './components/DrilldownPanel/DrilldownMetadataPane.vue';
+  import DrilldownParametersPane from './components/DrilldownPanel/DrilldownParametersPane.vue';
+  import ModalKnowledge from './components/ModalKnowledge/ModalKnowledge.vue';
+>>>>>>> add-text-snippet-epi-drilldown
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -89,7 +102,32 @@
     { name: 'Functional', id: 'functional' },
   ];
 
+<<<<<<< HEAD
   const pathSubgraph: SubgraphInterface = { nodes: [{ id: '4f8f229a-aab4-4db4-844b-64f68920dfad' }, { id: '4a8eb129-c503-4592-8cc2-e45b93bd8c26' }, { id: '024f553a-5070-482f-a94f-82b97dbdd88d' }, { id: 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd' }, { id: '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a' }, { id: '7ce1948c-b271-42d8-9b4b-29df3da5fdde' }, { id: '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa' }, { id: 'e1d3a02d-12f9-4b77-b35c-80695a219a5e' }, { id: 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3' }, { id: '620874cf-3a25-43e1-9848-dde986bcad1f' }, { id: 'aa94c3cc-5193-4122-b0ed-e83faefc214d' }, { id: 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d' }, { id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1' }, { id: '4e9f2344-29a6-4457-93cf-da8589382e3d' }, { id: '9d2259db-62cc-444f-a4d4-03f5769ba39b' }], edges: [{ source: '4f8f229a-aab4-4db4-844b-64f68920dfad', target: '4a8eb129-c503-4592-8cc2-e45b93bd8c26' }, { source: '4a8eb129-c503-4592-8cc2-e45b93bd8c26', target: '024f553a-5070-482f-a94f-82b97dbdd88d' }, { source: '024f553a-5070-482f-a94f-82b97dbdd88d', target: 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd' }, { source: 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd', target: '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a' }, { source: '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a', target: '7ce1948c-b271-42d8-9b4b-29df3da5fdde' }, { source: '7ce1948c-b271-42d8-9b4b-29df3da5fdde', target: '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa' }, { source: '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa', target: 'e1d3a02d-12f9-4b77-b35c-80695a219a5e' }, { source: 'e1d3a02d-12f9-4b77-b35c-80695a219a5e', target: 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3' }, { source: 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3', target: '620874cf-3a25-43e1-9848-dde986bcad1f' }, { source: '620874cf-3a25-43e1-9848-dde986bcad1f', target: 'aa94c3cc-5193-4122-b0ed-e83faefc214d' }, { source: 'aa94c3cc-5193-4122-b0ed-e83faefc214d', target: 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d' }, { source: 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d', target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1' }, { source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1', target: '4e9f2344-29a6-4457-93cf-da8589382e3d' }, { source: '4e9f2344-29a6-4457-93cf-da8589382e3d', target: '9d2259db-62cc-444f-a4d4-03f5769ba39b' }] };
+=======
+  /**
+  Temporary hack for workshop
+  **/
+  const bakedData = {
+    success: {
+      v: 1,
+      next_page: '',
+      scrollId: '',
+      hits: 1,
+      data: [{
+        pubname: 'Chaos, Solitons & Fractals',
+        publisher: 'Elsevier',
+        _gddid: '5ef5fd21a58f1dfd520aec60',
+        title: 'FORECASTING COVID-19 PANDEMIC: A DATA-DRIVEN ANALYSIS',
+        doi: '10.1016/j.chaos.2020.110046',
+        coverDate: 'Available online 25 June 2020',
+        URL: 'https://www.sciencedirect.com/science/article/pii/S0960077920304434?v=s5',
+        authors: '',
+        highlight: ['carriers, our analysis estimates the value of the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'estimates the value of the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> (R0 ) as', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> (R0 ) as of May 11, 2020 was found to be', '0) 0  181 182 183 184 185 186 187  188 189  190 191  3.2. <em class="hl">Basic</em> <em class="hl">Reproduction</em> <em class="hl">Number</em>', '0) 0  181 182 183 184 185 186 187  188 189  190 191  3.2. <em class="hl">Basic</em> <em class="hl">Reproduction</em> <em class="hl">Number</em> for Proposed', '<em class="hl">Basic</em> <em class="hl">Reproduction</em> <em class="hl">Number</em> for Proposed Model Using the next generation', '= −σ1 k γ + φD −σ2 k 0 φU + δU   The associated <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>,', '+ δU   The associated <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>, denoted', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>, denoted by R0 is then given by, R0 = ρ (FV', 'represents the robustness of the model forecasting. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'model forecasting. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 4.234', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 4.234 as of May 08, which lies in prior', 'peak around June 11 with about 26.449K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'about 26.449K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is estimated', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is estimated about 5.3467 as of May 11, which', 'about 5.3467 as of May 11, which is in between the observed <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> for', 'in between the observed <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> for COVID-19,', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> for COVID-19, estimated about 2-7 for COVID-19', 'peak around June 15 with about 9.504K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'about 9.504K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 5.218', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 5.218 as of May 11, which lies between', 'of COVID-19 dynamics. According to our calculation, the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'to our calculation, the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is around', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is around 4.649 as of May 09, which lies', 'control the disease burden of COVID-19. Otherwise, this <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'COVID-19. Otherwise, this <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> could increase', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> could increase upto 5.7 within 20 days and'],
+      }],
+    },
+  };
+>>>>>>> add-text-snippet-epi-drilldown
 
   const components = {
     SearchBar,
@@ -105,6 +143,7 @@
     DrilldownPanel,
     DrilldownMetadataPane,
     DrilldownParametersPane,
+    ModalKnowledge,
   };
 
   @Component({ components })
@@ -122,6 +161,8 @@
     drilldownMetadata: any = null;
     subgraph: GraphInterface = null;
     highlights: SubgraphInterface = null;
+    showModal: boolean = false;
+    modalData: CosmosArtifactInterface = null;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -207,7 +248,20 @@
       this.isOpenDrilldown = true;
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = node.nodeType;
-      this.drilldownMetadata = node.metadata;
+      const nodeMetadata = node.metadata;
+      const nodeKnowledge = { knowledge: bakedData.success.data };
+      this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
+    }
+
+    async getArtifactsList (doi: string):Promise<CosmosArtifactInterface> {
+      const response = await cosmosArtifactsMem({ doi });
+      return response;
+    }
+
+    async onOpenModal (doi: string):Promise<void> {
+      const response = await this.getArtifactsList(doi);
+      this.modalData = response;
+      this.showModal = true;
     }
 
     onRunQuery (): void {
