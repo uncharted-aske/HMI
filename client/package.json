@@ -14,12 +14,14 @@
     "watch": "yarn build:scripts --watch"
   },
   "dependencies": {
+    "@dekkai/data-source": "^0.2.0",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "@uncharted.software/facets-core": "^3.1.0",
     "@uncharted.software/facets-plugins": "^3.1.0",
+    "@uncharted.software/grafer": "^0.1.2",
     "@uncharted.software/lex": "^1.0.0",
     "bootstrap": "^4.5.2",
     "compound-graph": "git+https://bot-user:RosaRomeroGomez@github.com/mwdchang/compound-graph.git#99c392edf52963623e2b82a7deee746e49bbdaee",
@@ -32,6 +34,7 @@
     "moment-timezone": "0.5.x",
     "preact": "8.x",
     "sigma": "1.2.1",
+    "tweakpane": "^1.5.8",
     "vue": "^2.6.12",
     "vue-class-component": "^7.2.5",
     "vue-property-decorator": "^9.0.0",
