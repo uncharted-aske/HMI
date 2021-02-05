@@ -22,7 +22,7 @@
             <div>
               {{authorList}}
             </div>
-            <div class="font-weight-bolder mt-3">Publication Year</div>
+            <div class="font-weight-bolder mt-3">Publication Date</div>
             <div>
               {{data.bibjson.year || 'None'}}
             </div>
@@ -61,10 +61,14 @@
     @Prop({ default: null }) data: any;
 
     get authorList (): string {
+      if (!this.data.bibjson.doi) {
+        return this.data.bibjson.author.map(a => a.name).join(',');
+      }
       return getAuthorList(this.data.bibjson.author);
     }
 
     get imageStyle (): {backgroundImage: string} {
+      if (!this.data.objects) return;
       let backgroundImage = 'none';
       const image = this.data.objects.find(object => object.cls === 'Figure'); // Find the first image
       if (image) {
