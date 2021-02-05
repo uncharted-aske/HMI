@@ -19,6 +19,26 @@ import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
 import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
 import paramsData from '@/static/xdd_parameters_table.json'; // Boutique subgraph for COVID-19 model.
 
+import covidDetailedNodes from '@/static/nodes.js';
+
+const subgraphJSONNodeIdMap = new Map();
+subgraphJSON.nodes.map((node, index) => {
+  subgraphJSONNodeIdMap.set(Number(node.id), index);
+});
+
+const lines = covidDetailedNodes.split('\n');
+for (let line = 0; line < lines.length; line++) {
+  try {
+    const node = JSON.parse(lines[line]);
+    if (subgraphJSONNodeIdMap.has(node.id)) {
+      // @ts-expect-error hack
+      subgraphJSON.nodes[subgraphJSONNodeIdMap.get(node.id)].metadata = node;
+    }
+  } catch {
+
+  }
+}
+
 const state: ModelsState = {
   selectedModelIds: new Set(),
   parameters: paramsData,

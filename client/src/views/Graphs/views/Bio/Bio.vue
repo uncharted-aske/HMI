@@ -38,7 +38,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <local-bio-graph v-if="isSplitView" :graph="subgraph"/>
+        <local-bio-graph v-if="isSplitView" :graph="subgraph"  @node-click="onNodeClick"/>
       </div>
     </resizable-grid>
     <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
@@ -46,6 +46,12 @@
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
       </div>
     </drilldown-panel> -->
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
+      <div slot="content">
+        <drilldown-metadata-pane slot="metadata" :metadata="drilldownMetadata"/>
+        <!-- <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/> -->
+      </div>
+    </drilldown-panel>
   </div>
 </template>
 
@@ -55,7 +61,7 @@
   import { Getter } from 'vuex-class';
 
   import { TabInterface, ModelInterface } from '@/types/types';
-  import { GraphInterface } from '@/views/Graphs/types/types';
+  import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -73,6 +79,10 @@
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
+  ];
+
+  const TABS_DRILLDOWN: TabInterface[] = [
+    { name: 'Metadata', icon: 'filter', id: 'metadata' },
   ];
 
   const components = {
@@ -93,12 +103,13 @@
   @Component({ components })
   export default class BioView extends Vue {
     tabs: TabInterface[] = TABS;
+    tabsDrilldown: TabInterface[] = TABS_DRILLDOWN;
     activeTabId: string = 'metadata';
-    // isOpenDrilldown = false;
+    isOpenDrilldown = false;
     isSplitView = false;
-    // drilldownPaneTitle = '';
-    // drilldownPaneSubtitle = '';
-    // drilldownMetadata: any = null;
+    drilldownPaneTitle = '';
+    drilldownPaneSubtitle = '';
+    drilldownMetadata: any = null;
     subgraph: GraphInterface = null;
 
     @Getter getSelectedModelIds;
@@ -135,6 +146,8 @@
       // Get the COVID-19 model subgraph
       const modelsList = this.getModelsList;
       const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
+      console.log('fdhuifhuifhui');
+      console.log(modelsList);
       this.subgraph = selectedModel.subgraph;
     }
 
@@ -142,22 +155,23 @@
       this.activeTabId = tabId;
     }
 
-  // onCloseDrilldownPanel ():void {
-  //   this.isOpenDrilldown = false;
-  //   this.drilldownPaneTitle = '';
-  //   this.drilldownMetadata = null;
-  // }
+    onCloseDrilldownPanel ():void {
+      this.isOpenDrilldown = false;
+      this.drilldownPaneTitle = '';
+      this.drilldownMetadata = null;
+    }
 
   // onSetView (viewId: string): void {
   //   this.selectedViewId = viewId;
   // }
 
-  // onNodeClick (node: GraphNodeInterface): void {
-  //   this.isOpenDrilldown = true;
-  //   this.drilldownPaneTitle = node.label;
-  //   this.drilldownPaneSubtitle = node.nodeType;
-  //   this.drilldownMetadata = node.metadata;
-  // }
+    onNodeClick (node: GraphNodeInterface): void {
+      this.isOpenDrilldown = true;
+      this.drilldownPaneTitle = node.label;
+      this.drilldownPaneSubtitle = node.nodeType;
+      this.drilldownMetadata = node.metadata;
+      console.log(node.metadata);
+    }
   }
 </script>
 
