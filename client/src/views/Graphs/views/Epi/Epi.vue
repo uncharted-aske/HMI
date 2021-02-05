@@ -287,10 +287,10 @@
       return response;
     }
 
-    async onOpenModal (doi: string):Promise<void> {
+    async onOpenModal (id: string):Promise<void> {
       let response = null;
-      if (doi) {
-        response = await this.getArtifactsList(doi);
+      if (id) {
+        response = await this.getSingleArtifact(id);
       } else {
         response = bibjson;
       }
