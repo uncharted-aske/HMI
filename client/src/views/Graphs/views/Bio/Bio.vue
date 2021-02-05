@@ -15,11 +15,11 @@
     <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
       <div slot="1" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
-          <div slot="counters">
-            <!-- <counters
+          <div slot="left">
+            <counters
               :title="selectedModel.metadata.name"
-              :data="[`${nodeCount} Nodes`, `${edgeCount} Edges`]"
-            /> -->
+              :data="[`1688 Nodes`, `5035 Edges`]"
+            />
           </div>
           <div slot="settings">
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
@@ -29,7 +29,7 @@
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
-          <div slot="left">
+          <div slot="right">
             <counters
               :title="`Subgraph`"
               :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
@@ -108,15 +108,6 @@
       const modelsList = this.getModelsList;
       return modelsList.find(model => model.id === 4); // Only COVID-19 model for now
     }
-
-    // get nodeCount (): number {
-    //   const leafNodesCount = this.selectedGraph.nodes.filter(n => n.nodeType && n.nodeType !== NodeTypes.NODES.CONTAINER).length;
-    //   return leafNodesCount;
-    // }
-
-    // get edgeCount (): number {
-    //   return this.selectedGraph && this.selectedGraph.edges.length;
-    // }
 
     get subgraphNodeCount (): number {
       return this.subgraph && this.subgraph.nodes.length;
