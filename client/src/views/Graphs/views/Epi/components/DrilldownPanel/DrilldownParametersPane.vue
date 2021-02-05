@@ -5,9 +5,9 @@
       <div class="parameter-desc">The time required for the number of infections to double </div>
       <bar-chart :data="formatParametersData" :size="[400, 500]" @bar-click="onBarClick"/>
     </div>
-      <div> 
+      <div>
         <div>Related Parameters </div>
-      </div>  
+      </div>
     <div>
     </div>
   </div>

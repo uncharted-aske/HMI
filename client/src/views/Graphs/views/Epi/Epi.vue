@@ -89,7 +89,6 @@
   import ModalKnowledgeParameters from './components/ModalKnowledge/ModalKnowledgeParameters.vue';
   import ModalKnowledgeMetadata from './components/ModalKnowledge/ModalKnowledgeMetadata.vue';
 
-
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
@@ -123,30 +122,30 @@
         doi: '',
         coverDate: '2021-01-19T21:08',
         URL: 'https://drive.google.com/file/d/122LEBSEMF9x-3r3tWbF6YQ9xeV4I_9Eh/view?usp=sharing',
-        authors: [{"name": "Jason Lubken"},
-        {"name": "Marieke Jackson"},
-        {"name": "Michael Chow"}],
+        authors: [{ name: 'Jason Lubken' },
+                  { name: 'Marieke Jackson' },
+                  { name: 'Michael Chow' }],
         highlight: ['carriers, our analysis estimates the value of the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'estimates the value of the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> (R0 ) as', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> (R0 ) as of May 11, 2020 was found to be', '0) 0  181 182 183 184 185 186 187  188 189  190 191  3.2. <em class="hl">Basic</em> <em class="hl">Reproduction</em> <em class="hl">Number</em>', '0) 0  181 182 183 184 185 186 187  188 189  190 191  3.2. <em class="hl">Basic</em> <em class="hl">Reproduction</em> <em class="hl">Number</em> for Proposed', '<em class="hl">Basic</em> <em class="hl">Reproduction</em> <em class="hl">Number</em> for Proposed Model Using the next generation', '= −σ1 k γ + φD −σ2 k 0 φU + δU   The associated <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>,', '+ δU   The associated <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>, denoted', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>, denoted by R0 is then given by, R0 = ρ (FV', 'represents the robustness of the model forecasting. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'model forecasting. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 4.234', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 4.234 as of May 08, which lies in prior', 'peak around June 11 with about 26.449K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'about 26.449K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is estimated', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is estimated about 5.3467 as of May 11, which', 'about 5.3467 as of May 11, which is in between the observed <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> for', 'in between the observed <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> for COVID-19,', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> for COVID-19, estimated about 2-7 for COVID-19', 'peak around June 15 with about 9.504K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'about 9.504K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 5.218', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 5.218 as of May 11, which lies between', 'of COVID-19 dynamics. According to our calculation, the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'to our calculation, the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is around', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is around 4.649 as of May 09, which lies', 'control the disease burden of COVID-19. Otherwise, this <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'COVID-19. Otherwise, this <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> could increase', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> could increase upto 5.7 within 20 days and'],
       }],
     },
   };
 
   const bibjson = {
-    'bibjson':{
-    "title": "CHIME: COVID-19 Hospital Impact for Epidemics - Online Documentation",
-    "author":[
-        {"name": "Jason Lubken"},
-        {"name": "Marieke Jackson"},
-        {"name": "Michael Chow"}
-    ],
-    "type": "web_documentation",
-    "link": [{"url":"https://code-for-philly.gitbook.io/chime/"}],
-    "year": "2021-01-19T21:08",
-    "file": "CHIME-online-manual-T2021-01-19.pdf",
-    "file_url": "https://drive.google.com/file/d/122LEBSEMF9x-3r3tWbF6YQ9xeV4I_9Eh/view?usp=sharing",
-    "identifier": [{"type":"aske_id","id":"8467496e-3dfb-4efd-9061-433fef1b92de"}]
-}
-  }
+    bibjson: {
+      title: 'CHIME: COVID-19 Hospital Impact for Epidemics - Online Documentation',
+      author: [
+        { name: 'Jason Lubken' },
+        { name: 'Marieke Jackson' },
+        { name: 'Michael Chow' },
+      ],
+      type: 'web_documentation',
+      link: [{ url: 'https://code-for-philly.gitbook.io/chime/' }],
+      year: '2021-01-19T21:08',
+      file: 'CHIME-online-manual-T2021-01-19.pdf',
+      file_url: 'https://drive.google.com/file/d/122LEBSEMF9x-3r3tWbF6YQ9xeV4I_9Eh/view?usp=sharing',
+      identifier: [{ type: 'aske_id', id: '8467496e-3dfb-4efd-9061-433fef1b92de' }],
+    },
+  };
 
   const components = {
     SearchBar,
@@ -187,7 +186,6 @@
     showModalMetadata: boolean = false;
     modalDataParameters: any = null;
     modalDataMetadata: any = null;
-
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;

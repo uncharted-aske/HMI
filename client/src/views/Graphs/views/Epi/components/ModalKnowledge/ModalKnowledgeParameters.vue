@@ -66,6 +66,7 @@
     get authorList (): string {
       return getAuthorList(this.data.objects[0].bibjson.author);
     }
+
     get imageStyle (): {backgroundImage: string} {
       let backgroundImage = 'none';
       const image = this.data.objects[0].children[0].bytes; // Find the first image
@@ -84,9 +85,11 @@
     }
       return { backgroundImage };
     }
+
     close (): void {
       this.$emit('close', null);
     }
+
     openKnowledgeView () : void {
       this.$router.push({ name: 'knowledge' });
     }

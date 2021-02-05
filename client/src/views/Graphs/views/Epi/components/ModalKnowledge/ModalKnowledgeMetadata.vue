@@ -56,9 +56,11 @@
     get authorList (): string {
       return this.data.bibjson.author.map(a => a.name).join();
     }
+
     close (): void {
       this.$emit('close', null);
     }
+
     openKnowledgeView () : void {
       this.$router.push({ name: 'knowledge' });
     }

@@ -88,7 +88,6 @@ export const cosmosRelatedEntities = (paramObj: {doi: string, known_entities: st
   return getUtilMem(COSMOS_RELATED_ENTITIES, paramObj);
 };
 
-
 /// /////////////////////////////////////////////
 
 const COSMOS_RELATED_PARAMETERS = 'https://xdd.wisc.edu/sets/xdd-covid-19/word2vec/api/most_similar';

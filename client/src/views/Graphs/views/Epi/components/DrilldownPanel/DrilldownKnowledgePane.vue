@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-     
+
     </div>
 
     <div v-else class="alert alert-info" role="alert">
@@ -29,7 +29,6 @@
 
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
-
 
   const components = {
     CollapsibleItem,
@@ -65,5 +64,5 @@ display: flex;
         overflow: hidden scroll;
     }
 }
-  
+
 </style>
