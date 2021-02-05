@@ -27,7 +27,7 @@ export abstract class NodeTypes {
     FUNCTION: 'function',
     CONTAINER: 'container',
     ABSTRACTOVERLAPPING: 'AP',
-    NONOVERLAPPING: 'NOAP'
+    NONOVERLAPPING: 'NOAP',
   }
 
   static readonly VARIABLES: Record<string, any> = {

@@ -147,6 +147,7 @@
   get nodeCountIntersectionGraph (): number {
       return this.intersectionGraph.nodes.length;
   }
+
   get edgeCountIntersectionGraph (): number {
       return this.intersectionGraph.edges.length;
   }

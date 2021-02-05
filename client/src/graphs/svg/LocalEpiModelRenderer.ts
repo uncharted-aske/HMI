@@ -59,14 +59,15 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
         .attr('width', d => (d as any).width)
         .attr('height', d => (d as any).height)
         .style('fill', d => calcNodeColor(d))
-        .style('stroke-width', d=> (d as any).nodeType === 'NOAP' ? 3 : 1)
-        .style('stroke', d=> (d as any).nodeType === 'NOAP' ? '#FFA500' : Colors.STROKE)
-        .style("stroke-dasharray", d=> {
+        .style('stroke-width', d => (d as any).nodeType === 'NOAP' ? 3 : 1)
+        .style('stroke', d => (d as any).nodeType === 'NOAP' ? '#FFA500' : Colors.STROKE)
+        .style('stroke-dasharray', d => {
           if ((d as any).nodeType === 'NOAP') {
             return '5,5';
           } else {
             return null;
-          }})
+          }
+        });
     });
 
     nodeSelection.append('text')

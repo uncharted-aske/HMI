@@ -154,7 +154,7 @@ export const calcNodeColor = (node) => {
     }
   } else if (node.nodeType === NodeTypes.NODES.ABSTRACTOVERLAPPING || node.nodeType === NodeTypes.NODES.NONOVERLAPPING) {
     return Colors.NODES.ABSTRACTOVERLAPPING;
-  } 
+  }
   return Colors.NODES.DEFAULT;
 };
 
