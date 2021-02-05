@@ -146,8 +146,6 @@
       // Get the COVID-19 model subgraph
       const modelsList = this.getModelsList;
       const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
-      console.log('fdhuifhuifhui');
-      console.log(modelsList);
       this.subgraph = selectedModel.subgraph;
     }
 
@@ -170,7 +168,6 @@
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = node.nodeType;
       this.drilldownMetadata = node.metadata;
-      console.log(node.metadata);
     }
   }
 </script>
