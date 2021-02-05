@@ -3,24 +3,42 @@
     <div class="search-row">
       <search-bar />
     </div>
-    <resizable-grid :map="gridMap">
-      <div :slot="model.id" class="h-100 w-100 d-flex flex-column" v-for="(model) in selectedModels" :key="model.id">
-        <settings-bar>
+    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
+      <div slot="1" class="h-100 w-100 d-flex flex-column">
+        <div class="h-50 w-100" v-for="(model) in selectedModels" :key="model.id">
+          <settings-bar>
           <div slot="left">
-            <counters :labels="[model.metadata.name]"/>
+           <counters
+              :title="model.metadata.name"
+              :data="[`x Nodes`, `y Edges`]"
+            />
           </div>
           <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
         <epi-graph :graph="model.graph.detailed" :subgraph="model.subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
+        </div>  
       </div>
+      <div slot="2" class="h-100 w-100 d-flex flex-column">
+        <settings-bar>
+          <div slot="left">
+            <counters
+              :title="`TEST`"
+              :data="[`TEST Nodes`, `TEST Edges`]"
+            />          </div>
+          <div slot="right">
+            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
+          </div>
+        </settings-bar>
+        <local-epi-graph v-if="isSplitView" :graph="intersectionGraph" @node-click="onNodeClick"/>
+      </div>  
     </resizable-grid>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
+    <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
       </div>
-    </drilldown-panel>
+    </drilldown-panel> -->
   </div>
 </template>
 
@@ -38,7 +56,8 @@
   import Settings from '@/views/Graphs/components/Settings/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
-  import EpiGraph from './components/EpiGraph/EpiGraph.vue';
+  import EpiGraph from './components/EpiGraphs/EpiGraph.vue';
+  import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   // import DrilldownPanel from '@/components/DrilldownPanel.vue';
   // import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
@@ -62,10 +81,41 @@
     LeftSidePanel,
     MetadataPane,
     EpiGraph,
+    LocalEpiGraph,
     ResizableGrid,
     // DrilldownPanel,
     // DrilldownMetadataPane,
   };
+
+  const intersectionGraph = {
+      nodes: [
+        {id: '1', label: 's, sc'},
+        {id: '2', label: 'beta'},
+        {id: '3', label: 'r, rc'},
+        {id: '4', label: 'gamma'},
+        {id: '5', label: 'R, RC'},
+        {id: '5', label: 's, sc'},
+        {id: '6', label: 'r, rc'},
+        {id: '7', label: 'R, RC'},
+        {id: '8', label: 'NOAP 1'},
+        {id: '9', label: 'NOAP 2'},
+        {id: '10', label: 'AP 1'},
+        {id: '11', label: 'AP 2'},
+      ],
+    edges: [
+      {source:'1', target:'10' },
+      {source:'2', target:'10' },
+      {source:'3', target:'10' },
+      {source:'3', target:'11' },
+      {source:'4', target:'11' },
+      {source:'5', target:'11' },
+      {source:'10', target:'5' },
+      {source:'10', target:'6' },
+      {source:'11', target:'7' },
+      {source:'8', target:'2' },
+      {source:'9', target:'2' }
+    ]
+  }
 
   @Component({ components })
   export default class EpiView extends Vue {
@@ -79,6 +129,7 @@
     drilldownPaneSubtitle: string = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
     reference: string = ''
+    intersectionGraph: any = intersectionGraph;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
