@@ -64,7 +64,7 @@
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
   import { CosmosArtifactInterface, CosmosSearchInterface } from '@/types/typesCosmos';
-  import { cosmosArtifactSrc, cosmosArtifactsMem, filterToParamObj, cosmosSearch } from '@/utils/CosmosFetchUtil';
+  import { cosmosArtifactSrc, cosmosArtifactsMem, filterToParamObj, cosmosSearch, cosmosRelatedParameters } from '@/utils/CosmosFetchUtil';
   import { NodeTypes } from '@/graphs/svg/encodings';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
@@ -154,6 +154,7 @@
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
     drilldownKnowledge: CosmosSearchInterface | Record<any, never> = {};
+    drilldownParameters: any = null;
     subgraph: GraphInterface = null;
     showModal: boolean = false;
     modalData: any = null;
@@ -241,6 +242,11 @@
         }
     }
 
+    async getRelatedParameters (keyword: string): Promise<void> {
+      const response = await cosmosRelatedParameters({ word: keyword, model: 'trigam', n: 100 });
+      this.drilldownParameters = response;
+    }
+
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
 
@@ -251,8 +257,10 @@
       const nodeKnowledge = { knowledge: bakedData.success.data }; // To show some text snippets
       this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
 
+      // This probably will need to be refactored since we don't want to do all the queries at the same time, just on demand given the active tab
       const textDefinition = nodeMetadata.attributes[0].text_definition;
       this.searchCosmos(textDefinition);
+      this.getRelatedParameters(textDefinition);
     }
 
      async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
