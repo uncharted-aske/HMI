@@ -22,23 +22,22 @@
             <div>
               {{authorList}}
             </div>
-            <div class="font-weight-bolder mt-3">Publication Date</div>
+            <div class="font-weight-bolder mt-3">Publication Year</div>
             <div>
               {{data.objects[0].bibjson.year || 'None'}}
             </div>
             <div class="font-weight-bolder mt-3">Publisher</div>
             <div>
-              {{data.objects[0].bibjson.publisher || 'None'}}
+              {{data.objects[0].publisher || 'None'}}
             </div>
-            <!-- <div class="font-weight-bolder mt-3">Excerpt</div>
+            <div class="font-weight-bolder mt-3">Excerpt</div>
             <div class="position-relative flex-grow-1">
-              <div class="position-absolute h-100 w-100 pr-1 overflow-auto">
+              <!-- <div class="position-absolute h-100 w-100 pr-1 overflow-auto">
                 {{excerpt}}
-              </div>
-            </div> -->
+              </div> -->
+            </div>
           </div>
       </div>
-      <h3> Related Documents</h3>
     </div>
       <div slot="footer" class="related-docs">
         <button
@@ -56,30 +55,20 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
-
   import Modal from '@/components/Modal.vue';
-
   import { getAuthorList } from '@/utils/CosmosDataUtil';
-
   const components = {
     Modal,
   };
-
 @Component({ components })
-  export default class ModalKnowledge extends Vue {
+  export default class ModalKnowledgeParameters extends Vue {
     @Prop({ default: null }) data: any;
-
     get authorList (): string {
-      if (!this.data.bibjson.doi) {
-        return this.data.bibjson.author.map(a => a.name).join(',');
-      }
-      return getAuthorList(this.data.bibjson.author);
+      return getAuthorList(this.data.objects[0].bibjson.author);
     }
-
     get imageStyle (): {backgroundImage: string} {
-      if (!this.data.objects) return;
       let backgroundImage = 'none';
-      const image = this.data.objects[0].children[0].bytes;
+      const image = this.data.objects[0].children[0].bytes; // Find the first image
       if (image) {
           let isBase64 = true;
           try {
@@ -91,15 +80,13 @@
           }
           backgroundImage = isBase64
             ? `url(data:image/gif;base64,${image})`
-            : `url(${image})`;
+            : `url(${image.bytes})`;
     }
       return { backgroundImage };
     }
-
     close (): void {
       this.$emit('close', null);
     }
-
     openKnowledgeView () : void {
       this.$router.push({ name: 'knowledge' });
     }
@@ -107,13 +94,11 @@
 </script>
 
 <style lang="scss" scoped>
-
 .image {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
-
 .related-docs {
   display: flex;
   justify-content: space-between;

@@ -43,15 +43,20 @@
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
       <div slot="content">
-        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata" @open-modal="onOpenModal"/>
-        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'" @open-modal="onOpenModal"/>
+        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
+        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'" @open-modal="onOpenModalParameters"/>
         <drilldown-knowledge-pane v-if="activeTabIdDrilldown ===  'knowledge'" :data="drilldownKnowledge"/>
       </div>
     </drilldown-panel>
-    <modal-knowledge
-      v-if="showModal"
-      :data="modalData"
-      @close="showModal = false"
+    <modal-knowledge-parameters
+      v-if="showModalParameters"
+      :data="modalDataParameters"
+      @close="showModalParameters = false"
+     />
+     <modal-knowledge-metadata
+      v-if="showModalMetadata"
+      :data="modalDataMetadata"
+      @close="showModalMetadata = false"
      />
   </div>
 </template>
@@ -81,7 +86,9 @@
   import DrilldownMetadataPane from './components/DrilldownPanel/DrilldownMetadataPane.vue';
   import DrilldownParametersPane from './components/DrilldownPanel/DrilldownParametersPane.vue';
   import DrilldownKnowledgePane from './components/DrilldownPanel/DrilldownKnowledgePane.vue';
-  import ModalKnowledge from './components/ModalKnowledge/ModalKnowledge.vue';
+  import ModalKnowledgeParameters from './components/ModalKnowledge/ModalKnowledgeParameters.vue';
+  import ModalKnowledgeMetadata from './components/ModalKnowledge/ModalKnowledgeMetadata.vue';
+
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -156,7 +163,8 @@
     DrilldownMetadataPane,
     DrilldownParametersPane,
     DrilldownKnowledgePane,
-    ModalKnowledge,
+    ModalKnowledgeParameters,
+    ModalKnowledgeMetadata,
   };
 
   @Component({ components })
@@ -175,8 +183,11 @@
     drilldownKnowledge: CosmosSearchInterface | Record<any, never> = {};
     drilldownParameters: any = null;
     subgraph: GraphInterface = null;
-    showModal: boolean = false;
-    modalData: any = null;
+    showModalParameters: boolean = false;
+    showModalMetadata: boolean = false;
+    modalDataParameters: any = null;
+    modalDataMetadata: any = null;
+
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -287,15 +298,15 @@
       return response;
     }
 
-    async onOpenModal (id: string):Promise<void> {
-      let response = null;
-      if (id) {
-        response = await this.getSingleArtifact(id);
-      } else {
-        response = bibjson;
-      }
-      this.modalData = response;
-      this.showModal = true;
+    async onOpenModalParameters (id: string):Promise<void> {
+      const response = await this.getSingleArtifact(id);
+      this.modalDataParameters = response;
+      this.showModalParameters = true;
+    }
+
+    onOpenModalMetadata ():void {
+      this.modalDataMetadata = bibjson;
+      this.showModalMetadata = true;
     }
   }
 </script>
