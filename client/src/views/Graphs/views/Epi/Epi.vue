@@ -71,8 +71,7 @@
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, filterToParamObj, cosmosSearch, cosmosRelatedParameters } from '@/utils/CosmosFetchUtil';
   import { SubgraphInterface } from '@/graphs/svg/types/types';
-  import { CosmosArtifactInterface, CosmosSearchInterface } from '@/types/typesCosmos';
-  import { cosmosArtifactSrc, cosmosArtifactsMem, filterToParamObj, cosmosSearch, cosmosRelatedParameters } from '@/utils/CosmosFetchUtil';
+
   import { NodeTypes } from '@/graphs/svg/encodings';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
@@ -191,7 +190,6 @@
     modalDataParameters: any = null;
     modalDataMetadata: any = null;
     highlights: SubgraphInterface = null;
-   
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
