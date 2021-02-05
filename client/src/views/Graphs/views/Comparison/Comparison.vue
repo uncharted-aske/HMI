@@ -10,7 +10,7 @@
           <div slot="left">
            <counters
               :title="model.metadata.name"
-              :data="[`x Nodes`, `y Edges`]"
+              :data="[`${model.graph.detailed.nodes.length} Nodes`, `${model.graph.detailed.edges.length} Edges`]"
             />
           </div>
           <div slot="right">
@@ -18,21 +18,21 @@
           </div>
         </settings-bar>
         <epi-graph :graph="model.graph.detailed" :subgraph="model.subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
-        </div>  
+        </div>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
           <div slot="left">
             <counters
-              :title="`TEST`"
-              :data="[`TEST Nodes`, `TEST Edges`]"
+              :title="`Intersection Graph`"
+              :data="[`${nodeCountIntersectionGraph} Nodes`, `${edgeCountIntersectionGraph} Edges`]"
             />          </div>
           <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
         <local-epi-graph v-if="isSplitView" :graph="intersectionGraph" @node-click="onNodeClick"/>
-      </div>  
+      </div>
     </resizable-grid>
     <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
@@ -88,34 +88,34 @@
   };
 
   const intersectionGraph = {
-      nodes: [
-        {id: '1', label: 's, sc'},
-        {id: '2', label: 'beta'},
-        {id: '3', label: 'r, rc'},
-        {id: '4', label: 'gamma'},
-        {id: '5', label: 'R, RC'},
-        {id: '5', label: 's, sc'},
-        {id: '6', label: 'r, rc'},
-        {id: '7', label: 'R, RC'},
-        {id: '8', label: 'NOAP 1'},
-        {id: '9', label: 'NOAP 2'},
-        {id: '10', label: 'AP 1'},
-        {id: '11', label: 'AP 2'},
-      ],
+    nodes: [
+      { id: '1', label: 's, sc' },
+      { id: '2', label: 'beta' },
+      { id: '3', label: 'r, rc' },
+      { id: '4', label: 'gamma' },
+      { id: '5', label: 'R, RC' },
+      { id: '5', label: 's, sc' },
+      { id: '6', label: 'r, rc' },
+      { id: '7', label: 'R, RC' },
+      { id: '8', label: 'NOAP 1' },
+      { id: '9', label: 'NOAP 2' },
+      { id: '10', label: 'AP 1' },
+      { id: '11', label: 'AP 2' },
+    ],
     edges: [
-      {source:'1', target:'10' },
-      {source:'2', target:'10' },
-      {source:'3', target:'10' },
-      {source:'3', target:'11' },
-      {source:'4', target:'11' },
-      {source:'5', target:'11' },
-      {source:'10', target:'5' },
-      {source:'10', target:'6' },
-      {source:'11', target:'7' },
-      {source:'8', target:'2' },
-      {source:'9', target:'2' }
-    ]
-  }
+      { source: '1', target: '10' },
+      { source: '2', target: '10' },
+      { source: '3', target: '10' },
+      { source: '3', target: '11' },
+      { source: '4', target: '11' },
+      { source: '5', target: '11' },
+      { source: '10', target: '5' },
+      { source: '10', target: '6' },
+      { source: '11', target: '7' },
+      { source: '8', target: '2' },
+      { source: '9', target: '2' },
+    ],
+  };
 
   @Component({ components })
   export default class EpiView extends Vue {
@@ -142,6 +142,13 @@
     const modelsList = this.getModelsList;
     const selectedIds = new Set(this.getSelectedModelIds);
     return modelsList.filter(model => selectedIds.has(model.id));
+  }
+
+  get nodeCountIntersectionGraph (): number {
+      return this.intersectionGraph.nodes.length;
+  }
+  get edgeCountIntersectionGraph (): number {
+      return this.intersectionGraph.edges.length;
   }
 
   onCloseDrilldownPanel ():void {
