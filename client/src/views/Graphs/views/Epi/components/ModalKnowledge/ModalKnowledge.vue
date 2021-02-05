@@ -22,7 +22,7 @@
             <div>
               {{authorList}}
             </div>
-            <div class="font-weight-bolder mt-3">Publication Year</div>
+            <div class="font-weight-bolder mt-3">Publication Date</div>
             <div>
               {{data.objects[0].bibjson.year || 'None'}}
             </div>
@@ -38,6 +38,7 @@
             </div> -->
           </div>
       </div>
+      <h3> Related Documents</h3>
     </div>
       <div slot="footer" class="related-docs">
         <button
@@ -69,10 +70,14 @@
     @Prop({ default: null }) data: any;
 
     get authorList (): string {
-      return getAuthorList(this.data.objects[0].bibjson.author);
+      if (!this.data.bibjson.doi) {
+        return this.data.bibjson.author.map(a => a.name).join(',');
+      }
+      return getAuthorList(this.data.bibjson.author);
     }
 
     get imageStyle (): {backgroundImage: string} {
+      if (!this.data.objects) return;
       let backgroundImage = 'none';
       const image = this.data.objects[0].children[0].bytes;
       if (image) {
