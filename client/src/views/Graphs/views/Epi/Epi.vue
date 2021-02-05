@@ -44,7 +44,8 @@
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
       <div slot="content">
         <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata" @open-modal="onOpenModal"/>
-        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'" @open-modal="onOpenModal"/>
+        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/>
+        <drilldown-knowledge-pane v-if="activeTabIdDrilldown ===  'knowledge'" :data="drilldownKnowledge"/>
       </div>
     </drilldown-panel>
     <modal-knowledge
@@ -62,8 +63,8 @@
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
-  import { CosmosSearchInterface } from '@/types/typesCosmos';
-  import { cosmosArtifactSrc } from '@/utils/CosmosFetchUtil';
+  import { CosmosArtifactInterface, CosmosSearchInterface } from '@/types/typesCosmos';
+  import { cosmosArtifactSrc, cosmosArtifactsMem, filterToParamObj, cosmosSearch } from '@/utils/CosmosFetchUtil';
   import { NodeTypes } from '@/graphs/svg/encodings';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
@@ -79,6 +80,7 @@
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from './components/DrilldownPanel/DrilldownMetadataPane.vue';
   import DrilldownParametersPane from './components/DrilldownPanel/DrilldownParametersPane.vue';
+  import DrilldownKnowledgePane from './components/DrilldownPanel/DrilldownKnowledgePane.vue';
   import ModalKnowledge from './components/ModalKnowledge/ModalKnowledge.vue';
 
   const TABS: TabInterface[] = [
@@ -89,6 +91,7 @@
   const TABS_DRILLDOWN: TabInterface[] = [
     { name: 'Metadata', icon: 'filter', id: 'metadata' },
     { name: 'Parameters', icon: 'info', id: 'parameters' },
+    { name: 'Knowledge', icon: 'info', id: 'knowledge' },
   ];
 
   const VIEWS: ViewInterface[] = [
@@ -133,6 +136,7 @@
     DrilldownPanel,
     DrilldownMetadataPane,
     DrilldownParametersPane,
+    DrilldownKnowledgePane,
     ModalKnowledge,
   };
 
@@ -149,6 +153,7 @@
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
+    drilldownKnowledge: CosmosSearchInterface | Record<any, never> = {};
     subgraph: GraphInterface = null;
     showModal: boolean = false;
     modalData: any = null;
@@ -227,13 +232,27 @@
       this.selectedViewId = viewId;
     }
 
+    async searchCosmos (keyword: string): Promise<void> {
+        try {
+          const response = await cosmosSearch(filterToParamObj({ cosmosQuery: [keyword] }));
+          this.drilldownKnowledge = response;
+        } catch (e) {
+          throw Error(e);
+        }
+    }
+
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
+
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = node.nodeType;
+
       const nodeMetadata = node.metadata;
-      const nodeKnowledge = { knowledge: bakedData.success.data };
+      const nodeKnowledge = { knowledge: bakedData.success.data }; // To show some text snippets
       this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
+
+      const textDefinition = nodeMetadata.attributes[0].text_definition;
+      this.searchCosmos(textDefinition);
     }
 
      async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
