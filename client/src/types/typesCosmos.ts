@@ -131,3 +131,8 @@ export interface CosmosRelatedEntitiesInterface {
     data: CosmosRelatedEntitiesDataInterface[];
   }
 }
+
+export interface CosmosRelatedParametersInterface {
+  status: number;
+  data: string[];
+}
