@@ -5,7 +5,7 @@ export abstract class Colors {
     CONTAINER: '#2E3440',
     MODEL_VARIABLE: '#88C0D0',
     INITIAL_CONDITION: '#81A1C1',
-    ABSTRACTOVERLAPPING: '#D08770',
+    OVERLAPPING: '#D08770',
   };
 
   static readonly LABELS: Record<string, any> = {
@@ -26,6 +26,7 @@ export abstract class NodeTypes {
     VARIABLE: 'variable',
     FUNCTION: 'function',
     CONTAINER: 'container',
+    OVERLAPPING: 'overlapping',
     ABSTRACTOVERLAPPING: 'AP',
     NONOVERLAPPING: 'NOAP',
   }

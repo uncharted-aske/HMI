@@ -84,7 +84,23 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
     edgeSelection.append('path')
       .attr('d', d => pathFn(d.points))
       .style('fill', 'none')
-      .style('stroke', Colors.EDGES)
+      .style('stroke', d => {
+        if (d.data.type) {
+          if (d.data.type === 'overlapping') {
+            return Colors.NODES.OVERLAPPING
+          } 
+        }
+        return Colors.EDGES;
+      })
+      .style('stroke-width', 2)
+      .style('stroke-dasharray',d => {
+        if (d.data.type) {
+          if (d.data.type === 'NOAP') {
+            return '5,5'
+          }
+        }
+        return null;
+      })
       .attr('marker-end', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');
