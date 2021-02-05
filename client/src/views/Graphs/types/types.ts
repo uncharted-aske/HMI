@@ -9,7 +9,7 @@ export interface GraphNodeInterface {
 }
 
 export interface GraphEdgeInterface {
-  id: string,
+  id?: string,
   source: string,
   target: string
 }

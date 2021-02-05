@@ -15,6 +15,7 @@
   import { layered } from '@/graphs/svg//elk/layouts.js';
   import { hierarchyFn, showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
   import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
+  import { SubgraphInterface } from '@/graphs/svg/types/types';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -25,6 +26,7 @@
   @Component
   export default class GlobalEpiGraph extends Vue {
     @Prop({ default: null }) graph: GraphInterface;
+    @Prop({ default: null }) highlights: SubgraphInterface;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
@@ -32,6 +34,11 @@
     @Watch('graph')
     graphChanged (): void {
       this.refresh();
+    }
+
+    @Watch('highlights')
+    highlightsChanged (): void {
+      this.renderer.showNeighborhood(this.highlights);
     }
 
     created (): void {
