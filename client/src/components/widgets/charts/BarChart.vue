@@ -105,7 +105,7 @@
             svgUtil.hideTooltip(chart);
           })
           .on('click', (d) => {
-            this.$emit('bar-click', d.doi);
+            this.$emit('bar-click', d);
           });
 
       // Draw labels

@@ -3,7 +3,9 @@ import { COSMOS_TYPE_OPTIONS } from './ModelTypeUtil';
 import {
   CosmosSearchInterface,
   CosmosArtifactInterface,
+  CosmosSimilarInterface,
   CosmosRelatedEntitiesInterface,
+  CosmosRelatedParametersInterface,
 } from '@/types/typesCosmos';
 
 import { getUtilMem } from './FetchUtil';
@@ -68,8 +70,13 @@ export const cosmosArtifactsMem = async (paramObj: {doi: string, api_key?: strin
 const COSMOS_SIMILAR_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/doc2vec/api/similar';
 
 // eslint-disable-next-line camelcase
-export const cosmosSimilar = (paramObj: {doi: string}): Promise<CosmosSearchInterface> => {
-  return getUtilMem(COSMOS_SIMILAR_URL, paramObj);
+export const cosmosSimilar = async (doi: string): Promise<CosmosSimilarInterface> => {
+  const similarList = await getUtilMem(COSMOS_SIMILAR_URL, { doi });
+  await Promise.all(similarList.data.map(async (similar, index) => {
+    const response = await cosmosArtifactsMem({ doi: similar.bibjson.identifier[0].id });
+    similarList.data[index].objects = response.objects;
+  }));
+  return similarList;
 };
 
 /// /////////////////////////////////////////////
@@ -79,4 +86,14 @@ const COSMOS_RELATED_ENTITIES = 'https://xdd.wisc.edu/api/articles';
 // eslint-disable-next-line camelcase
 export const cosmosRelatedEntities = (paramObj: {doi: string, known_entities: string}): Promise<CosmosRelatedEntitiesInterface> => {
   return getUtilMem(COSMOS_RELATED_ENTITIES, paramObj);
+};
+
+
+/// /////////////////////////////////////////////
+
+const COSMOS_RELATED_PARAMETERS = 'https://xdd.wisc.edu/sets/xdd-covid-19/word2vec/api/most_similar';
+
+// eslint-disable-next-line camelcase
+export const cosmosRelatedParameters = (paramObj: {word: string, model: string, n: number}): Promise<CosmosRelatedParametersInterface> => {
+  return getUtilMem(COSMOS_RELATED_PARAMETERS, paramObj);
 };

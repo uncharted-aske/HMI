@@ -24,7 +24,7 @@ export const getUtilMem = async (urlStr: string, paramObj: Record<string, any>):
     return Promise.resolve(memoizedStore.get(hash));
   } else {
     try {
-      const result = await getUtil(urlStr, paramObj);
+      const result = await getUtil(urlStr, paramObj as URLSearchParams);
       memoizedStore.set(hash, result);
       return result;
     } catch (e) {
