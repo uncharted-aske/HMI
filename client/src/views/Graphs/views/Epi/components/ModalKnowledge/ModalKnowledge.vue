@@ -38,7 +38,7 @@
             </div>
           </div>
       </div>
-      <h5> Related Documents</h5>
+      <h3> Related Documents</h3>
     </div>
   </modal>
 </template>
