@@ -20,7 +20,7 @@
         <epi-graph class="h-100" :graph="model.graph.detailed" :subgraph="model.subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
         </div>
       </div>
-      <div slot="2" class="h-100 w-100 d-flex flex-column border-intersection-graph">
+      <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
           <div slot="left">
             <counters
@@ -135,7 +135,7 @@
     @Getter getModelsList;
 
     get gridMap (): string[][] {
-      return [this.selectedModels.map(model => model.id)];
+      return [['1', '3', '2']];
     }
 
   get selectedModels (): any[] {
@@ -177,7 +177,4 @@
 
 <style lang="scss" scoped>
 @import '@/styles/variables';
-.border-intersection-graph {
-  border-left: 10px solid $bg-body;
-}
 </style>
