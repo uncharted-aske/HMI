@@ -274,7 +274,7 @@
       const parametersArray = [];
       Object.keys(this.getParameters).forEach(key => {
         const item = this.getParameters[key];
-       if (item.variable === keyword){
+       if (item.variable === keyword) {
           parametersArray.push(this.getParameters[key]);
        }
       });

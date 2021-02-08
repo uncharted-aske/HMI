@@ -34,7 +34,7 @@
       return _.isEmpty(this.data);
     }
 
-    get title(): string {
+    get title (): string {
       return !_.isEmpty(this.data) && this.data[0].variable;
     }
 
