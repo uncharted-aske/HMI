@@ -161,7 +161,6 @@
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = node.nodeType;
       this.drilldownMetadata = node.metadata;
-      console.log(node.metadata);
     }
   }
 </script>

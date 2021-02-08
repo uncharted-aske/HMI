@@ -87,16 +87,16 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
       .style('stroke', d => {
         if (d.data.type) {
           if (d.data.type === 'overlapping') {
-            return Colors.NODES.OVERLAPPING
-          } 
+            return Colors.NODES.OVERLAPPING;
+          }
         }
         return Colors.EDGES;
       })
       .style('stroke-width', 2)
-      .style('stroke-dasharray',d => {
+      .style('stroke-dasharray', d => {
         if (d.data.type) {
           if (d.data.type === 'NOAP') {
-            return '5,5'
+            return '5,5';
           }
         }
         return null;

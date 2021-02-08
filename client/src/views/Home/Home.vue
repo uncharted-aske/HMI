@@ -61,7 +61,6 @@
   import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
   import COVID19Screenshot from '@/assets/img/COVID19.png';
 
-
   // Services
   import * as modelsService from '@/services/ModelsService';
 
