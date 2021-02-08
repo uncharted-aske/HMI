@@ -43,9 +43,8 @@
       svg.selectAll('*').remove();
 
       // TO FIX: This color scales probably won't work for all parameter types
-      let positiveColorScale = d3.scaleLinear(['#7b3294', '#008837']).domain([0, d3.max(data, (d) => Number((d as any).value))]);
-      let negativeColorScale = d3.scaleLinear(['#7b3294', '#008837']).domain([d3.min(data, (d) => Number((d as any).value)), 0]);
-
+      const positiveColorScale = d3.scaleLinear(['#7b3294', '#008837']).domain([0, d3.max(data, (d) => Number((d as any).value))]);
+      const negativeColorScale = d3.scaleLinear(['#7b3294', '#008837']).domain([d3.min(data, (d) => Number((d as any).value)), 0]);
 
       // Set the dimensions and margins of the chart
       const margin = DEFAULT_CONFIG.margin;
