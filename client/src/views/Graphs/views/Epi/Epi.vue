@@ -270,13 +270,10 @@
       this.drilldownRelatedParameters = response;
     }
 
-    formatParametersData (keyword: string): any {
+    formatParametersData (): any {
       const parametersArray = [];
       Object.keys(this.getParameters).forEach(key => {
-        const item = this.getParameters[key];
-       if (item.variable === keyword) {
-          parametersArray.push(this.getParameters[key]);
-       }
+        parametersArray.push(this.getParameters[key]);
       });
       this.drilldownParameters = parametersArray;
     }
@@ -294,7 +291,7 @@
 
         // This probably will need to be refactored since we don't want to do all the queries at the same time, just on demand given the active tab
         const textDefinition = nodeMetadata.attributes[0].text_definition;
-        this.formatParametersData(textDefinition);
+        this.formatParametersData();
         this.getRelatedParameters(textDefinition);
         this.searchCosmos(textDefinition);
       }

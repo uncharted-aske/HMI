@@ -2,7 +2,7 @@
   <div class="drilldown-parameters-pane-container">
     <div v-if="!isEmptyData">
       <div class="parameter-title">{{title | capitalize-first-letter-formatter}} </div>
-      <bar-chart :data="data" :size="[400, 500]" @bar-click="onBarClick"/>
+      <scatter-plot :data="data" :size="[400, 500]" @bar-click="onBarClick"/>
       <div>Related Parameters </div>
     </div>
     <div v-else class="alert alert-info" role="alert">
@@ -19,11 +19,11 @@
   import { Prop } from 'vue-property-decorator';
 
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
-  import BarChart from '@/components/widgets/charts/BarChart.vue';
+  import ScatterPlot from '@/components/widgets/charts/ScatterPlot.vue';
 
   const components = {
     CollapsibleItem,
-    BarChart,
+    ScatterPlot,
   };
 
   @Component({ components })
