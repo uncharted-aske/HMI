@@ -27,15 +27,10 @@
     },
   };
 
-  const COLORS = {
-    positive: '#5E81AC',
-    negative: '#BF616A',
-  };
-
 @Component
   export default class BarChart extends Vue {
     @Prop({ default: null }) data: any;
-    @Prop({ default: () => [450, 500] }) size: Array<number>;
+    @Prop({ default: () => [470, 500] }) size: Array<number>;
 
     mounted (): void {
         this.refresh();
@@ -46,6 +41,11 @@
       const data = this.data;
       const svg = d3.select(this.$refs.container as any);
       svg.selectAll('*').remove();
+
+      // TO FIX: This color scales probably won't work for all parameter types
+      let positiveColorScale = d3.scaleLinear(['#7b3294', '#008837']).domain([0, d3.max(data, (d) => Number((d as any).value))]);
+      let negativeColorScale = d3.scaleLinear(['#7b3294', '#008837']).domain([d3.min(data, (d) => Number((d as any).value)), 0]);
+
 
       // Set the dimensions and margins of the chart
       const margin = DEFAULT_CONFIG.margin;
@@ -94,7 +94,7 @@
           .attr('height', yscale.bandwidth())
           .attr('width', (d) => Math.abs(xscale(d.value) - xscale(0)))
           .style('fill', d => {
-            return (d as any).value > 0 ? COLORS.positive : COLORS.negative;
+            return (d as any).value > 0 ? positiveColorScale(d.value) : negativeColorScale(d.value);
           })
           .on('mouseover', (d) => {
             const coords = [xscale(0), yscale(d.location)];
@@ -118,14 +118,12 @@
         .attr('class', 'bar-label')
           .attr('x', xscale(0))
           .attr('y', (d) => yscale((d as any).location))
-          .attr('dx', (d) => (d as any).value < 0 ? 10 : -10)
+          .attr('dx', (d) => (d as any).value < 0 ? 5 : -5)
           .attr('dy', yscale.bandwidth())
           .attr('text-anchor', (d) => (d as any).value < 0 ? 'start' : 'end')
           .text((d) => (d as any).location)
           .style('font-size', '9px')
-          .style('fill', d => {
-            return (d as any).value > 0 ? COLORS.positive : COLORS.negative;
-          });
+          .style('fill', 'gray');
     }
   }
 
