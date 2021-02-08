@@ -43,8 +43,8 @@
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
       <div slot="content">
-        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :metadata="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
-        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'" @open-modal="onOpenModalParameters"/>
+        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
+        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'" :data="drilldownParameters" @open-modal="onOpenModalParameters"/>
         <drilldown-knowledge-pane v-if="activeTabIdDrilldown ===  'knowledge'" :data="drilldownKnowledge"/>
       </div>
     </drilldown-panel>
@@ -183,6 +183,7 @@
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
     drilldownKnowledge: CosmosSearchInterface | Record<any, never> = {};
+    drilldownRelatedParameters: any = null;
     drilldownParameters: any = null;
     subgraph: GraphInterface = null;
     showModalParameters: boolean = false;
@@ -193,6 +194,7 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+    @Getter getParameters;
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
@@ -233,23 +235,6 @@
       const edges = path.edges;
       const nodes = path.nodes.map(node => this.selectedGraph.nodes.find(n => n.id === node.id));
 
-      // // Get the CHIME GrFN subgraph
-      // const modelsList = this.getModelsList;
-      // const selectedModel = modelsList.find(model => model.id === 2); // Get CHIME model
-      // const GrFN = selectedModel.graph.detailed;
-      // // Get nodes only corresponding to the SIR plate
-      // const nodes = GrFN.nodes.filter(n => n.parent === 'bac81b1a-3a6d-45ad-9725-947e507f6930'); // sir plate has id: 2bfc84bb-f036-4420-a68c-4ef6d72928e9
-      // const nodesMap = new Map();
-      // // Creates a map of nodes and its corresponding parents
-      // nodes.forEach(n => {
-      //   nodesMap[n.id] = n.parent;
-      // });
-      // const edges = GrFN.edges.filter(e => {
-      //   const sourceParent = nodesMap[e.source];
-      //   const targetParent = nodesMap[e.target];
-      //   return ((sourceParent === 'bac81b1a-3a6d-45ad-9725-947e507f6930') && (targetParent === 'bac81b1a-3a6d-45ad-9725-947e507f6930'));
-      // });
-
       this.subgraph = { nodes, edges };
     }
 
@@ -282,7 +267,18 @@
 
     async getRelatedParameters (keyword: string): Promise<void> {
       const response = await cosmosRelatedParameters({ word: keyword, model: 'trigam', n: 100 });
-      this.drilldownParameters = response;
+      this.drilldownRelatedParameters = response;
+    }
+
+    formatParametersData (keyword: string): any {
+      const parametersArray = [];
+      Object.keys(this.getParameters).forEach(key => {
+        const item = this.getParameters[key];
+       if (item.variable === keyword){
+          parametersArray.push(this.getParameters[key]);
+       }
+      });
+      this.drilldownParameters = parametersArray;
     }
 
     onNodeClick (node: GraphNodeInterface): void {
@@ -292,13 +288,16 @@
       this.drilldownPaneSubtitle = node.nodeType;
 
       const nodeMetadata = node.metadata;
-      const nodeKnowledge = { knowledge: bakedData.success.data }; // To show some text snippets
-      this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
+      if (nodeMetadata) {
+        const nodeKnowledge = { knowledge: bakedData.success.data }; // To show some text snippets
+        this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
 
-      // This probably will need to be refactored since we don't want to do all the queries at the same time, just on demand given the active tab
-      const textDefinition = nodeMetadata.attributes[0].text_definition;
-      this.searchCosmos(textDefinition);
-      this.getRelatedParameters(textDefinition);
+        // This probably will need to be refactored since we don't want to do all the queries at the same time, just on demand given the active tab
+        const textDefinition = nodeMetadata.attributes[0].text_definition;
+        this.formatParametersData(textDefinition);
+        this.getRelatedParameters(textDefinition);
+        this.searchCosmos(textDefinition);
+      }
     }
 
      async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {

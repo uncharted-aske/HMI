@@ -1,22 +1,22 @@
 <template>
   <div class="drilldown-parameters-pane-container">
-    <div>
-      <div class="parameter-title">Doubling Time (days) </div>
-      <div class="parameter-desc">The time required for the number of infections to double </div>
-      <bar-chart :data="formatParametersData" :size="[400, 500]" @bar-click="onBarClick"/>
+    <div v-if="!isEmptyData">
+      <div class="parameter-title">{{title | capitalize-first-letter-formatter}} </div>
+      <bar-chart :data="data" :size="[400, 500]" @bar-click="onBarClick"/>
+      <div>Related Parameters </div>
     </div>
-      <div>
-        <div>Related Parameters </div>
-      </div>
-    <div>
+    <div v-else class="alert alert-info" role="alert">
+      No metadata at the moment
     </div>
   </div>
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
+
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter } from 'vuex-class';
+  import { Prop } from 'vue-property-decorator';
 
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
   import BarChart from '@/components/widgets/charts/BarChart.vue';
@@ -28,15 +28,14 @@
 
   @Component({ components })
   export default class DrilldownParametersPane extends Vue {
-    @Getter getSelectedModelIds;
-    @Getter getParameters;
+    @Prop({ default: null }) data: any;
 
-    get formatParametersData (): any {
-      const parametersArray = [];
-      Object.keys(this.getParameters).forEach(key => {
-        parametersArray.push(this.getParameters[key]);
-      });
-      return parametersArray;
+     get isEmptyData (): boolean {
+      return _.isEmpty(this.data);
+    }
+
+    get title(): string {
+      return !_.isEmpty(this.data) && this.data[0].variable;
     }
 
     onBarClick (doi:string): void {

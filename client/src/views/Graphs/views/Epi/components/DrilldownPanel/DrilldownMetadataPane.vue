@@ -1,6 +1,6 @@
 <template>
   <div class="drilldown-metadata-pane-container">
-    <div v-if="!isEmptyMetadata" >
+    <div v-if="!isEmptyMetadata">
       <collapsible-item>
         <div slot="title">Type</div>
         <div slot="content">
@@ -75,33 +75,33 @@
 
   @Component({ components })
   export default class DrilldownMetadataPane extends Vue {
-    @Prop({ default: null }) metadata: any;
+    @Prop({ default: null }) data: any;
 
     showModal: boolean = false;
     dataLoading = false;
 
     get isEmptyMetadata (): boolean {
-      return _.isEmpty(this.metadata);
+      return _.isEmpty(this.data);
     }
 
     get getType (): string {
-      return !_.isEmpty(this.metadata) && this.metadata.type;
+      return !_.isEmpty(this.data) && this.data.type;
     }
 
     get getProvenance (): any {
-      return !_.isEmpty(this.metadata) && this.metadata.provenance;
+      return !_.isEmpty(this.data) && this.data.provenance;
     }
 
     get getAttributes (): any {
-      return !_.isEmpty(this.metadata) && this.metadata.attributes;
+      return !_.isEmpty(this.data) && this.data.attributes;
     }
 
     get getTextDefinition (): string {
-      return (!_.isEmpty(this.metadata) && !_.isEmpty(this.metadata.attributes[0].text_definition)) && this.metadata.attributes[0].text_definition;
+      return (!_.isEmpty(this.data) && !_.isEmpty(this.data.attributes[0].text_definition)) && this.data.attributes[0].text_definition;
     }
 
     get getKnowledge (): CosmosTextSnippet[] {
-      return !_.isEmpty(this.metadata) && this.metadata.knowledge && this.metadata.knowledge.map(d => _.pick(d, ['doi', 'title', 'URL', 'highlight', 'doi']));
+      return !_.isEmpty(this.data) && this.data.knowledge && this.data.knowledge.map(d => _.pick(d, ['doi', 'title', 'URL', 'highlight', 'doi']));
     }
 
     showMoreHandler (doi: string): void {
