@@ -60,35 +60,33 @@
           .range([innerHeight, 0]);
 
       xscale.domain(d3.extent(data, (d) => Number((d as any).value)));
-      yscale.domain(data.map(d=> d.location));
-
+      yscale.domain(data.map(d => d.location));
 
       chart.append('g')
         .attr('class', 'x-axis')
         .attr('transform', svgUtil.translate(0, innerHeight))
         .call(d3.axisBottom(xscale))
-            .selectAll("text")
-            .attr("transform", "translate(-10,0)rotate(-45)")
-            .style("text-anchor", "end");
-
+            .selectAll('text')
+            .attr('transform', 'translate(-10,0)rotate(-45)')
+            .style('text-anchor', 'end');
 
       chart.append('g')
         // .attr('transform', svgUtil.translate(margin.left, 0))
         .attr('class', 'y-axis')
         .call(d3.axisLeft(yscale));
-    
+
       // Draw bars
       const dots = chart.append('g')
         .attr('class', 'dots');
 
-      dots.selectAll("dot")
+      dots.selectAll('dot')
         .data(data)
         .enter()
-        .append("circle")
-          .attr("cx", (d)=> xscale(d.value))
-          .attr("cy", (d)=> yscale(d.location))
-          .attr("r", 5)
-          .style("fill", "#69b3a2")
+        .append('circle')
+          .attr('cx', (d) => xscale(d.value))
+          .attr('cy', (d) => yscale(d.location))
+          .attr('r', 5)
+          .style('fill', '#69b3a2');
           // .on('mouseover', (d) => {
           //   const coords = [xscale(0), yscale(d.location)];
           //   const tooltipText = 'Value: ' + d.value + ' ' + 'Date: ' + d.date;
