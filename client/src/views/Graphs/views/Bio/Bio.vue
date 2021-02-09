@@ -38,19 +38,13 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <local-bio-graph v-if="isSplitView" :graph="subgraph"  @node-click="onNodeClick"/>
+        <local-bio-graph v-if="isSplitView" :graph="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
       </div>
     </resizable-grid>
-    <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
-      <div slot="content">
-        <drilldown-metadata-pane :metadata="drilldownMetadata"/>
-      </div>
-    </drilldown-panel> -->
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
-      <div slot="content">
-        <drilldown-metadata-pane slot="metadata" :metadata="drilldownMetadata"/>
-        <!-- <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/> -->
-      </div>
+      <drilldown-metadata-node v-if="isOpenDrilldown === 'node'" slot="metadata" :metadata="drilldownMetadata"/>
+      <drilldown-metadata-edge v-if="isOpenDrilldown === 'edge'" slot="metadata" :metadata="drilldownMetadata"/>
+      <!-- <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/> -->
     </drilldown-panel>
   </div>
 </template>
@@ -61,7 +55,7 @@
   import { Getter } from 'vuex-class';
 
   import { TabInterface, ModelInterface } from '@/types/types';
-  import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
+  import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/views/Graphs/types/types';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -73,7 +67,8 @@
   import LocalBioGraph from './components/BioGraphs/LocalBioGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import DrilldownMetadataPane from './components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  import DrilldownMetadataNode from './components/DrilldownMetadataPanel/DrilldownMetadataNode.vue';
+  import DrilldownMetadataEdge from './components/DrilldownMetadataPanel/DrilldownMetadataEdge.vue';
   import Grafer from './components/BioGraphs/Grafer.vue';
 
   const TABS: TabInterface[] = [
@@ -96,7 +91,8 @@
     LocalBioGraph,
     ResizableGrid,
     DrilldownPanel,
-    DrilldownMetadataPane,
+    DrilldownMetadataNode,
+    DrilldownMetadataEdge,
     Grafer,
   };
 
@@ -105,7 +101,7 @@
     tabs: TabInterface[] = TABS;
     tabsDrilldown: TabInterface[] = TABS_DRILLDOWN;
     activeTabId: string = 'metadata';
-    isOpenDrilldown = false;
+    isOpenDrilldown: string = '';
     isSplitView = false;
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
@@ -145,7 +141,7 @@
     }
 
     onCloseDrilldownPanel ():void {
-      this.isOpenDrilldown = false;
+      this.isOpenDrilldown = '';
       this.drilldownPaneTitle = '';
       this.drilldownMetadata = null;
     }
@@ -155,10 +151,17 @@
   // }
 
     onNodeClick (node: GraphNodeInterface): void {
-      this.isOpenDrilldown = true;
+      this.isOpenDrilldown = 'node';
       this.drilldownPaneTitle = node.label;
-      this.drilldownPaneSubtitle = node.nodeType;
+      this.drilldownPaneSubtitle = 'Node';
       this.drilldownMetadata = node.metadata;
+    }
+
+    onEdgeClick (edge: GraphEdgeInterface): void {
+      this.isOpenDrilldown = 'edge';
+      this.drilldownPaneTitle = `${edge.metadata.source_label} → ${edge.metadata.target_label}`;
+      this.drilldownPaneSubtitle = 'Edge';
+      this.drilldownMetadata = edge.metadata;
     }
   }
 </script>

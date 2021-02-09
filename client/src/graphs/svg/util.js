@@ -121,7 +121,7 @@ export const formatHierarchyNodeData = (root) => {
  * @param {string} node - a node object
  */
 
-export const calculateNeighborhood = (graph, node) => {
+export const calculateNodeNeighborhood = (graph, node) => {
   const neighborEdges = graph.edges.filter(edge =>
     edge.target === node.id || edge.source === node.id).map(edge => ({ source: edge.source, target: edge.target }));
 
@@ -136,6 +136,13 @@ export const calculateNeighborhood = (graph, node) => {
   // }
 
   return { nodes: neighborNodes, edges: neighborEdges };
+};
+
+export const calculateEdgeNeighborhood = (edge) => {
+  return {
+    edges: [{ source: edge.source, target: edge.target }],
+    nodes: [{ id: edge.source }, { id: edge.target }],
+  };
 };
 
 export const calcNodeColor = (node) => {
