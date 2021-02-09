@@ -42,9 +42,9 @@
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
-      <div slot="content">
+      <div class="h-100" slot="content">
         <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
-        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'" :data="drilldownParameters" @open-modal="onOpenModalParameters"/>
+        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'" :data="drilldownParameters" :related="drilldownRelatedParameters" @open-modal="onOpenModalParameters"/>
         <drilldown-knowledge-pane v-if="activeTabIdDrilldown ===  'knowledge'" :data="drilldownKnowledge"/>
       </div>
     </drilldown-panel>
@@ -266,8 +266,8 @@
     }
 
     async getRelatedParameters (keyword: string): Promise<void> {
-      const response = await cosmosRelatedParameters({ word: keyword, model: 'trigam', n: 100 });
-      this.drilldownRelatedParameters = response;
+      const response = await cosmosRelatedParameters({ word: keyword, model: 'trigram', n: 10 });
+      this.drilldownRelatedParameters = response.data;
     }
 
     formatParametersData (): any {
