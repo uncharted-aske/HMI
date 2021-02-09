@@ -75,7 +75,16 @@
         .attr('class', 'y-axis')
         .call(d3.axisLeft(yscale));
 
-      // Draw bars
+      chart.append('line')
+        .style('stroke', 'lightgray')
+        .style('stroke-dasharray', '5,5')
+        .style('stroke-width', 1)
+        .attr('x1', xscale(0))
+        .attr('y1', 0)
+        .attr('x2', xscale(0))
+        .attr('y2', innerHeight);
+
+      // Draw dots
       const dots = chart.append('g')
         .attr('class', 'dots');
 
