@@ -160,7 +160,7 @@
     onEdgeClick (edge: GraphEdgeInterface): void {
       this.isOpenDrilldown = 'edge';
       this.drilldownPaneTitle = `${edge.metadata.source_label} → ${edge.metadata.target_label}`;
-      this.drilldownPaneSubtitle = 'Edge';
+      this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
       this.drilldownMetadata = edge.metadata;
     }
   }

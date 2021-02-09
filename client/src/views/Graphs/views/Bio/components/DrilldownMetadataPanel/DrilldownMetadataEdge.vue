@@ -52,12 +52,12 @@
     }
 
     get dataObject (): Record<any, void> {
-        const output: Record<any, void> = {};
-        output.Type = this.metadata.type;
-        output.Tested = this.metadata.tested;
-        output.Belief = this.metadata.belief;
-        output.Evidence = this.metadata.statement.evidence.map(({ text }) => text).join(', ');
-        return output;
+      const output: Record<any, void> = {};
+      output.Type = this.metadata.type;
+      output.Tested = this.metadata.tested;
+      output.Belief = this.metadata.belief;
+      output.Evidence = this.metadata.statement.evidence.map(({ text }) => text).join(', ');
+      return output;
     }
   }
 </script>
@@ -65,22 +65,5 @@
 <style lang="scss" scoped>
   .drilldown-metadata-pane-container {
     padding: 5px;
-
-    //FIXME: Put back when we have document artifacts from Cosmosonsin
-    // .expression {
-    //     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
-    // }
-    // .snippet {
-    //   width: 100%;
-    //   height: 100px;
-    //   border: 1px solid rgba(207, 216, 220, .5);
-    //   margin: 5px;
-    //   img {
-    //       // Clip images that are too big, but maintain aspect ratio
-    //       object-fit: cover;
-    //       width: 100%;
-    //       height: 100%
-    //     }
-    //   }
   }
 </style>
