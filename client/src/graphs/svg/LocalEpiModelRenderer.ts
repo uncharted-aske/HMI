@@ -77,12 +77,12 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
       .style('fill', d => calcLabelColor(d))
       .style('font-weight', '600')
       .style('text-anchor', 'middle')
-      .text(d => { 
+      .text(d => {
         if (d.label.length > 10) {
           const label = d.label.slice(0, 10);
-          return label.concat('...')
+          return label.concat('...');
         } else return d.label;
-       });  
+      });
   }
 
   renderEdge (edgeSelection: d3.Selection<any, any, any, any>): void {

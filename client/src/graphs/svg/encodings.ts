@@ -55,6 +55,6 @@ export abstract class EdgeTypes {
     COMPLEX: 'Complex',
     OVERLAPPING: 'overlapping',
     ABSTRACTOVERLAPPING: 'AP',
-    NONOVERLAPPING: 'NOAP'
+    NONOVERLAPPING: 'NOAP',
   }
 }

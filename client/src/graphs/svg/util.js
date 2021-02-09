@@ -165,15 +165,15 @@ export const calcLabelColor = (node) => {
 export const calcEdgeColor = (edge) => {
   if (edge.data.edgeType) {
     if (edge.data.edgeType === EdgeTypes.EDGES.ACTIVATION) {
-        return Colors.EDGES.ACTIVATION; 
+      return Colors.EDGES.ACTIVATION;
     } else if (edge.data.edgeType === EdgeTypes.EDGES.INHIBITION) {
-      return Colors.EDGES.INHIBITION; 
+      return Colors.EDGES.INHIBITION;
     } else if (edge.data.edgeType === EdgeTypes.EDGES.COMPLEX) {
       return Colors.EDGES.COMPLEX;
     } else if (edge.data.edgeType === EdgeTypes.EDGES.OVERLAPPING) {
       return Colors.EDGES.OVERLAPPING;
-    } 
+    }
     return Colors.EDGES.DEFAULT;
-  } 
+  }
   return Colors.EDGES.DEFAULT;
 };
