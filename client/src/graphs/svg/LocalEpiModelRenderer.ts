@@ -76,6 +76,22 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
     edgeSelection.append('path')
       .attr('d', d => pathFn(d.points))
       .style('fill', 'none')
+      .style('stroke', 'transparent')
+      .attr('stroke-width', '10')
+      .attr('marker-end', d => {
+        const source = d.source.replace(/\s/g, '');
+        const target = d.target.replace(/\s/g, '');
+        return `url(#arrowhead-${source}-${target})`;
+      })
+      .attr('marker-start', d => {
+        const source = d.source.replace(/\s/g, '');
+        const target = d.target.replace(/\s/g, '');
+        return `url(#start-${source}-${target})`;
+      });
+
+    edgeSelection.append('path')
+      .attr('d', d => pathFn(d.points))
+      .style('fill', 'none')
       .style('stroke', Colors.EDGES)
       .attr('marker-end', d => {
         const source = d.source.replace(/\s/g, '');
