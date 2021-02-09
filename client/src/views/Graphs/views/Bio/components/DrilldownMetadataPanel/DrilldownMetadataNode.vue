@@ -1,7 +1,7 @@
 <template>
   <div class="drilldown-metadata-pane-container">
     <div v-if="!isEmptyMetadata">
-      <div v-for="(value, key) in metadata" :key="key" class="metadata-item">
+      <div v-for="(value, key) in data" :key="key" class="metadata-item">
         <div class="key">{{key | capitalize-first-letter-formatter | underscore-remover-formatter}}</div>
         <div class="value">{{JSON.stringify(value) | remove-braces-formatter}}</div>
       <div>
