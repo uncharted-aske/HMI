@@ -1,16 +1,10 @@
 <template>
   <div class="drilldown-metadata-pane-container">
-    <div v-if="!isEmptyMetadata" class="metadata-item">
-      <div class="key">Type</div>
-      <div>{{metadata.type}}</div>
-      <div class="key">Tested</div>
-      <div>{{metadata.tested}}</div>
-      <div class="key">Belief</div>
-      <div>{{metadata.belief}}</div>
-      <div v-for="{text, source_hash} in evidences" :key="source_hash">
-        <div class="key">Evidence</div>
-        <div>{{text}}</div>
-      </div>
+    <div v-if="!isEmptyMetadata">
+      <collapsible-item v-for="(value, key) in dataObject" :key="key">
+        <div slot="title">{{key}}</div>
+        <div slot="content" class="my-3">{{value}}</div>
+      </collapsible-item>
     </div>
     <div v-else class="alert alert-info" role="alert">
       No metadata at the moment
@@ -57,25 +51,20 @@
       return _.isEmpty(this.metadata);
     }
 
-    get evidences (): Record<any, void> {
-      return this.metadata.statement.evidence;
+    get dataObject (): Record<any, void> {
+        const output: Record<any, void> = {};
+        output.Type = this.metadata.type;
+        output.Tested = this.metadata.tested;
+        output.Belief = this.metadata.belief;
+        output.Evidence = this.metadata.statement.evidence.map(({ text }) => text).join(', ');
+        return output;
     }
   }
 </script>
 
 <style lang="scss" scoped>
-.drilldown-metadata-pane-container {
-  padding: 5px;
-  .metadata-item {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-    text-align: left;
-    margin-top: 5px;
-    .key {
-      font-weight: bold;
-      padding-top: 5px;
-    }
+  .drilldown-metadata-pane-container {
+    padding: 5px;
 
     //FIXME: Put back when we have document artifacts from Cosmosonsin
     // .expression {
@@ -93,6 +82,5 @@
     //       height: 100%
     //     }
     //   }
-    }
-}
+  }
 </style>
