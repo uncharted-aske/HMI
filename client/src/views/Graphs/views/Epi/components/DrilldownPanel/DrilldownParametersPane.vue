@@ -5,7 +5,7 @@
       <div class="parameter-title">Related Parameters </div>
       <div class="position-relative flex-grow-1">
         <div class="position-absolute h-100 w-100 related-params">
-          <div class="mb-1 px-2 py-4 d-flex rounded-lg border" v-for="(param, index) in related" :key="index">
+          <div class="mb-1 px-2 py-2 d-flex rounded-lg border" v-for="(param, index) in related" :key="index">
             <div class="flex-grow-1">
                 <h6>{{param[0] | underscore-remover-formatter | capitalize-first-letter-formatter}}</h6>
                 <div> {{param[1]}}</div>
@@ -66,7 +66,6 @@
 .related-params {
   overflow: hidden scroll;
 
-  -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
 
