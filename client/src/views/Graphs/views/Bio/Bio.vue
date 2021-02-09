@@ -154,7 +154,7 @@
       this.isOpenDrilldown = 'node';
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = 'Node';
-      this.drilldownMetadata = node.metadata;
+      this.drilldownMetadata = { name: node.label, db_refs: node.metadata };
     }
 
     onEdgeClick (edge: GraphEdgeInterface): void {

@@ -32,10 +32,10 @@
 
     get dataObject (): Record<any, void> {
       const output: Record<any, any> = {};
-      output.Name = [this.metadata.name];
+      output.Name = [this.data.name];
       output['DB Refs'] = [];
-      for (const refType in this.metadata.db_refs) {
-        output['DB Refs'].push(`${refType}: ${this.metadata.db_refs[refType]}`);
+      for (const refType in this.data.db_refs) {
+        output['DB Refs'].push(`${refType}: ${this.data.db_refs[refType]}`);
       }
       return output;
     }

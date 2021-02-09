@@ -38,10 +38,9 @@
 
     get dataObject (): Record<any, void> {
         const output: Record<any, void> = {};
-        output.Type = this.data.type;
         output.Tested = this.data.tested;
         output.Belief = this.data.belief;
-        // output.Evidence = this.data.statement.evidence.map(({ text }) => text).join(', ');
+        output.Evidence = this.data.evidence;
         return output;
     }
   }
