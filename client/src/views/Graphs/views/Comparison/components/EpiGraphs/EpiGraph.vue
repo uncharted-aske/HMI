@@ -102,7 +102,7 @@
       this.renderer.setData(graph);
       await this.renderer.render();
       if (this.subgraph) {
-        this.renderer.highlightSubgraph(this.subgraph, Colors.SUBGRAPH);
+        this.renderer.showNeighborhood(this.subgraph);
       }
     }
   }
@@ -112,6 +112,7 @@
 @import "@/styles/variables";
 
 .epi-graph-container {
+  background-color: $bg-graphs;
   flex: 1;
 
   ::v-deep > svg {

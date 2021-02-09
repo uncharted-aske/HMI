@@ -1,6 +1,6 @@
 <template>
   <div class="drilldown-metadata-pane-container">
-    <div v-if="!isEmptyMetadata" >
+    <div v-if="!isEmptyMetadata">
       <collapsible-item>
         <div slot="title">Type</div>
         <div slot="content">
@@ -40,15 +40,22 @@
         </div>      </div>
       </collapsible-item>
 
+      <collapsible-item>
+        <div slot="title">Text Snippets</div>
+        <div slot="content" class="knowledge-container">
+          <div v-for="(item, index) in getKnowledge" :key="index" class="snippet-container" @click="showMoreHandler(item.doi)">
+            <div class="snippet-title">
+              <a target="_blank" :href="item.URL">{{item.title}}</a>
+            </div>
+            <span v-for="(snippet, index) in item.highlight" :key="index" v-html="snippet" class="snippet-highlights"/>
+          </div>
+        </div>
+      </collapsible-item>
     </div>
 
     <div v-else class="alert alert-info" role="alert">
       No metadata at the moment
     </div>
-    <!-- <modal-knowledge
-      v-if="showModal"
-      @close="showModal = false"
-     /> -->
   </div>
 </template>
 
@@ -60,6 +67,7 @@
   import { Prop } from 'vue-property-decorator';
 
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
+  import { CosmosTextSnippet } from '@/types/typesCosmos';
 
   const components = {
     CollapsibleItem,
@@ -67,24 +75,37 @@
 
   @Component({ components })
   export default class DrilldownMetadataPane extends Vue {
-    @Prop({ default: null }) metadata: any;
+    @Prop({ default: null }) data: any;
 
     showModal: boolean = false;
+    dataLoading = false;
 
     get isEmptyMetadata (): boolean {
-      return _.isEmpty(this.metadata);
+      return _.isEmpty(this.data);
     }
 
     get getType (): string {
-      return !_.isEmpty(this.metadata) && this.metadata.type;
+      return !_.isEmpty(this.data) && this.data.type;
     }
 
     get getProvenance (): any {
-      return !_.isEmpty(this.metadata) && this.metadata.provenance;
+      return !_.isEmpty(this.data) && this.data.provenance;
     }
 
     get getAttributes (): any {
-      return !_.isEmpty(this.metadata) && this.metadata.attributes;
+      return !_.isEmpty(this.data) && this.data.attributes;
+    }
+
+    get getTextDefinition (): string {
+      return (!_.isEmpty(this.data) && !_.isEmpty(this.data.attributes[0].text_definition)) && this.data.attributes[0].text_definition;
+    }
+
+    get getKnowledge (): CosmosTextSnippet[] {
+      return !_.isEmpty(this.data) && this.data.knowledge && this.data.knowledge.map(d => _.pick(d, ['doi', 'title', 'URL', 'highlight', 'doi']));
+    }
+
+    showMoreHandler (doi: string): void {
+      this.$emit('open-modal', doi);
     }
   }
 </script>
@@ -109,6 +130,41 @@
       font-weight: bold;
       padding-top: 5px;
     }
+  }
+
+  .knowledge-container {
+    display: flex;
+    flex-direction: column;
+    height: 50vh;
+    overflow:hidden;
+    .snippet-container {
+      flex: 1;
+      overflow: auto;
+      border: 1px solid $border;
+      padding: 4px 8px;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      cursor: pointer;
+      .snippet-highlights {
+        font-size: 14px;
+        em {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .artifact-img {
+    width: 45%;
+    height: 0;
+    padding-top: 45%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #EAEBEC;
+    float: left;
+    border: $icon-color solid 1px;
+    border-radius: 10px;
+    margin: 2.5%;
   }
 }
 </style>

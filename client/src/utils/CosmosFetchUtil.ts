@@ -5,6 +5,7 @@ import {
   CosmosArtifactInterface,
   CosmosSimilarInterface,
   CosmosRelatedEntitiesInterface,
+  CosmosRelatedParametersInterface,
 } from '@/types/typesCosmos';
 
 import { getUtilMem } from './FetchUtil';
@@ -85,4 +86,13 @@ const COSMOS_RELATED_ENTITIES = 'https://xdd.wisc.edu/api/articles';
 // eslint-disable-next-line camelcase
 export const cosmosRelatedEntities = (paramObj: {doi: string, known_entities: string}): Promise<CosmosRelatedEntitiesInterface> => {
   return getUtilMem(COSMOS_RELATED_ENTITIES, paramObj);
+};
+
+/// /////////////////////////////////////////////
+
+const COSMOS_RELATED_PARAMETERS = 'https://xdd.wisc.edu/sets/xdd-covid-19/word2vec/api/most_similar';
+
+// eslint-disable-next-line camelcase
+export const cosmosRelatedParameters = (paramObj: {word: string, model: string, n: number}): Promise<CosmosRelatedParametersInterface> => {
+  return getUtilMem(COSMOS_RELATED_PARAMETERS, paramObj);
 };

@@ -67,6 +67,17 @@ export interface CosmosArtifactInterface {
   v: string,
 }
 
+export interface CosmosTextSnippet {
+  pubname: string,
+  publisher: string,
+  _gddid: string,
+  title: string,
+  doi: string,
+  coverDate: string,
+  URL: string,
+  authors: string,
+  highlight: string[]
+}
 export interface CosmosSimilarDataInterface {
   bibson: CosmosSearchBibjsonInterface;
   objects: CosmosArtifactObjectInterface[];
@@ -119,4 +130,9 @@ export interface CosmosRelatedEntitiesInterface {
     v: number;
     data: CosmosRelatedEntitiesDataInterface[];
   }
+}
+
+export interface CosmosRelatedParametersInterface {
+  status: number;
+  data: string[];
 }

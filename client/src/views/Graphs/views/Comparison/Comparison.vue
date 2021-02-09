@@ -3,24 +3,42 @@
     <div class="search-row">
       <search-bar />
     </div>
-    <resizable-grid :map="gridMap">
-      <div :slot="model.id" class="h-100 w-100 d-flex flex-column" v-for="(model) in selectedModels" :key="model.id">
-        <settings-bar>
+    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
+      <div slot="1" class="h-100 w-100 d-flex flex-column">
+        <div class="h-50 w-100" v-for="(model) in selectedModels" :key="model.id">
+          <settings-bar>
           <div slot="left">
-            <counters :labels="[model.metadata.name]"/>
+           <counters
+              :title="model.metadata.name"
+              :data="[`${model.graph.detailed.nodes.length} Nodes`, `${model.graph.detailed.edges.length} Edges`]"
+            />
           </div>
           <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <epi-graph :graph="model.graph.detailed" :subgraph="model.subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
+        <epi-graph class="h-100" :graph="model.graph.detailed" :subgraph="model.subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
+        </div>
+      </div>
+      <div slot="2" class="h-100 w-100 d-flex flex-column">
+        <settings-bar>
+          <div slot="left">
+            <counters
+              :title="`Intersection Graph`"
+              :data="[`${nodeCountIntersectionGraph} Nodes`, `${edgeCountIntersectionGraph} Edges`]"
+            />          </div>
+          <div slot="right">
+            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
+          </div>
+        </settings-bar>
+        <local-epi-graph class="h-100" v-if="isSplitView" :graph="intersectionGraph" @node-click="onNodeClick"/>
       </div>
     </resizable-grid>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
+    <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
       <div slot="content">
         <drilldown-metadata-pane :metadata="drilldownMetadata"/>
       </div>
-    </drilldown-panel>
+    </drilldown-panel> -->
   </div>
 </template>
 
@@ -38,7 +56,8 @@
   import Settings from '@/views/Graphs/components/Settings/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
-  import EpiGraph from './components/EpiGraph/EpiGraph.vue';
+  import EpiGraph from './components/EpiGraphs/EpiGraph.vue';
+  import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   // import DrilldownPanel from '@/components/DrilldownPanel.vue';
   // import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
@@ -62,9 +81,40 @@
     LeftSidePanel,
     MetadataPane,
     EpiGraph,
+    LocalEpiGraph,
     ResizableGrid,
     // DrilldownPanel,
     // DrilldownMetadataPane,
+  };
+
+  const intersectionGraph = {
+    nodes: [
+      { id: '1', label: 's, sc', nodeType: 'overlapping' },
+      { id: '2', label: 'beta', nodeType: 'overlapping' },
+      { id: '3', label: 'r, rc', nodeType: 'overlapping' },
+      { id: '4', label: 'gamma', nodeType: 'overlapping' },
+      { id: '5', label: 'R, RC', nodeType: 'overlapping' },
+      { id: '5', label: 's, sc', nodeType: 'overlapping' },
+      { id: '6', label: 'r, rc', nodeType: 'overlapping' },
+      { id: '7', label: 'R, RC', nodeType: 'overlapping' },
+      { id: '8', label: 'NOAP 1', nodeType: 'NOAP' },
+      { id: '9', label: 'NOAP 2', nodeType: 'NOAP' },
+      { id: '10', label: 'AP 1', nodeType: 'AP' },
+      { id: '11', label: 'AP 2', nodeType: 'AP' },
+    ],
+    edges: [
+      { source: '1', target: '10', type: 'overlapping' },
+      { source: '2', target: '10', type: 'overlapping' },
+      { source: '3', target: '10', type: 'overlapping' },
+      { source: '3', target: '11', type: 'overlapping' },
+      { source: '4', target: '11', type: 'overlapping' },
+      { source: '5', target: '11', type: 'AP' },
+      { source: '10', target: '5', type: 'AP' },
+      { source: '10', target: '6', type: 'AP' },
+      { source: '11', target: '7', type: 'AP' },
+      { source: '8', target: '2', type: 'NOAP' },
+      { source: '9', target: '2', type: 'NOAP' },
+    ],
   };
 
   @Component({ components })
@@ -79,18 +129,27 @@
     drilldownPaneSubtitle: string = '';
     drilldownMetadata: ModelComponentMetadataInterface = null;
     reference: string = ''
+    intersectionGraph: any = intersectionGraph;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
 
     get gridMap (): string[][] {
-      return [this.selectedModels.map(model => model.id)];
+      return [['1', '3', '2']];
     }
 
   get selectedModels (): any[] {
     const modelsList = this.getModelsList;
     const selectedIds = new Set(this.getSelectedModelIds);
     return modelsList.filter(model => selectedIds.has(model.id));
+  }
+
+  get nodeCountIntersectionGraph (): number {
+      return this.intersectionGraph.nodes.length;
+  }
+
+  get edgeCountIntersectionGraph (): number {
+      return this.intersectionGraph.edges.length;
   }
 
   onCloseDrilldownPanel ():void {
@@ -117,4 +176,5 @@
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/variables';
 </style>
