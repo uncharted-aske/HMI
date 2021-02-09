@@ -283,7 +283,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
       .attr('filterUnits', 'userSpaceOnUse');
 
     filter.append('feGaussianBlur')
-      .attr('stdDeviation', 8)
+      .attr('stdDeviation', 10)
       .attr('result', 'blur');
 
     filter.append('feOffset')
@@ -291,8 +291,8 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
       .attr('result', 'offsetBlur')
       .attr('dx', 0)
       .attr('dy', 0)
-      .attr('x', -10)
-      .attr('y', -10);
+      .attr('x', -20)
+      .attr('y', -20);
 
     filter.append('feFlood')
       .attr('in', 'offsetBlur')
@@ -313,7 +313,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
     feMerge.append('feMergeNode')
       .attr('in', 'SourceGraphic');
 
-    const hNode = chart.selectAll('.node-ui ellipse, rect').filter(d => {
+    const hNode = chart.selectAll('.node-ui, rect').filter(d => {
       return d.id === referenceId;
     });
 

@@ -84,6 +84,14 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'string',
   },
+
+  // Mocked-up fields
+  PATH_QUERY: {
+    ..._field('pathQuery', 'Path Query'),
+    ..._searchable('Path Query', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
 };
 
 export {

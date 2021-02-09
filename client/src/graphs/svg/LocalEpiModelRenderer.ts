@@ -59,7 +59,15 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
         .attr('width', d => (d as any).width)
         .attr('height', d => (d as any).height)
         .style('fill', d => calcNodeColor(d))
-        .style('stroke', '#888');
+        .style('stroke-width', d => (d as any).nodeType === 'NOAP' ? 3 : 1)
+        .style('stroke', d => (d as any).nodeType === 'NOAP' ? '#FFA500' : Colors.STROKE)
+        .style('stroke-dasharray', d => {
+          if ((d as any).nodeType === 'NOAP') {
+            return '5,5';
+          } else {
+            return null;
+          }
+        });
     });
 
     nodeSelection.append('text')
@@ -76,23 +84,29 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
     edgeSelection.append('path')
       .attr('d', d => pathFn(d.points))
       .style('fill', 'none')
-      .style('stroke', 'transparent')
-      .attr('stroke-width', '10')
-      .attr('marker-end', d => {
-        const source = d.source.replace(/\s/g, '');
-        const target = d.target.replace(/\s/g, '');
-        return `url(#arrowhead-${source}-${target})`;
-      })
-      .attr('marker-start', d => {
-        const source = d.source.replace(/\s/g, '');
-        const target = d.target.replace(/\s/g, '');
-        return `url(#start-${source}-${target})`;
-      });
+      .style('stroke', 'red')
+      .style('stroke-width', 14);
 
     edgeSelection.append('path')
       .attr('d', d => pathFn(d.points))
       .style('fill', 'none')
-      .style('stroke', Colors.EDGES)
+      .style('stroke', d => {
+        if (d.data.type) {
+          if (d.data.type === 'overlapping') {
+            return Colors.NODES.OVERLAPPING;
+          }
+        }
+        return Colors.EDGES;
+      })
+      .style('stroke-width', 2)
+      .style('stroke-dasharray', d => {
+        if (d.data.type) {
+          if (d.data.type === 'NOAP') {
+            return '5,5';
+          }
+        }
+        return null;
+      })
       .attr('marker-end', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');

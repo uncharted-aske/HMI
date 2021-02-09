@@ -59,6 +59,7 @@
   import CHIMEScreenshot from '@/assets/img/CHIME.png';
   import SIRScreenshot from '@/assets/img/SIR.png';
   import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
+  import COVID19Screenshot from '@/assets/img/COVID19.png';
 
   // Services
   import * as modelsService from '@/services/ModelsService';
@@ -123,13 +124,16 @@
         let previewImageSrc = null;
         switch (model.id) {
         case 1:
-            previewImageSrc = CHIMEScreenshot;
+            previewImageSrc = SIRScreenshot;
             break;
           case 2:
-            previewImageSrc = SIRScreenshot;
+            previewImageSrc = CHIMEScreenshot;
             break;
           case 3:
             previewImageSrc = DoubleEpiScreenshot;
+            break;
+          case 4:
+            previewImageSrc = COVID19Screenshot;
             break;
           default:
             previewImageSrc = null;
