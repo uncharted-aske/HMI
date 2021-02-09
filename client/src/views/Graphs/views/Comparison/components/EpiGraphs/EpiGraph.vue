@@ -15,7 +15,7 @@
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
   import { hierarchyFn } from '@/utils/SVGUtil.js';
-  import { calculateNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
 
   import { Colors } from '@/graphs/svg/encodings';
 
@@ -58,7 +58,7 @@
 
       this.renderer.setCallback('nodeClick', (node) => {
         this.$emit('node-click', node.datum().data); // TO FIX
-        const neighborhood = calculateNeighborhood(this.graph, node.datum().id);
+        const neighborhood = calculateNodeNeighborhood(this.graph, node.datum().id);
         this.renderer.showNeighborhood(neighborhood);
       });
 

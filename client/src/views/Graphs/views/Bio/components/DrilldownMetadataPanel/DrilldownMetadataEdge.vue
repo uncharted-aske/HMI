@@ -1,12 +1,10 @@
 <template>
   <div class="drilldown-metadata-pane-container">
     <div v-if="!isEmptyMetadata">
-      <div v-for="(value, key) in metadata" :key="key" class="metadata-item">
-        <div class="key">{{key | capitalize-first-letter-formatter | underscore-remover-formatter}}</div>
-        <div class="value">{{JSON.stringify(value) | remove-braces-formatter}}</div>
-      <div>
-      </div>
-      </div>
+      <collapsible-item v-for="(value, key) in dataObject" :key="key">
+        <div slot="title">{{key}}</div>
+        <div slot="content" class="my-3">{{value}}</div>
+      </collapsible-item>
     </div>
     <div v-else class="alert alert-info" role="alert">
       No metadata at the moment
@@ -35,7 +33,13 @@
   //   ModalKnowledge,
   // };
 
-  @Component
+  import CollapsibleItem from '@/components/CollapsibleItem.vue';
+
+  const components = {
+    CollapsibleItem,
+  };
+
+  @Component({ components })
   export default class DrilldownMetadataPane extends Vue {
     @Prop({ default: null }) metadata: any;
 
@@ -46,39 +50,20 @@
     get isEmptyMetadata (): boolean {
       return _.isEmpty(this.metadata);
     }
+
+    get dataObject (): Record<any, void> {
+      const output: Record<any, void> = {};
+      output.Type = this.metadata.type;
+      output.Tested = this.metadata.tested;
+      output.Belief = this.metadata.belief;
+      output.Evidence = this.metadata.statement.evidence.map(({ text }) => text).join(', ');
+      return output;
+    }
   }
 </script>
 
 <style lang="scss" scoped>
-.drilldown-metadata-pane-container {
-  padding: 5px;
-  .metadata-item {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-    text-align: left;
-    margin-top: 5px;
-    .key {
-      font-weight: bold;
-      padding-top: 5px;
-    }
-
-    //FIXME: Put back when we have document artifacts from Cosmosonsin
-    // .expression {
-    //     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
-    // }
-    // .snippet {
-    //   width: 100%;
-    //   height: 100px;
-    //   border: 1px solid rgba(207, 216, 220, .5);
-    //   margin: 5px;
-    //   img {
-    //       // Clip images that are too big, but maintain aspect ratio
-    //       object-fit: cover;
-    //       width: 100%;
-    //       height: 100%
-    //     }
-    //   }
-    }
-}
+  .drilldown-metadata-pane-container {
+    padding: 5px;
+  }
 </style>

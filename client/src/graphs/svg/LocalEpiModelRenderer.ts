@@ -84,6 +84,12 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
     edgeSelection.append('path')
       .attr('d', d => pathFn(d.points))
       .style('fill', 'none')
+      .style('stroke', 'transparent')
+      .style('stroke-width', 14);
+
+    edgeSelection.append('path')
+      .attr('d', d => pathFn(d.points))
+      .style('fill', 'none')
       .style('stroke', d => {
         if (d.data.type) {
           if (d.data.type === 'overlapping') {
