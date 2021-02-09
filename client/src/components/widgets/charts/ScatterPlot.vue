@@ -120,4 +120,8 @@
   box-sizing: border-box;
   cursor: pointer;
 }
+
+.chart {
+  height: auto;
+}
 </style>
