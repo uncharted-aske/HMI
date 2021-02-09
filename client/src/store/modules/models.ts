@@ -20,55 +20,55 @@ import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
 import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
 import paramsData from '@/static/xdd_parameters_table.json'; // Boutique subgraph for COVID-19 model.
 
-import covidDetailedNodes from '@/static/nodes.js';
-import edgesBoutique from '@/static/edges_boutique.js';
-import statementsBoutique from '@/static/statements_boutique.js';
+// import covidDetailedNodes from '@/static/nodes.js';
+// import edgesBoutique from '@/static/edges_boutique.js';
+// import statementsBoutique from '@/static/statements_boutique.js';
 
-const parseJSONL = (jsonlString: string, cb: (lineObj: Record<any, void>) => void): void => {
-  const lines = jsonlString.split('\n');
-  for (let line = 0; line < lines.length; line++) {
-    try {
-      cb(JSON.parse(lines[line]));
-    } catch {
+// const parseJSONL = (jsonlString: string, cb: (lineObj: Record<any, void>) => void): void => {
+//   const lines = jsonlString.split('\n');
+//   for (let line = 0; line < lines.length; line++) {
+//     try {
+//       cb(JSON.parse(lines[line]));
+//     } catch {
 
-    }
-  }
-};
+//     }
+//   }
+// };
 
-// Augment subgraph nodes with metadata
+// // Augment subgraph nodes with metadata
 
-const subgraphJSONNodeIdMap = new Map();
-subgraphJSON.nodes.map((node, index) => {
-  subgraphJSONNodeIdMap.set(Number(node.id), index);
-});
-parseJSONL(covidDetailedNodes, node => {
-  if (subgraphJSONNodeIdMap.has(node.id)) {
-    // @ts-expect-error hack
-    subgraphJSON.nodes[subgraphJSONNodeIdMap.get(node.id)].metadata = node;
-  }
-});
+// const subgraphJSONNodeIdMap = new Map();
+// subgraphJSON.nodes.map((node, index) => {
+//   subgraphJSONNodeIdMap.set(Number(node.id), index);
+// });
+// parseJSONL(covidDetailedNodes, node => {
+//   if (subgraphJSONNodeIdMap.has(node.id)) {
+//     // @ts-expect-error hack
+//     subgraphJSON.nodes[subgraphJSONNodeIdMap.get(node.id)].metadata = node;
+//   }
+// });
 
-// Augment subgraph edges with metadata
+// // Augment subgraph edges with metadata
 
-const subgraphJSONEdgeIdMap = new Map();
-subgraphJSON.edges.map((edge, index) => {
-  subgraphJSONEdgeIdMap.set(Number(edge.id), index);
-});
+// const subgraphJSONEdgeIdMap = new Map();
+// subgraphJSON.edges.map((edge, index) => {
+//   subgraphJSONEdgeIdMap.set(Number(edge.id), index);
+// });
 
-const statementBoutiqueMatchesHashMap = new Map();
-parseJSONL(statementsBoutique, statement => {
-  statementBoutiqueMatchesHashMap.set(statement.matches_hash, statement);
-});
+// const statementBoutiqueMatchesHashMap = new Map();
+// parseJSONL(statementsBoutique, statement => {
+//   statementBoutiqueMatchesHashMap.set(statement.matches_hash, statement);
+// });
 
-parseJSONL(edgesBoutique, edge => {
-  if (subgraphJSONEdgeIdMap.has(edge.id)) {
-    edge.statement = statementBoutiqueMatchesHashMap.get(edge.statement_id);
-    const subgraphEdge: GraphEdgeInterface = subgraphJSON.edges[subgraphJSONEdgeIdMap.get(edge.id)];
-    subgraphEdge.metadata = edge;
-    subgraphEdge.metadata.source_label = subgraphJSON.nodes[subgraphJSONNodeIdMap.get(subgraphEdge.metadata.source_id)].label;
-    subgraphEdge.metadata.target_label = subgraphJSON.nodes[subgraphJSONNodeIdMap.get(subgraphEdge.metadata.target_id)].label;
-  }
-});
+// parseJSONL(subgraphJSON, edge => {
+//   if (subgraphJSONEdgeIdMap.has(edge.id)) {
+//     edge.statement = statementBoutiqueMatchesHashMap.get(edge.statement_id);
+//     const subgraphEdge: GraphEdgeInterface = subgraphJSON.edges[subgraphJSONEdgeIdMap.get(edge.id)];
+//     subgraphEdge.metadata = edge;
+//     subgraphEdge.metadata.source_label = subgraphJSON.nodes[subgraphJSONNodeIdMap.get(subgraphEdge.metadata.source_id)].label;
+//     subgraphEdge.metadata.target_label = subgraphJSON.nodes[subgraphJSONNodeIdMap.get(subgraphEdge.metadata.target_id)].label;
+//   }
+// });
 
 // Models
 

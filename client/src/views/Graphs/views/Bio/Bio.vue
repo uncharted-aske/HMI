@@ -42,8 +42,8 @@
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
-      <drilldown-metadata-node v-if="isOpenDrilldown === 'node'" slot="metadata" :metadata="drilldownMetadata"/>
-      <drilldown-metadata-edge v-if="isOpenDrilldown === 'edge'" slot="metadata" :metadata="drilldownMetadata"/>
+      <drilldown-metadata-node v-if="isOpenDrilldown === 'node'" slot="metadata" :data="drilldownMetadata"/>
+      <drilldown-metadata-edge v-if="isOpenDrilldown === 'edge'" slot="metadata" :data="drilldownMetadata"/>
       <!-- <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/> -->
     </drilldown-panel>
   </div>
@@ -159,8 +159,9 @@
 
     onEdgeClick (edge: GraphEdgeInterface): void {
       this.isOpenDrilldown = 'edge';
-      this.drilldownPaneTitle = `${edge.metadata.source_label} → ${edge.metadata.target_label}`;
-      this.drilldownPaneSubtitle = 'Edge';
+      console.log(edge);
+      // this.drilldownPaneTitle = `${edge.metadata.source_label} → ${edge.metadata.target_label}`;
+      // this.drilldownPaneSubtitle = 'Edge';
       this.drilldownMetadata = edge.metadata;
     }
   }
