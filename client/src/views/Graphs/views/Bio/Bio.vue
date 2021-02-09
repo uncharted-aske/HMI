@@ -159,9 +159,8 @@
 
     onEdgeClick (edge: GraphEdgeInterface): void {
       this.isOpenDrilldown = 'edge';
-      console.log(edge);
-      // this.drilldownPaneTitle = `${edge.metadata.source_label} → ${edge.metadata.target_label}`;
-      // this.drilldownPaneSubtitle = 'Edge';
+      this.drilldownPaneTitle = `${edge.metadata.source_label} → ${edge.metadata.target_label}`;
+      this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
       this.drilldownMetadata = edge.metadata;
     }
   }

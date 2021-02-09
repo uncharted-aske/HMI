@@ -1,13 +1,21 @@
 <template>
-  <div class="drilldown-parameters-pane-container">
-    <div v-if="!isEmptyData">
+  <div v-if="!isEmptyData" class="h-100 d-flex flex-column drilldown-parameters-pane-container">
       <div class="parameter-title">{{title | capitalize-first-letter-formatter}} </div>
       <scatter-plot :data="data" :size="[400, 500]" @dot-click="onDotClick"/>
-      <div>Related Parameters </div>
-    </div>
-    <div v-else class="alert alert-info" role="alert">
-      No metadata at the moment
-    </div>
+      <div class="parameter-title">Related Parameters </div>
+      <div class="position-relative flex-grow-1">
+        <div class="position-absolute h-100 w-100 related-params">
+          <div class="mb-1 px-2 py-2 d-flex rounded-lg border" v-for="(param, index) in related" :key="index">
+            <div class="flex-grow-1">
+                <h6>{{param[0] | underscore-remover-formatter | capitalize-first-letter-formatter}}</h6>
+                <div> {{param[1]}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div v-else class="alert alert-info" role="alert">
+    No metadata at the moment
   </div>
 </template>
 
@@ -29,6 +37,7 @@
   @Component({ components })
   export default class DrilldownParametersPane extends Vue {
     @Prop({ default: null }) data: any;
+    @Prop({ default: null }) related: any;
 
      get isEmptyData (): boolean {
       return _.isEmpty(this.data);
@@ -52,6 +61,16 @@
   .parameter-title {
     font-weight: bold;
   }
+}
+
+.related-params {
+  overflow: hidden scroll;
+
+  scrollbar-width: none;  /* Firefox */
+}
+
+.related-params::-webkit-scrollbar {
+  display: none;
 }
 
 </style>

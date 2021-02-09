@@ -1,12 +1,10 @@
 <template>
   <div class="drilldown-metadata-pane-container">
     <div v-if="!isEmptyMetadata">
-      <div v-for="(value, key) in data" :key="key" class="metadata-item">
-        <div class="key">{{key | capitalize-first-letter-formatter | underscore-remover-formatter}}</div>
-        <div class="value">{{JSON.stringify(value) | remove-braces-formatter}}</div>
-      <div>
-      </div>
-      </div>
+      <collapsible-item v-for="(values, key) in dataObject" :key="key">
+        <div slot="title">{{key}}</div>
+        <div slot="content" class="my-3" v-for="(value, key) in values" :key="key">{{value}}</div>
+      </collapsible-item>
     </div>
     <div v-else class="alert alert-info" role="alert">
       No metadata at the moment
@@ -22,9 +20,25 @@
   import { Prop } from 'vue-property-decorator';
 
 
-  @Component
+  import CollapsibleItem from '@/components/CollapsibleItem.vue';
+
+  const components = {
+    CollapsibleItem,
+  };
+
+  @Component({ components })
   export default class DrilldownMetadataPane extends Vue {
     @Prop({ default: null }) data: any;
+
+    get dataObject (): Record<any, void> {
+      const output: Record<any, any> = {};
+      output.Name = [this.metadata.name];
+      output['DB Refs'] = [];
+      for (const refType in this.metadata.db_refs) {
+        output['DB Refs'].push(`${refType}: ${this.metadata.db_refs[refType]}`);
+      }
+      return output;
+    }
 
     get isEmptyMetadata (): boolean {
       return _.isEmpty(this.data);
@@ -35,16 +49,5 @@
 <style lang="scss" scoped>
 .drilldown-metadata-pane-container {
   padding: 5px;
-  .metadata-item {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-    text-align: left;
-    margin-top: 5px;
-    .key {
-      font-weight: bold;
-      padding-top: 5px;
-    }
-  }
 }
 </style>
