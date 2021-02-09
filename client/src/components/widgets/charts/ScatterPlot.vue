@@ -23,7 +23,7 @@
       top: 25,
       right: 10,
       bottom: 30,
-      left: 60,
+      left: 100,
     },
   };
 
@@ -56,8 +56,9 @@
       // Define scales
       const xscale = d3.scaleLinear()
         .range([0, innerWidth]);
-      const yscale = d3.scaleLinear()
-          .range([innerHeight, 0]);
+      const yscale = d3.scaleBand()
+          .rangeRound([innerHeight, 0])
+          .padding(0.1);
 
       xscale.domain(d3.extent(data, (d) => Number((d as any).value)));
       yscale.domain(data.map(d => d.location));
@@ -71,7 +72,6 @@
             .style('text-anchor', 'end');
 
       chart.append('g')
-        // .attr('transform', svgUtil.translate(margin.left, 0))
         .attr('class', 'y-axis')
         .call(d3.axisLeft(yscale));
 
@@ -86,18 +86,18 @@
           .attr('cx', (d) => xscale(d.value))
           .attr('cy', (d) => yscale(d.location))
           .attr('r', 5)
-          .style('fill', '#69b3a2');
-          // .on('mouseover', (d) => {
-          //   const coords = [xscale(0), yscale(d.location)];
-          //   const tooltipText = 'Value: ' + d.value + ' ' + 'Date: ' + d.date;
-          //   svgUtil.showTooltip(chart, tooltipText, coords);
-          // })
-          // .on('mouseout', () => {
-          //   svgUtil.hideTooltip(chart);
-          // })
-          // .on('click', (d) => {
-          //   this.$emit('bar-click', d.object_id);
-          // });
+          .style('fill', '#5E81AC')
+          .on('mouseover', (d) => {
+            const coords = [xscale(d.value), yscale(d.location)];
+            const tooltipText = 'Value: ' + d.value + ' ' + 'Date: ' + d.date;
+            svgUtil.showTooltip(chart, tooltipText, coords);
+          })
+          .on('mouseout', () => {
+            svgUtil.hideTooltip(chart);
+          })
+          .on('click', (d) => {
+            this.$emit('dot-click', d.object_id);
+          });
     }
   }
 

@@ -2,7 +2,7 @@
   <div class="drilldown-parameters-pane-container">
     <div v-if="!isEmptyData">
       <div class="parameter-title">{{title | capitalize-first-letter-formatter}} </div>
-      <scatter-plot :data="data" :size="[400, 500]" @bar-click="onBarClick"/>
+      <scatter-plot :data="data" :size="[400, 500]" @dot-click="onDotClick"/>
       <div>Related Parameters </div>
     </div>
     <div v-else class="alert alert-info" role="alert">
@@ -38,7 +38,7 @@
       return !_.isEmpty(this.data) && this.data[0].variable;
     }
 
-    onBarClick (doi:string): void {
+    onDotClick (doi:string): void {
       this.$emit('open-modal', doi);
     }
   }
