@@ -87,10 +87,11 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
 
   renderEdge (edgeSelection: d3.Selection<any, any, any, any>): void {
     edgeSelection.append('path')
+      .attr('cursor', 'pointer')
       .attr('d', d => pathFn(d.points))
       .style('fill', 'none')
       .style('stroke', d => calcEdgeColor(d))
-      .style('stroke-width', 2)
+      .style('stroke-width', 5)
       .style('stroke-dasharray', d => {
         if (d.data.type) {
           if (d.data.type === 'NOAP') {

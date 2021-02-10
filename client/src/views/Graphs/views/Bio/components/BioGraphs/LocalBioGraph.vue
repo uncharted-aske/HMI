@@ -60,7 +60,13 @@
         // Show neighborhood
         const neighborhood = calculateEdgeNeighborhood(edge.datum());
         this.renderer.showNeighborhood(neighborhood);
-        this.$emit('edge-click', edge.datum().data);
+        // Hack: get labels for source and target
+        const sourceNode = this.renderer.data.nodes.find(node => node.id === edge.datum().source);
+        const targetNode = this.renderer.data.nodes.find(node => node.id === edge.datum().target);
+
+        edge.datum().data.metadata['sourceLabel'] = sourceNode.label;
+        edge.datum().data.metadata['targetLabel'] = targetNode.label;
+        this.$emit('edge-click',  edge.datum().data);
       });
 
       this.renderer.setCallback('backgroundDblClick', () => {
