@@ -1,5 +1,5 @@
 <template>
-  <modal @close="onClickClose">
+  <modal v-if="data.raw" @close="onClickClose">
     <div slot="header">
       <a :href="data.raw.bibjson.link[0].url" target="_blank">
         <h3>{{data.title}}</h3>
