@@ -10,36 +10,32 @@
       </h4>
       <h5>{{data.objects[0].bibjson.identifier[0].id}}</h5>
     </div>
-    <div
-      slot="body"
-    >
-      <div class="d-flex flex-grow-1">
-          <div class="d-flex col-7">
-            <div class="image flex-grow-1" :style="imageStyle"/>
-          </div>
-          <div class="d-flex flex-column col">
-            <div class="font-weight-bolder">Authors</div>
-            <div>
-              {{authorList}}
-            </div>
-            <div class="font-weight-bolder mt-3">Publication Year</div>
-            <div>
-              {{data.objects[0].bibjson.year || 'None'}}
-            </div>
-            <div class="font-weight-bolder mt-3">Publisher</div>
-            <div>
-              {{data.objects[0].publisher || 'None'}}
-            </div>
-            <!-- <div class="font-weight-bolder mt-3">Excerpt</div>
-            <div class="position-relative flex-grow-1">
-              <div class="position-absolute h-100 w-100 pr-1 overflow-auto">
-                {{excerpt}}
-              </div>
-            </div> -->
-          </div>
+    <div slot="body" class="d-flex flex-grow-1">
+      <div class="d-flex col-7">
+        <div class="image flex-grow-1" :style="imageStyle"/>
       </div>
-      <similar-docs :doi="doi" class="my-4"/>
+      <div class="d-flex flex-column col">
+        <div class="font-weight-bolder">Authors</div>
+        <div>
+          {{authorList}}
+        </div>
+        <div class="font-weight-bolder mt-3">Publication Year</div>
+        <div>
+          {{data.objects[0].bibjson.year || 'None'}}
+        </div>
+        <div class="font-weight-bolder mt-3">Publisher</div>
+        <div>
+          {{data.objects[0].publisher || 'None'}}
+        </div>
+        <!-- <div class="font-weight-bolder mt-3">Excerpt</div>
+        <div class="position-relative flex-grow-1">
+          <div class="position-absolute h-100 w-100 pr-1 overflow-auto">
+            {{excerpt}}
+          </div>
+        </div> -->
+      </div>
     </div>
+    <similar-docs slot="body" :doi="doi" class="my-4"/>
     <div slot="footer" class="related-docs">
       <button
         type="button"

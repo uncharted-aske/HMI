@@ -1,29 +1,21 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask">
+    <div class="modal-mask" @click="close">
       <div
-        class="modal-wrapper"
-        @click.stop="close()">
-        <div
-          class="modal-container"
-        >
+        class="container rounded-lg modal-container"
+        @click="clickStop"
+      >
+        <div class="modal-header">
+          <slot name="header" />
+          <close-button @close="close"/>
+        </div>
 
-          <div
-            class="modal-header"
-          >
-            <slot name="header" />
-            <close-button
-              @click="close()"
-            />
-          </div>
+        <div class="modal-body">
+          <slot name="body" />
+        </div>
 
-          <div class="modal-body">
-            <slot name="body" />
-          </div>
-
-          <div class="modal-footer">
-            <slot name="footer" />
-          </div>
+        <div class="modal-footer">
+          <slot name="footer" />
         </div>
       </div>
     </div>
@@ -48,6 +40,10 @@
     close (): void {
       this.$emit('close', null);
     }
+
+    clickStop (e: MouseEvent): void {
+      e.stopPropagation();
+    }
   }
 
 </script>
@@ -57,29 +53,32 @@
 
 .modal-mask {
   position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: map-get($z-index-order, modal);
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, .5);
-  display: table;
   transition: opacity .3s ease;
-}
-
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
 }
 
 .modal-container {
   position: relative;
-  width: 1000px;
-  margin: 0px auto;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
-  border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
+}
+
+.modal-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 /*
