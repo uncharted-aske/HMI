@@ -222,6 +222,7 @@
                            },
                    ],
                  },
+                 { nodes: [{ id: '4f8f229a-aab4-4db4-844b-64f68920dfad' }, { id: '9d85aa4e-2a80-42a9-a8fb-33d10932f2ac' }, { id: '4a3659ff-9c44-4352-9d3e-f592b2597b5a' }, { id: '26f0ec12-51a6-42e5-a5fd-afdad6d21f4e' }, { id: 'a9840a0e-8a1a-4eda-a9ca-7746f23d3677' }, { id: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f' }, { id: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0' }, { id: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3' }, { id: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524' }, { id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1' }, { id: '9d2259db-62cc-444f-a4d4-03f5769ba39b' }], edges: [{ source: '4f8f229a-aab4-4db4-844b-64f68920dfad', target: '9d85aa4e-2a80-42a9-a8fb-33d10932f2ac' }, { source: '9d85aa4e-2a80-42a9-a8fb-33d10932f2ac', target: '4a3659ff-9c44-4352-9d3e-f592b2597b5a' }, { source: '4a3659ff-9c44-4352-9d3e-f592b2597b5a', target: '26f0ec12-51a6-42e5-a5fd-afdad6d21f4e' }, { source: '26f0ec12-51a6-42e5-a5fd-afdad6d21f4e', target: 'a9840a0e-8a1a-4eda-a9ca-7746f23d3677' }, { source: 'a9840a0e-8a1a-4eda-a9ca-7746f23d3677', target: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f' }, { source: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f', target: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0' }, { source: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0', target: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3' }, { source: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3', target: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524' }, { source: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524', target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1' }, { source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1', target: '9d2259db-62cc-444f-a4d4-03f5769ba39b' }] },
   ];
 
   const components = {
@@ -265,6 +266,7 @@
     modalDataParameters: any = null;
     modalDataMetadata: any = null;
     highlights: SubgraphInterface = null;
+    pathsCounter: number = 0;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -388,7 +390,8 @@
     }
 
     onRunQuery (): void {
-      this.highlights = paths[2];
+      this.highlights = paths[this.pathsCounter];
+      this.pathsCounter++;
     }
   }
 </script>
