@@ -173,7 +173,7 @@
   onNodeHover (node: GraphNodeInterface):void {
     this.reference = node['linked-to'][0]['node-id'];
   }
-}
+  }
 </script>
 
 <style lang="scss" scoped>
