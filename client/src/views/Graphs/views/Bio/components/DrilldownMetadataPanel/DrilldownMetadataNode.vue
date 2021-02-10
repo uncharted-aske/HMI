@@ -3,8 +3,11 @@
     <div v-if="!isEmptyMetadata">
       <collapsible-item v-for="(values, dataObjectKey) in dataObject" :key="dataObjectKey">
         <div slot="title">{{dataObjectKey}}</div>
-          <div slot="content" class="my-3" v-for="(value, key) in values" :key="key">
-            <div @click="onEdgeClick(value)">{{value}}{{key}}</div>
+          <div v-if="dataObjectKey !== 'Incoming' && dataObjectKey !== 'Outgoing'" slot="content" class="my-3" v-for="(value, key) in values" :key="key">
+            <div @click="onEdgeClick(value)">{{value}}</div>
+          </div>  
+          <div v-else slot="content" class="mb-1 px-2 py-2 d-flex rounded-lg border" role="button" v-for="(edge) in values" :key="edge.id" @click="onEdgeClick(edge)">
+            {{edge.source_label}} → {{edge.target_label}}
           </div>  
       </collapsible-item>
     </div>

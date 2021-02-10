@@ -25,7 +25,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <grafer class="grafer"></grafer>
+        <!-- <grafer class="grafer"></grafer> -->
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -169,9 +169,23 @@
       let subgraph = _.cloneDeep(this.subgraph);
       const sourceNode = { id: edge.source, label: edge.source_label };
       const targetNode = { id: edge.target, label: edge.target_label };
-      subgraph.nodes.push(sourceNode);
-      subgraph.nodes.push(targetNode);
-      subgraph.edges.push({source: edge.source, target: edge.target});
+
+      //Check if nodes already exists in subgraph
+      const sourceFound = subgraph.nodes.find(node => node.id === sourceNode.id);
+      const targetFound = subgraph.nodes.find(node => node.id === targetNode.id);
+      if (!sourceFound) {
+        subgraph.nodes.push(sourceNode);
+      }
+      if (!targetFound) {
+        subgraph.nodes.push(targetNode);
+      }
+
+      //Check if edges already exist in the subgraph
+      const edgeFound = subgraph.edges.find(e => e.id === edge.id);
+      if (!edgeFound) {
+        subgraph.edges.push({id: edge.id, source: edge.source, target: edge.target});
+      } 
+
       this.subgraph = subgraph;
     }
   }
