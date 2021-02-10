@@ -42,7 +42,7 @@
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
-      <drilldown-metadata-node v-if="isOpenDrilldown === 'node'" slot="metadata" :data="drilldownMetadata"/>
+      <drilldown-metadata-node v-if="isOpenDrilldown === 'node'" slot="metadata" :data="drilldownMetadata" @add-edge="onAddEdge"/>
       <drilldown-metadata-edge v-if="isOpenDrilldown === 'edge'" slot="metadata" :data="drilldownMetadata"/>
       <!-- <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/> -->
     </drilldown-panel>
@@ -50,6 +50,8 @@
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
+
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
@@ -154,7 +156,7 @@
       this.isOpenDrilldown = 'node';
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = 'Node';
-      this.drilldownMetadata = { name: node.label, db_refs: node.metadata };
+      this.drilldownMetadata = node.metadata;
     }
 
     onEdgeClick (edge: GraphEdgeInterface): void {
@@ -162,6 +164,15 @@
       this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
       this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
       this.drilldownMetadata = edge.metadata;
+    }
+    onAddEdge(edge: any): void {
+      let subgraph = _.cloneDeep(this.subgraph);
+      const sourceNode = { id: edge.source, label: edge.source_label };
+      const targetNode = { id: edge.target, label: edge.target_label };
+      subgraph.nodes.push(sourceNode);
+      subgraph.nodes.push(targetNode);
+      subgraph.edges.push({source: edge.source, target: edge.target});
+      this.subgraph = subgraph;
     }
   }
 </script>
