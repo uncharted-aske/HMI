@@ -24,7 +24,6 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop, Watch } from 'vue-property-decorator';
-  import _ from 'lodash';
 
   import { cosmosSimilar } from '@/utils/CosmosFetchUtil';
   import CloseButton from '@/components/widgets/CloseButton.vue';
