@@ -68,7 +68,6 @@
   ];
 
   const VIEWS: ViewInterface[] = [
-    { name: 'Summary', id: 'summary' },
     { name: 'Causal', id: 'causal' },
     { name: 'Functional', id: 'functional' },
   ];
@@ -89,14 +88,14 @@
 
   const intersectionGraph = {
     nodes: [
-      { id: '1', label: 'S, Sc', nodeType: 'overlapping' },
+      { id: '1', label: 's, s_c', nodeType: 'overlapping' },
       { id: '2', label: 'gamma', nodeType: 'overlapping' },
       { id: '3', label: 'beta', nodeType: 'overlapping' },
-      { id: '4', label: 'I, Ic', nodeType: 'overlapping' },
-      { id: '5', label: 'R, Rc', nodeType: 'overlapping' },
-      { id: '6', label: 'S, Sc', nodeType: 'overlapping' },
-      { id: '7', label: 'I, Ic', nodeType: 'overlapping' },
-      { id: '8', label: 'R, Rc', nodeType: 'overlapping' },
+      { id: '4', label: 'i, i_c', nodeType: 'overlapping' },
+      { id: '5', label: 'r, r_c', nodeType: 'overlapping' },
+      { id: '6', label: 's, s_c', nodeType: 'overlapping' },
+      { id: '7', label: 'i, i_c', nodeType: 'overlapping' },
+      { id: '8', label: 'r, r_c', nodeType: 'overlapping' },
       { id: '9', label: 'OAP-1', nodeType: 'AP', ids: [] },
       { id: '10', label: 'NOAP(SIR)-1', nodeType: 'NOAP', ids: [] },
       { id: '11', label: 'NOAP(CHIME)-2', nodeType: 'NOAP', ids: [] },
@@ -174,7 +173,7 @@
   onNodeHover (node: GraphNodeInterface):void {
     this.reference = node['linked-to'][0]['node-id'];
   }
-  }
+}
 </script>
 
 <style lang="scss" scoped>
