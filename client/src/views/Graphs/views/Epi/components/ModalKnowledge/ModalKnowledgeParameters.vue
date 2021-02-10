@@ -30,24 +30,26 @@
             <div>
               {{data.objects[0].publisher || 'None'}}
             </div>
-            <div class="font-weight-bolder mt-3">Excerpt</div>
+            <!-- <div class="font-weight-bolder mt-3">Excerpt</div>
             <div class="position-relative flex-grow-1">
-              <!-- <div class="position-absolute h-100 w-100 pr-1 overflow-auto">
+              <div class="position-absolute h-100 w-100 pr-1 overflow-auto">
                 {{excerpt}}
-              </div> -->
-            </div>
+              </div>
+            </div> -->
           </div>
       </div>
+      <similar-docs :doi="doi" class="my-4"/>
     </div>
-      <div slot="footer" class="related-docs">
-        <button
-                type="button"
-                class="btn btn-link"
-                @click="openKnowledgeView()"
-              >
-                Explore All         <font-awesome-icon class="icon" :icon="['fas', 'search']"/>
-</button>
-      </div>
+    <div slot="footer" class="related-docs">
+      <button
+        type="button"
+        class="btn btn-link"
+        @click="openKnowledgeView()"
+      >
+        Explore All
+        <font-awesome-icon class="icon" :icon="['fas', 'search']"/>
+      </button>
+    </div>
   </modal>
 </template>
 
@@ -56,15 +58,22 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
   import Modal from '@/components/Modal.vue';
+  import SimilarDocs from '@/components/widgets/SimilarDocs.vue';
   import { getAuthorList } from '@/utils/CosmosDataUtil';
+
   const components = {
     Modal,
+    SimilarDocs,
   };
 @Component({ components })
   export default class ModalKnowledgeParameters extends Vue {
     @Prop({ default: null }) data: any;
     get authorList (): string {
       return getAuthorList(this.data.objects[0].bibjson.author);
+    }
+
+    get doi (): string {
+      return this.data.objects[0].bibjson.identifier[0].id;
     }
 
     get imageStyle (): {backgroundImage: string} {
