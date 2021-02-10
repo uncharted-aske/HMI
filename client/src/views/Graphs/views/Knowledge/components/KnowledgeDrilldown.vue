@@ -1,42 +1,40 @@
 <template>
-  <div class="knowledge-drilldown position-fixed d-flex align-items-center w-100 h-100"
-    v-if="show"
-    @click="onClickClose"
-  >
-    <div class="position-relative d-flex flex-column py-3 pr-0 rounded shadow container" @click="onClickStop">
-      <close-button @close="onClickClose"/>
+  <modal @close="onClickClose">
+    <div slot="header">
       <a :href="data.raw.bibjson.link[0].url" target="_blank">
         <h3>{{data.title}}</h3>
       </a>
-      <h5>{{data.raw.bibjson.identifier[0].id}}</h5>
+      <h5 class="m-0">{{data.raw.bibjson.identifier[0].id}}</h5>
+    </div>
+    <div slot="body" class="d-flex flex-column flex-grow-1">
       <div class="d-flex flex-grow-1">
-          <div class="d-flex col-7">
-            <div class="image flex-grow-1" :style="imageStyle(this.data.previewImageSrc)"/>
+        <div class="d-flex col-7">
+          <div class="image flex-grow-1" :style="imageStyle(this.data.previewImageSrc)"/>
+        </div>
+        <div class="d-flex flex-column col">
+          <div class="font-weight-bolder">Authors</div>
+          <div>
+            {{authorList}}
           </div>
-          <div class="d-flex flex-column col">
-            <div class="font-weight-bolder">Authors</div>
-            <div>
-              {{authorList}}
-            </div>
-            <div class="font-weight-bolder mt-3">Publication Year</div>
-            <div>
-              {{data.raw.bibjson.year || 'None'}}
-            </div>
-            <div class="font-weight-bolder mt-3">Publisher</div>
-            <div>
-              {{data.raw.bibjson.publisher || 'None'}}
-            </div>
-            <div class="font-weight-bolder mt-3">Excerpt</div>
-            <div class="position-relative flex-grow-1">
-              <div class="position-absolute h-100 w-100 pr-1 overflow-auto">
-                {{excerpt}}
-              </div>
+          <div class="font-weight-bolder mt-3">Publication Year</div>
+          <div>
+            {{data.raw.bibjson.year || 'None'}}
+          </div>
+          <div class="font-weight-bolder mt-3">Publisher</div>
+          <div>
+            {{data.raw.bibjson.publisher || 'None'}}
+          </div>
+          <div class="font-weight-bolder mt-3">Excerpt</div>
+          <div class="position-relative flex-grow-1">
+            <div class="position-absolute h-100 w-100 pr-1 overflow-auto">
+              {{excerpt}}
             </div>
           </div>
+        </div>
       </div>
       <similar-docs :doi="doi" class="d-flex flex-column m-3"/>
     </div>
-  </div>
+  </modal>
 </template>
 
 <script lang="ts">
@@ -49,11 +47,13 @@
   import CloseButton from '@/components/widgets/CloseButton.vue';
 
   import SimilarDocs from '@/components/widgets/SimilarDocs.vue';
+  import Modal from '@/components/Modal.vue';
   import { CardInterface } from '@/components/Cards/types';
 
   const components = {
     CloseButton,
     SimilarDocs,
+    Modal,
   };
 
   @Component({ components })

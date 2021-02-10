@@ -14,7 +14,7 @@
           <slot name="body" />
         </div>
 
-        <div class="modal-footer">
+        <div v-if="$slots.footer" class="modal-footer">
           <slot name="footer" />
         </div>
       </div>
@@ -75,8 +75,11 @@
   transition: all .3s ease;
 }
 
+.modal-header, .modal-body, .modal-footer {
+  padding: 1rem 0;
+}
+
 .modal-body {
-  padding: 1rem;
   display: flex;
   flex-direction: column;
 }
