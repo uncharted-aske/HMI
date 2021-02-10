@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { GetterTree, MutationTree } from 'vuex';
 
 import { ModelsState } from '@/types/types';
-import { GraphEdgeInterface } from '@/views/Graphs/types/types';
 
 import CHIME from '@/static/uncharted_chime.json';
 import nestedCHIMECAG from '@/static/nested-CHIME-SIR-CAG.json';
