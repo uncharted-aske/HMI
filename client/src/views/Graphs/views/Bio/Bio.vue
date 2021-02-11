@@ -18,7 +18,7 @@
           <div slot="left">
             <counters
               :title="selectedModel.metadata.name"
-              :data="[`1688 Nodes`, `5035 Edges`]"
+              :data="[`448723 Nodes`, `44104 Edges`]"
             />
           </div>
           <div slot="settings">
