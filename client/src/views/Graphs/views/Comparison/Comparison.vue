@@ -174,10 +174,7 @@
     const nodeId = node.id;
     const highlightsModels = {};
     this.selectedModels.forEach(model => {
-      if (model.id === 2) {
-        const subgraph = this.getComparisonHighlights[nodeId][model.id];
-        highlightsModels[model.id] = subgraph;
-      }
+      highlightsModels[model.id] = this.getComparisonHighlights[nodeId][model.id];
     });
     this.highlightsModels = highlightsModels;
   }
