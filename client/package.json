@@ -21,7 +21,7 @@
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "@uncharted.software/facets-core": "^3.1.0",
     "@uncharted.software/facets-plugins": "^3.1.0",
-    "@uncharted.software/grafer": "^0.1.2",
+    "@uncharted.software/grafer": "0.2.0-demo",
     "@uncharted.software/lex": "^1.0.0",
     "bootstrap": "^4.5.2",
     "compound-graph": "git+https://bot-user:RosaRomeroGomez@github.com/mwdchang/compound-graph.git#99c392edf52963623e2b82a7deee746e49bbdaee",

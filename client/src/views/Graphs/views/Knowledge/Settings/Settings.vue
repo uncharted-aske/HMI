@@ -2,8 +2,8 @@
   <div class="settings-container">
     <button
       type="button" class="btn btn-secondary mr-1"
-      :disabled="this.$route.name === 'knowledgeEntities'"
-      @click="$router.push({ name: 'knowledgeEntities' })"
+      :disabled="this.$route.name === 'knowledgeDocsClusters'"
+      @click="$router.push({ name: 'knowledgeDocsClusters' })"
     >
       Entity-based Views
     </button>

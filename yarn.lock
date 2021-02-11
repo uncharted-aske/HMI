@@ -37,14 +37,6 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@dekkai/data-source@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/@dekkai/data-source/-/data-source-0.1.0.tgz#cce59bda9eb54722a90ab5081c641b7c5af72644"
-  integrity sha512-XhCDInhqoHkV1NlUqj+aKof/KLoakKt54h3AnHGNmp8EnOKSs5PVNnATtufmyCXPCg35iyr62QH2n4GLfY4ZNQ==
-  dependencies:
-    "@dekkai/env" "^1.0.1"
-    "@dekkai/event-emitter" "^1.0.2"
-
 "@dekkai/data-source@^0.2.0":
   version "0.2.0"
   resolved "https://registry.npmjs.org/@dekkai/data-source/-/data-source-0.2.0.tgz#d9a0354abc4ae8c45ddd824716cb757ae2b1a99d"
@@ -58,7 +50,7 @@
   resolved "https://registry.npmjs.org/@dekkai/env/-/env-1.0.1.tgz#b91ce8e3cbcab71420301688df983e156a687692"
   integrity sha512-dE9y9DVIVZYJ2xq7FWNK4zo61ZZLR/LPR4FTtEp4VgbaNBLMtm5VkD5ZECwtY/0ey7XvWrEocvxHtiiaglYv+w==
 
-"@dekkai/event-emitter@^1.0.2", "@dekkai/event-emitter@^1.1.0":
+"@dekkai/event-emitter@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@dekkai/event-emitter/-/event-emitter-1.1.0.tgz#82bf46f9b8cc1443320567f57f377dc2cc8f007f"
   integrity sha512-wQkAuh4p96ZZvCuOA1XRi8FiYE2Nbsozzv8y8mRq2JwN7fSJS0DtMCsLvfcpEF4wdFo2Hum0u3vpxoAv0rY5Eg==
@@ -597,12 +589,12 @@
     lit-element "^2.2.1"
     lit-html "^1.1.2"
 
-"@uncharted.software/grafer@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.npmjs.org/@uncharted.software/grafer/-/grafer-0.1.2.tgz#457625d5d25fe87026757a3a98dd5153f208d0e1"
-  integrity sha512-5q3OLhdJq6iajlI55tWG2BNsjAAMs3X2rcZAqg+kZtth74K7k8fzixfVOdwRZCxmQSCzdhGxf3cKNgmyCSy0nQ==
+"@uncharted.software/grafer@0.2.0-demo":
+  version "0.2.0-demo"
+  resolved "https://registry.npmjs.org/@uncharted.software/grafer/-/grafer-0.2.0-demo.tgz#1b439bdaaa4efffd8b79e7fae5c38960ae1a0868"
+  integrity sha512-ZHNjESBKIdy4UysdddTmNJThtS2v90ntCbqDGvkzmx+uC18bXZEDp++j5marTxw1c5utZ5B7m1IaO848FEnCSg==
   dependencies:
-    "@dekkai/data-source" "^0.1.0"
+    "@dekkai/data-source" "^0.2.0"
     "@dekkai/event-emitter" "^1.1.0"
     chroma-js "^2.1.0"
     dekkai "^0.3.6"

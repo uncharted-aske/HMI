@@ -8,19 +8,29 @@
 </template>
 
 <script lang="ts">
-  import { GraferController, GraferControllerData, graph } from '@uncharted.software/grafer';
+  import { GraferController, GraferControllerData, GraferPointsData, graph } from '@uncharted.software/grafer';
   import { DataFile } from '@dekkai/data-source';
-  import Component from 'vue-class-component';
+  import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
+  import { GraferLayerData } from '@uncharted.software/grafer/build/types/src/grafer/GraferController';
 
   @Component
   export default class Grafer extends Vue {
     private loading: boolean = true;
     private controller: GraferController;
 
+    @Prop({ default: 'covid-19' })
+    private model: string;
+
+    @Prop({ default: null })
+    private layer: string;
+
+    @Prop({ default: true })
+    private backEdges: boolean;
+
     public mounted (): void {
       this.loadGraph().then(data => {
-        this.controller = new GraferController(this.$refs.canvas, data);
+        this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
         this.loading = false;
       });
     }
@@ -28,68 +38,73 @@
     // temporary demo functions
     async loadGraph (): Promise<GraferControllerData> {
       const points = {
-        data: [],
+        data: await this.loadGraferFile(`/grafer/${this.model}/points.jsonl`),
       };
 
-      await this.parseJSONL('/grafer/points_dodgy.jsonl', json => {
-        points.data.push(json);
-      });
+      const colors = this.getModelColors();
 
-      const clusterLayer = {
-        name: 'Clusters',
-        labels: {
-          type: 'RingLabel',
-          data: [],
-          mappings: {
-            background: (): boolean => false,
-            fontSize: (): number => 14,
-            padding: (): number => 0,
-          },
-          options: {
-            visibilityThreshold: 160,
-            repeatLabel: -1,
-            repeatGap: 64,
-          },
-        },
-        edges: {
-          type: 'CurvedPath',
-          data: [],
-          options: {
-            alpha: 0.04,
-            nearDepth: 0.9,
-          },
-        },
+      const layers = await this.loadModelLayers(points);
+
+      return { points, colors, layers };
+    }
+
+    getModelColors (): string[] {
+      if (this.model === 'covid-19') {
+        return [
+          '#5e81ac',
+          '#d08770',
+          '#ebcb8b',
+          '#81a1c1',
+        ];
+      }
+      return [
+        '#bf616a',
+        '#d08770',
+        '#ebcb8b',
+        '#a3be8c',
+        '#b48ead',
+        '#d8dee9',
+      ];
+    }
+
+    async loadModelLayers (points: GraferPointsData): Promise<GraferLayerData[]> {
+      if (this.model === 'covid-19') {
+        return await this.loadBioLayers();
+      }
+      return await this.loadKnowledgeLayers(points);
+    }
+
+    async loadBioLayers (): Promise<GraferLayerData[]> {
+      const layers = [];
+
+      const nodeOptions = { color: 1 };
+      const nodeEdgeOptions = {
+        sourceColor: 2,
+        targetColor: 2,
       };
-
-      await this.parseJSONL('/grafer/clusters.jsonl', json => {
-        clusterLayer.labels.data.push(Object.assign({}, json, {
-          color: 3,
-        }));
-      });
-
-      await this.parseJSONL('/grafer/edges_dodgy.jsonl', json => {
-        clusterLayer.edges.data.push(Object.assign({}, json, {
-          sourceColor: 0,
-          targetColor: 0,
-        }));
-      });
+      const nodeData = await this.loadGraferFile(`/grafer/${this.model}/nodes.jsonl`, nodeOptions);
 
       const nodeLayer = {
         name: 'Nodes',
         nodes: {
           type: 'Circle',
-          data: [],
+          data: nodeData,
+          options: {
+            nearDepth: 0.5,
+            farDepth: 1.0,
+          },
         },
         edges: {
-          data: [],
+          data: await this.loadGraferFile(`/grafer/${this.model}/intra_edges.jsonl`, nodeEdgeOptions),
           options: {
             alpha: 0.55,
-            nearDepth: 0.9,
+            nearDepth: 0.6,
+            farDepth: 1.0,
           },
         },
         labels: {
           type: 'PointLabel',
-          data: [],
+          data: nodeData,
           mappings: {
             background: (): boolean => true,
             fontSize: (): number => 12,
@@ -101,40 +116,232 @@
           },
         },
       };
+      layers.push(nodeLayer);
 
-      await this.parseJSONL('/grafer/nodes.jsonl', json => {
-        nodeLayer.nodes.data.push(Object.assign({}, json, {
-          color: 1,
-        }));
+      const clusterLabelOptions = { color: 3 };
+      const clusterEdgeOptions = {
+        sourceColor: 0,
+        targetColor: 0,
+      };
+
+      const clusterLayer = {
+        name: 'Clusters',
+        // nodes: {
+        //   type: 'Ring',
+        //   data: await this.loadGraferFile(`/grafer/${this.model}/clusters.jsonl`, clusterLabelOptions),
+        //   options: {},
+        // },
+        labels: {
+          type: 'RingLabel',
+          data: await this.loadGraferFile(`/grafer/${this.model}/clusters.jsonl`, clusterLabelOptions),
+          mappings: {
+            background: (): boolean => false,
+            fontSize: (): number => 14,
+            padding: (): number => 0,
+          },
+          options: {
+            visibilityThreshold: 160,
+            repeatLabel: -1,
+            repeatGap: 64,
+            nearDepth: 0.5,
+            farDepth: 1.0,
+          },
+        },
+        edges: {
+          type: 'ClusterBundle',
+          data: await this.loadGraferFile(`/grafer/${this.model}/inter_edges.jsonl`, clusterEdgeOptions),
+          options: {
+            alpha: 0.04,
+            nearDepth: 0.7,
+            farDepth: 1.0,
+          },
+        },
+      };
+      layers.push(clusterLayer);
+
+      if (this.layer) {
+        // change the layers properties
+        const fadedOptions = {
+          alpha: 1.0,
+          fade: 0.7,
+          desaturate: 0.5,
+        };
+
+        nodeLayer.nodes.options = Object.assign(nodeLayer.nodes.options, fadedOptions);
+        nodeLayer.edges.options = Object.assign(nodeLayer.edges.options, fadedOptions, { fade: 0.9, enabled: this.backEdges });
+        nodeLayer.labels.options = Object.assign(nodeLayer.labels.options, fadedOptions);
+
+        // clusterLayer.nodes.options = Object.assign(clusterLayer.nodes.options, fadedOptions);
+        clusterLayer.edges.options = Object.assign(clusterLayer.edges.options, fadedOptions, { fade: 0.9, enabled: this.backEdges });
+        clusterLayer.labels.options = Object.assign(clusterLayer.labels.options, fadedOptions);
+
+        // load the layers
+        // 3710
+        const highlightClusterEdges = await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/inter_edges.jsonl`, clusterEdgeOptions);
+        const highlightClusterLayer = {
+          name: 'Highlights - Clusters',
+          labels: {
+            type: 'RingLabel',
+            data: await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`, clusterLabelOptions),
+            mappings: {
+              background: (): boolean => false,
+              fontSize: (): number => 14,
+              padding: (): number => 0,
+            },
+            options: {
+              visibilityThreshold: 160,
+              repeatLabel: -1,
+              repeatGap: 64,
+              nearDepth: 0.0,
+              farDepth: 0.4,
+            },
+          },
+          edges: {
+            type: 'ClusterBundle',
+            data: highlightClusterEdges,
+            options: {
+              alpha: Math.min(0.99, Math.max(0.2, 1 - ((1 / 4100) * highlightClusterEdges.length))),
+              nearDepth: 0.1,
+              farDepth: 0.4,
+            },
+          },
+        };
+        layers.unshift(highlightClusterLayer);
+
+        const highlightNodeData = await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`, nodeOptions);
+        const highlightNodeLayer = {
+          name: 'Highlights - Nodes',
+          nodes: {
+            type: 'Circle',
+            data: highlightNodeData,
+            options: {
+              nearDepth: 0.0,
+              farDepth: 0.4,
+            },
+          },
+          edges: {
+            data: await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/intra_edges.jsonl`, nodeEdgeOptions),
+            options: {
+              alpha: 0.55,
+            },
+          },
+          labels: {
+            type: 'PointLabel',
+            data: highlightNodeData,
+            mappings: {
+              background: (): boolean => true,
+              fontSize: (): number => 12,
+              padding: (): [number, number] => [8, 5],
+            },
+            options: {
+              visibilityThreshold: 8,
+              labelPlacement: graph.labels.PointLabelPlacement.TOP,
+              nearDepth: 0.0,
+              farDepth: 0.4,
+            },
+          },
+        };
+        layers.unshift(highlightNodeLayer);
+      }
+
+      return layers;
+    }
+
+    async loadKnowledgeLayers (points: GraferPointsData): Promise<GraferLayerData[]> {
+      const layers = [];
+      const nodeLayer = {
+        name: 'Nodes',
+        nodes: {
+          type: 'Circle',
+          data: await this.loadGraferFile(`/grafer/${this.model}/nodes.jsonl`),
+          options: {
+            pixelSizing: true,
+            nearDepth: 0.75,
+            farDepth: 1.0,
+          },
+        },
+        edges: null,
+        labels: {
+          type: 'PointLabel',
+          data: await this.loadGraferFile(`/grafer/${this.model}/clusters.jsonl`),
+          mappings: {
+            background: (): boolean => true,
+            fontSize: (): number => 12,
+            padding: (): [number, number] => [8, 5],
+          },
+          options: {
+            visibilityThreshold: 5,
+            labelPlacement: graph.labels.PointLabelPlacement.CENTER,
+            nearDepth: 0.5,
+            farDepth: 0.74,
+          },
+        },
+      };
+      layers.push(nodeLayer);
+
+      if (this.layer) {
+        // change the layers properties
+        const fadedOptions = {
+          alpha: 1.0,
+          fade: 0.9,
+          desaturate: 0.5,
+        };
+
+        nodeLayer.nodes.options = Object.assign(nodeLayer.nodes.options, fadedOptions);
+        nodeLayer.labels.options = Object.assign(nodeLayer.labels.options, fadedOptions);
+
+        // load the extra points
+        points.data.push(...await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/points.jsonl`));
+
+        // load the layer
+        const highlightNodeLayer = {
+          name: 'Nodes',
+          nodes: {
+            type: 'Circle',
+            data: await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`),
+            options: {
+              pixelSizing: true,
+              nearDepth: 0.25,
+              farDepth: 0.5,
+            },
+          },
+          edges: null,
+          labels: {
+            type: 'PointLabel',
+            data: await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`),
+            mappings: {
+              background: (): boolean => true,
+              fontSize: (): number => 12,
+              padding: (): [number, number] => [8, 5],
+            },
+            options: {
+              visibilityThreshold: 0,
+              labelPlacement: graph.labels.PointLabelPlacement.TOP,
+              nearDepth: 0.0,
+              farDepth: 0.24,
+            },
+          },
+        };
+        layers.unshift(highlightNodeLayer);
+      }
+
+      return layers;
+    }
+
+    async loadGraferFile (file: string, options: any = null): Promise<any> {
+      const ret = [];
+
+      await this.parseJSONL(file, json => {
+        ret.push(Object.assign({}, json, options));
       });
-      nodeLayer.labels.data = nodeLayer.nodes.data;
 
-      await this.parseJSONL('/grafer/intra_edges.jsonl', json => {
-        nodeLayer.edges.data.push(Object.assign({}, json, {
-          sourceColor: 2,
-          targetColor: 2,
-        }));
-      });
-
-      const colors = [
-        '#5e81ac',
-        '#d08770',
-        '#ebcb8b',
-        '#81a1c1',
-      ];
-
-      const layers = [
-        clusterLayer,
-        nodeLayer,
-      ];
-
-      return { points, colors, layers };
+      return ret;
     }
 
     async parseJSONL (input: string, cb: (o: any) => void): Promise<void> {
       const file = await DataFile.fromRemoteSource(input);
 
-      // load 16MB chunks
+      // load 2MB chunks
       const sizeOf2MB = 2 * 1024 * 1024;
       const byteLength = await file.byteLength;
       const decoder = new TextDecoder();
