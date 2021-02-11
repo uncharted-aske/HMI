@@ -97,13 +97,10 @@
       { id: '6', label: 's, s_c', nodeType: 'overlapping' },
       { id: '7', label: 'i, i_c', nodeType: 'overlapping' },
       { id: '8', label: 'r, r_c', nodeType: 'overlapping' },
-      { id: '9', label: 'OAP-1', nodeType: 'AP', ids: [] },
-      { id: '10', label: 'NOAP(SIR)-1', nodeType: 'NOAP', subgraph: {
-        nodes: [],
-        edges: []
-      } },
-      { id: '11', label: 'NOAP(CHIME)-2', nodeType: 'NOAP', ids: [] },
-      { id: '12', label: 'NOAP(CHIME)-1', nodeType: 'NOAP', ids: [] },
+      { id: '9', label: 'OAP-1', nodeType: 'AP'},
+      { id: '10', label: 'NOAP(SIR)-1', nodeType: 'NOAP'},
+      { id: '11', label: 'NOAP(CHIME)-2', nodeType: 'NOAP' },
+      { id: '12', label: 'NOAP(CHIME)-1', nodeType: 'NOAP' },
     ],
     edges: [
       { source: '1', target: '9', edgeType: 'overlapping' },
@@ -172,6 +169,7 @@
 
   onNodeClick (node: GraphNodeInterface): void {
     const nodeId = node.id;
+    console.log(nodeId);
     const highlightsModels = {};
     this.selectedModels.forEach(model => {
       highlightsModels[model.id] = this.getComparisonHighlights[nodeId][model.id];
