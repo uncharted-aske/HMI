@@ -42,14 +42,16 @@
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
-      <drilldown-metadata-node v-if="isOpenDrilldown === 'node'" slot="metadata" :metadata="drilldownMetadata"/>
-      <drilldown-metadata-edge v-if="isOpenDrilldown === 'edge'" slot="metadata" :metadata="drilldownMetadata"/>
+      <drilldown-metadata-node v-if="isOpenDrilldown === 'node'" slot="metadata" :data="drilldownMetadata" @add-edge="onAddEdge"/>
+      <drilldown-metadata-edge v-if="isOpenDrilldown === 'edge'" slot="metadata" :data="drilldownMetadata"/>
       <!-- <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/> -->
     </drilldown-panel>
   </div>
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
+
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
@@ -159,9 +161,33 @@
 
     onEdgeClick (edge: GraphEdgeInterface): void {
       this.isOpenDrilldown = 'edge';
-      this.drilldownPaneTitle = `${edge.metadata.source_label} → ${edge.metadata.target_label}`;
+      this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
       this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
       this.drilldownMetadata = edge.metadata;
+    }
+
+    onAddEdge (edge: any): void {
+      const subgraph = _.cloneDeep(this.subgraph);
+      const sourceNode = { id: edge.source, label: edge.source_label, nodeType: 'ontological grounding' };
+      const targetNode = { id: edge.target, label: edge.target_label, nodeType: 'ontological grounding' };
+
+      // Check if nodes already exists in subgraph
+      const sourceFound = subgraph.nodes.find(node => node.id === sourceNode.id);
+      const targetFound = subgraph.nodes.find(node => node.id === targetNode.id);
+      if (!sourceFound) {
+        subgraph.nodes.push(sourceNode);
+      }
+      if (!targetFound) {
+        subgraph.nodes.push(targetNode);
+      }
+
+      // Check if edges already exist in the subgraph
+      const edgeFound = subgraph.edges.find(e => e.id === edge.id);
+      if (!edgeFound) {
+        subgraph.edges.push(edge);
+      }
+
+      this.subgraph = subgraph;
     }
   }
 </script>

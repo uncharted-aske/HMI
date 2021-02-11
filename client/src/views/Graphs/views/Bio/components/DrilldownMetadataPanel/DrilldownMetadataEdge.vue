@@ -22,17 +22,6 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
-
-  // import ModalKnowledge from './components/ModalKnowledge/ModalKnowledge.vue';
-
-  import FirstSnippet from '@/assets/img/SnippetKnowledge1.png';
-  import SecondSnippet from '@/assets/img/SnippetKnowledge2.png';
-
-  // FIXME: When we get document artifacts from xDD we should be able to display the modal dialog.
-  // const components = {
-  //   ModalKnowledge,
-  // };
-
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
 
   const components = {
@@ -41,23 +30,18 @@
 
   @Component({ components })
   export default class DrilldownMetadataPane extends Vue {
-    @Prop({ default: null }) metadata: any;
-
-    showModal: boolean = false;
-    firstSnippet: string = FirstSnippet;
-    secondSnippet: string = SecondSnippet;
+    @Prop({ default: null }) data: any;
 
     get isEmptyMetadata (): boolean {
-      return _.isEmpty(this.metadata);
+      return _.isEmpty(this.data);
     }
 
     get dataObject (): Record<any, void> {
-      const output: Record<any, void> = {};
-      output.Type = this.metadata.type;
-      output.Tested = this.metadata.tested;
-      output.Belief = this.metadata.belief;
-      output.Evidence = this.metadata.statement.evidence.map(({ text }) => text).join(', ');
-      return output;
+        const output: Record<any, void> = {};
+        output.Tested = this.data.tested;
+        output.Belief = this.data.belief;
+        output.Evidence = this.data.evidence;
+        return output;
     }
   }
 </script>

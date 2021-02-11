@@ -44,7 +44,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
       .attr('xoverflow', 'visible')
       .append('svg:path')
       .attr('d', SVGUtil.ARROW)
-      .style('fill', Colors.EDGES)
+      .style('fill', Colors.EDGES.DEFAULT)
       .style('stroke', 'none');
 
     // Vreate filter with id #drop-shadow
@@ -106,7 +106,7 @@ export default class GlobalEPIModelRenderer extends SVGRenderer {
       .attr('cursor', 'pointer')
       .attr('d', d => pathFn(d.points))
       .style('fill', 'none')
-      .style('stroke', Colors.EDGES)
+      .style('stroke', Colors.EDGES.DEFAULT)
       .style('stroke-width', 2)
       .attr('marker-end', d => {
         const source = d.source.replace(/\s/g, '');

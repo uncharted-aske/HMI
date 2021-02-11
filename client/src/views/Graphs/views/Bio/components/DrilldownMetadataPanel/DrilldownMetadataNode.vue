@@ -1,18 +1,16 @@
 <template>
   <div class="drilldown-metadata-pane-container">
     <div v-if="!isEmptyMetadata">
-      <collapsible-item v-for="(values, key) in dataObject" :key="key">
-        <div slot="title">{{key}}</div>
-        <div slot="content" class="my-3" v-for="(value, key) in values" :key="key">{{value}}</div>
+      <collapsible-item v-for="(values, dataObjectKey) in dataObject" :key="dataObjectKey">
+        <div slot="title">{{dataObjectKey}}</div>
+        <div slot="content" class="mb-1 px-2 py-2 d-flex rounded-lg border" role="button" v-for="(edge, index) in values" :key="index" @click="onEdgeClick(edge)">
+          {{edge.source_label}} → {{edge.target_label}}
+        </div>
       </collapsible-item>
     </div>
     <div v-else class="alert alert-info" role="alert">
       No metadata at the moment
     </div>
-    <!-- <modal-knowledge
-      v-if="showModal"
-      @close="showModal = false"
-     /> -->
   </div>
 </template>
 
@@ -23,16 +21,6 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-  // import ModalKnowledge from './components/ModalKnowledge/ModalKnowledge.vue';
-
-  import FirstSnippet from '@/assets/img/SnippetKnowledge1.png';
-  import SecondSnippet from '@/assets/img/SnippetKnowledge2.png';
-
-  // FIXME: When we get document artifacts from xDD we should be able to display the modal dialog.
-  // const components = {
-  //   ModalKnowledge,
-  // };
-
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
 
   const components = {
@@ -41,24 +29,21 @@
 
   @Component({ components })
   export default class DrilldownMetadataPane extends Vue {
-    @Prop({ default: null }) metadata: any;
-
-    showModal: boolean = false;
-    firstSnippet: string = FirstSnippet;
-    secondSnippet: string = SecondSnippet;
+    @Prop({ default: null }) data: any;
 
     get dataObject (): Record<any, void> {
       const output: Record<any, any> = {};
-      output.Name = [this.metadata.name];
-      output['DB Refs'] = [];
-      for (const refType in this.metadata.db_refs) {
-        output['DB Refs'].push(`${refType}: ${this.metadata.db_refs[refType]}`);
-      }
+      output.Incoming = this.data.incoming_neighbors.slice(0, 10);
+      output.Outgoing = this.data.outgoing_neighbors.slice(0, 10);
       return output;
     }
 
     get isEmptyMetadata (): boolean {
-      return _.isEmpty(this.metadata);
+      return _.isEmpty(this.data);
+    }
+
+    onEdgeClick (edge: any): void {
+      this.$emit('add-edge', edge);
     }
   }
 </script>

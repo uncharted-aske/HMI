@@ -5,7 +5,7 @@ import { SVGRenderer } from 'compound-graph';
 
 import { EpiModelRendererOptionsInterface, SubgraphInterface } from '@/graphs/svg/types/types';
 
-import { calcNodeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
+import { calcNodeColor, calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors, NodeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 
@@ -44,7 +44,7 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
       .attr('xoverflow', 'visible')
       .append('svg:path')
       .attr('d', SVGUtil.ARROW)
-      .style('fill', Colors.EDGES)
+      .style('fill', d => calcEdgeColor(d))
       .style('stroke', 'none');
   }
 
@@ -77,28 +77,21 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
       .style('fill', d => calcLabelColor(d))
       .style('font-weight', '600')
       .style('text-anchor', 'middle')
-      .text(d => d.label);
+      .text(d => {
+        if (d.label.length > 10) {
+          const label = d.label.slice(0, 10);
+          return label.concat('...');
+        } else return d.label;
+      });
   }
 
   renderEdge (edgeSelection: d3.Selection<any, any, any, any>): void {
     edgeSelection.append('path')
+      .attr('cursor', 'pointer')
       .attr('d', d => pathFn(d.points))
       .style('fill', 'none')
-      .style('stroke', 'transparent')
-      .style('stroke-width', 14);
-
-    edgeSelection.append('path')
-      .attr('d', d => pathFn(d.points))
-      .style('fill', 'none')
-      .style('stroke', d => {
-        if (d.data.type) {
-          if (d.data.type === 'overlapping') {
-            return Colors.NODES.OVERLAPPING;
-          }
-        }
-        return Colors.EDGES;
-      })
-      .style('stroke-width', 2)
+      .style('stroke', d => calcEdgeColor(d))
+      .style('stroke-width', 5)
       .style('stroke-dasharray', d => {
         if (d.data.type) {
           if (d.data.type === 'NOAP') {
