@@ -148,8 +148,196 @@
       identifier: [{ type: 'aske_id', id: '8467496e-3dfb-4efd-9061-433fef1b92de' }],
     },
   };
-  const pathSubgraph = { nodes: [{ id: '4f8f229a-aab4-4db4-844b-64f68920dfad' }, { id: '4a8eb129-c503-4592-8cc2-e45b93bd8c26' }, { id: '024f553a-5070-482f-a94f-82b97dbdd88d' }, { id: 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd' }, { id: '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a' }, { id: '7ce1948c-b271-42d8-9b4b-29df3da5fdde' }, { id: '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa' }, { id: 'e1d3a02d-12f9-4b77-b35c-80695a219a5e' }, { id: 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3' }, { id: '620874cf-3a25-43e1-9848-dde986bcad1f' }, { id: 'aa94c3cc-5193-4122-b0ed-e83faefc214d' }, { id: 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d' }, { id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1' }, { id: '4e9f2344-29a6-4457-93cf-da8589382e3d' }, { id: '9d2259db-62cc-444f-a4d4-03f5769ba39b' }], edges: [{ source: '4f8f229a-aab4-4db4-844b-64f68920dfad', target: '4a8eb129-c503-4592-8cc2-e45b93bd8c26' }, { source: '4a8eb129-c503-4592-8cc2-e45b93bd8c26', target: '024f553a-5070-482f-a94f-82b97dbdd88d' }, { source: '024f553a-5070-482f-a94f-82b97dbdd88d', target: 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd' }, { source: 'f0ca40d1-b8f2-4d10-81c3-08cf796d9acd', target: '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a' }, { source: '725dd80c-e5c8-46ab-8df1-8f8fa9f3515a', target: '7ce1948c-b271-42d8-9b4b-29df3da5fdde' }, { source: '7ce1948c-b271-42d8-9b4b-29df3da5fdde', target: '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa' }, { source: '0e1f1d8c-2f80-4aa1-853c-8d9b8a03c2aa', target: 'e1d3a02d-12f9-4b77-b35c-80695a219a5e' }, { source: 'e1d3a02d-12f9-4b77-b35c-80695a219a5e', target: 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3' }, { source: 'b2a9f511-b7ec-48c5-9b6e-183821bf39c3', target: '620874cf-3a25-43e1-9848-dde986bcad1f' }, { source: '620874cf-3a25-43e1-9848-dde986bcad1f', target: 'aa94c3cc-5193-4122-b0ed-e83faefc214d' }, { source: 'aa94c3cc-5193-4122-b0ed-e83faefc214d', target: 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d' }, { source: 'ef3ed63b-1bbc-4de7-a9d7-457b91e1a30d', target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1' }, { source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1', target: '4e9f2344-29a6-4457-93cf-da8589382e3d' }, { source: '4e9f2344-29a6-4457-93cf-da8589382e3d', target: '9d2259db-62cc-444f-a4d4-03f5769ba39b' }] };
 
+  const paths = [{
+                   nodes: [{
+                     id: '3ca29049-d9c6-459e-be33-5912e8a1433b',
+                   }, {
+                     id: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
+                   }],
+                   edges: [{
+                     source: '3ca29049-d9c6-459e-be33-5912e8a1433b',
+                     target: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
+                   }],
+                 },
+                 {
+                   nodes: [{
+                             id: '3ca29049-d9c6-459e-be33-5912e8a1433b',
+                           },
+                           {
+                             id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                           }, {
+                             id: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
+                           },
+                   ],
+                   edges: [{
+                             source: '3ca29049-d9c6-459e-be33-5912e8a1433b',
+                             target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                           },
+                           {
+                             source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                             target: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
+                           },
+                   ],
+                 },
+                 {
+                   nodes: [{
+                             id: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
+                           },
+                           {
+                             id: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
+                           },
+                           {
+                             id: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
+                           },
+                           {
+                             id: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
+                           },
+                           {
+                             id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                           },
+                           {
+                             id: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
+                           },
+                   ],
+                   edges: [{
+                             source: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
+                             target: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
+                           },
+                           {
+                             source: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
+                             target: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
+                           },
+                           {
+                             source: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
+                             target: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
+                           },
+                           {
+                             source: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
+                             target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                           },
+                           {
+                             source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                             target: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
+                           },
+                   ],
+                 },
+                 {
+                   nodes: [{
+                             id: '3ca29049-d9c6-459e-be33-5912e8a1433b',
+                           },
+                           {
+                             id: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
+                           },
+                           {
+                             id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                           },
+                           {
+                             id: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
+                           },
+                           {
+                             id: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
+                           },
+                           {
+                             id: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
+                           },
+                           {
+                             id: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
+                           },
+                           {
+                             id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                           },
+                           {
+                             id: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
+                           },
+                   ],
+                   edges: [
+                     {
+                       source: '3ca29049-d9c6-459e-be33-5912e8a1433b',
+                       target: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
+                     },
+
+                     {
+                       source: '3ca29049-d9c6-459e-be33-5912e8a1433b',
+                       target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                     }, {
+                       source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                       target: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
+                     }, {
+                       source: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
+                       target: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
+                     }, {
+                       source: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
+                       target: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
+                     }, {
+                       source: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
+                       target: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
+                     }, {
+                       source: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
+                       target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                     }, {
+                       source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                       target: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
+                     },
+                   ],
+                 },
+                 {
+                   nodes: [{
+                     id: '4f8f229a-aab4-4db4-844b-64f68920dfad',
+                   }, {
+                     id: '9d85aa4e-2a80-42a9-a8fb-33d10932f2ac',
+                   }, {
+                     id: '4a3659ff-9c44-4352-9d3e-f592b2597b5a',
+                   }, {
+                     id: '26f0ec12-51a6-42e5-a5fd-afdad6d21f4e',
+                   }, {
+                     id: 'a9840a0e-8a1a-4eda-a9ca-7746f23d3677',
+                   }, {
+                     id: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
+                   }, {
+                     id: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
+                   }, {
+                     id: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
+                   }, {
+                     id: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
+                   }, {
+                     id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                   }, {
+                     id: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
+                   }],
+                   edges: [{
+                     source: '4f8f229a-aab4-4db4-844b-64f68920dfad',
+                     target: '9d85aa4e-2a80-42a9-a8fb-33d10932f2ac',
+                   }, {
+                     source: '9d85aa4e-2a80-42a9-a8fb-33d10932f2ac',
+                     target: '4a3659ff-9c44-4352-9d3e-f592b2597b5a',
+                   }, {
+                     source: '4a3659ff-9c44-4352-9d3e-f592b2597b5a',
+                     target: '26f0ec12-51a6-42e5-a5fd-afdad6d21f4e',
+                   }, {
+                     source: '26f0ec12-51a6-42e5-a5fd-afdad6d21f4e',
+                     target: 'a9840a0e-8a1a-4eda-a9ca-7746f23d3677',
+                   }, {
+                     source: 'a9840a0e-8a1a-4eda-a9ca-7746f23d3677',
+                     target: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
+                   }, {
+                     source: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
+                     target: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
+                   }, {
+                     source: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
+                     target: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
+                   }, {
+                     source: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
+                     target: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
+                   }, {
+                     source: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
+                     target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                   }, {
+                     source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
+                     target: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
+                   }],
+                 },
+  ];
   const components = {
     SearchBar,
     SettingsBar,
@@ -191,6 +379,7 @@
     modalDataParameters: any = null;
     modalDataMetadata: any = null;
     highlights: SubgraphInterface = null;
+    pathsCounter: number = 0;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -314,7 +503,8 @@
     }
 
     onRunQuery (): void {
-      this.highlights = pathSubgraph;
+      this.highlights = paths[this.pathsCounter];
+      this.pathsCounter++;
     }
   }
 </script>

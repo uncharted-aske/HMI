@@ -27,7 +27,9 @@
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.setQuery();
       // HACK FOR DEMO IN FEB.12TH
-      this.$emit('run-query');
+      if (!filtersUtil.isEmpty(this.getFilters)) {
+        this.$emit('run-query');
+      }
     }
 
     mounted (): void {
