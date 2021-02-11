@@ -18,11 +18,7 @@
           <settings />
         </div>
       </settings-bar>
-      <!-- <card-container
-          :header="`Knowledge`"
-          :cards="modelsCards"
-          @click-card="onOpenPanel"
-      /> -->
+      <grafer class="grafer" model="wisconsin-knowledge" layer="epi" :back-edges="true"/>
       <div class="loader-container" v-if="dataLoading">
         <div class="loader">Loading...</div>
       </div>
@@ -65,6 +61,7 @@
   import CardContainer from '@/components/Cards/CardContainer.vue';
   import KnowledgeDrilldown from './components/KnowledgeDrilldown.vue';
   import knowledgePanel from './DrilldownPanel/KnowledgePanel.vue';
+  import Grafer from '@/views/Graphs/views/Bio/components/BioGraphs/Grafer.vue';
 
   import { FacetTermsSelectionMap } from '@/types/types';
 
@@ -82,6 +79,7 @@
     CardContainer,
     KnowledgeDrilldown,
     knowledgePanel,
+    Grafer,
   };
 
   @Component({ components })
