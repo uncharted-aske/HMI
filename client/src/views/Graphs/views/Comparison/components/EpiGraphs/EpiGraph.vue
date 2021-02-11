@@ -29,6 +29,7 @@
   export default class EpiGraph extends Vue {
     @Prop({ default: null }) graph: GraphInterface;
     @Prop({ default: null }) subgraph: SubgraphInterface;
+    @Prop({ default: null }) highlights: SubgraphInterface;
     @Prop({ default: '' }) reference: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -37,6 +38,12 @@
     @Watch('graph')
     graphChanged (): void {
       this.refresh();
+    }
+
+    @Watch('highlights')
+    highlightsChanged (): void {
+      this.renderer.hideNeighbourhood();
+      this.renderer.showNeighborhood(this.highlights);
     }
 
     @Watch('reference')

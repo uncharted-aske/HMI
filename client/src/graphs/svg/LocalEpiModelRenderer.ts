@@ -93,8 +93,8 @@ export default class LocalEpiModelRenderer extends SVGRenderer {
       .style('stroke', d => calcEdgeColor(d))
       .style('stroke-width', 5)
       .style('stroke-dasharray', d => {
-        if (d.data.type) {
-          if (d.data.type === 'NOAP') {
+        if (d.data.edgeType) {
+          if (d.data.edgeType === 'NOAP') {
             return '5,5';
           }
         }

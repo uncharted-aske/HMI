@@ -17,7 +17,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <epi-graph class="h-100" :graph="model.graph.detailed" :subgraph="model.subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
+        <epi-graph class="h-100" :graph="model.graph.detailed" :subgraph="model.subgraph" :highlights="highlightsModels[model.id]" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
         </div>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
@@ -49,6 +49,7 @@
 
   import { TabInterface, ViewInterface, ModelComponentMetadataInterface } from '@/types/types';
   import { GraphNodeInterface } from '@/views/Graphs/types/types';
+  // import { SubgraphInterface } from '@/graphs/svg/types/types';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -68,7 +69,6 @@
   ];
 
   const VIEWS: ViewInterface[] = [
-    { name: 'Summary', id: 'summary' },
     { name: 'Causal', id: 'causal' },
     { name: 'Functional', id: 'functional' },
   ];
@@ -89,31 +89,33 @@
 
   const intersectionGraph = {
     nodes: [
-      { id: '1', label: 's, sc', nodeType: 'overlapping' },
-      { id: '2', label: 'beta', nodeType: 'overlapping' },
-      { id: '3', label: 'r, rc', nodeType: 'overlapping' },
-      { id: '4', label: 'gamma', nodeType: 'overlapping' },
-      { id: '5', label: 'R, RC', nodeType: 'overlapping' },
-      { id: '5', label: 's, sc', nodeType: 'overlapping' },
-      { id: '6', label: 'r, rc', nodeType: 'overlapping' },
-      { id: '7', label: 'R, RC', nodeType: 'overlapping' },
-      { id: '8', label: 'NOAP 1', nodeType: 'NOAP' },
-      { id: '9', label: 'NOAP 2', nodeType: 'NOAP' },
-      { id: '10', label: 'AP 1', nodeType: 'AP' },
-      { id: '11', label: 'AP 2', nodeType: 'AP' },
+      { id: '1', label: 's, s_c', nodeType: 'overlapping' },
+      { id: '2', label: 'gamma', nodeType: 'overlapping' },
+      { id: '3', label: 'beta', nodeType: 'overlapping' },
+      { id: '4', label: 'i, i_c', nodeType: 'overlapping' },
+      { id: '5', label: 'r, r_c', nodeType: 'overlapping' },
+      { id: '6', label: 's, s_c', nodeType: 'overlapping' },
+      { id: '7', label: 'i, i_c', nodeType: 'overlapping' },
+      { id: '8', label: 'r, r_c', nodeType: 'overlapping' },
+      { id: '9', label: 'OAP-1', nodeType: 'AP' },
+      { id: '10', label: 'NOAP(SIR)-1', nodeType: 'NOAP' },
+      { id: '11', label: 'NOAP(CHIME)-2', nodeType: 'NOAP' },
+      { id: '12', label: 'NOAP(CHIME)-1', nodeType: 'NOAP' },
     ],
     edges: [
-      { source: '1', target: '10', edgeType: 'overlapping' },
-      { source: '2', target: '10', edgeType: 'overlapping' },
-      { source: '3', target: '10', edgeType: 'overlapping' },
-      { source: '3', target: '11', edgeType: 'overlapping' },
-      { source: '4', target: '11', edgeType: 'overlapping' },
-      { source: '5', target: '11', edgeType: 'AP' },
-      { source: '10', target: '5', edgeType: 'AP' },
-      { source: '10', target: '6', edgeType: 'AP' },
-      { source: '11', target: '7', edgeType: 'AP' },
-      { source: '8', target: '2', edgeType: 'NOAP' },
-      { source: '9', target: '2', edgeType: 'NOAP' },
+      { source: '1', target: '9', edgeType: 'overlapping' },
+      { source: '2', target: '9', edgeType: 'overlapping' },
+      { source: '4', target: '9', edgeType: 'overlapping' },
+      { source: '5', target: '9', edgeType: 'overlapping' },
+      { source: '3', target: '9', edgeType: 'overlapping' },
+      { source: '9', target: '6', edgeType: 'overlapping' },
+      { source: '9', target: '7', edgeType: 'overlapping' },
+      { source: '9', target: '8', edgeType: 'overlapping' },
+      { source: '10', target: '9', edgeType: 'NOAP' },
+      { source: '11', target: '9', edgeType: 'NOAP' },
+      { source: '1', target: '12', edgeType: 'NOAP' },
+      { source: '2', target: '12', edgeType: 'NOAP' },
+      { source: '12', target: '3', edgeType: 'NOAP' },
     ],
   };
 
@@ -130,9 +132,11 @@
     drilldownMetadata: ModelComponentMetadataInterface = null;
     reference: string = ''
     intersectionGraph: any = intersectionGraph;
+    highlightsModels: any = { 1: null, 2: null };
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+    @Getter getComparisonHighlights;
 
     get gridMap (): string[][] {
       return [['1', '3', '2']];
@@ -163,10 +167,12 @@
   }
 
   onNodeClick (node: GraphNodeInterface): void {
-    this.isOpenDrilldown = true;
-    this.drilldownPaneTitle = node.label;
-    this.drilldownPaneSubtitle = node.nodeType;
-    this.drilldownMetadata = node.metadata;
+    const nodeId = node.id;
+    const highlightsModels = {};
+    this.selectedModels.forEach(model => {
+      highlightsModels[model.id] = this.getComparisonHighlights[nodeId][model.id];
+    });
+    this.highlightsModels = highlightsModels;
   }
 
   onNodeHover (node: GraphNodeInterface):void {
