@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import {GraferController, GraferControllerData, GraferPointsData, graph} from '@uncharted.software/grafer';
+  import { GraferController, GraferControllerData, GraferPointsData, graph } from '@uncharted.software/grafer';
   import { DataFile } from '@dekkai/data-source';
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
@@ -207,8 +207,6 @@ import {GraferController, GraferControllerData, GraferPointsData, graph} from '@
           },
         };
         layers.unshift(highlightClusterLayer);
-        console.log('HEEEEEEEREEEEEEEE');
-        console.log(highlightClusterLayer.edges.data.length);
 
         const highlightNodeData = await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`, nodeOptions);
         const highlightNodeLayer = {
