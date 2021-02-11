@@ -124,7 +124,7 @@ const state: ModelsState = {
     },
     {
       id: 6,
-      metadata: { name: 'Breast Cancer', source: 'A model of molecular mechanisms governing brest cancer, focusing on frequently mutated genes, and the pathways in which they are involved.' },
+      metadata: { name: 'Breast Cancer', source: 'A model of molecular mechanisms governing breast cancer, focusing on frequently mutated genes, and the pathways in which they are involved.' },
       graph: null,
       subgraph: subgraphJSON,
       type: 'causal',
@@ -152,7 +152,7 @@ const state: ModelsState = {
     },
     {
       id: 10,
-      metadata: { name: 'Multiple sclerosis', source: 'A self-updating model of multiple sclerosis' },
+      metadata: { name: 'Multiple sclerosis', source: 'A self-updating model of multiple sclerosis.' },
       graph: null,
       subgraph: subgraphJSON,
       type: 'causal',
@@ -208,7 +208,7 @@ const state: ModelsState = {
     },
     {
       id: 18,
-      metadata: { name: 'Vitiligo', source: 'A self-updating model of vitiligo' },
+      metadata: { name: 'Vitiligo', source: 'A self-updating model of vitiligo.' },
       graph: null,
       subgraph: subgraphJSON,
       type: 'causal',
