@@ -316,7 +316,7 @@
             },
             options: {
               visibilityThreshold: 0,
-              labelPlacement: graph.labels.PointLabelPlacement.CENTER,
+              labelPlacement: graph.labels.PointLabelPlacement.TOP,
               nearDepth: 0.0,
               farDepth: 0.24,
             },
