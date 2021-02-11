@@ -15,13 +15,19 @@ import DoubleEpi from '@/static/uncharted_double_epi.json';
 import nestedDoubleEpiCAG from '@/static/nested-SARS-COV1-SEIRP-CAG.json';
 import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 
-import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME.json';
+import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME.json'; //Overlapping nodes and edges for SIR and CHIME
+import OAP1Paths from '@/static/OAP1-paths.json'; //Overlapping nodes and edges for SIR and CHIME
 import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
 import paramsData from '@/static/xdd_parameters_table.json'; // Boutique subgraph for COVID-19 model.
 
 const state: ModelsState = {
   selectedModelIds: new Set(),
   parameters: paramsData,
+  comparisonHighlights: 
+    {
+      '9': OAP1Paths,
+    }
+  ,
   modelsList: [
     {
       id: 1,
@@ -146,6 +152,7 @@ const getters: GetterTree<ModelsState, any> = {
   getSelectedModelIds: state => [...state.selectedModelIds],
   getParameters: state => state.parameters,
   getModelsList: state => state.modelsList,
+  getComparisonHighlights: state => state.comparisonHighlights,
 };
 
 const mutations: MutationTree<ModelsState> = {

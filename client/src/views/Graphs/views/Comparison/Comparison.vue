@@ -17,7 +17,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <epi-graph class="h-100" :graph="model.graph.detailed" :subgraph="model.subgraph" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
+        <epi-graph class="h-100" :graph="model.graph.detailed" :subgraph="model.subgraph" :highlights="highlightsModels[model.id]" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
         </div>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
@@ -49,6 +49,7 @@
 
   import { TabInterface, ViewInterface, ModelComponentMetadataInterface } from '@/types/types';
   import { GraphNodeInterface } from '@/views/Graphs/types/types';
+  // import { SubgraphInterface } from '@/graphs/svg/types/types';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -97,7 +98,10 @@
       { id: '7', label: 'i, i_c', nodeType: 'overlapping' },
       { id: '8', label: 'r, r_c', nodeType: 'overlapping' },
       { id: '9', label: 'OAP-1', nodeType: 'AP', ids: [] },
-      { id: '10', label: 'NOAP(SIR)-1', nodeType: 'NOAP', ids: [] },
+      { id: '10', label: 'NOAP(SIR)-1', nodeType: 'NOAP', subgraph: {
+        nodes: [],
+        edges: []
+      } },
       { id: '11', label: 'NOAP(CHIME)-2', nodeType: 'NOAP', ids: [] },
       { id: '12', label: 'NOAP(CHIME)-1', nodeType: 'NOAP', ids: [] },
     ],
@@ -131,9 +135,11 @@
     drilldownMetadata: ModelComponentMetadataInterface = null;
     reference: string = ''
     intersectionGraph: any = intersectionGraph;
+    highlightsModels: any = {'1': null, '2': null};
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+    @Getter getComparisonHighlights;
 
     get gridMap (): string[][] {
       return [['1', '3', '2']];
@@ -153,6 +159,7 @@
       return this.intersectionGraph.edges.length;
   }
 
+
   onCloseDrilldownPanel ():void {
     this.isOpenDrilldown = false;
     this.drilldownPaneTitle = '';
@@ -164,10 +171,15 @@
   }
 
   onNodeClick (node: GraphNodeInterface): void {
-    this.isOpenDrilldown = true;
-    this.drilldownPaneTitle = node.label;
-    this.drilldownPaneSubtitle = node.nodeType;
-    this.drilldownMetadata = node.metadata;
+    const nodeId = node.id;
+    const highlightsModels = {};
+    this.selectedModels.forEach(model => {
+      if (model.id === 2) {
+        const subgraph = this.getComparisonHighlights[nodeId];
+        highlightsModels[model.id] = {nodes: subgraph.nodes, edges: [{source: '3ca29049-d9c6-459e-be33-5912e8a1433b', target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1'}, {source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1', target:'9d2259db-62cc-444f-a4d4-03f5769ba39b'}]};
+      }
+    });
+    this.highlightsModels = highlightsModels;
   }
 
   onNodeHover (node: GraphNodeInterface):void {
