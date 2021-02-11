@@ -1,0 +1,1684 @@
+{"id":"18799","point":"n-20193","label":"N"}
+{"id":"30232","point":"n-126","label":"IFNB1"}
+{"id":"38737","point":"n-66","label":"bortezomib"}
+{"id":"30623","point":"n-9575","label":"TP53"}
+{"id":"30977","point":"n-5433","label":"sulforaphane"}
+{"id":"30573","point":"n-13521","label":"NFE2L2"}
+{"id":"31033","point":"n-25","label":"hydroquinone"}
+{"id":"31650","point":"n-8","label":"all-trans-retinoic acid"}
+{"id":"38348","point":"n-3504","label":"ADP"}
+{"id":"26216","point":"n-12989","label":"IRF3"}
+{"id":"19905","point":"n-20538","label":"PLpro"}
+{"id":"25250","point":"n-10168","label":"CCNB1"}
+{"id":"16724","point":"n-7742","label":"GYS"}
+{"id":"40267","point":"n-7202","label":"acetic acid [2-[[(5-nitro-2-thiazolyl)amino]-oxomethyl]phenyl] ester"}
+{"id":"25966","point":"n-13968","label":"EIF2AK2"}
+{"id":"43709","point":"n-7185","label":"4-[1-hydroxy-2-[4-(phenylmethyl)-1-piperidinyl]propyl]phenol"}
+{"id":"34402","point":"n-13278","label":"MAPK1"}
+{"id":"38072","point":"n-7176","label":"sulfasalazine"}
+{"id":"11286","point":"n-7922","label":"TNF"}
+{"id":"35921","point":"n-7153","label":"simvastatin"}
+{"id":"26066","point":"n-13579","label":"ATM"}
+{"id":"31032","point":"n-7150","label":"silibinin"}
+{"id":"41233","point":"n-7146","label":"silver(0)"}
+{"id":"37959","point":"n-7130","label":"sertraline"}
+{"id":"34362","point":"n-8979","label":"RPS6KB1"}
+{"id":"35539","point":"n-7129","label":"S3I-201"}
+{"id":"30494","point":"n-9360","label":"STAT3"}
+{"id":"31390","point":"n-6894","label":"pioglitazone"}
+{"id":"38246","point":"n-6759","label":"dorsomorphin"}
+{"id":"25901","point":"n-78","label":"AMPK"}
+{"id":"38270","point":"n-6709","label":"olanzapine"}
+{"id":"30420","point":"n-13032","label":"JAK2"}
+{"id":"35906","point":"n-6395","label":"temozolomide"}
+{"id":"34713","point":"n-31702","label":"licocoumarone"}
+{"id":"15956","point":"n-14128","label":"BCL2"}
+{"id":"35634","point":"n-6290","label":"everolimus"}
+{"id":"30428","point":"n-12392","label":"MTOR"}
+{"id":"35128","point":"n-6222","label":"andrographolide"}
+{"id":"25438","point":"n-9472","label":"TGFB1"}
+{"id":"42964","point":"n-6214","label":"triciribine"}
+{"id":"25959","point":"n-7612","label":"AKT"}
+{"id":"35791","point":"n-6174","label":"crizotinib"}
+{"id":"40714","point":"n-6139","label":"iloprost"}
+{"id":"36022","point":"n-6040","label":"ketorolac"}
+{"id":"13888","point":"n-129","label":"IL4"}
+{"id":"40563","point":"n-6002","label":"itraconazole"}
+{"id":"30492","point":"n-9358","label":"STAT1"}
+{"id":"40923","point":"n-5936","label":"Interferon beta-1b"}
+{"id":"35626","point":"n-5870","label":"cladribine"}
+{"id":"40328","point":"n-5857","label":"Ile(5)-angiotensin II (1-7)"}
+{"id":"34739","point":"n-5757","label":"leptomycin B"}
+{"id":"40835","point":"n-5742","label":"wortmannin"}
+{"id":"31435","point":"n-5685","label":"fluoxetine"}
+{"id":"30379","point":"n-12098","label":"EGFR"}
+{"id":"38659","point":"n-5668","label":"sorafenib"}
+{"id":"38642","point":"n-5583","label":"3,3'-diindolylmethane"}
+{"id":"42391","point":"n-5528","label":"beta-cyclodextrin"}
+{"id":"34401","point":"n-13281","label":"MAPK3"}
+{"id":"38233","point":"n-62","label":"etoposide"}
+{"id":"36006","point":"n-5422","label":"ketoconazole"}
+{"id":"38145","point":"n-5412","label":"ouabain"}
+{"id":"31384","point":"n-61","label":"5-fluorouracil"}
+{"id":"31352","point":"n-5349","label":"paracetamol"}
+{"id":"38416","point":"n-5283","label":"desferrioxamine B"}
+{"id":"31654","point":"n-5262","label":"fisetin"}
+{"id":"38680","point":"n-5238","label":"tamoxifen"}
+{"id":"30447","point":"n-7905","label":"SRC"}
+{"id":"31483","point":"n-51","label":"curcumin"}
+{"id":"35544","point":"n-5125","label":"3-methyladenine"}
+{"id":"31592","point":"n-4955","label":"diethyl ether"}
+{"id":"38188","point":"n-4797","label":"capsaicin"}
+{"id":"35652","point":"n-48","label":"potassium chloride"}
+{"id":"30159","point":"n-9940","label":"HDAC5"}
+{"id":"31646","point":"n-4548","label":"betulinic acid"}
+{"id":"41188","point":"n-42","label":"arsenite(3-)"}
+{"id":"43159","point":"n-4309","label":"deoxycholic acid"}
+{"id":"34684","point":"n-41","label":"doxorubicin"}
+{"id":"34656","point":"n-4272","label":"cytarabine"}
+{"id":"31029","point":"n-4255","label":"rutin"}
+{"id":"30996","point":"n-4231","label":"hesperetin"}
+{"id":"35069","point":"n-4229","label":"rotenone"}
+{"id":"38665","point":"n-37","label":"genistein"}
+{"id":"35780","point":"n-35","label":"cisplatin"}
+{"id":"31023","point":"n-34","label":"resveratrol"}
+{"id":"31372","point":"n-4165","label":"caffeine"}
+{"id":"38136","point":"n-4156","label":"actinomycin D"}
+{"id":"38310","point":"n-4124","label":"folic acid"}
+{"id":"26439","point":"n-13527","label":"NFKBIA"}
+{"id":"31147","point":"n-3852","label":"bleomycin"}
+{"id":"35061","point":"n-3785","label":"apigenin"}
+{"id":"37961","point":"n-3694","label":"glutathione disulfide"}
+{"id":"30959","point":"n-3641","label":"toluene"}
+{"id":"41874","point":"n-3612","label":"cystine"}
+{"id":"31649","point":"n-22","label":"nicotinamide"}
+{"id":"30158","point":"n-101","label":"SIRT1"}
+{"id":"31584","point":"n-3550","label":"dinitrogen oxide"}
+{"id":"30961","point":"n-3517","label":"glutathione"}
+{"id":"34963","point":"n-21","label":"melatonin"}
+{"id":"35387","point":"n-29883","label":"6-aminohexanoic acid"}
+{"id":"36113","point":"n-3465","label":"nitric oxide"}
+{"id":"30998","point":"n-15","label":"quercetin"}
+{"id":"30972","point":"n-13","label":"berberine"}
+{"id":"41876","point":"n-3373","label":"2-deoxy-D-glucose"}
+{"id":"41890","point":"n-11","label":"staurosporine"}
+{"id":"41919","point":"n-3349","label":"UTP"}
+{"id":"38777","point":"n-10","label":"prostaglandin E2"}
+{"id":"31574","point":"n-9","label":"dioxygen"}
+{"id":"34797","point":"n-5194","label":"valproic acid"}
+{"id":"27032","point":"n-12848","label":"IFITM3"}
+{"id":"30647","point":"n-12226","label":"ESR1"}
+{"id":"12088","point":"n-7872","label":"Proteasome"}
+{"id":"19958","point":"n-21654","label":"Non-structural protein 8b"}
+{"id":"21234","point":"n-21619","label":"8K protein"}
+{"id":"21583","point":"n-21411","label":"CO"}
+{"id":"41789","point":"n-19350","label":"SARS Virus"}
+{"id":"25014","point":"n-19987","label":"Angiotensin-2"}
+{"id":"22487","point":"n-21204","label":"carboxypeptidase"}
+{"id":"20367","point":"n-23160","label":"griffithsin"}
+{"id":"42801","point":"n-19159","label":"Coronavirus OC43, Human"}
+{"id":"20476","point":"n-21167","label":"NHE"}
+{"id":"10471","point":"n-14412","label":"severe acute respiratory syndrome coronavirus 2"}
+{"id":"20733","point":"n-21041","label":"ribE"}
+{"id":"19498","point":"n-20829","label":"LI"}
+{"id":"18815","point":"n-20783","label":"tsh"}
+{"id":"11687","point":"n-9269","label":"SLPI"}
+{"id":"19210","point":"n-20707","label":"est"}
+{"id":"22406","point":"n-20631","label":"PCT1"}
+{"id":"22318","point":"n-20616","label":"Delta"}
+{"id":"20158","point":"n-20544","label":"rep"}
+{"id":"18630","point":"n-20429","label":"S"}
+{"id":"16725","point":"n-9307","label":"BST2"}
+{"id":"19907","point":"n-23301","label":"Mpro"}
+{"id":"13548","point":"n-7871","label":"Protease"}
+{"id":"21971","point":"n-20392","label":"env"}
+{"id":"20844","point":"n-152","label":"Fi"}
+{"id":"41788","point":"n-19955","label":"Middle East Respiratory Syndrome Coronavirus"}
+{"id":"20989","point":"n-20380","label":"E6"}
+{"id":"21267","point":"n-20372","label":"PNA"}
+{"id":"18336","point":"n-20366","label":"NA"}
+{"id":"18337","point":"n-20367","label":"Na"}
+{"id":"21827","point":"n-16573","label":"Aprotinin"}
+{"id":"13882","point":"n-130","label":"IL6"}
+{"id":"18790","point":"n-20234","label":"serA"}
+{"id":"39819","point":"n-19469","label":"Cyclooxygenase 2 Inhibitors"}
+{"id":"14703","point":"n-14036","label":"PTGS2"}
+{"id":"36925","point":"n-33278","label":"Amber"}
+{"id":"28121","point":"n-7345","label":"labelling"}
+{"id":"39601","point":"n-33233","label":"Arachidonic Acid"}
+{"id":"30479","point":"n-12607","label":"GSK3B"}
+{"id":"29987","point":"n-11518","label":"CYP2C19"}
+{"id":"27062","point":"n-10735","label":"CES1"}
+{"id":"25374","point":"n-9297","label":"SOD1"}
+{"id":"28909","point":"n-33230","label":"Gabexate"}
+{"id":"29546","point":"n-18207","label":"Zinc"}
+{"id":"16309","point":"n-12732","label":"ANPEP"}
+{"id":"13038","point":"n-7840","label":"PDE"}
+{"id":"26574","point":"n-83","label":"NFkappaB"}
+{"id":"32778","point":"n-17831","label":"Streptomycin"}
+{"id":"12905","point":"n-746","label":"FBRS"}
+{"id":"42648","point":"n-16849","label":"Methylprednisolone"}
+{"id":"11649","point":"n-12908","label":"IL10"}
+{"id":"39655","point":"n-16593","label":"Killer Cells, Natural"}
+{"id":"25723","point":"n-7775","label":"IFNA"}
+{"id":"11364","point":"n-9526","label":"TMPRSS2"}
+{"id":"23972","point":"n-16358","label":"Honey"}
+{"id":"27957","point":"n-28717","label":"Hesperidin"}
+{"id":"15197","point":"n-9863","label":"ACE2"}
+{"id":"42842","point":"n-16178","label":"Glycyrrhiza"}
+{"id":"16073","point":"n-86","label":"TLR"}
+{"id":"43432","point":"n-32957","label":"Estrogens, Conjugated (USP)"}
+{"id":"16321","point":"n-11589","label":"ACE"}
+{"id":"33688","point":"n-32906","label":"Clenbuterol"}
+{"id":"25706","point":"n-11426","label":"CTSL"}
+{"id":"33250","point":"n-32905","label":"Citrulline"}
+{"id":"16333","point":"n-7823","label":"NOS"}
+{"id":"33683","point":"n-15521","label":"Cinanserin"}
+{"id":"40002","point":"n-15328","label":"Bromelains"}
+{"id":"43430","point":"n-32829","label":"Nivolumab"}
+{"id":"11517","point":"n-13734","label":"PDCD1"}
+{"id":"29307","point":"n-32827","label":"Rimonabant"}
+{"id":"34441","point":"n-12365","label":"FOS"}
+{"id":"26765","point":"n-11074","label":"CNR1"}
+{"id":"43421","point":"n-32817","label":"Ipilimumab"}
+{"id":"15480","point":"n-11397","label":"CTLA4"}
+{"id":"43431","point":"n-32791","label":"Ustekinumab"}
+{"id":"12202","point":"n-7780","label":"IL12"}
+{"id":"32237","point":"n-14698","label":"Olive Oil"}
+{"id":"27308","point":"n-7595","label":"endothelial dysfunction"}
+{"id":"43427","point":"n-32789","label":"Denosumab"}
+{"id":"14547","point":"n-9553","label":"TNFSF11"}
+{"id":"42709","point":"n-14694","label":"Omalizumab"}
+{"id":"14031","point":"n-7917","label":"TGFB"}
+{"id":"43424","point":"n-14693","label":"Natalizumab"}
+{"id":"33262","point":"n-7446","label":"disease recurrence"}
+{"id":"42714","point":"n-29595","label":"Infliximab"}
+{"id":"43423","point":"n-14680","label":"Adalimumab"}
+{"id":"43425","point":"n-14679","label":"Trastuzumab"}
+{"id":"30377","point":"n-12209","label":"ERBB2"}
+{"id":"17080","point":"n-7825","label":"NRG"}
+{"id":"43422","point":"n-14668","label":"Bevacizumab"}
+{"id":"16151","point":"n-7942","label":"VEGF"}
+{"id":"10438","point":"n-30200","label":"Cilengitide"}
+{"id":"25267","point":"n-763","label":"FNR"}
+{"id":"14362","point":"n-13940","label":"PREP"}
+{"id":"25774","point":"n-13907","label":"PPIA"}
+{"id":"41786","point":"n-19786","label":"Coronavirus NL63, Human"}
+{"id":"14875","point":"n-13787","label":"SERPINA1"}
+{"id":"12545","point":"n-13690","label":"FURIN"}
+{"id":"17590","point":"n-13608","label":"NRP1"}
+{"id":"26255","point":"n-13589","label":"NR3C1"}
+{"id":"17723","point":"n-13477","label":"MYOM2"}
+{"id":"15719","point":"n-13432","label":"MTHFD1"}
+{"id":"16408","point":"n-13363","label":"ARR3"}
+{"id":"23215","point":"n-7502","label":"NOD/ShiLtJ"}
+{"id":"26189","point":"n-13303","label":"MAX"}
+{"id":"18091","point":"n-20765","label":"jockey\\pol"}
+{"id":"13437","point":"n-13215","label":"LTF"}
+{"id":"34443","point":"n-13036","label":"JUN"}
+{"id":"17205","point":"n-12855","label":"IFNG"}
+{"id":"37502","point":"n-17584","label":"Rift Valley fever virus"}
+{"id":"37525","point":"n-14737","label":"Zika Virus"}
+{"id":"27031","point":"n-12847","label":"IFITM1"}
+{"id":"17281","point":"n-27542","label":"IDI1"}
+{"id":"21431","point":"n-20378","label":"L"}
+{"id":"25647","point":"n-12792","label":"HSPA5"}
+{"id":"16479","point":"n-12707","label":"HLA-A"}
+{"id":"17036","point":"n-12670","label":"HTT"}
+{"id":"25141","point":"n-12399","label":"ALB"}
+{"id":"12410","point":"n-12395","label":"FST"}
+{"id":"12953","point":"n-12348","label":"AKAP4"}
+{"id":"30779","point":"n-12179","label":"AGTR1"}
+{"id":"25195","point":"n-12088","label":"NMS"}
+{"id":"15259","point":"n-11875","label":"DPP4"}
+{"id":"15240","point":"n-11866","label":"MIR7-3HG"}
+{"id":"17091","point":"n-11688","label":"DHPS"}
+{"id":"16390","point":"n-11686","label":"DHODH"}
+{"id":"10678","point":"n-2393","label":"cytokine"}
+{"id":"30003","point":"n-11492","label":"CYP1A2"}
+{"id":"23395","point":"n-7334","label":"dose"}
+{"id":"15012","point":"n-11405","label":"CTNND1"}
+{"id":"15340","point":"n-11233","label":"CRP"}
+{"id":"12951","point":"n-11199","label":"CPZ"}
+{"id":"13704","point":"n-11155","label":"CP"}
+{"id":"13676","point":"n-11107","label":"COL14A1"}
+{"id":"30367","point":"n-10839","label":"CHEK1"}
+{"id":"16599","point":"n-10801","label":"TRIM56"}
+{"id":"16920","point":"n-10753","label":"ADA"}
+{"id":"26382","point":"n-10725","label":"FEV"}
+{"id":"21161","point":"n-21155","label":"RTI"}
+{"id":"16286","point":"n-10301","label":"LIAS"}
+{"id":"30771","point":"n-10223","label":"CCR1"}
+{"id":"13090","point":"n-10159","label":"ERMAP"}
+{"id":"11731","point":"n-10066","label":"CARS1"}
+{"id":"15298","point":"n-9857","label":"CLEC4M"}
+{"id":"15176","point":"n-9810","label":"C3"}
+{"id":"16573","point":"n-9770","label":"XPO1"}
+{"id":"16978","point":"n-9746","label":"LAT2"}
+{"id":"17129","point":"n-9723","label":"VIM"}
+{"id":"25785","point":"n-9516","label":"TLR4"}
+{"id":"25793","point":"n-9514","label":"TLR3"}
+{"id":"26851","point":"n-9401","label":"TACR1"}
+{"id":"41785","point":"n-19157","label":"Coronavirus 229E, Human"}
+{"id":"40095","point":"n-16636","label":"Lassa virus"}
+{"id":"17353","point":"n-9286","label":"SNAP25"}
+{"id":"17403","point":"n-9215","label":"SLC25A10"}
+{"id":"19571","point":"n-20838","label":"XVI"}
+{"id":"11338","point":"n-9175","label":"SKP2"}
+{"id":"12793","point":"n-9084","label":"SDS"}
+{"id":"24986","point":"n-9082","label":"SDHB"}
+{"id":"25042","point":"n-9060","label":"CCL5"}
+{"id":"26386","point":"n-7908","label":"SWI_SNF"}
+{"id":"26136","point":"n-7907","label":"STAT"}
+{"id":"15324","point":"n-7811","label":"MMP"}
+{"id":"15379","point":"n-7790","label":"Interferon"}
+{"id":"13094","point":"n-7789","label":"Integrins"}
+{"id":"12195","point":"n-7784","label":"IL2R"}
+{"id":"30466","point":"n-7705","label":"ERK"}
+{"id":"13042","point":"n-7680","label":"Cyclin"}
+{"id":"18166","point":"n-20816","label":"IE2"}
+{"id":"16796","point":"n-7677","label":"Clathrin"}
+{"id":"15325","point":"n-7672","label":"Cathepsin"}
+{"id":"30689","point":"n-7667","label":"Calcium_channels"}
+{"id":"10750","point":"n-7544","label":"event"}
+{"id":"25827","point":"n-7849","label":"PI3K"}
+{"id":"29416","point":"n-7264","label":"hypersensitivity reaction disease"}
+{"id":"11620","point":"n-11778","label":"LRG1"}
+{"id":"31379","point":"n-7247","label":"verapamil"}
+{"id":"31376","point":"n-7242","label":"valsartan"}
+{"id":"37973","point":"n-7231","label":"Triton X-100"}
+{"id":"38731","point":"n-7222","label":"toremifene"}
+{"id":"14730","point":"n-11963","label":"VHLL"}
+{"id":"40570","point":"n-31941","label":"tolterodine"}
+{"id":"37892","point":"n-13051","label":"KCNH2"}
+{"id":"38569","point":"n-31939","label":"tirofiban"}
+{"id":"30053","point":"n-13013","label":"ITGB3"}
+{"id":"30062","point":"n-13002","label":"ITGA2B"}
+{"id":"35481","point":"n-7214","label":"tioguanine"}
+{"id":"26374","point":"n-11823","label":"DNMT1"}
+{"id":"38265","point":"n-31935","label":"thiethylperazine"}
+{"id":"37509","point":"n-15467","label":"Chikungunya virus"}
+{"id":"43671","point":"n-7213","label":"2-[1-ethylsulfonyl-3-[4-(7H-pyrrolo[2,3-d]pyrimidin-4-yl)-1-pyrazolyl]-3-azetidinyl]acetonitrile"}
+{"id":"35989","point":"n-7211","label":"thalidomide"}
+{"id":"44099","point":"n-31928","label":"N-[4-oxo-2-(2H-tetrazol-5-yl)-1-benzopyran-8-yl]-4-(4-phenylbutoxy)benzamide"}
+{"id":"13885","point":"n-12947","label":"IL5"}
+{"id":"26427","point":"n-280","label":"AR"}
+{"id":"43537","point":"n-31925","label":"(2R,3S,4S,5R)-2-(6-amino-2-fluoro-9-purinyl)-5-(hydroxymethyl)oxolane-3,4-diol"}
+{"id":"13919","point":"n-8987","label":"RRM1"}
+{"id":"43267","point":"n-31923","label":"2-[2-[4-[(R)-(4-chlorophenyl)-phenylmethyl]-1-piperazinyl]ethoxy]acetic acid"}
+{"id":"30797","point":"n-12778","label":"HRH1"}
+{"id":"43758","point":"n-31921","label":"2-cyclopentyl-2-hydroxy-2-phenylacetic acid (1,1-dimethyl-3-pyrrolidin-1-iumyl) ester"}
+{"id":"30786","point":"n-32300","label":"CHRM2"}
+{"id":"31397","point":"n-7191","label":"telmisartan"}
+{"id":"31393","point":"n-7175","label":"sulfamethoxazole"}
+{"id":"20590","point":"n-21075","label":"HMGS"}
+{"id":"38032","point":"n-31912","label":"sulfadoxine"}
+{"id":"35630","point":"n-7156","label":"sirolimus"}
+{"id":"43115","point":"n-31900","label":"N-tert-butyl-3-[[5-methyl-2-[4-[2-(1-pyrrolidinyl)ethoxy]anilino]-4-pyrimidinyl]amino]benzenesulfonamide"}
+{"id":"31028","point":"n-7118","label":"(-)-epicatechin"}
+{"id":"38828","point":"n-7116","label":"tiotropium"}
+{"id":"35904","point":"n-7111","label":"tenofovir alafenamide"}
+{"id":"21448","point":"n-20036","label":"DNA polymerase"}
+{"id":"38932","point":"n-7110","label":"tipiracil"}
+{"id":"14124","point":"n-12013","label":"TYMP"}
+{"id":"40659","point":"n-7104","label":"SB 203580"}
+{"id":"30467","point":"n-7793","label":"JNK"}
+{"id":"43639","point":"n-7103","label":"anthra[1,9-cd]pyrazol-6(2H)-one"}
+{"id":"31007","point":"n-7102","label":"U0126"}
+{"id":"35629","point":"n-7098","label":"sotrastaurin"}
+{"id":"31138","point":"n-7092","label":"pirazofurin"}
+{"id":"40831","point":"n-31881","label":"lactucopicrin 15-oxalate"}
+{"id":"35923","point":"n-31880","label":"rubitecan"}
+{"id":"25312","point":"n-23344","label":"TOP1"}
+{"id":"38710","point":"n-31879","label":"plitidepsin"}
+{"id":"15133","point":"n-12072","label":"EEF1A1"}
+{"id":"35993","point":"n-7086","label":"salmeterol"}
+{"id":"25061","point":"n-131","label":"CXCL8"}
+{"id":"38539","point":"n-7074","label":"rocuronium"}
+{"id":"15180","point":"n-13958","label":"BAG3"}
+{"id":"35938","point":"n-7051","label":"ramipril"}
+{"id":"38599","point":"n-7049","label":"raloxifene"}
+{"id":"36007","point":"n-31870","label":"prasugrel"}
+{"id":"37944","point":"n-10649","label":"P2RY12"}
+{"id":"35609","point":"n-7046","label":"mycophenolate mofetil"}
+{"id":"35826","point":"n-7036","label":"aurintricarboxylic acid"}
+{"id":"23168","point":"n-24074","label":"HCT116"}
+{"id":"31169","point":"n-31868","label":"hexamidine"}
+{"id":"17783","point":"n-9350","label":"ST14"}
+{"id":"38142","point":"n-7028","label":"quinacrine"}
+{"id":"31026","point":"n-23987","label":"quercetagetin"}
+{"id":"41114","point":"n-7022","label":"Pyridostigmine"}
+{"id":"40412","point":"n-7013","label":"puerarin"}
+{"id":"38544","point":"n-31859","label":"isavuconazole"}
+{"id":"37882","point":"n-9035","label":"SCN5A"}
+{"id":"40679","point":"n-31858","label":"edoxaban"}
+{"id":"25178","point":"n-12253","label":"F2"}
+{"id":"38008","point":"n-6993","label":"peramivir"}
+{"id":"26404","point":"n-97","label":"TWIST1"}
+{"id":"37995","point":"n-31853","label":"paritaprevir"}
+{"id":"34619","point":"n-6989","label":"carboxymethylcellulose"}
+{"id":"25513","point":"n-9228","label":"SLC2A1"}
+{"id":"35586","point":"n-6985","label":"ledipasvir"}
+{"id":"35512","point":"n-6983","label":"dapagliflozin"}
+{"id":"15047","point":"n-10376","label":"RAPGEF5"}
+{"id":"31437","point":"n-6976","label":"eltrombopag"}
+{"id":"43258","point":"n-31851","label":"Propiverine"}
+{"id":"37868","point":"n-9916","label":"CACNA1C"}
+{"id":"38512","point":"n-6967","label":"promazine"}
+{"id":"38116","point":"n-6959","label":"procaine"}
+{"id":"40729","point":"n-6958","label":"procainamide"}
+{"id":"40596","point":"n-6956","label":"probenecid"}
+{"id":"11247","point":"n-12843","label":"ABCC2"}
+{"id":"40663","point":"n-6948","label":"cardiac glycoside"}
+{"id":"37497","point":"n-19163","label":"Ebolavirus"}
+{"id":"31329","point":"n-6945","label":"prednisolone"}
+{"id":"40693","point":"n-6942","label":"prazosin"}
+{"id":"35554","point":"n-6923","label":"daclatasvir"}
+{"id":"35909","point":"n-6921","label":"fosamprenavir"}
+{"id":"35536","point":"n-29547","label":"Z-Val-Phe-H"}
+{"id":"25713","point":"n-11416","label":"CTSB"}
+{"id":"31175","point":"n-6915","label":"dalbavancin"}
+{"id":"38814","point":"n-29545","label":"vorapaxar"}
+{"id":"26732","point":"n-12254","label":"F2R"}
+{"id":"31098","point":"n-31833","label":"oritavancin"}
+{"id":"38113","point":"n-6849","label":"liquiritin"}
+{"id":"38016","point":"n-6795","label":"penciclovir"}
+{"id":"19724","point":"n-20700","label":"POL"}
+{"id":"16921","point":"n-13293","label":"MAPT"}
+{"id":"31271","point":"n-6792","label":"parthenolide"}
+{"id":"31406","point":"n-6786","label":"pantoprazole"}
+{"id":"25167","point":"n-7747","label":"G_i"}
+{"id":"31336","point":"n-6736","label":"oseltamivir"}
+{"id":"9206","point":"n-7602","label":"H1N1"}
+{"id":"38793","point":"n-6729","label":"orphenadrine"}
+{"id":"34643","point":"n-6718","label":"S-nitroso-N-acetyl-D-penicillamine"}
+{"id":"31696","point":"n-6712","label":"ebselen"}
+{"id":"34701","point":"n-31781","label":"crystal violet cation"}
+{"id":"17317","point":"n-9287","label":"SNCA"}
+{"id":"38788","point":"n-6698","label":"bromhexine"}
+{"id":"34651","point":"n-6693","label":"vancomycin(1+)"}
+{"id":"38770","point":"n-6686","label":"ibrutinib"}
+{"id":"13496","point":"n-10296","label":"NLRP3"}
+{"id":"35613","point":"n-6681","label":"nortriptyline"}
+{"id":"30190","point":"n-10070","label":"CASP3"}
+{"id":"40285","point":"n-31771","label":"vortioxetine"}
+{"id":"17267","point":"n-9250","label":"SLC6A4"}
+{"id":"31487","point":"n-6659","label":"dimethyl fumarate"}
+{"id":"38234","point":"n-6656","label":"teniposide"}
+{"id":"31633","point":"n-31770","label":"hispidulin"}
+{"id":"14225","point":"n-12476","label":"GFER"}
+{"id":"38812","point":"n-6648","label":"nimodipine"}
+{"id":"43874","point":"n-6639","label":"Niclosamide"}
+{"id":"43964","point":"n-6638","label":"Nicardipine"}
+{"id":"30001","point":"n-11533","label":"CYP3A4"}
+{"id":"31478","point":"n-6625","label":"miltefosine"}
+{"id":"26708","point":"n-11213","label":"CALHM3"}
+{"id":"34587","point":"n-6622","label":"tannic acid"}
+{"id":"38550","point":"n-6617","label":"N-benzyloxycarbonyl-L-leucyl-L-leucyl-L-leucinal"}
+{"id":"38096","point":"n-6614","label":"neomycin"}
+{"id":"38655","point":"n-6594","label":"nelfinavir"}
+{"id":"35666","point":"n-6590","label":"nedocromil"}
+{"id":"30827","point":"n-12376","label":"FPR1"}
+{"id":"31344","point":"n-6568","label":"naproxen"}
+{"id":"35405","point":"n-6507","label":"Arg-Val"}
+{"id":"35178","point":"n-6452","label":"Glu-Asp"}
+{"id":"35418","point":"n-6437","label":"Asn-Tyr"}
+{"id":"40275","point":"n-31739","label":"nisoxetine"}
+{"id":"17241","point":"n-9247","label":"SLC6A2"}
+{"id":"34999","point":"n-6414","label":"(-)-noscapine"}
+{"id":"40678","point":"n-6389","label":"apixaban"}
+{"id":"40783","point":"n-31724","label":"bedaquiline"}
+{"id":"40584","point":"n-6388","label":"cobicistat"}
+{"id":"21376","point":"n-5069","label":"protease inhibitor"}
+{"id":"38677","point":"n-6385","label":"dactolisib"}
+{"id":"34823","point":"n-31721","label":"phenazopyridine"}
+{"id":"37888","point":"n-9031","label":"SCN1A"}
+{"id":"31119","point":"n-6368","label":"telavancin"}
+{"id":"38765","point":"n-31718","label":"pazopanib"}
+{"id":"30286","point":"n-8903","label":"RIPK1"}
+{"id":"38805","point":"n-6365","label":"tofacitinib"}
+{"id":"35097","point":"n-23028","label":"bisdemethoxycurcumin"}
+{"id":"34991","point":"n-6359","label":"omacetaxine mepesuccinate"}
+{"id":"42028","point":"n-6356","label":"cathepsin L (EC 3.4.22.15) inhibitor"}
+{"id":"38446","point":"n-6354","label":"dabigatran"}
+{"id":"15099","point":"n-13985","label":"PRSS1"}
+{"id":"35933","point":"n-31715","label":"dabigatran etexilate"}
+{"id":"40277","point":"n-31714","label":"lurasidone"}
+{"id":"29983","point":"n-11524","label":"CYP2D6"}
+{"id":"34589","point":"n-6345","label":"(-)-epicatechin-3-O-gallate"}
+{"id":"35852","point":"n-31707","label":"mometasone"}
+{"id":"43715","point":"n-31705","label":"Miglitol"}
+{"id":"11805","point":"n-9150","label":"SI"}
+{"id":"35023","point":"n-6330","label":"midazolam"}
+{"id":"36000","point":"n-6329","label":"miconazole"}
+{"id":"40726","point":"n-6327","label":"mexiletine"}
+{"id":"31359","point":"n-6318","label":"6alpha-methylprednisolone"}
+{"id":"16229","point":"n-10357","label":"CD4"}
+{"id":"31123","point":"n-6312","label":"methylene blue"}
+{"id":"35901","point":"n-31692","label":"abiraterone acetate"}
+{"id":"35520","point":"n-6307","label":"boceprevir"}
+{"id":"38023","point":"n-6303","label":"rilpivirine"}
+{"id":"35521","point":"n-6301","label":"telaprevir"}
+{"id":"34772","point":"n-31691","label":"fidaxomicin"}
+{"id":"30490","point":"n-9359","label":"STAT2"}
+{"id":"40683","point":"n-6298","label":"ticagrelor"}
+{"id":"35519","point":"n-6297","label":"icatibant"}
+{"id":"30826","point":"n-8953","label":"BDKRB2"}
+{"id":"34860","point":"n-6294","label":"teriflunomide"}
+{"id":"38733","point":"n-6293","label":"enzalutamide"}
+{"id":"31334","point":"n-6280","label":"metformin"}
+{"id":"31450","point":"n-6261","label":"mefenamic acid"}
+{"id":"26998","point":"n-128","label":"IL1B"}
+{"id":"38676","point":"n-6246","label":"ruxolitinib"}
+{"id":"38682","point":"n-29918","label":"axitinib"}
+{"id":"26021","point":"n-13072","label":"KIT"}
+{"id":"34798","point":"n-31670","label":"vismodegib"}
+{"id":"26771","point":"n-9279","label":"SMO"}
+{"id":"40561","point":"n-6232","label":"lycorine"}
+{"id":"35846","point":"n-23027","label":"lupeol"}
+{"id":"15969","point":"n-11404","label":"CTNNB1"}
+{"id":"40695","point":"n-6223","label":"losartan"}
+{"id":"40268","point":"n-6218","label":"loperamide"}
+{"id":"35542","point":"n-6217","label":"LY294002"}
+{"id":"31425","point":"n-6191","label":"lidocaine"}
+{"id":"16083","point":"n-11548","label":"SLC35G1"}
+{"id":"40628","point":"n-6188","label":"levonorgestrel"}
+{"id":"14257","point":"n-9142","label":"SHBG"}
+{"id":"40239","point":"n-6180","label":"posaconazole"}
+{"id":"17598","point":"n-13562","label":"NPC1"}
+{"id":"38469","point":"n-6177","label":"ergotamine"}
+{"id":"38831","point":"n-6176","label":"isoprenaline"}
+{"id":"38213","point":"n-6175","label":"memantine"}
+{"id":"40376","point":"n-6171","label":"leupeptin"}
+{"id":"38772","point":"n-6165","label":"4-\\{[(5,5,8,8-tetramethyl-5,6,7,8-tetrahydronaphthalen-2-yl)carbonyl]amino\\}benzoic acid"}
+{"id":"34767","point":"n-6158","label":"tanespimycin"}
+{"id":"31024","point":"n-6144","label":"celastrol"}
+{"id":"42267","point":"n-6140","label":"artesunate"}
+{"id":"31480","point":"n-6132","label":"lenalidomide"}
+{"id":"38003","point":"n-6127","label":"tenofovir hydrate"}
+{"id":"42076","point":"n-6124","label":"vigabatrin"}
+{"id":"26593","point":"n-9454","label":"TERF1"}
+{"id":"38013","point":"n-6118","label":"tipranavir"}
+{"id":"38019","point":"n-6114","label":"saquinavir"}
+{"id":"38002","point":"n-6108","label":"maraviroc"}
+{"id":"34672","point":"n-6099","label":"ribavirin"}
+{"id":"35918","point":"n-6098","label":"lamivudine"}
+{"id":"30578","point":"n-12100","label":"EGR3"}
+{"id":"35635","point":"n-6083","label":"fingolimod"}
+{"id":"38402","point":"n-23827","label":"scutellarin"}
+{"id":"31385","point":"n-6036","label":"ketamine"}
+{"id":"35639","point":"n-6024","label":"tacrolimus (anhydrous)"}
+{"id":"40681","point":"n-6022","label":"fondaparinux"}
+{"id":"41148","point":"n-6012","label":"6-methyl-7-oxo-8-(1-D-ribityl)lumazine (2-oxo tautomer)"}
+{"id":"25486","point":"n-11942","label":"HBEGF"}
+{"id":"39065","point":"n-6011","label":"enfuvirtide"}
+{"id":"34795","point":"n-5997","label":"isotretinoin"}
+{"id":"42963","point":"n-5949","label":"N-acetylglucosamine"}
+{"id":"17875","point":"n-20184","label":"GP"}
+{"id":"25722","point":"n-7776","label":"IFNB"}
+{"id":"38039","point":"n-31604","label":"cefpiramide"}
+{"id":"22688","point":"n-24783","label":"ftsI"}
+{"id":"31318","point":"n-5908","label":"ibuprofen"}
+{"id":"38567","point":"n-5899","label":"hydroxyzine"}
+{"id":"38451","point":"n-5893","label":"hydroxychloroquine"}
+{"id":"17407","point":"n-10114","label":"PICALM"}
+{"id":"34746","point":"n-5882","label":"atovaquone"}
+{"id":"35717","point":"n-5873","label":"hexachlorophene"}
+{"id":"40230","point":"n-31587","label":"anidulafungin"}
+{"id":"13939","point":"n-7770","label":"Hemoglobin"}
+{"id":"35638","point":"n-5843","label":"gliotoxin"}
+{"id":"26662","point":"n-9715","label":"VDR"}
+{"id":"40609","point":"n-5839","label":"almitrine"}
+{"id":"16625","point":"n-9891","label":"CA2"}
+{"id":"31154","point":"n-5766","label":"geldanamycin"}
+{"id":"38798","point":"n-5751","label":"2-O-acetyl-1-O-octadecyl-sn-glycero-3-phosphocholine"}
+{"id":"35818","point":"n-5739","label":"rose bengal"}
+{"id":"25022","point":"n-11489","label":"CYP19A1"}
+{"id":"38775","point":"n-5734","label":"nilotinib"}
+{"id":"31001","point":"n-5720","label":"fucoidan"}
+{"id":"36023","point":"n-5711","label":"formoterol"}
+{"id":"38615","point":"n-31556","label":"fomepizole"}
+{"id":"14028","point":"n-7608","label":"ADH"}
+{"id":"37964","point":"n-5705","label":"D-ascorbic acid"}
+{"id":"35668","point":"n-5700","label":"fluticasone"}
+{"id":"38240","point":"n-5674","label":"flumazenil"}
+{"id":"38702","point":"n-5656","label":"bexarotene"}
+{"id":"43055","point":"n-5655","label":"corticosteroid"}
+{"id":"38048","point":"n-5651","label":"doxycycline"}
+{"id":"40627","point":"n-31541","label":"etonogestrel"}
+{"id":"35656","point":"n-5632","label":"montelukast"}
+{"id":"35490","point":"n-5622","label":"mercaptopurine"}
+{"id":"34673","point":"n-5621","label":"zanamivir"}
+{"id":"31432","point":"n-5620","label":"dronedarone"}
+{"id":"40407","point":"n-5602","label":"hemin"}
+{"id":"38209","point":"n-5601","label":"miglustat"}
+{"id":"26984","point":"n-9659","label":"UGCG"}
+{"id":"43180","point":"n-5584","label":"naringenin"}
+{"id":"34324","point":"n-11000","label":"TPCN2"}
+{"id":"26072","point":"n-7807","label":"MAPK"}
+{"id":"42869","point":"n-5562","label":"(+)-Tetrandrine"}
+{"id":"42982","point":"n-5556","label":"rimantadine"}
+{"id":"41132","point":"n-5546","label":"lithium(1+)"}
+{"id":"31343","point":"n-5540","label":"indometacin"}
+{"id":"30058","point":"n-13009","label":"ITGAM"}
+{"id":"27060","point":"n-9174","label":"ACHE"}
+{"id":"38717","point":"n-5523","label":"dasatinib (anhydrous)"}
+{"id":"38926","point":"n-5492","label":"etacrynic acid"}
+{"id":"40748","point":"n-23697","label":"argatroban"}
+{"id":"40630","point":"n-31504","label":"amylmetacresol"}
+{"id":"37887","point":"n-9032","label":"SCN2A"}
+{"id":"34774","point":"n-5456","label":"brefeldin A"}
+{"id":"30984","point":"n-5455","label":"(-)-epigallocatechin 3-gallate"}
+{"id":"38103","point":"n-5435","label":"emetine"}
+{"id":"38783","point":"n-31501","label":"emedastine"}
+{"id":"41858","point":"n-5432","label":"AMP-PNP"}
+{"id":"36004","point":"n-29910","label":"econazole"}
+{"id":"38062","point":"n-5416","label":"cefazolin"}
+{"id":"16938","point":"n-11681","label":"DHFR"}
+{"id":"35036","point":"n-5413","label":"alvocidib"}
+{"id":"30318","point":"n-8900","label":"GRK1"}
+{"id":"38516","point":"n-31495","label":"droperidol"}
+{"id":"38672","point":"n-5406","label":"doxazosin"}
+{"id":"43869","point":"n-31493","label":"zebularine"}
+{"id":"38173","point":"n-5365","label":"clonidine"}
+{"id":"14040","point":"n-14063","label":"PVR"}
+{"id":"35721","point":"n-5364","label":"disulfiram"}
+{"id":"40715","point":"n-5361","label":"dipyridamole"}
+{"id":"38518","point":"n-5355","label":"diphenidol"}
+{"id":"25932","point":"n-7944","label":"Voltage_gated_ion_channels"}
+{"id":"38236","point":"n-5344","label":"trifluoperazine"}
+{"id":"35532","point":"n-5341","label":"suramin"}
+{"id":"34996","point":"n-5335","label":"imatinib"}
+{"id":"34998","point":"n-58","label":"vorinostat"}
+{"id":"30986","point":"n-23033","label":"trans-resveratrol"}
+{"id":"38541","point":"n-5334","label":"succinylcholine"}
+{"id":"27059","point":"n-14103","label":"BCHE"}
+{"id":"31225","point":"n-5331","label":"digoxin"}
+{"id":"31181","point":"n-23662","label":"sinefungin"}
+{"id":"31447","point":"n-5330","label":"ritonavir"}
+{"id":"34727","point":"n-31479","label":"difloxacin"}
+{"id":"34687","point":"n-5328","label":"adenine arabinoside"}
+{"id":"34508","point":"n-11571","label":"ADORA3"}
+{"id":"31537","point":"n-5317","label":"triethylene glycol"}
+{"id":"14347","point":"n-13947","label":"PRH2"}
+{"id":"34608","point":"n-31469","label":"N-cyclohexyl-2-aminoethanesulfonic acid"}
+{"id":"12705","point":"n-9391","label":"SULT2B1"}
+{"id":"41120","point":"n-31467","label":"tetraethylammonium"}
+{"id":"35484","point":"n-56","label":"methotrexate"}
+{"id":"42095","point":"n-5288","label":"lisinopril"}
+{"id":"41982","point":"n-5273","label":"25-hydroxycholesterol"}
+{"id":"38229","point":"n-5272","label":"galanthamine"}
+{"id":"42258","point":"n-5269","label":"guanidine"}
+{"id":"22040","point":"n-20436","label":"vpu"}
+{"id":"12629","point":"n-10542","label":"CD274"}
+{"id":"14638","point":"n-8910","label":"RNASE1"}
+{"id":"38088","point":"n-5255","label":"2,2,2-trifluoroethanol"}
+{"id":"25579","point":"n-12772","label":"HRAS"}
+{"id":"38635","point":"n-5250","label":"emodin"}
+{"id":"34628","point":"n-5248","label":"ethylenediaminetetraacetic acid"}
+{"id":"25663","point":"n-10075","label":"CASP8"}
+{"id":"42008","point":"n-5235","label":"D-glucopyranose"}
+{"id":"43576","point":"n-5218","label":"androsta-1,4-diene-3,17-dione"}
+{"id":"35268","point":"n-52","label":"cyclosporin A"}
+{"id":"31321","point":"n-5202","label":"cyclophosphamide"}
+{"id":"31323","point":"n-5199","label":"sitagliptin"}
+{"id":"38133","point":"n-31444","label":"5-fluorouridine"}
+{"id":"38017","point":"n-5198","label":"amprenavir"}
+{"id":"31043","point":"n-5134","label":"corilagin"}
+{"id":"36021","point":"n-5121","label":"fluvastatin"}
+{"id":"41219","point":"n-5084","label":"phenothiazine"}
+{"id":"38000","point":"n-5082","label":"atazanavir"}
+{"id":"31754","point":"n-5072","label":"co-trimoxazole"}
+{"id":"15024","point":"n-10410","label":"POSTN"}
+{"id":"38543","point":"n-5055","label":"clomiphene"}
+{"id":"31603","point":"n-5050","label":"clofazimine"}
+{"id":"31415","point":"n-5049","label":"clindamycin"}
+{"id":"38780","point":"n-5041","label":"clemastine"}
+{"id":"31412","point":"n-5036","label":"citalopram"}
+{"id":"38525","point":"n-5035","label":"cisapride"}
+{"id":"34895","point":"n-5026","label":"cimetidine"}
+{"id":"38007","point":"n-5013","label":"darunavir"}
+{"id":"38155","point":"n-5000","label":"pyrithione"}
+{"id":"38521","point":"n-4997","label":"chlorpromazine"}
+{"id":"38888","point":"n-4996","label":"carprofen"}
+{"id":"14701","point":"n-14035","label":"PTGS1"}
+{"id":"35543","point":"n-4993","label":"chloroquine"}
+{"id":"17115","point":"n-9713","label":"VCP"}
+{"id":"34716","point":"n-4982","label":"chlorhexidine"}
+{"id":"42977","point":"n-31376","label":"cerivastatin"}
+{"id":"16310","point":"n-12729","label":"HMGCR"}
+{"id":"41198","point":"n-4939","label":"indole"}
+{"id":"38576","point":"n-4883","label":"cefuroxime"}
+{"id":"38056","point":"n-4868","label":"cefotetan"}
+{"id":"31685","point":"n-4823","label":"2,6-di-tert-butyl-4-methylphenol"}
+{"id":"35100","point":"n-4820","label":"15-deoxy-Delta(12,14)-prostaglandin J2"}
+{"id":"40702","point":"n-4798","label":"captopril"}
+{"id":"38956","point":"n-4764","label":"platinum"}
+{"id":"34898","point":"n-4687","label":"magnesium sulfate"}
+{"id":"38899","point":"n-31323","label":"tolfenamic acid"}
+{"id":"12798","point":"n-12382","label":"AKR1C3"}
+{"id":"35854","point":"n-47","label":"budesonide"}
+{"id":"42192","point":"n-31314","label":"potassium sulfate"}
+{"id":"30133","point":"n-13602","label":"ATP1A1"}
+{"id":"35859","point":"n-4626","label":"nicorandil"}
+{"id":"25224","point":"n-12440","label":"GAL"}
+{"id":"43930","point":"n-29730","label":"Mequitazine"}
+{"id":"38012","point":"n-4614","label":"lopinavir"}
+{"id":"41004","point":"n-29480","label":"Botulinum toxin type A"}
+{"id":"35945","point":"n-31301","label":"droxidopa"}
+{"id":"12528","point":"n-13695","label":"PAH"}
+{"id":"38515","point":"n-4587","label":"domperidone"}
+{"id":"35843","point":"n-4583","label":"fluticasone propionate"}
+{"id":"40987","point":"n-31295","label":"Ciclesonide"}
+{"id":"41054","point":"n-31293","label":"Carmofur"}
+{"id":"35707","point":"n-31290","label":"bithionol"}
+{"id":"15211","point":"n-7670","label":"Caspase"}
+{"id":"39166","point":"n-4563","label":"ammonium chloride"}
+{"id":"31398","point":"n-4550","label":"bicalutamide"}
+{"id":"31031","point":"n-46","label":"gallic acid"}
+{"id":"38792","point":"n-31273","label":"benzatropine"}
+{"id":"40632","point":"n-4478","label":"E64"}
+{"id":"13702","point":"n-7639","label":"CAPN"}
+{"id":"35857","point":"n-4429","label":"baicalin"}
+{"id":"31628","point":"n-4426","label":"baicalein"}
+{"id":"15189","point":"n-9819","label":"C4A"}
+{"id":"31761","point":"n-3012","label":"tunicamycin"}
+{"id":"31732","point":"n-4416","label":"teicoplanin"}
+{"id":"31383","point":"n-4412","label":"azithromycin"}
+{"id":"35659","point":"n-4411","label":"azelastine"}
+{"id":"35627","point":"n-4373","label":"auranofin"}
+{"id":"35458","point":"n-4358","label":"calcium(2+)"}
+{"id":"35430","point":"n-4357","label":"zinc(2+)"}
+{"id":"35455","point":"n-4354","label":"L-ascorbic acid"}
+{"id":"35446","point":"n-4351","label":"copper(2+)"}
+{"id":"35440","point":"n-4349","label":"iron(3+)"}
+{"id":"34583","point":"n-23386","label":"dihydromyricetin"}
+{"id":"42062","point":"n-4318","label":"phosphatidylinositol"}
+{"id":"35140","point":"n-4307","label":"propan-1-ol"}
+{"id":"13432","point":"n-13226","label":"LYZ"}
+{"id":"35527","point":"n-4304","label":"piperine"}
+{"id":"42934","point":"n-4302","label":"heparan sulfate"}
+{"id":"11619","point":"n-12769","label":"HPSE"}
+{"id":"42412","point":"n-4299","label":"mannan"}
+{"id":"40496","point":"n-31236","label":"gamma-linolenic acid"}
+{"id":"31581","point":"n-4260","label":"gossypol"}
+{"id":"31164","point":"n-4258","label":"valinomycin"}
+{"id":"23396","point":"n-7577","label":"viral load"}
+{"id":"31107","point":"n-4241","label":"novobiocin"}
+{"id":"40674","point":"n-4236","label":"heparin"}
+{"id":"30330","point":"n-13267","label":"MAP3K14"}
+{"id":"13175","point":"n-79","label":"Histone"}
+{"id":"38669","point":"n-4228","label":"daidzein"}
+{"id":"31486","point":"n-38","label":"theophylline"}
+{"id":"38675","point":"n-23359","label":"all-cis-docosa-4,7,10,13,16,19-hexaenoic acid"}
+{"id":"30581","point":"n-9332","label":"SREBF1"}
+{"id":"35960","point":"n-4210","label":"chromium atom"}
+{"id":"35894","point":"n-4199","label":"1,8-cineole"}
+{"id":"30579","point":"n-12099","label":"EGR1"}
+{"id":"31657","point":"n-4185","label":"castanospermine"}
+{"id":"11639","point":"n-12904","label":"IK"}
+{"id":"30968","point":"n-4160","label":"sitosterol"}
+{"id":"38607","point":"n-4159","label":"acetazolamide"}
+{"id":"38498","point":"n-4153","label":"cycloheximide"}
+{"id":"31438","point":"n-4151","label":"acetophenone"}
+{"id":"34734","point":"n-4148","label":"monensin A"}
+{"id":"40441","point":"n-4142","label":"selenomethionine"}
+{"id":"40462","point":"n-4131","label":"isatin"}
+{"id":"38641","point":"n-4121","label":"methyltestosterone"}
+{"id":"44097","point":"n-4098","label":"trehalose"}
+{"id":"34776","point":"n-4079","label":"amphotericin B"}
+{"id":"35936","point":"n-4068","label":"amodiaquine"}
+{"id":"31445","point":"n-4059","label":"amitriptyline"}
+{"id":"38813","point":"n-4057","label":"amiodarone"}
+{"id":"34675","point":"n-4033","label":"amentoflavone"}
+{"id":"42023","point":"n-4029","label":"amastatin"}
+{"id":"34893","point":"n-4021","label":"amantadine"}
+{"id":"35495","point":"n-3918","label":"acyclovir"}
+{"id":"13468","point":"n-12968","label":"IDO1"}
+{"id":"34851","point":"n-3875","label":"copper(II) sulfate"}
+{"id":"35719","point":"n-29","label":"bafilomycin A1"}
+{"id":"31470","point":"n-3794","label":"nicotine"}
+{"id":"34953","point":"n-3780","label":"(R)-noradrenaline"}
+{"id":"38307","point":"n-3758","label":"3,3',5-triiodo-L-thyronine"}
+{"id":"38214","point":"n-3753","label":"dopamine"}
+{"id":"31008","point":"n-3737","label":"myricetin"}
+{"id":"35433","point":"n-3717","label":"NADP(+)"}
+{"id":"31110","point":"n-3705","label":"puromycin"}
+{"id":"17811","point":"n-10098","label":"SPINK5"}
+{"id":"36062","point":"n-3696","label":"hydrogen chloride"}
+{"id":"38791","point":"n-3691","label":"(S)-naringenin"}
+{"id":"35298","point":"n-3672","label":"thymidine"}
+{"id":"35842","point":"n-3657","label":"cortisol"}
+{"id":"31434","point":"n-3644","label":"gemcitabine"}
+{"id":"31693","point":"n-3621","label":"geraniol"}
+{"id":"34987","point":"n-3620","label":"cyanocob(III)alamin"}
+{"id":"17769","point":"n-10079","label":"CAT"}
+{"id":"41891","point":"n-3608","label":"cytidine 5'-monophosphate"}
+{"id":"25889","point":"n-10659","label":"CMPK1"}
+{"id":"40312","point":"n-3604","label":"testosterone"}
+{"id":"17221","point":"n-1166","label":"LH"}
+{"id":"42884","point":"n-3599","label":"D-glucosamine"}
+{"id":"42116","point":"n-3594","label":"aniline"}
+{"id":"35476","point":"n-3546","label":"riboflavin"}
+{"id":"41870","point":"n-3533","label":"cortisone"}
+{"id":"35450","point":"n-3526","label":"NADH"}
+{"id":"14449","point":"n-12447","label":"GAPDH"}
+{"id":"27075","point":"n-9058","label":"BLVRA"}
+{"id":"38582","point":"n-3511","label":"L-tryptophan"}
+{"id":"38345","point":"n-3502","label":"guanosine"}
+{"id":"34856","point":"n-3498","label":"(E)-cinnamaldehyde"}
+{"id":"35435","point":"n-3495","label":"pyridoxine"}
+{"id":"13840","point":"n-12937","label":"IL2"}
+{"id":"31206","point":"n-3487","label":"S-adenosyl-L-homocysteine"}
+{"id":"14212","point":"n-27736","label":"SETD7"}
+{"id":"38333","point":"n-20","label":"spermidine"}
+{"id":"26302","point":"n-7822","label":"NFAT"}
+{"id":"34985","point":"n-3446","label":"(R)-carnitine"}
+{"id":"16552","point":"n-9763","label":"XDH"}
+{"id":"41090","point":"n-17","label":"hyaluronic acid"}
+{"id":"17338","point":"n-9295","label":"BSG"}
+{"id":"34888","point":"n-3443","label":"adenosine"}
+{"id":"23757","point":"n-16311","label":"Murine hepatitis virus"}
+{"id":"40532","point":"n-29457","label":"phloroglucinol"}
+{"id":"40530","point":"n-3414","label":"cholesterol"}
+{"id":"19538","point":"n-20356","label":"CD"}
+{"id":"34976","point":"n-3413","label":"chlorogenic acid"}
+{"id":"41212","point":"n-3406","label":"1H-imidazole"}
+{"id":"30468","point":"n-7950","label":"p38"}
+{"id":"35547","point":"n-3389","label":"GTP"}
+{"id":"12965","point":"n-7748","label":"G_protein"}
+{"id":"40491","point":"n-3381","label":"glycyrrhizinic acid"}
+{"id":"31037","point":"n-3376","label":"taurine"}
+{"id":"34750","point":"n-3374","label":"phenol"}
+{"id":"31643","point":"n-3372","label":"luteolin"}
+{"id":"43350","point":"n-3366","label":"arachidonic acid"}
+{"id":"40438","point":"n-12","label":"hexadecanoic acid"}
+{"id":"30963","point":"n-3357","label":"spermine"}
+{"id":"34724","point":"n-3350","label":"enoxacin"}
+{"id":"35235","point":"n-3321","label":"protoporphyrin"}
+{"id":"34962","point":"n-3302","label":"acetylcholine"}
+{"id":"41209","point":"n-3286","label":"pyrazole"}
+{"id":"35926","point":"n-3271","label":"remdesivir"}
+{"id":"41779","point":"n-19347","label":"Nipah Virus"}
+{"id":"35027","point":"n-31079","label":"gilteritinib"}
+{"id":"30409","point":"n-13841","label":"AXL"}
+{"id":"25826","point":"n-12355","label":"FLT3"}
+{"id":"41208","point":"n-3258","label":"imidazole"}
+{"id":"31284","point":"n-3198","label":"(7R,14S)-dihydroxy-(4Z,8E,10E,12Z,16Z,19Z)-docosahexaenoic acid"}
+{"id":"35537","point":"n-3187","label":"Z-Val-Ala-Asp(OMe)-CH2F"}
+{"id":"30567","point":"n-9459","label":"TFAP2A"}
+{"id":"44016","point":"n-3177","label":"clevudine"}
+{"id":"34382","point":"n-33956","label":"TK1"}
+{"id":"39063","point":"n-31042","label":"degarelix"}
+{"id":"43261","point":"n-31041","label":"ambrisentan"}
+{"id":"30830","point":"n-12066","label":"EDNRB"}
+{"id":"30831","point":"n-12064","label":"EDNRA"}
+{"id":"38838","point":"n-3172","label":"valrubicin"}
+{"id":"14178","point":"n-12505","label":"ABCB11"}
+{"id":"43738","point":"n-31035","label":"antrafenine"}
+{"id":"36018","point":"n-3167","label":"tafenoquine"}
+{"id":"40819","point":"n-3166","label":"lacidipine"}
+{"id":"37866","point":"n-9913","label":"CACNA1A"}
+{"id":"41","point":"n-3159","label":"camostat"}
+{"id":"43036","point":"n-3150","label":"nafamostat"}
+{"id":"43168","point":"n-31014","label":"chlorobutanol"}
+{"id":"42390","point":"n-3140","label":"simeprevir"}
+{"id":"10329","point":"n-3139","label":"umifenovir"}
+{"id":"43549","point":"n-3138","label":"favipiravir"}
+{"id":"43680","point":"n-31011","label":"cetilistat"}
+{"id":"42408","point":"n-3137","label":"sacubitril"}
+{"id":"15710","point":"n-13377","label":"MME"}
+{"id":"35556","point":"n-31002","label":"velpatasvir"}
+{"id":"43696","point":"n-30986","label":"8-chloro-2-phenyl-3-[(1S)-1-(7H-purin-6-ylamino)ethyl]-1-isoquinolinone"}
+{"id":"34252","point":"n-13803","label":"PIK3CG"}
+{"id":"34251","point":"n-13802","label":"PIK3CD"}
+{"id":"35090","point":"n-3067","label":"vitamin A"}
+{"id":"35730","point":"n-3058","label":"fentanyl"}
+{"id":"37996","point":"n-30983","label":"delavirdine"}
+{"id":"38011","point":"n-3057","label":"efavirenz"}
+{"id":"12516","point":"n-7665","label":"CYP"}
+{"id":"38694","point":"n-3049","label":"erlotinib"}
+{"id":"44038","point":"n-30978","label":"3,4-dichloro-2-benzopyran-1-one"}
+{"id":"16688","point":"n-11636","label":"CFD"}
+{"id":"31313","point":"n-3018","label":"ciprofloxacin"}
+{"id":"3720","point":"n-30693","label":"Z-Val-Ala-Asp fluoromethyl ketone"}
+{"id":"25665","point":"n-10068","label":"CASP1"}
+{"id":"2535","point":"n-30678","label":"Vedolizumab"}
+{"id":"30055","point":"n-13005","label":"ITGA4"}
+{"id":"2440","point":"n-30652","label":"Topiroxostat"}
+{"id":"2601","point":"n-30613","label":"Selinexor"}
+{"id":"10500","point":"n-30610","label":"Saracatinib"}
+{"id":"30374","point":"n-13503","label":"ABL1"}
+{"id":"4748","point":"n-30545","label":"Ravulizumab"}
+{"id":"25385","point":"n-9832","label":"C5"}
+{"id":"63","point":"n-30522","label":"R667"}
+{"id":"30608","point":"n-22918","label":"RARG"}
+{"id":"4844","point":"n-30503","label":"Pentosan polysulfate"}
+{"id":"25506","point":"n-12318","label":"FGF2"}
+{"id":"8624","point":"n-1574","label":"PTC299"}
+{"id":"5056","point":"n-30469","label":"Ocrelizumab"}
+{"id":"16178","point":"n-13405","label":"MS4A1"}
+{"id":"4209","point":"n-30363","label":"Ixekizumab"}
+{"id":"13836","point":"n-12922","label":"IL17A"}
+{"id":"4215","point":"n-30360","label":"Isatoribine"}
+{"id":"25792","point":"n-10143","label":"TLR7"}
+{"id":"4423","point":"n-30358","label":"Interferon alfacon-1"}
+{"id":"26996","point":"n-12853","label":"IFNAR1"}
+{"id":"4422","point":"n-30357","label":"Interferon alfa-2b"}
+{"id":"10799","point":"n-30354","label":"Indirubin"}
+{"id":"4374","point":"n-30331","label":"Human interferon beta"}
+{"id":"4373","point":"n-30330","label":"Human immunoglobulin G"}
+{"id":"25366","point":"n-12299","label":"FCGR2B"}
+{"id":"27055","point":"n-12297","label":"FCGR1A"}
+{"id":"15172","point":"n-9820","label":"C4B"}
+{"id":"68","point":"n-30327","label":"Hexatantalum Dodecabromide"}
+{"id":"13262","point":"n-9633","label":"UBA1"}
+{"id":"4347","point":"n-30325","label":"Halofuginone"}
+{"id":"25694","point":"n-13385","label":"MMP2"}
+{"id":"5379","point":"n-867","label":"Gimsilumab"}
+{"id":"13997","point":"n-11296","label":"CSF2"}
+{"id":"991","point":"n-30303","label":"Galidesivir"}
+{"id":"10792","point":"n-30274","label":"Fasudil"}
+{"id":"30445","point":"n-12415","label":"FYN"}
+{"id":"11","point":"n-30256","label":"Ephedra sinica root"}
+{"id":"1066","point":"n-30252","label":"Emricasan"}
+{"id":"1044","point":"n-30249","label":"Eculizumab"}
+{"id":"1161","point":"n-30234","label":"Dupilumab"}
+{"id":"13886","point":"n-12946","label":"IL4R"}
+{"id":"1160","point":"n-30233","label":"Drotrecogin alfa"}
+{"id":"1135","point":"n-30227","label":"Defibrotide"}
+{"id":"34507","point":"n-11541","label":"ADORA2B"}
+{"id":"10498","point":"n-30204","label":"Compound 19"}
+{"id":"753","point":"n-30199","label":"Cibacron Blue"}
+{"id":"25456","point":"n-24515","label":"GSTP1"}
+{"id":"16770","point":"n-11698","label":"NQO1"}
+{"id":"511","point":"n-30146","label":"Brequinar"}
+{"id":"508","point":"n-30143","label":"Belatacept"}
+{"id":"12156","point":"n-10441","label":"CD86"}
+{"id":"14991","point":"n-10428","label":"CD80"}
+{"id":"514","point":"n-30142","label":"Bardoxolone methyl"}
+{"id":"480","point":"n-30126","label":"Antithymocyte immunoglobulin (rabbit)"}
+{"id":"12188","point":"n-10281","label":"CD1A"}
+{"id":"3549","point":"n-325","label":"Akt inhibitor"}
+{"id":"60","point":"n-30114","label":"Adenosine-5-Diphosphoribose"}
+{"id":"30155","point":"n-102","label":"SIRT3"}
+{"id":"10702","point":"n-30111","label":"Acalabrutinib"}
+{"id":"25877","point":"n-9348","label":"BTK"}
+{"id":"20366","point":"n-21192","label":"Griffithsin"}
+{"id":"17088","point":"n-7673","label":"Chemokine"}
+{"id":"22336","point":"n-20933","label":"Interferon-alpha"}
+{"id":"13805","point":"n-12421","label":"ISG15"}
+{"id":"21744","point":"n-20609","label":"IE1"}
+{"id":"12674","point":"n-9074","label":"SDC2"}
+{"id":"13399","point":"n-12549","label":"GP2"}
+{"id":"40301","point":"n-7215","label":"thioridazine"}
+{"id":"13529","point":"n-10423","label":"SERPINA3"}
+{"id":"34752","point":"n-77","label":"thimerosal"}
+{"id":"34920","point":"n-7200","label":"orlistat"}
+{"id":"34547","point":"n-10583","label":"CDKN1A"}
+{"id":"43262","point":"n-7197","label":"Terfenadine"}
+{"id":"31141","point":"n-7189","label":"tazobactam"}
+{"id":"30636","point":"n-12699","label":"HIF1A"}
+{"id":"40637","point":"n-7133","label":"sevoflurane"}
+{"id":"31701","point":"n-7082","label":"sodium dodecyl sulfate"}
+{"id":"26267","point":"n-13463","label":"MYC"}
+{"id":"25790","point":"n-9513","label":"TLR2"}
+{"id":"42043","point":"n-7065","label":"EC 2.7.12.2 (mitogen-activated protein kinase kinase) inhibitor"}
+{"id":"43619","point":"n-7064","label":"Rhein"}
+{"id":"38187","point":"n-7057","label":"Resiniferatoxin"}
+{"id":"38729","point":"n-75","label":"panobinostat"}
+{"id":"38519","point":"n-29935","label":"palonosetron"}
+{"id":"30018","point":"n-9398","label":"TAC1"}
+{"id":"31375","point":"n-6975","label":"propranolol"}
+{"id":"38528","point":"n-29934","label":"pirenzepine"}
+{"id":"14557","point":"n-9546","label":"CD40"}
+{"id":"38047","point":"n-6896","label":"piperacillin"}
+{"id":"25787","point":"n-9512","label":"TLR1"}
+{"id":"43770","point":"n-29933","label":"thyroid stimulating hormone"}
+{"id":"30682","point":"n-11951","label":"DUOX1"}
+{"id":"30681","point":"n-9827","label":"DUOX2"}
+{"id":"38256","point":"n-6841","label":"phenobarbital"}
+{"id":"35648","point":"n-6805","label":"Salinomycin"}
+{"id":"44047","point":"n-6800","label":"Pentoxifylline"}
+{"id":"38105","point":"n-6790","label":"paromomycin"}
+{"id":"38177","point":"n-6761","label":"oxycodone"}
+{"id":"31015","point":"n-72","label":"icariin"}
+{"id":"34424","point":"n-12374","label":"FOXO3"}
+{"id":"38098","point":"n-6685","label":"nystatin"}
+{"id":"14378","point":"n-10588","label":"HAVCR1"}
+{"id":"39131","point":"n-6654","label":"nitroprusside"}
+{"id":"38875","point":"n-6643","label":"nifedipine"}
+{"id":"12869","point":"n-14019","label":"PTBP1"}
+{"id":"26537","point":"n-9309","label":"SP1"}
+{"id":"31666","point":"n-6616","label":"chrysin"}
+{"id":"40738","point":"n-29926","label":"Natamycin"}
+{"id":"11310","point":"n-9501","label":"TIMP1"}
+{"id":"31443","point":"n-6556","label":"naltrexone"}
+{"id":"40616","point":"n-6555","label":"naloxone"}
+{"id":"38460","point":"n-6535","label":"1-archaetidyl-D-myo-inositol"}
+{"id":"35167","point":"n-6444","label":"masoprocol"}
+{"id":"31346","point":"n-6350","label":"N,N-diethyl-m-toluamide"}
+{"id":"38410","point":"n-6333","label":"cannabidiol"}
+{"id":"31019","point":"n-6317","label":"hydroxytyrosol"}
+{"id":"30969","point":"n-6288","label":"quercetin 3-O-beta-D-glucopyranoside"}
+{"id":"34889","point":"n-6269","label":"meloxicam"}
+{"id":"14827","point":"n-11989","label":"RSAD2"}
+{"id":"34899","point":"n-6255","label":"meclofenamic acid"}
+{"id":"25538","point":"n-9485","label":"THBS1"}
+{"id":"35889","point":"n-6239","label":"malic acid"}
+{"id":"26379","point":"n-13583","label":"NR1H4"}
+{"id":"35142","point":"n-6228","label":"dieckol"}
+{"id":"38718","point":"n-6219","label":"carfilzomib"}
+{"id":"34320","point":"n-9732","label":"TRPV1"}
+{"id":"31407","point":"n-6185","label":"levetiracetam"}
+{"id":"30775","point":"n-12581","label":"CXCR3"}
+{"id":"16684","point":"n-11635","label":"DES"}
+{"id":"31485","point":"n-6179","label":"levamisole"}
+{"id":"12861","point":"n-14031","label":"BAX"}
+{"id":"31367","point":"n-6126","label":"lamotrigine"}
+{"id":"13404","point":"n-8960","label":"BDNF"}
+{"id":"25188","point":"n-11222","label":"CRH"}
+{"id":"40671","point":"n-6119","label":"tolcapone"}
+{"id":"38015","point":"n-6117","label":"telbivudine"}
+{"id":"31403","point":"n-6115","label":"sotalol"}
+{"id":"34725","point":"n-6111","label":"moxifloxacin"}
+{"id":"16672","point":"n-7782","label":"IL1"}
+{"id":"36026","point":"n-6110","label":"misoprostol"}
+{"id":"35996","point":"n-6109","label":"mefloquine"}
+{"id":"21495","point":"n-21401","label":"alt"}
+{"id":"34723","point":"n-6104","label":"levofloxacin"}
+{"id":"38533","point":"n-6075","label":"zinc acetate"}
+{"id":"43606","point":"n-6046","label":"isopropyl beta-D-thiogalactopyranoside"}
+{"id":"14108","point":"n-7738","label":"GST"}
+{"id":"40236","point":"n-6025","label":"kanamycin"}
+{"id":"25387","point":"n-13195","label":"RHOA"}
+{"id":"31743","point":"n-6004","label":"ivermectin"}
+{"id":"17777","point":"n-9341","label":"TRIM21"}
+{"id":"38523","point":"n-5863","label":"haloperidol"}
+{"id":"38620","point":"n-5847","label":"glyburide"}
+{"id":"38593","point":"n-29914","label":"all-cis-icosa-8,11,14-trienoic acid"}
+{"id":"30705","point":"n-105","label":"CD209"}
+{"id":"41222","point":"n-5644","label":"ferric oxide"}
+{"id":"13411","point":"n-8961","label":"BECN1"}
+{"id":"34770","point":"n-5627","label":"minocycline"}
+{"id":"40298","point":"n-5623","label":"methimazole"}
+{"id":"38203","point":"n-63","label":"rosiglitazone"}
+{"id":"31328","point":"n-5563","label":"fenofibrate"}
+{"id":"31363","point":"n-5535","label":"diazepam"}
+{"id":"39161","point":"n-5533","label":"copper(II) chloride"}
+{"id":"34855","point":"n-5518","label":"eugenol"}
+{"id":"40233","point":"n-5515","label":"etomidate"}
+{"id":"42383","point":"n-5509","label":"17alpha-ethynylestradiol"}
+{"id":"26479","point":"n-9762","label":"XBP1"}
+{"id":"37984","point":"n-5446","label":"enflurane"}
+{"id":"31184","point":"n-5441","label":"4'-epidoxorubicin"}
+{"id":"25666","point":"n-10077","label":"CASP9"}
+{"id":"35907","point":"n-5437","label":"enalapril"}
+{"id":"31684","point":"n-5426","label":"ellagic acid"}
+{"id":"40274","point":"n-5420","label":"imipramine"}
+{"id":"31428","point":"n-5418","label":"furosemide"}
+{"id":"38045","point":"n-5408","label":"imipenem"}
+{"id":"11340","point":"n-9179","label":"SLC10A1"}
+{"id":"38284","point":"n-5380","label":"dobutamine"}
+{"id":"38557","point":"n-5360","label":"ganciclovir"}
+{"id":"35697","point":"n-5345","label":"thiabendazole"}
+{"id":"31391","point":"n-5342","label":"trimethoprim"}
+{"id":"35157","point":"n-5338","label":"paclitaxel"}
+{"id":"38170","point":"n-5333","label":"dihydroergotamine"}
+{"id":"41849","point":"n-29908","label":"rifapentine"}
+{"id":"34603","point":"n-5315","label":"propofol"}
+{"id":"35735","point":"n-5302","label":"desmopressin"}
+{"id":"17104","point":"n-9736","label":"VWF"}
+{"id":"37986","point":"n-5300","label":"desflurane"}
+{"id":"30691","point":"n-9090","label":"SELE"}
+{"id":"31474","point":"n-5298","label":"hydroxyurea"}
+{"id":"31039","point":"n-5263","label":"4-hydroxyphenyl retinamide"}
+{"id":"34982","point":"n-5240","label":"diethylstilbestrol"}
+{"id":"12384","point":"n-10454","label":"CD9"}
+{"id":"31355","point":"n-54","label":"dexamethasone"}
+{"id":"31501","point":"n-5206","label":"cypermethrin"}
+{"id":"35491","point":"n-5201","label":"allopurinol"}
+{"id":"31429","point":"n-5191","label":"atorvastatin"}
+{"id":"31521","point":"n-29905","label":"esfenvalerate"}
+{"id":"37971","point":"n-23620","label":"2-(N-morpholino)ethanesulfonic acid"}
+{"id":"31481","point":"n-5144","label":"sunitinib"}
+{"id":"31371","point":"n-5065","label":"clotrimazole"}
+{"id":"37970","point":"n-29901","label":"anthralin"}
+{"id":"11722","point":"n-9470","label":"TFRC"}
+{"id":"31449","point":"n-5039","label":"clarithromycin"}
+{"id":"25207","point":"n-13973","label":"PRL"}
+{"id":"38687","point":"n-5022","label":"cidofovir anhydrous"}
+{"id":"43692","point":"n-5010","label":"resiquimod"}
+{"id":"38738","point":"n-5009","label":"imiquimod"}
+{"id":"41235","point":"n-4999","label":"zinc oxide"}
+{"id":"31591","point":"n-4900","label":"chloroform"}
+{"id":"39190","point":"n-4886","label":"zinc sulfate"}
+{"id":"34925","point":"n-4856","label":"nocodazole"}
+{"id":"38810","point":"n-4833","label":"carvedilol"}
+{"id":"35696","point":"n-4830","label":"4-aminopyridine"}
+{"id":"35127","point":"n-4825","label":"1,3-benzothiazole-2-thiol"}
+{"id":"30764","point":"n-10237","label":"CCR5"}
+{"id":"31410","point":"n-4824","label":"oxybenzone"}
+{"id":"35043","point":"n-4812","label":"carbendazim"}
+{"id":"31113","point":"n-4802","label":"(-)-anisomycin"}
+{"id":"31370","point":"n-4782","label":"candesartan"}
+{"id":"38977","point":"n-4769","label":"gadolinium atom"}
+{"id":"26122","point":"n-11602","label":"DDIT3"}
+{"id":"38960","point":"n-4752","label":"titanium atom"}
+{"id":"31034","point":"n-4733","label":"vitamin E"}
+{"id":"35654","point":"n-4721","label":"calcium carbonate"}
+{"id":"41116","point":"n-29669","label":"cetylpyridinium"}
+{"id":"36015","point":"n-4654","label":"bupivacaine"}
+{"id":"36124","point":"n-4646","label":"silver(1+) nitrate"}
+{"id":"38889","point":"n-4633","label":"pirfenidone"}
+{"id":"38250","point":"n-4618","label":"bromocriptine"}
+{"id":"43678","point":"n-29481","label":"Ibudilast"}
+{"id":"11674","point":"n-7800","label":"LDH"}
+{"id":"38742","point":"n-4600","label":"fulvestrant"}
+{"id":"38005","point":"n-4592","label":"emtricitabine"}
+{"id":"40921","point":"n-4574","label":"Bucillamine"}
+{"id":"26992","point":"n-12735","label":"HMOX1"}
+{"id":"43637","point":"n-29892","label":"Bromperidol"}
+{"id":"40289","point":"n-4564","label":"aripiprazole"}
+{"id":"31441","point":"n-29891","label":"antipyrine"}
+{"id":"35900","point":"n-4560","label":"adefovir pivoxil"}
+{"id":"35590","point":"n-29478","label":"aceclofenac"}
+{"id":"38495","point":"n-4552","label":"bifenthrin"}
+{"id":"31475","point":"n-4545","label":"glycyrrhetinic acid"}
+{"id":"34605","point":"n-4538","label":"iron trichloride"}
+{"id":"40706","point":"n-4509","label":"bepridil"}
+{"id":"35441","point":"n-4480","label":"(R)-lipoic acid"}
+{"id":"35494","point":"n-4410","label":"azathioprine"}
+{"id":"38049","point":"n-4344","label":"ceftriaxone"}
+{"id":"31709","point":"n-4342","label":"aluminium atom"}
+{"id":"38031","point":"n-4339","label":"ampicillin"}
+{"id":"34970","point":"n-4327","label":"(R)-adrenaline"}
+{"id":"38583","point":"n-4317","label":"menadione"}
+{"id":"31120","point":"n-4315","label":"tobramycin"}
+{"id":"35830","point":"n-4294","label":"coumarin"}
+{"id":"34948","point":"n-4291","label":"serotonin"}
+{"id":"25222","point":"n-12165","label":"AGT"}
+{"id":"41142","point":"n-4257","label":"digitoxin"}
+{"id":"38748","point":"n-4240","label":"all-cis-5,8,11,14,17-icosapentaenoic acid"}
+{"id":"41937","point":"n-29888","label":"alloxanthine"}
+{"id":"25051","point":"n-9049","label":"CCL2"}
+{"id":"38330","point":"n-4233","label":"galactose"}
+{"id":"40460","point":"n-4215","label":"amylose"}
+{"id":"38684","point":"n-4211","label":"rifampicin"}
+{"id":"38212","point":"n-4197","label":"physostigmine"}
+{"id":"31140","point":"n-4192","label":"tetracycline"}
+{"id":"35606","point":"n-4174","label":"heroin"}
+{"id":"17083","point":"n-9789","label":"TRIM25"}
+{"id":"34869","point":"n-33","label":"camptothecin"}
+{"id":"35505","point":"n-4144","label":"thymol"}
+{"id":"40327","point":"n-4141","label":"aldosterone"}
+{"id":"31704","point":"n-4139","label":"silicon atom"}
+{"id":"25695","point":"n-13389","label":"MMP9"}
+{"id":"31715","point":"n-4136","label":"selenium atom"}
+{"id":"38690","point":"n-4127","label":"mitomycin C"}
+{"id":"38595","point":"n-4120","label":"alpha-linolenic acid"}
+{"id":"43741","point":"n-23329","label":"kinetin"}
+{"id":"38877","point":"n-4116","label":"vincaleukoblastine"}
+{"id":"41163","point":"n-4107","label":"uric acid"}
+{"id":"13876","point":"n-12927","label":"IL18"}
+{"id":"13264","point":"n-10690","label":"IFNL1"}
+{"id":"39177","point":"n-29470","label":"sodium hydrogensulfite"}
+{"id":"40604","point":"n-4030","label":"proanthocyanidin"}
+{"id":"31063","point":"n-4001","label":"pentaerythritol tetranitrate"}
+{"id":"38618","point":"n-29466","label":"acarbose"}
+{"id":"38232","point":"n-3873","label":"colchicine"}
+{"id":"14787","point":"n-11272","label":"TPPP"}
+{"id":"38059","point":"n-3805","label":"cefotaxime"}
+{"id":"38817","point":"n-3789","label":"AICA ribonucleotide"}
+{"id":"34945","point":"n-3773","label":"L-thyroxine"}
+{"id":"35326","point":"n-3768","label":"acrylic acid"}
+{"id":"34950","point":"n-3765","label":"histamine"}
+{"id":"31221","point":"n-3743","label":"benzylpenicillin"}
+{"id":"40668","point":"n-3730","label":"formononetin"}
+{"id":"26429","point":"n-258","label":"AHR"}
+{"id":"38093","point":"n-3687","label":"gentamycin"}
+{"id":"31488","point":"n-3685","label":"calcitriol"}
+{"id":"31144","point":"n-3663","label":"chloramphenicol"}
+{"id":"40336","point":"n-3646","label":"inosine"}
+{"id":"40760","point":"n-3618","label":"agmatine"}
+{"id":"31411","point":"n-3596","label":"morphine"}
+{"id":"41989","point":"n-3566","label":"methylglyoxal"}
+{"id":"40629","point":"n-3547","label":"progesterone"}
+{"id":"34843","point":"n-3542","label":"propane-1,2-diol"}
+{"id":"38797","point":"n-3537","label":"leukotriene C4"}
+{"id":"31416","point":"n-3514","label":"mycophenolic acid"}
+{"id":"31388","point":"n-3496","label":"codeine"}
+{"id":"36002","point":"n-3488","label":"atropine"}
+{"id":"12477","point":"n-13039","label":"APP"}
+{"id":"25177","point":"n-13514","label":"SERPINC1"}
+{"id":"31446","point":"n-3458","label":"triclosan"}
+{"id":"40437","point":"n-3449","label":"3',5'-cyclic GMP"}
+{"id":"38169","point":"n-3368","label":"quinine"}
+{"id":"25215","point":"n-12975","label":"INS"}
+{"id":"30004","point":"n-11490","label":"CYP1A1"}
+{"id":"31014","point":"n-3352","label":"carnosine"}
+{"id":"42931","point":"n-3341","label":"leukotriene B4"}
+{"id":"41916","point":"n-3340","label":"5-formyltetrahydrofolic acid"}
+{"id":"31030","point":"n-3336","label":"(+)-catechin"}
+{"id":"43339","point":"n-3330","label":"prostaglandin F2alpha"}
+{"id":"42929","point":"n-3329","label":"prostaglandin I2"}
+{"id":"34793","point":"n-7","label":"acetylsalicylic acid"}
+{"id":"34955","point":"n-3301","label":"choline"}
+{"id":"40651","point":"n-3194","label":"5-(N-methyl-N-propyl)amiloride"}
+{"id":"40790","point":"n-3157","label":"ambroxol"}
+{"id":"43677","point":"n-29878","label":"pemirolast"}
+{"id":"43965","point":"n-3073","label":"6-[5-[(cyclopropylamino)-oxomethyl]-3-fluoro-2-methylphenyl]-N-(2,2-dimethylpropyl)-3-pyridinecarboxamide"}
+{"id":"38749","point":"n-3044","label":"clodronic acid"}
+{"id":"35482","point":"n-3028","label":"zidovudine"}
+{"id":"36009","point":"n-3020","label":"warfarin"}
+{"id":"34722","point":"n-5938","label":"chloroxine"}
+{"id":"34433","point":"n-140","label":"RELA"}
+{"id":"35581","point":"n-5781","label":"Bandrowski's base"}
+{"id":"26256","point":"n-13590","label":"NR3C2"}
+{"id":"12266","point":"n-11200","label":"CR1"}
+{"id":"31396","point":"n-7246","label":"venlafaxine"}
+{"id":"16694","point":"n-9330","label":"SQSTM1"}
+{"id":"43160","point":"n-7239","label":"ursodeoxycholic acid"}
+{"id":"30263","point":"n-10561","label":"CDK4"}
+{"id":"11875","point":"n-9489","label":"THPO"}
+{"id":"43263","point":"n-29555","label":"1-[(4-chlorophenyl)-phenylmethyl]-4-methylpiperazine"}
+{"id":"13891","point":"n-12951","label":"IL6ST"}
+{"id":"26330","point":"n-110","label":"CREBBP"}
+{"id":"12186","point":"n-10280","label":"CD19"}
+{"id":"35661","point":"n-7167","label":"ketotifen"}
+{"id":"25047","point":"n-9063","label":"CXCL10"}
+{"id":"11270","point":"n-12820","label":"ICAM1"}
+{"id":"35940","point":"n-7091","label":"tiazofurine"}
+{"id":"38703","point":"n-7089","label":"selumetinib"}
+{"id":"40623","point":"n-7072","label":"risperidone"}
+{"id":"38706","point":"n-7068","label":"bryostatin 1"}
+{"id":"38526","point":"n-7048","label":"rabeprazole"}
+{"id":"14175","point":"n-9603","label":"SERPING1"}
+{"id":"38763","point":"n-29549","label":"pyrvinium"}
+{"id":"35844","point":"n-6947","label":"prednisone"}
+{"id":"25041","point":"n-9061","label":"CCL7"}
+{"id":"34988","point":"n-6912","label":"idelalisib"}
+{"id":"13812","point":"n-10706","label":"HAVCR2"}
+{"id":"35944","point":"n-6838","label":"irinotecan"}
+{"id":"15359","point":"n-11239","label":"ZC3HAV1"}
+{"id":"34633","point":"n-6796","label":"D-penicillamine"}
+{"id":"30971","point":"n-6781","label":"crocin-1"}
+{"id":"38778","point":"n-6770","label":"oxytocin"}
+{"id":"11474","point":"n-10872","label":"ADAM17"}
+{"id":"17149","point":"n-13506","label":"NEDD4"}
+{"id":"38191","point":"n-6708","label":"octreotide"}
+{"id":"14661","point":"n-12485","label":"GH1"}
+{"id":"34891","point":"n-6591","label":"nefazodone"}
+{"id":"38162","point":"n-29532","label":"3-iodobenzyl-5'-N-methylcarboxamidoadenosine"}
+{"id":"38163","point":"n-6420","label":"N-ethyl-5'-carboxamidoadenosine"}
+{"id":"40721","point":"n-6384","label":"tadalafil"}
+{"id":"38357","point":"n-6348","label":"muscimol"}
+{"id":"25187","point":"n-13890","label":"POMC"}
+{"id":"14723","point":"n-11947","label":"SPECC1"}
+{"id":"42959","point":"n-29527","label":"phosphodiesterase IV inhibitor"}
+{"id":"16248","point":"n-14142","label":"REN"}
+{"id":"40675","point":"n-6299","label":"rivaroxaban"}
+{"id":"31422","point":"n-6283","label":"methamphetamine"}
+{"id":"31421","point":"n-6282","label":"methadone"}
+{"id":"30693","point":"n-9093","label":"SELL"}
+{"id":"42187","point":"n-6208","label":"lithium carbonate"}
+{"id":"38274","point":"n-6181","label":"pregabalin"}
+{"id":"30011","point":"n-12062","label":"EDN1"}
+{"id":"35637","point":"n-6150","label":"leflunomide"}
+{"id":"25943","point":"n-9452","label":"TEK"}
+{"id":"35934","point":"n-6122","label":"valganciclovir"}
+{"id":"37998","point":"n-6112","label":"nevirapine"}
+{"id":"25796","point":"n-9716","label":"VEGFA"}
+{"id":"38051","point":"n-6107","label":"linezolid"}
+{"id":"26714","point":"n-10447","label":"MLC1"}
+{"id":"34670","point":"n-6100","label":"stavudine"}
+{"id":"16644","point":"n-99","label":"ADIPOQ"}
+{"id":"30211","point":"n-9007","label":"S100A8"}
+{"id":"38898","point":"n-29520","label":"etoricoxib"}
+{"id":"26850","point":"n-13297","label":"MAS1"}
+{"id":"38580","point":"n-5983","label":"isoniazide"}
+{"id":"37985","point":"n-5973","label":"isoflurane"}
+{"id":"43254","point":"n-29515","label":"iodoquinol"}
+{"id":"42322","point":"n-5864","label":"halothane"}
+{"id":"38066","point":"n-23793","label":"cefmenoxime"}
+{"id":"30019","point":"n-13570","label":"NPPA"}
+{"id":"38553","point":"n-5732","label":"dutasteride"}
+{"id":"38268","point":"n-5725","label":"chlorphenamine"}
+{"id":"38732","point":"n-5696","label":"flutamide"}
+{"id":"38856","point":"n-29508","label":"propidium"}
+{"id":"43118","point":"n-5659","label":"penicillamine"}
+{"id":"26221","point":"n-12994","label":"IRF7"}
+{"id":"13514","point":"n-10275","label":"CD14"}
+{"id":"34886","point":"n-5631","label":"mitoxantrone"}
+{"id":"38554","point":"n-5618","label":"finasteride"}
+{"id":"38823","point":"n-5558","label":"aprepitant"}
+{"id":"38529","point":"n-5549","label":"famotidine"}
+{"id":"35480","point":"n-5510","label":"ezetimibe"}
+{"id":"34707","point":"n-5507","label":"quinolin-8-ol"}
+{"id":"38800","point":"n-5487","label":"tranexamic acid"}
+{"id":"38832","point":"n-5472","label":"cinacalcet"}
+{"id":"14702","point":"n-14037","label":"PTH"}
+{"id":"38719","point":"n-5458","label":"vinorelbine"}
+{"id":"38042","point":"n-5434","label":"cefepime"}
+{"id":"15978","point":"n-14133","label":"BCL2L1"}
+{"id":"31366","point":"n-5347","label":"fluconazole"}
+{"id":"35931","point":"n-5325","label":"pyrazinecarboxamide"}
+{"id":"15918","point":"n-115","label":"EP300"}
+{"id":"42068","point":"n-5324","label":"diethylcarbamazine"}
+{"id":"43539","point":"n-5323","label":"praziquantel"}
+{"id":"31373","point":"n-57","label":"pentamidine"}
+{"id":"34897","point":"n-5307","label":"dexmedetomidine"}
+{"id":"38887","point":"n-5299","label":"nimesulide"}
+{"id":"40229","point":"n-5293","label":"indinavir"}
+{"id":"35848","point":"n-55","label":"dapsone"}
+{"id":"31319","point":"n-5268","label":"gabapentin"}
+{"id":"31302","point":"n-23313","label":"digoxigenin"}
+{"id":"35905","point":"n-5203","label":"lovastatin"}
+{"id":"38880","point":"n-5085","label":"clopidogrel"}
+{"id":"31340","point":"n-5068","label":"clozapine"}
+{"id":"31320","point":"n-4943","label":"cetirizine"}
+{"id":"31317","point":"n-4808","label":"carbamazepine"}
+{"id":"42407","point":"n-29486","label":"Candesartan cilexetil"}
+{"id":"25527","point":"n-9591","label":"TRAF2"}
+{"id":"31746","point":"n-4665","label":"verteporfin"}
+{"id":"38181","point":"n-4656","label":"buprenorphine"}
+{"id":"34924","point":"n-4647","label":"sodium hydrogencarbonate"}
+{"id":"17251","point":"n-9239","label":"SLC4A1"}
+{"id":"31348","point":"n-4644","label":"saccharin"}
+{"id":"38885","point":"n-29484","label":"lornoxicam"}
+{"id":"25189","point":"n-12863","label":"IGF1"}
+{"id":"40592","point":"n-29483","label":"iodixanol"}
+{"id":"26877","point":"n-13551","label":"NOS2"}
+{"id":"40949","point":"n-29482","label":"Iguratimod"}
+{"id":"40573","point":"n-4597","label":"febuxostat"}
+{"id":"25258","point":"n-10080","label":"CAV1"}
+{"id":"38601","point":"n-4561","label":"alfacalcidol"}
+{"id":"35463","point":"n-4355","label":"sodium(1+)"}
+{"id":"30970","point":"n-4332","label":"N-acetyl-L-cysteine"}
+{"id":"16011","point":"n-7658","label":"COX"}
+{"id":"35631","point":"n-4320","label":"melphalan"}
+{"id":"31404","point":"n-4290","label":"nitroglycerin"}
+{"id":"38575","point":"n-4261","label":"quinidine"}
+{"id":"42085","point":"n-4259","label":"piperazine"}
+{"id":"30383","point":"n-12390","label":"AKT1"}
+{"id":"34602","point":"n-4234","label":"dimethyl sulfoxide"}
+{"id":"34853","point":"n-4175","label":"resorcinol"}
+{"id":"25424","point":"n-9535","label":"TNFRSF10B"}
+{"id":"38314","point":"n-4110","label":"vitamin D"}
+{"id":"38030","point":"n-4070","label":"amoxicillin"}
+{"id":"38604","point":"n-4044","label":"amiloride"}
+{"id":"31395","point":"n-3983","label":"albuterol"}
+{"id":"42308","point":"n-3927","label":"hypochlorous acid"}
+{"id":"40323","point":"n-3904","label":"glucocorticoid"}
+{"id":"35443","point":"n-3788","label":"pyridoxal 5'-phosphate"}
+{"id":"40527","point":"n-3757","label":"ornithine"}
+{"id":"25488","point":"n-12094","label":"EGF"}
+{"id":"35438","point":"n-29464","label":"phylloquinone"}
+{"id":"31106","point":"n-3570","label":"cerulenin"}
+{"id":"40315","point":"n-3442","label":"17beta-hydroxy-5alpha-androstan-3-one"}
+{"id":"41264","point":"n-3429","label":"hydroxide"}
+{"id":"42134","point":"n-22864","label":"sincalide"}
+{"id":"43975","point":"n-29451","label":"ethyl biscoumacetate"}
+{"id":"12356","point":"n-12248","label":"F10"}
+{"id":"5733","point":"n-9123","label":"SFTPA1"}
+{"id":"40613","point":"n-3030","label":"zolpidem"}
+{"id":"16736","point":"n-13306","label":"MBL2"}
+{"id":"3935","point":"n-23544","label":"mCherry"}
+{"id":"17899","point":"n-24179","label":"luxY"}
+{"id":"4202","point":"n-685","label":"EGFP"}
+{"id":"18998","point":"n-18951","label":"Streptavidin"}
+{"id":"39822","point":"n-16265","label":"Hemagglutinins"}
+{"id":"5734","point":"n-22589","label":"eukaryotic subfamily"}
+{"id":"11225","point":"n-12807","label":"HTN3"}
+{"id":"11209","point":"n-12799","label":"HSPB3"}
+{"id":"21507","point":"n-20651","label":"TFS1"}
+{"id":"12810","point":"n-12404","label":"FUS"}
+{"id":"26361","point":"n-11867","label":"PBRM1"}
+{"id":"18598","point":"n-20592","label":"gC"}
+{"id":"22732","point":"n-24044","label":"UL54"}
+{"id":"12097","point":"n-9873","label":"AOPEP"}
+{"id":"18109","point":"n-23328","label":"blaNDM-1"}
+{"id":"20166","point":"n-23258","label":"alrB"}
+{"id":"2359","point":"n-22171","label":"RBD"}
+{"id":"5097","point":"n-25979","label":"LYS465"}
+{"id":"1498","point":"n-1095","label":"Ig"}
+{"id":"5098","point":"n-25978","label":"6D"}
+{"id":"19906","point":"n-22968","label":"M pro"}
+{"id":"28299","point":"n-19341","label":"Severe Acute Respiratory Syndrome"}
+{"id":"16663","point":"n-11641","label":"SLC6A19"}
+{"id":"15845","point":"n-9952","label":"BLNK"}
+{"id":"6698","point":"n-22398","label":"FlaG"}
+{"id":"18907","point":"n-20680","label":"lectin"}
+{"id":"24676","point":"n-146","label":"Phycoerythrin"}
+{"id":"17273","point":"n-9248","label":"SLC6A3"}
+{"id":"25416","point":"n-11441","label":"CUL1"}
+{"id":"27087","point":"n-9173","label":"SKP1"}
+{"id":"18485","point":"n-24640","label":"UNC"}
+{"id":"26647","point":"n-9148","label":"SHOX"}
+{"id":"28860","point":"n-8246","label":"peptidase activity"}
+{"id":"9539","point":"n-20134","label":"K63"}
+{"id":"15700","point":"n-7938","label":"Ubiquitin"}
+{"id":"40118","point":"n-8548","label":"virogenic stroma"}
+{"id":"23987","point":"n-16763","label":"Major Histocompatibility Complex"}
+{"id":"12533","point":"n-7915","label":"TCR"}
+{"id":"28849","point":"n-8307","label":"coreceptor activity"}
+{"id":"16705","point":"n-7903","label":"SOS"}
+{"id":"14329","point":"n-13970","label":"DNAJC3"}
+{"id":"13032","point":"n-12388","label":"ERVK-18"}
+{"id":"18727","point":"n-23493","label":"otu"}
+{"id":"3449","point":"n-300","label":"ATN-161"}
+{"id":"13568","point":"n-7766","label":"HSP90"}
+{"id":"11666","point":"n-7693","label":"E3_Ub_ligase"}
+{"id":"14513","point":"n-23246","label":"SPRY"}
+{"id":"17112","point":"n-7646","label":"CD8"}
+{"id":"22034","point":"n-20432","label":"Mhc"}
+{"id":"3189","point":"n-22290","label":"NCIT:C121977"}
+{"id":"18067","point":"n-7635","label":"C1"}
+{"id":"15389","point":"n-7796","label":"KLK"}
+{"id":"27775","point":"n-16668","label":"Leukocytes"}
+{"id":"22868","point":"n-7437","label":"adhesion factor"}
+{"id":"23139","point":"n-7383","label":"S1"}
+{"id":"34034","point":"n-23378","label":"obstructive nephropathy"}
+{"id":"14974","point":"n-11567","label":"GEN1"}
+{"id":"38304","point":"n-7243","label":"vasopressin"}
+{"id":"16885","point":"n-24014","label":"MCC"}
+{"id":"17098","point":"n-9735","label":"VTN"}
+{"id":"14152","point":"n-818","label":"GC"}
+{"id":"5791","point":"n-23887","label":"300 K"}
+{"id":"40297","point":"n-23871","label":"conivaptan"}
+{"id":"10748","point":"n-23852","label":"Rituximab"}
+{"id":"41971","point":"n-6151","label":"linoleoyl ethanolamide"}
+{"id":"34731","point":"n-5963","label":"daptomycin"}
+{"id":"31567","point":"n-5782","label":"N-bromosuccinimide"}
+{"id":"16219","point":"n-14152","label":"RGN"}
+{"id":"16131","point":"n-23750","label":"PLOD1"}
+{"id":"40383","point":"n-5617","label":"N-acetyl-D-glucosamine"}
+{"id":"13065","point":"n-9639","label":"C2"}
+{"id":"38303","point":"n-5476","label":"angiotensin"}
+{"id":"31219","point":"n-59","label":"N-acetyl-beta-neuraminic acid"}
+{"id":"38014","point":"n-5246","label":"abacavir"}
+{"id":"13609","point":"n-12330","label":"FH"}
+{"id":"38063","point":"n-23545","label":"cefadroxil"}
+{"id":"11365","point":"n-9525","label":"TMPO"}
+{"id":"31086","point":"n-4497","label":"sulfur hexafluoride"}
+{"id":"35462","point":"n-4490","label":"cobalamin"}
+{"id":"14620","point":"n-12491","label":"CBLIF"}
+{"id":"13231","point":"n-7701","label":"ELA"}
+{"id":"11777","point":"n-2035","label":"TF"}
+{"id":"37092","point":"n-19071","label":"Coat Protein Complex I"}
+{"id":"30524","point":"n-13902","label":"PPARG"}
+{"id":"41035","point":"n-30","label":"reactive oxygen species"}
+{"id":"26694","point":"n-7821","label":"NADPH_oxidase"}
+{"id":"42975","point":"n-3899","label":"dimyristoyl phosphatidylcholine"}
+{"id":"35427","point":"n-3715","label":"chloride"}
+{"id":"38335","point":"n-3682","label":"IDP"}
+{"id":"12322","point":"n-13629","label":"NUP214"}
+{"id":"41862","point":"n-3662","label":"sphingosine-1-phosphocholine"}
+{"id":"12838","point":"n-10463","label":"LY96"}
+{"id":"43288","point":"n-3556","label":"glycoprotein"}
+{"id":"40357","point":"n-3532","label":"ADP-D-ribose"}
+{"id":"41922","point":"n-3436","label":"dATP"}
+{"id":"30059","point":"n-13001","label":"ITGA2"}
+{"id":"15117","point":"n-98","label":"BRD4"}
+{"id":"35445","point":"n-3316","label":"S-adenosyl-L-methionine"}
+{"id":"43114","point":"n-22863","label":"glisoxepide"}
+{"id":"17110","point":"n-9977","label":"ENDOU"}
+{"id":"38001","point":"n-22854","label":"grazoprevir"}
+{"id":"17869","point":"n-21682","label":"NS5A"}
+{"id":"35558","point":"n-3104","label":"elbasvir"}
+{"id":"18834","point":"n-160","label":"Myc"}
+{"id":"20190","point":"n-21722","label":"S11"}
+{"id":"25143","point":"n-11014","label":"CLU"}
+{"id":"22806","point":"n-20484","label":"XPR2"}
+{"id":"25786","point":"n-10145","label":"TLR9"}
+{"id":"19068","point":"n-20460","label":"PRR"}
+{"id":"21953","point":"n-20294","label":"gag"}
+{"id":"18644","point":"n-20230","label":"NK"}
+{"id":"18487","point":"n-10692","label":"IFNL3"}
+{"id":"43858","point":"n-19093","label":"Ginger"}
+{"id":"34322","point":"n-12722","label":"TRPA1"}
+{"id":"33685","point":"n-18890","label":"Lactic Acid"}
+{"id":"16143","point":"n-10418","label":"CD79A"}
+{"id":"26505","point":"n-12987","label":"IRF1"}
+{"id":"14944","point":"n-7819","label":"Metallothionein"}
+{"id":"29794","point":"n-17829","label":"Streptokinase"}
+{"id":"25197","point":"n-13098","label":"KNG1"}
+{"id":"34063","point":"n-17614","label":"S-Adenosylmethionine"}
+{"id":"15084","point":"n-11327","label":"DESI1"}
+{"id":"14426","point":"n-7804","label":"MAP1LC3"}
+{"id":"34065","point":"n-16558","label":"Inosine Pranobex"}
+{"id":"42846","point":"n-16159","label":"Panax"}
+{"id":"27384","point":"n-16057","label":"Fish Oils"}
+{"id":"39988","point":"n-16042","label":"Fibrinolysin"}
+{"id":"29545","point":"n-15542","label":"Cobalt"}
+{"id":"26658","point":"n-7760","label":"HIF"}
+{"id":"33291","point":"n-15099","label":"Antioxidants"}
+{"id":"13908","point":"n-12953","label":"IL7R"}
+{"id":"25069","point":"n-12815","label":"TNC"}
+{"id":"16072","point":"n-11552","label":"CD55"}
+{"id":"15976","point":"n-11413","label":"SGSM3"}
+{"id":"13946","point":"n-11303","label":"CSF3"}
+{"id":"30443","point":"n-10885","label":"CHUK"}
+{"id":"11852","point":"n-9467","label":"TFPI"}
+{"id":"30542","point":"n-9447","label":"TEAD1"}
+{"id":"30725","point":"n-9124","label":"SFTPA2"}
+{"id":"30619","point":"n-8915","label":"RNF2"}
+{"id":"18374","point":"n-7920","label":"TK"}
+{"id":"30688","point":"n-7909","label":"Sodium_channels"}
+{"id":"13930","point":"n-7880","label":"RLR"}
+{"id":"14036","point":"n-14060","label":"PTS"}
+{"id":"25180","point":"n-9040","label":"SCT"}
+{"id":"30690","point":"n-10781","label":"CFTR"}
+{"id":"40490","point":"n-7240","label":"ursolic acid"}
+{"id":"35841","point":"n-7227","label":"triamcinolone"}
+{"id":"31414","point":"n-7224","label":"tramadol"}
+{"id":"40639","point":"n-7201","label":"tetracaine"}
+{"id":"38555","point":"n-7192","label":"temoporfin"}
+{"id":"31419","point":"n-7165","label":"spironolactone"}
+{"id":"40775","point":"n-7151","label":"KN-93"}
+{"id":"40710","point":"n-7144","label":"sildenafil"}
+{"id":"42045","point":"n-7124","label":"EC 2.7.11.26 (tau-protein kinase) inhibitor"}
+{"id":"35004","point":"n-7113","label":"ixazomib"}
+{"id":"26277","point":"n-13360","label":"MITF"}
+{"id":"38630","point":"n-7107","label":"sonidegib"}
+{"id":"11669","point":"n-7769","label":"Hedgehog"}
+{"id":"26347","point":"n-82","label":"NFY"}
+{"id":"38180","point":"n-7054","label":"remifentanil"}
+{"id":"38264","point":"n-7026","label":"quetiapine"}
+{"id":"38370","point":"n-6994","label":"N-(4Z,7Z,10Z,13Z,16Z,19Z)-docosahexaenoylethanolamine"}
+{"id":"38750","point":"n-6990","label":"nintedanib"}
+{"id":"35898","point":"n-6984","label":"sofosbuvir"}
+{"id":"40282","point":"n-6964","label":"varenicline"}
+{"id":"38237","point":"n-6961","label":"prochlorperazine"}
+{"id":"41853","point":"n-6949","label":"primaquine"}
+{"id":"36030","point":"n-6935","label":"Povidone-iodine"}
+{"id":"36005","point":"n-6913","label":"orciprenaline"}
+{"id":"38794","point":"n-6890","label":"pimozide"}
+{"id":"17300","point":"n-12896","label":"ATG5"}
+{"id":"14952","point":"n-10400","label":"ATG7"}
+{"id":"38137","point":"n-6852","label":"5-formyluracil"}
+{"id":"38688","point":"n-6839","label":"phenformin"}
+{"id":"35773","point":"n-6836","label":"phencyclidine"}
+{"id":"34862","point":"n-6791","label":"paroxetine"}
+{"id":"38884","point":"n-6762","label":"apremilast"}
+{"id":"25730","point":"n-13085","label":"KLK3"}
+{"id":"38577","point":"n-6748","label":"oxcarbazepine"}
+{"id":"36017","point":"n-6720","label":"omeprazole"}
+{"id":"36127","point":"n-6716","label":"calcium phosphate"}
+{"id":"14530","point":"n-12445","label":"GAN"}
+{"id":"38700","point":"n-6658","label":"trametinib"}
+{"id":"25581","point":"n-13109","label":"KRAS"}
+{"id":"40727","point":"n-6655","label":"flecainide"}
+{"id":"38873","point":"n-6636","label":"N(gamma)-nitro-L-arginine methyl ester"}
+{"id":"35492","point":"n-6620","label":"trifluridine"}
+{"id":"40600","point":"n-6567","label":"aluminium sulfate (anhydrous)"}
+{"id":"35253","point":"n-6485","label":"Thr-Trp-Asp"}
+{"id":"38046","point":"n-6346","label":"mupirocin"}
+{"id":"35213","point":"n-6326","label":"latrunculin A"}
+{"id":"31369","point":"n-6323","label":"metronidazole"}
+{"id":"15911","point":"n-11430","label":"MFSD11"}
+{"id":"38624","point":"n-6305","label":"linagliptin"}
+{"id":"37981","point":"n-6296","label":"deferiprone"}
+{"id":"38036","point":"n-6287","label":"methicillin"}
+{"id":"38084","point":"n-6274","label":"mesalamine"}
+{"id":"34926","point":"n-6253","label":"mebendazole"}
+{"id":"40816","point":"n-6236","label":"MET-enkephalin"}
+{"id":"40264","point":"n-6120","label":"topiramate"}
+{"id":"12713","point":"n-9010","label":"BID"}
+{"id":"34662","point":"n-6103","label":"etravirine"}
+{"id":"25186","point":"n-12145","label":"AGRP"}
+{"id":"31353","point":"n-6039","label":"ketoprofen"}
+{"id":"43867","point":"n-5974","label":"phosphatidylinositol trisphosphate"}
+{"id":"40700","point":"n-5969","label":"aliskiren"}
+{"id":"38562","point":"n-5966","label":"micafungin"}
+{"id":"16496","point":"n-12733","label":"HMI"}
+{"id":"41125","point":"n-5945","label":"ipratropium"}
+{"id":"35424","point":"n-5944","label":"sapropterin"}
+{"id":"26876","point":"n-13552","label":"NOS3"}
+{"id":"39066","point":"n-5927","label":"bivalirudin"}
+{"id":"26455","point":"n-11523","label":"ZC3H12A"}
+{"id":"38394","point":"n-5918","label":"oleandrin"}
+{"id":"41855","point":"n-5902","label":"hypericin"}
+{"id":"44091","point":"n-5845","label":"glucosamine"}
+{"id":"43767","point":"n-5817","label":"methyl cellulose"}
+{"id":"35895","point":"n-5796","label":"sodium citrate"}
+{"id":"12883","point":"n-11170","label":"OTUB1"}
+{"id":"13069","point":"n-9653","label":"UCHL3"}
+{"id":"35737","point":"n-5794","label":"poly(vinylpyrrolidone)"}
+{"id":"38453","point":"n-5772","label":"Ins-1-P-Cer(t18:0/2-OH-26:0)"}
+{"id":"25321","point":"n-80","label":"Histone_H3"}
+{"id":"12448","point":"n-12277","label":"AIM2"}
+{"id":"12580","point":"n-7732","label":"GPX"}
+{"id":"41089","point":"n-5728","label":"dextran"}
+{"id":"40704","point":"n-5708","label":"bosentan"}
+{"id":"35879","point":"n-5706","label":"fluvoxamine"}
+{"id":"17648","point":"n-13529","label":"NGF"}
+{"id":"40269","point":"n-5690","label":"fluphenazine"}
+{"id":"40723","point":"n-5626","label":"milrinone"}
+{"id":"40707","point":"n-5614","label":"levosimendan"}
+{"id":"38262","point":"n-5593","label":"esomeprazole"}
+{"id":"13039","point":"n-10210","label":"TSG101"}
+{"id":"43892","point":"n-5581","label":"acitretin"}
+{"id":"25377","point":"n-10817","label":"DDX58"}
+{"id":"43868","point":"n-64","label":"5-aza-2'-deoxycytidine"}
+{"id":"40457","point":"n-5564","label":"beta-pinene"}
+{"id":"35970","point":"n-5560","label":"xenon atom"}
+{"id":"11556","point":"n-13731","label":"PCYT1A"}
+{"id":"30415","point":"n-7810","label":"MEK"}
+{"id":"35501","point":"n-5512","label":"didanosine"}
+{"id":"38065","point":"n-5504","label":"clavulanic acid"}
+{"id":"31364","point":"n-5503","label":"erythromycin"}
+{"id":"40686","point":"n-5475","label":"angiotensin II"}
+{"id":"38226","point":"n-5430","label":"clomipramine"}
+{"id":"31361","point":"n-5424","label":"bezafibrate"}
+{"id":"38086","point":"n-5417","label":"caspofungin"}
+{"id":"43629","point":"n-5390","label":"poly(ethylene glycol)"}
+{"id":"38667","point":"n-5383","label":"docetaxel anhydrous"}
+{"id":"31621","point":"n-5353","label":"diosmin"}
+{"id":"17312","point":"n-9288","label":"SNCG"}
+{"id":"26886","point":"n-7863","label":"PPP3"}
+{"id":"31339","point":"n-5308","label":"dextromethorphan"}
+{"id":"16516","point":"n-13535","label":"NM"}
+{"id":"26599","point":"n-7759","label":"HIF1"}
+{"id":"34919","point":"n-5297","label":"duvoglustat"}
+{"id":"34697","point":"n-5291","label":"meropenem"}
+{"id":"42965","point":"n-5281","label":"5-(2-methylpiperazine-1-sulfonyl)isoquinoline"}
+{"id":"35878","point":"n-5264","label":"flufenamic acid"}
+{"id":"11653","point":"n-11765","label":"MAVS"}
+{"id":"34685","point":"n-5243","label":"idarubicin"}
+{"id":"38171","point":"n-5230","label":"celecoxib"}
+{"id":"30974","point":"n-5221","label":"astaxanthin"}
+{"id":"31341","point":"n-5118","label":"rosuvastatin"}
+{"id":"25429","point":"n-9547","label":"FAS"}
+{"id":"11969","point":"n-10893","label":"CISH"}
+{"id":"42078","point":"n-5016","label":"escitalopram"}
+{"id":"40502","point":"n-5014","label":"alpha-pinene"}
+{"id":"43336","point":"n-4855","label":"Niflumic acid"}
+{"id":"31078","point":"n-4851","label":"methyl methacrylate"}
+{"id":"38061","point":"n-4849","label":"cefaclor"}
+{"id":"31166","point":"n-4832","label":"carvacrol"}
+{"id":"34592","point":"n-4829","label":"monobenzone"}
+{"id":"41871","point":"n-4740","label":"thiamine(1+) chloride"}
+{"id":"25110","point":"n-9596","label":"TRB"}
+{"id":"39175","point":"n-4726","label":"sodium iodide"}
+{"id":"42363","point":"n-4709","label":"sodium acetate"}
+{"id":"39196","point":"n-4686","label":"calcium diphosphate"}
+{"id":"31401","point":"n-4660","label":"bupropion"}
+{"id":"31002","point":"n-4634","label":"pitavastatin"}
+{"id":"40907","point":"n-4622","label":"Mizoribine"}
+{"id":"35831","point":"n-4598","label":"fluorescein"}
+{"id":"41000","point":"n-4590","label":"Ebastine"}
+{"id":"16464","point":"n-9909","label":"CA9"}
+{"id":"31115","point":"n-4531","label":"citric acid"}
+{"id":"31675","point":"n-44","label":"formic acid"}
+{"id":"40429","point":"n-4432","label":"mannitol"}
+{"id":"30340","point":"n-13270","label":"MAP3K5"}
+{"id":"30442","point":"n-9415","label":"TBK1"}
+{"id":"35473","point":"n-4356","label":"potassium(1+)"}
+{"id":"14364","point":"n-7624","label":"Actin"}
+{"id":"26997","point":"n-12930","label":"IL1A"}
+{"id":"35236","point":"n-4280","label":"asiatic acid"}
+{"id":"44044","point":"n-4271","label":"neopterin"}
+{"id":"31349","point":"n-4249","label":"reserpine"}
+{"id":"14179","point":"n-12484","label":"GGT1"}
+{"id":"40709","point":"n-4232","label":"papaverine"}
+{"id":"35437","point":"n-4218","label":"methylcobalamin"}
+{"id":"34958","point":"n-4092","label":"anandamide"}
+{"id":"26746","point":"n-11078","label":"CNR2"}
+{"id":"34304","point":"n-10646","label":"TRPV4"}
+{"id":"31324","point":"n-4018","label":"alprazolam"}
+{"id":"30512","point":"n-11592","label":"PARP1"}
+{"id":"38185","point":"n-3996","label":"alfentanil"}
+{"id":"26767","point":"n-13658","label":"OPRM1"}
+{"id":"38600","point":"n-3991","label":"alendronic acid"}
+{"id":"42217","point":"n-3987","label":"nitrous acid"}
+{"id":"11970","point":"n-12763","label":"HP"}
+{"id":"40544","point":"n-3942","label":"Aescin"}
+{"id":"43552","point":"n-3924","label":"hydroxyproline"}
+{"id":"38366","point":"n-3787","label":"2-phenylethylamine"}
+{"id":"31489","point":"n-3736","label":"(+)-alpha-tocopherol"}
+{"id":"35886","point":"n-3718","label":"fumaric acid"}
+{"id":"38139","point":"n-3708","label":"urethane"}
+{"id":"35052","point":"n-3704","label":"calcidiol"}
+{"id":"38430","point":"n-3695","label":"FADH2"}
+{"id":"35874","point":"n-3670","label":"N,N-dimethylformamide"}
+{"id":"35470","point":"n-3651","label":"FMN"}
+{"id":"38626","point":"n-3640","label":"biochanin A"}
+{"id":"41996","point":"n-3636","label":"cytidine"}
+{"id":"25192","point":"n-13622","label":"NTS"}
+{"id":"42463","point":"n-3624","label":"3',5'-cyclic AMP"}
+{"id":"40516","point":"n-3605","label":"linoleic acid"}
+{"id":"40644","point":"n-3592","label":"N-phosphocreatine"}
+{"id":"40353","point":"n-3569","label":"2'-deoxyguanosine"}
+{"id":"31298","point":"n-3525","label":"D-mannitol"}
+{"id":"34947","point":"n-3519","label":"gamma-aminobutyric acid"}
+{"id":"42256","point":"n-3512","label":"methylamine"}
+{"id":"25788","point":"n-10144","label":"TLR8"}
+{"id":"41921","point":"n-3491","label":"uridine 5'-monophosphate"}
+{"id":"42006","point":"n-3470","label":"alpha,alpha-trehalose"}
+{"id":"41192","point":"n-3451","label":"iodide"}
+{"id":"12138","point":"n-11205","label":"MYCBP2"}
+{"id":"41186","point":"n-3439","label":"nitrite"}
+{"id":"41201","point":"n-3411","label":"isoquinoline"}
+{"id":"14109","point":"n-7945","label":"Wnt"}
+{"id":"35469","point":"n-3367","label":"NAD(+)"}
+{"id":"40356","point":"n-3364","label":"D-arginine"}
+{"id":"17507","point":"n-272","label":"APC"}
+{"id":"34951","point":"n-3360","label":"tyramine"}
+{"id":"25220","point":"n-9724","label":"VIP"}
+{"id":"40557","point":"n-3325","label":"(3S)-3-hydroxy-3-methylglutaryl-CoA"}
+{"id":"43763","point":"n-3324","label":"inulin"}
+{"id":"35457","point":"n-3318","label":"ATP"}
+{"id":"41122","point":"n-3235","label":"cisatracurium"}
+{"id":"24920","point":"n-10521","label":"CDH1"}
+{"id":"35534","point":"n-3192","label":"Z-DEVD-FMK"}
+{"id":"16189","point":"n-13396","label":"MPO"}
+{"id":"11493","point":"n-9019","label":"ACSM3"}
+{"id":"40713","point":"n-3031","label":"diltiazem"}
+{"id":"38238","point":"n-3025","label":"yohimbine"}
+{"id":"13774","point":"n-10662","label":"CEACAM5"}
+{"id":"14348","point":"n-13946","label":"PRH1"}
+{"id":"30217","point":"n-9006","label":"S100A6"}
+{"id":"31314","point":"n-3019","label":"norfloxacin"}
+{"id":"40739","point":"n-3017","label":"voriconazole"}
+{"id":"35517","point":"n-6","label":"acetyl-CoA"}
