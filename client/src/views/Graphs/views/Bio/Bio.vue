@@ -168,8 +168,8 @@
 
     onAddEdge (edge: any): void {
       const subgraph = _.cloneDeep(this.subgraph);
-      const sourceNode = { id: edge.source, label: edge.source_label };
-      const targetNode = { id: edge.target, label: edge.target_label };
+      const sourceNode = { id: edge.source, label: edge.source_label, nodeType: 'ontological grounding' };
+      const targetNode = { id: edge.target, label: edge.target_label, nodeType: 'ontological grounding' };
 
       // Check if nodes already exists in subgraph
       const sourceFound = subgraph.nodes.find(node => node.id === sourceNode.id);
@@ -184,7 +184,7 @@
       // Check if edges already exist in the subgraph
       const edgeFound = subgraph.edges.find(e => e.id === edge.id);
       if (!edgeFound) {
-        subgraph.edges.push({ id: edge.id, source: edge.source, target: edge.target });
+        subgraph.edges.push(edge);
       }
 
       this.subgraph = subgraph;
