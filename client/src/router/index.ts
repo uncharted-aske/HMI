@@ -6,7 +6,7 @@ import BioView from '@/views/Graphs/views/Bio/Bio.vue';
 import EpiView from '@/views/Graphs/views/Epi/Epi.vue';
 import ComparisonView from '@/views/Graphs/views/Comparison/Comparison.vue';
 import Knowledge from '@/views/Graphs/views/Knowledge/Knowledge.vue';
-import knowledgeEntities from '@/views/Graphs/views/Knowledge/knowledgeEntities.vue';
+import KnowledgeDocsClusters from '@/views/Graphs/views/Knowledge/KnowledgeDocsClusters.vue';
 
 const RouterSingleton = ((): any => {
   let router: Router;
@@ -40,9 +40,9 @@ const RouterSingleton = ((): any => {
           name: 'knowledge',
           component: Knowledge,
         }, {
-          path: '/knowledgeEntities',
-          name: 'knowledgeEntities',
-          component: knowledgeEntities,
+          path: '/knowledgeDocsClusters',
+          name: 'knowledgeDocsClusters',
+          component: KnowledgeDocsClusters,
         },
         /* 404, this has to go last */
         {
