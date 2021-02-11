@@ -44,7 +44,6 @@
     highlightsChanged (): void {
       this.renderer.hideNeighbourhood();
       this.renderer.showNeighborhood(this.highlights);
-
     }
 
     @Watch('reference')

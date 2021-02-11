@@ -97,8 +97,8 @@
       { id: '6', label: 's, s_c', nodeType: 'overlapping' },
       { id: '7', label: 'i, i_c', nodeType: 'overlapping' },
       { id: '8', label: 'r, r_c', nodeType: 'overlapping' },
-      { id: '9', label: 'OAP-1', nodeType: 'AP'},
-      { id: '10', label: 'NOAP(SIR)-1', nodeType: 'NOAP'},
+      { id: '9', label: 'OAP-1', nodeType: 'AP' },
+      { id: '10', label: 'NOAP(SIR)-1', nodeType: 'NOAP' },
       { id: '11', label: 'NOAP(CHIME)-2', nodeType: 'NOAP' },
       { id: '12', label: 'NOAP(CHIME)-1', nodeType: 'NOAP' },
     ],
@@ -132,7 +132,7 @@
     drilldownMetadata: ModelComponentMetadataInterface = null;
     reference: string = ''
     intersectionGraph: any = intersectionGraph;
-    highlightsModels: any = {'1': null, '2': null};
+    highlightsModels: any = { 1: null, 2: null };
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -156,7 +156,6 @@
       return this.intersectionGraph.edges.length;
   }
 
-
   onCloseDrilldownPanel ():void {
     this.isOpenDrilldown = false;
     this.drilldownPaneTitle = '';
@@ -169,7 +168,6 @@
 
   onNodeClick (node: GraphNodeInterface): void {
     const nodeId = node.id;
-    console.log(nodeId);
     const highlightsModels = {};
     this.selectedModels.forEach(model => {
       highlightsModels[model.id] = this.getComparisonHighlights[nodeId][model.id];
