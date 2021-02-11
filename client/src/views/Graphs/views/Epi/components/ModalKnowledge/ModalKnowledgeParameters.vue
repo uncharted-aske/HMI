@@ -96,7 +96,7 @@
     }
 
     openKnowledgeView () : void {
-      this.$router.push({ name: 'knowledge' });
+      this.$router.push({ name: 'knowledgeDocsClusters' });
     }
   }
 </script>
