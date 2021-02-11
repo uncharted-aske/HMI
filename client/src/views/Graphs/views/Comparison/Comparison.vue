@@ -175,8 +175,8 @@
     const highlightsModels = {};
     this.selectedModels.forEach(model => {
       if (model.id === 2) {
-        const subgraph = this.getComparisonHighlights[nodeId];
-        highlightsModels[model.id] = {nodes: subgraph.nodes, edges: [{source: '3ca29049-d9c6-459e-be33-5912e8a1433b', target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1'}, {source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1', target:'9d2259db-62cc-444f-a4d4-03f5769ba39b'}]};
+        const subgraph = this.getComparisonHighlights[nodeId][model.id];
+        highlightsModels[model.id] = subgraph;
       }
     });
     this.highlightsModels = highlightsModels;

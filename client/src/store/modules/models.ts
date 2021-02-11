@@ -16,7 +16,7 @@ import nestedDoubleEpiCAG from '@/static/nested-SARS-COV1-SEIRP-CAG.json';
 import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 
 import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME.json'; //Overlapping nodes and edges for SIR and CHIME
-import OAP1Paths from '@/static/OAP1-paths.json'; //Overlapping nodes and edges for SIR and CHIME
+import OAP1CHIMEPaths from '@/static/OAP1-CHIME-paths.json'; //Overlapping nodes and edges for SIR and CHIME
 import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
 import paramsData from '@/static/xdd_parameters_table.json'; // Boutique subgraph for COVID-19 model.
 
@@ -25,7 +25,10 @@ const state: ModelsState = {
   parameters: paramsData,
   comparisonHighlights: 
     {
-      '9': OAP1Paths,
+      '9': {
+        1: null,
+        2: OAP1CHIMEPaths
+      },
     }
   ,
   modelsList: [
