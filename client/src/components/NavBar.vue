@@ -6,7 +6,7 @@
       <li
         v-if="displayNav"
         class="nav-item"
-        :class="{underlined: currentView === 'knowledge'}"
+        :class="{underlined: currentView === 'knowledge' || currentView === 'knowledgeDocsClusters'}"
       >
         <a class="nav-link" href="#/knowledge">Knowledge</a>
       </li>
@@ -32,7 +32,8 @@
       return currentView === 'home' ||
         currentView === 'bioView' ||
         currentView === 'epiView' ||
-        currentView === 'knowledge';
+        currentView === 'knowledge' ||
+        currentView === 'knowledgeDocsClusters';
     }
 
     get currentView () : string {

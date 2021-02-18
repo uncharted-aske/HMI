@@ -15,13 +15,37 @@ import DoubleEpi from '@/static/uncharted_double_epi.json';
 import nestedDoubleEpiCAG from '@/static/nested-SARS-COV1-SEIRP-CAG.json';
 import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
 
-import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME_v2.json';
+import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME.json'; // Overlapping nodes and edges for SIR and CHIME
+import OAP1CHIMEPaths from '@/static/OAP1-CHIME-paths.json'; // Overlapping nodes and edges for SIR and CHIME
+import OAP1SIRPaths from '@/static/OAP1-SIR-paths.json'; // Overlapping nodes and edges for SIR and CHIME
+import NOAP1CHIMEPaths from '@/static/NOAP1-CHIME-paths.json'; // Overlapping nodes and edges for SIR and CHIME
+import NOAP2CHIMEPaths from '@/static/NOAP2-CHIME-paths.json'; // Overlapping nodes and edges for SIR and CHIME
+import NOAP1SIRPaths from '@/static/NOAP1-SIR-paths.json'; // Overlapping nodes and edges for SIR and CHIME
 import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
 import paramsData from '@/static/xdd_parameters_table.json'; // Boutique subgraph for COVID-19 model.
 
 const state: ModelsState = {
   selectedModelIds: new Set(),
   parameters: paramsData,
+  comparisonHighlights:
+    {
+      9: {
+        1: OAP1SIRPaths,
+        2: OAP1CHIMEPaths,
+      },
+      10: {
+        1: NOAP1SIRPaths,
+        2: { nodes: [], edges: [] },
+      },
+      11: {
+        1: { nodes: [], edges: [] },
+        2: NOAP2CHIMEPaths,
+      },
+      12: {
+        1: { nodes: [], edges: [] },
+        2: NOAP1CHIMEPaths,
+      },
+    },
   modelsList: [
     {
       id: 1,
@@ -60,84 +84,105 @@ const state: ModelsState = {
         detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
       },
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 5,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'Acute Myeloid Leukemia', source: 'A model of molecular mechanisms governing AML, focusing on frequently mutated genes, and the pathways in which they are involved.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 6,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'Breast Cancer', source: 'A model of molecular mechanisms governing breast cancer, focusing on frequently mutated genes, and the pathways in which they are involved.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 7,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'Food Insecurity Model', source: 'A model of causal factors affecting food insecurity, built around a set of core concepts.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 8,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'Lung Adenocarcinoma', source: 'A model of molecular mechanisms governing lung cancer, focusing on frequently mutated genes, and the pathways in which they are involved.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 9,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'MARM Model', source: 'Natural-language-based implementation of the MARM model.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 10,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'Multiple sclerosis', source: 'A self-updating model of multiple sclerosis.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 11,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'Neurofibromatosis', source: 'Neurofibromatosis knowledge network automatically assembled from relevant publications in PubMed.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 12,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'Pancreatic Adenocarcinoma', source: 'A model of molecular mechanisms governing pancreatic cancer, focusing on frequently mutated genes, and the pathways in which they are involved.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 13,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'Pain Machine', source: 'A model of molecular mechanisms governing pain.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 14,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'Prostate Adenocarcinoma', source: 'A model of molecular mechanisms governing prostace cancer, focusing on frequently mutated genes, and the pathways in which they are involved.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
     },
     {
       id: 15,
-      metadata: { name: 'Model N', description: 'Unknown' },
+      metadata: { name: 'Ras Machine 2.0', source: 'A model of Ras signaling built using automated reading and assembly from the scientific literature.' },
       graph: null,
       subgraph: subgraphJSON,
-      type: 'knowledge',
+      type: 'causal',
+    },
+    {
+      id: 16,
+      metadata: { name: 'Ras Model', source: 'A human-curated model of Ras signaling defined in natural language.' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'causal',
+    },
+    {
+      id: 17,
+      metadata: { name: 'Melanoma', source: 'A model of molecular mechanisms governing melanoma, focusing on frequently mutated genes, and the pathways in which they are involved.' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'causal',
+    },
+    {
+      id: 18,
+      metadata: { name: 'Vitiligo', source: 'A self-updating model of vitiligo.' },
+      graph: null,
+      subgraph: subgraphJSON,
+      type: 'causal',
     },
   ],
 };
@@ -146,6 +191,7 @@ const getters: GetterTree<ModelsState, any> = {
   getSelectedModelIds: state => [...state.selectedModelIds],
   getParameters: state => state.parameters,
   getModelsList: state => state.modelsList,
+  getComparisonHighlights: state => state.comparisonHighlights,
 };
 
 const mutations: MutationTree<ModelsState> = {

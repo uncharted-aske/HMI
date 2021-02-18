@@ -51,7 +51,7 @@
   padding: 16px 22px 16px 22px;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: $bg-secondary;
+  background-color: $bg-primary;
 
   .section-header {
     // Match cards' 10px horizontal margin

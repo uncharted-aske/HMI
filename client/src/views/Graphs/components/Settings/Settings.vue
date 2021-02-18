@@ -58,6 +58,10 @@
     onViewSelection (viewId:string):void {
       this.$emit('view-change', viewId);
     }
+
+    runQuery (): void {
+      this.$emit('run-query');
+    }
   }
 </script>
 

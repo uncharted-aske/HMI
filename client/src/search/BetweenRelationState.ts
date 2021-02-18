@@ -1,7 +1,7 @@
 import { ValueStateValue, RelationState } from '@uncharted.software/lex/dist/lex';
 
 const options = [
-  new ValueStateValue('between', {}, { displayKey: 'between' }),
+  new ValueStateValue('from', {}, { displayKey: 'from' }),
 ];
 
 export default class BetweenRelationState extends RelationState {

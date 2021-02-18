@@ -12,24 +12,29 @@
   import { Watch } from 'vue-property-decorator';
   import _ from 'lodash';
   import { Lex, ValueState } from '@uncharted.software/lex/dist/lex';
-  import KeyValuePill from '@/search/pills/KeyValuePill';
   import * as filtersUtil from '@/utils/FiltersUtil';
+  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
+  import PathQueryPill from '@/search/pills/PathQueryPill';
 
   @Component
   export default class SearchBar extends Vue {
     private lex: Lex = null;
-    private pills: KeyValuePill[] = [];
+    private pills: any = [];
 
     @Getter getFilters;
     @Action setFilters;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.setQuery();
+      // HACK FOR DEMO IN FEB.12TH
+      if (!filtersUtil.isEmpty(this.getFilters)) {
+        this.$emit('run-query');
+      }
     }
 
     mounted (): void {
       /* add pills here */
-      // this.pills = [ new KeyValuePill( ... ) ];
+      this.pills = [new PathQueryPill(QUERY_FIELDS_MAP.PATH_QUERY)];
 
       const language = Lex.from('field', ValueState, {
         name: 'Choose a field to search',

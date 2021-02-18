@@ -1,7 +1,19 @@
 <template>
   <div class="settings-container">
-    <button type="button" class="btn btn-secondary mr-1" disabled>Entity-based Views</button>
-    <button type="button" class="btn btn-secondary mr-1" disabled>Document-based Views</button>
+    <button
+      type="button" class="btn btn-secondary mr-1"
+      :disabled="this.$route.name === 'knowledgeDocsClusters'"
+      @click="$router.push({ name: 'knowledgeDocsClusters' })"
+    >
+      Entity-based Views
+    </button>
+    <button
+      type="button" class="btn btn-secondary mr-1"
+      :disabled="this.$route.name === 'knowledge'"
+      @click="$router.push({ name: 'knowledge' })"
+    >
+      Document-based Views
+    </button>
     <button type="button" class="btn btn-secondary mr-1" disabled>Layouts</button>
     <button type="button" class="btn btn-secondary mr-1" disabled>Settings</button>
   </div>

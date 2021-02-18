@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Colors, NodeTypes } from '@/graphs/svg/encodings.ts';
+import { Colors, NodeTypes, EdgeTypes } from '@/graphs/svg/encodings.ts';
 
 /**
  * Recursively traverse a graph that looks like
@@ -121,7 +121,7 @@ export const formatHierarchyNodeData = (root) => {
  * @param {string} node - a node object
  */
 
-export const calculateNeighborhood = (graph, node) => {
+export const calculateNodeNeighborhood = (graph, node) => {
   const neighborEdges = graph.edges.filter(edge =>
     edge.target === node.id || edge.source === node.id).map(edge => ({ source: edge.source, target: edge.target }));
 
@@ -138,6 +138,13 @@ export const calculateNeighborhood = (graph, node) => {
   return { nodes: neighborNodes, edges: neighborEdges };
 };
 
+export const calculateEdgeNeighborhood = (edge) => {
+  return {
+    edges: [{ source: edge.source, target: edge.target }],
+    nodes: [{ id: edge.source }, { id: edge.target }],
+  };
+};
+
 export const calcNodeColor = (node) => {
   if (node.nodes) {
     // Distinction between the main container and the rest
@@ -152,10 +159,28 @@ export const calcNodeColor = (node) => {
         return Colors.NODES.INITIAL_CONDITION;
       }
     }
+  } else if (node.nodeType === NodeTypes.NODES.OVERLAPPING) {
+    return Colors.NODES.OVERLAPPING;
   }
   return Colors.NODES.DEFAULT;
 };
 
 export const calcLabelColor = (node) => {
   return node.nodes ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
+};
+
+export const calcEdgeColor = (edge) => {
+  if (edge.data.edgeType) {
+    if (edge.data.edgeType === EdgeTypes.EDGES.ACTIVATION) {
+      return Colors.EDGES.ACTIVATION;
+    } else if (edge.data.edgeType === EdgeTypes.EDGES.INHIBITION) {
+      return Colors.EDGES.INHIBITION;
+    } else if (edge.data.edgeType === EdgeTypes.EDGES.COMPLEX) {
+      return Colors.EDGES.COMPLEX;
+    } else if (edge.data.edgeType === EdgeTypes.EDGES.OVERLAPPING) {
+      return Colors.EDGES.OVERLAPPING;
+    }
+    return Colors.EDGES.DEFAULT;
+  }
+  return Colors.EDGES.DEFAULT;
 };

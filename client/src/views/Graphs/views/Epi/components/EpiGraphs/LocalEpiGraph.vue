@@ -14,7 +14,7 @@
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
   import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
-  import { calculateNeighborhood } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood } from '@/graphs/svg/util.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -49,7 +49,7 @@
         // Clear previous highlights
         this.renderer.hideNeighbourhood();
         // Show neighborhood
-        const neighborhood = calculateNeighborhood(this.graph, node.datum());
+        const neighborhood = calculateNodeNeighborhood(this.graph, node.datum());
         this.renderer.showNeighborhood(neighborhood);
         this.$emit('node-click', node.datum());
       });
@@ -87,7 +87,7 @@
 
 .local-epi-graph-container {
   flex: 1;
-  background-color: $bg-secondary;
+  background-color: $bg-graphs;
   ::v-deep > svg {
     width: 100%;
     height: 100%;

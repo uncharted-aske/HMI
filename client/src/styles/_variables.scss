@@ -1,6 +1,8 @@
 // Colors (based on https://material.io/design/color/the-color-system.html#tools-for-picking-colors)
 @import "nord";
 
+$bg-graphs: #242a36;
+
 $bg-primary: $nord0;
 $bg-secondary: $nord1;
 $bg-tertiary: $nord2;
@@ -35,7 +37,7 @@ $z-index-order: (
   resizable-grid: 0,
   hierarchy-slider: 500,
   side-panel: 600,
-  modal:1000,
+  modal:1200,
   dropdown: 500
 );
 
