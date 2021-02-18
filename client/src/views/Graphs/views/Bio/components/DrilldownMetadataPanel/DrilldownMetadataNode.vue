@@ -10,7 +10,7 @@
         </div>
         <div v-else slot="content">
           {{values}}
-        </div>  
+        </div>
       </collapsible-item>
     </div>
     <div v-else class="alert alert-info" role="alert">
@@ -26,6 +26,8 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
+  import { SubgraphEdgeInterface } from '@/views/Graphs/types/types';
+
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
 
   const components = {
@@ -40,7 +42,7 @@
       const output: Record<any, any> = {};
       const dbRefs = [];
       Object.keys(this.data.db_refs).forEach(key => {
-        dbRefs.push(`${key}: ${this.data.db_refs[key]}`)
+        dbRefs.push(`${key}: ${this.data.db_refs[key]}`);
       });
       output.DBRefs = dbRefs.join(',');
       output.Incoming = this.data.incoming_neighbors.slice(0, 10);
@@ -52,7 +54,7 @@
       return _.isEmpty(this.data);
     }
 
-    onEdgeClick (edge: any): void {
+    onEdgeClick (edge: SubgraphEdgeInterface): void {
       this.$emit('add-edge', edge);
     }
   }

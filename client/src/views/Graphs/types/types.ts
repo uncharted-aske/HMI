@@ -1,3 +1,5 @@
+/* eslint camelcase: 0 */
+
 export interface GraphNodeInterface {
   id: string,
   concept?: string,
@@ -23,4 +25,14 @@ export interface GraphInterface {
 export interface ModelGraphInterface {
   abstract: GraphInterface,
   detailed: GraphInterface
+}
+
+export interface SubgraphEdgeInterface {
+  edgeType: string,
+  id: string,
+  metadata: any,
+  source: string,
+  source_label: string,
+  target: string,
+  target_label: string,
 }

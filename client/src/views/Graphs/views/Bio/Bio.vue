@@ -57,7 +57,7 @@
   import { Getter } from 'vuex-class';
 
   import { TabInterface, ModelInterface } from '@/types/types';
-  import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/views/Graphs/types/types';
+  import { GraphInterface, GraphNodeInterface, GraphEdgeInterface, SubgraphEdgeInterface } from '@/views/Graphs/types/types';
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -166,7 +166,7 @@
       this.drilldownMetadata = edge.metadata;
     }
 
-    onAddEdge (edge: any): void {
+    onAddEdge (edge: SubgraphEdgeInterface): void {
       const subgraph = _.cloneDeep(this.subgraph);
       const sourceNode = { id: edge.source, label: edge.source_label, nodeType: 'ontological grounding' };
       const targetNode = { id: edge.target, label: edge.target_label, nodeType: 'ontological grounding' };
