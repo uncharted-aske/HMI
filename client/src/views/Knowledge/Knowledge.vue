@@ -64,7 +64,7 @@
   import FacetsPane from '@/views/Home/components/FacetsPane/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
   import KnowledgeDrilldown from './components/KnowledgeDrilldown.vue';
-  import knowledgePanel from './DrilldownPanel/KnowledgePanel.vue';
+  import knowledgePanel from './components/DrilldownPanel/KnowledgePanel.vue';
 
   import { FacetTermsSelectionMap } from '@/types/types';
 

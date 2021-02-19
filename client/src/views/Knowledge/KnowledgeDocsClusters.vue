@@ -60,8 +60,8 @@
   import FacetsPane from '@/views/Home/components/FacetsPane/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
   import KnowledgeDrilldown from './components/KnowledgeDrilldown.vue';
-  import knowledgePanel from './DrilldownPanel/KnowledgePanel.vue';
-  import Grafer from '@/views/Graphs/views/Bio/components/BioGraphs/Grafer.vue';
+  import knowledgePanel from './components/DrilldownPanel/KnowledgePanel.vue';
+  import Grafer from '@/views/Models/Bio/components/BioGraphs/Grafer.vue';
 
   import { FacetTermsSelectionMap } from '@/types/types';
 
