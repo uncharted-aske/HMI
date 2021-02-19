@@ -76,7 +76,7 @@
 
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
-  import Counters from '@/views/Graphs/components/Counters/Counters.vue';
+  import Counters from '@/components/Counters.vue';
   import Settings from '@/views/Graphs/components/Settings/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';

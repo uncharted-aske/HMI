@@ -55,7 +55,7 @@
 
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from './Settings/Settings.vue';
-  import Counters from '@/views/Graphs/components/Counters/Counters.vue';
+  import Counters from '@/components/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/views/Home/components/FacetsPane/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';

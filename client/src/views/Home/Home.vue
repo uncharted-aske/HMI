@@ -41,7 +41,7 @@
   import { TabInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
-  import Counters from '@/views/Graphs/components/Counters/Counters.vue';
+  import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from './Settings/Settings.vue';
   import KeyValuePill from '@/search/pills/KeyValuePill';
