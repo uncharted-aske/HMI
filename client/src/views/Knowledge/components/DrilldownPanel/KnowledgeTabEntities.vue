@@ -24,7 +24,7 @@
   import { Prop, Watch } from 'vue-property-decorator';
   import { CosmosRelatedEntitiesDrugsInterface } from '@/types/typesCosmos';
 
-  import { cosmosRelatedEntities } from '@/utils/CosmosFetchUtil';
+  import { cosmosRelatedEntities } from '@/services/CosmosFetchService';
 
   @Component({ })
   export default class KnowledgeTabEntities extends Vue {

@@ -42,7 +42,7 @@
   import { CosmosArtifactInterface, CosmosArtifactObjectInterface } from '@/types/typesCosmos';
 
   import { getAuthorList } from '@/utils/CosmosDataUtil';
-  import { cosmosArtifactsMem } from '@/utils/CosmosFetchUtil';
+  import { cosmosArtifactsMem } from '@/services/CosmosFetchService';
 
   const ARTIFACT_DISPLAY_LIMIT = 4;
 

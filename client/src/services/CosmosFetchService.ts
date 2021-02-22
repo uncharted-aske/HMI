@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { COSMOS_TYPE_OPTIONS } from './ModelTypeUtil';
+import { COSMOS_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
 import {
   CosmosSearchInterface,
   CosmosArtifactInterface,
@@ -8,7 +8,7 @@ import {
   CosmosRelatedParametersInterface,
 } from '@/types/typesCosmos';
 
-import { getUtilMem } from './FetchUtil';
+import { getUtilMem } from './FetchService';
 
 /// /////////////////////////////////////////////
 

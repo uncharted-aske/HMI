@@ -69,7 +69,7 @@
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface } from '@/types/typesGraphs';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
-  import { cosmosArtifactSrc, filterToParamObj, cosmosSearch, cosmosRelatedParameters } from '@/utils/CosmosFetchUtil';
+  import { cosmosArtifactSrc, filterToParamObj, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
   import { SubgraphInterface } from '@/types/typesRenderer';
 
   import { NodeTypes } from '@/graphs/svg/encodings';
