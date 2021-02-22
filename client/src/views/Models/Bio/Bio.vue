@@ -62,9 +62,9 @@
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
-  import Settings from '@/views/Graphs/components/Settings/Settings.vue';
+  import Settings from '@/views/Models/components/Settings/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
+  import MetadataPane from '@/views/Models/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import LocalBioGraph from './components/BioGraphs/LocalBioGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';

@@ -77,9 +77,9 @@
   import SearchBar from './components/SearchBar/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
-  import Settings from '@/views/Graphs/components/Settings/Settings.vue';
+  import Settings from '@/views/Models/components/Settings/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPane from '@/views/Graphs/components/MetadataPane/MetadataPane.vue';
+  import MetadataPane from '@/views/Models/components/MetadataPane/MetadataPane.vue';
   import FacetsPane from './components/FacetsPane/FacetsPane.vue';
   import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
