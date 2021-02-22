@@ -48,7 +48,7 @@
 
   import SimilarDocs from '@/components/widgets/SimilarDocs.vue';
   import Modal from '@/components/Modal.vue';
-  import { CardInterface } from '@/components/Cards/types';
+  import { CardInterface } from '@/types/types';
 
   const components = {
     CloseButton,

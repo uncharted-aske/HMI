@@ -41,7 +41,7 @@
   import _ from 'lodash';
 
   import { CosmosSearchInterface, CosmosSearchObjectsInterface } from '@/types/typesCosmos';
-  import { CardInterface } from '@/components/Cards/types';
+  import { CardInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import TextPill from '@/search/pills/TextPill';

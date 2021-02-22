@@ -48,7 +48,7 @@
   import { Getter } from 'vuex-class';
 
   import { TabInterface, ViewInterface, ModelComponentMetadataInterface } from '@/types/types';
-  import { GraphNodeInterface } from '@/views/Graphs/types/types';
+  import { GraphNodeInterface } from '@/types/typesGraphs';
   // import { SubgraphInterface } from '@/graphs/svg/types/types';
 
   import SearchBar from './components/SearchBar.vue';

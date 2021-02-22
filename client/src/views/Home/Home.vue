@@ -38,7 +38,7 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
 
-  import { TabInterface } from '@/types/types';
+  import { TabInterface, CardInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import Counters from '@/components/Counters.vue';
@@ -48,7 +48,6 @@
   import RangePill from '@/search/pills/RangePill';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
-  import { CardInterface } from '@/components/Cards/types';
 
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
 

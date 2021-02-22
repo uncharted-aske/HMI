@@ -8,14 +8,14 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import { GraphInterface } from '@/views/Graphs/types/types';
+  import { GraphInterface } from '@/types/typesGraphs';
 
   import GlobalEpiModelRenderer from '@/graphs/svg/GlobalEpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
   import { hierarchyFn, showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
   import { calculateNodeNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
-  import { SubgraphInterface } from '@/graphs/svg/types/types';
+  import { SubgraphInterface } from '@/types/typesRenderer';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,

@@ -8,7 +8,7 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import { GraphInterface } from '@/views/Graphs/types/types';
+  import { GraphInterface } from '@/types/typesGraphs';
 
   import LocalEpiModelRenderer from '@/graphs/svg/LocalEpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';

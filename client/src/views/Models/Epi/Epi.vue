@@ -67,10 +67,10 @@
   import { Getter } from 'vuex-class';
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
-  import { GraphInterface, GraphNodeInterface } from '@/views/Graphs/types/types';
+  import { GraphInterface, GraphNodeInterface } from '@/types/typesGraphs';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, filterToParamObj, cosmosSearch, cosmosRelatedParameters } from '@/utils/CosmosFetchUtil';
-  import { SubgraphInterface } from '@/graphs/svg/types/types';
+  import { SubgraphInterface } from '@/types/typesRenderer';
 
   import { NodeTypes } from '@/graphs/svg/encodings';
 

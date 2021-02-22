@@ -57,7 +57,7 @@
   import { Getter } from 'vuex-class';
 
   import { TabInterface, ModelInterface } from '@/types/types';
-  import { GraphInterface, GraphNodeInterface, GraphEdgeInterface, SubgraphEdgeInterface } from '@/views/Graphs/types/types';
+  import { GraphInterface, GraphNodeInterface, GraphEdgeInterface, SubgraphEdgeInterface } from '@/types/typesGraphs';
 
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';

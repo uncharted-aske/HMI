@@ -104,6 +104,15 @@ interface MappedOptionStateConfig {
   [key: string]: any // Interface extends Lex's ValueState.config. TODO: Generate types for Lex
 }
 
+interface CardInterface {
+  id: number;
+  previewImageSrc?: string,
+  title: string;
+  subtitle: string;
+  type: string;
+  raw: any;
+}
+
 interface DimensionsInterface {
   [key: string]: {
     width: string,
@@ -150,6 +159,7 @@ export {
   MappedOptionStateConfig,
   LexConvertType,
   LexConvertTypeMapping,
+  CardInterface,
   DimensionsInterface,
   CellPositionInterface,
   CellBorderInterface,

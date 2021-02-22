@@ -22,7 +22,7 @@
   import { Prop } from 'vue-property-decorator';
 
   import Card from '@/components/Cards/Card.vue';
-  import { CardInterface } from '@/components/Cards/types';
+  import { CardInterface } from '@/types/types';
 
   const components = {
     Card,
