@@ -42,7 +42,7 @@ export const cosmosSearch = (paramObj: URLSearchParams): Promise<CosmosSearchInt
 /// /////////////////////////////////////////////
 
 const COSMOS_API_KEY = process.env.COSMOS_API_KEY;
-const COSMOS_ARTIFACT_SRC_URL = 'https://xdddev.chtc.io/sets/xdd-covid-19/cosmos/api/object/';
+const COSMOS_ARTIFACT_SRC_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/cosmos/api/object/';
 
 // eslint-disable-next-line camelcase
 export const cosmosArtifactSrc = (id: string): Promise<CosmosSearchInterface> => {
@@ -52,7 +52,7 @@ export const cosmosArtifactSrc = (id: string): Promise<CosmosSearchInterface> =>
 
 /// /////////////////////////////////////////////
 
-const COSMOS_ARTIFACT_URL = 'https://xdddev.chtc.io/sets/xdd-covid-19/cosmos/api/document';
+const COSMOS_ARTIFACT_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/cosmos/api/document';
 
 // eslint-disable-next-line camelcase
 export const cosmosArtifactsMem = async (paramObj: {doi: string, api_key?: string}): Promise<CosmosArtifactInterface> => {
