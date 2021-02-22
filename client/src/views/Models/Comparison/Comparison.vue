@@ -51,12 +51,12 @@
   import { GraphNodeInterface } from '@/views/Graphs/types/types';
   // import { SubgraphInterface } from '@/graphs/svg/types/types';
 
-  import SearchBar from './components/SearchBar/SearchBar.vue';
+  import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
-  import Settings from '@/views/Models/components/Settings/Settings.vue';
+  import Settings from '@/views/Models/components/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPane from '@/views/Models/components/MetadataPane/MetadataPane.vue';
+  import MetadataPane from '@/views/Models/components/MetadataPane.vue';
   import EpiGraph from './components/EpiGraphs/EpiGraph.vue';
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';

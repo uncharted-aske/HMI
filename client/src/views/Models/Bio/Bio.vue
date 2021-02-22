@@ -59,13 +59,13 @@
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface, SubgraphEdgeInterface } from '@/views/Graphs/types/types';
 
-  import SearchBar from './components/SearchBar/SearchBar.vue';
+  import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
-  import Settings from '@/views/Models/components/Settings/Settings.vue';
+  import Settings from '@/views/Models/components/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPane from '@/views/Models/components/MetadataPane/MetadataPane.vue';
-  import FacetsPane from './components/FacetsPane/FacetsPane.vue';
+  import MetadataPane from '@/views/Models/components/MetadataPane.vue';
+  import FacetsPane from './components/FacetsPane.vue';
   import LocalBioGraph from './components/BioGraphs/LocalBioGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';

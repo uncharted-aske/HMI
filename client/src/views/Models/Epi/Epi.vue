@@ -74,13 +74,13 @@
 
   import { NodeTypes } from '@/graphs/svg/encodings';
 
-  import SearchBar from './components/SearchBar/SearchBar.vue';
+  import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
-  import Settings from '@/views/Models/components/Settings/Settings.vue';
+  import Settings from '@/views/Models/components/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPane from '@/views/Models/components/MetadataPane/MetadataPane.vue';
-  import FacetsPane from './components/FacetsPane/FacetsPane.vue';
+  import MetadataPane from '@/views/Models/components/MetadataPane.vue';
+  import FacetsPane from './components/FacetsPane.vue';
   import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
