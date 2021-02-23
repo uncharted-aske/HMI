@@ -41,7 +41,7 @@
   import _ from 'lodash';
 
   import { CosmosSearchInterface, CosmosSearchObjectsInterface } from '@/types/typesCosmos';
-  import { CardInterface } from '@/types/types';
+  import { CardInterface, FacetTermsSelectionMap } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import TextPill from '@/search/pills/TextPill';
@@ -62,8 +62,6 @@
   import KnowledgeDrilldown from './components/KnowledgeDrilldown.vue';
   import knowledgePanel from './components/DrilldownPanel/KnowledgePanel.vue';
   import Grafer from '@/views/Models/Bio/components/BioGraphs/Grafer.vue';
-
-  import { FacetTermsSelectionMap } from '@/types/types';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
