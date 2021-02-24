@@ -43,7 +43,7 @@
   import SearchBar from '@/components/SearchBar.vue';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
-  import Settings from './Settings.vue';
+  import Settings from './components/Settings.vue';
   import KeyValuePill from '@/search/pills/KeyValuePill';
   import RangePill from '@/search/pills/RangePill';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
