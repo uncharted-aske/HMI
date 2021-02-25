@@ -10,6 +10,9 @@ import {
 
 import { getUtilMem } from '@/utils/FetchUtil';
 
+// Note: Description and input parameters can be found by accessing each API URL with no parameters attached using a web browser
+// Note: https://xdd.wisc.edu is the production endpoint, as opposed to https://xdddev.chtc.io which is the development endpoint
+
 /// /////////////////////////////////////////////
 
 const COSMOS_API_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/cosmos/api/search';
