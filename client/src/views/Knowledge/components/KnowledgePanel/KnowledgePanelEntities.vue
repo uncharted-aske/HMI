@@ -7,7 +7,7 @@
       <h6>{{doi}}</h6>
     </div>
     <div class="mt-3 entities-container">
-      <div class="mb-1 px-2 py-4 d-flex rounded-lg border" v-for="(drug) in drugsList" :key="drug.drugs">
+      <div class="mb-1 px-2 py-4 d-flex rounded-lg border" v-for="(drug, index) in drugsList" :key="index + drug.drugs">
         <div class="flex-grow-1">
             <div class="font-weight-bold">{{drug.drugs}}</div>
             <div class="text-muted">{{drug.drugID}}</div>
