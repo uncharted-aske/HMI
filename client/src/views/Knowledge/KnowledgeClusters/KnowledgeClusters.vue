@@ -23,8 +23,8 @@
         <div class="loader">Loading...</div>
       </div>
     </div>
-    <knowledge-drilldown :data="openDrilldown" @close-drilldown="onCloseDrilldown"/>
-    <knowledgePanel
+    <knowledge-modal :data="openDrilldown" @close-drilldown="onCloseDrilldown"/>
+    <knowledge-panel
       @close-pane="onClosePanel"
       :is-open="isOpenPanel"
       @open-drilldown="onOpenDrilldown"
@@ -54,13 +54,13 @@
   import { getAuthorList } from '@/utils/CosmosDataUtil';
 
   import SettingsBar from '@/components/SettingsBar.vue';
-  import Settings from './Settings/Settings.vue';
+  import Settings from '../components/Settings.vue';
   import Counters from '@/components/Counters.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/views/Home/components/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
-  import KnowledgeDrilldown from './components/KnowledgeModal.vue';
-  import knowledgePanel from './components/DrilldownPanel/KnowledgePanel.vue';
+  import KnowledgeModal from '../components/KnowledgeModal.vue';
+  import KnowledgePanel from '../components/KnowledgePanel/KnowledgePanel.vue';
   import Grafer from '@/views/Models/Bio/components/BioGraphs/Grafer.vue';
 
   const ACTIONS = [
@@ -75,8 +75,8 @@
     LeftSidePanel,
     FacetsPane,
     CardContainer,
-    KnowledgeDrilldown,
-    knowledgePanel,
+    KnowledgeModal,
+    KnowledgePanel,
     Grafer,
   };
 

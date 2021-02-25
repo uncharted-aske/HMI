@@ -27,7 +27,7 @@
   import { cosmosRelatedEntities } from '@/services/CosmosFetchService';
 
   @Component({ })
-  export default class KnowledgeTabEntities extends Vue {
+  export default class KnowledgePanelEntities extends Vue {
     @Prop({ required: false }) private data: any;
 
     drugsList: CosmosRelatedEntitiesDrugsInterface[] = [];

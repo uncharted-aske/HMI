@@ -1,17 +1,17 @@
 <template>
 <drilldown-panel @close-pane="$emit('close-pane')" :is-open="isOpen" :tabs="tabsList">
-  <knowledge-tab-preview
+  <knowledge-panel-preview
     slot="0"
     class="pt-3 px-1 tab"
     @open-drilldown="$emit('open-drilldown')"
     :data="data"
   />
-  <knowledge-tab-models
+  <knowledge-panel-models
     slot="1"
     class="pt-3 px-1 tab"
     :data="data"
   />
-  <knowledge-tab-entities
+  <knowledge-panel-entities
     slot="2"
     class="pt-3 px-1 tab"
     :data="data"
@@ -26,17 +26,17 @@
 
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
 
-  import KnowledgeTabPreview from './KnowledgeTabPreview.vue';
-  import KnowledgeTabModels from './KnowledgeTabModels.vue';
-  import KnowledgeTabEntities from './KnowledgeTabEntities.vue';
+  import KnowledgePanelPreview from './KnowledgePanelPreview.vue';
+  import KnowledgePanelModels from './KnowledgePanelModels.vue';
+  import KnowledgePanelEntities from './KnowledgePanelEntities.vue';
 
   import { TabInterface } from '@/types/types';
 
   const components = {
     DrilldownPanel,
-    KnowledgeTabPreview,
-    KnowledgeTabModels,
-    KnowledgeTabEntities,
+    KnowledgePanelPreview,
+    KnowledgePanelModels,
+    KnowledgePanelEntities,
   };
 
   @Component({ components })

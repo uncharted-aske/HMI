@@ -22,7 +22,7 @@
   import { Prop } from 'vue-property-decorator';
 
   @Component({ })
-  export default class KnowledgeTabPreview extends Vue {
+  export default class KnowledgePanelModels extends Vue {
     @Prop({ required: false }) private data: any;
 
     get doi (): string {

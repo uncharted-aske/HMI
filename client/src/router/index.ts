@@ -5,8 +5,8 @@ import NotFound from '@/views/NotFound/NotFound.vue';
 import BioView from '@/views/Models/Bio/Bio.vue';
 import EpiView from '@/views/Models/Epi/Epi.vue';
 import ComparisonView from '@/views/Models/Comparison/Comparison.vue';
-import Knowledge from '@/views/Knowledge/Knowledge.vue';
-import KnowledgeDocsClusters from '@/views/Knowledge/KnowledgeDocsClusters.vue';
+import KnowledgeCards from '@/views/Knowledge/KnowledgeCards/KnowledgeCards.vue';
+import KnowledgeClusters from '@/views/Knowledge/KnowledgeClusters/KnowledgeClusters.vue';
 
 const RouterSingleton = ((): any => {
   let router: Router;
@@ -38,11 +38,11 @@ const RouterSingleton = ((): any => {
         }, {
           path: '/knowledge',
           name: 'knowledge',
-          component: Knowledge,
+          component: KnowledgeCards,
         }, {
           path: '/knowledgeDocsClusters',
           name: 'knowledgeDocsClusters',
-          component: KnowledgeDocsClusters,
+          component: KnowledgeClusters,
         },
         /* 404, this has to go last */
         {
