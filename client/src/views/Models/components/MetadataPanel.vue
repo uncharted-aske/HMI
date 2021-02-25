@@ -35,7 +35,7 @@
   import { ModelMetadataInterface } from '@/types/types';
 
   @Component
-  export default class MetadataPane extends Vue {
+  export default class MetadataPanel extends Vue {
     @Prop({ default: null }) metadata: ModelMetadataInterface;
   }
 </script>

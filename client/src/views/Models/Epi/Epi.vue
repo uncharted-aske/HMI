@@ -2,7 +2,7 @@
   <div class="view-container">
     <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
           <div slot="content">
-            <metadata-pane v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/>
+            <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/>
             <facets-pane v-if="activeTabId === 'facets'" />
           </div>
     </left-side-panel>
@@ -79,7 +79,7 @@
   import Counters from '@/components/Counters.vue';
   import Settings from '@/views/Models/components/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPane from '@/views/Models/components/MetadataPane.vue';
+  import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from './components/FacetsPane.vue';
   import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
@@ -344,7 +344,7 @@
     Counters,
     Settings,
     LeftSidePanel,
-    MetadataPane,
+    MetadataPanel,
     FacetsPane,
     GlobalEpiGraph,
     LocalEpiGraph,

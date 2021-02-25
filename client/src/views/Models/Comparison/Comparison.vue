@@ -56,7 +56,6 @@
   import Counters from '@/components/Counters.vue';
   import Settings from '@/views/Models/components/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPane from '@/views/Models/components/MetadataPane.vue';
   import EpiGraph from './components/EpiGraphs/EpiGraph.vue';
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
@@ -79,7 +78,6 @@
     Counters,
     Settings,
     LeftSidePanel,
-    MetadataPane,
     EpiGraph,
     LocalEpiGraph,
     ResizableGrid,
