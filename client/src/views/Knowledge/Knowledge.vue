@@ -63,7 +63,7 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/views/Home/components/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
-  import KnowledgeDrilldown from './components/KnowledgeDrilldown.vue';
+  import KnowledgeDrilldown from './components/KnowledgeModal.vue';
   import knowledgePanel from './components/DrilldownPanel/KnowledgePanel.vue';
 
   const ACTIONS = [
