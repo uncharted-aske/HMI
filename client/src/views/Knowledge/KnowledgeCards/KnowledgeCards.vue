@@ -54,8 +54,8 @@
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   import * as filtersUtil from '@/utils/FiltersUtil';
-  import { filterToParamObj, cosmosSearch } from '@/services/CosmosFetchService';
-  import { getAuthorList } from '@/utils/CosmosDataUtil';
+  import { cosmosSearch } from '@/services/CosmosFetchService';
+  import { filterToParamObj, getAuthorList } from '@/utils/CosmosDataUtil';
 
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from '../components/Settings.vue';
