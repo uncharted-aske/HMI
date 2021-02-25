@@ -38,7 +38,7 @@
   const ARTIFACT_LIMIT = 2;
 
   @Component({ components })
-  export default class KnowledgeDrilldown extends Vue {
+  export default class SimilarDocs extends Vue {
     @Prop({ required: false }) private doi: string;
 
     similarDocList: CosmosSimilarDataInterface[] = [];

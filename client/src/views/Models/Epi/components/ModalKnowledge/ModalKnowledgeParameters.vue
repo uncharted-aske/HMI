@@ -54,7 +54,7 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
   import Modal from '@/components/Modal.vue';
-  import SimilarDocs from '@/components/widgets/SimilarDocs.vue';
+  import SimilarDocs from '@/components/SimilarDocs.vue';
   import { getAuthorList } from '@/utils/CosmosDataUtil';
 
   const components = {

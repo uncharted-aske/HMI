@@ -46,7 +46,7 @@
   import { getAuthorList } from '@/utils/CosmosDataUtil';
   import CloseButton from '@/components/widgets/CloseButton.vue';
 
-  import SimilarDocs from '@/components/widgets/SimilarDocs.vue';
+  import SimilarDocs from '@/components/SimilarDocs.vue';
   import Modal from '@/components/Modal.vue';
   import { CardInterface } from '@/types/types';
 
