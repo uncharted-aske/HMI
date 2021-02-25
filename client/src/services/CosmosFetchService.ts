@@ -8,7 +8,7 @@ import {
   CosmosRelatedParametersInterface,
 } from '@/types/typesCosmos';
 
-import { getUtilMem } from './FetchService';
+import { getUtilMem } from '@/utils/FetchUtil';
 
 /// /////////////////////////////////////////////
 
