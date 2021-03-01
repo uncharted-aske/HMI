@@ -7,7 +7,7 @@ import MappedOptionState from '../MappedOptionState';
 import BasePill from './BasePill';
 
 import * as lexUtil from '../../utils/LexUtil';
-import { QueryFieldEntry, MappedOptions, MappedOptionStateConfig, Filter } from '@/types/types';
+import { QueryFieldEntry, MappedOptions, MappedOptionStateConfig, Filter } from '@/types/typesLex';
 
 /**
  * Used for static suggestions in key-value format. For

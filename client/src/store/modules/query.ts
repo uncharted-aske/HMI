@@ -2,7 +2,7 @@ import { GetterTree, ActionTree } from 'vuex';
 import _ from 'lodash';
 import Router from '@/router';
 import * as filtersUtil from '@/utils/FiltersUtil';
-import { QueryState, Filters } from 'src/types/types';
+import { QueryState, Filters } from '@/types/typesLex';
 import { Location } from 'vue-router';
 
 const updateQuery = (getters: QueryState, filters: Filters): QueryState => {

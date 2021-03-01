@@ -4,7 +4,7 @@ import SingleRelationState from '@/search/SingleRelationState';
 
 import { StateTemplate } from '@uncharted.software/lex/src/lib/state.js';
 
-import { QueryFieldEntry } from '@/types/types';
+import { QueryFieldEntry } from '@/types/typesLex';
 
 export default class TextPill extends BasePill {
   private args: {multiValue: boolean};

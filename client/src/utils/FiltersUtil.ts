@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FilterOperand, Filter, Filters, QueryFieldKey, LexConvertTypeMapping, LexConvertType } from '@/types/types';
+import { FilterOperand, Filter, Filters, QueryFieldKey, LexConvertTypeMapping, LexConvertType } from '@/types/typesLex';
 
 /**
  * Utility to construct search queries to pass through components, store and route.

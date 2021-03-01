@@ -10,7 +10,7 @@ import { StateTemplate } from '@uncharted.software/lex/src/lib/state.js';
 import BetweenRelationState from '../BetweenRelationState';
 import BasePill from './BasePill';
 import { addSearchTerm } from '@/utils/FiltersUtil';
-import { Filter, Filters } from '@/types/types';
+import { Filter, Filters } from '@/types/typesLex';
 
 export default class RangePill extends BasePill {
   makeBranch (): StateTemplate {

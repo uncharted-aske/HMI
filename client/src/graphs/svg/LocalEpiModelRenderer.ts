@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import { SVGRenderer } from 'compound-graph';
 
-import { EpiModelRendererOptionsInterface, SubgraphInterface } from '@/graphs/svg/types/types';
+import { EpiModelRendererOptionsInterface, SubgraphInterface } from '@/types/typesGraphs';
 
 import { calcNodeColor, calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors, NodeTypes } from '@/graphs/svg/encodings';

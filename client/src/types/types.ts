@@ -1,6 +1,3 @@
-import { FacetTermsData, FacetTermsSelection, FacetTermsSubselection } from '@uncharted.software/facets-core/dist/types/facet-terms/FacetTerms';
-import { MODEL_TYPE_OPTIONS, COSMOS_TYPE_OPTIONS, COSMOS_INCLUSIVE_OPTIONS } from '@/utils/ModelTypeUtil';
-
 interface ModelMetadataInterface {
   name: string,
   description?: string,
@@ -43,90 +40,13 @@ interface ModelsState {
   comparisonHighlights?: any,
 }
 
-type LexConvertType = 'integer' | 'string';
-type LexConvertTypeMapping = {
-  integer: number,
-  string: string
-}
-
-type QueryFieldKey = string;
-interface QueryFieldEntry {
-  field: string, // id of query field entry
-  display: string, // human readable field name,
-  icon?: string, // font-awesome icon to display on search pill
-  iconText?: string,
-  searchable?: boolean, // searchable fields are queryable from lex
-  searchDisplay?: string, // text to display on search
-  ranged?: boolean, // if search is ranged
-  // baseType/lexType defines the type conversion required from/to base/lex types
-  baseType: LexConvertType,
-  lexType: LexConvertType
-}
-type QueryFieldMap = Record<QueryFieldKey, QueryFieldEntry>
-
-type FilterOperand = 'and' | 'or';
-
-interface Filter {
-  field: QueryFieldKey, // the logical-field to filter
-  values: LexConvertTypeMapping[LexConvertType][], // an array of matching values
-  operand: FilterOperand,
-  isNot: boolean, // specifies whether the sub-filter should be negated
-}
-
-interface Filters {
-  clauses: Filter[],
-}
-
-interface QueryState {
-  filters: string, // JSON representation of Filters interface
-}
-
-interface FacetTermsSubselectionMap {
-  [key: string]: FacetTermsSubselection;
-}
-
-interface FacetTermsSelectionMap {
-  [key: string]: FacetTermsSelection;
-}
-
-interface FacetTermsDataMap {
-  [key: string]: FacetTermsData;
-}
-
-type MappedOptions = (
-  typeof MODEL_TYPE_OPTIONS |
-  typeof COSMOS_TYPE_OPTIONS |
-  typeof COSMOS_INCLUSIVE_OPTIONS
-);
-
-interface MappedOptionStateConfig {
-  mappedOptions: MappedOptions, // Suggestions to be used as mapped options
-  [key: string]: any // Interface extends Lex's ValueState.config. TODO: Generate types for Lex
-}
-
-interface DimensionsInterface {
-  [key: string]: {
-    width: string,
-    widthFixed: boolean,
-    // height: string,
-    // heightFixed: boolean,
-  }
-}
-
-interface CellPositionInterface {
-  [key: string]: number,
-}
-
-interface CellBorderInterface {
-  [key: string]: string[],
-}
-
-interface ContentInterface {
-  id: string,
-  left: number,
-  top: number,
-  width: number,
-  height: number,
+interface CardInterface {
+  id: number;
+  previewImageSrc?: string,
+  title: string;
+  subtitle: string;
+  type: string;
+  raw: any;
 }
 
 export {
@@ -136,22 +56,5 @@ export {
   ModelMetadataInterface,
   ModelComponentMetadataInterface,
   ModelsState,
-  QueryState,
-  FacetTermsSubselectionMap,
-  FacetTermsSelectionMap,
-  FacetTermsDataMap,
-  QueryFieldKey,
-  QueryFieldEntry,
-  QueryFieldMap,
-  FilterOperand,
-  Filter,
-  Filters,
-  MappedOptions,
-  MappedOptionStateConfig,
-  LexConvertType,
-  LexConvertTypeMapping,
-  DimensionsInterface,
-  CellPositionInterface,
-  CellBorderInterface,
-  ContentInterface,
+  CardInterface,
 };

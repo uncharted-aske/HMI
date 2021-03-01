@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { ValueState } from '@uncharted.software/lex/dist/lex';
-import { MappedOptionStateConfig, MappedOptions } from '@/types/types';
+import { MappedOptionStateConfig, MappedOptions } from '@/types/typesLex';
 
 /**
  * Leverage boxed/unboxed values to do key=>value maps
