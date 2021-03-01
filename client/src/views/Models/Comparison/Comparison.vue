@@ -49,7 +49,6 @@
 
   import { TabInterface, ViewInterface, ModelComponentMetadataInterface } from '@/types/types';
   import { GraphNodeInterface } from '@/types/typesGraphs';
-  // import { SubgraphInterface } from '@/graphs/svg/types/types';
 
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
