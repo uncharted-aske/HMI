@@ -41,7 +41,8 @@
   import _ from 'lodash';
 
   import { CosmosSearchInterface, CosmosSearchObjectsInterface } from '@/types/typesCosmos';
-  import { CardInterface, FacetTermsSelectionMap } from '@/types/types';
+  import { FacetTermsSelectionMap } from '@/types/typesFacets';
+  import { CardInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import TextPill from '@/search/pills/TextPill';

@@ -21,7 +21,7 @@
 
   import ResizableGridContent from './ResizableGridContent.vue';
 
-  import { DimensionsInterface, CellPositionInterface, CellBorderInterface, ContentInterface } from '@/types/types';
+  import { DimensionsInterface, CellPositionInterface, CellBorderInterface, ContentInterface } from '@/types/typesResizableGrid';
 
   // reverse the position of the key and values in an object, placing the former keys in an array
   // e.g. invertObject({x: 1, y: 1, z: 2}) ---> {1: ["x","y"], 2:["z"]}

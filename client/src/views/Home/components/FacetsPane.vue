@@ -19,7 +19,7 @@
   import * as facetsService from '@/services/FacetsService';
   import * as filtersUtil from '@/utils/FiltersUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
-  import { FacetTermsDataMap, FacetTermsSelectionMap, FacetTermsSubselectionMap } from '@/types/types';
+  import { FacetTermsDataMap, FacetTermsSelectionMap, FacetTermsSubselectionMap } from '@/types/typesFacets';
 
   const components = {
     FacetTerms,
