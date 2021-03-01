@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { ValueStateValue } from '@uncharted.software/lex/dist/lex';
-import { MappedOptions, MappedOptionStateConfig, LexConvertType, LexConvertTypeMapping } from '@/types/types';
+import { MappedOptions, MappedOptionStateConfig, LexConvertType, LexConvertTypeMapping } from '@/types/typesLex';
 
 const SUGGESTIONS_LIMIT = 10;
 

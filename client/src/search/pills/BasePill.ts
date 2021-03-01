@@ -6,7 +6,7 @@ import BinaryRelationState from '../BinaryRelationState';
 
 import * as filtersUtil from '@/utils/FiltersUtil';
 import * as lexUtil from '@/utils/LexUtil';
-import { LexConvertType, QueryFieldEntry, Filter, Filters } from '@/types/types';
+import { LexConvertType, QueryFieldEntry, Filter, Filters } from '@/types/typesLex';
 
 export default class BasePill {
   public searchDisplay: string;
