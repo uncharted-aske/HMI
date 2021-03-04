@@ -55,7 +55,7 @@
 
     async getSimilar (doi: string): Promise<void> {
       if (doi) {
-        const response = await cosmosSimilar(doi);
+        const response = await cosmosSimilar({ doi });
         response.data.map(similarDoc => {
           similarDoc.objects = similarDoc.objects.filter(object => object.bytes !== null).slice(0, ARTIFACT_LIMIT);
           return similarDoc;

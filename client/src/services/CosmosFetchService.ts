@@ -47,8 +47,8 @@ export const cosmosArtifactsMem = async (paramObj: {doi: string}): Promise<Cosmo
 const COSMOS_SIMILAR_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/doc2vec/api/similar';
 
 // eslint-disable-next-line camelcase
-export const cosmosSimilar = async (doi: string): Promise<CosmosSimilarInterface> => {
-  const similarList = await getUtilMem(COSMOS_SIMILAR_URL, { api_key: COSMOS_API_KEY, doi });
+export const cosmosSimilar = async (paramObj: {doi: string}): Promise<CosmosSimilarInterface> => {
+  const similarList = await getUtilMem(COSMOS_SIMILAR_URL, { api_key: COSMOS_API_KEY, ...paramObj });
   await Promise.all(similarList.data.map(async (similar, index) => {
     const response = await cosmosArtifactsMem({ doi: similar.bibjson.identifier[0].id });
     similarList.data[index].objects = response.objects;
