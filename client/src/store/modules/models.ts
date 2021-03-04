@@ -24,6 +24,50 @@ import NOAP1SIRPaths from '@/static/NOAP1-SIR-paths.json'; // Overlapping nodes 
 import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
 import paramsData from '@/static/xdd_parameters_table.json'; // Boutique subgraph for COVID-19 model.
 
+import { emmaaModelList } from '@/services/EmmaaFetchService';
+
+const STATIC_MODELS = [
+  {
+    id: 1,
+    metadata: SIR.metadata,
+    graph: {
+      abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
+      detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
+    },
+    subgraph: _.pick(comparisonJSON.subgraphs[0], ['nodes', 'edges']),
+    type: 'computational',
+  },
+  {
+    id: 2,
+    metadata: CHIME.metadata,
+    graph: {
+      abstract: _.pick(nestedCHIMECAG, ['nodes', 'edges']),
+      detailed: _.pick(nestedCHIMEGrFN, ['nodes', 'edges']),
+    },
+    subgraph: _.pick(comparisonJSON.subgraphs[1], ['nodes', 'edges']),
+    type: 'computational',
+  },
+  {
+    id: 3,
+    metadata: DoubleEpi.metadata,
+    graph: {
+      abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
+      detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
+    },
+    type: 'computational',
+  },
+  {
+    id: 4,
+    metadata: { name: 'COVID-19 model', source: 'EMMAA', version: '', knowledge: 'https://emmaa.indra.bio/dashboard/covid19?tab=model', created: '', description: 'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.' },
+    graph: {
+      abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
+      detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
+    },
+    subgraph: subgraphJSON,
+    type: 'causal',
+  },
+];
+
 const state: ModelsState = {
   selectedModelIds: new Set(),
   parameters: paramsData,
@@ -47,143 +91,7 @@ const state: ModelsState = {
       },
     },
   modelsList: [
-    {
-      id: 1,
-      metadata: SIR.metadata,
-      graph: {
-        abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-        detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-      },
-      subgraph: _.pick(comparisonJSON.subgraphs[0], ['nodes', 'edges']),
-      type: 'computational',
-    },
-    {
-      id: 2,
-      metadata: CHIME.metadata,
-      graph: {
-        abstract: _.pick(nestedCHIMECAG, ['nodes', 'edges']),
-        detailed: _.pick(nestedCHIMEGrFN, ['nodes', 'edges']),
-      },
-      subgraph: _.pick(comparisonJSON.subgraphs[1], ['nodes', 'edges']),
-      type: 'computational',
-    },
-    {
-      id: 3,
-      metadata: DoubleEpi.metadata,
-      graph: {
-        abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
-        detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
-      },
-      type: 'computational',
-    },
-    {
-      id: 4,
-      metadata: { name: 'COVID-19 model', source: 'EMMAA', version: '', knowledge: 'https://emmaa.indra.bio/dashboard/covid19?tab=model', created: '', description: 'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.' },
-      graph: {
-        abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-        detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-      },
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 5,
-      metadata: { name: 'Acute Myeloid Leukemia', source: 'A model of molecular mechanisms governing AML, focusing on frequently mutated genes, and the pathways in which they are involved.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 6,
-      metadata: { name: 'Breast Cancer', source: 'A model of molecular mechanisms governing breast cancer, focusing on frequently mutated genes, and the pathways in which they are involved.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 7,
-      metadata: { name: 'Food Insecurity Model', source: 'A model of causal factors affecting food insecurity, built around a set of core concepts.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 8,
-      metadata: { name: 'Lung Adenocarcinoma', source: 'A model of molecular mechanisms governing lung cancer, focusing on frequently mutated genes, and the pathways in which they are involved.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 9,
-      metadata: { name: 'MARM Model', source: 'Natural-language-based implementation of the MARM model.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 10,
-      metadata: { name: 'Multiple sclerosis', source: 'A self-updating model of multiple sclerosis.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 11,
-      metadata: { name: 'Neurofibromatosis', source: 'Neurofibromatosis knowledge network automatically assembled from relevant publications in PubMed.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 12,
-      metadata: { name: 'Pancreatic Adenocarcinoma', source: 'A model of molecular mechanisms governing pancreatic cancer, focusing on frequently mutated genes, and the pathways in which they are involved.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 13,
-      metadata: { name: 'Pain Machine', source: 'A model of molecular mechanisms governing pain.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 14,
-      metadata: { name: 'Prostate Adenocarcinoma', source: 'A model of molecular mechanisms governing prostace cancer, focusing on frequently mutated genes, and the pathways in which they are involved.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 15,
-      metadata: { name: 'Ras Machine 2.0', source: 'A model of Ras signaling built using automated reading and assembly from the scientific literature.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 16,
-      metadata: { name: 'Ras Model', source: 'A human-curated model of Ras signaling defined in natural language.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 17,
-      metadata: { name: 'Melanoma', source: 'A model of molecular mechanisms governing melanoma, focusing on frequently mutated genes, and the pathways in which they are involved.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
-    {
-      id: 18,
-      metadata: { name: 'Vitiligo', source: 'A self-updating model of vitiligo.' },
-      graph: null,
-      subgraph: subgraphJSON,
-      type: 'causal',
-    },
+    ...STATIC_MODELS,
   ],
 };
 
@@ -195,6 +103,10 @@ const getters: GetterTree<ModelsState, any> = {
 };
 
 const mutations: MutationTree<ModelsState> = {
+  addModel (state, newModel) {
+    const modelsListLength = state.modelsList.length;
+    state.modelsList.push(Object.assign({ id: modelsListLength }, newModel));
+  },
   setSelectedModels (state, newSelectedModelId) {
     if (state.selectedModelIds.has(newSelectedModelId)) {
       state.selectedModelIds.delete(newSelectedModelId);
@@ -205,6 +117,18 @@ const mutations: MutationTree<ModelsState> = {
     state.selectedModelIds = new Set(state.selectedModelIds);
   },
 };
+
+const init = async (): Promise<void> => {
+  const modelList = await emmaaModelList();
+  modelList.map(metadata => mutations.addModel(state, {
+    metadata,
+    graph: null,
+    subgraph: subgraphJSON,
+    type: 'causal',
+  }));
+};
+
+init();
 
 export const models = {
   state,
