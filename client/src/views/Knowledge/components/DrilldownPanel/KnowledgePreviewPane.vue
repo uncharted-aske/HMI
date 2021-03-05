@@ -47,7 +47,7 @@
   const ARTIFACT_DISPLAY_LIMIT = 4;
 
   @Component({ })
-  export default class KnowledgePanelPreview extends Vue {
+  export default class KnowledgePreviewPane extends Vue {
     @Prop({ required: false }) private data: any;
 
     @Watch('data') onDataChange (): any {

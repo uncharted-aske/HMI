@@ -1,17 +1,17 @@
 <template>
 <drilldown-panel @close-pane="$emit('close-pane')" :is-open="isOpen" :tabs="tabsList">
-  <knowledge-panel-preview
+  <knowledge-preview-pane
     slot="0"
     class="pt-3 px-1 tab"
     @open-drilldown="$emit('open-drilldown')"
     :data="data"
   />
-  <knowledge-panel-models
+  <models-pane
     slot="1"
     class="pt-3 px-1 tab"
     :data="data"
   />
-  <knowledge-panel-entities
+  <entities-pane
     slot="2"
     class="pt-3 px-1 tab"
     :data="data"
