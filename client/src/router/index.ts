@@ -2,11 +2,11 @@ import { VueConstructor } from 'vue';
 import Router from 'vue-router';
 import Home from '@/views/Home/Home.vue';
 import NotFound from '@/views/NotFound/NotFound.vue';
-import BioView from '@/views/Models/Bio/Bio.vue';
-import EpiView from '@/views/Models/Epi/Epi.vue';
-import ComparisonView from '@/views/Models/Comparison/Comparison.vue';
-import KnowledgeCards from '@/views/Knowledge/KnowledgeCards/KnowledgeCards.vue';
-import KnowledgeClusters from '@/views/Knowledge/KnowledgeClusters/KnowledgeClusters.vue';
+import Bio from '@/views/Models/Bio/Bio.vue';
+import Epi from '@/views/Models/Epi/Epi.vue';
+import Comparison from '@/views/Models/Comparison/Comparison.vue';
+import DocsCards from '@/views/Knowledge/DocsCards/DocsCards.vue';
+import DocsClusters from '@/views/Knowledge/DocsClusters/DocsClusters.vue';
 
 const RouterSingleton = ((): any => {
   let router: Router;
@@ -22,27 +22,27 @@ const RouterSingleton = ((): any => {
           component: Home,
         },
         {
-          path: '/bioView',
-          name: 'bioView',
-          component: BioView,
+          path: '/bio',
+          name: 'bio',
+          component: Bio,
         },
         {
-          path: '/epiView',
-          name: 'epiView',
-          component: EpiView,
+          path: '/epi',
+          name: 'epi',
+          component: Epi,
         },
         {
-          path: '/comparisonView',
-          name: 'comparisonView',
-          component: ComparisonView,
+          path: '/comparison',
+          name: 'comparison',
+          component: Comparison,
         }, {
-          path: '/knowledge',
-          name: 'knowledge',
-          component: KnowledgeCards,
+          path: '/docsCards',
+          name: 'docsCards',
+          component: DocsCards,
         }, {
-          path: '/knowledgeDocsClusters',
-          name: 'knowledgeDocsClusters',
-          component: KnowledgeClusters,
+          path: '/docsClustersView',
+          name: 'docsClustersView',
+          component: DocsClusters,
         },
         /* 404, this has to go last */
         {
