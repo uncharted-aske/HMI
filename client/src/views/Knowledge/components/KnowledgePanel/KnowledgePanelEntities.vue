@@ -6,7 +6,7 @@
       </a>
       <h6>{{doi}}</h6>
     </div>
-    <div class="mt-3 entities-container">
+    <div class="mt-3 entities-container hide-scrollbar">
       <div class="mb-1 px-2 py-4 d-flex rounded-lg border" v-for="(drug, index) in drugsList" :key="index + drug.drugs">
         <div class="flex-grow-1">
             <div class="font-weight-bold">{{drug.drugs}}</div>
@@ -57,14 +57,5 @@
 
 .entities-container {
   overflow: hidden scroll;
-
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.entities-container::-webkit-scrollbar {
-  display: none;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
 }
 </style>
