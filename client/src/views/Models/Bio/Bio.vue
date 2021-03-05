@@ -18,7 +18,7 @@
           <div slot="left">
             <counters
               :title="selectedModel.metadata.name"
-              :data="[`448723 Nodes`, `44104 Edges`]"
+              :data="[`44104 Nodes`, `448723 Edges`]"
             />
           </div>
           <div slot="settings">
@@ -41,11 +41,7 @@
         <local-bio-graph v-if="isSplitView" :graph="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
       </div>
     </resizable-grid>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
-      <drilldown-metadata-node v-if="isOpenDrilldown === 'node'" slot="metadata" :data="drilldownMetadata" @add-edge="onAddEdge"/>
-      <drilldown-metadata-edge v-if="isOpenDrilldown === 'edge'" slot="metadata" :data="drilldownMetadata"/>
-      <!-- <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'"/> -->
-    </drilldown-panel>
+    <drilldown-pane :is-open="isOpenDrilldown" @close-pane="onCloseDrilldownPanel"/>
   </div>
 </template>
 
@@ -68,18 +64,12 @@
   import FacetsPane from './components/FacetsPane.vue';
   import LocalBioGraph from './components/BioGraphs/LocalBioGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
-  import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import DrilldownMetadataNode from './components/DrilldownMetadataPanel/DrilldownMetadataNode.vue';
-  import DrilldownMetadataEdge from './components/DrilldownMetadataPanel/DrilldownMetadataEdge.vue';
+  import DrilldownPane from './components/DrilldownPanel/DrilldownPane.vue';
   import Grafer from './components/BioGraphs/Grafer.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
-  ];
-
-  const TABS_DRILLDOWN: TabInterface[] = [
-    { name: 'Metadata', icon: 'filter', id: 'metadata' },
   ];
 
   const components = {
@@ -92,16 +82,13 @@
     FacetsPane,
     LocalBioGraph,
     ResizableGrid,
-    DrilldownPanel,
-    DrilldownMetadataNode,
-    DrilldownMetadataEdge,
+    DrilldownPane,
     Grafer,
   };
 
   @Component({ components })
   export default class BioView extends Vue {
     tabs: TabInterface[] = TABS;
-    tabsDrilldown: TabInterface[] = TABS_DRILLDOWN;
     activeTabId: string = 'metadata';
     isOpenDrilldown: string = '';
     isSplitView = false;

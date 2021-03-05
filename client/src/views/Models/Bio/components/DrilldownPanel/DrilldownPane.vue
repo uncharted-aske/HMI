@@ -1,0 +1,64 @@
+<template>
+<drilldown-panel @close-pane="$emit('close-pane')" :is-open="isOpen" :tabs="tabsList">
+  <!-- <knowledge-panel-preview
+    slot="0"
+    class="pt-3 px-1 tab"
+    @open-drilldown="$emit('open-drilldown')"
+    :data="data"
+  />
+  <knowledge-panel-models
+    slot="1"
+    class="pt-3 px-1 tab"
+    :data="data"
+  />
+  <knowledge-panel-entities
+    slot="2"
+    class="pt-3 px-1 tab"
+    :data="data"
+  /> -->
+</drilldown-panel>
+</template>
+
+<script lang="ts">
+  import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { Prop } from 'vue-property-decorator';
+
+  import DrilldownPanel from '@/components/DrilldownPanel.vue';
+
+  import NodePane from './NodePane.vue';
+  import EdgePane from './EdgePane.vue';
+
+  import { TabInterface } from '@/types/types';
+
+  const components = {
+    DrilldownPanel,
+    NodePane,
+    EdgePane,
+  };
+
+  @Component({ components })
+  export default class DrilldownPane extends Vue {
+    @Prop({ required: false }) private data: any;
+
+    @Prop({ default: false }) isOpen: boolean;
+
+    tabsList: TabInterface[] = [
+      { id: '0', name: 'Node', icon: '' },
+      { id: '1', name: 'Edge', icon: '' },
+    ];
+  }
+</script>
+
+<style lang="scss" scoped>
+@import "@/styles/variables";
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+</style>
