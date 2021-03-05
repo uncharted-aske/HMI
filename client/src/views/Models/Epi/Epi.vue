@@ -41,19 +41,13 @@
         <local-epi-graph v-if="isSplitView" :graph="subgraph" @node-click="onNodeClick"/>
       </div>
     </resizable-grid>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
-      <div class="h-100" slot="content">
-        <drilldown-metadata-pane v-if="activeTabIdDrilldown ===  'metadata'" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
-        <drilldown-parameters-pane v-if="activeTabIdDrilldown ===  'parameters'" :data="drilldownParameters" :related="drilldownRelatedParameters" @open-modal="onOpenModalParameters"/>
-        <drilldown-knowledge-pane v-if="activeTabIdDrilldown ===  'knowledge'" :data="drilldownKnowledge"/>
-      </div>
-    </drilldown-panel>
-    <modal-knowledge-parameters
+    <drilldown-pane @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" />
+    <modal-parameters
       v-if="showModalParameters"
       :data="modalDataParameters"
       @close="showModalParameters = false"
      />
-     <modal-knowledge-metadata
+     <modal-doc-metadata
       v-if="showModalMetadata"
       :data="modalDataMetadata"
       @close="showModalMetadata = false"
@@ -84,22 +78,13 @@
   import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
-  import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import DrilldownMetadataPane from './components/DrilldownPanel/DrilldownMetadataPane.vue';
-  import DrilldownParametersPane from './components/DrilldownPanel/DrilldownParametersPane.vue';
-  import DrilldownKnowledgePane from './components/DrilldownPanel/DrilldownKnowledgePane.vue';
-  import ModalKnowledgeParameters from './components/ModalKnowledge/ModalKnowledgeParameters.vue';
-  import ModalKnowledgeMetadata from './components/ModalKnowledge/ModalKnowledgeMetadata.vue';
+  import DrilldownPane from './components/DrilldownPanel/DrilldownPane.vue';
+  import ModalParameters from './components/Modals/ModalParameters.vue';
+  import ModalDocMetadata from './components/Modals/ModalDocMetadata.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
-  ];
-
-  const TABS_DRILLDOWN: TabInterface[] = [
-    { name: 'Metadata', icon: 'filter', id: 'metadata' },
-    { name: 'Parameters', icon: 'info', id: 'parameters' },
-    { name: 'Knowledge', icon: 'info', id: 'knowledge' },
   ];
 
   const VIEWS: ViewInterface[] = [
@@ -349,18 +334,14 @@
     GlobalEpiGraph,
     LocalEpiGraph,
     ResizableGrid,
-    DrilldownPanel,
-    DrilldownMetadataPane,
-    DrilldownParametersPane,
-    DrilldownKnowledgePane,
-    ModalKnowledgeParameters,
-    ModalKnowledgeMetadata,
+    DrilldownPane,
+    ModalParameters,
+    ModalDocMetadata,
   };
 
   @Component({ components })
   export default class EpiView extends Vue {
     tabs: TabInterface[] = TABS;
-    tabsDrilldown: TabInterface[] = TABS_DRILLDOWN;
     activeTabId: string = 'metadata';
     activeTabIdDrilldown: string = 'metadata';
     views: ViewInterface[] = VIEWS;
