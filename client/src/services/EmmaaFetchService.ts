@@ -1,10 +1,12 @@
 import { getUtilMem } from '@/utils/FetchUtil';
 
+import { EmmaaModelInfoInterface, EmmaaEvidenceInterface } from '@/types/typesEmmaa';
+
 /// /////////////////////////////////////////////
 
 const EMMAA_MODEL_INFO = 'https://emmaa.indra.bio/model_info/';
 
-export const emmaaModelInfo = (paramObj: {modelName: string}): Promise<any> => {
+export const emmaaModelInfo = (paramObj: {modelName: string}): Promise<EmmaaModelInfoInterface> => {
   return getUtilMem(EMMAA_MODEL_INFO + paramObj.modelName, {});
 };
 
@@ -24,4 +26,13 @@ export const emmaaModelList = async (): Promise<any> => {
       source: response.description,
     };
   }));
+};
+
+/// /////////////////////////////////////////////
+
+const EMMAA_EVIDENCE = 'https://emmaa.indra.bio/evidence';
+
+// eslint-disable-next-line camelcase
+export const emmaaEvidence = (paramObj: {stmt_hash: number, source: string, model: string, format: string}): Promise<EmmaaEvidenceInterface> => {
+  return getUtilMem(EMMAA_EVIDENCE, { format: 'json', ...paramObj });
 };

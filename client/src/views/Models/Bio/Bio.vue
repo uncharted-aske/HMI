@@ -33,7 +33,8 @@
             <counters
               :title="`Subgraph`"
               :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
-            />          </div>
+            />
+          </div>
           <div slot="right">
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
@@ -58,6 +59,8 @@
 
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface, SubgraphEdgeInterface } from '@/types/typesGraphs';
+
+  import { emmaaEvidence } from '@/services/EmmaaFetchService';
 
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -159,11 +162,16 @@
       this.drilldownMetadata = node.metadata;
     }
 
-    onEdgeClick (edge: GraphEdgeInterface): void {
+    async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {
       this.isOpenDrilldown = 'edge';
       this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
       this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
-      this.drilldownMetadata = edge.metadata;
+      this.drilldownMetadata = await emmaaEvidence({
+        stmt_hash: edge.metadata.statement_id,
+        source: 'model_statement',
+        model: 'covid19',
+        format: 'json',
+      });
     }
 
     onAddEdge (edge: SubgraphEdgeInterface): void {
