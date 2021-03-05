@@ -27,8 +27,8 @@
         <div class="loader">Loading...</div>
       </div>
     </div>
-    <knowledge-modal :data="openDrilldown" @close-drilldown="onCloseDrilldown"/>
-    <knowledge-panel
+    <drilldown-modal :data="openDrilldown" @close-drilldown="onCloseDrilldown"/>
+    <drilldown-pane
       @close-pane="onClosePanel"
       :is-open="isOpenPanel"
       @open-drilldown="onOpenDrilldown"
@@ -64,8 +64,8 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import FacetsPane from '@/views/Home/components/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
-  import KnowledgeModal from '../components/KnowledgeModal.vue';
-  import KnowledgePanel from '../components/KnowledgePanel/KnowledgePanel.vue';
+  import DrilldownModal from '../components/DrilldownModal.vue';
+  import DrilldownPane from '../components/DrilldownPanel/DrilldownPane.vue';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },
@@ -79,8 +79,8 @@
     LeftSidePanel,
     FacetsPane,
     CardContainer,
-    KnowledgeModal,
-    KnowledgePanel,
+    DrilldownModal,
+    DrilldownPane,
   };
 
   @Component({ components })
