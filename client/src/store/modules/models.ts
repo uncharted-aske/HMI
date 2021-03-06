@@ -28,7 +28,7 @@ import { emmaaModelList } from '@/services/EmmaaFetchService';
 
 const STATIC_MODELS = [
   {
-    id: 1,
+    id: 0,
     metadata: SIR.metadata,
     graph: {
       abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
@@ -38,7 +38,7 @@ const STATIC_MODELS = [
     type: 'computational',
   },
   {
-    id: 2,
+    id: 1,
     metadata: CHIME.metadata,
     graph: {
       abstract: _.pick(nestedCHIMECAG, ['nodes', 'edges']),
@@ -48,23 +48,13 @@ const STATIC_MODELS = [
     type: 'computational',
   },
   {
-    id: 3,
+    id: 2,
     metadata: DoubleEpi.metadata,
     graph: {
       abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
       detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
     },
     type: 'computational',
-  },
-  {
-    id: 4,
-    metadata: { name: 'COVID-19 model', source: 'EMMAA', version: '', knowledge: 'https://emmaa.indra.bio/dashboard/covid19?tab=model', created: '', description: 'Covid-19 knowledge network automatically assembled from the CORD-19 document corpus.' },
-    graph: {
-      abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-      detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-    },
-    subgraph: subgraphJSON,
-    type: 'causal',
   },
 ];
 
@@ -122,7 +112,10 @@ const init = async (): Promise<void> => {
   const modelList = await emmaaModelList();
   modelList.map(metadata => mutations.addModel(state, {
     metadata,
-    graph: null,
+    graph: {
+      abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
+      detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
+    },
     subgraph: subgraphJSON,
     type: 'causal',
   }));

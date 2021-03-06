@@ -13,17 +13,17 @@ export const emmaaModelInfo = (paramObj: {modelName: string}): Promise<EmmaaMode
 /// /////////////////////////////////////////////
 
 const EMMAA_MODEL_LIST = 'https://emmaa.indra.bio/models';
-const modelNameBlacklist = ['covid19'];
 
 export const emmaaModelList = async (): Promise<any> => {
   const modelList = await getUtilMem(EMMAA_MODEL_LIST, {});
-  modelList.models = modelList.models.filter(modelName => !modelNameBlacklist.includes(modelName));
 
   return await Promise.all(modelList.models.map(async (modelName) => {
     const response = await emmaaModelInfo({ modelName });
     return {
       name: response.human_readable_name,
-      source: response.description,
+      id: response.name,
+      source: 'EMMAA',
+      description: response.description,
     };
   }));
 };

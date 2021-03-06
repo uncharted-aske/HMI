@@ -2,7 +2,7 @@
   <div class="view-container">
     <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
           <div slot="content">
-            <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/>
+            <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel && selectedModel.metadata"/>
             <!-- <facets-pane v-if="activeTabId === 'facets'" /> -->
           </div>
     </left-side-panel>
@@ -17,7 +17,7 @@
         <settings-bar>
           <div slot="left">
             <counters
-              :title="selectedModel.metadata.name"
+              :title="selectedModel && selectedModel.metadata.name"
               :data="[`448723 Nodes`, `44104 Edges`]"
             />
           </div>
@@ -118,7 +118,7 @@
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
-      return modelsList.find(model => model.id === 4); // Only COVID-19 model for now
+      return modelsList.find(model => model.metadata.id === 'covid19'); // Only COVID-19 model for now
     }
 
     get subgraphNodeCount (): number {
@@ -169,7 +169,7 @@
       this.drilldownMetadata = await emmaaEvidence({
         stmt_hash: edge.metadata.statement_id,
         source: 'model_statement',
-        model: 'covid19',
+        model: this.selectedModel.metadata.id,
         format: 'json',
       });
     }
