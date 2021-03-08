@@ -117,7 +117,7 @@ const init = async (): Promise<void> => {
       detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
     },
     subgraph: subgraphJSON,
-    type: 'causal',
+    type: 'biomechanism',
   }));
 };
 
