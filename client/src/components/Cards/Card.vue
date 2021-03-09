@@ -9,7 +9,7 @@
     <div class="title-wrapper">
       <h5 class="title">{{ title }}</h5>
     </div>
-    <h6 class="subtitle">{{ subtitle }}</h6>
+    <h6 class="subtitle hide-scrollbar">{{ subtitle }}</h6>
     <div class="mt-2 d-flex justify-content-between align-items-center">
       <input :class="classCheckbox" type="checkbox" :checked="checked"/>
       <font-awesome-icon class="icon" :icon="['fas', iconType]"/>
@@ -102,13 +102,6 @@
     overflow-x: hidden;
     overflow-y: scroll;
     margin-top: 10px;
-
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
-
-  .subtitle::-webkit-scrollbar {
-    display: none;
   }
 
   .icon {

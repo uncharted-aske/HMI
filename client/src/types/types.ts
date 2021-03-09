@@ -1,5 +1,6 @@
 interface ModelMetadataInterface {
   name: string,
+  id?: string,
   description?: string,
   created?: string,
   source?: string,

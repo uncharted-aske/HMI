@@ -122,22 +122,19 @@
       const modelsCards = modelsList.map(model => {
         let previewImageSrc = null;
         switch (model.id) {
-        case 1:
+        case 0:
             previewImageSrc = SIRScreenshot;
             break;
-          case 2:
+          case 1:
             previewImageSrc = CHIMEScreenshot;
             break;
-          case 3:
+          case 2:
             previewImageSrc = DoubleEpiScreenshot;
             break;
-          case 4:
-            previewImageSrc = COVID19Screenshot;
-            break;
           default:
-            previewImageSrc = null;
+            previewImageSrc = COVID19Screenshot;
         }
-        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.source, checked: selectedModelsList.has(model.id) });
+        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.description, checked: selectedModelsList.has(model.id) });
       });
       return modelsCards;
     }

@@ -67,7 +67,7 @@
   ];
 
   const VIEWS: ViewInterface[] = [
-    { name: 'Causal', id: 'causal' },
+    { name: 'Biomechanism', id: 'biomechanism' },
     { name: 'Functional', id: 'functional' },
   ];
 
