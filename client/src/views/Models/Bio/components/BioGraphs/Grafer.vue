@@ -8,11 +8,10 @@
 </template>
 
 <script lang="ts">
-  import { GraferController, GraferControllerData, GraferPointsData, graph } from '@uncharted.software/grafer';
+  import { GraferController, GraferControllerData, GraferPointsData, graph, GraferLayerData } from '@uncharted.software/grafer';
   import { DataFile } from '@dekkai/data-source';
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
-  import { GraferLayerData } from '@uncharted.software/grafer/build/types/src/grafer/GraferController';
 
   @Component
   export default class Grafer extends Vue {

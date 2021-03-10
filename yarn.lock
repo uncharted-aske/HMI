@@ -589,10 +589,10 @@
     lit-element "^2.2.1"
     lit-html "^1.1.2"
 
-"@uncharted.software/grafer@0.2.0-demo":
-  version "0.2.0-demo"
-  resolved "https://registry.npmjs.org/@uncharted.software/grafer/-/grafer-0.2.0-demo.tgz#1b439bdaaa4efffd8b79e7fae5c38960ae1a0868"
-  integrity sha512-ZHNjESBKIdy4UysdddTmNJThtS2v90ntCbqDGvkzmx+uC18bXZEDp++j5marTxw1c5utZ5B7m1IaO848FEnCSg==
+"@uncharted.software/grafer@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/@uncharted.software/grafer/-/grafer-0.3.0.tgz#51dca3142a6cfe1d47dd08255d8aa8cddbcea6fb"
+  integrity sha512-13/t0dWZ3hkIMPp+qzOZjLSdMY3lQOF6mT2Kt7vIBcSXzTHAmeiNGvDNWog4+DRue0aGWxRHj/tdaeFHHRvqTQ==
   dependencies:
     "@dekkai/data-source" "^0.2.0"
     "@dekkai/event-emitter" "^1.1.0"
