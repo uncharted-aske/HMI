@@ -1,5 +1,6 @@
 'use strict';
 const path = require('path');
+const pkg = require('./package.json');
 const typescript = require('rollup-plugin-typescript2');
 const sourceMaps = require('rollup-plugin-sourcemaps');
 const vue = require('rollup-plugin-vue');
@@ -19,9 +20,6 @@ if (dotenvResult.error) {
   throw dotenvResult.error;
 }
 
-const buildDir = path.resolve(__dirname, 'build');
-const distDir = path.resolve(__dirname, 'dist');
-
 const extensions = [
   '.js', '.jsx', '.ts', '.tsx',
 ];
@@ -37,6 +35,13 @@ const types = {
   BUILD: 'build',
   DIST: 'dist',
   TEST: 'test',
+  DEV: 'dev',
+};
+
+const outputDirs = {
+  [types.BUILD]: path.resolve(__dirname, 'build'),
+  [types.DIST]: path.resolve(__dirname, 'dist'),
+  [types.DEV]: path.resolve(__dirname, 'build'),
 };
 
 function liveServer (options = {}) {
@@ -70,7 +75,7 @@ function inputForType (type) {
 
   if (type === types.DIST) {
     input['js/main'] = 'build/js/main.js';
-  } else if (type === types.BUILD) {
+  } else if (type === types.BUILD || type === types.DEV) {
     globby.sync([
       path.join('src/', '/**/*.{ts,js}'),
       `!${path.join('src/', '/**/*.d.ts')}`,
@@ -97,28 +102,17 @@ function outputForType (type) {
 
   return {
     output: {
-      dir: type === types.DIST ? distDir : buildDir,
+      dir: outputDirs[type],
       format: 'esm',
       sourcemap: type !== types.DIST,
       chunkFileNames: 'web_modules/[name].js',
       // paths: id => console.log(id),
     },
+    external: type === types.BUILD || type === types.DEV ? Object.keys(pkg.dependencies).map(mod => new RegExp(`^${mod}`)) : null,
   };
 }
 
 function pluginsForType (type, env) {
-  if (type === types.DIST) {
-    return {
-      plugins: [
-        copy({
-          targets: [
-            { src: 'src/static/*', dest: 'dist' },
-          ],
-        }),
-      ],
-    };
-  }
-
   function replaceObject () {
     const output = {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
@@ -132,9 +126,24 @@ function pluginsForType (type, env) {
     return output;
   }
 
+  if (type === types.DIST) {
+    return {
+      plugins: [
+        replace(replaceObject()),
+        resolve({
+          extensions,
+          jsnext: true,
+          browser: true,
+          preferBuiltins: false,
+        }),
+        commonjs(),
+        json(),
+      ],
+    };
+  }
+
   return {
     plugins: [
-      replace(replaceObject()),
       alias({
         entries: [
           {
@@ -143,13 +152,6 @@ function pluginsForType (type, env) {
           },
         ],
       }),
-      resolve({
-        extensions,
-        jsnext: true,
-        browser: true,
-        preferBuiltins: false,
-      }),
-      commonjs(),
       typescript({
         typescript: require('typescript'),
         cacheRoot: path.resolve(__dirname, '.rts2_cache'),
@@ -174,12 +176,17 @@ function pluginsForType (type, env) {
       }),
       json(),
       image(),
+      copy({
+        targets: [
+          { src: 'src/static/*', dest: type === types.DEV ? 'dev' : 'dist' },
+        ],
+      }),
     ],
   };
 }
 
 function chunksForType (type) {
-  if (type === types.BUILD) {
+  if (type === types.BUILD || type === types.DEV) {
     return {
       manualChunks: function (id) {
         if (id.includes('tslib.js')) {
@@ -244,20 +251,22 @@ function generateClientConfig (type, env, startDevServer = false) {
 module.exports = function generator (args) {
   const config = [];
 
-  let type;
-  if (args['config-dist']) {
-    type = types.DIST;
-  } else if (args['config-test']) {
-    type = types.TEST;
-  } else {
-    type = types.BUILD;
-  }
-
   let env;
   if (process.env.NODE_ENV === environments.PROD) {
     env = environments.PROD;
   } else {
     env = environments.DEV;
+  }
+
+  let type;
+  if (args['config-dist']) {
+    type = types.DIST;
+  } else if (args['config-test']) {
+    type = types.TEST;
+  } else if (args['config-dev']) {
+    type = types.DEV;
+  } else {
+    type = types.BUILD;
   }
 
   config.push(generateClientConfig(type, env, args['config-dev-server']));
