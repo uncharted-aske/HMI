@@ -14,6 +14,7 @@
     "watch": "yarn build:scripts --watch"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.8.0",
     "@dekkai/data-source": "^0.2.0",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
@@ -23,6 +24,7 @@
     "@uncharted.software/facets-plugins": "^3.1.0",
     "@uncharted.software/grafer": "0.3.0",
     "@uncharted.software/lex": "^1.0.0",
+    "aws-sdk": "^2.861.0",
     "bootstrap": "^4.5.2",
     "compound-graph": "git+https://bot-user:RosaRomeroGomez@github.com/mwdchang/compound-graph.git#99c392edf52963623e2b82a7deee746e49bbdaee",
     "d3": "5.7.0",
@@ -30,6 +32,7 @@
     "elkjs": "0.5.1",
     "flatpickr": "4.6.x",
     "lodash": "^4.17.20",
+    "minio": "^7.0.18",
     "moment": "^2.29.1",
     "moment-timezone": "0.5.x",
     "preact": "8.x",
@@ -52,6 +55,7 @@
     "@rollup/plugin-replace": "^2.3.3",
     "@types/chai": "^4.2.12",
     "@types/d3": "5.x",
+    "@types/minio": "^7.0.7",
     "@types/mocha": "^8.0.3",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",

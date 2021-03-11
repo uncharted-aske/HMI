@@ -61,6 +61,7 @@
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface, SubgraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
+  import { loadData } from '@/services/QueryService';
 
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -115,6 +116,11 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+
+    public mounted (): void {
+      console.log('Load Bgraph Data');
+      loadData();
+    }
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
