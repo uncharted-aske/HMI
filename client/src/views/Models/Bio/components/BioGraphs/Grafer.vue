@@ -9,9 +9,10 @@
 
 <script lang="ts">
   import { GraferController, GraferControllerData, GraferPointsData, graph, GraferLayerData } from '@uncharted.software/grafer';
-  import { DataFile } from '@dekkai/data-source';
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
+
+  import { loadJSONLFile } from '@/utils/FileLoaderUtil';
 
   @Component
   export default class Grafer extends Vue {
@@ -37,7 +38,7 @@
     // temporary demo functions
     async loadGraph (): Promise<GraferControllerData> {
       const points = {
-        data: await this.loadGraferFile(`/grafer/${this.model}/points.jsonl`),
+        data: await loadJSONLFile(`/grafer/${this.model}/points.jsonl`),
       };
 
       const colors = this.getModelColors();
@@ -81,7 +82,7 @@
         sourceColor: 2,
         targetColor: 2,
       };
-      const nodeData = await this.loadGraferFile(`/grafer/${this.model}/nodes.jsonl`, nodeOptions);
+      const nodeData = await loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, nodeOptions);
 
       const nodeLayer = {
         name: 'Nodes',
@@ -94,7 +95,7 @@
           },
         },
         edges: {
-          data: await this.loadGraferFile(`/grafer/${this.model}/intra_edges.jsonl`, nodeEdgeOptions),
+          data: await loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, nodeEdgeOptions),
           options: {
             alpha: 0.55,
             nearDepth: 0.6,
@@ -127,12 +128,12 @@
         name: 'Clusters',
         // nodes: {
         //   type: 'Ring',
-        //   data: await this.loadGraferFile(`/grafer/${this.model}/clusters.jsonl`, clusterLabelOptions),
+        //   data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, clusterLabelOptions),
         //   options: {},
         // },
         labels: {
           type: 'RingLabel',
-          data: await this.loadGraferFile(`/grafer/${this.model}/clusters.jsonl`, clusterLabelOptions),
+          data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, clusterLabelOptions),
           mappings: {
             background: (): boolean => false,
             fontSize: (): number => 14,
@@ -148,7 +149,7 @@
         },
         edges: {
           type: 'ClusterBundle',
-          data: await this.loadGraferFile(`/grafer/${this.model}/inter_edges.jsonl`, clusterEdgeOptions),
+          data: await loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, clusterEdgeOptions),
           options: {
             alpha: 0.04,
             nearDepth: 0.7,
@@ -176,12 +177,12 @@
 
         // load the layers
         // 3710
-        const highlightClusterEdges = await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/inter_edges.jsonl`, clusterEdgeOptions);
+        const highlightClusterEdges = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/inter_edges.jsonl`, clusterEdgeOptions);
         const highlightClusterLayer = {
           name: 'Highlights - Clusters',
           labels: {
             type: 'RingLabel',
-            data: await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`, clusterLabelOptions),
+            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`, clusterLabelOptions),
             mappings: {
               background: (): boolean => false,
               fontSize: (): number => 14,
@@ -207,7 +208,7 @@
         };
         layers.unshift(highlightClusterLayer);
 
-        const highlightNodeData = await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`, nodeOptions);
+        const highlightNodeData = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`, nodeOptions);
         const highlightNodeLayer = {
           name: 'Highlights - Nodes',
           nodes: {
@@ -219,7 +220,7 @@
             },
           },
           edges: {
-            data: await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/intra_edges.jsonl`, nodeEdgeOptions),
+            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/intra_edges.jsonl`, nodeEdgeOptions),
             options: {
               alpha: 0.55,
             },
@@ -252,7 +253,7 @@
         name: 'Nodes',
         nodes: {
           type: 'Circle',
-          data: await this.loadGraferFile(`/grafer/${this.model}/nodes.jsonl`),
+          data: await loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`),
           options: {
             pixelSizing: true,
             nearDepth: 0.75,
@@ -262,7 +263,7 @@
         edges: null,
         labels: {
           type: 'PointLabel',
-          data: await this.loadGraferFile(`/grafer/${this.model}/clusters.jsonl`),
+          data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`),
           mappings: {
             background: (): boolean => true,
             fontSize: (): number => 12,
@@ -290,14 +291,14 @@
         nodeLayer.labels.options = Object.assign(nodeLayer.labels.options, fadedOptions);
 
         // load the extra points
-        points.data.push(...await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/points.jsonl`));
+        points.data.push(...await loadJSONLFile(`/grafer/${this.model}/${this.layer}/points.jsonl`));
 
         // load the layer
         const highlightNodeLayer = {
           name: 'Nodes',
           nodes: {
             type: 'Circle',
-            data: await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`),
+            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`),
             options: {
               pixelSizing: true,
               nearDepth: 0.25,
@@ -307,7 +308,7 @@
           edges: null,
           labels: {
             type: 'PointLabel',
-            data: await this.loadGraferFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`),
+            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`),
             mappings: {
               background: (): boolean => true,
               fontSize: (): number => 12,
@@ -325,50 +326,6 @@
       }
 
       return layers;
-    }
-
-    async loadGraferFile (file: string, options: any = null): Promise<any> {
-      const ret = [];
-
-      await this.parseJSONL(file, json => {
-        ret.push(Object.assign({}, json, options));
-      });
-
-      return ret;
-    }
-
-    async parseJSONL (input: string, cb: (o: any) => void): Promise<void> {
-      const file = await DataFile.fromRemoteSource(input);
-
-      // load 2MB chunks
-      const sizeOf2MB = 2 * 1024 * 1024;
-      const byteLength = await file.byteLength;
-      const decoder = new TextDecoder();
-      const lineBreak = '\n'.charCodeAt(0);
-
-      for (let offset = 0; offset <= byteLength; offset += sizeOf2MB) {
-        const chunkEnd = Math.min(offset + sizeOf2MB, byteLength);
-        const chunk = await file.loadData(offset, chunkEnd);
-        const view = new DataView(chunk);
-        let start = 0;
-        for (let i = 0, n = chunk.byteLength; i < n; ++i) {
-          if (view.getUint8(i) === lineBreak || offset + i === byteLength) {
-            const statementBuffer = new Uint8Array(chunk, start, i - start);
-            start = i + 1;
-
-            const str = decoder.decode(statementBuffer);
-            const json = JSON.parse(str);
-
-            cb(json);
-          }
-        }
-
-        if (start < chunk.byteLength) {
-          offset -= chunk.byteLength - start;
-        }
-
-        // console.log(`${chunkEnd} / ${byteLength} - ${((chunkEnd/byteLength) * 100).toFixed(2)}%`);
-      }
     }
   }
 
