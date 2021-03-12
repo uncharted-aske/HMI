@@ -43,21 +43,19 @@
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
-      <node-pane v-if="activePaneId === 'node'" slot="content" :data="drilldownMetadata"/>
-      <edge-pane v-if="activePaneId === 'edge'" slot="content" :data="drilldownMetadata"/>
+      <node-pane v-if="drilldownActivePaneId === 'node'" slot="content" :data="drilldownMetadata"/>
+      <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content" :data="drilldownMetadata"/>
     </drilldown-panel>
   </div>
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
   import { TabInterface, ModelInterface } from '@/types/types';
-  import { GraphInterface, GraphNodeInterface, GraphEdgeInterface, SubgraphEdgeInterface } from '@/types/typesGraphs';
+  import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
 
@@ -103,11 +101,11 @@
     activeTabId: string = 'metadata';
 
     isOpenDrilldown: boolean = false;
-    activePaneId: string = '';
+    drilldownActivePaneId: string = '';
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
-    
+
     isSplitView = false;
     subgraph: GraphInterface = null;
 
@@ -155,7 +153,7 @@
 
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
-      this.activePaneId = 'node';
+      this.drilldownActivePaneId = 'node';
 
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = 'Type: Node';
@@ -164,7 +162,7 @@
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {
       this.isOpenDrilldown = true;
-      this.activePaneId = 'edge';
+      this.drilldownActivePaneId = 'edge';
 
       this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
       this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
@@ -175,7 +173,6 @@
         format: 'json',
       });
     }
-
   }
 </script>
 

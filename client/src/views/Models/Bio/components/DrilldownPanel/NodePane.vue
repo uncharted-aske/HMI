@@ -26,8 +26,6 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-  import { SubgraphEdgeInterface } from '@/types/typesGraphs';
-
   import CollapsibleItem from '@/components/CollapsibleItem.vue';
 
   const components = {

@@ -41,7 +41,11 @@
         <local-epi-graph v-if="isSplitView" :graph="subgraph" @node-click="onNodeClick"/>
       </div>
     </resizable-grid>
-    <drilldown-pane @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" />
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
+      <metadata-pane v-if="drilldownActiveTabId ===  'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
+      <parameters-pane v-if="drilldownActiveTabId ===  'parameters'" slot="content" :data="drilldownParameters" :related="drilldownRelatedParameters" @open-modal="onOpenModalParameters"/>
+      <knowledge-pane v-if="drilldownActiveTabId ===  'knowledge'" slot="content" :data="drilldownKnowledge"/>
+    </drilldown-panel>
     <modal-parameters
       v-if="showModalParameters"
       :data="modalDataParameters"
@@ -78,7 +82,10 @@
   import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
   import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
-  import DrilldownPane from './components/DrilldownPanel/DrilldownPane.vue';
+  import DrilldownPanel from '@/components/DrilldownPanel.vue';
+  import MetadataPane from './components/DrilldownPanel/MetadataPane.vue';
+  import KnowledgePane from './components/DrilldownPanel/KnowledgePane.vue';
+  import ParametersPane from './components/DrilldownPanel/ParametersPane.vue';
   import ModalParameters from './components/Modals/ModalParameters.vue';
   import ModalDocMetadata from './components/Modals/ModalDocMetadata.vue';
 
@@ -88,8 +95,14 @@
   ];
 
   const VIEWS: ViewInterface[] = [
-    { name: 'Biomechanism', id: 'biomechanism' },
+    { name: 'Causal', id: 'causal' },
     { name: 'Functional', id: 'functional' },
+  ];
+
+  const DRILLDOWN_TABS: TabInterface[] = [
+    { name: 'Metadata', icon: '', id: 'metadata' },
+    { name: 'Parameters', icon: '', id: 'parameters' },
+    { name: 'Knowledge', icon: '', id: 'knowledge' },
   ];
 
   /**
@@ -334,26 +347,33 @@
     GlobalEpiGraph,
     LocalEpiGraph,
     ResizableGrid,
-    DrilldownPane,
+    DrilldownPanel,
+    MetadataPane,
+    ParametersPane,
+    KnowledgePane,
     ModalParameters,
     ModalDocMetadata,
   };
 
   @Component({ components })
   export default class EpiView extends Vue {
+    views: ViewInterface[] = VIEWS;
+    selectedViewId = 'causal';
+
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
-    activeTabIdDrilldown: string = 'metadata';
-    views: ViewInterface[] = VIEWS;
-    selectedViewId = 'biomechanism';
+
+    drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
-    isSplitView = false;
+    drilldownActiveTabId: string = 'metadata';
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
     drilldownKnowledge: CosmosSearchInterface | Record<any, never> = {};
     drilldownRelatedParameters: any = null;
     drilldownParameters: any = null;
+
+    isSplitView = false;
     subgraph: GraphInterface = null;
     showModalParameters: boolean = false;
     showModalMetadata: boolean = false;
@@ -372,7 +392,7 @@
     }
 
     get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 'biomechanism' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
+      return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
     }
 
     get nodeCount (): number {
@@ -412,13 +432,15 @@
       this.activeTabId = tabId;
     }
 
-    onTabClickDrilldown (tabId: string): void {
-      this.activeTabIdDrilldown = tabId;
+    onDrilldownTabClick (tabId: string): void {
+      this.drilldownActiveTabId = tabId;
     }
 
     onCloseDrilldownPanel ():void {
       this.isOpenDrilldown = false;
+      this.drilldownActiveTabId = '';
       this.drilldownPaneTitle = '';
+      this.drilldownPaneSubtitle = '';
       this.drilldownMetadata = null;
     }
 
@@ -450,9 +472,11 @@
 
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
+      this.drilldownActiveTabId = 'metadata';
 
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = node.nodeType;
+      this.drilldownMetadata = null;
 
       const nodeMetadata = node.metadata;
       if (nodeMetadata) {
