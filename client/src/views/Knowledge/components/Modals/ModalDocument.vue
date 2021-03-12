@@ -112,12 +112,6 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.knowledge-drilldown {
-  top: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 1200;
-}
-
 .container {
   height: 90vh;
   background: white;
