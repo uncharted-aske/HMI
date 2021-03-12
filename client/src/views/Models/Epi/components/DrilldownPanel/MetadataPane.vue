@@ -1,5 +1,5 @@
 <template>
-  <div class="drilldown-metadata-pane-container">
+  <div class="metadata-pane-container">
     <div v-if="!isEmptyMetadata">
       <collapsible-item>
         <div slot="title">Type</div>
@@ -113,7 +113,7 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.drilldown-metadata-pane-container {
+.metadata-pane-container {
   .metadata-header {
     padding: 5px;
     color: $text-color-dark;

@@ -1,5 +1,5 @@
 <template>
-  <div class="drilldown-knowledge-pane-container">
+  <div class="knowledge-pane-container">
     <div v-if="!isEmptyData" >
      <div class="mt-3 documents-container">
       <div class="mb-1 px-2 py-4 d-flex rounded-lg border" v-for="(object, index) in data.objects" :key="index">
@@ -53,7 +53,7 @@
 
 <style lang="scss" scoped>
 @import "@/styles/variables";
-.drilldown-knowledge-pane-container {
+.knowledge-pane-container {
 display: flex;
   flex-direction: column;
   position: absolute;
