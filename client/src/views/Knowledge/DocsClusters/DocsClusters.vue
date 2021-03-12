@@ -24,12 +24,12 @@
       </div>
     </div>
     <drilldown-modal :data="openDrilldown" @close-drilldown="onCloseDrilldown"/>
-    <drilldown-panel
+    <!-- <drilldown-panel
       @close-pane="onClosePanel"
       :is-open="isOpenPanel"
       @open-drilldown="onOpenDrilldown"
       :data="openPanel"
-    />
+    /> -->
   </div>
 </template>
 
@@ -61,7 +61,7 @@
   import FacetsPane from '@/views/Home/components/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
   import DrilldownModal from '../components/DrilldownModal.vue';
-  import DrilldownPane from '../components/DrilldownPanel/DrilldownPane.vue';
+  // import DrilldownPane from '../components/DrilldownPanel/DrilldownPane.vue';
   import Grafer from '@/views/Models/Bio/components/BioGraphs/Grafer.vue';
 
   const ACTIONS = [
@@ -77,7 +77,7 @@
     FacetsPane,
     CardContainer,
     DrilldownModal,
-    DrilldownPane,
+    // DrilldownPane,
     Grafer,
   };
 

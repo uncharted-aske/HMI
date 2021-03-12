@@ -1,11 +1,5 @@
 <template>
   <div class="view-container">
-    <left-side-panel @close-pane="onClosePane">
-      <div slot="content">
-        <facets-pane />
-      </div>
-    </left-side-panel>
-
     <div class="d-flex flex-column h-100">
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for documents including a specific keyword (e.g. IL-6)...`" />
@@ -20,20 +14,19 @@
       </settings-bar>
       <card-container
           :header="`Knowledge`"
-          :cards="modelsCards"
-          @click-card="onOpenPanel"
+          :cards="docsCards"
+          @click-card="onCardClick"
       />
       <div class="loader-container" v-if="dataLoading">
         <div class="loader">Loading...</div>
       </div>
     </div>
-    <drilldown-modal :data="openDrilldown" @close-drilldown="onCloseDrilldown"/>
-    <drilldown-pane
-      @close-pane="onClosePanel"
-      :is-open="isOpenPanel"
-      @open-drilldown="onOpenDrilldown"
-      :data="openPanel"
-    />
+    <!-- <drilldown-modal :data="openDrilldown" @close-drilldown="onCloseDrilldown"/> -->
+    <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
+        <knowledge-preview-pane v-if="drilldownActiveTabId ===  'preview'" slot="content" :data="drilldownData"/>
+        <models-pane v-if="drilldownActiveTabId ===  'models'" slot="content" :data="drilldownData"/>
+        <entities-pane v-if="drilldownActiveTabId ===  'entities'" slot="content" :data="drilldownData"/>
+    </drilldown-panel>
   </div>
 </template>
 
@@ -46,7 +39,7 @@
 
   import { CosmosSearchInterface, CosmosSearchObjectsInterface } from '@/types/typesCosmos';
   import { FacetTermsSelectionMap } from '@/types/typesFacets';
-  import { CardInterface } from '@/types/types';
+  import { TabInterface, CardInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import TextPill from '@/search/pills/TextPill';
@@ -61,14 +54,17 @@
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from '../components/Settings.vue';
   import Counters from '@/components/Counters.vue';
-  import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import FacetsPane from '@/views/Home/components/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
   import DrilldownModal from '../components/DrilldownModal.vue';
-  import DrilldownPane from '../components/DrilldownPanel/DrilldownPane.vue';
+  import DrilldownPanel from '@/components/DrilldownPanel.vue';
+  import KnowledgePreviewPane from '../components/DrilldownPanel/KnowledgePreviewPane.vue';
+  import ModelsPane from '../components/DrilldownPanel/ModelsPane.vue';
+  import EntitiesPane from '../components/DrilldownPanel/EntitiesPane.vue';
 
-  const ACTIONS = [
-    { name: 'Facets', icon: 'filter', paneId: 'facets' },
+  const DRILLDOWN_TABS: TabInterface[] = [
+    { name: 'Preview', icon: '', id: 'preview' },
+    { name: 'Models', icon: '', id: 'models' },
+    { name: 'Entities', icon: '', id: 'entities' },
   ];
 
   const components = {
@@ -76,22 +72,24 @@
     Settings,
     SettingsBar,
     Counters,
-    LeftSidePanel,
-    FacetsPane,
     CardContainer,
     DrilldownModal,
-    DrilldownPane,
+    DrilldownPanel,
+    KnowledgePreviewPane,
+    ModelsPane,
+    EntitiesPane,
   };
 
   @Component({ components })
   export default class DocsCards extends Vue {
-    activePane = '';
-    actions: any = ACTIONS;
     dataLoading = false;
     data: CosmosSearchInterface | Record<any, never> = {};
     filterHash: string = '';
-    openPanel: CosmosSearchObjectsInterface | Record<any, never> = {};
-    openDrilldown: CosmosSearchObjectsInterface | Record<any, never> = {};
+
+    drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
+    isOpenDrilldown: boolean = false;
+    drilldownActiveTabId: string = '';
+    drilldownData: CosmosSearchObjectsInterface | Record<any, never> = {};
 
     @Getter getFilters;
     @Getter getModelsList;
@@ -183,54 +181,31 @@
       }
     }
 
-    get currentAction (): string {
-      return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
-    }
-
-    get modelsCards (): CardInterface[] {
+    get docsCards (): CardInterface[] {
       const data = this.data as CosmosSearchInterface;
       return data.objects && data.objects.map((item, index) => ({
         id: index,
         title: item.bibjson.title,
-        subtitle: `${item.bibjson.year ?? 'Unknown Year'} - ${getAuthorList(item)}
-        `,
+        subtitle: `${item.bibjson.year ?? 'Unknown Year'} - ${getAuthorList(item)}`,
         type: item.bibjson.type,
         previewImageSrc: item.children[0].bytes,
         raw: item,
       }));
     }
 
-    get isOpenPanel (): boolean {
-      return !_.isEmpty(this.openPanel);
+    onDrilldownTabClick (tabId: string): void {
+      this.drilldownActiveTabId = tabId;
     }
 
-    onOpenPanel (card: CosmosSearchObjectsInterface): void {
-      this.openPanel = card;
-      this.openDrilldown = {};
+    onCardClick (card: CosmosSearchObjectsInterface): void {
+      this.isOpenDrilldown = true;
+      this.drilldownActiveTabId = 'preview';
+
+      this.drilldownData = card;
     }
 
-    onClosePanel (): void {
-      this.openPanel = {};
-    }
-
-    onOpenDrilldown (card: CosmosSearchObjectsInterface): void {
-      this.openDrilldown = card || this.openPanel;
-    }
-
-    onCloseDrilldown (): void {
-      this.openDrilldown = {};
-    }
-
-    onSetActivePane (actionName: string): void {
-      let activePane = '';
-      if (actionName !== '') {
-        activePane = this.actions.find(a => a.name === actionName).paneId;
-      }
-      this.activePane = activePane;
-    }
-
-    onClosePane ():void {
-      this.activePane = '';
+    onCloseDrilldownPanel (): void {
+      this.isOpenDrilldown = false;
     }
   }
 </script>
