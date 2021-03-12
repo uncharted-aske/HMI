@@ -2,7 +2,7 @@
   <div class="view-container">
     <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
           <div slot="content">
-            <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/>
+            <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel && selectedModel.metadata"/>
             <!-- <facets-pane v-if="activeTabId === 'facets'" /> -->
           </div>
     </left-side-panel>
@@ -17,15 +17,20 @@
         <settings-bar>
           <div slot="left">
             <counters
+<<<<<<< HEAD
               :title="selectedModel.metadata.name"
               :data="[`44104 Nodes`, `448723 Edges`]"
+=======
+              :title="selectedModel && selectedModel.metadata.name"
+              :data="[`448723 Nodes`, `44104 Edges`]"
+>>>>>>> main
             />
           </div>
           <div slot="settings">
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <!-- <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="true"></grafer> -->
+        <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false"></grafer>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -33,7 +38,8 @@
             <counters
               :title="`Subgraph`"
               :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
-            />          </div>
+            />
+          </div>
           <div slot="right">
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
@@ -54,6 +60,8 @@
 
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface, SubgraphEdgeInterface } from '@/types/typesGraphs';
+
+  import { emmaaEvidence } from '@/services/EmmaaFetchService';
 
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -102,7 +110,7 @@
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
-      return modelsList.find(model => model.id === 4); // Only COVID-19 model for now
+      return modelsList.find(model => model.metadata.id === 'covid19'); // Only COVID-19 model for now
     }
 
     get subgraphNodeCount (): number {
@@ -146,11 +154,16 @@
       this.drilldownMetadata = node.metadata;
     }
 
-    onEdgeClick (edge: GraphEdgeInterface): void {
+    async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {
       this.isOpenDrilldown = 'edge';
       this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
       this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
-      this.drilldownMetadata = edge.metadata;
+      this.drilldownMetadata = await emmaaEvidence({
+        stmt_hash: edge.metadata.statement_id,
+        source: 'model_statement',
+        model: this.selectedModel.metadata.id,
+        format: 'json',
+      });
     }
 
     onAddEdge (edge: SubgraphEdgeInterface): void {

@@ -88,7 +88,7 @@
   ];
 
   const VIEWS: ViewInterface[] = [
-    { name: 'Causal', id: 'causal' },
+    { name: 'Biomechanism', id: 'biomechanism' },
     { name: 'Functional', id: 'functional' },
   ];
 
@@ -345,7 +345,7 @@
     activeTabId: string = 'metadata';
     activeTabIdDrilldown: string = 'metadata';
     views: ViewInterface[] = VIEWS;
-    selectedViewId = 'causal';
+    selectedViewId = 'biomechanism';
     isOpenDrilldown = false;
     isSplitView = false;
     drilldownPaneTitle = '';
@@ -372,7 +372,7 @@
     }
 
     get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
+      return this.selectedViewId === 'biomechanism' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
     }
 
     get nodeCount (): number {

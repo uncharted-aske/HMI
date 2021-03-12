@@ -4,7 +4,7 @@
       <scatter-plot :data="data" :size="[400, 500]" @dot-click="onDotClick"/>
       <div class="parameter-title">Related Parameters </div>
       <div class="position-relative flex-grow-1">
-        <div class="position-absolute h-100 w-100 related-params">
+        <div class="position-absolute h-100 w-100 related-params hide-scrollbar">
           <div class="mb-1 px-2 py-2 d-flex rounded-lg border" v-for="(param, index) in related" :key="index">
             <div class="flex-grow-1">
                 <h6>{{param[0] | underscore-remover-formatter | capitalize-first-letter-formatter}}</h6>
@@ -65,12 +65,6 @@
 
 .related-params {
   overflow: hidden scroll;
-
-  scrollbar-width: none;  /* Firefox */
-}
-
-.related-params::-webkit-scrollbar {
-  display: none;
 }
 
 </style>

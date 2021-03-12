@@ -20,7 +20,7 @@
       <h6>{{paneSubtitle}}</h6>
     </div>
     <close-button @close="onClose"/>
-    <div class="flex-grow-1 position-relative panel-body">
+    <div class="flex-grow-1 position-relative overflow-scroll hide-scrollbar panel-body">
       <slot name="content"/>
       <slot :name="_activeTabId"/>
     </div>

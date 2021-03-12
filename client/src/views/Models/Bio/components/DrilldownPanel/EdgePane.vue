@@ -1,9 +1,21 @@
 <template>
   <div class="drilldown-metadata-pane-container">
     <div v-if="!isEmptyMetadata">
-      <collapsible-item v-for="(value, key) in dataObject" :key="key">
-        <div slot="title">{{key}}</div>
-        <div slot="content" class="my-3">{{value}}</div>
+      <collapsible-item key="tested">
+        <div slot="title">Tested</div>
+        <div slot="content" class="my-3">{{data.tested}}</div>
+      </collapsible-item>
+      <collapsible-item key="belief">
+        <div slot="title">Belief</div>
+        <div slot="content" class="my-3">{{data.belief}}</div>
+      </collapsible-item>
+      <collapsible-item key="evidence">
+        <div slot="title">Evidence</div>
+        <div slot="content" class="my-3">
+          <ul class="pl-4">
+            <li v-for="(evidence, index) in data.evidence" :key="index">{{evidence.text}}</li>
+          </ul>
+        </div>
       </collapsible-item>
     </div>
     <div v-else class="alert alert-info" role="alert">
@@ -34,14 +46,6 @@
 
     get isEmptyMetadata (): boolean {
       return _.isEmpty(this.data);
-    }
-
-    get dataObject (): Record<any, void> {
-        const output: Record<any, void> = {};
-        output.Tested = this.data.tested;
-        output.Belief = this.data.belief;
-        output.Evidence = this.data.evidence;
-        return output;
     }
   }
 </script>
