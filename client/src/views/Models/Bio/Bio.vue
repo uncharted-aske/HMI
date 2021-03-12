@@ -17,13 +17,8 @@
         <settings-bar>
           <div slot="left">
             <counters
-<<<<<<< HEAD
-              :title="selectedModel.metadata.name"
-              :data="[`44104 Nodes`, `448723 Edges`]"
-=======
               :title="selectedModel && selectedModel.metadata.name"
               :data="[`448723 Nodes`, `44104 Edges`]"
->>>>>>> main
             />
           </div>
           <div slot="settings">
