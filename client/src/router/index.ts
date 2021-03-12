@@ -40,8 +40,8 @@ const RouterSingleton = ((): any => {
           name: 'docsCards',
           component: DocsCards,
         }, {
-          path: '/docsClustersView',
-          name: 'docsClustersView',
+          path: '/docsClusters',
+          name: 'docsClusters',
           component: DocsClusters,
         },
         /* 404, this has to go last */

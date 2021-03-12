@@ -42,7 +42,10 @@
         <local-bio-graph v-if="isSplitView" :graph="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
       </div>
     </resizable-grid>
-    <drilldown-pane :is-open="isOpenDrilldown" @close-pane="onCloseDrilldownPanel"/>
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
+      <node-pane v-if="activePaneId === 'node'" slot="content" :data="drilldownMetadata"/>
+      <edge-pane v-if="activePaneId === 'edge'" slot="content" :data="drilldownMetadata"/>
+    </drilldown-panel>
   </div>
 </template>
 
@@ -67,7 +70,10 @@
   import FacetsPane from './components/FacetsPane.vue';
   import LocalBioGraph from './components/BioGraphs/LocalBioGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
-  import DrilldownPane from './components/DrilldownPanel/DrilldownPane.vue';
+  import DrilldownPanel from '@/components/DrilldownPanel.vue';
+  import EdgePane from './components/DrilldownPanel/EdgePane.vue';
+  import NodePane from './components/DrilldownPanel/NodePane.vue';
+
   import Grafer from './components/BioGraphs/Grafer.vue';
 
   const TABS: TabInterface[] = [
@@ -85,19 +91,24 @@
     FacetsPane,
     LocalBioGraph,
     ResizableGrid,
-    DrilldownPane,
+    DrilldownPanel,
+    NodePane,
+    EdgePane,
     Grafer,
   };
 
   @Component({ components })
-  export default class BioView extends Vue {
+  export default class Bio extends Vue {
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
-    isOpenDrilldown: string = '';
-    isSplitView = false;
+
+    isOpenDrilldown: boolean = false;
+    activePaneId: string = '';
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
+    
+    isSplitView = false;
     subgraph: GraphInterface = null;
 
     @Getter getSelectedModelIds;
@@ -133,7 +144,7 @@
     }
 
     onCloseDrilldownPanel ():void {
-      this.isOpenDrilldown = '';
+      this.isOpenDrilldown = false;
       this.drilldownPaneTitle = '';
       this.drilldownMetadata = null;
     }
@@ -143,14 +154,18 @@
   // }
 
     onNodeClick (node: GraphNodeInterface): void {
-      this.isOpenDrilldown = 'node';
+      this.isOpenDrilldown = true;
+      this.activePaneId = 'node';
+
       this.drilldownPaneTitle = node.label;
-      this.drilldownPaneSubtitle = 'Node';
+      this.drilldownPaneSubtitle = 'Type: Node';
       this.drilldownMetadata = node.metadata;
     }
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {
-      this.isOpenDrilldown = 'edge';
+      this.isOpenDrilldown = true;
+      this.activePaneId = 'edge';
+
       this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
       this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
       this.drilldownMetadata = await emmaaEvidence({
@@ -161,29 +176,6 @@
       });
     }
 
-    onAddEdge (edge: SubgraphEdgeInterface): void {
-      const subgraph = _.cloneDeep(this.subgraph);
-      const sourceNode = { id: edge.source, label: edge.source_label, nodeType: 'ontological grounding' };
-      const targetNode = { id: edge.target, label: edge.target_label, nodeType: 'ontological grounding' };
-
-      // Check if nodes already exists in subgraph
-      const sourceFound = subgraph.nodes.find(node => node.id === sourceNode.id);
-      const targetFound = subgraph.nodes.find(node => node.id === targetNode.id);
-      if (!sourceFound) {
-        subgraph.nodes.push(sourceNode);
-      }
-      if (!targetFound) {
-        subgraph.nodes.push(targetNode);
-      }
-
-      // Check if edges already exist in the subgraph
-      const edgeFound = subgraph.edges.find(e => e.id === edge.id);
-      if (!edgeFound) {
-        subgraph.edges.push(edge);
-      }
-
-      this.subgraph = subgraph;
-    }
   }
 </script>
 

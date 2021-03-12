@@ -53,10 +53,6 @@
     get isEmptyMetadata (): boolean {
       return _.isEmpty(this.data);
     }
-
-    onEdgeClick (edge: SubgraphEdgeInterface): void {
-      this.$emit('add-edge', edge);
-    }
   }
 </script>
 

@@ -6,14 +6,14 @@
       <li
         v-if="displayNav"
         class="nav-item"
-        :class="{underlined: currentView === 'knowledge' || currentView === 'knowledgeDocsClusters'}"
+        :class="{underlined: currentView === 'docsCards' || currentView === 'docsClusters'}"
       >
-        <a class="nav-link" href="#/knowledge">Knowledge</a>
+        <a class="nav-link" href="#/docsCards">Knowledge</a>
       </li>
       <li
         v-if="displayNav"
         class="nav-item"
-        :class="{underlined: currentView === 'epiView' || currentView === 'bioView' || currentView === 'home'}"
+        :class="{underlined: currentView === 'epi' || currentView === 'bio' || currentView === 'home'}"
       >
         <a class="nav-link" href="#/">Models</a>
       </li>
@@ -30,10 +30,10 @@
     get displayNav () : boolean {
       const { currentView } = this;
       return currentView === 'home' ||
-        currentView === 'bioView' ||
-        currentView === 'epiView' ||
-        currentView === 'knowledge' ||
-        currentView === 'knowledgeDocsClusters';
+        currentView === 'bio' ||
+        currentView === 'epi' ||
+        currentView === 'docsCards' ||
+        currentView === 'docsClusters';
     }
 
     get currentView () : string {
