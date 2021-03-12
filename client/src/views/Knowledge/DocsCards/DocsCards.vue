@@ -21,12 +21,16 @@
         <div class="loader">Loading...</div>
       </div>
     </div>
-    <!-- <drilldown-modal :data="openDrilldown" @close-drilldown="onCloseDrilldown"/> -->
     <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
-        <knowledge-preview-pane v-if="drilldownActiveTabId ===  'preview'" slot="content" :data="drilldownData"/>
+        <knowledge-preview-pane v-if="drilldownActiveTabId ===  'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true" @close-modal="showModalDocuments = false"/>
         <models-pane v-if="drilldownActiveTabId ===  'models'" slot="content" :data="drilldownData"/>
         <entities-pane v-if="drilldownActiveTabId ===  'entities'" slot="content" :data="drilldownData"/>
     </drilldown-panel>
+    <modal-document 
+      v-if="showModalDocuments"
+      :data="drilldownData"
+    />
+
   </div>
 </template>
 
@@ -55,11 +59,12 @@
   import Settings from '../components/Settings.vue';
   import Counters from '@/components/Counters.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
-  import DrilldownModal from '../components/DrilldownModal.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import KnowledgePreviewPane from '../components/DrilldownPanel/KnowledgePreviewPane.vue';
   import ModelsPane from '../components/DrilldownPanel/ModelsPane.vue';
   import EntitiesPane from '../components/DrilldownPanel/EntitiesPane.vue';
+  import ModalDocument from '../components/Modals/ModalDocument.vue';
+
 
   const DRILLDOWN_TABS: TabInterface[] = [
     { name: 'Preview', icon: '', id: 'preview' },
@@ -73,11 +78,11 @@
     SettingsBar,
     Counters,
     CardContainer,
-    DrilldownModal,
     DrilldownPanel,
     KnowledgePreviewPane,
     ModelsPane,
     EntitiesPane,
+    ModalDocument,
   };
 
   @Component({ components })
@@ -90,6 +95,8 @@
     isOpenDrilldown: boolean = false;
     drilldownActiveTabId: string = '';
     drilldownData: CosmosSearchObjectsInterface | Record<any, never> = {};
+
+    showModalDocuments: boolean = false;
 
     @Getter getFilters;
     @Getter getModelsList;

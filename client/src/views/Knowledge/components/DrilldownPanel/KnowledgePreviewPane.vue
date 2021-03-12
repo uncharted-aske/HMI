@@ -100,7 +100,7 @@
     }
 
     showMoreHandler (e: Event): void {
-        this.$emit('open-drilldown');
+        this.$emit('open-modal');
         e.preventDefault();
     }
   }
