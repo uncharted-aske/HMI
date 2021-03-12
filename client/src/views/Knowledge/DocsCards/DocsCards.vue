@@ -26,7 +26,7 @@
         <models-pane v-if="drilldownActiveTabId ===  'models'" slot="content" :data="drilldownData"/>
         <entities-pane v-if="drilldownActiveTabId ===  'entities'" slot="content" :data="drilldownData"/>
     </drilldown-panel>
-    <modal-document 
+    <modal-document
       v-if="showModalDocuments"
       :data="drilldownData"
     />
@@ -64,7 +64,6 @@
   import ModelsPane from '../components/DrilldownPanel/ModelsPane.vue';
   import EntitiesPane from '../components/DrilldownPanel/EntitiesPane.vue';
   import ModalDocument from '../components/Modals/ModalDocument.vue';
-
 
   const DRILLDOWN_TABS: TabInterface[] = [
     { name: 'Preview', icon: '', id: 'preview' },

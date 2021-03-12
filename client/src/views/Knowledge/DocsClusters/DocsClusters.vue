@@ -16,34 +16,15 @@
 
 <script lang="ts">
   import Component from 'vue-class-component';
-  import { Watch } from 'vue-property-decorator';
   import Vue from 'vue';
-  import { Getter } from 'vuex-class';
-  import _ from 'lodash';
-
-  import { CosmosSearchInterface, CosmosSearchObjectsInterface } from '@/types/typesCosmos';
-  import { FacetTermsSelectionMap } from '@/types/typesFacets';
-  import { CardInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
-  import TextPill from '@/search/pills/TextPill';
-  import KeyValuePill from '@/search/pills/KeyValuePill';
-  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
-  import * as modelTypeUtil from '@/utils/ModelTypeUtil';
-
-  import * as filtersUtil from '@/utils/FiltersUtil';
-  import { cosmosSearch } from '@/services/CosmosFetchService';
-  import { filterToParamObj, getAuthorList } from '@/utils/CosmosDataUtil';
 
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from '../components/Settings.vue';
   import Counters from '@/components/Counters.vue';
-  
-  import Grafer from '@/views/Models/Bio/components/BioGraphs/Grafer.vue';
 
-  const ACTIONS = [
-    { name: 'Facets', icon: 'filter', paneId: 'facets' },
-  ];
+  import Grafer from '@/views/Models/Bio/components/BioGraphs/Grafer.vue';
 
   const components = {
     SearchBar,
@@ -55,10 +36,6 @@
 
   @Component({ components })
   export default class DocsClusters extends Vue {
-
-    mounted (): void {
-    }
-
   }
 </script>
 
