@@ -1,5 +1,5 @@
 <template>
-  <div class="drilldown-metadata-pane-container">
+  <div class="node-pane-container">
     <div v-if="!isEmptyMetadata">
       <collapsible-item v-for="(values, dataObjectKey) in dataObject" :key="dataObjectKey">
         <div slot="title">{{dataObjectKey}}</div>
@@ -33,7 +33,7 @@
   };
 
   @Component({ components })
-  export default class DrilldownMetadataPane extends Vue {
+  export default class NodePane extends Vue {
     @Prop({ default: null }) data: any;
 
     get dataObject (): Record<any, void> {
@@ -55,7 +55,7 @@
 </script>
 
 <style lang="scss" scoped>
-.drilldown-metadata-pane-container {
+.node-pane-container {
   padding: 5px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="drilldown-metadata-pane-container">
+  <div class="edge-pane-container">
     <div v-if="!isEmptyMetadata">
       <collapsible-item key="tested">
         <div slot="title">Tested</div>
@@ -21,10 +21,6 @@
     <div v-else class="alert alert-info" role="alert">
       No metadata at the moment
     </div>
-    <!-- <modal-knowledge
-      v-if="showModal"
-      @close="showModal = false"
-     /> -->
   </div>
 </template>
 
@@ -41,7 +37,7 @@
   };
 
   @Component({ components })
-  export default class DrilldownMetadataPane extends Vue {
+  export default class EdgePane extends Vue {
     @Prop({ default: null }) data: any;
 
     get isEmptyMetadata (): boolean {
@@ -51,7 +47,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .drilldown-metadata-pane-container {
+  .edge-pane-container {
     padding: 5px;
   }
 </style>

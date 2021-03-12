@@ -7,7 +7,7 @@
       <h6>{{doi}}</h6>
     </div>
     <div class="mt-3">
-      <div class="px-2 py-4 d-flex justify-content-center border rounded-lg" role="button" @click="$router.push({ name: 'bioView' })">
+      <div class="px-2 py-4 d-flex justify-content-center border rounded-lg" role="button" @click="$router.push({ name: 'bio' })">
         <div>COVID-19 Model</div>
       </div>
       <div class="my-4 d-flex justify-content-center font-weight-bold">⋮</div>
@@ -22,7 +22,7 @@
   import { Prop } from 'vue-property-decorator';
 
   @Component({ })
-  export default class KnowledgePanelModels extends Vue {
+  export default class ModelsPane extends Vue {
     @Prop({ required: false }) private data: any;
 
     get doi (): string {

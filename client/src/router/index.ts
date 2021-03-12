@@ -22,25 +22,25 @@ const RouterSingleton = ((): any => {
           component: Home,
         },
         {
-          path: '/bio',
+          path: '/models/bio',
           name: 'bio',
           component: Bio,
         },
         {
-          path: '/epi',
+          path: '/models/epi',
           name: 'epi',
           component: Epi,
         },
         {
-          path: '/comparison',
+          path: '/models/comparison',
           name: 'comparison',
           component: Comparison,
         }, {
-          path: '/docsCards',
+          path: '/knowledge/docsCards',
           name: 'docsCards',
           component: DocsCards,
         }, {
-          path: '/docsClusters',
+          path: '/knowledge/docsClusters',
           name: 'docsClusters',
           component: DocsClusters,
         },

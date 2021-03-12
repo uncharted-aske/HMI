@@ -1,35 +1,16 @@
 <template>
   <div class="view-container">
-    <left-side-panel @close-pane="onClosePane">
-      <div slot="content">
-        <facets-pane />
-      </div>
-    </left-side-panel>
-
     <div class="d-flex flex-column h-100">
       <div class="search-row">
-        <search-bar :pills="searchPills" :placeholder="`Search for documents including a specific keyword (e.g. IL-6)...`" />
+        <search-bar :placeholder="`Search for documents including a specific keyword (e.g. IL-6)...`" />
       </div>
       <settings-bar>
-        <div slot="left">
-          <counters :data="countersData"/>
-        </div>
         <div slot="right">
           <settings />
         </div>
       </settings-bar>
       <grafer class="grafer" model="wisconsin-knowledge" layer="epi" :back-edges="true"/>
-      <div class="loader-container" v-if="dataLoading">
-        <div class="loader">Loading...</div>
-      </div>
     </div>
-    <drilldown-modal :data="openDrilldown" @close-drilldown="onCloseDrilldown"/>
-    <!-- <drilldown-panel
-      @close-pane="onClosePanel"
-      :is-open="isOpenPanel"
-      @open-drilldown="onOpenDrilldown"
-      :data="openPanel"
-    /> -->
   </div>
 </template>
 
@@ -57,11 +38,7 @@
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from '../components/Settings.vue';
   import Counters from '@/components/Counters.vue';
-  import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import FacetsPane from '@/views/Home/components/FacetsPane.vue';
-  import CardContainer from '@/components/Cards/CardContainer.vue';
-  import DrilldownModal from '../components/DrilldownModal.vue';
-  // import DrilldownPane from '../components/DrilldownPanel/DrilldownPane.vue';
+  
   import Grafer from '@/views/Models/Bio/components/BioGraphs/Grafer.vue';
 
   const ACTIONS = [
@@ -73,163 +50,15 @@
     Settings,
     SettingsBar,
     Counters,
-    LeftSidePanel,
-    FacetsPane,
-    CardContainer,
-    DrilldownModal,
-    // DrilldownPane,
     Grafer,
   };
 
   @Component({ components })
   export default class DocsClusters extends Vue {
-    activePane = '';
-    actions: any = ACTIONS;
-    dataLoading = false;
-    data: CosmosSearchInterface | Record<any, never> = {};
-    filterHash: string = '';
-    openPanel: CosmosSearchObjectsInterface | Record<any, never> = {};
-    openDrilldown: CosmosSearchObjectsInterface | Record<any, never> = {};
-
-    @Getter getFilters;
-    @Getter getModelsList;
-
-    @Watch('getFilters') onGetFiltersChanged (): void {
-      this.fetchCosmos();
-    }
 
     mounted (): void {
-      this.fetchCosmos();
     }
 
-    async fetchCosmos (): Promise<void> {
-      const facetSelection = this.facetSelection;
-      const filterHashNew = JSON.stringify(facetSelection);
-
-      if (filterHashNew !== this.filterHash || !_.isEmpty(facetSelection.cosmosQuery)) {
-        this.filterHash = filterHashNew;
-        try {
-          this.dataLoading = true;
-          const response = await cosmosSearch(filterToParamObj(this.facetSelection));
-          this.data = response;
-        } catch (e) {
-          throw Error(e);
-        }
-        this.dataLoading = false;
-      }
-    }
-
-    // TO-DO: Refactor with the same function in FacetsPane.vue
-    public get facetTerms (): any {
-      return Object.keys(QUERY_FIELDS_MAP).map(queryFieldKey => QUERY_FIELDS_MAP[queryFieldKey].field);
-    }
-
-    // TO-DO: Refactor with the same function in FacetsPane.vue
-    public get facetSelection (): FacetTermsSelectionMap {
-      const selectionMap = {};
-      this.facetTerms.forEach(facet => {
-        let selection = {};
-        const facetClause = filtersUtil.findPositiveFacetClause(this.getFilters, facet);
-        if (!_.isEmpty(facetClause)) {
-          switch (facetClause.field) {
-            case QUERY_FIELDS_MAP.MODEL_TYPE.field: {
-              facetClause.values.forEach(value => {
-                selection[value] = true;
-              });
-              break;
-            }
-            default: {
-              selection = facetClause.values;
-            }
-          }
-        }
-        selectionMap[facet] = selection;
-      });
-      return selectionMap;
-    }
-
-    get searchPills (): (KeyValuePill | TextPill)[] {
-      return [
-        new TextPill(QUERY_FIELDS_MAP.COSMOS_QUERY),
-        new KeyValuePill(
-          QUERY_FIELDS_MAP.COSMOS_TYPE,
-          modelTypeUtil.COSMOS_TYPE_OPTIONS,
-          'Select type..',
-          { single: true, multiValue: false },
-        ),
-        new KeyValuePill(
-          QUERY_FIELDS_MAP.COSMOS_INCLUSIVE,
-          modelTypeUtil.COSMOS_INCLUSIVE_OPTIONS,
-          'Select option..',
-          { single: true, multiValue: false },
-        ),
-        new TextPill(
-          QUERY_FIELDS_MAP.COSMOS_BASE_CONFIDENCE,
-          { multiValue: false },
-        ),
-        new TextPill(
-          QUERY_FIELDS_MAP.COSMOS_POSTPROCESSING_CONFIDENCE,
-          { multiValue: false },
-        ),
-      ];
-    }
-
-    get countersData (): Array<string> {
-      const data = this.data as CosmosSearchInterface;
-      if (data && data.total !== undefined && data.page !== undefined) {
-        return [`${data.total} Documents`, `Page ${data.page + 1}`];
-      }
-    }
-
-    get currentAction (): string {
-      return this.activePane && this.actions.find(a => a.paneId === this.activePane).name;
-    }
-
-    get modelsCards (): CardInterface[] {
-      const data = this.data as CosmosSearchInterface;
-      return data.objects && data.objects.map((item, index) => ({
-        id: index,
-        title: item.bibjson.title,
-        subtitle: `${item.bibjson.year ?? 'Unknown Year'} - ${getAuthorList(item)}
-        `,
-        type: item.bibjson.type,
-        previewImageSrc: item.children[0].bytes,
-        raw: item,
-      }));
-    }
-
-    get isOpenPanel (): boolean {
-      return !_.isEmpty(this.openPanel);
-    }
-
-    onOpenPanel (card: CosmosSearchObjectsInterface): void {
-      this.openPanel = card;
-      this.openDrilldown = {};
-    }
-
-    onClosePanel (): void {
-      this.openPanel = {};
-    }
-
-    onOpenDrilldown (card: CosmosSearchObjectsInterface): void {
-      this.openDrilldown = card || this.openPanel;
-    }
-
-    onCloseDrilldown (): void {
-      this.openDrilldown = {};
-    }
-
-    onSetActivePane (actionName: string): void {
-      let activePane = '';
-      if (actionName !== '') {
-        activePane = this.actions.find(a => a.name === actionName).paneId;
-      }
-      this.activePane = activePane;
-    }
-
-    onClosePane ():void {
-      this.activePane = '';
-    }
   }
 </script>
 
