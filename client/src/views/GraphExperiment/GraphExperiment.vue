@@ -71,16 +71,34 @@
 
 
 
-  const DATA = {
-    nodes: [ 
-      { id: 'Node A', label: 'Node A' },
-      { id: 'Node B', label: 'Node B' },
-
-    ], 
-    edges: [
-      { id: 'Edge 1', source: 'Node A', target: 'Node B'}
-    ]
-  }
+ const DATA = {
+  nodes: [
+    { id: 'Node A', label: 'Node A' },
+    { id: 'Node B', label: 'Node B' },
+    { id: 'Node C', label: 'Node C' },
+    { id: 'L1', label: 'L1',
+      nodes: [
+        { id: 'Sub 1', label: 'Sub 1' },
+        { id: 'L2', label: 'L2',
+          nodes: [
+            { id: 'L3', label: 'L3',
+              nodes: [
+                { id: 'L4', label: 'L4' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  edges: [
+    { id: 'Edge 1', source: 'Node A', target: 'Node B' },
+    { id: 'Edge 2', source: 'Sub 1', target: 'Node B' },
+    { id: 'Edge 3', source: 'L4', target: 'Node A' },
+    { id: 'Edge 4', source: 'L4', target: 'L4' },
+    { id: 'Edge 5', source: 'Sub 1', target: 'Node C' }
+  ]
+};
   
   @Component({ })
   export default class GraphExperiment extends Vue {
