@@ -17,7 +17,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <epi-graph class="h-100" :graph="model.graph.detailed" :subgraph="model.subgraph" :highlights="highlightsModels[model.id]" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/>
+        <!-- <epi-graph class="h-100" :graph="model.graph.detailed" :subgraph="model.subgraph" :highlights="highlightsModels[model.id]" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/> -->
         </div>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
@@ -31,7 +31,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <local-epi-graph class="h-100" v-if="isSplitView" :graph="intersectionGraph" @node-click="onNodeClick"/>
+        <!-- <local-epi-graph class="h-100" v-if="isSplitView" :graph="intersectionGraph" @node-click="onNodeClick"/> -->
       </div>
     </resizable-grid>
     <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >

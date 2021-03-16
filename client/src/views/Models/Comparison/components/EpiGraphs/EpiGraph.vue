@@ -10,7 +10,7 @@
 
   import { GraphInterface, SubgraphInterface } from '@/types/typesGraphs';
 
-  import GlobalEpiModelRenderer from '@/graphs/svg/GlobalEpiModelRenderer';
+  // import GlobalEpiModelRenderer from '@/graphs/svg/GlobalEpiModelRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter.js';
   import { layered } from '@/graphs/svg//elk/layouts.js';
   import { hierarchyFn } from '@/utils/SVGUtil.js';
@@ -56,46 +56,46 @@
     }
 
     mounted (): void {
-      this.renderer = new GlobalEpiModelRenderer({
-        el: this.$refs.graph,
-        adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
-        renderMode: 'delta',
-      });
+    //   this.renderer = new GlobalEpiModelRenderer({
+    //     el: this.$refs.graph,
+    //     adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
+    //     renderMode: 'delta',
+    //   });
 
-      this.renderer.setCallback('nodeClick', (node) => {
-        this.$emit('node-click', node.datum().data); // TO FIX
-        const neighborhood = calculateNodeNeighborhood(this.graph, node.datum().id);
-        this.renderer.showNeighborhood(neighborhood);
-      });
+    //   this.renderer.setCallback('nodeClick', (node) => {
+    //     this.$emit('node-click', node.datum().data); // TO FIX
+    //     const neighborhood = calculateNodeNeighborhood(this.graph, node.datum().id);
+    //     this.renderer.showNeighborhood(neighborhood);
+    //   });
 
-     // Collapse/Expand
-     this.renderer.setCallback('nodeDblClick', (node) => {
-        if (!node.datum().collapsed || node.datum().collapsed === false) {
-          this.renderer.collapse(node.datum().id);
-        } else {
-          this.renderer.expand(node.datum().id);
-        }
-      });
+    //  // Collapse/Expand
+    //  this.renderer.setCallback('nodeDblClick', (node) => {
+    //     if (!node.datum().collapsed || node.datum().collapsed === false) {
+    //       this.renderer.collapse(node.datum().id);
+    //     } else {
+    //       this.renderer.expand(node.datum().id);
+    //     }
+    //   });
 
-      this.renderer.setCallback('backgroundDblClick', () => {
-        this.renderer.hideNeighbourhood();
-      });
+    //   this.renderer.setCallback('backgroundDblClick', () => {
+    //     this.renderer.hideNeighbourhood();
+    //   });
 
-      // TO FIX: Enable back tooltip functionality
-      this.renderer.setCallback('nodeMouseEnter', (node) => {
-        const nodeData = node.datum();
-        // Highlight linked nodes/edges
-        if (!nodeData.nodes) {
-          const found = this.subgraph.nodes.find(node => node.id === nodeData.id);
-          if (found) {
-            this.$emit('node-hover', found);
-          }
-        }
-      });
+    //   // TO FIX: Enable back tooltip functionality
+    //   this.renderer.setCallback('nodeMouseEnter', (node) => {
+    //     const nodeData = node.datum();
+    //     // Highlight linked nodes/edges
+    //     if (!nodeData.nodes) {
+    //       const found = this.subgraph.nodes.find(node => node.id === nodeData.id);
+    //       if (found) {
+    //         this.$emit('node-hover', found);
+    //       }
+    //     }
+    //   });
 
-      this.renderer.setCallback('nodeMouseLeave', () => {
-        this.renderer.unHighlightReference(this.reference);
-      });
+    //   this.renderer.setCallback('nodeMouseLeave', () => {
+    //     this.renderer.unHighlightReference(this.reference);
+    //   });
 
       this.refresh();
     }

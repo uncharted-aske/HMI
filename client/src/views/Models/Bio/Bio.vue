@@ -39,7 +39,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <local-bio-graph v-if="isSplitView" :graph="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
+        <local-graph v-if="isSplitView" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
@@ -69,12 +69,12 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from './components/FacetsPane.vue';
-  import LocalBioGraph from './components/BioGraphs/LocalBioGraph.vue';
+  import LocalGraph from './components/Graphs/LocalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataNode from './components/DrilldownMetadataPanel/DrilldownMetadataNode.vue';
   import DrilldownMetadataEdge from './components/DrilldownMetadataPanel/DrilldownMetadataEdge.vue';
-  import Grafer from './components/BioGraphs/Grafer.vue';
+  import Grafer from './components/Graphs/Grafer.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -93,7 +93,7 @@
     LeftSidePanel,
     MetadataPanel,
     FacetsPane,
-    LocalBioGraph,
+    LocalGraph,
     ResizableGrid,
     DrilldownPanel,
     DrilldownMetadataNode,

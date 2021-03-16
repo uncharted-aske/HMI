@@ -70,7 +70,6 @@
   }
 
 
-
  const DATA = {
   nodes: [
     { id: 'Node A', label: 'Node A' },

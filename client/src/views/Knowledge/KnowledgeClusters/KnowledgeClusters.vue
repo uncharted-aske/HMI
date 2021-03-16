@@ -62,7 +62,7 @@
   import CardContainer from '@/components/Cards/CardContainer.vue';
   import KnowledgeModal from '../components/KnowledgeModal.vue';
   import KnowledgePanel from '../components/KnowledgePanel/KnowledgePanel.vue';
-  import Grafer from '@/views/Models/Bio/components/BioGraphs/Grafer.vue';
+  import Grafer from '@/views/Models/Bio/components/Graphs/Grafer.vue';
 
   const ACTIONS = [
     { name: 'Facets', icon: 'filter', paneId: 'facets' },

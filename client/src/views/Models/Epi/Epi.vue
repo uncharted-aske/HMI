@@ -25,7 +25,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <global-epi-graph v-if="selectedModel" :graph="selectedGraph" :highlights="highlights" @node-click="onNodeClick"/>
+        <!-- <global-epi-graph v-if="selectedModel" :graph="selectedGraph" :highlights="highlights" @node-click="onNodeClick"/> -->
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -38,7 +38,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <local-epi-graph v-if="isSplitView" :graph="subgraph" @node-click="onNodeClick"/>
+        <!-- <local-epi-graph v-if="isSplitView" :graph="subgraph" @node-click="onNodeClick"/> -->
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :tabs="tabsDrilldown" :activeTabId="activeTabIdDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onTabClickDrilldown">
@@ -81,8 +81,8 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from './components/FacetsPane.vue';
-  import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
-  import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
+  // import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
+  // import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import DrilldownMetadataPane from './components/DrilldownPanel/DrilldownMetadataPane.vue';
@@ -346,8 +346,8 @@
     LeftSidePanel,
     MetadataPanel,
     FacetsPane,
-    GlobalEpiGraph,
-    LocalEpiGraph,
+    // GlobalEpiGraph,
+    // LocalEpiGraph,
     ResizableGrid,
     DrilldownPanel,
     DrilldownMetadataPane,
