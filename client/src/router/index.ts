@@ -7,6 +7,7 @@ import EpiView from '@/views/Models/Epi/Epi.vue';
 import ComparisonView from '@/views/Models/Comparison/Comparison.vue';
 import KnowledgeCards from '@/views/Knowledge/KnowledgeCards/KnowledgeCards.vue';
 import KnowledgeClusters from '@/views/Knowledge/KnowledgeClusters/KnowledgeClusters.vue';
+import GraphExperiment from '@/views/GraphExperiment/GraphExperiment.vue';
 
 const RouterSingleton = ((): any => {
   let router: Router;
@@ -20,6 +21,11 @@ const RouterSingleton = ((): any => {
           path: '/',
           name: 'home',
           component: Home,
+        },
+        {
+          path: '/graphExperiment',
+          name: 'graphExperiment',
+          component: GraphExperiment,
         },
         {
           path: '/bioView',
