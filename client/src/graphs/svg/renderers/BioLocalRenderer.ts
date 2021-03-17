@@ -13,12 +13,12 @@ const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 const DEFAULT_STYLE = {
   node: {
     fill: Colors.NODES.DEFAULT,
-    stroke: Colors.STROKE
+    stroke: Colors.STROKE,
   },
   edge: {
     fill: 'none',
     strokeWidth: 5,
-  }
+  },
 };
 
 export default class BioLocalRenderer extends SVGRenderer {
@@ -26,66 +26,65 @@ export default class BioLocalRenderer extends SVGRenderer {
     super(options);
   }
 
-    buildDefs (): void {
-      const svg = d3.select((this as any).svgEl);
-      const edges = flatten((this as any).layout).edges;
+  buildDefs (): void {
+    const svg = d3.select((this as any).svgEl);
+    const edges = flatten((this as any).layout).edges;
 
-      //Clean up
-      svg.select('defs').selectAll('.edge-marker-end').remove();
+    // Clean up
+    svg.select('defs').selectAll('.edge-marker-end').remove();
 
-      const defs = svg.select('defs')
-        .selectAll('.edge-marker-end')
-        .data(edges)
-        .enter()
-        .append('marker')
-        .classed('edge-marker-end', true);
+    const defs = svg.select('defs')
+      .selectAll('.edge-marker-end')
+      .data(edges)
+      .enter()
+      .append('marker')
+      .classed('edge-marker-end', true);
 
-      //Arrowheads 
-      defs
-        .filter(d => (d as any).data.edgeType !== EdgeTypes.EDGES.COMPLEX)
-        .attr('id', d => {
-          const source = (d as any).source.replace(/\s/g, '');
-          const target = (d as any).target.replace(/\s/g, '');
-          const type = (d as any).data.edgeType;
-          return `arrowhead-${source}-${target}-${type}`;
-        })
-        .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
-        .attr('refX', 2)
-        .attr('refY', 0)
-        .attr('orient', 'auto')
-        .attr('markerWidth', 15)
-        .attr('markerHeight', 15)
-        .attr('markerUnits', 'userSpaceOnUse')
-        .attr('xoverflow', 'visible')
-        .append('svg:path')
-        .attr('d', SVGUtil.ARROW)
-        .style('fill', d => calcEdgeColor(d))
-        .style('stroke', 'none');
-      
-      //Circles
-      defs
-          .filter(d => (d as any).data.edgeType === EdgeTypes.EDGES.COMPLEX)
-          .attr('id', d => {
-            const source = (d as any).source.replace(/\s/g, '');
-            const target = (d as any).target.replace(/\s/g, '');
-            const type = (d as any).data.edgeType;
-            return `arrowhead-${source}-${target}-${type}`;
-          })
-          .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
-          .attr('refX', 2)
-          .attr('refY', 0)
-          .attr('orient', 'auto')
-          .attr('markerWidth', 15)
-          .attr('markerHeight', 15)
-          .attr('markerUnits', 'userSpaceOnUse')
-          .attr('xoverflow', 'visible')
-          .append('circle')
-          .attr('cx', 0)
-          .attr('cy', 0)
-          .attr('r', 3)
-          .style('fill', d => calcEdgeColor(d));
-          
-    }
+    // Arrowheads
+    defs
+      .filter(d => (d as any).data.edgeType !== EdgeTypes.EDGES.COMPLEX)
+      .attr('id', d => {
+        const source = (d as any).source.replace(/\s/g, '');
+        const target = (d as any).target.replace(/\s/g, '');
+        const type = (d as any).data.edgeType;
+        return `arrowhead-${source}-${target}-${type}`;
+      })
+      .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
+      .attr('refX', 2)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', 15)
+      .attr('markerHeight', 15)
+      .attr('markerUnits', 'userSpaceOnUse')
+      .attr('xoverflow', 'visible')
+      .append('svg:path')
+      .attr('d', SVGUtil.ARROW)
+      .style('fill', d => calcEdgeColor(d))
+      .style('stroke', 'none');
+
+    // Circles
+    defs
+      .filter(d => (d as any).data.edgeType === EdgeTypes.EDGES.COMPLEX)
+      .attr('id', d => {
+        const source = (d as any).source.replace(/\s/g, '');
+        const target = (d as any).target.replace(/\s/g, '');
+        const type = (d as any).data.edgeType;
+        return `arrowhead-${source}-${target}-${type}`;
+      })
+      .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
+      .attr('refX', 2)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', 15)
+      .attr('markerHeight', 15)
+      .attr('markerUnits', 'userSpaceOnUse')
+      .attr('xoverflow', 'visible')
+      .append('circle')
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', 3)
+      .style('fill', d => calcEdgeColor(d));
+  }
 
   renderNode (nodeSelection: d3.Selection<any, any, any, any>): void {
     nodeSelection.each(function () {
@@ -115,7 +114,7 @@ export default class BioLocalRenderer extends SVGRenderer {
       .style('fill', '#333')
       .style('font-weight', '600')
       .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-      .text(d => d.label); //FIXME: Create a string util for truncation5
+      .text(d => d.label); // FIXME: Create a string util for truncation
   }
 
   renderEdge (edgeSelection:d3.Selection<any, any, any, any>):void {
@@ -123,7 +122,7 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('d', d => pathFn(d.points))
       .style('fill', DEFAULT_STYLE.edge.fill)
       .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
-      .style('stroke', d=> calcEdgeColor(d))
+      .style('stroke', d => calcEdgeColor(d))
       .attr('marker-end', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');

@@ -36,7 +36,7 @@
         el: this.$refs.graph,
         adapter: new Adapter(DEFAULT_RENDERING_OPTIONS),
         renderMode: 'basic',
-        useEdgeControl: false,
+        useEdgeControl: true,
         useZoom: true,
         useMinimap: false,
         addons: [],

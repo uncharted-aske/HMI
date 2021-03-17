@@ -53,7 +53,7 @@ export abstract class NodeTypes {
 
 export abstract class EdgeTypes {
   static readonly EDGES: Record<string, any> = {
-    //Statement types
+    // Statement types
     INHIBITION: 'Inhibition',
     ACTIVATION: 'Activation',
     INCREASEAMOUNT: 'IncreaseAmount',

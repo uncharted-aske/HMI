@@ -172,8 +172,8 @@ export const calcLabelColor = (node) => {
 /**
  * Calculate edge colors for biological graphs
  *  - ACTIVATION/INCREASEAMOUNT: BLUE
- *  - INHIBITION/DECREASEAMOUNT: RED  
- * 
+ *  - INHIBITION/DECREASEAMOUNT: RED
+ *
  */
 
 export const calcEdgeColor = (edge) => {
