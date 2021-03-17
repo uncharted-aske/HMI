@@ -1,16 +1,17 @@
 import { DataFile } from '@dekkai/data-source';
 
-async function parseJSONL (input: string, cb: (o: any) => void): Promise<void> {
+const SIZE_OF_2MB = 2 * 1024 * 1024;
+
+async function parseJSONL (input: string, cb: (obj: any) => void): Promise<void> {
   const file = await DataFile.fromRemoteSource(input);
 
-  // load 2MB chunks
-  const sizeOf2MB = 2 * 1024 * 1024;
+  const chunkSizeInBytes = SIZE_OF_2MB;
   const byteLength = await file.byteLength;
   const decoder = new TextDecoder();
   const lineBreak = '\n'.charCodeAt(0);
 
-  for (let offset = 0; offset <= byteLength; offset += sizeOf2MB) {
-    const chunkEnd = Math.min(offset + sizeOf2MB, byteLength);
+  for (let offset = 0; offset <= byteLength; offset += chunkSizeInBytes) {
+    const chunkEnd = Math.min(offset + chunkSizeInBytes, byteLength);
     const chunk = await file.loadData(offset, chunkEnd);
     const view = new DataView(chunk);
     let start = 0;
@@ -29,17 +30,15 @@ async function parseJSONL (input: string, cb: (o: any) => void): Promise<void> {
     if (start < chunk.byteLength) {
       offset -= chunk.byteLength - start;
     }
-
-    // console.log(`${chunkEnd} / ${byteLength} - ${((chunkEnd/byteLength) * 100).toFixed(2)}%`);
   }
 }
 
-export const loadJSONLFile = async (file: string, options: any = null): Promise<any> => {
-  const ret = [];
+export const loadJSONLFile = async (file: string, options: any = null): Promise<any[]> => {
+  const parsedJSONL = [];
 
   await parseJSONL(file, json => {
-    ret.push(Object.assign({}, json, options));
+    parsedJSONL.push(Object.assign({}, json, options));
   });
 
-  return ret;
+  return parsedJSONL;
 };
