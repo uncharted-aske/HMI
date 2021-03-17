@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="entities-pane-container">
     <div class="border-bottom">
       <a :href="data.raw.bibjson.link[0].url" target="_blank">
         <h5>{{data.title}}</h5>
@@ -54,7 +54,14 @@
 
 <style lang="scss" scoped>
 @import "@/styles/variables";
-
+.entities-pane-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
 .entities-container {
   overflow: hidden scroll;
 }

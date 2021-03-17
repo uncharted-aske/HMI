@@ -1,7 +1,6 @@
 <template>
   <div class="knowledge-pane-container">
-    <div v-if="!isEmptyData" >
-     <div class="mt-3 documents-container">
+     <div v-if="!isEmptyData" class="mt-3 documents-container hide-scrollbar">
       <div class="mb-1 px-2 py-4 d-flex rounded-lg border" v-for="(object, index) in data.objects" :key="index">
         <div class="flex-grow-1">
             <a :href="object.bibjson.link[0].url" target="_blank">
@@ -11,9 +10,6 @@
         </div>
       </div>
     </div>
-
-    </div>
-
     <div v-else class="alert alert-info" role="alert">
       No metadata at the moment
     </div>
@@ -54,15 +50,16 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 .knowledge-pane-container {
-display: flex;
+  display: flex;
   flex-direction: column;
   position: absolute;
   height: 100%;
   width: 100%;
   overflow: hidden;
-    .documents-container {
-        overflow: hidden scroll;
-    }
 }
+
+ .documents-container {
+    overflow: hidden scroll;
+  }
 
 </style>

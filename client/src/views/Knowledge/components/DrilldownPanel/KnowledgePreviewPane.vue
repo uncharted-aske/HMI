@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="knowledge-preview-pane-container">
     <div class="border-bottom">
       <a :href="data.raw.bibjson.link[0].url" target="_blank">
         <h5>{{data.title}}</h5>
@@ -18,7 +18,7 @@
       <h6>Publisher</h6>
       <div>{{data.raw.bibjson.publisher || 'None'}}</div>
     </div>
-    <div class="mt-3 flex-grow-1 position-relative overflow-hidden">
+    <div class="mt-3 preview-container hide-scrollbar">
       <div class="position-absolute h-100 w-100">
         <h6>{{artifactHeader}}</h6>
         <div v-for="(artifact) in artifactList" :key="artifact.id"
@@ -108,6 +108,19 @@
 
 <style lang="scss" scoped>
 @import "@/styles/variables";
+
+.knowledge-preview-pane-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.preview-container {
+  overflow: hidden scroll;
+}
 
   .artifact-img {
     width: 45%;
