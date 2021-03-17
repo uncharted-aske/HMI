@@ -65,7 +65,7 @@
     }
 
     onClickClose (): void {
-      this.$emit('close-modal');
+      this.$emit('close');
     }
 
     onClickStop (e: MouseEvent): void {

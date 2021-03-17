@@ -22,12 +22,13 @@
       </div>
     </div>
     <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
-        <knowledge-preview-pane v-if="drilldownActiveTabId ===  'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true" @close-modal="showModalDocuments = false"/>
+        <knowledge-preview-pane v-if="drilldownActiveTabId ===  'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true"/>
         <models-pane v-if="drilldownActiveTabId ===  'models'" slot="content" :data="drilldownData"/>
         <entities-pane v-if="drilldownActiveTabId ===  'entities'" slot="content" :data="drilldownData"/>
     </drilldown-panel>
     <modal-document
       v-if="showModalDocuments"
+      @close="showModalDocuments = false"
       :data="drilldownData"
     />
 
