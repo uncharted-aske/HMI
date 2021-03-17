@@ -5,7 +5,7 @@ import { SVGRenderer } from 'svg-flowgraph';
 import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
 
 import { calcEdgeColor, flatten } from '@/graphs/svg/util';
-import { Colors } from '@/graphs/svg/encodings';
+import { Colors, EdgeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
@@ -33,16 +33,21 @@ export default class BioLocalRenderer extends SVGRenderer {
       //Clean up
       svg.select('defs').selectAll('.edge-marker-end').remove();
 
-      svg.select('defs')
+      const defs = svg.select('defs')
         .selectAll('.edge-marker-end')
         .data(edges)
         .enter()
         .append('marker')
-        .classed('edge-marker-end', true)
+        .classed('edge-marker-end', true);
+
+      //Arrowheads 
+      defs
+        .filter(d => (d as any).data.edgeType !== EdgeTypes.EDGES.COMPLEX)
         .attr('id', d => {
           const source = (d as any).source.replace(/\s/g, '');
           const target = (d as any).target.replace(/\s/g, '');
-          return `arrowhead-${source}-${target}`;
+          const type = (d as any).data.edgeType;
+          return `arrowhead-${source}-${target}-${type}`;
         })
         .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
         .attr('refX', 2)
@@ -56,6 +61,30 @@ export default class BioLocalRenderer extends SVGRenderer {
         .attr('d', SVGUtil.ARROW)
         .style('fill', d => calcEdgeColor(d))
         .style('stroke', 'none');
+      
+      //Circles
+      defs
+          .filter(d => (d as any).data.edgeType === EdgeTypes.EDGES.COMPLEX)
+          .attr('id', d => {
+            const source = (d as any).source.replace(/\s/g, '');
+            const target = (d as any).target.replace(/\s/g, '');
+            const type = (d as any).data.edgeType;
+            return `arrowhead-${source}-${target}-${type}`;
+          })
+          .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
+          .attr('refX', 2)
+          .attr('refY', 0)
+          .attr('orient', 'auto')
+          .attr('markerWidth', 15)
+          .attr('markerHeight', 15)
+          .attr('markerUnits', 'userSpaceOnUse')
+          .attr('xoverflow', 'visible')
+          .append('circle')
+          .attr('cx', 0)
+          .attr('cy', 0)
+          .attr('r', 3)
+          .style('fill', d => calcEdgeColor(d));
+          
     }
 
   renderNode (nodeSelection: d3.Selection<any, any, any, any>): void {
@@ -86,7 +115,7 @@ export default class BioLocalRenderer extends SVGRenderer {
       .style('fill', '#333')
       .style('font-weight', '600')
       .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-      .text(d => d.label);
+      .text(d => d.label); //FIXME: Create a string util for truncation5
   }
 
   renderEdge (edgeSelection:d3.Selection<any, any, any, any>):void {
@@ -98,41 +127,16 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('marker-end', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');
-        return `url(#arrowhead-${source}-${target})`;
+        const type = (d as any).data.edgeType;
+        return `url(#arrowhead-${source}-${target}-${type})`;
       })
       .attr('marker-start', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');
-        return `url(#start-${source}-${target})`;
+        const type = (d as any).data.edgeType;
+        return `url(#start-${source}-${target}-${type})`;
       });
   }
-
-  //   renderEdge (edgeSelection: d3.Selection<any, any, any, any>): void {
-  //     edgeSelection.append('path')
-  //       .attr('cursor', 'pointer')
-  //       .attr('d', d => pathFn(d.points))
-  //       .style('fill', 'none')
-  //       .style('stroke', d => calcEdgeColor(d))
-  //       .style('stroke-width', 5)
-  //       .style('stroke-dasharray', d => {
-  //         if (d.data.edgeType) {
-  //           if (d.data.edgeType === 'NOAP') {
-  //             return '5,5';
-  //           }
-  //         }
-  //         return null;
-  //       })
-  //       .attr('marker-end', d => {
-  //         const source = d.source.replace(/\s/g, '');
-  //         const target = d.target.replace(/\s/g, '');
-  //         return `url(#arrowhead-${source}-${target})`;
-  //       })
-  //       .attr('marker-start', d => {
-  //         const source = d.source.replace(/\s/g, '');
-  //         const target = d.target.replace(/\s/g, '');
-  //         return `url(#start-${source}-${target})`;
-  //       });
-  //   }
 
   //   hideNeighbourhood (): void {
   //     const chart = this.chart;

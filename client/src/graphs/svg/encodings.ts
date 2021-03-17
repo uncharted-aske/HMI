@@ -58,6 +58,7 @@ export abstract class EdgeTypes {
     ACTIVATION: 'Activation',
     INCREASEAMOUNT: 'IncreaseAmount',
     DECREASEAMOUNT: 'DecreaseAmount',
+    COMPLEX: 'Complex',
 
     OVERLAPPING: 'overlapping',
     ABSTRACTOVERLAPPING: 'AP',
