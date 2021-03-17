@@ -1,6 +1,6 @@
 <template>
   <div class="metadata-pane-container">
-    <div v-if="!isEmptyMetadata">
+    <div v-if="!isEmptyMetadata" class="metadata-container hide-scrollbar">
       <collapsible-item>
         <div slot="title">Type</div>
         <div slot="content">
@@ -114,6 +114,15 @@
 @import "@/styles/variables";
 
 .metadata-pane-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  .metadata-container {
+    overflow:  hidden scroll;
+  }
   .metadata-header {
     padding: 5px;
     color: $text-color-dark;
