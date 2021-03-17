@@ -6,12 +6,11 @@ export const getUtil = async (urlStr: string, paramObj: Record<string, any>): Pr
     mode: 'cors',
     cache: 'default',
   };
-  // TypeScript URL type incorrect
-  // eslint-disable-next-line
-  const url: any = new URL(urlStr);
+
+  const url = new URL(urlStr);
   url.search = new URLSearchParams(paramObj).toString();
   try {
-    const response = await fetch(url, init);
+    const response = await fetch(url as unknown as Request, init);
     return await response.json();
   } catch (e) {
     return e;
