@@ -61,6 +61,7 @@
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface, SubgraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
+  import { loadBGraphData } from '@/utils/BGraphUtil';
 
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -115,6 +116,17 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+
+    public mounted (): void {
+      this.initializeBGraph();
+    }
+
+    async initializeBGraph (): Promise<void> {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const [bgNodes, bgEdges] = await loadBGraphData();
+      // TODO: Register bgraph library and import
+      // this.bgraph = bgraph.graph(bgNodes, bgEdges);
+    }
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
