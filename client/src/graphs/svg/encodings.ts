@@ -12,11 +12,14 @@ export abstract class Colors {
     OVERLAPPING: Colors.HIGHLIGHT,
   };
 
+  // Bio graphs
+  static readonly POLARITY: Record<string, any> = {
+    POSITIVE: '#81A1C1',
+    NEGATIVE: '#BF616A',
+  };
+
   static readonly EDGES: Record<string, any> = {
     DEFAULT: '#c2c7d1',
-    ACTIVATION: '#88C0D0',
-    INHIBITION: '#BF616A',
-    COMPLEX: '#B48EAD',
     OVERLAPPING: Colors.HIGHLIGHT,
   };
 
@@ -50,9 +53,12 @@ export abstract class NodeTypes {
 
 export abstract class EdgeTypes {
   static readonly EDGES: Record<string, any> = {
+    //Statement types
     INHIBITION: 'Inhibition',
     ACTIVATION: 'Activation',
-    COMPLEX: 'Complex',
+    INCREASEAMOUNT: 'IncreaseAmount',
+    DECREASEAMOUNT: 'DecreaseAmount',
+
     OVERLAPPING: 'overlapping',
     ABSTRACTOVERLAPPING: 'AP',
     NONOVERLAPPING: 'NOAP',

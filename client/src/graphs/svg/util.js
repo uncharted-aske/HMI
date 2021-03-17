@@ -169,18 +169,20 @@ export const calcLabelColor = (node) => {
   return node.nodes ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
 };
 
+/**
+ * Calculate edge colors for biological graphs
+ *  - ACTIVATION/INCREASEAMOUNT: BLUE
+ *  - INHIBITION/DECREASEAMOUNT: RED  
+ * 
+ */
+
 export const calcEdgeColor = (edge) => {
   if (edge.data.edgeType) {
-    if (edge.data.edgeType === EdgeTypes.EDGES.ACTIVATION) {
-      return Colors.EDGES.ACTIVATION;
-    } else if (edge.data.edgeType === EdgeTypes.EDGES.INHIBITION) {
-      return Colors.EDGES.INHIBITION;
-    } else if (edge.data.edgeType === EdgeTypes.EDGES.COMPLEX) {
-      return Colors.EDGES.COMPLEX;
-    } else if (edge.data.edgeType === EdgeTypes.EDGES.OVERLAPPING) {
-      return Colors.EDGES.OVERLAPPING;
-    }
-    return Colors.EDGES.DEFAULT;
+    if (edge.data.edgeType === EdgeTypes.EDGES.ACTIVATION || edge.data.edgeType === EdgeTypes.EDGES.INCREASEAMOUNT) {
+      return Colors.POLARITY.POSITIVE;
+    } else if (edge.data.edgeType === EdgeTypes.EDGES.INHIBITION || edge.data.edgeType === EdgeTypes.EDGES.DECREASEAMOUNT) {
+      return Colors.POLARITY.NEGATIVE;
+    } else return Colors.EDGES.DEFAULT;
   }
   return Colors.EDGES.DEFAULT;
 };

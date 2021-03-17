@@ -16,7 +16,7 @@ export const layered = {
       'elk.spacing.edgeEdge': 10,
       'elk.spacing.edgeNode': 10,
       'elk.layered.spacing.edgeEdgeBetweenLayers': 15,
-      'elk.layered.spacing.edgeNodeBetweenLayers': 10
+      'elk.layered.spacing.edgeNodeBetweenLayers': 10,
     };
 
     return {
@@ -27,7 +27,7 @@ export const layered = {
       'elk.randomSeed': 666, // might as well be a coool number
       'elk.padding': '[top=25, left=25, bottom=25, right=25]',
       'elk.validateGraph': true,
-      ...spacingOptions
+      ...spacingOptions,
     };
   },
   nodesLayoutOptions: (/* node */) => {
@@ -36,7 +36,7 @@ export const layered = {
       'elk.portAlignment.default': 'DISTRIBUTED',
       'elk.padding': '[top=20, left=20, bottom=20, right=20]', // Hierarchical padding
       'elk.layered.spacing.edgeEdgeBetweenLayers': 5,
-      'elk.layered.spacing.edgeNodeBetweenLayers': 1
+      'elk.layered.spacing.edgeNodeBetweenLayers': 1,
     };
   },
   portsLayoutOptions: (node, port) => {
@@ -45,5 +45,5 @@ export const layered = {
     } else {
       return { 'elk.port.side': 'WEST' };
     }
-  }
+  },
 };

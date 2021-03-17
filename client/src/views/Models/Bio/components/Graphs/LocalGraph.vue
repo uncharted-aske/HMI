@@ -12,7 +12,7 @@
   import BioLocalRenderer from '@/graphs/svg/renderers/BioLocalRenderer';
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
-  
+
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
     nodeHeight: 40,
@@ -39,7 +39,7 @@
         useEdgeControl: false,
         useZoom: true,
         useMinimap: false,
-        addons: []
+        addons: [],
       });
 
     //   this.renderer.setCallback('nodeClick', (node) => {

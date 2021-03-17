@@ -17,7 +17,7 @@ const build = (root) => {
       depth: depth,
       type: 'normal',
       parent: parent,
-      data: node
+      data: node,
     };
 
     // Build edges
@@ -31,7 +31,7 @@ const build = (root) => {
           id: source + ':' + target,
           source: source,
           target: target,
-          data: edge
+          data: edge,
         });
       }
     }
@@ -44,7 +44,6 @@ const build = (root) => {
   };
   return _walk(root, 0, null);
 };
-
 
 /**
  * Add ELK engine specific data so we can run layout
@@ -141,7 +140,7 @@ const postProcess = (layout) => {
     edge.points = [startPoint, ...bendPoints, endPoint].map(p => {
       return {
         x: p.x + tx,
-        y: p.y + ty
+        y: p.y + ty,
       };
     });
 
@@ -161,7 +160,7 @@ const postProcess = (layout) => {
     for (let i = 1; i < t.length - 1; i++) {
       edge.points.push({
         x: 0.5 * (p.x + t[i].x),
-        y: 0.5 * (p.y + t[i].y)
+        y: 0.5 * (p.y + t[i].y),
       });
       edge.points.push(t[i]);
       p = t[i];
@@ -175,12 +174,12 @@ const postProcess = (layout) => {
     if (!node.parent) {
       nodeGlobalPosition.set(node.id, {
         x: node.x,
-        y: node.y
+        y: node.y,
       });
     } else {
       nodeGlobalPosition.set(node.id, {
         x: node.x + nodeGlobalPosition.get(node.parent.id).x,
-        y: node.y + nodeGlobalPosition.get(node.parent.id).y
+        y: node.y + nodeGlobalPosition.get(node.parent.id).y,
       });
     }
   });
@@ -213,7 +212,6 @@ const changeKey = (obj, before, after) => {
   }
 };
 
-
 const getEdgeContainerId = (sourceNode, targetNode) => {
   if (sourceNode.parent === null || targetNode.parent === null) {
     return null;
@@ -222,7 +220,6 @@ const getEdgeContainerId = (sourceNode, targetNode) => {
   }
   return getEdgeContainerId(sourceNode.parent, targetNode.parent);
 };
-
 
 // Reshuffle edges into the right compound nodes for layout
 const reshuffle = (renderGraph) => {
@@ -248,16 +245,16 @@ const reshuffle = (renderGraph) => {
  * https://www.eclipse.org/elk/
 */
 export default class ELKAdapter {
-  constructor(options) {
+  constructor (options) {
     this.options = options;
   }
 
-  makeRenderingGraph(graphData) {
+  makeRenderingGraph (graphData) {
     const renderGraph = build(graphData);
     return renderGraph;
   }
 
-  async run(renderGraph) {
+  async run (renderGraph) {
     reshuffle(renderGraph);
 
     const elk = new ELK();
