@@ -1,6 +1,5 @@
 'use strict';
 const path = require('path');
-const typescript = require('rollup-plugin-typescript2');
 const sourceMaps = require('rollup-plugin-sourcemaps');
 const vue = require('rollup-plugin-vue');
 const commonjs = require('@rollup/plugin-commonjs');
@@ -12,6 +11,7 @@ const globby = require('globby');
 const server = require('live-server');
 const copy = require('rollup-plugin-copy');
 const alias = require('@rollup/plugin-alias');
+const esbuild = require('rollup-plugin-esbuild');
 const dotenv = require('dotenv');
 
 const dotenvResult = dotenv.config();
@@ -150,10 +150,6 @@ function pluginsForType (type, env) {
         preferBuiltins: false,
       }),
       commonjs(),
-      typescript({
-        typescript: require('typescript'),
-        cacheRoot: path.resolve(__dirname, '.rts2_cache'),
-      }),
       vue({
         needMap: false,
         style: {
@@ -171,6 +167,10 @@ function pluginsForType (type, env) {
             },
           },
         },
+      }),
+      esbuild({
+        minify: env === environments.PROD,
+        target: 'es2015',
       }),
       json(),
       image(),
