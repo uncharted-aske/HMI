@@ -108,4 +108,12 @@
 
 }
 
+.nav-link.active {
+  cursor: default;
+  border-bottom: 3px solid $selection;
+}
+.nav-link:not(.active) {
+  cursor: pointer;
+}
+
 </style>
