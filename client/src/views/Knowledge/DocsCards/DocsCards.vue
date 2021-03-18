@@ -21,7 +21,7 @@
         <div class="loader">Loading...</div>
       </div>
     </div>
-    <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
+    <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" :active-tab-id="drilldownActiveTabId" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
         <knowledge-preview-pane v-if="drilldownActiveTabId ===  'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true"/>
         <models-pane v-if="drilldownActiveTabId ===  'models'" slot="content" :data="drilldownData"/>
         <entities-pane v-if="drilldownActiveTabId ===  'entities'" slot="content" :data="drilldownData"/>
@@ -193,7 +193,7 @@
       return data.objects && data.objects.map((item, index) => ({
         id: index,
         title: item.bibjson.title,
-        subtitle: `${item.bibjson.year ?? 'Unknown Year'} - ${getAuthorList(item)}`,
+        subtitle: `${item.bibjson.year} ?? 'Unknown Year'} - ${getAuthorList(item)}`,
         type: item.bibjson.type,
         previewImageSrc: item.children[0].bytes,
         raw: item,
@@ -289,4 +289,5 @@
     height: 5em;
   }
 }
+
 </style>
