@@ -73,7 +73,7 @@
   import EdgePane from './components/DrilldownPanel/EdgePane.vue';
   import NodePane from './components/DrilldownPanel/NodePane.vue';
 
-  import Grafer from './components/BioGraphs/Grafer.vue';
+  import Grafer from './components/Graphs/Grafer.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },

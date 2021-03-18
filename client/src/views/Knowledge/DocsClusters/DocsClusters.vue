@@ -24,7 +24,7 @@
   import Settings from '../components/Settings.vue';
   import Counters from '@/components/Counters.vue';
 
-  import Grafer from '@/views/Models/Bio/components/BioGraphs/Grafer.vue';
+  import Grafer from '@/views/Models/Bio/components/Graphs/Grafer.vue';
 
   const components = {
     SearchBar,
