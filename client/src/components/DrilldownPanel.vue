@@ -29,7 +29,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Prop, Watch } from 'vue-property-decorator';
+  import { Prop } from 'vue-property-decorator';
 
   import { TabInterface } from '@/types/types';
 
@@ -56,7 +56,6 @@
     @Prop({ default: '' })
     paneSubtitle: string;
 
-    
     get displayHeader (): boolean {
       return Boolean(this.paneTitle || this.paneSubtitle);
     }
@@ -103,7 +102,7 @@
 
 .nav-link.active {
   cursor: default;
-  border-bottom: 3px solid $selection; 
+  border-bottom: 3px solid $selection;
 }
 .nav-link:not(.active) {
   cursor: pointer;
