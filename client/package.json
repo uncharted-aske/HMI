@@ -24,7 +24,6 @@
     "@uncharted.software/grafer": "0.3.0",
     "@uncharted.software/lex": "^1.0.0",
     "bootstrap": "^4.5.2",
-    "compound-graph": "git+https://bot-user:RosaRomeroGomez@github.com/mwdchang/compound-graph.git#99c392edf52963623e2b82a7deee746e49bbdaee",
     "d3": "^6.6.0",
     "element-resize-detector": "1.1.x",
     "elkjs": "0.5.1",
