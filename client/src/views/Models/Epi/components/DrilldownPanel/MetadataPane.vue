@@ -1,6 +1,6 @@
 <template>
   <div class="metadata-pane-container">
-    <div v-if="!isEmptyMetadata" class="metadata-container hide-scrollbar">
+    <template v-if="!isEmptyMetadata">
       <collapsible-item>
         <div slot="title">Type</div>
         <div slot="content">
@@ -40,7 +40,7 @@
         </div>      </div>
       </collapsible-item>
 
-      <collapsible-item>
+      <collapsible-item class="flex-grow-1">
         <div slot="title">Text Snippets</div>
         <div slot="content" class="knowledge-container">
           <div v-for="(item, index) in getKnowledge" :key="index" class="snippet-container" @click="showMoreHandler(item.doi)">
@@ -51,7 +51,7 @@
           </div>
         </div>
       </collapsible-item>
-    </div>
+    </template>
 
     <div v-else class="alert alert-info" role="alert">
       No metadata at the moment
@@ -142,12 +142,10 @@
   }
 
   .knowledge-container {
-    display: flex;
-    flex-direction: column;
-    height: 50vh;
-    overflow:hidden;
+    height: 100%;
+    position: absolute;
     .snippet-container {
-      flex: 1;
+      height: 100%;
       overflow: auto;
       border: 1px solid $border;
       padding: 4px 8px;
