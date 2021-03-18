@@ -22,7 +22,7 @@ export abstract class Colors {
     INCORRECT: '#BF616A',
     CORRECT: '#7ca25c',
     PARTIAL: '#D08770',
-    UNCURATED: '#212529'
+    UNCURATED: '#212529',
   };
 
   static readonly EDGES: Record<string, any> = {
@@ -80,5 +80,4 @@ export abstract class EdgeTypes {
     PARTIAL: 2,
     UNCURATED: 3,
   }
-
 }

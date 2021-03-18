@@ -187,7 +187,6 @@ export const calcEdgeColor = (edge) => {
   return Colors.EDGES.DEFAULT;
 };
 
-
 /**
  * Calculate edge control filling according to the curation status of a statement
  * incorrect - 0
@@ -201,23 +200,21 @@ export const calcEdgeControlBackground = (edge) => {
     return Colors.CURATION.INCORRECT;
   } else if (curated === EdgeTypes.CURATION_STATUS.CORRECT) {
     return Colors.CURATION.CORRECT;
-
   } else if (curated === EdgeTypes.CURATION_STATUS.PARTIAL) {
     return Colors.CURATION.PARTIAL;
   }
   return Colors.CURATION.UNCURATED;
 };
 
-
 export const calculateEdgeControlLabels = (edge) => {
   const type = edge.data.edgeType;
-  switch(type) {
+  switch (type) {
     case EdgeTypes.EDGES.ACTIVATION:
-      return 'A'
+      return 'A';
     case EdgeTypes.EDGES.INHIBITION:
       return 'I';
     case EdgeTypes.EDGES.INCREASEAMOUNT:
-    return '+';
+      return '+';
     case EdgeTypes.EDGES.PHOSPORYLATION:
       return 'P';
     case EdgeTypes.EDGES.DEPHOSPORYLATION:
@@ -226,4 +223,3 @@ export const calculateEdgeControlLabels = (edge) => {
       return '';
   }
 };
-

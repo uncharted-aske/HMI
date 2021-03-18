@@ -15,7 +15,7 @@ const DEFAULT_STYLE = {
   node: {
     fill: Colors.NODES.DEFAULT,
     stroke: Colors.STROKE,
-    borderRadius: 5
+    borderRadius: 5,
   },
   edge: {
     fill: 'none',
@@ -120,15 +120,15 @@ export default class BioLocalRenderer extends SVGRenderer {
       .style('font-weight', '600')
       .style('font-size', '12px')
       .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-      .text(d => truncateString(d.label, 15)); 
+      .text(d => truncateString(d.label, 15));
   }
 
-  renderEdgeControl(edgeSelection) {
+  renderEdgeControl (edgeSelection) {
     edgeSelection.append('circle')
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', DEFAULT_STYLE.edge.controlRadius)
-      .attr('fill', d=> calcEdgeControlBackground(d))
+      .attr('fill', d => calcEdgeControlBackground(d))
       .attr('stroke', d => calcEdgeColor(d))
       .attr('stroke-width', DEFAULT_STYLE.edge.controlStrokeWidth);
 
