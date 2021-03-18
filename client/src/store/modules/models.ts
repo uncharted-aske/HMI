@@ -16,26 +16,47 @@ const state: ModelsState = {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const fetchInitialModelData = async () => {
-  const CHIME = await getUtil(`${window.location.protocol}//${window.location.host}/uncharted_chime.json`, {});
-  const nestedCHIMECAG = await getUtil(`${window.location.protocol}//${window.location.host}/nested-CHIME-SIR-CAG.json`, {});
-  const nestedCHIMEGrFN = await getUtil(`${window.location.protocol}//${window.location.host}/nested-CHIME-SIR-GrFN.json`, {});
+  const staticFileURLs = [
+    `${window.location.protocol}//${window.location.host}/uncharted_chime.json`,
+    `${window.location.protocol}//${window.location.host}/nested-CHIME-SIR-CAG.json`,
+    `${window.location.protocol}//${window.location.host}/nested-CHIME-SIR-GrFN.json`,
+    `${window.location.protocol}//${window.location.host}/uncharted_sir.json`,
+    `${window.location.protocol}//${window.location.host}/nested-SIR-simple-CAG.json`,
+    `${window.location.protocol}//${window.location.host}/nested-SIR-simple-GrFN.json`,
+    `${window.location.protocol}//${window.location.host}/uncharted_double_epi.json`,
+    `${window.location.protocol}//${window.location.host}/nested-SARS-COV1-SEIRP-CAG.json`,
+    `${window.location.protocol}//${window.location.host}/nested-SARS-COV1-SEIRP-GrFN.json`,
+    `${window.location.protocol}//${window.location.host}/comparison-SimpleSIR-CHIME.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.protocol}//${window.location.host}/OAP1-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.protocol}//${window.location.host}/OAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.protocol}//${window.location.host}/NOAP1-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.protocol}//${window.location.host}/NOAP2-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.protocol}//${window.location.host}/NOAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.protocol}//${window.location.host}/subgraph.json`, // Boutique subgraph for COVID-19 model.
+    `${window.location.protocol}//${window.location.host}/xdd_parameters_table.json`, // Boutique subgraph for COVID-19 model.
+  ];
 
-  const SIR = await getUtil(`${window.location.protocol}//${window.location.host}/uncharted_sir.json`, {});
-  const nestedSIRCAG = await getUtil(`${window.location.protocol}//${window.location.host}/nested-SIR-simple-CAG.json`, {});
-  const nestedSIRGrFN = await getUtil(`${window.location.protocol}//${window.location.host}/nested-SIR-simple-GrFN.json`, {});
-
-  const DoubleEpi = await getUtil(`${window.location.protocol}//${window.location.host}/uncharted_double_epi.json`, {});
-  const nestedDoubleEpiCAG = await getUtil(`${window.location.protocol}//${window.location.host}/nested-SARS-COV1-SEIRP-CAG.json`, {});
-  const nestedDoubleEpiGrFN = await getUtil(`${window.location.protocol}//${window.location.host}/nested-SARS-COV1-SEIRP-GrFN.json`, {});
-
-  const comparisonJSON = await getUtil(`${window.location.protocol}//${window.location.host}/comparison-SimpleSIR-CHIME.json`, {}); // Overlapping nodes and edges for SIR and CHIME
-  const OAP1CHIMEPaths = await getUtil(`${window.location.protocol}//${window.location.host}/OAP1-CHIME-paths.json`, {}); // Overlapping nodes and edges for SIR and CHIME
-  const OAP1SIRPaths = await getUtil(`${window.location.protocol}//${window.location.host}/OAP1-SIR-paths.json`, {}); // Overlapping nodes and edges for SIR and CHIME
-  const NOAP1CHIMEPaths = await getUtil(`${window.location.protocol}//${window.location.host}/NOAP1-CHIME-paths.json`, {}); // Overlapping nodes and edges for SIR and CHIME
-  const NOAP2CHIMEPaths = await getUtil(`${window.location.protocol}//${window.location.host}/NOAP2-CHIME-paths.json`, {}); // Overlapping nodes and edges for SIR and CHIME
-  const NOAP1SIRPaths = await getUtil(`${window.location.protocol}//${window.location.host}/NOAP1-SIR-paths.json`, {}); // Overlapping nodes and edges for SIR and CHIME
-  const subgraphJSON = await getUtil(`${window.location.protocol}//${window.location.host}/subgraph.json`, {}); // Boutique subgraph for COVID-19 model.
-  const paramsData = await getUtil(`${window.location.protocol}//${window.location.host}/xdd_parameters_table.json`, {}); // Boutique subgraph for COVID-19 model.
+  const [
+    CHIME,
+    nestedCHIMECAG,
+    nestedCHIMEGrFN,
+    SIR,
+    nestedSIRCAG,
+    nestedSIRGrFN,
+    DoubleEpi,
+    nestedDoubleEpiCAG,
+    nestedDoubleEpiGrFN,
+    comparisonJSON,
+    OAP1CHIMEPaths,
+    OAP1SIRPaths,
+    NOAP1CHIMEPaths,
+    NOAP2CHIMEPaths,
+    NOAP1SIRPaths,
+    subgraphJSON,
+    paramsData,
+  ] = await Promise.all(
+    staticFileURLs.map(url => getUtil(url, {})),
+  );
 
   return {
     CHIME,
