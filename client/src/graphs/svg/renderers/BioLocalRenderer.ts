@@ -4,7 +4,7 @@ import { SVGRenderer } from 'svg-flowgraph';
 
 import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
 
-import { calcEdgeColor, flatten } from '@/graphs/svg/util';
+import { calcEdgeColor, calcEdgeControlBackground, calculateEdgeControlLabels, flatten } from '@/graphs/svg/util';
 import { Colors, EdgeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 
@@ -18,6 +18,8 @@ const DEFAULT_STYLE = {
   edge: {
     fill: 'none',
     strokeWidth: 5,
+    controlRadius: 6,
+    controlStrokeWidth: 2,
   },
 };
 
@@ -115,6 +117,26 @@ export default class BioLocalRenderer extends SVGRenderer {
       .style('font-weight', '600')
       .style('text-anchor', d => d.nodes ? 'left' : 'middle')
       .text(d => d.label); // FIXME: Create a string util for truncation
+  }
+
+  renderEdgeControl(edgeSelection) {
+    edgeSelection.append('circle')
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', DEFAULT_STYLE.edge.controlRadius)
+      .attr('fill', d=> calcEdgeControlBackground(d))
+      .attr('stroke', d => calcEdgeColor(d))
+      .attr('stroke-width', DEFAULT_STYLE.edge.controlStrokeWidth);
+
+    edgeSelection.append('text')
+      .attr('x', -DEFAULT_STYLE.edge.controlRadius * 0.5)
+      .attr('y', DEFAULT_STYLE.edge.controlRadius * 0.5)
+      .style('font-size', DEFAULT_STYLE.edge.controlRadius)
+      .style('stroke', 'none')
+      .style('font-weight', '800')
+      .style('fill', 'white')
+      .style('cursor', 'pointer')
+      .text(d => calculateEdgeControlLabels(d));
   }
 
   renderEdge (edgeSelection:d3.Selection<any, any, any, any>):void {

@@ -18,6 +18,13 @@ export abstract class Colors {
     NEGATIVE: '#BF616A',
   };
 
+  static readonly CURATION: Record<string, any> = {
+    INCORRECT: '#BF616A',
+    CORRECT: '#7ca25c',
+    PARTIAL: '#D08770',
+    UNCURATED: '#212529'
+  };
+
   static readonly EDGES: Record<string, any> = {
     DEFAULT: '#c2c7d1',
     OVERLAPPING: Colors.HIGHLIGHT,
@@ -58,10 +65,20 @@ export abstract class EdgeTypes {
     ACTIVATION: 'Activation',
     INCREASEAMOUNT: 'IncreaseAmount',
     DECREASEAMOUNT: 'DecreaseAmount',
+    PHOSPORYLATION: 'Phosporylation',
+    DEPHOSPORYLATION: 'Dephosporylation',
     COMPLEX: 'Complex',
 
     OVERLAPPING: 'overlapping',
     ABSTRACTOVERLAPPING: 'AP',
     NONOVERLAPPING: 'NOAP',
   }
+
+  static readonly CURATION_STATUS: Record<string, any> = {
+    INCORRECT: 0,
+    CORRECT: 1,
+    PARTIAL: 2,
+    UNCURATED: 3,
+  }
+
 }

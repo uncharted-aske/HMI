@@ -139,6 +139,11 @@
       const modelsList = this.getModelsList;
       const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
       this.subgraph = selectedModel.subgraph;
+      this.subgraph.edges = this.subgraph.edges.map(edge => {
+        let e = Object.assign({}, edge);
+        e.metadata.curated = 2;
+        return e;
+      })
     }
 
     onTabClick (tabId: string): void {

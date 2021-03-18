@@ -37,6 +37,7 @@
         adapter: new Adapter(DEFAULT_RENDERING_OPTIONS),
         renderMode: 'basic',
         useEdgeControl: true,
+        edgeControlOffset: 0.5,
         useZoom: true,
         useMinimap: false,
         addons: [],
