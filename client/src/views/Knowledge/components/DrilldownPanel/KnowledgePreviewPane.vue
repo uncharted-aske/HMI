@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="knowledge-preview-pane-container">
     <div class="border-bottom">
       <a :href="data.raw.bibjson.link[0].url" target="_blank">
         <h5>{{data.title}}</h5>
@@ -18,8 +18,8 @@
       <h6>Publisher</h6>
       <div>{{data.raw.bibjson.publisher || 'None'}}</div>
     </div>
-    <div class="mt-3 flex-grow-1 position-relative overflow-hidden">
-      <div class="position-absolute h-100 w-100">
+    <div class="mt-3 preview-container hide-scrollbar">
+      <div>
         <h6>{{artifactHeader}}</h6>
         <div v-for="(artifact) in artifactList" :key="artifact.id"
           class="shadow artifact-img"
@@ -47,7 +47,7 @@
   const ARTIFACT_DISPLAY_LIMIT = 4;
 
   @Component({ })
-  export default class KnowledgePanelPreview extends Vue {
+  export default class KnowledgePreviewPane extends Vue {
     @Prop({ required: false }) private data: any;
 
     @Watch('data') onDataChange (): any {
@@ -100,7 +100,7 @@
     }
 
     showMoreHandler (e: Event): void {
-        this.$emit('open-drilldown');
+        this.$emit('open-modal');
         e.preventDefault();
     }
   }
@@ -109,7 +109,20 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-  .artifact-img {
+.knowledge-preview-pane-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.preview-container {
+  overflow: hidden scroll;
+}
+
+.artifact-img {
     width: 45%;
     height: 0;
     padding-top: 45%;
@@ -121,6 +134,6 @@
     border: $icon-color solid 1px;
     border-radius: 10px;
     margin: 2.5%;
-  }
+}
 
 </style>

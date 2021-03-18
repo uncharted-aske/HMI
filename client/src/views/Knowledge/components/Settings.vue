@@ -2,15 +2,13 @@
   <div class="settings-container">
     <button
       type="button" class="btn btn-secondary mr-1"
-      :disabled="this.$route.name === 'knowledgeDocsClusters'"
-      @click="$router.push({ name: 'knowledgeDocsClusters' })"
+      disabled
     >
       Entity-based Views
     </button>
     <button
       type="button" class="btn btn-secondary mr-1"
-      :disabled="this.$route.name === 'knowledge'"
-      @click="$router.push({ name: 'knowledge' })"
+      disabled
     >
       Document-based Views
     </button>
@@ -22,7 +20,6 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  //   import { Prop } from 'vue-property-decorator';
 
   const components = {
 
