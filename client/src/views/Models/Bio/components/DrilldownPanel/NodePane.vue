@@ -1,22 +1,21 @@
 <template>
-  <div class="node-pane-container">
-    <div v-if="!isEmptyMetadata">
-      <collapsible-item v-for="(values, dataObjectKey) in dataObject" :key="dataObjectKey">
-        <div slot="title">{{dataObjectKey}}</div>
-        <div v-if="dataObjectKey !== 'DBRefs'">
-          <div slot="content" class="mb-1 px-2 py-2 d-flex rounded-lg border" role="button" v-for="(edge, index) in values" :key="index" @click="onEdgeClick(edge)">
-            {{edge.source_label}} → {{edge.target_label}}
-          </div>
+  <collapsible-container :isEmpty="isEmptyMetadata">
+    <collapsible-item slot="item" v-for="(values, dataObjectKey) in dataObject" :key="dataObjectKey">
+      <div slot="title">{{dataObjectKey}}</div>
+      <div v-if="dataObjectKey !== 'DBRefs'">
+        <div slot="content" class="mb-1 px-2 py-2 d-flex rounded-lg border" role="button" v-for="(edge, index) in values" :key="index" @click="onEdgeClick(edge)">
+          {{edge.source_label}} → {{edge.target_label}}
         </div>
-        <div v-else slot="content">
-          {{values}}
-        </div>
-      </collapsible-item>
-    </div>
-    <div v-else class="alert alert-info" role="alert">
+      </div>
+      <div v-else slot="content">
+        {{values}}
+      </div>
+    </collapsible-item>
+
+    <div slot="empty" class="alert alert-info" role="alert">
       No metadata at the moment
     </div>
-  </div>
+  </collapsible-container>
 </template>
 
 <script lang="ts">
@@ -26,9 +25,11 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-  import CollapsibleItem from '@/components/CollapsibleItem.vue';
+  import CollapsibleContainer from '@/components/Collapsible/CollapsibleContainer.vue';
+  import CollapsibleItem from '@/components/Collapsible/CollapsibleItem.vue';
 
   const components = {
+    CollapsibleContainer,
     CollapsibleItem,
   };
 

@@ -23,14 +23,9 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-  import CollapsibleItem from '@/components/CollapsibleItem.vue';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
 
-  const components = {
-    CollapsibleItem,
-  };
-
-  @Component({ components })
+  @Component
   export default class KnowledgePane extends Vue {
     @Prop({ default: null }) data: CosmosSearchInterface;
 

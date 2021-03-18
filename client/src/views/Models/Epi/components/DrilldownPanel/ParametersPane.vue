@@ -26,11 +26,9 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-  import CollapsibleItem from '@/components/CollapsibleItem.vue';
   import ScatterPlot from '@/components/widgets/charts/ScatterPlot.vue';
 
   const components = {
-    CollapsibleItem,
     ScatterPlot,
   };
 

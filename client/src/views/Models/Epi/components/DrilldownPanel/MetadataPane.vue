@@ -1,19 +1,18 @@
 <template>
-  <div class="metadata-pane-container">
-    <div v-if="!isEmptyMetadata" class="metadata-container hide-scrollbar">
-      <collapsible-item>
-        <div slot="title">Type</div>
-        <div slot="content">
-          <div class="metadata-item">
-              {{getType}}
-          </div>
+  <collapsible-container :isEmpty="isEmptyMetadata">
+    <collapsible-item slot="item">
+      <div slot="title">Type</div>
+      <div slot="content">
+        <div class="metadata-item">
+            {{getType}}
         </div>
-      </collapsible-item>
+      </div>
+    </collapsible-item>
 
-      <collapsible-item>
-        <div slot="title">Provenance</div>
-        <div slot="content">
-          <div class="metadata-item">
+    <collapsible-item slot="item">
+      <div slot="title">Provenance</div>
+      <div slot="content">
+        <div class="metadata-item">
           <div v-for="(value, key) in getProvenance" :key="key">
             <div class="key">{{key | capitalize-first-letter-formatter}}</div>
             <div v-if="key !== 'sources'">{{value}}</div>
@@ -24,12 +23,12 @@
             </div>
           </div>
         </div>
-        </div>
-      </collapsible-item>
+      </div>
+    </collapsible-item>
 
-      <collapsible-item>
-        <div slot="title">Attributes</div>
-        <div slot="content">
+    <collapsible-item slot="item">
+      <div slot="title">Attributes</div>
+      <div slot="content">
         <div class="metadata-item">
           <div v-for="(item, index) in getAttributes" :key="index">
             <div v-for="(value, key) in item" :key="key">
@@ -37,26 +36,26 @@
               {{value}}
             </div>
           </div>
-        </div>      </div>
-      </collapsible-item>
-
-      <collapsible-item>
-        <div slot="title">Text Snippets</div>
-        <div slot="content" class="knowledge-container">
-          <div v-for="(item, index) in getKnowledge" :key="index" class="snippet-container" @click="showMoreHandler(item.doi)">
-            <div class="snippet-title">
-              <a target="_blank" :href="item.URL">{{item.title}}</a>
-            </div>
-            <span v-for="(snippet, index) in item.highlight" :key="index" v-html="snippet" class="snippet-highlights"/>
-          </div>
         </div>
-      </collapsible-item>
-    </div>
+      </div>
+    </collapsible-item>
 
-    <div v-else class="alert alert-info" role="alert">
+    <collapsible-item slot="item" class="flex-grow-1">
+      <div slot="title">Text Snippets</div>
+      <div slot="content" class="h-100 position-absolute">
+        <div v-for="(item, index) in getKnowledge" :key="index" class="snippet-container" @click="showMoreHandler(item.doi)">
+          <div class="snippet-title">
+            <a target="_blank" :href="item.URL">{{item.title}}</a>
+          </div>
+          <span v-for="(snippet, index) in item.highlight" :key="index" v-html="snippet" class="snippet-highlights"/>
+        </div>
+      </div>
+    </collapsible-item>
+
+    <div slot="empty" class="alert alert-info" role="alert">
       No metadata at the moment
     </div>
-  </div>
+  </collapsible-container>
 </template>
 
 <script lang="ts">
@@ -66,10 +65,12 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-  import CollapsibleItem from '@/components/CollapsibleItem.vue';
+  import CollapsibleContainer from '@/components/Collapsible/CollapsibleContainer.vue';
+  import CollapsibleItem from '@/components/Collapsible/CollapsibleItem.vue';
   import { CosmosTextSnippet } from '@/types/typesCosmos';
 
   const components = {
+    CollapsibleContainer,
     CollapsibleItem,
   };
 
@@ -113,67 +114,31 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.metadata-pane-container {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
+.metadata-item {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  text-align: left;
+  margin-top: 5px;
+  padding: 5px;
+  .key {
+    font-weight: bold;
+    padding-top: 5px;
+  }
+}
+
+.snippet-container {
   height: 100%;
-  width: 100%;
-  overflow: hidden;
-  .metadata-container {
-    overflow:  hidden scroll;
-  }
-  .metadata-header {
-    padding: 5px;
-    color: $text-color-dark;
-    background-color: $drilldown-header;
-  }
-  .metadata-item {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-    text-align: left;
-    margin-top: 5px;
-    padding: 5px;
-    .key {
+  overflow: auto;
+  border: 1px solid $border;
+  padding: 4px 8px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  cursor: pointer;
+  .snippet-highlights {
+    font-size: 14px;
+    em {
       font-weight: bold;
-      padding-top: 5px;
     }
-  }
-
-  .knowledge-container {
-    display: flex;
-    flex-direction: column;
-    height: 50vh;
-    overflow:hidden;
-    .snippet-container {
-      flex: 1;
-      overflow: auto;
-      border: 1px solid $border;
-      padding: 4px 8px;
-      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-      cursor: pointer;
-      .snippet-highlights {
-        font-size: 14px;
-        em {
-          font-weight: bold;
-        }
-      }
-    }
-  }
-
-  .artifact-img {
-    width: 45%;
-    height: 0;
-    padding-top: 45%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: #EAEBEC;
-    float: left;
-    border: $icon-color solid 1px;
-    border-radius: 10px;
-    margin: 2.5%;
   }
 }
 </style>
