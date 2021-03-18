@@ -1,5 +1,5 @@
 <template>
-  <div class="drilldown-panel-container" v-if="isOpen" :key="rerenderKey">
+  <div class="drilldown-panel-container" v-if="isOpen">
     <div
       v-if="tabs.length > 1"
       class="mb-2"
@@ -7,7 +7,7 @@
       <ul class="nav nav-tabs">
         <li v-for="(tab) in tabs" :key="tab.id" class="nav-item">
           <div
-            :class="_activeTabId === tab.id ? 'nav-link active' : 'nav-link'"
+            :class="activeTabId === tab.id ? 'nav-link active' : 'nav-link'"
             @click="onTabClick(tab.id)"
           >
             {{tab.name}}
@@ -22,7 +22,6 @@
     <close-button @close="onClose"/>
     <div class="flex-grow-1 position-relative overflow-scroll hide-scrollbar panel-body">
       <slot name="content"/>
-      <slot :name="_activeTabId"/>
     </div>
   </div>
 </template>
@@ -57,26 +56,7 @@
     @Prop({ default: '' })
     paneSubtitle: string;
 
-    @Watch('activeTabId')
-    onActiveTabIdChanged (): void {
-      this._activeTabId = this.activeTabId;
-    }
-
-    rerenderKey: number = 0;
-    _activeTabId: string;
-
-    forceRerender (): void {
-      this.rerenderKey += 1;
-    }
-
-    created (): void {
-      if (this.activeTabId !== undefined) {
-        this._activeTabId = this.activeTabId;
-      } else if (this.tabs.constructor === Array && this.tabs.length > 0) {
-        this._activeTabId = this.tabs[0].id;
-      }
-    }
-
+    
     get displayHeader (): boolean {
       return Boolean(this.paneTitle || this.paneSubtitle);
     }
@@ -87,10 +67,6 @@
 
     onTabClick (tabId: string): void {
       this.$emit('tab-click', tabId);
-      if (this.activeTabId === undefined) {
-        this._activeTabId = tabId;
-        this.forceRerender();
-      }
     }
   }
 </script>
@@ -127,6 +103,7 @@
 
 .nav-link.active {
   cursor: default;
+  border-bottom: 3px solid $selection; 
 }
 .nav-link:not(.active) {
   cursor: pointer;

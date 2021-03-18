@@ -166,6 +166,6 @@
 }
 
 .model-cards ::v-deep .card.checked {
-  border-color: $selection-dark;
+  border-color: $selection;
 }
 </style>
