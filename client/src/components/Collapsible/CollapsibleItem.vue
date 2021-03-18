@@ -1,5 +1,5 @@
 <template>
-  <div class="collapsible-container">
+  <div class="collapsible-item">
     <div class="item-container">
       <div
         class="item-title"
@@ -63,7 +63,7 @@
 
 <style lang="scss">
 @import "@/styles/variables";
-.collapsible-container {
+.collapsible-item {
   margin: 2px 0;
   display: flex;
   flex-direction: column;

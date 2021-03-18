@@ -1,27 +1,26 @@
 <template>
-  <div class="edge-pane-container">
-    <div v-if="!isEmptyMetadata">
-      <collapsible-item key="tested">
-        <div slot="title">Tested</div>
-        <div slot="content" class="my-3">{{data.tested}}</div>
-      </collapsible-item>
-      <collapsible-item key="belief">
-        <div slot="title">Belief</div>
-        <div slot="content" class="my-3">{{data.belief}}</div>
-      </collapsible-item>
-      <collapsible-item key="evidence">
-        <div slot="title">Evidence</div>
-        <div slot="content" class="my-3">
-          <ul class="pl-4">
-            <li v-for="(evidence, index) in data.evidence" :key="index">{{evidence.text}}</li>
-          </ul>
-        </div>
-      </collapsible-item>
-    </div>
-    <div v-else class="alert alert-info" role="alert">
+  <collapsible-container :isEmpty="isEmptyMetadata">
+    <collapsible-item slot="item">
+      <div slot="title">Tested</div>
+      <div slot="content" class="my-3">{{data.tested}}</div>
+    </collapsible-item>
+    <collapsible-item slot="item">
+      <div slot="title">Belief</div>
+      <div slot="content" class="my-3">{{data.belief}}</div>
+    </collapsible-item>
+    <collapsible-item class="flex-grow-1" slot="item">
+      <div slot="title">Evidence</div>
+      <div slot="content" class="h-100 position-absolute">
+        <ul class="pl-4 h-100 overflow-auto">
+          <li v-for="(evidence, index) in data.evidence" :key="index">{{evidence.text}}</li>
+        </ul>
+      </div>
+    </collapsible-item>
+
+    <div slot="empty" class="alert alert-info" role="alert">
       No metadata at the moment
     </div>
-  </div>
+  </collapsible-container>
 </template>
 
 <script lang="ts">
@@ -30,9 +29,11 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
-  import CollapsibleItem from '@/components/CollapsibleItem.vue';
+  import CollapsibleContainer from '@/components/Collapsible/CollapsibleContainer.vue';
+  import CollapsibleItem from '@/components/Collapsible/CollapsibleItem.vue';
 
   const components = {
+    CollapsibleContainer,
     CollapsibleItem,
   };
 
