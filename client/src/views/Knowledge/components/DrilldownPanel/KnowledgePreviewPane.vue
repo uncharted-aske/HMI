@@ -19,7 +19,7 @@
       <div>{{data.raw.bibjson.publisher || 'None'}}</div>
     </div>
     <div class="mt-3 preview-container hide-scrollbar">
-      <div class="position-absolute h-100 w-100">
+      <div>
         <h6>{{artifactHeader}}</h6>
         <div v-for="(artifact) in artifactList" :key="artifact.id"
           class="shadow artifact-img"
@@ -122,7 +122,7 @@
   overflow: hidden scroll;
 }
 
-  .artifact-img {
+.artifact-img {
     width: 45%;
     height: 0;
     padding-top: 45%;
@@ -134,6 +134,6 @@
     border: $icon-color solid 1px;
     border-radius: 10px;
     margin: 2.5%;
-  }
+}
 
 </style>
