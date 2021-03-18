@@ -5,6 +5,7 @@ export interface SVGRendererOptionsInterface {
   adapter: any, // Layout adapter
   renderMode: string, // basic or delta
   useEdgeControl?: boolean,
+  edgeControlOffset?: number,
   useMinimap?: boolean,
   useZoom?: boolean,
   addons?: any
