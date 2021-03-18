@@ -119,7 +119,7 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('y', d => d.nodes ? -5 : 0.5 * d.height)
       .style('fill', '#333')
       .style('font-weight', '600')
-      // .style('font-size', '14px')
+      .style('font-size', '14px')
       .style('text-anchor', d => d.nodes ? 'left' : 'middle')
       .text(d => truncateString(d.label, 15));
   }
