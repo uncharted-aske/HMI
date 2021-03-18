@@ -1,5 +1,5 @@
 <template>
-  <div class="collapsible-container">
+  <div class="collapsible-item">
     <div class="item-container">
       <div
         class="item-title"
@@ -8,7 +8,7 @@
         <slot name="title" />
       </div>
     </div>
-    <div v-if="expanded">
+    <div class="flex-grow-1 position-relative" v-if="expanded">
       <slot name="content" />
     </div>
   </div>
@@ -63,8 +63,15 @@
 
 <style lang="scss">
 @import "@/styles/variables";
-.collapsible-container {
+.collapsible-item {
   margin: 2px 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &.active {
+    flex: 1;
+  }
 
   .item-container {
     padding: 2px 0;

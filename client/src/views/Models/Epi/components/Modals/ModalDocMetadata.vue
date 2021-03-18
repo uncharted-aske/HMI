@@ -51,7 +51,7 @@
     Modal,
   };
 @Component({ components })
-  export default class ModalKnowledge extends Vue {
+  export default class ModalDocMetadata extends Vue {
     @Prop({ default: null }) data: any;
     get authorList (): string {
       return this.data.bibjson.author.map(a => a.name).join();

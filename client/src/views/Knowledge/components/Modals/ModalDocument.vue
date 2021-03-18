@@ -57,7 +57,7 @@
   };
 
   @Component({ components })
-  export default class KnowledgeDrilldown extends Vue {
+  export default class ModalDocument extends Vue {
     @Prop({ required: false }) private data: CardInterface;
 
     get doi (): string {
@@ -65,7 +65,7 @@
     }
 
     onClickClose (): void {
-      this.$emit('close-drilldown');
+      this.$emit('close');
     }
 
     onClickStop (e: MouseEvent): void {
@@ -111,12 +111,6 @@
 
 <style lang="scss" scoped>
 @import "@/styles/variables";
-
-.knowledge-drilldown {
-  top: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 1200;
-}
 
 .container {
   height: 90vh;

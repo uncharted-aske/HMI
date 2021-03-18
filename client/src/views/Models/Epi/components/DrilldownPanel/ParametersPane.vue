@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isEmptyData" class="h-100 d-flex flex-column drilldown-parameters-pane-container">
+  <div v-if="!isEmptyData" class="h-100 d-flex flex-column parameters-pane-container">
       <div class="parameter-title">{{title | capitalize-first-letter-formatter}} </div>
       <scatter-plot :data="data" :size="[400, 500]" @dot-click="onDotClick"/>
       <div class="parameter-title">Related Parameters </div>
@@ -26,16 +26,14 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-  import CollapsibleItem from '@/components/CollapsibleItem.vue';
   import ScatterPlot from '@/components/widgets/charts/ScatterPlot.vue';
 
   const components = {
-    CollapsibleItem,
     ScatterPlot,
   };
 
   @Component({ components })
-  export default class DrilldownParametersPane extends Vue {
+  export default class ParametersPane extends Vue {
     @Prop({ default: null }) data: any;
     @Prop({ default: null }) related: any;
 
@@ -56,7 +54,7 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.drilldown-parameters-pane-container {
+.parameters-pane-container {
   padding: 5px;
   .parameter-title {
     font-weight: bold;
