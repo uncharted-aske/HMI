@@ -139,9 +139,12 @@
       const modelsList = this.getModelsList;
       const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
       this.subgraph = selectedModel.subgraph;
-      this.subgraph.edges = this.subgraph.edges.map(edge => {
+      this.subgraph.edges = this.subgraph.edges.map((edge, idx) => {
         const e = Object.assign({}, edge);
-        e.metadata.curated = 2;
+        if (idx === 1 || idx === 2) {
+          (e as any).edgeType = 'Inhibition';
+        }
+        e.metadata.curated = idx;
         return e;
       });
     }

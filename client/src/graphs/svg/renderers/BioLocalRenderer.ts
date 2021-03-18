@@ -22,6 +22,7 @@ const DEFAULT_STYLE = {
     strokeWidth: 5,
     controlRadius: 6,
     controlStrokeWidth: 2,
+    controlStrokeColor: Colors.NODES.DEFAULT,
   },
 };
 
@@ -118,7 +119,7 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('y', d => d.nodes ? -5 : 0.5 * d.height)
       .style('fill', '#333')
       .style('font-weight', '600')
-      .style('font-size', '12px')
+      // .style('font-size', '14px')
       .style('text-anchor', d => d.nodes ? 'left' : 'middle')
       .text(d => truncateString(d.label, 15));
   }
@@ -129,16 +130,16 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('cy', 0)
       .attr('r', DEFAULT_STYLE.edge.controlRadius)
       .attr('fill', d => calcEdgeControlBackground(d))
-      .attr('stroke', d => calcEdgeColor(d))
+      .attr('stroke', 'white')
       .attr('stroke-width', DEFAULT_STYLE.edge.controlStrokeWidth);
 
     edgeSelection.append('text')
-      .attr('x', -DEFAULT_STYLE.edge.controlRadius * 0.5)
-      .attr('y', DEFAULT_STYLE.edge.controlRadius * 0.5)
+      .attr('x', - (DEFAULT_STYLE.edge.controlRadius * 0.5) + 1)
+      .attr('y', (DEFAULT_STYLE.edge.controlRadius * 0.5) -1)
       .style('font-size', DEFAULT_STYLE.edge.controlRadius)
       .style('stroke', 'none')
       .style('font-weight', '800')
-      .style('fill', 'white')
+      .style('fill', DEFAULT_STYLE.edge.controlStrokeColor)
       .style('cursor', 'pointer')
       .text(d => calculateEdgeControlLabels(d));
   }
