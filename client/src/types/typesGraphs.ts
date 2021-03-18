@@ -25,6 +25,7 @@ export interface GraphEdgeInterface {
 id?: string,
 source: string,
 target: string,
+edgeType?: string,
 metadata?: any
 }
 
