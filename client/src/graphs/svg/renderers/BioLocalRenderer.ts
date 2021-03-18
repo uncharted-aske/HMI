@@ -7,6 +7,7 @@ import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
 import { calcEdgeColor, calcEdgeControlBackground, calculateEdgeControlLabels, flatten } from '@/graphs/svg/util';
 import { Colors, EdgeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
+import { truncateString } from '@/utils/StringUtil';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
@@ -14,6 +15,7 @@ const DEFAULT_STYLE = {
   node: {
     fill: Colors.NODES.DEFAULT,
     stroke: Colors.STROKE,
+    borderRadius: 5
   },
   edge: {
     fill: 'none',
@@ -96,14 +98,15 @@ export default class BioLocalRenderer extends SVGRenderer {
         selection.append('rect')
           .attr('x', 0)
           .attr('y', 0)
+          .attr('rx', DEFAULT_STYLE.node.borderRadius)
           .attr('width', d => (d as any).width)
           .attr('height', d => (d as any).height)
-          .style('fill', '#EEF')
-          .style('stroke', '#888');
+          .style('stroke', DEFAULT_STYLE.node.stroke);
       } else {
         selection.append('rect')
           .attr('x', 0)
           .attr('y', 0)
+          .attr('rx', DEFAULT_STYLE.node.borderRadius)
           .attr('width', d => (d as any).width)
           .attr('height', d => (d as any).height)
           .style('fill', DEFAULT_STYLE.node.fill)
@@ -112,11 +115,12 @@ export default class BioLocalRenderer extends SVGRenderer {
     });
     nodeSelection.append('text')
       .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
-      .attr('y', d => d.nodes ? -5 : 25)
+      .attr('y', d => d.nodes ? -5 : 0.5 * d.height)
       .style('fill', '#333')
       .style('font-weight', '600')
+      .style('font-size', '12px')
       .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-      .text(d => d.label); // FIXME: Create a string util for truncation
+      .text(d => truncateString(d.label, 15)); 
   }
 
   renderEdgeControl(edgeSelection) {
