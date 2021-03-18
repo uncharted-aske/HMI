@@ -1,91 +1,224 @@
 import _ from 'lodash';
-import { GetterTree, MutationTree } from 'vuex';
+import { GetterTree, MutationTree, ActionTree } from 'vuex';
 
-import { ModelsState } from '@/types/types';
-
-import CHIME from '@/static/uncharted_chime.json';
-import nestedCHIMECAG from '@/static/nested-CHIME-SIR-CAG.json';
-import nestedCHIMEGrFN from '@/static/nested-CHIME-SIR-GrFN.json';
-
-import SIR from '@/static/uncharted_sir.json';
-import nestedSIRCAG from '@/static/nested-SIR-simple-CAG.json';
-import nestedSIRGrFN from '@/static/nested-SIR-simple-GrFN.json';
-
-import DoubleEpi from '@/static/uncharted_double_epi.json';
-import nestedDoubleEpiCAG from '@/static/nested-SARS-COV1-SEIRP-CAG.json';
-import nestedDoubleEpiGrFN from '@/static/nested-SARS-COV1-SEIRP-GrFN.json';
-
-import comparisonJSON from '@/static/comparison-SimpleSIR-CHIME.json'; // Overlapping nodes and edges for SIR and CHIME
-import OAP1CHIMEPaths from '@/static/OAP1-CHIME-paths.json'; // Overlapping nodes and edges for SIR and CHIME
-import OAP1SIRPaths from '@/static/OAP1-SIR-paths.json'; // Overlapping nodes and edges for SIR and CHIME
-import NOAP1CHIMEPaths from '@/static/NOAP1-CHIME-paths.json'; // Overlapping nodes and edges for SIR and CHIME
-import NOAP2CHIMEPaths from '@/static/NOAP2-CHIME-paths.json'; // Overlapping nodes and edges for SIR and CHIME
-import NOAP1SIRPaths from '@/static/NOAP1-SIR-paths.json'; // Overlapping nodes and edges for SIR and CHIME
-import subgraphJSON from '@/static/subgraph.json'; // Boutique subgraph for COVID-19 model.
-import paramsData from '@/static/xdd_parameters_table.json'; // Boutique subgraph for COVID-19 model.
+import { ModelsState, ModelInterface } from '@/types/types';
 
 import { emmaaModelList } from '@/services/EmmaaFetchService';
-
-const STATIC_MODELS = [
-  {
-    id: 0,
-    metadata: SIR.metadata,
-    graph: {
-      abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-      detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-    },
-    subgraph: _.pick(comparisonJSON.subgraphs[0], ['nodes', 'edges']),
-    type: 'computational',
-  },
-  {
-    id: 1,
-    metadata: CHIME.metadata,
-    graph: {
-      abstract: _.pick(nestedCHIMECAG, ['nodes', 'edges']),
-      detailed: _.pick(nestedCHIMEGrFN, ['nodes', 'edges']),
-    },
-    subgraph: _.pick(comparisonJSON.subgraphs[1], ['nodes', 'edges']),
-    type: 'computational',
-  },
-  {
-    id: 2,
-    metadata: DoubleEpi.metadata,
-    graph: {
-      abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
-      detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
-    },
-    type: 'computational',
-  },
-];
+import { getUtil } from '@/utils/FetchUtil';
 
 const state: ModelsState = {
+  isInitialized: false,
   selectedModelIds: new Set(),
-  parameters: paramsData,
-  comparisonHighlights:
+  parameters: {},
+  comparisonHighlights: {},
+  modelsList: [],
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const fetchInitialModelData = async () => {
+  const staticFileURLs = [
+    `${window.location.origin}/uncharted_chime.json`,
+    `${window.location.origin}/nested-CHIME-SIR-CAG.json`,
+    `${window.location.origin}/nested-CHIME-SIR-GrFN.json`,
+    `${window.location.origin}/uncharted_sir.json`,
+    `${window.location.origin}/nested-SIR-simple-CAG.json`,
+    `${window.location.origin}/nested-SIR-simple-GrFN.json`,
+    `${window.location.origin}/uncharted_double_epi.json`,
+    `${window.location.origin}/nested-SARS-COV1-SEIRP-CAG.json`,
+    `${window.location.origin}/nested-SARS-COV1-SEIRP-GrFN.json`,
+    `${window.location.origin}/comparison-SimpleSIR-CHIME.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.origin}/OAP1-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.origin}/OAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.origin}/NOAP1-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.origin}/NOAP2-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.origin}/NOAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    `${window.location.origin}/subgraph.json`, // Boutique subgraph for COVID-19 model.
+    `${window.location.origin}/xdd_parameters_table.json`, // Boutique subgraph for COVID-19 model.
+  ];
+
+  const [
+    CHIME,
+    nestedCHIMECAG,
+    nestedCHIMEGrFN,
+    SIR,
+    nestedSIRCAG,
+    nestedSIRGrFN,
+    DoubleEpi,
+    nestedDoubleEpiCAG,
+    nestedDoubleEpiGrFN,
+    comparisonJSON,
+    OAP1CHIMEPaths,
+    OAP1SIRPaths,
+    NOAP1CHIMEPaths,
+    NOAP2CHIMEPaths,
+    NOAP1SIRPaths,
+    subgraphJSON,
+    paramsData,
+  ] = await Promise.all(
+    staticFileURLs.map(url => getUtil(url, {})),
+  );
+
+  return {
+    CHIME,
+    nestedCHIMECAG,
+    nestedCHIMEGrFN,
+    SIR,
+    nestedSIRCAG,
+    nestedSIRGrFN,
+    DoubleEpi,
+    nestedDoubleEpiCAG,
+    nestedDoubleEpiGrFN,
+    comparisonJSON,
+    OAP1CHIMEPaths,
+    OAP1SIRPaths,
+    NOAP1CHIMEPaths,
+    NOAP2CHIMEPaths,
+    NOAP1SIRPaths,
+    subgraphJSON,
+    paramsData,
+  };
+};
+
+const buildInitialModelsList = ({
+  SIR,
+  nestedSIRCAG,
+  nestedSIRGrFN,
+  comparisonJSON,
+  CHIME,
+  nestedCHIMECAG,
+  nestedCHIMEGrFN,
+  DoubleEpi,
+  nestedDoubleEpiCAG,
+  nestedDoubleEpiGrFN,
+}): ModelInterface[] => {
+  return [
     {
-      9: {
-        1: OAP1SIRPaths,
-        2: OAP1CHIMEPaths,
+      id: 0,
+      metadata: SIR.metadata,
+      graph: {
+        abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
+        detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
       },
-      10: {
-        1: NOAP1SIRPaths,
-        2: { nodes: [], edges: [] },
-      },
-      11: {
-        1: { nodes: [], edges: [] },
-        2: NOAP2CHIMEPaths,
-      },
-      12: {
-        1: { nodes: [], edges: [] },
-        2: NOAP1CHIMEPaths,
-      },
+      subgraph: _.pick(comparisonJSON.subgraphs[0], ['nodes', 'edges']),
+      type: 'computational',
     },
-  modelsList: [
-    ...STATIC_MODELS,
-  ],
+    {
+      id: 1,
+      metadata: CHIME.metadata,
+      graph: {
+        abstract: _.pick(nestedCHIMECAG, ['nodes', 'edges']),
+        detailed: _.pick(nestedCHIMEGrFN, ['nodes', 'edges']),
+      },
+      subgraph: _.pick(comparisonJSON.subgraphs[1], ['nodes', 'edges']),
+      type: 'computational',
+    },
+    {
+      id: 2,
+      metadata: DoubleEpi.metadata,
+      graph: {
+        abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
+        detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
+      },
+      type: 'computational',
+    },
+  ];
+};
+
+// TODO: Define ComparisonHighlight type
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const buildInitialComparisonHighlights = ({
+  OAP1CHIMEPaths,
+  OAP1SIRPaths,
+  NOAP1CHIMEPaths,
+  NOAP2CHIMEPaths,
+  NOAP1SIRPaths,
+}) => {
+  return {
+    9: {
+      1: OAP1SIRPaths,
+      2: OAP1CHIMEPaths,
+    },
+    10: {
+      1: NOAP1SIRPaths,
+      2: { nodes: [], edges: [] },
+    },
+    11: {
+      1: { nodes: [], edges: [] },
+      2: NOAP2CHIMEPaths,
+    },
+    12: {
+      1: { nodes: [], edges: [] },
+      2: NOAP1CHIMEPaths,
+    },
+  };
+};
+
+const actions: ActionTree<ModelsState, any> = {
+  async setInitialModelsState ({ commit }) {
+    const {
+      CHIME,
+      nestedCHIMECAG,
+      nestedCHIMEGrFN,
+      SIR,
+      nestedSIRCAG,
+      nestedSIRGrFN,
+      DoubleEpi,
+      nestedDoubleEpiCAG,
+      nestedDoubleEpiGrFN,
+      comparisonJSON,
+      OAP1CHIMEPaths,
+      OAP1SIRPaths,
+      NOAP1CHIMEPaths,
+      NOAP2CHIMEPaths,
+      NOAP1SIRPaths,
+      subgraphJSON,
+      paramsData,
+    } = await fetchInitialModelData();
+
+    commit('setParameters', paramsData);
+
+    // Initialize static models
+    const initialModelsList = buildInitialModelsList({
+      SIR,
+      nestedSIRCAG,
+      nestedSIRGrFN,
+      comparisonJSON,
+      CHIME,
+      nestedCHIMECAG,
+      nestedCHIMEGrFN,
+      DoubleEpi,
+      nestedDoubleEpiCAG,
+      nestedDoubleEpiGrFN,
+    });
+    commit('setModelsList', initialModelsList);
+
+    // Initialize models from emmaa
+    const modelList = await emmaaModelList();
+    modelList.map(metadata => commit('addModel', {
+      metadata,
+      graph: {
+        abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
+        detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
+      },
+      subgraph: subgraphJSON,
+      type: 'biomechanism',
+    }));
+
+    const initialComparisonHighlights = buildInitialComparisonHighlights({
+      OAP1CHIMEPaths,
+      OAP1SIRPaths,
+      NOAP1CHIMEPaths,
+      NOAP2CHIMEPaths,
+      NOAP1SIRPaths,
+    });
+    commit('setComparisonHighlights', initialComparisonHighlights);
+
+    commit('setIsInitialized', true);
+  },
 };
 
 const getters: GetterTree<ModelsState, any> = {
+  getIsInitialized: state => state.isInitialized,
   getSelectedModelIds: state => [...state.selectedModelIds],
   getParameters: state => state.parameters,
   getModelsList: state => state.modelsList,
@@ -96,6 +229,18 @@ const mutations: MutationTree<ModelsState> = {
   addModel (state, newModel) {
     const modelsListLength = state.modelsList.length;
     state.modelsList.push(Object.assign({ id: modelsListLength }, newModel));
+  },
+  setIsInitialized (state, newIsInitialized) {
+    state.isInitialized = newIsInitialized;
+  },
+  setParameters (state, newParameters) {
+    state.parameters = newParameters;
+  },
+  setModelsList (state, newModelsList) {
+    state.modelsList = newModelsList;
+  },
+  setComparisonHighlights (state, newComparisonHighlights) {
+    state.comparisonHighlights = newComparisonHighlights;
   },
   setSelectedModels (state, newSelectedModelId) {
     if (state.selectedModelIds.has(newSelectedModelId)) {
@@ -108,23 +253,9 @@ const mutations: MutationTree<ModelsState> = {
   },
 };
 
-const init = async (): Promise<void> => {
-  const modelList = await emmaaModelList();
-  modelList.map(metadata => mutations.addModel(state, {
-    metadata,
-    graph: {
-      abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-      detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-    },
-    subgraph: subgraphJSON,
-    type: 'biomechanism',
-  }));
-};
-
-init();
-
 export const models = {
   state,
   getters,
   mutations,
+  actions,
 };

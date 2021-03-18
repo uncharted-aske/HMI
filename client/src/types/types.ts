@@ -35,6 +35,7 @@ interface ViewInterface {
 }
 
 interface ModelsState {
+  isInitialized: boolean,
   selectedModelIds: Set<string>,
   modelsList: ModelInterface[],
   parameters?: any,
