@@ -8,7 +8,7 @@
 
     <div class="d-flex flex-column h-100">
       <div class="search-row">
-        <search-bar :pills="searchPills" :placeholder="`Test Quire`"/>
+        <search-bar :pills="searchPills" :placeholder="`Final test Quire`"/>
       </div>
       <settings-bar>
         <div slot="left">
