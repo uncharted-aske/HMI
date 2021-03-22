@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as d3 from 'd3';
 
 /* SVG Utility functions */
@@ -36,48 +37,111 @@ export const hierarchyFn = d3.stratify()
   .id((d) => d.id)
   .parentId((d) => d.parent);
 
-export const hideTooltip = (domlocation) => {
-  domlocation.selectAll('.svg-tooltip').remove();
+export const hideTooltip = (svgContainer) => {
+  if (svgContainer === null || svgContainer.node() === null) return;
+  svgContainer.selectAll('.svg-tooltip').remove();
 };
+  
 
-export const showTooltip = (domlocation, text, position) => {
-  hideTooltip(domlocation);
+/** Borrowed from Causemos (WM)
+ * Appends a nice tooltip to the svg at the position requested
+ * @param {Object} svgContainer - the svg element where the tooltip is removed/appended
+ * @param {String} text - the text inside the tooltip - can include \n, will word wrap
+ * @param {Object} position - [x,y] array, svg coordinates where the tooltip will point at
+ * @param {Number} preferredAngle - radians direction the tooltip will point (default -PI/2 = pointing down, tooltip above), can be adjusted if the tooltip doesn't fit
+ * @param {Bool} flexPosition - allow the tooltip to adjust it's position based on if it fits within the bbox of it's container element
+ */
+export const showTooltip = (svgContainer, text, position, preferredAngle, flexPosition) => {
+  if (svgContainer === null || svgContainer.node() === null) { console.log('svgContainer is null\n'); return; }
 
-  const svgTooltip = domlocation.append('g')
+  let angle = (_.isNumber(preferredAngle)) ? preferredAngle : -Math.PI / 2; // points down (tooltip above)
+
+  hideTooltip(svgContainer);
+
+  const originalBBox = svgContainer.node().getBBox();
+
+  const padding = 10;
+  const lineSpacing = 12;
+
+  const svgTooltip = svgContainer.append('g')
     .classed('svg-tooltip', true)
-    .attr('transform', translate(position[0], position[1]));
+    .attr('transform', translate(...position))
+    .style('pointer-events', 'none')
+    .style('opacity', '1');
 
-  const svgTooltipRect = svgTooltip
-    .append('rect')
-    .attr('y', 15)
-    .style('rx', '4px')
-    .style('opacity', '0.8')
-    .style('background-color', '#4C566A');
-
-  svgTooltip
+  // add arrow first so that it's behind background-rect and text
+  const svgTooltipArrow = svgTooltip
     .append('polygon')
-    .attr('points', '0,10 -5,15 5,15')
-    .style('opacity', '0.8')
-    .style('background-color', '#4C566A');
+    .attr('points', [
+      [padding, 0],
+      [padding * 2, -padding * 0.5],
+      [padding * 2, padding * 0.5]
+    ].join(' '))
+    .style('fill', '#4c566a');
 
-  const svgTooltipText = svgTooltip
+  const svgTooltipContents = svgTooltip
+    .append('g');
+
+  const svgTooltipRect = svgTooltipContents
+    .append('rect')
+    .style('rx', '4px')
+    .style('fill', '#4c566a');
+
+  const svgTooltipText = svgTooltipContents
     .append('text')
-    .attr('y', 30)
     .style('font-weight', 600)
     .style('font-size', '10px')
-    .style('fill', '#ECEFF4')
-    .text(text);
+    .style('fill', 'white');
 
-  const svgTooltipTextHeight = 20;
-  const svgTooltipTextWidth = svgTooltipText.node().getComputedTextLength();
+  const tspans = String(text).replace(/<br \/>/g, '\n').split('\n')
+    .map(line => svgTooltipText.append('tspan').text(line).node());
 
-  svgTooltipText.attr('x', -svgTooltipTextWidth / 2);
+  const svgTooltipTextWidth = Math.round(Math.max(...tspans.map(tspan => tspan.getComputedTextLength())) + padding * 2);
+  const svgTooltipTextHeight = lineSpacing * tspans.length + padding * 2;
+
+  tspans.forEach((tspan, i) => {
+    d3.select(tspan)
+      .attr('x', (svgTooltipTextWidth - tspan.getComputedTextLength()) / 2)
+      .attr('y', i * lineSpacing + padding * 2);
+  });
 
   svgTooltipRect
-    .attr('x', -svgTooltipTextWidth / 1.7)
-    .attr('width', svgTooltipTextWidth * 1.2)
-    .attr('height', svgTooltipTextHeight * 1.2);
+    .attr('width', svgTooltipTextWidth)
+    .attr('height', svgTooltipTextHeight);
+
+  const offset = [
+    (Math.cos(angle) * (svgTooltipTextWidth * 0.5 + padding * 1.75)),
+    (Math.sin(angle) * (svgTooltipTextHeight * 0.5 + padding * 1.75))
+  ];
+
+  // move tooltip into place and see if it affects the bbox of the container
+  svgTooltipContents.attr('transform', translate(offset[0] + (svgTooltipTextWidth * -0.5), offset[1] + (svgTooltipTextHeight * -0.5)));
+
+  // if adding this tooltip changed the BBox, move the tooltip to adjust accordingly
+  if (flexPosition === true) {
+    const newBBox = svgContainer.node().getBBox();
+
+    if (newBBox.x < originalBBox.x) {
+      offset[0] += (originalBBox.x - newBBox.x);
+    } else if (newBBox.width > originalBBox.width) {
+      offset[0] -= svgTooltipTextWidth + padding * 3.5;
+    }
+
+    if (newBBox.y < originalBBox.y) {
+      offset[1] += (originalBBox.y - newBBox.y);
+    } else if (newBBox.height > originalBBox.height) {
+      offset[1] -= (newBBox.height - originalBBox.height);
+    }
+  }
+
+  // re-angle that angle (the arrow)
+  angle = Math.atan2(offset[1], offset[0]);
+
+  svgTooltipContents.attr('transform', translate(offset[0] + (svgTooltipTextWidth * -0.5), offset[1] + (svgTooltipTextHeight * -0.5)));
+  svgTooltipArrow.attr('transform', 'rotate(' + (angle / Math.PI * 180) + ')');
 };
+
+
 
 // Pre-canned path/glyphs, we assume all paths are bounded by a 10x10 grid and centered at (0, 0)
 // - Arrows point left-to-right
