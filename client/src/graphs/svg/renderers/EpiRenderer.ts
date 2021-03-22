@@ -101,37 +101,22 @@ export default class EpiRenderer extends SVGRenderer {
     nodeSelection.each(function () {
       const selection = d3.select(this);
 
-      if ((selection.datum() as any).nodes) {
-        selection.append('rect')
+      selection.append('rect')
           .attr('x', 0)
           .attr('y', 0)
           .attr('rx', DEFAULT_STYLE.node.borderRadius)
           .attr('width', d => (d as any).width)
           .attr('height', d => (d as any).height)
-          .style('stroke', DEFAULT_STYLE.node.stroke)
-          .style('filter', 'url(#drop-shadow)');
-      } else {
-        selection.append('rect')
-          .attr('x', 0)
-          .attr('y', 0)
-          .attr('rx', DEFAULT_STYLE.node.borderRadius)
-          .attr('width', d => (d as any).width)
-          .attr('height', d => (d as any).height)
-          .style('fill', DEFAULT_STYLE.node.fill)
+          .style('fill', d => (d as any).nodes ? '' : DEFAULT_STYLE.node.fill)
           .style('stroke', DEFAULT_STYLE.node.stroke);
-      }
 
-      // Labels
       selection.append('text')
-        .attr('x', d => (d as any).nodes ? 5 : 0.5 * (d as any).width)
-        .attr('y', d => (d as any).nodes ? (-0.5 * 25) : 25)
-        .style('fill', d => calcLabelColor(d))
-        .style('font-weight', d => (d as any).nodes ? '800' : '500')
-        .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
-        .text(d => (d as any).label);
-      // .each(function (d) {
-      //   (d as any).textWidth = this.getBBox().width + 10; // Property to be able to adjust the rect to the label size
-      // });
+          .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
+          .attr('y', d => (d as any).nodes ? -5 : 25)
+          .style('fill', d => calcLabelColor(d))
+          .style('font-weight', d => (d as any).nodes ? '800' : '500')
+          .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+          .text(d => (d as any).label);     
     });
   }
 
