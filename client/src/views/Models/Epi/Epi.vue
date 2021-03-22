@@ -38,7 +38,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <!-- <local-epi-graph v-if="isSplitView" :graph="subgraph" @node-click="onNodeClick"/> -->
+        <local-graph v-if="isSplitView" :data="subgraph" @node-click="onNodeClick"/>
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :active-tab-id="drilldownActiveTabId" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
@@ -80,7 +80,7 @@
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from './components/FacetsPane.vue';
   // import GlobalEpiGraph from './components/EpiGraphs/GlobalEpiGraph.vue';
-  // import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
+  import LocalGraph from './components/Graphs/LocalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import MetadataPane from './components/DrilldownPanel/MetadataPane.vue';
@@ -345,7 +345,7 @@
     MetadataPanel,
     FacetsPane,
     // GlobalEpiGraph,
-    // LocalEpiGraph,
+    LocalGraph,
     ResizableGrid,
     DrilldownPanel,
     MetadataPane,
