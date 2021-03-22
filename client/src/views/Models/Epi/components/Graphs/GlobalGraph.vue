@@ -8,6 +8,8 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
+  import { expandCollapse } from 'svg-flowgraph';
+
   import { GraphInterface } from '@/types/typesGraphs';
 
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
@@ -22,7 +24,7 @@
     layout: layered,
   };
 
-   const DATA = {
+  const DATA = {
     nodes: [
       { id: 'Node A', label: 'Node A' },
       { id: 'Node B', label: 'Node B' },
@@ -77,35 +79,19 @@
         useEdgeControl: false,
         useZoom: true,
         useMinimap: false,
-        addons: [],
+        addons: [expandCollapse],
       });
-    
-      // this.renderer.setCallback('nodeClick', (node) => {
-      //   // Clear previous highlights
-      //   this.renderer.hideNeighbourhood();
-      //   // Show neighborhood
-      //   const neighborhood = calculateNodeNeighborhood(this.graph, node.datum());
-      //   this.renderer.showNeighborhood(neighborhood);
-      //   this.$emit('node-click', node.datum());
-      // });
 
-      // this.renderer.setCallback('backgroundDblClick', () => {
-      //   this.renderer.hideNeighbourhood();
-      //   this.$emit('background-dbl-click');
-      // });
-
-      // this.renderer.setCallback('nodeMouseEnter', (node) => {
-      //   const nodeData = node.datum();
-      //   const nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)]; // TO FIX: It seems there is an issue with coordinates for deeply nested nodes.
-
-      //   const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.nodeType;
-
-      //   showTooltip(this.renderer.chart, tooltipText, nodeCoords);
-      // });
-
-      // this.renderer.setCallback('nodeMouseLeave', () => {
-      //   hideTooltip(this.renderer.chart);
-      // });
+      this.renderer.setCallback('nodeClick', (evt, node) => {
+        if (node.datum().nodes) {
+          const id = node.datum().id;
+          if (node.datum().collapsed === true) {
+            this.renderer.expand(id);
+          } else {
+            this.renderer.collapse(id);
+          }
+        }
+      });
 
       this.refresh();
     }
