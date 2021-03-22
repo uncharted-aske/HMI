@@ -1,5 +1,5 @@
 <template>
-    <div class="local-graph-container" ref="graph">
+    <div class="global-graph-container" ref="graph">
     </div>
 </template>
 
@@ -22,8 +22,43 @@
     layout: layered,
   };
 
+   const DATA = {
+    nodes: [
+      { id: 'Node A', label: 'Node A' },
+      { id: 'Node B', label: 'Node B' },
+      { id: 'Node C', label: 'Node C' },
+      {
+        id: 'L1',
+        label: 'L1',
+        nodes: [
+          { id: 'Sub 1', label: 'Sub 1' },
+          {
+            id: 'L2',
+            label: 'L2',
+            nodes: [
+              {
+                id: 'L3',
+                label: 'L3',
+                nodes: [
+                  { id: 'L4', label: 'L4' },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    edges: [
+      { id: 'Edge 1', source: 'Node A', target: 'Node B' },
+      { id: 'Edge 2', source: 'Sub 1', target: 'Node B' },
+      { id: 'Edge 3', source: 'L4', target: 'Node A' },
+      { id: 'Edge 4', source: 'L4', target: 'L4' },
+      { id: 'Edge 5', source: 'Sub 1', target: 'Node C' },
+    ],
+  };
+
   @Component
-  export default class LocalGraph extends Vue {
+  export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -81,7 +116,7 @@
     }
 
     refresh (): void {
-      this.renderer.setData(this.data);
+      this.renderer.setData(DATA);
       this.renderer.render();
     }
   }
@@ -90,7 +125,7 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.local-graph-container {
+.global-graph-container {
   flex: 1;
   background-color: $bg-graphs;
   ::v-deep > svg {
