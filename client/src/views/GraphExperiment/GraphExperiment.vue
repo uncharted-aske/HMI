@@ -8,7 +8,7 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import * as d3 from 'd3';
-  import { SVGRenderer } from 'svg-flowgraph';
+  import { SVGRenderer, expandCollapse } from 'svg-flowgraph';
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
 
@@ -115,8 +115,20 @@
         renderMode: 'basic',
         useEdgeControl: false,
         useMinimap: false,
-        addons: [],
+        addons: [ expandCollapse ],
       });
+
+      this.renderer.setCallback('nodeClick', (evt, node) => {
+        if (node.datum().nodes) {
+          const id = node.datum().id;
+          if (node.datum().collapsed === true) {
+            this.renderer.expand(id);
+          } else {
+            this.renderer.collapse(id);
+          }
+        }       
+      });
+
       this.refresh();
     }
 
