@@ -93,7 +93,7 @@
           }
         } else {
           const neighborhood = calculateNodeNeighborhood(DATA, node.datum());
-          this.renderer.highlight(neighborhood, { color: 'yellow', duration: 5000 });
+          this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
         }
       });
 

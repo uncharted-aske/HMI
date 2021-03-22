@@ -8,13 +8,16 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
+  import { highlight } from 'svg-flowgraph';
+
   import { GraphInterface } from '@/types/typesGraphs';
 
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
   // import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
-  // import { calculateNodeNeighborhood } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood } from '@/graphs/svg/util.js';
+  import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -42,7 +45,12 @@
         useEdgeControl: false,
         useZoom: true,
         useMinimap: false,
-        addons: [],
+        addons: [ highlight ],
+      });
+
+      this.renderer.setCallback('nodeClick', (evt, node) => {
+        const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
+        this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
       });
      
       // this.renderer.setCallback('nodeClick', (node) => {
