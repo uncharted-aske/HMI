@@ -122,16 +122,15 @@ export default class EpiRenderer extends SVGRenderer {
 
       // Labels
       selection.append('text')
-                .attr('x', d => (d as any).nodes ? 5 : 0.5 * (d as any).width)
-                .attr('y', d => (d as any).nodes ? (-0.5 * 25) : 25)
-                .style('fill', d => calcLabelColor(d))
-                .style('font-weight', d => (d as any).nodes ? '800' : '500')
-                .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
-                .text(d => (d as any).label)
-                // .each(function (d) {
-                //   (d as any).textWidth = this.getBBox().width + 10; // Property to be able to adjust the rect to the label size
-                // });
-      
+        .attr('x', d => (d as any).nodes ? 5 : 0.5 * (d as any).width)
+        .attr('y', d => (d as any).nodes ? (-0.5 * 25) : 25)
+        .style('fill', d => calcLabelColor(d))
+        .style('font-weight', d => (d as any).nodes ? '800' : '500')
+        .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+        .text(d => (d as any).label);
+      // .each(function (d) {
+      //   (d as any).textWidth = this.getBBox().width + 10; // Property to be able to adjust the rect to the label size
+      // });
     });
   }
 
@@ -143,8 +142,7 @@ export default class EpiRenderer extends SVGRenderer {
         .transition()
         .duration(1000)
         .attr('width', d => (d as any).width)
-        .attr('height', d => (d as any).height)
-        .style('fill', DEFAULT_STYLE.node.fill);
+        .attr('height', d => (d as any).height);
     });
   }
 
@@ -160,7 +158,6 @@ export default class EpiRenderer extends SVGRenderer {
     });
   }
 
-  
   renderEdgeAdded (edgeSelection:d3.Selection<any, any, any, any>):void {
     edgeSelection.append('path')
       .classed('edge-path', true)
@@ -180,26 +177,25 @@ export default class EpiRenderer extends SVGRenderer {
       });
   }
 
-    renderEdgeUpdated (edgeSelection: d3.Selection<any, any, any, any>): void {
-      edgeSelection
+  renderEdgeUpdated (edgeSelection: d3.Selection<any, any, any, any>): void {
+    edgeSelection
       .selectAll('.edge-path')
       .attr('d', d => {
         return pathFn((d as any).points);
       });
-    }
+  }
 
-    renderEdgeRemoved (edgeSelection: d3.Selection<any, any, any, any>): void {
-      edgeSelection.each(function () {
-        d3.select(this)
-          .transition()
-          .on('end', function () {
-            d3.select(this).remove();
-          })
-          .duration(1500)
-          .style('opacity', 0.2);
-      });
-    }
-
+  renderEdgeRemoved (edgeSelection: d3.Selection<any, any, any, any>): void {
+    edgeSelection.each(function () {
+      d3.select(this)
+        .transition()
+        .on('end', function () {
+          d3.select(this).remove();
+        })
+        .duration(1500)
+        .style('opacity', 0.2);
+    });
+  }
 
   //   hideNeighbourhood (): void {
   //     const chart = this.chart;
