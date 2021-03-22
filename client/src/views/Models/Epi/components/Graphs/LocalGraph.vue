@@ -15,7 +15,7 @@
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
-  // import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
+  import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
   import { calculateNodeNeighborhood } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
 
@@ -52,7 +52,16 @@
         const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
         this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
       });
-     
+
+      this.renderer.setCallback('nodeMouseEnter', (evt, node, renderer) => {
+        const data = node.datum();
+        showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]);
+      });
+
+      this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
+        hideTooltip(renderer.chart);
+    });
+
       // this.renderer.setCallback('nodeClick', (node) => {
       //   // Clear previous highlights
       //   this.renderer.hideNeighbourhood();
@@ -62,10 +71,6 @@
       //   this.$emit('node-click', node.datum());
       // });
 
-      // this.renderer.setCallback('backgroundDblClick', () => {
-      //   this.renderer.hideNeighbourhood();
-      //   this.$emit('background-dbl-click');
-      // });
 
       // this.renderer.setCallback('nodeMouseEnter', (node) => {
       //   const nodeData = node.datum();

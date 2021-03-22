@@ -15,7 +15,7 @@
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
-  // import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
+  import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
   import { calculateNodeNeighborhood } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
 
@@ -96,6 +96,18 @@
           this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
         }
       });
+
+      this.renderer.setCallback('nodeMouseEnter', (evt, node, renderer) => {
+        if (node.datum().nodes) return;
+        const data = node.datum();
+        showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]);
+      });
+
+      this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
+        if (node.datum().nodes) return;
+        hideTooltip(renderer.chart);
+    });
+
 
       this.refresh();
     }
