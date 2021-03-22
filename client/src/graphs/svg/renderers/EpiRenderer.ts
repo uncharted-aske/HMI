@@ -4,7 +4,7 @@ import { SVGRenderer } from 'svg-flowgraph';
 
 import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
 
-import { calcEdgeColor, flatten } from '@/graphs/svg/util';
+import { calcNodeColor, calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 import { truncateString } from '@/utils/StringUtil';
@@ -96,7 +96,7 @@ export default class EpiRenderer extends SVGRenderer {
       .attr('color', 'SourceGraphic');
   }
 
-  renderNode (nodeSelection: d3.Selection<any, any, any, any>): void {
+  renderNodeAdded (nodeSelection: d3.Selection<any, any, any, any>): void {
     nodeSelection.each(function () {
       const selection = d3.select(this);
 
@@ -109,7 +109,6 @@ export default class EpiRenderer extends SVGRenderer {
           .attr('height', d => (d as any).height)
           .style('stroke', DEFAULT_STYLE.node.stroke)
           .style('filter', 'url(#drop-shadow)');
-
       } else {
         selection.append('rect')
           .attr('x', 0)
@@ -120,19 +119,51 @@ export default class EpiRenderer extends SVGRenderer {
           .style('fill', DEFAULT_STYLE.node.fill)
           .style('stroke', DEFAULT_STYLE.node.stroke);
       }
+
+      // Labels
+      selection.append('text')
+                .attr('x', d => (d as any).nodes ? 5 : 0.5 * (d as any).width)
+                .attr('y', d => (d as any).nodes ? (-0.5 * 25) : 25)
+                .style('fill', d => calcLabelColor(d))
+                .style('font-weight', d => (d as any).nodes ? '800' : '500')
+                .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+                .text(d => (d as any).label)
+                // .each(function (d) {
+                //   (d as any).textWidth = this.getBBox().width + 10; // Property to be able to adjust the rect to the label size
+                // });
+      
     });
-    nodeSelection.append('text')
-      .attr('x', d => d.nodes ? 5 : 0.5 * d.width)
-      .attr('y', d => d.nodes ? -5 : 0.5 * d.height)
-      .style('fill', '#333')
-      .style('font-weight', '600')
-      .style('font-size', '14px')
-      .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-      .text(d => truncateString(d.label, 15));
   }
 
-  renderEdge (edgeSelection:d3.Selection<any, any, any, any>):void {
+  renderNodeUpdated (nodeSelection: d3.Selection<any, any, any, any>): void {
+    nodeSelection.each(function () {
+      const selection = d3.select(this);
+
+      selection.select('rect')
+        .transition()
+        .duration(1000)
+        .attr('width', d => (d as any).width)
+        .attr('height', d => (d as any).height)
+        .style('fill', DEFAULT_STYLE.node.fill);
+    });
+  }
+
+  renderNodeRemoved (nodeSelection: d3.Selection<any, any, any, any>): void {
+    nodeSelection.each(function () {
+      d3.select(this)
+        .transition()
+        .on('end', function () {
+          d3.select(this.parentNode).remove();
+        })
+        .duration(1500)
+        .style('opacity', 0.2);
+    });
+  }
+
+  
+  renderEdgeAdded (edgeSelection:d3.Selection<any, any, any, any>):void {
     edgeSelection.append('path')
+      .classed('edge-path', true)
       .attr('d', d => pathFn(d.points))
       .style('fill', DEFAULT_STYLE.edge.fill)
       .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
@@ -148,6 +179,27 @@ export default class EpiRenderer extends SVGRenderer {
         return `url(#start-${source}-${target}`;
       });
   }
+
+    renderEdgeUpdated (edgeSelection: d3.Selection<any, any, any, any>): void {
+      edgeSelection
+      .selectAll('.edge-path')
+      .attr('d', d => {
+        return pathFn((d as any).points);
+      });
+    }
+
+    renderEdgeRemoved (edgeSelection: d3.Selection<any, any, any, any>): void {
+      edgeSelection.each(function () {
+        d3.select(this)
+          .transition()
+          .on('end', function () {
+            d3.select(this).remove();
+          })
+          .duration(1500)
+          .style('opacity', 0.2);
+      });
+    }
+
 
   //   hideNeighbourhood (): void {
   //     const chart = this.chart;

@@ -73,18 +73,13 @@
        this.renderer = new EpiRenderer({
         el: this.$refs.graph,
         adapter: new Adapter(DEFAULT_RENDERING_OPTIONS),
-        renderMode: 'basic',
+        renderMode: 'delta',
         useEdgeControl: false,
         useZoom: true,
         useMinimap: false,
         addons: [],
       });
-      // this.renderer = new LocalEpiModelRenderer({
-      //   el: this.$refs.graph,
-      //   adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
-      //   renderMode: 'basic',
-      // });
-
+    
       // this.renderer.setCallback('nodeClick', (node) => {
       //   // Clear previous highlights
       //   this.renderer.hideNeighbourhood();

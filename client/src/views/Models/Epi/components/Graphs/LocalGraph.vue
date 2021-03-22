@@ -38,7 +38,7 @@
        this.renderer = new EpiRenderer({
         el: this.$refs.graph,
         adapter: new Adapter(DEFAULT_RENDERING_OPTIONS),
-        renderMode: 'basic',
+        renderMode: 'delta',
         useEdgeControl: false,
         useZoom: true,
         useMinimap: false,
