@@ -80,7 +80,7 @@
         useEdgeControl: false,
         useZoom: true,
         useMinimap: false,
-        addons: [ expandCollapse, highlight ],
+        addons: [expandCollapse, highlight],
       });
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
@@ -100,14 +100,13 @@
       this.renderer.setCallback('nodeMouseEnter', (evt, node, renderer) => {
         if (node.datum().nodes) return;
         const data = node.datum();
-        showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); //Fixme: tooltips for nodes within a container are not properly placed
+        showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
       });
 
       this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
         if (node.datum().nodes) return;
         hideTooltip(renderer.chart);
     });
-
 
       this.refresh();
     }

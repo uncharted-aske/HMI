@@ -41,7 +41,6 @@ export const hideTooltip = (svgContainer) => {
   if (svgContainer === null || svgContainer.node() === null) return;
   svgContainer.selectAll('.svg-tooltip').remove();
 };
-  
 
 /** Borrowed from Causemos (WM)
  * Appends a nice tooltip to the svg at the position requested
@@ -75,7 +74,7 @@ export const showTooltip = (svgContainer, text, position, preferredAngle, flexPo
     .attr('points', [
       [padding, 0],
       [padding * 2, -padding * 0.5],
-      [padding * 2, padding * 0.5]
+      [padding * 2, padding * 0.5],
     ].join(' '))
     .style('fill', '#4c566a');
 
@@ -111,7 +110,7 @@ export const showTooltip = (svgContainer, text, position, preferredAngle, flexPo
 
   const offset = [
     (Math.cos(angle) * (svgTooltipTextWidth * 0.5 + padding * 1.75)),
-    (Math.sin(angle) * (svgTooltipTextHeight * 0.5 + padding * 1.75))
+    (Math.sin(angle) * (svgTooltipTextHeight * 0.5 + padding * 1.75)),
   ];
 
   // move tooltip into place and see if it affects the bbox of the container
@@ -140,8 +139,6 @@ export const showTooltip = (svgContainer, text, position, preferredAngle, flexPo
   svgTooltipContents.attr('transform', translate(offset[0] + (svgTooltipTextWidth * -0.5), offset[1] + (svgTooltipTextHeight * -0.5)));
   svgTooltipArrow.attr('transform', 'rotate(' + (angle / Math.PI * 180) + ')');
 };
-
-
 
 // Pre-canned path/glyphs, we assume all paths are bounded by a 10x10 grid and centered at (0, 0)
 // - Arrows point left-to-right

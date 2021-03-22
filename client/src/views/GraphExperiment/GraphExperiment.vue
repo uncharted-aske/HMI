@@ -115,7 +115,7 @@
         renderMode: 'basic',
         useEdgeControl: false,
         useMinimap: false,
-        addons: [ expandCollapse ],
+        addons: [expandCollapse],
       });
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
@@ -126,7 +126,7 @@
           } else {
             this.renderer.collapse(id);
           }
-        }       
+        }
       });
 
       this.refresh();

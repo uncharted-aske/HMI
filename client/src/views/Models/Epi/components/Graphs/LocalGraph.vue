@@ -45,7 +45,7 @@
         useEdgeControl: false,
         useZoom: true,
         useMinimap: false,
-        addons: [ highlight ],
+        addons: [highlight],
       });
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
@@ -70,7 +70,6 @@
       //   this.renderer.showNeighborhood(neighborhood);
       //   this.$emit('node-click', node.datum());
       // });
-
 
       // this.renderer.setCallback('nodeMouseEnter', (node) => {
       //   const nodeData = node.datum();

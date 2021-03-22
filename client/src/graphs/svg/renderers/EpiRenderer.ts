@@ -1,14 +1,13 @@
 import * as d3 from 'd3';
-import _ from 'lodash';
 
 import { SVGRenderer } from 'svg-flowgraph';
 
-import { SVGRendererOptionsInterface, SubgraphInterface } from '@/types/typesGraphs';
+import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
 
-import { calcNodeColor, calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
+import { calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
-import { truncateString } from '@/utils/StringUtil';
+// import { truncateString } from '@/utils/StringUtil';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
@@ -102,21 +101,21 @@ export default class EpiRenderer extends SVGRenderer {
       const selection = d3.select(this);
 
       selection.append('rect')
-          .attr('x', 0)
-          .attr('y', 0)
-          .attr('rx', DEFAULT_STYLE.node.borderRadius)
-          .attr('width', d => (d as any).width)
-          .attr('height', d => (d as any).height)
-          .style('fill', d => (d as any).nodes ? '' : DEFAULT_STYLE.node.fill)
-          .style('stroke', DEFAULT_STYLE.node.stroke);
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('rx', DEFAULT_STYLE.node.borderRadius)
+        .attr('width', d => (d as any).width)
+        .attr('height', d => (d as any).height)
+        .style('fill', d => (d as any).nodes ? '' : DEFAULT_STYLE.node.fill)
+        .style('stroke', DEFAULT_STYLE.node.stroke);
 
       selection.append('text')
-          .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
-          .attr('y', d => (d as any).nodes ? -5 : 25)
-          .style('fill', d => calcLabelColor(d))
-          .style('font-weight', d => (d as any).nodes ? '800' : '500')
-          .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
-          .text(d => (d as any).label);     
+        .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
+        .attr('y', d => (d as any).nodes ? -5 : 25)
+        .style('fill', d => calcLabelColor(d))
+        .style('font-weight', d => (d as any).nodes ? '800' : '500')
+        .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+        .text(d => (d as any).label);
     });
   }
 
