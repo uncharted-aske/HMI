@@ -1,8 +1,9 @@
 import * as d3 from 'd3';
+import _ from 'lodash';
 
 import { SVGRenderer } from 'svg-flowgraph';
 
-import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
+import { SVGRendererOptionsInterface, SubgraphInterface } from '@/types/typesGraphs';
 
 import { calcNodeColor, calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors } from '@/graphs/svg/encodings';
@@ -196,22 +197,4 @@ export default class EpiRenderer extends SVGRenderer {
         .style('opacity', 0.2);
     });
   }
-
-  //   hideNeighbourhood (): void {
-  //     const chart = this.chart;
-  //     chart.selectAll('.node-ui').style('opacity', 1);
-  //     chart.selectAll('.edge').style('opacity', 1);
-  //   }
-
-  //   showNeighborhood (subgraph: SubgraphInterface): void {
-  //     const chart = this.chart;
-  //     // FIXME: not very efficient
-  //     const nodes = subgraph.nodes;
-  //     const edges = subgraph.edges;
-  //     const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => !nodes.map(node => node.id).includes(d.id));
-  //     nonNeighborNodes.style('opacity', 0.1);
-
-//     const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.source && edge.target === d.target));
-//     nonNeighborEdges.style('opacity', 0.1);
-//   }
 }

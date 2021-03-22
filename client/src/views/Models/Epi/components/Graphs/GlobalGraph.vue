@@ -8,7 +8,7 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import { expandCollapse } from 'svg-flowgraph';
+  import { expandCollapse, highlight } from 'svg-flowgraph';
 
   import { GraphInterface } from '@/types/typesGraphs';
 
@@ -16,7 +16,8 @@
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
   // import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
-  // import { calculateNodeNeighborhood } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood } from '@/graphs/svg/util.js';
+  import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -79,7 +80,7 @@
         useEdgeControl: false,
         useZoom: true,
         useMinimap: false,
-        addons: [expandCollapse],
+        addons: [ expandCollapse, highlight ],
       });
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
@@ -90,6 +91,9 @@
           } else {
             this.renderer.collapse(id);
           }
+        } else {
+          const neighborhood = calculateNodeNeighborhood(DATA, node.datum());
+          this.renderer.highlight(neighborhood, { color: 'yellow', duration: 5000 });
         }
       });
 
