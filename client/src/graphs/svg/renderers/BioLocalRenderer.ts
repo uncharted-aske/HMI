@@ -124,7 +124,7 @@ export default class BioLocalRenderer extends SVGRenderer {
       .text(d => truncateString(d.label, 15));
   }
 
-  renderEdgeControl (edgeSelection) {
+  renderEdgeControl (edgeSelection:d3.Selection<any, any, any, any>):void {
     edgeSelection.append('circle')
       .attr('cx', 0)
       .attr('cy', 0)
@@ -134,8 +134,8 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('stroke-width', DEFAULT_STYLE.edge.controlStrokeWidth);
 
     edgeSelection.append('text')
-      .attr('x', - (DEFAULT_STYLE.edge.controlRadius * 0.5) + 1)
-      .attr('y', (DEFAULT_STYLE.edge.controlRadius * 0.5) -1)
+      .attr('x', -(DEFAULT_STYLE.edge.controlRadius * 0.5) + 1)
+      .attr('y', (DEFAULT_STYLE.edge.controlRadius * 0.5) - 1)
       .style('font-size', DEFAULT_STYLE.edge.controlRadius)
       .style('stroke', 'none')
       .style('font-weight', '800')
