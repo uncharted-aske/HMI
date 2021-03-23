@@ -12,7 +12,7 @@ const build = (root) => {
   const _walk = (node, depth, parent) => {
     const nodeSpec = {
       id: node.id ?? '',
-      concept: node.concept, 
+      concept: node.concept,
       label: node.label,
       depth: depth,
       type: 'normal',
@@ -201,8 +201,6 @@ const postProcess = (layout) => {
   return layout;
 };
 
-
-
 const getEdgeContainerId = (sourceNode, targetNode) => {
   if (sourceNode.parent === null || targetNode.parent === null) {
     return null;
@@ -250,7 +248,7 @@ export default class ELKAdapter {
 
     const elk = new ELK();
     injectELKOptions(renderGraph, this.options);
-    changeKey(renderGraph, 'nodes', 'children'); //Elk has a different naming convention
+    changeKey(renderGraph, 'nodes', 'children'); // Elk has a different naming convention
     const result = await elk.layout(renderGraph);
     changeKey(result, 'children', 'nodes');
     return postProcess(result);

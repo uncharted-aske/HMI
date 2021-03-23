@@ -105,15 +105,15 @@ export const changeKey = (obj, before, after) => {
  */
 
 export const constructRootNode = (root) => {
-    root.label = root.data.label;
-    root.concept = root.data.concept;
-    changeKey(root, 'children', 'nodes');
+  root.label = root.data.label;
+  root.concept = root.data.concept;
+  changeKey(root, 'children', 'nodes');
 
-    if (root.nodes) {
-      for (let i = 0; i < root.nodes.length; i++) {
-        constructRootNode(root.nodes[i]);
-      }
+  if (root.nodes) {
+    for (let i = 0; i < root.nodes.length; i++) {
+      constructRootNode(root.nodes[i]);
     }
+  }
 };
 
 /**

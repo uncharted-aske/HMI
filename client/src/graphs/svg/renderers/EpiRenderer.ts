@@ -111,7 +111,6 @@ export default class EpiRenderer extends SVGRenderer {
         .style('stroke', DEFAULT_STYLE.node.stroke)
         .style('stroke-width', d => (d as any).nodes ? 5 : DEFAULT_STYLE.node.strokeWidth);
 
-
       selection.append('text')
         .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
         .attr('y', d => (d as any).nodes ? -5 : 25)

@@ -9,13 +9,16 @@
   import Vue from 'vue';
   import * as d3 from 'd3';
   import { SVGRenderer, expandCollapse } from 'svg-flowgraph';
+
+  import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
 
   import { pathFn } from '@/utils/SVGUtil';
 
   class TestRenderer extends SVGRenderer {
-    constructor (options:any) {
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+    constructor (options:SVGRendererOptionsInterface) {
       super(options);
     }
 

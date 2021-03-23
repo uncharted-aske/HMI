@@ -33,8 +33,8 @@ export const pathFn = d3.line()
   .x(d => d.x)
   .y(d => d.y);
 
-  // Re-arrange data into a hierarchy. This returns data in the following format:
-  // https://github.com/d3/d3-hierarchy#stratify
+// Re-arrange data into a hierarchy. This returns data in the following format:
+// https://github.com/d3/d3-hierarchy#stratify
 export const hierarchyFn = d3.stratify()
   .id((d) => d.id)
   .parentId((d) => d.parent);
@@ -53,7 +53,7 @@ export const hideTooltip = (svgContainer) => {
  * @param {Bool} flexPosition - allow the tooltip to adjust it's position based on if it fits within the bbox of it's container element
  */
 export const showTooltip = (svgContainer, text, position, preferredAngle, flexPosition) => {
-  if (svgContainer === null || svgContainer.node() === null) { console.log('svgContainer is null\n'); return; }
+  if (svgContainer === null || svgContainer.node() === null) { return; }
 
   let angle = (_.isNumber(preferredAngle)) ? preferredAngle : -Math.PI / 2; // points down (tooltip above)
 
