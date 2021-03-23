@@ -7,7 +7,6 @@ import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
 import { calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
-// import { truncateString } from '@/utils/StringUtil';
 
 const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
 
