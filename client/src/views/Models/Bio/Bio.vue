@@ -53,6 +53,8 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
+  import { bgraph } from '@uncharted.software/bgraph';
+  import _ from 'lodash';
 
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
@@ -110,6 +112,8 @@
     isSplitView = false;
     subgraph: GraphInterface = null;
 
+    bgraph: any = null;
+
     @Getter getSelectedModelIds;
     @Getter getModelsList;
 
@@ -118,10 +122,37 @@
     }
 
     async initializeBGraph (): Promise<void> {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // TODO: Below code is used for demonstration purposes to show how bgraph can be loaded and run
+      //       code should be removed during integration
+      function deepCopy (inObject, keyBlackList?: Array<any>): any {
+        let value, key;
+
+        if (typeof inObject !== 'object' || inObject === null) {
+          return inObject; // Return the value if inObject is not an object
+        }
+
+        // Create an array or object to hold the values
+        const isArray = Array.isArray(inObject);
+        const outObject = isArray ? [] : {};
+
+        for (key in inObject) {
+          if (!isArray && keyBlackList?.includes(key)) {
+            // Object property should not be deep copied
+            continue;
+          }
+
+          value = inObject[key];
+          // Recursively (deep) copy for nested objects, including arrays
+          outObject[key] = deepCopy(value, keyBlackList);
+        }
+
+        return outObject;
+      }
+
       const [bgNodes, bgEdges] = await loadBGraphData();
-      // TODO: Register bgraph library and import
-      // this.bgraph = bgraph.graph(bgNodes, bgEdges);
+      const G: any = bgraph.graph(bgNodes, bgEdges); // TODO: Fix type should be IGraph
+      // eslint-disable-next-line no-console
+      console.log(deepCopy(G.v().run(), ['_in', '_out']));
     }
 
     get selectedModel (): ModelInterface {
