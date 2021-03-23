@@ -11,8 +11,8 @@ import { makeEdgeMaps, traverse, changeKey } from '@/graphs/svg/util.js';
 const build = (root) => {
   const _walk = (node, depth, parent) => {
     const nodeSpec = {
-      id: node.id || '',
-      concept: node.concept, // FIXME ... should just rely on id
+      id: node.id,
+      concept: node.concept, 
       label: node.label,
       depth: depth,
       type: 'normal',
