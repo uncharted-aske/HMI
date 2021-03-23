@@ -15,6 +15,7 @@ const DEFAULT_STYLE = {
   node: {
     fill: Colors.NODES.DEFAULT,
     stroke: Colors.STROKE,
+    strokeWidth: 1,
     borderRadius: 5,
   },
   edge: {
@@ -95,33 +96,24 @@ export default class BioLocalRenderer extends SVGRenderer {
     nodeSelection.each(function () {
       const selection = d3.select(this);
 
-      if ((selection.datum() as any).nodes) {
-        selection.append('rect')
-          .attr('x', 0)
-          .attr('y', 0)
-          .attr('rx', DEFAULT_STYLE.node.borderRadius)
-          .attr('width', d => (d as any).width)
-          .attr('height', d => (d as any).height)
-          .style('stroke', DEFAULT_STYLE.node.stroke);
-      } else {
-        selection.append('rect')
-          .attr('x', 0)
-          .attr('y', 0)
-          .attr('rx', DEFAULT_STYLE.node.borderRadius)
-          .attr('width', d => (d as any).width)
-          .attr('height', d => (d as any).height)
-          .style('fill', DEFAULT_STYLE.node.fill)
-          .style('stroke', DEFAULT_STYLE.node.stroke);
-      }
+      selection.append('rect')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('rx', DEFAULT_STYLE.node.borderRadius)
+        .attr('width', d => (d as any).width)
+        .attr('height', d => (d as any).height)
+        .style('fill', d => (d as any).nodes ? '' : DEFAULT_STYLE.node.fill)
+        .style('stroke', DEFAULT_STYLE.node.stroke)
+        .style('stroke-width', d => (d as any).nodes ? 5 : DEFAULT_STYLE.node.strokeWidth);
+
+
+      selection.append('text')
+        .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
+        .attr('y', d => (d as any).nodes ? -5 : 25)
+        .style('font-weight', d => (d as any).nodes ? '800' : '500')
+        .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+        .text(d => truncateString((d as any).label, 10));
     });
-    nodeSelection.append('text')
-      .attr('x', d => d.nodes ? 0 : 0.5 * d.width)
-      .attr('y', d => d.nodes ? -5 : 0.5 * d.height)
-      .style('fill', '#333')
-      .style('font-weight', '600')
-      .style('font-size', '14px')
-      .style('text-anchor', d => d.nodes ? 'left' : 'middle')
-      .text(d => truncateString(d.label, 15));
   }
 
   renderEdgeControl (edgeSelection:d3.Selection<any, any, any, any>):void {

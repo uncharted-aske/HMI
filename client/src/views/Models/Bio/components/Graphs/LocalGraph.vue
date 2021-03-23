@@ -14,8 +14,8 @@
   import { layered } from '@/graphs/svg/elk/layouts';
 
   const DEFAULT_RENDERING_OPTIONS = {
-    nodeWidth: 130,
-    nodeHeight: 35,
+    nodeWidth: 120,
+    nodeHeight: 40,
     layout: layered,
   };
 
