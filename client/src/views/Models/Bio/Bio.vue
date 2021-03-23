@@ -54,7 +54,6 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
   import { bgraph } from '@uncharted.software/bgraph';
-  import _ from 'lodash';
 
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
@@ -111,8 +110,6 @@
 
     isSplitView = false;
     subgraph: GraphInterface = null;
-
-    bgraph: any = null;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
