@@ -17,6 +17,7 @@
   import { pathFn } from '@/utils/SVGUtil';
 
   class TestRenderer extends SVGRenderer {
+    // eslint-disable-next-line no-useless-constructor
     constructor (options:SVGRendererOptionsInterface) {
       super(options);
     }
