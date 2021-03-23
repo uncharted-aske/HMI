@@ -16,7 +16,7 @@
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
   import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
-  import { calculateNodeNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood, constructRootNode } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
@@ -77,12 +77,12 @@
     }
 
     refresh (): void {
-      const hierarchyNodes = hierarchyFn(this.data.nodes); // Transform the flat nodes structure into a hierarchical one
-      formatHierarchyNodeData(hierarchyNodes);
-      const edges = this.data.edges;
-      const graph = { nodes: [hierarchyNodes], edges };
-      
-      this.renderer.setData(this.data);
+      const nodesHierarchy = hierarchyFn(this.data.nodes); // Transform the flat nodes structure into a hierarchical one
+      constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
+      const data = { nodes: [nodesHierarchy], edges: this.data.edges };
+      console.log(data);
+
+      this.renderer.setData(data);
       this.renderer.render();
     }
   }

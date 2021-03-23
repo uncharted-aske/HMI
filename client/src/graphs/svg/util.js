@@ -83,7 +83,6 @@ export const makeEdgeMaps = (root) => {
   };
 };
 
-// ELK has a different naming convention
 export const changeKey = (obj, before, after) => {
   if ({}.hasOwnProperty.call(obj, before)) {
     obj[after] = obj[before];
@@ -105,25 +104,18 @@ export const changeKey = (obj, before, after) => {
  * }
  */
 
-export const formatHierarchyNodeData = (root) => {
-  // const data = root.data;
-  // root.concept = data.concept;
-  // root.label = data.label;
-  // root.nodeType = data.nodeType;
-  // root.nodeSubType = data.nodeSubType;
-  // root.metadata = data.metadata;
+export const constructRootNode = (root) => {
+  // if (root.children || root.nodes) {
+    root.label = root.data.label;
+    root.concept = root.data.concept;
+    changeKey(root, 'children', 'nodes');
 
-  // if (root.metadata && root.metadata.attributes) {
-  //   root.role = root.metadata.attributes[0].code_role;
-  // }
-
-  // if (root.children) {
-  //   root.nodes = root.children;
-  //   delete root.children;
-  //   for (let i = 0; i < root.nodes.length; i++) {
-  //     formatHierarchyNodeData(root.nodes[i]);
-  //   }
-  // }
+    // if (root.children) {
+      for (let i = 0; i < root.nodes.length; i++) {
+        constructRootNode(root.nodes[i]);
+      }
+    //}
+  //}
 };
 
 /**
