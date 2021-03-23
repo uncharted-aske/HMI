@@ -15,49 +15,14 @@
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
-  import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
-  import { calculateNodeNeighborhood } from '@/graphs/svg/util.js';
+  import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
+  import { calculateNodeNeighborhood, formatHierarchyNodeData } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
     nodeHeight: 40,
     layout: layered,
-  };
-
-  const DATA = {
-    nodes: [
-      { id: 'Node A', label: 'Node A' },
-      { id: 'Node B', label: 'Node B' },
-      { id: 'Node C', label: 'Node C' },
-      {
-        id: 'L1',
-        label: 'L1',
-        nodes: [
-          { id: 'Sub 1', label: 'Sub 1' },
-          {
-            id: 'L2',
-            label: 'L2',
-            nodes: [
-              {
-                id: 'L3',
-                label: 'L3',
-                nodes: [
-                  { id: 'L4', label: 'L4' },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    edges: [
-      { id: 'Edge 1', source: 'Node A', target: 'Node B' },
-      { id: 'Edge 2', source: 'Sub 1', target: 'Node B' },
-      { id: 'Edge 3', source: 'L4', target: 'Node A' },
-      { id: 'Edge 4', source: 'L4', target: 'L4' },
-      { id: 'Edge 5', source: 'Sub 1', target: 'Node C' },
-    ],
   };
 
   @Component
@@ -92,7 +57,7 @@
             this.renderer.collapse(id);
           }
         } else {
-          const neighborhood = calculateNodeNeighborhood(DATA, node.datum());
+          const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
         }
       });
@@ -112,7 +77,12 @@
     }
 
     refresh (): void {
-      this.renderer.setData(DATA);
+      const hierarchyNodes = hierarchyFn(this.data.nodes); // Transform the flat nodes structure into a hierarchical one
+      formatHierarchyNodeData(hierarchyNodes);
+      const edges = this.data.edges;
+      const graph = { nodes: [hierarchyNodes], edges };
+      
+      this.renderer.setData(this.data);
       this.renderer.render();
     }
   }
