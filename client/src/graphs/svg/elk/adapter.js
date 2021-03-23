@@ -250,7 +250,7 @@ export default class ELKAdapter {
 
     const elk = new ELK();
     injectELKOptions(renderGraph, this.options);
-    changeKey(renderGraph, 'nodes', 'children');
+    changeKey(renderGraph, 'nodes', 'children'); //Elk has a different naming convention
     const result = await elk.layout(renderGraph);
     changeKey(result, 'children', 'nodes');
     return postProcess(result);
