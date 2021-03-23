@@ -14,7 +14,7 @@ const DEFAULT_STYLE = {
   node: {
     fill: Colors.NODES.DEFAULT,
     stroke: Colors.STROKE,
-    strokeWidth: 3,
+    strokeWidth: 1,
     borderRadius: 5,
   },
   edge: {
