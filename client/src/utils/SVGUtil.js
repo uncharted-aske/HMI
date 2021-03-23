@@ -33,6 +33,8 @@ export const pathFn = d3.line()
   .x(d => d.x)
   .y(d => d.y);
 
+  // Re-arrange data into a hierarchy. This returns data in the following format:
+  // https://github.com/d3/d3-hierarchy#stratify
 export const hierarchyFn = d3.stratify()
   .id((d) => d.id)
   .parentId((d) => d.parent);
