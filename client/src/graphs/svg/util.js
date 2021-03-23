@@ -83,6 +83,17 @@ export const makeEdgeMaps = (root) => {
   };
 };
 
+// ELK has a different naming convention
+export const changeKey = (obj, before, after) => {
+  if ({}.hasOwnProperty.call(obj, before)) {
+    obj[after] = obj[before];
+    delete obj[before];
+    obj[after].forEach(child => {
+      changeKey(child, before, after);
+    });
+  }
+};
+
 /**
  * Given a nested representation of nodes computed by d3.stratify, it formats it to one that can be used by the renderer
 * {
@@ -95,24 +106,24 @@ export const makeEdgeMaps = (root) => {
  */
 
 export const formatHierarchyNodeData = (root) => {
-  const data = root.data;
-  root.concept = data.concept;
-  root.label = data.label;
-  root.nodeType = data.nodeType;
-  root.nodeSubType = data.nodeSubType;
-  root.metadata = data.metadata;
+  // const data = root.data;
+  // root.concept = data.concept;
+  // root.label = data.label;
+  // root.nodeType = data.nodeType;
+  // root.nodeSubType = data.nodeSubType;
+  // root.metadata = data.metadata;
 
-  if (root.metadata && root.metadata.attributes) {
-    root.role = root.metadata.attributes[0].code_role;
-  }
+  // if (root.metadata && root.metadata.attributes) {
+  //   root.role = root.metadata.attributes[0].code_role;
+  // }
 
-  if (root.children) {
-    root.nodes = root.children;
-    delete root.children;
-    for (let i = 0; i < root.nodes.length; i++) {
-      formatHierarchyNodeData(root.nodes[i]);
-    }
-  }
+  // if (root.children) {
+  //   root.nodes = root.children;
+  //   delete root.children;
+  //   for (let i = 0; i < root.nodes.length; i++) {
+  //     formatHierarchyNodeData(root.nodes[i]);
+  //   }
+  // }
 };
 
 /**

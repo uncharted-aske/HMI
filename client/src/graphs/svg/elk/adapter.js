@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import ELK from 'elkjs/lib/elk.bundled';
 
-import { makeEdgeMaps, traverse } from '@/graphs/svg/util.js';
+import { makeEdgeMaps, traverse, changeKey } from '@/graphs/svg/util.js';
 
 /**
  * Convert graph data structure to a basic graph structure that can be used by the renderer
@@ -201,16 +201,7 @@ const postProcess = (layout) => {
   return layout;
 };
 
-// ELK has a different naming convention
-const changeKey = (obj, before, after) => {
-  if ({}.hasOwnProperty.call(obj, before)) {
-    obj[after] = obj[before];
-    delete obj[before];
-    obj[after].forEach(child => {
-      changeKey(child, before, after);
-    });
-  }
-};
+
 
 const getEdgeContainerId = (sourceNode, targetNode) => {
   if (sourceNode.parent === null || targetNode.parent === null) {
