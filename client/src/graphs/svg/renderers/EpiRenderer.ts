@@ -15,6 +15,7 @@ const DEFAULT_STYLE = {
   node: {
     fill: Colors.NODES.DEFAULT,
     stroke: Colors.STROKE,
+    strokeWidth: 3,
     borderRadius: 5,
   },
   edge: {
@@ -107,7 +108,9 @@ export default class EpiRenderer extends SVGRenderer {
         .attr('width', d => (d as any).width)
         .attr('height', d => (d as any).height)
         .style('fill', d => (d as any).nodes ? '' : DEFAULT_STYLE.node.fill)
-        .style('stroke', DEFAULT_STYLE.node.stroke);
+        .style('stroke', DEFAULT_STYLE.node.stroke)
+        .style('stroke-width', d => (d as any).nodes ? 5 : DEFAULT_STYLE.node.strokeWidth);
+
 
       selection.append('text')
         .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)

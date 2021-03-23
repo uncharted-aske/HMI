@@ -11,7 +11,7 @@ import { makeEdgeMaps, traverse, changeKey } from '@/graphs/svg/util.js';
 const build = (root) => {
   const _walk = (node, depth, parent) => {
     const nodeSpec = {
-      id: node.id,
+      id: node.id ?? '',
       concept: node.concept, 
       label: node.label,
       depth: depth,

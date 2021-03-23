@@ -17,7 +17,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <!-- <epi-graph class="h-100" :graph="model.graph.detailed" :subgraph="model.subgraph" :highlights="highlightsModels[model.id]" :reference="reference" @node-click="onNodeClick" @node-hover="onNodeHover"/> -->
+        <global-graph class="h-100" :data="model.graph.detailed"/>
         </div>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
@@ -31,7 +31,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <!-- <local-epi-graph class="h-100" v-if="isSplitView" :graph="intersectionGraph" @node-click="onNodeClick"/> -->
+        <intersection-graph class="h-100" v-if="isSplitView" :data="intersectionGraph" @node-click="onNodeClick"/>
       </div>
     </resizable-grid>
     <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
@@ -55,8 +55,8 @@
   import Counters from '@/components/Counters.vue';
   import Settings from '@/views/Models/components/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import EpiGraph from './components/EpiGraphs/EpiGraph.vue';
-  import LocalEpiGraph from './components/EpiGraphs/LocalEpiGraph.vue';
+  import GlobalGraph from '@/views/Models/Epi/components/Graphs/GlobalGraph.vue';
+  import IntersectionGraph from './components/Graphs/IntersectionGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   // import DrilldownPanel from '@/components/DrilldownPanel.vue';
   // import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
@@ -77,8 +77,8 @@
     Counters,
     Settings,
     LeftSidePanel,
-    EpiGraph,
-    LocalEpiGraph,
+    GlobalGraph,
+    IntersectionGraph,
     ResizableGrid,
     // DrilldownPanel,
     // DrilldownMetadataPane,
