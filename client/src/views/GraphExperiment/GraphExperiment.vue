@@ -18,7 +18,7 @@
 
   class TestRenderer extends SVGRenderer {
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-    constructor (options:SVGRendererOptionsInterface) {
+    constructor (private options:SVGRendererOptionsInterface) {
       super(options);
     }
 
