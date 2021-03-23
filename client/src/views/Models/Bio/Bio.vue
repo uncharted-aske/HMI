@@ -25,7 +25,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <!-- <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false"></grafer> -->
+        <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false"></grafer>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
