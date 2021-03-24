@@ -1,6 +1,6 @@
 export abstract class Colors {
   static readonly SUBGRAPH: string = '#FFA500';
-  static readonly HIGHLIGHT: string = '#D08770';
+  static readonly HIGHLIGHT: string = '#EBCB8B';
   static readonly STROKE: string = '#81A1C1';
 
   static readonly NODES: Record<string, any> = {
@@ -12,11 +12,21 @@ export abstract class Colors {
     OVERLAPPING: Colors.HIGHLIGHT,
   };
 
+  // Bio graphs
+  static readonly POLARITY: Record<string, any> = {
+    POSITIVE: '#81A1C1',
+    NEGATIVE: '#BF616A',
+  };
+
+  static readonly CURATION: Record<string, any> = {
+    INCORRECT: '#BF616A',
+    CORRECT: '#7ca25c',
+    PARTIAL: '#D08770',
+    UNCURATED: '#212529',
+  };
+
   static readonly EDGES: Record<string, any> = {
     DEFAULT: '#c2c7d1',
-    ACTIVATION: '#88C0D0',
-    INHIBITION: '#BF616A',
-    COMPLEX: '#B48EAD',
     OVERLAPPING: Colors.HIGHLIGHT,
   };
 
@@ -50,11 +60,24 @@ export abstract class NodeTypes {
 
 export abstract class EdgeTypes {
   static readonly EDGES: Record<string, any> = {
+    // Statement types
     INHIBITION: 'Inhibition',
     ACTIVATION: 'Activation',
+    INCREASEAMOUNT: 'IncreaseAmount',
+    DECREASEAMOUNT: 'DecreaseAmount',
+    PHOSPORYLATION: 'Phosporylation',
+    DEPHOSPORYLATION: 'Dephosporylation',
     COMPLEX: 'Complex',
+
     OVERLAPPING: 'overlapping',
     ABSTRACTOVERLAPPING: 'AP',
     NONOVERLAPPING: 'NOAP',
+  }
+
+  static readonly CURATION_STATUS: Record<string, any> = {
+    INCORRECT: 0,
+    CORRECT: 1,
+    PARTIAL: 2,
+    UNCURATED: 3,
   }
 }
