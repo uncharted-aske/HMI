@@ -87,21 +87,19 @@ export const executeBgraph = (bgraph: any, clause: Filter): any => {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const filterToBgraph = (bgraph: any, filters: Filters): any => {
-  if (!bgraph || !filters || !filters.clauses || filters.clauses.length === 0) {
-    return; // no-op
+  if (bgraph && filters && filters.clauses && filters.clauses.length > 0) {
+    const { clauses } = filters;
+
+    const mapped = clauses.map((clause, index) => {
+      return { index, value: filterTermToPriorityRank[clause.field] ?? 0 };
+    });
+
+    const sortedClauses = mapped.map(v => clauses[v.index]);
+
+    let bgraphQuery = bgraph.v();
+    sortedClauses.map(clause => {
+      bgraphQuery = executeBgraph(bgraphQuery, clause);
+    });
+    return deepCopy(bgraphQuery.run(), ['_in', '_out']);
   }
-
-  const { clauses } = filters;
-
-  const mapped = clauses.map((clause, index) => {
-    return { index, value: filterTermToPriorityRank[clause.field] ?? 0 };
-  });
-
-  const sortedClauses = mapped.map(v => clauses[v.index]);
-
-  let bgraphQuery = bgraph.v();
-  sortedClauses.map(clause => {
-    bgraphQuery = executeBgraph(bgraphQuery, clause);
-  });
-  return deepCopy(bgraphQuery.run(), ['_in', '_out']);
 };
