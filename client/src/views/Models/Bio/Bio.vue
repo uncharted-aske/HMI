@@ -8,8 +8,9 @@
     </left-side-panel>
     <div class="search-row">
       <search-bar :placeholder="`Search for model components...`" @set-subgraph="onSetSubgraph"/>
-      <button class="btn btn-primary m-1" @click="onSplitView">
-        Add Subgraph
+      <button class="btn btn-primary m-1" @click="onSplitView" :disabled="subgraphIsEmpty">
+        <font-awesome-icon :icon="['fas', getIcon ]" />
+        <span>{{ getMessage }}</span>
       </button>
     </div>
     <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
@@ -50,6 +51,7 @@
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
@@ -58,7 +60,7 @@
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
-  import { loadBGraphData } from '@/utils/BGraphUtil';
+  import { loadBGraphData, filterToBgraph } from '@/utils/BGraphUtil';
   import { formatBGraphOutput } from '@/graphs/svg/util';
 
 
@@ -114,53 +116,16 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+    @Getter getFilters;
 
-<<<<<<< HEAD
-    public mounted (): void {
-      this.initializeBGraph();
+    get getIcon (): string {
+      return this.isSplitView ? 'window-maximize' : 'columns';
     }
 
-    async initializeBGraph (): Promise<void> {
-      // TODO: Below code is used for demonstration purposes to show how bgraph can be loaded and run
-      //       code should be removed during integration
-      function deepCopy (inObject, keyBlackList?: Array<any>): any {
-        let value, key;
-
-        if (typeof inObject !== 'object' || inObject === null) {
-          return inObject; // Return the value if inObject is not an object
-        }
-
-        // Create an array or object to hold the values
-        const isArray = Array.isArray(inObject);
-        const outObject = isArray ? [] : {};
-
-        for (key in inObject) {
-          if (!isArray && keyBlackList?.includes(key)) {
-            // Object property should not be deep copied
-            continue;
-          }
-
-          value = inObject[key];
-          // Recursively (deep) copy for nested objects, including arrays
-          outObject[key] = deepCopy(value, keyBlackList);
-        }
-
-        return outObject;
-      }
-
-      const [bgNodes, bgEdges] = await loadBGraphData();
-      const G: any = bgraph.graph(bgNodes, bgEdges); // TODO: Fix type should be IGraph
-
-      // eslint-disable-next-line no-console
-      const query = deepCopy(G.v().filter(document => document._type === 'edge' && document.belief > 0.99 && document.doc_ids.length > 3 && document.evidence_ids.length > 8 && document.tested === true)
-                      .as('edges').out().as('out_nodes').back('edges').in().as('in_nodes').merge('edges', 'in_nodes', 'out_nodes').run(), ['_in', '_out']);
-      
-      console.log(JSON.stringify(query));
-      this.subgraph = formatBGraphOutput(query);
+    get getMessage (): string {
+      return this.isSplitView ? 'Close Local View' : 'Open Local View';
     }
 
-=======
->>>>>>> lex-to-bgraph
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
       return modelsList.find(model => model.metadata.id === 'covid19'); // Only COVID-19 model for now
@@ -178,20 +143,12 @@
       return this.isSplitView ? [['1', '3', '2']] : [['1']];
     }
 
+    get subgraphIsEmpty(): Boolean {
+      return _.isEmpty(this.subgraph);
+    }
+
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
-      // Get the COVID-19 model subgraph
-      // const modelsList = this.getModelsList;
-      // const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
-      // this.subgraph = selectedModel.subgraph;
-      // this.subgraph.edges = this.subgraph.edges.map((edge, idx) => {
-      //   const e = Object.assign({}, edge);
-      //   if (idx === 1 || idx === 2) {
-      //     (e as any).edgeType = 'Inhibition';
-      //   }
-      //   e.metadata.curated = idx;
-      //   return e;
-      // });
     }
 
     onTabClick (tabId: string): void {
@@ -233,8 +190,9 @@
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     onSetSubgraph (subgraph: any): void {
-      // eslint-disable-next-line no-console
-      console.log(subgraph);
+      if (_.isEmpty(subgraph)) return;
+      this.subgraph = formatBGraphOutput(subgraph);
+      console.log(this.subgraph);
     }
   }
 </script>
