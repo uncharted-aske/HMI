@@ -23,6 +23,8 @@ function getDistBuildOptions () {
     entryPoints: ['./build/js/main.js'],
     minify: true,
     bundle: true,
+    sourcemap: false,
+    target: 'es2020',
     outfile: './dist/js/main.js',
     define: Object.assign({
       'process.env.BASE_URL': '"/"',
@@ -36,6 +38,8 @@ function getDevBuildOptions () {
   return {
     entryPoints: ['./build/js/main.js'],
     bundle: true,
+    sourcemap: true,
+    target: 'es2020',
     outfile: './dev/js/main.js',
     define: Object.assign({
       'process.env.BASE_URL': '"/"',
