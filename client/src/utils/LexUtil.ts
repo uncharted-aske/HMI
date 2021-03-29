@@ -5,8 +5,14 @@ import * as filtersUtil from '@/utils/FiltersUtil';
 
 const SUGGESTIONS_LIMIT = 10;
 
-export function initializeLex (config: {pills: any[], placeholder: string, fieldName: string, onChange: (newFilters: Filters) => void, suggestionLimit?: number}): Lex {
-  const { pills, placeholder, fieldName, onChange, suggestionLimit } = config;
+export const initializeLex = (config: {
+  pills: any[],
+  onChange: (newFilters: Filters) => void,
+  placeholder?: string,
+  fieldName?: string,
+  suggestionLimit?: number,
+}): Lex => {
+  const { pills, onChange, placeholder, fieldName, suggestionLimit } = config;
 
   const language = Lex.from('field', ValueState, {
     name: fieldName ?? 'Choose a field to search',
@@ -47,9 +53,9 @@ export function initializeLex (config: {pills: any[], placeholder: string, field
   });
 
   return lex;
-}
+};
 
-export function setPills (config : {lex: Lex, pills: any[], filters: Filters}): void {
+export const setPills = (config : {lex: Lex, pills: any[], filters: Filters}): void => {
   const { lex, pills, filters } = config;
   if (!lex) return;
   const lexQuery = [];
@@ -61,7 +67,7 @@ export function setPills (config : {lex: Lex, pills: any[], filters: Filters}): 
     }
   });
   lex.setQuery(lexQuery, false);
-}
+};
 
 /**
  * Suggestion builder for MappedOptionState
@@ -70,7 +76,7 @@ export function setPills (config : {lex: Lex, pills: any[], filters: Filters}): 
  * @param isMultiValue - if state allows multiple values
  * @param mappedOptions - Suggestions to be used as mapped options
  */
-export function mappedSuggestionBuilder (message: string, isMultiValue: boolean, mappedOptions: MappedOptions): MappedOptionStateConfig {
+export const mappedSuggestionBuilder = (message: string, isMultiValue: boolean, mappedOptions: MappedOptions): MappedOptionStateConfig => {
   const states = Object.keys(mappedOptions).map(key => {
     return new ValueStateValue(key, { key: key, searchKey: mappedOptions[key] });
   });
@@ -89,9 +95,9 @@ export function mappedSuggestionBuilder (message: string, isMultiValue: boolean,
     allowUnknown: false,
     mappedOptions,
   };
-}
+};
 
-function _convertTo (values: LexConvertTypeMapping[LexConvertType][], convertType: LexConvertType): LexConvertTypeMapping[LexConvertType][] {
+const _convertTo = (values: LexConvertTypeMapping[LexConvertType][], convertType: LexConvertType): LexConvertTypeMapping[LexConvertType][] => {
   if (convertType === 'integer') {
     return values.map(r => +r) as number[];
   } else if (convertType === 'string') {
@@ -99,7 +105,7 @@ function _convertTo (values: LexConvertTypeMapping[LexConvertType][], convertTyp
   } else {
     throw Error('No conversion implemented for convert types');
   }
-}
+};
 
 export const convertToLex = (values: LexConvertTypeMapping[LexConvertType][], lexType: LexConvertType): LexConvertTypeMapping[LexConvertType][] => {
   return _convertTo(values, lexType);
