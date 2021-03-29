@@ -20,31 +20,6 @@
   import KeyValuePill from '@/search/pills/KeyValuePill';
   import { bgraph } from '@uncharted.software/bgraph';
 
-  function deepCopy (inObject, keyBlackList?: Array<any>): any {
-    let value, key;
-
-    if (typeof inObject !== 'object' || inObject === null) {
-      return inObject; // Return the value if inObject is not an object
-    }
-
-    // Create an array or object to hold the values
-    const isArray = Array.isArray(inObject);
-    const outObject = isArray ? [] : {};
-
-    for (key in inObject) {
-      if (!isArray && keyBlackList?.includes(key)) {
-        // Object property should not be deep copied
-        continue;
-      }
-
-      value = inObject[key];
-      // Recursively (deep) copy for nested objects, including arrays
-      outObject[key] = deepCopy(value, keyBlackList);
-    }
-
-    return outObject;
-  }
-
   @Component
   export default class SearchBar extends Vue {
     private lex: Lex = null;
@@ -57,7 +32,7 @@
     @Watch('getFilters') async onGetFiltersChanged (): Promise<void> {
       setPills({ lex: this.lex, pills: this.pills, filters: this.getFilters });
       if (this.bgraphInstance) {
-        this.$emit('subgraph', deepCopy(filterToBgraph(this.bgraphInstance, this.getFilters), ['_in', '_out']));
+        this.$emit('subgraph', filterToBgraph(this.bgraphInstance, this.getFilters), ['_in', '_out']);
       }
     }
 
@@ -99,7 +74,7 @@
       const [bgNodes, bgEdges] = await loadBGraphData();
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
       if (this.bgraphInstance) {
-        this.$emit('subgraph', deepCopy(filterToBgraph(this.bgraphInstance, this.getFilters), ['_in', '_out']));
+        this.$emit('subgraph', filterToBgraph(this.bgraphInstance, this.getFilters), ['_in', '_out']);
       }
     }
   }

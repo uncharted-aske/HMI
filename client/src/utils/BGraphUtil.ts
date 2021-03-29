@@ -6,7 +6,7 @@ import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 
 const memoizedStore = { bgEdges: null, bgNodes: null };
 
-function deepCopy (inObject, keyBlackList?: Array<any>): any {
+const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
   let value, key;
 
   if (typeof inObject !== 'object' || inObject === null) {
@@ -29,7 +29,7 @@ function deepCopy (inObject, keyBlackList?: Array<any>): any {
   }
 
   return outObject;
-}
+};
 
 // FIXME: Fix return type once bgraph library types are added
 export const loadBGraphData = (): Promise<any[]> => {
