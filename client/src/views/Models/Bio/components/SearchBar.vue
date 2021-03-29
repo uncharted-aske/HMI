@@ -26,6 +26,7 @@
   export default class SearchBar extends Vue {
     private lex: Lex = null;
     private pills: any = [];
+    // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     private bgraphInstance: any = undefined;
 
     @Getter getFilters;

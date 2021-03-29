@@ -62,6 +62,8 @@ export const loadBGraphData = (): Promise<any[]> => {
   return Promise.all(output);
 };
 
+// Add filter terms here to change the order in which they are processed in bgraph
+// e.g. QUERY_FIELDS_MAP.BIO_NODE_NAME.field: 1
 const filterTermToPriorityRank = {
 
 };
