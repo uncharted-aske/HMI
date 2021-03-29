@@ -3,6 +3,7 @@ import { loadJSONLFile } from '@/utils/FileLoaderUtil';
 
 import { Filters, Filter } from '@/types/typesLex';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
+import { isEmpty } from './FiltersUtil';
 
 const memoizedStore = { bgEdges: null, bgNodes: null };
 
@@ -87,7 +88,7 @@ export const executeBgraph = (bgraph: any, clause: Filter): any => {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const filterToBgraph = (bgraph: any, filters: Filters): any => {
-  if (bgraph && filters && filters.clauses && filters.clauses.length > 0) {
+  if (bgraph && !isEmpty(filters)) {
     const { clauses } = filters;
 
     const mapped = clauses.map((clause, index) => {
