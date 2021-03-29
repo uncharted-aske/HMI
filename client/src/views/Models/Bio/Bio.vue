@@ -7,7 +7,7 @@
           </div>
     </left-side-panel>
     <div class="search-row">
-      <search-bar :placeholder="`Search for model components...`" @subgraph="setSubgraph"/>
+      <search-bar :placeholder="`Search for model components...`" @set-subgraph="onSetSubgraph"/>
       <button class="btn btn-primary m-1" @click="onSplitView">
         Add Subgraph
       </button>
@@ -175,7 +175,7 @@
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    setSubgraph (subgraph: any): void {
+    onSetSubgraph (subgraph: any): void {
       // eslint-disable-next-line no-console
       console.log(subgraph);
     }

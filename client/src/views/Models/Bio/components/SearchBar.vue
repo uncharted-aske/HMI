@@ -10,15 +10,17 @@
   import Component from 'vue-class-component';
   import { Getter, Action } from 'vuex-class';
   import { Watch } from 'vue-property-decorator';
-  import { initializeLex, setPills } from '@/utils/LexUtil';
+
+  import { bgraph } from '@uncharted.software/bgraph';
   import { Lex } from '@uncharted.software/lex/dist/lex';
+  import TextPill from '@/search/pills/TextPill';
+  import KeyValuePill from '@/search/pills/KeyValuePill';
+
   import * as filtersUtil from '@/utils/FiltersUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
   import { BOOLEAN_OPTIONS } from '@/utils/ModelTypeUtil';
   import { loadBGraphData, filterToBgraph } from '@/utils/BGraphUtil';
-  import TextPill from '@/search/pills/TextPill';
-  import KeyValuePill from '@/search/pills/KeyValuePill';
-  import { bgraph } from '@uncharted.software/bgraph';
+  import { initializeLex, setPills } from '@/utils/LexUtil';
 
   @Component
   export default class SearchBar extends Vue {
@@ -32,7 +34,7 @@
     @Watch('getFilters') async onGetFiltersChanged (): Promise<void> {
       setPills({ lex: this.lex, pills: this.pills, filters: this.getFilters });
       if (this.bgraphInstance) {
-        this.$emit('subgraph', filterToBgraph(this.bgraphInstance, this.getFilters), ['_in', '_out']);
+        this.$emit('subgraph', filterToBgraph(this.bgraphInstance, this.getFilters));
       }
     }
 
@@ -74,7 +76,7 @@
       const [bgNodes, bgEdges] = await loadBGraphData();
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
       if (this.bgraphInstance) {
-        this.$emit('subgraph', filterToBgraph(this.bgraphInstance, this.getFilters), ['_in', '_out']);
+        this.$emit('set-subgraph', filterToBgraph(this.bgraphInstance, this.getFilters));
       }
     }
   }
