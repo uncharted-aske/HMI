@@ -34,7 +34,7 @@
     @Watch('getFilters') async onGetFiltersChanged (): Promise<void> {
       setPills({ lex: this.lex, pills: this.pills, filters: this.getFilters });
       if (this.bgraphInstance) {
-        this.$emit('subgraph', filterToBgraph(this.bgraphInstance, this.getFilters));
+        this.$emit('set-subgraph', filterToBgraph(this.bgraphInstance, this.getFilters));
       }
     }
 
