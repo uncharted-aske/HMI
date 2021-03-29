@@ -1,10 +1,8 @@
-import { DataFile } from '@dekkai/data-source';
+import { DataSource, DataFile } from '@dekkai/data-source';
 
 const SIZE_OF_2MB = 2 * 1024 * 1024;
 
-async function parseJSONL (input: string, cb: (obj: any) => void): Promise<void> {
-  const file = await DataFile.fromRemoteSource(input);
-
+async function parseJSONL (file: DataSource, cb: (obj: any) => void): Promise<void> {
   const chunkSizeInBytes = SIZE_OF_2MB;
   const byteLength = await file.byteLength;
   const decoder = new TextDecoder();
@@ -33,8 +31,12 @@ async function parseJSONL (input: string, cb: (obj: any) => void): Promise<void>
   }
 }
 
-export const loadJSONLFile = async (file: string, options: any = null): Promise<any[]> => {
+export const loadJSONLFile = async (file: DataSource | string, options: any = null): Promise<any[]> => {
   const parsedJSONL = [];
+
+  if (typeof (file) === 'string') {
+    file = await DataFile.fromRemoteSource(file);
+  }
 
   await parseJSONL(file, json => {
     parsedJSONL.push(Object.assign({}, json, options));
