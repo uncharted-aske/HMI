@@ -1,8 +1,73 @@
 import _ from 'lodash';
-import { ValueStateValue } from '@uncharted.software/lex/dist/lex';
-import { MappedOptions, MappedOptionStateConfig, LexConvertType, LexConvertTypeMapping } from '@/types/typesLex';
+import { Lex, ValueState, ValueStateValue } from '@uncharted.software/lex/dist/lex';
+import { Filters, MappedOptions, MappedOptionStateConfig, LexConvertType, LexConvertTypeMapping } from '@/types/typesLex';
+import * as filtersUtil from '@/utils/FiltersUtil';
 
 const SUGGESTIONS_LIMIT = 10;
+
+export const initializeLex = (config: {
+  pills: any[],
+  onChange: (newFilters: Filters) => void,
+  placeholder?: string,
+  fieldName?: string,
+  suggestionLimit?: number,
+}): Lex => {
+  const { pills, onChange, placeholder, fieldName, suggestionLimit } = config;
+
+  const language = Lex.from('field', ValueState, {
+    name: fieldName ?? 'Choose a field to search',
+    suggestions: _.sortBy(pills, p => p.searchDisplay).map(pill =>
+      pill.makeOption(),
+    ),
+    suggestionLimit: suggestionLimit ?? SUGGESTIONS_LIMIT,
+    icon: v => {
+      if (_.isNil(v)) return '<i class="fas fa-search"></i>';
+      const pill = pills.find(
+        pill => pill.searchKey === v.meta.searchKey,
+      );
+      return pill.makeIcon();
+    },
+  }).branch(...pills.map(pill => pill.makeBranch()));
+
+  // Initialize lex instance
+  const lex = new Lex({
+    language: language,
+    tokenXIcon: '<i class="fas fa-times"></i>',
+    placeholder: placeholder ?? 'Search...',
+  });
+
+  lex.on('query changed', (...args /* [newModel, oldModel, newUnboxedModel, oldUnboxedModel, nextTokenStarted] */) => {
+    const newModel = args[0];
+    const newFilters = filtersUtil.newFilters();
+
+    newModel.forEach(item => {
+      const pill = pills.find(
+        pill => pill.searchKey === item.field.meta.searchKey,
+      );
+      if (!_.isNil(pill)) {
+        pill.lex2Filters(item, newFilters);
+      }
+    });
+
+    onChange(newFilters);
+  });
+
+  return lex;
+};
+
+export const setPills = (config : {lex: Lex, pills: any[], filters: Filters}): void => {
+  const { lex, pills, filters } = config;
+  if (!lex) return;
+  const lexQuery = [];
+  filters.clauses.forEach(clause => {
+    const pill = pills.find(pill => pill.searchKey === clause.field);
+    if (!_.isNil(pill)) {
+      const selectedPill = pill.makeOption();
+      pill.filters2Lex(clause, selectedPill, lexQuery);
+    }
+  });
+  lex.setQuery(lexQuery, false);
+};
 
 /**
  * Suggestion builder for MappedOptionState
@@ -11,7 +76,7 @@ const SUGGESTIONS_LIMIT = 10;
  * @param isMultiValue - if state allows multiple values
  * @param mappedOptions - Suggestions to be used as mapped options
  */
-function mappedSuggestionBuilder (message: string, isMultiValue: boolean, mappedOptions: MappedOptions): MappedOptionStateConfig {
+export const mappedSuggestionBuilder = (message: string, isMultiValue: boolean, mappedOptions: MappedOptions): MappedOptionStateConfig => {
   const states = Object.keys(mappedOptions).map(key => {
     return new ValueStateValue(key, { key: key, searchKey: mappedOptions[key] });
   });
@@ -30,9 +95,9 @@ function mappedSuggestionBuilder (message: string, isMultiValue: boolean, mapped
     allowUnknown: false,
     mappedOptions,
   };
-}
+};
 
-function _convertTo (values: LexConvertTypeMapping[LexConvertType][], convertType: LexConvertType): LexConvertTypeMapping[LexConvertType][] {
+const _convertTo = (values: LexConvertTypeMapping[LexConvertType][], convertType: LexConvertType): LexConvertTypeMapping[LexConvertType][] => {
   if (convertType === 'integer') {
     return values.map(r => +r) as number[];
   } else if (convertType === 'string') {
@@ -40,13 +105,13 @@ function _convertTo (values: LexConvertTypeMapping[LexConvertType][], convertTyp
   } else {
     throw Error('No conversion implemented for convert types');
   }
-}
+};
 
-const convertToLex = (values: LexConvertTypeMapping[LexConvertType][], lexType: LexConvertType): LexConvertTypeMapping[LexConvertType][] => {
+export const convertToLex = (values: LexConvertTypeMapping[LexConvertType][], lexType: LexConvertType): LexConvertTypeMapping[LexConvertType][] => {
   return _convertTo(values, lexType);
 };
 
-const convertFromLex = (values: unknown, baseType: LexConvertType): LexConvertTypeMapping[LexConvertType][] => {
+export const convertFromLex = (values: unknown, baseType: LexConvertType): LexConvertTypeMapping[LexConvertType][] => {
   if (_.isArray(values)) {
     // Handle lex array values
     const valuesArray = values as any[];
@@ -63,10 +128,4 @@ const convertFromLex = (values: unknown, baseType: LexConvertType): LexConvertTy
     const flattened = valuesArray.map(v => v.key) as LexConvertTypeMapping[LexConvertType][];
     return _convertTo(flattened, baseType);
   }
-};
-
-export {
-  mappedSuggestionBuilder,
-  convertToLex,
-  convertFromLex,
 };

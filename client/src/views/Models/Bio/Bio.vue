@@ -7,7 +7,7 @@
           </div>
     </left-side-panel>
     <div class="search-row">
-      <search-bar :placeholder="`Search for model components...`"/>
+      <search-bar :placeholder="`Search for model components...`" @set-subgraph="onSetSubgraph"/>
       <button class="btn btn-primary m-1" @click="onSplitView">
         Add Subgraph
       </button>
@@ -53,7 +53,6 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
-  import { bgraph } from '@uncharted.software/bgraph';
 
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
@@ -116,6 +115,7 @@
     @Getter getSelectedModelIds;
     @Getter getModelsList;
 
+<<<<<<< HEAD
     public mounted (): void {
       this.initializeBGraph();
     }
@@ -159,6 +159,8 @@
       this.subgraph = formatBGraphOutput(query);
     }
 
+=======
+>>>>>>> lex-to-bgraph
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
       return modelsList.find(model => model.metadata.id === 'covid19'); // Only COVID-19 model for now
@@ -227,6 +229,12 @@
         model: this.selectedModel.metadata.id,
         format: 'json',
       });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    onSetSubgraph (subgraph: any): void {
+      // eslint-disable-next-line no-console
+      console.log(subgraph);
     }
   }
 </script>
