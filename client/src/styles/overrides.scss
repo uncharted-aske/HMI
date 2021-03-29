@@ -13,7 +13,7 @@
   }
 }
 
-.btn-primary {
+.btn-primary .btn-primary.focus {
   color: $text-color-dark;
   background-color: $nord4;
   border-color: $nord4;
@@ -22,6 +22,14 @@
   color: $text-color-dark;
   background-color: $nord5;
   border-color: $nord5;
+}
+
+.btn-primary:disabled {
+  color: $text-color-dark;
+  background-color: $nord4;
+  border-color: $nord4;
+  opacity: 0.3;
+  cursor: none;
 }
 
 .btn-secondary {
