@@ -39,7 +39,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <local-graph v-if="isSplitView" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
+        <local-graph v-if="isSplitView && subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
@@ -60,6 +60,8 @@
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
   import { loadBGraphData } from '@/utils/BGraphUtil';
+  import { formatBGraphOutput } from '@/graphs/svg/util';
+
 
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -148,8 +150,13 @@
 
       const [bgNodes, bgEdges] = await loadBGraphData();
       const G: any = bgraph.graph(bgNodes, bgEdges); // TODO: Fix type should be IGraph
+
       // eslint-disable-next-line no-console
-      console.log(deepCopy(G.v().run(), ['_in', '_out']));
+      const query = deepCopy(G.v().filter(document => document._type === 'edge' && document.belief > 0.99 && document.doc_ids.length > 3 && document.evidence_ids.length > 8 && document.tested === true)
+                      .as('edges').out().as('out_nodes').back('edges').in().as('in_nodes').merge('edges', 'in_nodes', 'out_nodes').run(), ['_in', '_out']);
+      
+      console.log(JSON.stringify(query));
+      this.subgraph = formatBGraphOutput(query);
     }
 
     get selectedModel (): ModelInterface {
@@ -172,17 +179,17 @@
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
       // Get the COVID-19 model subgraph
-      const modelsList = this.getModelsList;
-      const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
-      this.subgraph = selectedModel.subgraph;
-      this.subgraph.edges = this.subgraph.edges.map((edge, idx) => {
-        const e = Object.assign({}, edge);
-        if (idx === 1 || idx === 2) {
-          (e as any).edgeType = 'Inhibition';
-        }
-        e.metadata.curated = idx;
-        return e;
-      });
+      // const modelsList = this.getModelsList;
+      // const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
+      // this.subgraph = selectedModel.subgraph;
+      // this.subgraph.edges = this.subgraph.edges.map((edge, idx) => {
+      //   const e = Object.assign({}, edge);
+      //   if (idx === 1 || idx === 2) {
+      //     (e as any).edgeType = 'Inhibition';
+      //   }
+      //   e.metadata.curated = idx;
+      //   return e;
+      // });
     }
 
     onTabClick (tabId: string): void {
