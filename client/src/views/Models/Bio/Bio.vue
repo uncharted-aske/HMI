@@ -62,7 +62,6 @@
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
   import { formatBGraphOutput } from '@/graphs/svg/util';
-  import { isEmpty } from '@/utils/FiltersUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
@@ -195,7 +194,6 @@
       if (_.isEmpty(subgraph)) {
         this.isSplitView = false;
         this.subgraph = null;
-
       } else {
         this.subgraph = formatBGraphOutput(subgraph);
         this.subgraphLoading = true;
