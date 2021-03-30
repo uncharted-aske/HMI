@@ -39,7 +39,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <local-bio-graph v-if="isSplitView" :graph="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
+        <local-graph v-if="isSplitView" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
@@ -66,13 +66,13 @@
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from './components/FacetsPane.vue';
-  import LocalBioGraph from './components/BioGraphs/LocalBioGraph.vue';
+  import LocalGraph from './components/Graphs/LocalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import EdgePane from './components/DrilldownPanel/EdgePane.vue';
   import NodePane from './components/DrilldownPanel/NodePane.vue';
 
-  import Grafer from './components/BioGraphs/Grafer.vue';
+  import Grafer from './components/Graphs/Grafer.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -87,7 +87,7 @@
     LeftSidePanel,
     MetadataPanel,
     FacetsPane,
-    LocalBioGraph,
+    LocalGraph,
     ResizableGrid,
     DrilldownPanel,
     NodePane,
@@ -135,6 +135,14 @@
       const modelsList = this.getModelsList;
       const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
       this.subgraph = selectedModel.subgraph;
+      this.subgraph.edges = this.subgraph.edges.map((edge, idx) => {
+        const e = Object.assign({}, edge);
+        if (idx === 1 || idx === 2) {
+          (e as any).edgeType = 'Inhibition';
+        }
+        e.metadata.curated = idx;
+        return e;
+      });
     }
 
     onTabClick (tabId: string): void {

@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import ELK from 'elkjs/lib/elk.bundled';
 
-import { makeEdgeMaps, traverse } from '@/graphs/svg/util.js';
-import { NodeTypes } from '@/graphs/svg/encodings.ts';
+import { makeEdgeMaps, traverse, changeKey } from '@/graphs/svg/util.js';
 
 /**
  * Convert graph data structure to a basic graph structure that can be used by the renderer
@@ -12,17 +11,13 @@ import { NodeTypes } from '@/graphs/svg/encodings.ts';
 const build = (root) => {
   const _walk = (node, depth, parent) => {
     const nodeSpec = {
-      id: node.id,
+      id: node.id ?? '',
       concept: node.concept,
       label: node.label,
-      nodeType: node.nodeType,
-      nodeSubType: node.nodeSubType,
       depth: depth,
       type: 'normal',
       parent: parent,
-      data: node.data,
-      metadata: node.metadata,
-      role: node.role,
+      data: node,
     };
 
     // Build edges
@@ -41,6 +36,7 @@ const build = (root) => {
       }
     }
 
+    // Recurse children nodes
     if (node.nodes && node.nodes.length > 0) {
       nodeSpec.nodes = node.nodes.map(n => _walk(n, depth + 1, nodeSpec));
     }
@@ -57,16 +53,12 @@ const build = (root) => {
  * - Add targets/sources to edges
  * - Compute layout options
  *
- * We need to do multi traverse passes, since we are not sure if cross-hierarchy edges
- * are specified at the higher or the lower node hierarchy.
- *
- *
  * @param {object} renderGraph
  */
 const injectELKOptions = (renderGraph, options) => {
   const edgeMaps = makeEdgeMaps(renderGraph);
-  const outgoingMap = {};
-  const incomingMap = {};
+  const outgoingMap = new Map();
+  const incomingMap = new Map();
   const layout = options.layout;
 
   // Set up nodes end edges
@@ -83,13 +75,8 @@ const injectELKOptions = (renderGraph, options) => {
     node.ports = ports;
 
     if (!node.nodes || node.nodes.length === 0) {
-      if (node.nodeType === NodeTypes.NODES.FUNCTION) {
-        node.width = 15;
-        node.height = 15;
-      } else {
-        node.width = node.width || options.nodeWidth;
-        node.height = node.height || options.nodeHeight;
-      }
+      node.width = node.width || options.nodeWidth;
+      node.height = node.height || options.nodeHeight;
     } else {
       delete node.width;
       delete node.height;
@@ -99,17 +86,17 @@ const injectELKOptions = (renderGraph, options) => {
     node.edges.forEach(edge => {
       const source = edge.source;
       const target = edge.target;
-      if (!{}.hasOwnProperty.call(outgoingMap, source)) {
-        outgoingMap[source] = -1;
+      if (!outgoingMap.has(source)) {
+        outgoingMap.set(source, -1);
       }
-      if (!{}.hasOwnProperty.call(incomingMap, target)) {
-        incomingMap[target] = -1;
+      if (!incomingMap.has(target)) {
+        incomingMap.set(target, -1);
       }
-      outgoingMap[source] = outgoingMap[source] + 1;
-      incomingMap[target] = incomingMap[target] + 1;
+      outgoingMap.set(source, outgoingMap.get(source) + 1);
+      incomingMap.set(target, incomingMap.get(target) + 1);
 
-      edge.sources = [`${source}:source:${outgoingMap[source]}`];
-      edge.targets = [`${target}:target:${incomingMap[target]}`];
+      edge.sources = [`${source}:source:${outgoingMap.get(source)}`];
+      edge.targets = [`${target}:target:${incomingMap.get(target)}`];
 
       delete edge.points;
       delete edge.sections;
@@ -132,21 +119,24 @@ const injectELKOptions = (renderGraph, options) => {
 };
 
 const postProcess = (layout) => {
-  const nodeGlobalPosition = {};
-  const nodeParent = {};
+  const nodeGlobalPosition = new Map();
+  const nodeMap = new Map();
 
-  /**
-   * Move edge points xy to world coordinates
-   */
+  // Move edge points xy to world coordinates
   const convertPointsToGlobalXY = (edge) => {
     const { startPoint, bendPoints = [], endPoint } = edge.sections[0];
     let tx = 0;
     let ty = 0;
-    if (nodeParent[edge.source] === nodeParent[edge.target]) {
-      const parentNodeId = nodeParent[edge.source];
-      tx = nodeGlobalPosition[parentNodeId].x;
-      ty = nodeGlobalPosition[parentNodeId].y;
+
+    const sourceNode = nodeMap.get(edge.source);
+    const targetNode = nodeMap.get(edge.target);
+
+    const edgeContainerId = getEdgeContainerId(sourceNode, targetNode);
+    if (edgeContainerId) {
+      tx += nodeGlobalPosition.get(edgeContainerId).x;
+      ty += nodeGlobalPosition.get(edgeContainerId).y;
     }
+
     edge.points = [startPoint, ...bendPoints, endPoint].map(p => {
       return {
         x: p.x + tx,
@@ -163,7 +153,6 @@ const postProcess = (layout) => {
   };
 
   const splitLineSegments = (edge) => {
-    // Test
     const t = edge.points;
     edge.points = [];
     edge.points.push(_.first(t));
@@ -181,40 +170,62 @@ const postProcess = (layout) => {
 
   // Precompute nodes global positions
   traverse(layout, (node) => {
-    nodeParent[node.id] = node.parent ? node.parent.id : null;
+    nodeMap.set(node.id, node);
     if (!node.parent) {
-      nodeGlobalPosition[node.id] = {
+      nodeGlobalPosition.set(node.id, {
         x: node.x,
         y: node.y,
-      };
+      });
     } else {
-      nodeGlobalPosition[node.id] = {
-        x: node.x + nodeGlobalPosition[node.parent.id].x,
-        y: node.y + nodeGlobalPosition[node.parent.id].y,
-      };
+      nodeGlobalPosition.set(node.id, {
+        x: node.x + nodeGlobalPosition.get(node.parent.id).x,
+        y: node.y + nodeGlobalPosition.get(node.parent.id).y,
+      });
     }
   });
 
+  // Reassign edges to the top level
+  let globalEdges = [];
   traverse(layout, (node) => {
     if (node.edges) {
       for (const edge of node.edges) {
         convertPointsToGlobalXY(edge);
         splitLineSegments(edge);
       }
+      globalEdges = globalEdges.concat(node.edges);
+      delete node.edges;
     }
   });
+  layout.edges = globalEdges;
 
   return layout;
 };
 
-// ELK has a different naming convention
-const changeKey = (obj, before, after) => {
-  if ({}.hasOwnProperty.call(obj, before)) {
-    obj[after] = obj[before];
-    delete obj[before];
-    obj[after].forEach(child => {
-      changeKey(child, before, after);
-    });
+const getEdgeContainerId = (sourceNode, targetNode) => {
+  if (sourceNode.parent === null || targetNode.parent === null) {
+    return null;
+  } else if (sourceNode.parent === targetNode.parent) {
+    return sourceNode.parent.id;
+  }
+  return getEdgeContainerId(sourceNode.parent, targetNode.parent);
+};
+
+// Reshuffle edges into the right compound nodes for layout
+const reshuffle = (renderGraph) => {
+  const nodeMap = new Map();
+  traverse(renderGraph, (node) => {
+    nodeMap.set(node.id, node);
+    if (!node.edges) node.edges = [];
+  });
+
+  const edges = renderGraph.edges;
+  renderGraph.edges = [];
+
+  for (let i = 0; i < edges.length; i++) {
+    const edge = edges[i];
+
+    // FIXME: common parent
+    nodeMap.get(renderGraph.id).edges.push(edge);
   }
 };
 
@@ -228,40 +239,16 @@ export default class ELKAdapter {
   }
 
   makeRenderingGraph (graphData) {
-    const renderGraph = build({
-      id: 'dummy',
-      nodes: graphData.nodes,
-      edges: graphData.edges,
-    });
+    const renderGraph = build(graphData);
     return renderGraph;
   }
 
-  /**
-   * Runs layout
-   * @param {object} graphData - { nodes, edges }
-   */
-  // async run(graphData /*, options */) {
-  //   const elk = new ELK();
-  //   const renderGraph = build({
-  //     id: 'dummy',
-  //     nodes: graphData.nodes,
-  //     edges: graphData.edges
-  //   });
-  //   injectELKOptions(renderGraph, this.options);
-  //   changeKey(renderGraph, 'nodes', 'children');
-  //   const result = await elk.layout(renderGraph);
-  //   changeKey(result, 'children', 'nodes');
-  //   return postProcess(result);
-  // }
+  async run (renderGraph) {
+    reshuffle(renderGraph);
 
-  /**
-   * Reruns the layout
-   * @param {object} renderGraph
-   */
-  async run (renderGraph /*, options */) {
     const elk = new ELK();
     injectELKOptions(renderGraph, this.options);
-    changeKey(renderGraph, 'nodes', 'children');
+    changeKey(renderGraph, 'nodes', 'children'); // Elk has a different naming convention
     const result = await elk.layout(renderGraph);
     changeKey(result, 'children', 'nodes');
     return postProcess(result);

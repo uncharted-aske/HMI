@@ -83,6 +83,16 @@ export const makeEdgeMaps = (root) => {
   };
 };
 
+export const changeKey = (obj, before, after) => {
+  if ({}.hasOwnProperty.call(obj, before)) {
+    obj[after] = obj[before];
+    delete obj[before];
+    obj[after].forEach(child => {
+      changeKey(child, before, after);
+    });
+  }
+};
+
 /**
  * Given a nested representation of nodes computed by d3.stratify, it formats it to one that can be used by the renderer
 * {
@@ -94,23 +104,14 @@ export const makeEdgeMaps = (root) => {
  * }
  */
 
-export const formatHierarchyNodeData = (root) => {
-  const data = root.data;
-  root.concept = data.concept;
-  root.label = data.label;
-  root.nodeType = data.nodeType;
-  root.nodeSubType = data.nodeSubType;
-  root.metadata = data.metadata;
+export const constructRootNode = (root) => {
+  root.label = root.data.label;
+  root.concept = root.data.concept;
+  changeKey(root, 'children', 'nodes');
 
-  if (root.metadata && root.metadata.attributes) {
-    root.role = root.metadata.attributes[0].code_role;
-  }
-
-  if (root.children) {
-    root.nodes = root.children;
-    delete root.children;
+  if (root.nodes) {
     for (let i = 0; i < root.nodes.length; i++) {
-      formatHierarchyNodeData(root.nodes[i]);
+      constructRootNode(root.nodes[i]);
     }
   }
 };
@@ -126,14 +127,9 @@ export const calculateNodeNeighborhood = (graph, node) => {
     edge.target === node.id || edge.source === node.id).map(edge => ({ source: edge.source, target: edge.target }));
 
   // Reverse-engineer nodes from edges
-  let neighborNodes = [];
-  // if (node.nodes) {
-  //   neighborNodes = flatten(node).nodes.map(n => n.id).concat(node.id);
-  // } else {
-  neighborNodes = _.uniq(_.flatten(neighborEdges.map(edge => {
+  const neighborNodes = _.uniq(_.flatten(neighborEdges.map(edge => {
     return [edge.source, edge.target];
-  })).concat(node)).map(id => ({ id })); // Include the selected node (added into .uniq)
-  // }
+  }))).map(id => id);
 
   return { nodes: neighborNodes, edges: neighborEdges };
 };
@@ -141,7 +137,7 @@ export const calculateNodeNeighborhood = (graph, node) => {
 export const calculateEdgeNeighborhood = (edge) => {
   return {
     edges: [{ source: edge.source, target: edge.target }],
-    nodes: [{ id: edge.source }, { id: edge.target }],
+    nodes: [edge.source, edge.target],
   };
 };
 
@@ -169,18 +165,57 @@ export const calcLabelColor = (node) => {
   return node.nodes ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
 };
 
+/**
+ * Calculate edge colors for biological graphs
+ *  - ACTIVATION/INCREASEAMOUNT: BLUE
+ *  - INHIBITION/DECREASEAMOUNT: RED
+ *
+ */
+
 export const calcEdgeColor = (edge) => {
   if (edge.data.edgeType) {
-    if (edge.data.edgeType === EdgeTypes.EDGES.ACTIVATION) {
-      return Colors.EDGES.ACTIVATION;
-    } else if (edge.data.edgeType === EdgeTypes.EDGES.INHIBITION) {
-      return Colors.EDGES.INHIBITION;
-    } else if (edge.data.edgeType === EdgeTypes.EDGES.COMPLEX) {
-      return Colors.EDGES.COMPLEX;
-    } else if (edge.data.edgeType === EdgeTypes.EDGES.OVERLAPPING) {
-      return Colors.EDGES.OVERLAPPING;
-    }
-    return Colors.EDGES.DEFAULT;
+    if (edge.data.edgeType === EdgeTypes.EDGES.ACTIVATION || edge.data.edgeType === EdgeTypes.EDGES.INCREASEAMOUNT) {
+      return Colors.POLARITY.POSITIVE;
+    } else if (edge.data.edgeType === EdgeTypes.EDGES.INHIBITION || edge.data.edgeType === EdgeTypes.EDGES.DECREASEAMOUNT) {
+      return Colors.POLARITY.NEGATIVE;
+    } else return Colors.EDGES.DEFAULT;
   }
   return Colors.EDGES.DEFAULT;
+};
+
+/**
+ * Calculate edge control filling according to the curation status of a statement
+ * incorrect - 0
+ * correct - 1
+ * partial - 2
+ * uncurated - 3
+ */
+export const calcEdgeControlBackground = (edge) => {
+  const curated = edge.data.metadata.curated;
+  if (curated === EdgeTypes.CURATION_STATUS.INCORRECT) {
+    return Colors.CURATION.INCORRECT;
+  } else if (curated === EdgeTypes.CURATION_STATUS.CORRECT) {
+    return Colors.CURATION.CORRECT;
+  } else if (curated === EdgeTypes.CURATION_STATUS.PARTIAL) {
+    return Colors.CURATION.PARTIAL;
+  }
+  return Colors.CURATION.UNCURATED;
+};
+
+export const calculateEdgeControlLabels = (edge) => {
+  const type = edge.data.edgeType;
+  switch (type) {
+    case EdgeTypes.EDGES.ACTIVATION:
+      return 'A';
+    case EdgeTypes.EDGES.INHIBITION:
+      return 'I';
+    case EdgeTypes.EDGES.INCREASEAMOUNT:
+      return '+';
+    case EdgeTypes.EDGES.PHOSPORYLATION:
+      return 'P';
+    case EdgeTypes.EDGES.DEPHOSPORYLATION:
+      return 'D';
+    default:
+      return '';
+  }
 };
