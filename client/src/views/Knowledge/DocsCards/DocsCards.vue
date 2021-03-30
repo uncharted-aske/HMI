@@ -166,7 +166,7 @@
         ),
         new KeyValuePill(
           QUERY_FIELDS_MAP.COSMOS_INCLUSIVE,
-          modelTypeUtil.COSMOS_INCLUSIVE_OPTIONS,
+          modelTypeUtil.BOOLEAN_OPTIONS,
           'Select option..',
           { single: true, multiValue: false },
         ),

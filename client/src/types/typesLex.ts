@@ -1,4 +1,4 @@
-import { MODEL_TYPE_OPTIONS, COSMOS_TYPE_OPTIONS, COSMOS_INCLUSIVE_OPTIONS } from '@/utils/ModelTypeUtil';
+import { MODEL_TYPE_OPTIONS, COSMOS_TYPE_OPTIONS, BOOLEAN_OPTIONS } from '@/utils/ModelTypeUtil';
 
 export type LexConvertType = 'integer' | 'string';
 export type LexConvertTypeMapping = {
@@ -41,7 +41,7 @@ export interface QueryState {
 export type MappedOptions = (
   typeof MODEL_TYPE_OPTIONS |
   typeof COSMOS_TYPE_OPTIONS |
-  typeof COSMOS_INCLUSIVE_OPTIONS
+  typeof BOOLEAN_OPTIONS
 )
 
 export interface MappedOptionStateConfig {

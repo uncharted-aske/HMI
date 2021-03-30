@@ -53,7 +53,7 @@
         .text(d => d.label);
     }
 
-    renderEdge (edgeSelection) {
+    renderEdge (edgeSelection: d3.Selection<any, any, any, any>): void {
       edgeSelection.append('path')
         .attr('d', d => pathFn(d.points))
         .style('fill', 'none')
@@ -141,18 +141,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
-  .content {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-  }
-
-  .grafer {
-    flex-grow: 1;
-  }
-</style>

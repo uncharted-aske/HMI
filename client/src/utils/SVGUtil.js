@@ -40,8 +40,9 @@ export const hierarchyFn = d3.stratify()
   .parentId((d) => d.parent);
 
 export const hideTooltip = (svgContainer) => {
-  if (svgContainer === null || svgContainer.node() === null) return;
-  svgContainer.selectAll('.svg-tooltip').remove();
+  if (svgContainer !== null || svgContainer.node() !== null) {
+    svgContainer.selectAll('.svg-tooltip').remove();
+  }
 };
 
 /** Borrowed from Causemos (WM)

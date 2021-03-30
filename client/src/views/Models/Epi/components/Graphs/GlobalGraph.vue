@@ -63,9 +63,10 @@
       });
 
       this.renderer.setCallback('nodeMouseEnter', (evt, node, renderer) => {
-        if (node.datum().nodes) return;
-        const data = node.datum();
-        showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
+        if (!node.datum().nodes) {
+          const data = node.datum();
+          showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
+        }
       });
 
       this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
