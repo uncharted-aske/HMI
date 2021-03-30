@@ -87,9 +87,9 @@ export const changeKey = (obj, before, after) => {
   if ({}.hasOwnProperty.call(obj, before)) {
     obj[after] = obj[before];
     delete obj[before];
-      obj[after].forEach(child => {
-        changeKey(child, before, after);
-      });
+    obj[after].forEach(child => {
+      changeKey(child, before, after);
+    });
   }
 };
 
@@ -116,28 +116,26 @@ export const constructRootNode = (root) => {
   }
 };
 
-
 export const formatBGraphOutput = (data) => {
-  let nodes = [];
-  let edges = [];
+  const nodes = [];
+  const edges = [];
   data.forEach(d => {
     if (d._type === 'node') {
       d.label = d.name;
       delete d.name;
-      nodes.push(d)
-
+      nodes.push(d);
     } else {
       d.source = d.source_id;
       d.target = d.target_id;
       delete d.source_id;
-      delete d.target_id
+      delete d.target_id;
       edges.push(d);
     }
-  })
+  });
   return {
     nodes,
-    edges
-  }
+    edges,
+  };
 };
 
 /**

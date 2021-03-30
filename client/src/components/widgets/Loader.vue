@@ -1,6 +1,6 @@
 <template>
   <div v-if="loading" class="loader-container">
-    <div class="loader">{{ message }}</div>
+    <div class="loader" />
   </div>
 </template>
 
@@ -9,12 +9,9 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-
   @Component
   export default class Loader extends Vue {
      @Prop({ default: false }) loading: boolean;
-     @Prop({ default: 'Loading...' }) message: string;
-
   }
 
 </script>
