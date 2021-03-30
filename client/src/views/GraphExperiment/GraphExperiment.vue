@@ -22,7 +22,7 @@
       super(options);
     }
 
-    const renderNode = (nodeSelection: d3.Selection<any, any, any, any>): void => {
+    renderNode (nodeSelection: d3.Selection<any, any, any, any>): void {
       nodeSelection.each(function () {
         const selection = d3.select(this);
 
@@ -53,7 +53,7 @@
         .text(d => d.label);
     }
 
-    const renderEdge = (edgeSelection: d3.Selection<any, any, any, any>): void => {
+    renderEdge (edgeSelection: d3.Selection<any, any, any, any>): void {
       edgeSelection.append('path')
         .attr('d', d => pathFn(d.points))
         .style('fill', 'none')
