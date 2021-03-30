@@ -17,7 +17,7 @@
           :cards="docsCards"
           @click-card="onCardClick"
       />
-      <loader :loading="dataLoading">
+      <loader :loading="dataLoading" />
     </div>
     <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" :active-tab-id="drilldownActiveTabId" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
         <knowledge-preview-pane v-if="drilldownActiveTabId ===  'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true"/>

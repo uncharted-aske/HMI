@@ -40,7 +40,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <loader :loading="subgraphLoading">
+        <loader :loading="subgraphLoading" />
         <local-graph v-if="isSplitView && subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
       </div>
     </resizable-grid>
@@ -61,7 +61,6 @@
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
-  import { loadBGraphData, filterToBgraph } from '@/utils/BGraphUtil';
   import { formatBGraphOutput } from '@/graphs/svg/util';
   import { isEmpty } from '@/utils/FiltersUtil';
 
@@ -147,7 +146,7 @@
       return this.isSplitView ? [['1', '3', '2']] : [['1']];
     }
 
-    get canOpenLocalView(): Boolean {
+    get canOpenLocalView (): boolean {
       return !_.isEmpty(this.subgraph) && !isEmpty(this.getFilters);
     }
 

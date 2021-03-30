@@ -1,7 +1,7 @@
 <template>
   <div class="grafer-container">
     <canvas class="grafer-canvas" ref="canvas"></canvas>
-    <loader :loading="loading">
+    <loader :loading="loading" class="loading"/>
   </div>
 </template>
 
