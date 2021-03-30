@@ -195,7 +195,7 @@
         this.isSplitView = false;
         this.subgraph = null;
       } else {
-        this.subgraph = formatBGraphOutput(subgraph);
+        this.subgraph = formatBGraphOutput(subgraph); //FIXME: We should limit the query results to certain number of elements (e.g. 1000 nodes/edges). D3 can't handle large results.
         this.subgraphLoading = true;
       }
     }
