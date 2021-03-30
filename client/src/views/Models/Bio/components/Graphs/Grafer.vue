@@ -1,9 +1,7 @@
 <template>
   <div class="grafer-container">
     <canvas class="grafer-canvas" ref="canvas"></canvas>
-    <div v-if="loading" class="loading">
-      <div class="loader">Loading...</div>
-    </div>
+    <loader :loading="loading">
   </div>
 </template>
 
@@ -13,7 +11,13 @@
   import Vue from 'vue';
   import { loadJSONLFile } from '@/utils/FileLoaderUtil';
 
-  @Component
+  import Loader from '@/components/widgets/Loader.vue';
+
+  const components = {
+    Loader,
+  };
+
+  @Component({ components })
   export default class Grafer extends Vue {
     private loading: boolean = true;
     private controller: GraferController;

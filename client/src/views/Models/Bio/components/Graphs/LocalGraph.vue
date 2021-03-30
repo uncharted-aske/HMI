@@ -1,5 +1,5 @@
 <template>
-    <div class="local-graph-container" ref="graph" />
+  <div class="local-graph-container" ref="graph" />
 </template>
 
 <script lang="ts">
@@ -88,9 +88,11 @@
       this.refresh();
     }
 
-    refresh (): void {
+    async refresh (): Promise<void> {
       this.renderer.setData(this.data);
-      this.renderer.render();
+      this.renderer.render().then(() => {
+        this.$emit('loaded');
+      });
     }
   }
 </script>

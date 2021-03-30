@@ -17,9 +17,7 @@
           :cards="docsCards"
           @click-card="onCardClick"
       />
-      <div class="loader-container" v-if="dataLoading">
-        <div class="loader">Loading...</div>
-      </div>
+      <loader :loading="dataLoading">
     </div>
     <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" :active-tab-id="drilldownActiveTabId" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
         <knowledge-preview-pane v-if="drilldownActiveTabId ===  'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true"/>
@@ -56,6 +54,7 @@
   import { cosmosSearch } from '@/services/CosmosFetchService';
   import { filterToParamObj, getAuthorList } from '@/utils/CosmosDataUtil';
 
+  import Loader from '@/components/widgets/Loader.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from '../components/Settings.vue';
   import Counters from '@/components/Counters.vue';
@@ -83,6 +82,7 @@
     ModelsPane,
     EntitiesPane,
     ModalDocument,
+    Loader,
   };
 
   @Component({ components })

@@ -8,7 +8,7 @@
     </left-side-panel>
     <div class="search-row">
       <search-bar :placeholder="`Search for model components...`" @set-subgraph="onSetSubgraph"/>
-      <button class="btn btn-primary m-1" @click="onSplitView" :disabled="subgraphIsEmpty">
+      <button class="btn btn-primary m-1" @click="onSplitView" :disabled="!canOpenLocalView">
         <font-awesome-icon :icon="['fas', getIcon ]" />
         <span>{{ getMessage }}</span>
       </button>
@@ -40,7 +40,8 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <local-graph v-if="isSplitView && subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
+        <loader :loading="subgraphLoading">
+        <local-graph v-if="isSplitView && subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
@@ -62,8 +63,9 @@
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
   import { loadBGraphData, filterToBgraph } from '@/utils/BGraphUtil';
   import { formatBGraphOutput } from '@/graphs/svg/util';
+  import { isEmpty } from '@/utils/FiltersUtil';
 
-
+  import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
@@ -98,6 +100,7 @@
     NodePane,
     EdgePane,
     Grafer,
+    Loader,
   };
 
   @Component({ components })
@@ -113,6 +116,7 @@
 
     isSplitView = false;
     subgraph: GraphInterface = null;
+    subgraphLoading: boolean = false;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -143,8 +147,8 @@
       return this.isSplitView ? [['1', '3', '2']] : [['1']];
     }
 
-    get subgraphIsEmpty(): Boolean {
-      return _.isEmpty(this.subgraph);
+    get canOpenLocalView(): Boolean {
+      return !_.isEmpty(this.subgraph) && !isEmpty(this.getFilters);
     }
 
     onSplitView (): void {
@@ -192,7 +196,7 @@
     onSetSubgraph (subgraph: any): void {
       if (_.isEmpty(subgraph)) return;
       this.subgraph = formatBGraphOutput(subgraph);
-      console.log(this.subgraph);
+      this.subgraphLoading = true;
     }
   }
 </script>
