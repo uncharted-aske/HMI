@@ -119,7 +119,6 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
-    @Getter getFilters;
 
     get getIcon (): string {
       return this.isSplitView ? 'window-maximize' : 'columns';
@@ -147,7 +146,7 @@
     }
 
     get canOpenLocalView (): boolean {
-      return !_.isEmpty(this.subgraph) && !isEmpty(this.getFilters);
+      return !_.isEmpty(this.subgraph);
     }
 
     onSplitView (): void {
@@ -193,9 +192,14 @@
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     onSetSubgraph (subgraph: any): void {
-      if (_.isEmpty(subgraph)) return;
-      this.subgraph = formatBGraphOutput(subgraph);
-      this.subgraphLoading = true;
+      if (_.isEmpty(subgraph)) {
+        this.isSplitView = false;
+        this.subgraph = null;
+
+      } else {
+        this.subgraph = formatBGraphOutput(subgraph);
+        this.subgraphLoading = true;
+      }
     }
   }
 </script>
