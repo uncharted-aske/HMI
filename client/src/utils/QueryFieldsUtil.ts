@@ -46,6 +46,37 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'string',
   },
+  // BIO MODELS
+  BIO_NODE_NAME: {
+    ..._field('bioNodeName', 'Node Name'),
+    ..._searchable('Node Name', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
+  BIO_NODE_GROUNDED: {
+    ..._field('bioNodeGrounded', 'Node Grounded'),
+    ..._searchable('Node Grounded', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_NODE_GROUNDED_ONTO: {
+    ..._field('bioNodeGroundedOnto', 'Node Group'),
+    ..._searchable('Node Group', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_NODE_IN_DEGREE: {
+    ..._field('bioNodeInDegree', 'Node In-degree'),
+    ..._searchable('Node In-degree', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_NODE_OUT_DEGREE: {
+    ..._field('bioNodeOutDegree', 'Node Out-degree'),
+    ..._searchable('Node Out-degree', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
   // COSMOS
   COSMOS_QUERY: {
     ..._field('cosmosQuery', 'Keyword'),

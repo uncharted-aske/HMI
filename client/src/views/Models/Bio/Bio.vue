@@ -7,7 +7,7 @@
           </div>
     </left-side-panel>
     <div class="search-row">
-      <search-bar :placeholder="`Search for model components...`"/>
+      <search-bar :placeholder="`Search for model components...`" @set-subgraph="onSetSubgraph"/>
       <button class="btn btn-primary m-1" @click="onSplitView">
         Add Subgraph
       </button>
@@ -53,13 +53,11 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
-  import { bgraph } from '@uncharted.software/bgraph';
 
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
-  import { loadBGraphData } from '@/utils/BGraphUtil';
 
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -113,44 +111,6 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
-
-    public mounted (): void {
-      this.initializeBGraph();
-    }
-
-    async initializeBGraph (): Promise<void> {
-      // TODO: Below code is used for demonstration purposes to show how bgraph can be loaded and run
-      //       code should be removed during integration
-      function deepCopy (inObject, keyBlackList?: Array<any>): any {
-        let value, key;
-
-        if (typeof inObject !== 'object' || inObject === null) {
-          return inObject; // Return the value if inObject is not an object
-        }
-
-        // Create an array or object to hold the values
-        const isArray = Array.isArray(inObject);
-        const outObject = isArray ? [] : {};
-
-        for (key in inObject) {
-          if (!isArray && keyBlackList?.includes(key)) {
-            // Object property should not be deep copied
-            continue;
-          }
-
-          value = inObject[key];
-          // Recursively (deep) copy for nested objects, including arrays
-          outObject[key] = deepCopy(value, keyBlackList);
-        }
-
-        return outObject;
-      }
-
-      const [bgNodes, bgEdges] = await loadBGraphData();
-      const G: any = bgraph.graph(bgNodes, bgEdges); // TODO: Fix type should be IGraph
-      // eslint-disable-next-line no-console
-      console.log(deepCopy(G.v().run(), ['_in', '_out']));
-    }
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
@@ -212,6 +172,12 @@
         model: this.selectedModel.metadata.id,
         format: 'json',
       });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    onSetSubgraph (subgraph: any): void {
+      // eslint-disable-next-line no-console
+      console.log(subgraph);
     }
   }
 </script>
