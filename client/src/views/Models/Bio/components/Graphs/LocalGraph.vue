@@ -90,9 +90,8 @@
 
     async refresh (): Promise<void> {
       this.renderer.setData(this.data);
-      this.renderer.render().then(() => {
-        this.$emit('loaded');
-      });
+      await this.renderer.render();
+      this.$emit('loaded');
     }
   }
 </script>

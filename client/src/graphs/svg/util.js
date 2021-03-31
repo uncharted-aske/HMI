@@ -116,28 +116,6 @@ export const constructRootNode = (root) => {
   }
 };
 
-export const formatBGraphOutput = (data) => {
-  const nodes = [];
-  const edges = [];
-  data.forEach(d => {
-    if (d._type === 'node') {
-      d.label = d.name;
-      delete d.name;
-      nodes.push(d);
-    } else {
-      d.source = d.source_id;
-      d.target = d.target_id;
-      delete d.source_id;
-      delete d.target_id;
-      edges.push(d);
-    }
-  });
-  return {
-    nodes,
-    edges,
-  };
-};
-
 /**
  * Get the neighborhood graph for a selected node
  * @param {object} graph - an object of nodes/edges arrays

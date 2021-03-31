@@ -61,7 +61,7 @@
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
-  import { formatBGraphOutput } from '@/graphs/svg/util';
+  import { formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
@@ -113,7 +113,7 @@
     drilldownMetadata: any = null;
 
     isSplitView = false;
-    subgraph: GraphInterface = null;
+    subgraph: GraphInterface = undefined; // Initialize as undefined to prevent vue from tracking changes to the subgraph instance
     subgraphLoading: boolean = false;
 
     @Getter getSelectedModelIds;
@@ -193,9 +193,9 @@
     onSetSubgraph (subgraph: any): void {
       if (_.isEmpty(subgraph)) {
         this.isSplitView = false;
-        this.subgraph = null;
+        this.subgraph = undefined;
       } else {
-        this.subgraph = formatBGraphOutput(subgraph); // FIXME: We should limit the query results to certain number of elements (e.g. 1000 nodes/edges). D3 can't handle large results.
+        this.subgraph = formatBGraphOutputToLocalGraph(subgraph); // FIXME: We should limit the query results to certain number of elements (e.g. 1000 nodes/edges). D3 can't handle large results.
         this.subgraphLoading = true;
       }
     }
