@@ -7,11 +7,16 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
+  import { highlight } from 'svg-flowgraph';
+
   import { GraphInterface } from '@/types/typesGraphs';
 
   import BioLocalRenderer from '@/graphs/svg/renderers/BioLocalRenderer';
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
+  import { calculateNodeNeighborhood } from '@/graphs/svg/util.js';
+  import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
+  import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -40,50 +45,22 @@
         edgeControlOffset: 0.5,
         useZoom: true,
         useMinimap: false,
-        addons: [],
+        addons: [highlight],
       });
 
-    //   this.renderer.setCallback('nodeClick', (node) => {
-    //     // Clear previous highlights
-    //     this.renderer.hideNeighbourhood();
-    //     // Show neighborhood
-    //     const neighborhood = calculateNodeNeighborhood(this.graph, node.datum());
-    //     this.renderer.showNeighborhood(neighborhood);
-    //     this.$emit('node-click', node.datum());
-    //   });
+      this.renderer.setCallback('nodeClick', (evt, node) => {
+        const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
+        this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
+      });
 
-    //   this.renderer.setCallback('edgeClick', (edge) => {
-    //     // Clear previous highlights
-    //     this.renderer.hideNeighbourhood();
-    //     // Show neighborhood
-    //     const neighborhood = calculateEdgeNeighborhood(edge.datum());
-    //     this.renderer.showNeighborhood(neighborhood);
-    //     // Hack: get labels for source and target
-    //     const sourceNode = this.renderer.data.nodes.find(node => node.id === edge.datum().source);
-    //     const targetNode = this.renderer.data.nodes.find(node => node.id === edge.datum().target);
+      this.renderer.setCallback('nodeMouseEnter', (evt, node, renderer) => {
+        const data = node.datum();
+        showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]);
+      });
 
-    //     edge.datum().data.metadata.sourceLabel = sourceNode.label;
-    //     edge.datum().data.metadata.targetLabel = targetNode.label;
-    //     this.$emit('edge-click', edge.datum().data);
-    //   });
-
-    //   this.renderer.setCallback('backgroundDblClick', () => {
-    //     this.renderer.hideNeighbourhood();
-    //     this.$emit('background-dbl-click');
-    //   });
-
-    //   this.renderer.setCallback('nodeMouseEnter', (node) => {
-    //     const nodeData = node.datum();
-    //     const nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)]; // TO FIX: It seems there is an issue with coordinates for deeply nested nodes.
-
-    //     const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.nodeType;
-
-    //     showTooltip(this.renderer.chart, tooltipText, nodeCoords);
-    //   });
-
-    //   this.renderer.setCallback('nodeMouseLeave', () => {
-    //     hideTooltip(this.renderer.chart);
-    //   });
+      this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
+        hideTooltip(renderer.chart);
+      });
 
       this.refresh();
     }
