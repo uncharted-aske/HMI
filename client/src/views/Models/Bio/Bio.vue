@@ -62,6 +62,7 @@
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
   import { formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
+  import { isEmpty } from '@/utils/FiltersUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
@@ -118,6 +119,7 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+    @Getter getFilters;
 
     get getIcon (): string {
       return this.isSplitView ? 'window-maximize' : 'columns';
@@ -145,14 +147,11 @@
     }
 
     get canOpenLocalView (): boolean {
-      return !_.isEmpty(this.subgraph);
+      return !isEmpty(this.getFilters);
     }
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
-      if (!this.isSplitView) {
-        this.subgraph = null;
-      }
     }
 
     onTabClick (tabId: string): void {
