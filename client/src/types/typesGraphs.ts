@@ -18,7 +18,7 @@ label: string,
 nodeType?: string,
 nodeSubType?: string,
 dataType?:string,
-metadata?: any
+data?: any
 }
 
 export interface GraphEdgeInterface {

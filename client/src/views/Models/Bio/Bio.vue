@@ -165,17 +165,13 @@
       this.drilldownMetadata = null;
     }
 
-  // onSetView (viewId: string): void {
-  //   this.selectedViewId = viewId;
-  // }
-
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'node';
 
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = 'Type: Node';
-      this.drilldownMetadata = node.metadata;
+      this.drilldownMetadata = node.data;
     }
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {

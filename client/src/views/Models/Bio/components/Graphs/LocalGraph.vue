@@ -51,6 +51,7 @@
       this.renderer.setCallback('nodeClick', (evt, node) => {
         const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
         this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
+        this.$emit('node-click', node.datum());
       });
 
       this.renderer.setCallback('nodeMouseEnter', (evt, node, renderer) => {
