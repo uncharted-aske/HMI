@@ -113,7 +113,7 @@
     drilldownMetadata: any = null;
 
     isSplitView = false;
-    subgraph: GraphInterface = undefined; // Initialize as undefined to prevent vue from tracking changes to the subgraph instance
+    subgraph: GraphInterface = null; 
     subgraphLoading: boolean = false;
 
     @Getter getSelectedModelIds;
@@ -150,6 +150,9 @@
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
+      if (!this.isSplitView) {
+        this.subgraph = null;
+      }
     }
 
     onTabClick (tabId: string): void {
@@ -193,7 +196,7 @@
     onSetSubgraph (subgraph: any): void {
       if (_.isEmpty(subgraph)) {
         this.isSplitView = false;
-        this.subgraph = undefined;
+        this.subgraph = null;
       } else {
         this.subgraph = formatBGraphOutputToLocalGraph(subgraph); // FIXME: We should limit the query results to certain number of elements (e.g. 1000 nodes/edges). D3 can't handle large results.
         this.subgraphLoading = true;
