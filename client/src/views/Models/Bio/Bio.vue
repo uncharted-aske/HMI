@@ -7,7 +7,7 @@
           </div>
     </left-side-panel>
     <div class="search-row">
-      <search-bar :placeholder="`Search for model components...`" @set-subgraph="onSetSubgraph"/>
+      <search-bar :placeholder="`Search for model components...`" />
       <button class="btn btn-primary m-1" @click="onSplitView">
         Add Subgraph
       </button>
@@ -54,10 +54,13 @@
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
 
+  import { bgraph } from '@uncharted.software/bgraph';
+
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
+  import { loadBGraphData, filterToBgraph } from '@/utils/BGraphUtil';
 
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -97,6 +100,9 @@
 
   @Component({ components })
   export default class Bio extends Vue {
+    // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
+    bgraphInstance: any = undefined;
+
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
@@ -111,6 +117,12 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+    @Getter getFilters;
+
+    @Watch('getFilters') async onGetFiltersChanged (): Promise<void> {
+      const BGraphOutput= filterToBgraph(this.bgraphInstance, this.getFilters));
+      console.log(BGraphOutput);
+    }
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
@@ -127,6 +139,15 @@
 
     get gridMap (): string[][] {
       return this.isSplitView ? [['1', '3', '2']] : [['1']];
+    }
+
+    async mounted (): Promise<void> { 
+      const [bgNodes, bgEdges] = await loadBGraphData();
+      this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
+      // if (this.bgraphInstance) {
+      //   this.$emit('set-subgraph', filterToBgraph(this.bgraphInstance, this.getFilters));
+      // }
+
     }
 
     onSplitView (): void {
@@ -182,11 +203,11 @@
       });
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    onSetSubgraph (subgraph: any): void {
-      // eslint-disable-next-line no-console
-      console.log(subgraph);
-    }
+    // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    // onSetSubgraph (subgraph: any): void {
+    //   // eslint-disable-next-line no-console
+    //   console.log(subgraph);
+    // }
   }
 </script>
 
