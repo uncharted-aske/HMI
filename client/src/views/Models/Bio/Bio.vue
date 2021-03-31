@@ -64,7 +64,7 @@
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
-  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';  import { isEmpty } from '@/utils/FiltersUtil';
+  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil'; import { isEmpty } from '@/utils/FiltersUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
@@ -177,7 +177,7 @@
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
-      
+
       if (this.isSplitView) {
         if (this.bgraphInstance) {
           const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
