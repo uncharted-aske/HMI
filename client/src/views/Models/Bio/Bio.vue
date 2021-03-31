@@ -53,6 +53,7 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
+  import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
 
@@ -120,8 +121,10 @@
     @Getter getFilters;
 
     @Watch('getFilters') async onGetFiltersChanged (): Promise<void> {
-      const BGraphOutput= filterToBgraph(this.bgraphInstance, this.getFilters));
-      console.log(BGraphOutput);
+      if (this.bgraphInstance) {  
+        const BGraphOutput= filterToBgraph(this.bgraphInstance, this.getFilters);
+        console.log(BGraphOutput);
+      }
     }
 
     get selectedModel (): ModelInterface {
@@ -144,10 +147,7 @@
     async mounted (): Promise<void> { 
       const [bgNodes, bgEdges] = await loadBGraphData();
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
-      // if (this.bgraphInstance) {
-      //   this.$emit('set-subgraph', filterToBgraph(this.bgraphInstance, this.getFilters));
-      // }
-
+      console.log('mounted');
     }
 
     onSplitView (): void {
