@@ -18,14 +18,13 @@
   import * as filtersUtil from '@/utils/FiltersUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
   import { BOOLEAN_OPTIONS } from '@/utils/ModelTypeUtil';
-  import { loadBGraphData, filterToBgraph } from '@/utils/BGraphUtil';
   import { initializeLex, setPills } from '@/utils/LexUtil';
 
   @Component
   export default class SearchBar extends Vue {
     private lex: Lex = null;
     private pills: any = [];
-   
+
     @Getter getFilters;
     @Action setFilters;
 

@@ -126,8 +126,8 @@
     @Getter getFilters;
 
     @Watch('getFilters') async onGetFiltersChanged (): Promise<void> {
-      if (this.bgraphInstance) {  
-        const subgraph= filterToBgraph(this.bgraphInstance, this.getFilters);
+      if (this.bgraphInstance) {
+        const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
         if (_.isEmpty(subgraph)) {
           this.isSplitView = false;
           this.subgraph = null;
@@ -167,11 +167,11 @@
       return !_.isEmpty(this.subgraph);
     }
 
-    async mounted (): Promise<void> { 
+    async mounted (): Promise<void> {
       const [bgNodes, bgEdges] = await loadBGraphData();
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
     }
-  
+
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
       if (!this.isSplitView) {
