@@ -25,7 +25,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false"></grafer>
+        <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false" :bus="bus"></grafer>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -108,6 +108,7 @@
 
     isSplitView = false;
     subgraph: GraphInterface = null;
+    bus = new Vue();
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -184,8 +185,7 @@
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     onSetSubgraph (subgraph: any): void {
-      // eslint-disable-next-line no-console
-      console.log(subgraph);
+      this.bus.$emit('new-query-results', subgraph);
     }
   }
 </script>
