@@ -113,7 +113,7 @@
     drilldownMetadata: any = null;
 
     isSplitView = false;
-    subgraph: GraphInterface = null; 
+    subgraph: GraphInterface = null;
     subgraphLoading: boolean = false;
 
     @Getter getSelectedModelIds;
