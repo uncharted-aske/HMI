@@ -211,14 +211,14 @@
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'edge';
 
-      this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
-      this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
-      this.drilldownMetadata = await emmaaEvidence({
-        stmt_hash: edge.metadata.statement_id,
-        source: 'model_statement',
-        model: this.selectedModel.metadata.id,
-        format: 'json',
-      });
+      // this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
+      // this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
+      // this.drilldownMetadata = await emmaaEvidence({
+      //   stmt_hash: edge.metadata.statement_id,
+      //   source: 'model_statement',
+      //   model: this.selectedModel.metadata.id,
+      //   format: 'json',
+      // });
     }
   }
 </script>
