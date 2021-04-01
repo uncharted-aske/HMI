@@ -10,6 +10,7 @@
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
   import { loadJSONLFile } from '@/utils/FileLoaderUtil';
+  import { buildHighlightClusterLayer, buildHighlightNodeLayer, clusterEdgeOptions, clusterLabelOptions, nodeEdgeOptions, nodeOptions } from '@/utils/GraferUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
 
@@ -96,81 +97,13 @@
       // eslint-disable-next-line no-console
       console.log(arg);
 
-      const clusterLabelOptions = { color: 3 };
-      const clusterEdgeOptions = {
-        sourceColor: 0,
-        targetColor: 0,
-      };
-
-      const nodeOptions = { color: 1 };
-      const nodeEdgeOptions = {
-        sourceColor: 2,
-        targetColor: 2,
-      };
-
       const highlightClusterEdges = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/inter_edges.jsonl`, clusterEdgeOptions);
-      const highlightClusterLayer = {
-        name: 'Highlights - Clusters',
-        labels: {
-          type: 'RingLabel',
-          data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`, clusterLabelOptions),
-          mappings: {
-            background: (): boolean => false,
-            fontSize: (): number => 14,
-            padding: (): number => 0,
-          },
-          options: {
-            visibilityThreshold: 160,
-            repeatLabel: -1,
-            repeatGap: 64,
-            nearDepth: 0.0,
-            farDepth: 0.4,
-          },
-        },
-        edges: {
-          type: 'ClusterBundle',
-          data: highlightClusterEdges,
-          options: {
-            alpha: Math.min(0.99, Math.max(0.2, 1 - ((1 / 4100) * highlightClusterEdges.length))),
-            nearDepth: 0.1,
-            farDepth: 0.4,
-          },
-        },
-      };
+      const highlightClusters = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`, clusterLabelOptions);
+      const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', highlightClusterEdges, highlightClusters);
 
       const highlightNodeData = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`, nodeOptions);
-      const highlightNodeLayer = {
-        name: 'Highlights - Nodes',
-        nodes: {
-          type: 'Circle',
-          data: highlightNodeData,
-          options: {
-            nearDepth: 0.0,
-            farDepth: 0.4,
-          },
-        },
-        edges: {
-          data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/intra_edges.jsonl`, nodeEdgeOptions),
-          options: {
-            alpha: 0.55,
-          },
-        },
-        labels: {
-          type: 'PointLabel',
-          data: highlightNodeData,
-          mappings: {
-            background: (): boolean => true,
-            fontSize: (): number => 12,
-            padding: (): [number, number] => [8, 5],
-          },
-          options: {
-            visibilityThreshold: 8,
-            labelPlacement: graph.labels.PointLabelPlacement.TOP,
-            nearDepth: 0.0,
-            farDepth: 0.4,
-          },
-        },
-      };
+      const highlightNodeEdges = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/intra_edges.jsonl`, nodeEdgeOptions);
+      const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', highlightNodeData, highlightNodeEdges);
 
       this.controller.removeLayerByName('highlightClusterLayer');
       this.controller.removeLayerByName('highlightNodeLayer');
@@ -182,11 +115,6 @@
     async loadBioLayers (): Promise<GraferLayerData[]> {
       const layers = [];
 
-      const nodeOptions = { color: 1 };
-      const nodeEdgeOptions = {
-        sourceColor: 2,
-        targetColor: 2,
-      };
       const nodeData = await loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, nodeOptions);
 
       const nodeLayer = {
@@ -222,12 +150,6 @@
         },
       };
       layers.push(nodeLayer);
-
-      const clusterLabelOptions = { color: 3 };
-      const clusterEdgeOptions = {
-        sourceColor: 0,
-        targetColor: 0,
-      };
 
       const clusterLayer = {
         name: 'Clusters',
