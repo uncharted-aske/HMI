@@ -14,6 +14,8 @@ import {
   faArrowsAltH,
   faCaretDown,
   faCaretRight,
+  faColumns,
+  faWindowMaximize,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterFormatter';
@@ -42,6 +44,8 @@ library.add(
   faArrowsAltH,
   faCaretDown,
   faCaretRight,
+  faColumns,
+  faWindowMaximize,
 );
 // Enable automatic font awesome icon transformations
 dom.watch();

@@ -3,6 +3,7 @@ import { loadJSONLFile } from '@/utils/FileLoaderUtil';
 import { DataFile } from '@dekkai/data-source';
 
 import { Filters, Filter } from '@/types/typesLex';
+import { GraphInterface } from '@/types/typesGraphs';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
 
@@ -110,4 +111,28 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
     });
     return deepCopy(bgraphQuery.run(), ['_in', '_out']);
   }
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const formatBGraphOutputToLocalGraph = (data: any): GraphInterface => {
+  const nodes = [];
+  const edges = [];
+  const dataDeepCopy = deepCopy(data);
+  dataDeepCopy.forEach(d => {
+    if (d._type === 'node') {
+      d.label = d.name;
+      delete d.name;
+      nodes.push(d);
+    } else {
+      d.source = d.source_id;
+      d.target = d.target_id;
+      delete d.source_id;
+      delete d.target_id;
+      edges.push(d);
+    }
+  });
+  return {
+    nodes,
+    edges,
+  };
 };
