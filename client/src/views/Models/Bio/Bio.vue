@@ -64,7 +64,8 @@
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
-  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil'; import { isEmpty } from '@/utils/FiltersUtil';
+  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
+  import { isEmpty } from '@/utils/FiltersUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
@@ -126,7 +127,7 @@
     @Getter getModelsList;
     @Getter getFilters;
 
-    @Watch('getFilters') async onGetFiltersChanged (): Promise<void> {
+    @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
         const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
         if (_.isEmpty(subgraph)) {
@@ -172,8 +173,6 @@
       const [bgNodes, bgEdges] = await loadBGraphData();
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
     }
-
-    runQueryOnLoca
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;

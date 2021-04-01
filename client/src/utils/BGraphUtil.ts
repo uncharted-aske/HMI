@@ -117,7 +117,8 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
 export const formatBGraphOutputToLocalGraph = (data: any): GraphInterface => {
   const nodes = [];
   const edges = [];
-  deepCopy(data.forEach(d => {
+  const dataDeepCopy = deepCopy(data);
+  dataDeepCopy.forEach(d => {
     if (d._type === 'node') {
       d.label = d.name;
       delete d.name;
@@ -129,7 +130,7 @@ export const formatBGraphOutputToLocalGraph = (data: any): GraphInterface => {
       delete d.target_id;
       edges.push(d);
     }
-  }));
+  });
   return {
     nodes,
     edges,
