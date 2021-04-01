@@ -13,15 +13,24 @@
   }
 }
 
-.btn-primary {
+.btn-primary, .btn-primary:focus, .btn-primary:active, .btn-primary.active {
   color: $text-color-dark;
   background-color: $nord4;
   border-color: $nord4;
+  box-shadow: none;
 }
+
 .btn-primary:hover {
   color: $text-color-dark;
   background-color: $nord5;
-  border-color: $nord5;
+  border-color: $nord4;
+}
+
+.btn-primary:disabled {
+  color: $text-color-dark;
+  background-color: $nord4;
+  border-color: $nord4;
+  opacity: 0.3;
 }
 
 .btn-secondary {

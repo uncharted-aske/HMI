@@ -7,9 +7,10 @@
           </div>
     </left-side-panel>
     <div class="search-row">
-      <search-bar :placeholder="`Search for model components...`" @set-subgraph="onSetSubgraph"/>
-      <button class="btn btn-primary m-1" @click="onSplitView">
-        Add Subgraph
+      <search-bar :placeholder="`Search for model components...`" />
+      <button class="btn btn-primary m-1" @click="onSplitView" :disabled="!canOpenLocalView">
+        <font-awesome-icon :icon="['fas', getIcon ]" />
+        <span>{{ getMessage }}</span>
       </button>
     </div>
     <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
@@ -39,7 +40,8 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <local-graph v-if="isSplitView" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick"/>
+        <loader :loading="subgraphLoading" />
+        <local-graph :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
@@ -50,15 +52,22 @@
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
+  import { Watch } from 'vue-property-decorator';
+
+  import { bgraph } from '@uncharted.software/bgraph';
 
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
+  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
+  import { isEmpty } from '@/utils/FiltersUtil';
 
+  import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
@@ -93,10 +102,14 @@
     NodePane,
     EdgePane,
     Grafer,
+    Loader,
   };
 
   @Component({ components })
   export default class Bio extends Vue {
+    // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
+    bgraphInstance: any = undefined;
+
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
@@ -108,9 +121,32 @@
 
     isSplitView = false;
     subgraph: GraphInterface = null;
+    subgraphLoading: boolean = false;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+    @Getter getFilters;
+
+    @Watch('getFilters') onGetFiltersChanged (): void {
+      if (this.bgraphInstance) {
+        const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+        if (_.isEmpty(subgraph)) {
+          this.isSplitView = false;
+          this.subgraph = null;
+        } else {
+          this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
+          this.subgraphLoading = true;
+        }
+      }
+    }
+
+    get getIcon (): string {
+      return this.isSplitView ? 'window-maximize' : 'columns';
+    }
+
+    get getMessage (): string {
+      return this.isSplitView ? 'Close Local View' : 'Open Local View';
+    }
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
@@ -129,20 +165,27 @@
       return this.isSplitView ? [['1', '3', '2']] : [['1']];
     }
 
+    get canOpenLocalView (): boolean {
+      return !isEmpty(this.getFilters);
+    }
+
+    async mounted (): Promise<void> {
+      const [bgNodes, bgEdges] = await loadBGraphData();
+      this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
+    }
+
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
-      // Get the COVID-19 model subgraph
-      const modelsList = this.getModelsList;
-      const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
-      this.subgraph = selectedModel.subgraph;
-      this.subgraph.edges = this.subgraph.edges.map((edge, idx) => {
-        const e = Object.assign({}, edge);
-        if (idx === 1 || idx === 2) {
-          (e as any).edgeType = 'Inhibition';
+
+      if (this.isSplitView) {
+        if (this.bgraphInstance) {
+          const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+          this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
+          this.subgraphLoading = true;
         }
-        e.metadata.curated = idx;
-        return e;
-      });
+      } else {
+        this.subgraph = null;
+      }
     }
 
     onTabClick (tabId: string): void {
@@ -180,12 +223,6 @@
         model: this.selectedModel.metadata.id,
         format: 'json',
       });
-    }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    onSetSubgraph (subgraph: any): void {
-      // eslint-disable-next-line no-console
-      console.log(subgraph);
     }
   }
 </script>
