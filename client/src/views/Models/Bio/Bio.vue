@@ -7,7 +7,7 @@
           </div>
     </left-side-panel>
     <div class="search-row">
-      <search-bar :placeholder="`Search for model components...`" @set-subgraph="onSetSubgraph"/>
+      <search-bar :placeholder="`Search for model components...`" />
       <button class="btn btn-primary m-1" @click="onSplitView" :disabled="!canOpenLocalView">
         <font-awesome-icon :icon="['fas', getIcon ]" />
         <span>{{ getMessage }}</span>
@@ -56,12 +56,16 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
+  import { Watch } from 'vue-property-decorator';
+
+  import { bgraph } from '@uncharted.software/bgraph';
 
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
-  import { formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
+  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
+  import { isEmpty } from '@/utils/FiltersUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
@@ -103,6 +107,9 @@
 
   @Component({ components })
   export default class Bio extends Vue {
+    // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
+    bgraphInstance: any = undefined;
+
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
@@ -118,6 +125,20 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+    @Getter getFilters;
+
+    @Watch('getFilters') onGetFiltersChanged (): void {
+      if (this.bgraphInstance) {
+        const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+        if (_.isEmpty(subgraph)) {
+          this.isSplitView = false;
+          this.subgraph = null;
+        } else {
+          this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
+          this.subgraphLoading = true;
+        }
+      }
+    }
 
     get getIcon (): string {
       return this.isSplitView ? 'window-maximize' : 'columns';
@@ -145,12 +166,24 @@
     }
 
     get canOpenLocalView (): boolean {
-      return !_.isEmpty(this.subgraph);
+      return !isEmpty(this.getFilters);
+    }
+
+    async mounted (): Promise<void> {
+      const [bgNodes, bgEdges] = await loadBGraphData();
+      this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
     }
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
-      if (!this.isSplitView) {
+
+      if (this.isSplitView) {
+        if (this.bgraphInstance) {
+          const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+          this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
+          this.subgraphLoading = true;
+        }
+      } else {
         this.subgraph = null;
       }
     }
@@ -186,17 +219,6 @@
         model: this.selectedModel.metadata.id,
         format: 'json',
       });
-    }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    onSetSubgraph (subgraph: any): void {
-      if (_.isEmpty(subgraph)) {
-        this.isSplitView = false;
-        this.subgraph = null;
-      } else {
-        this.subgraph = formatBGraphOutputToLocalGraph(subgraph); // FIXME: We should limit the query results to certain number of elements (e.g. 1000 nodes/edges). D3 can't handle large results.
-        this.subgraphLoading = true;
-      }
     }
   }
 </script>
