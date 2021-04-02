@@ -26,7 +26,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false"></grafer>
+        <!-- <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false"></grafer> -->
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -63,7 +63,7 @@
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
-  import { emmaaEvidence } from '@/services/EmmaaFetchService';
+  // import { emmaaEvidence } from '@/services/EmmaaFetchService';
   import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
 
@@ -177,15 +177,29 @@
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
 
-      if (this.isSplitView) {
-        if (this.bgraphInstance) {
-          const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
-          this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
-          this.subgraphLoading = true;
+      // Get the COVID-19 model subgraph
+      const modelsList = this.getModelsList;
+      const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
+      this.subgraph = selectedModel.subgraph;
+
+      this.subgraph.edges = this.subgraph.edges.map((edge, idx) => {
+        const e = Object.assign({}, edge);
+        if (idx === 1 || idx === 2) {
+          (e as any).edgeType = 'Inhibition';
         }
-      } else {
-        this.subgraph = null;
-      }
+        e.metadata.curated = idx;
+        return e;
+      });
+
+      // if (this.isSplitView) {
+      //   if (this.bgraphInstance) {
+      //     const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+      //     this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
+      //     this.subgraphLoading = true;
+      //   }
+      // } else {
+      //   this.subgraph = null;
+      // }
     }
 
     onTabClick (tabId: string): void {
