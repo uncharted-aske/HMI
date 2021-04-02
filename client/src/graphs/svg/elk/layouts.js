@@ -11,7 +11,7 @@ export const layered = {
     const spacingOptions = {
       'elk.layered.layering.strategy': 'COFFMAN_GRAHAM',
       'elk.layered.layering.coffmanGraham.layerBound': layerBound,
-      'elk.layered.spacing.nodeNodeBetweenLayers': 20,
+      'elk.layered.spacing.nodeNodeBetweenLayers': 40, //Separation between nodes within the same layer (horizontally)
       'elk.spacing.nodeNode': 15,
       'elk.spacing.edgeEdge': 10,
       'elk.spacing.edgeNode': 10,
@@ -27,6 +27,7 @@ export const layered = {
       'elk.randomSeed': 666, // might as well be a coool number
       'elk.padding': '[top=25, left=25, bottom=25, right=25]',
       'elk.validateGraph': true,
+      // 'elk.partitioning.activate': true,
       ...spacingOptions,
     };
   },
