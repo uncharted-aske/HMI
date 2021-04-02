@@ -4,7 +4,7 @@ import { SVGRenderer } from 'svg-flowgraph';
 
 import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
 
-import { calcEdgeColor, calcEdgeControlBackground, calculateEdgeControlLabels, flatten } from '@/graphs/svg/util';
+import { calcEdgeColor, calcEdgeControlBackground, flatten } from '@/graphs/svg/util';
 import { Colors, EdgeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 import { truncateString } from '@/utils/StringUtil';
@@ -22,10 +22,13 @@ const DEFAULT_STYLE = {
     fill: 'none',
     strokeWidth: 5,
     controlRadius: 6,
-    controlStrokeWidth: 2,
+    controlStrokeWidth: 1,
     controlStrokeColor: Colors.NODES.DEFAULT,
   },
 };
+
+const edgeOpacityScale = d3.scaleLog().domain([0.01, 1]).range([0.3, 1]);
+
 
 export default class BioLocalRenderer extends SVGRenderer {
   constructor (options:SVGRendererOptionsInterface) {
@@ -116,6 +119,13 @@ export default class BioLocalRenderer extends SVGRenderer {
   }
 
   renderEdgeControl (edgeSelection:d3.Selection<any, any, any, any>):void {
+    // FIXME: move this to the SVGUtil
+    const arcGenerator = d3.arc()
+      .outerRadius(DEFAULT_STYLE.edge.controlRadius - DEFAULT_STYLE.edge.controlStrokeWidth)
+      .innerRadius(0)
+      .startAngle(0 * (Math.PI / 180)) // Degrees to radians
+      .endAngle(180 * (Math.PI / 180));
+
     edgeSelection.append('circle')
       .attr('cx', 0)
       .attr('cy', 0)
@@ -124,21 +134,20 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('stroke', 'white')
       .attr('stroke-width', DEFAULT_STYLE.edge.controlStrokeWidth);
 
-    edgeSelection.append('text')
-      .attr('x', -(DEFAULT_STYLE.edge.controlRadius * 0.5) + 1)
-      .attr('y', (DEFAULT_STYLE.edge.controlRadius * 0.5) - 1)
-      .style('font-size', DEFAULT_STYLE.edge.controlRadius)
-      .style('stroke', 'none')
-      .style('font-weight', '800')
-      .style('fill', DEFAULT_STYLE.edge.controlStrokeColor)
-      .style('cursor', 'pointer')
-      .text(d => calculateEdgeControlLabels(d));
+    // Semi-circle just added for partially curated statements
+    edgeSelection
+      .filter(d => d.data.metadata.curated === EdgeTypes.CURATION_STATUS.PARTIAL)
+      .append('path')
+      .attr('d', arcGenerator)
+      .attr('fill', Colors.CURATION.CORRECT);
   }
 
   renderEdge (edgeSelection:d3.Selection<any, any, any, any>):void {
     edgeSelection.append('path')
+      .classed('edge-path', true)
       .attr('d', d => pathFn(d.points))
       .style('fill', DEFAULT_STYLE.edge.fill)
+      .style('opacity', d => edgeOpacityScale(d.data.metadata.belief))
       .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
       .style('stroke', d => calcEdgeColor(d))
       .attr('marker-end', d => {

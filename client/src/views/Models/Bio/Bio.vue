@@ -8,7 +8,7 @@
     </left-side-panel>
     <div class="search-row">
       <search-bar :placeholder="`Search for model components...`" />
-      <button class="btn btn-primary m-1" @click="onSplitView" :disabled="!canOpenLocalView">
+      <button class="btn btn-primary m-1" @click="onSplitView">
         <font-awesome-icon :icon="['fas', getIcon ]" />
         <span>{{ getMessage }}</span>
       </button>
@@ -64,7 +64,7 @@
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   // import { emmaaEvidence } from '@/services/EmmaaFetchService';
-  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
+  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph, deepCopy } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
@@ -127,18 +127,18 @@
     @Getter getModelsList;
     @Getter getFilters;
 
-    @Watch('getFilters') onGetFiltersChanged (): void {
-      if (this.bgraphInstance) {
-        const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
-        if (_.isEmpty(subgraph)) {
-          this.isSplitView = false;
-          this.subgraph = null;
-        } else {
-          this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
-          this.subgraphLoading = true;
-        }
-      }
-    }
+    // @Watch('getFilters') onGetFiltersChanged (): void {
+    //   if (this.bgraphInstance) {
+    //     const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+    //     if (_.isEmpty(subgraph)) {
+    //       this.isSplitView = false;
+    //       this.subgraph = null;
+    //     } else {
+    //       this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
+    //       this.subgraphLoading = true;
+    //     }
+    //   }
+    // }
 
     get getIcon (): string {
       return this.isSplitView ? 'window-maximize' : 'columns';
@@ -193,9 +193,10 @@
 
       // if (this.isSplitView) {
       //   if (this.bgraphInstance) {
-      //     const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
-      //     this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
-      //     this.subgraphLoading = true;
+      //     //Experiment for visual encodings
+      //     // const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+      //     // this.subgraph = fsubgraphBGraphOutputToLocalGraph(subgraph);
+      //     // this.subgraphLoading = true;
       //   }
       // } else {
       //   this.subgraph = null;
@@ -218,7 +219,7 @@
 
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = 'Type: Node';
-      this.drilldownMetadata = node.data;
+      this.drilldownMetadata = node.data.metadata;
     }
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {
