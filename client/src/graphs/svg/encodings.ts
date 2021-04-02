@@ -19,9 +19,8 @@ export abstract class Colors {
   };
 
   static readonly CURATION: Record<string, any> = {
-    INCORRECT: '#BF616A',
-    CORRECT: '#7ca25c',
-    PARTIAL: '#D08770',
+    INCORRECT: '#e84545',
+    CORRECT: '#0091EA',
     UNCURATED: '#212529',
   };
 
