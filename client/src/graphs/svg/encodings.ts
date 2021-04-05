@@ -1,6 +1,6 @@
 export abstract class Colors {
   static readonly SUBGRAPH: string = '#FFA500';
-  static readonly HIGHLIGHT: string = '#EBCB8B';
+  static readonly HIGHLIGHT: string = '#FFA600';
   static readonly STROKE: string = '#81A1C1';
 
   static readonly NODES: Record<string, any> = {
