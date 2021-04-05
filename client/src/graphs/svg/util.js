@@ -191,7 +191,7 @@ export const calcEdgeColor = (edge) => {
  * uncurated - 3
  */
 export const calcEdgeControlBackground = (edge) => {
-  const curated = edge.data.metadata.curated;
+  const curated = edge.data.curated;
   if (curated === EdgeTypes.CURATION_STATUS.INCORRECT) {
     return Colors.CURATION.INCORRECT;
   } else if (curated === EdgeTypes.CURATION_STATUS.CORRECT) {
