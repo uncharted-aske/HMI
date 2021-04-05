@@ -41,7 +41,7 @@
         useEdgeControl: true,
         edgeControlOffset: 0.5,
         useZoom: true,
-        useMinimap: false,
+        useMinimap: true,
         addons: [],
       });
 
