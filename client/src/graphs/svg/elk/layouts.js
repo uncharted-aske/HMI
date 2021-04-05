@@ -11,7 +11,7 @@ export const layered = {
     const spacingOptions = {
       'elk.layered.layering.strategy': 'COFFMAN_GRAHAM',
       'elk.layered.layering.coffmanGraham.layerBound': layerBound,
-      'elk.layered.spacing.nodeNodeBetweenLayers': 40, //Separation between nodes within the same layer (horizontally)
+      'elk.layered.spacing.nodeNodeBetweenLayers': 40, // Separation between nodes within the same layer (horizontally)
       'elk.spacing.nodeNode': 15,
       'elk.spacing.edgeEdge': 10,
       'elk.spacing.edgeNode': 10,
