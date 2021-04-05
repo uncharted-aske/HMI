@@ -8,8 +8,6 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import { highlight } from 'svg-flowgraph';
-
   import { GraphInterface } from '@/types/typesGraphs';
 
   import BioLocalRenderer from '@/graphs/svg/renderers/BioLocalRenderer';
@@ -46,13 +44,14 @@
         edgeControlOffset: 0.5,
         useZoom: true,
         useMinimap: false,
-        addons: [highlight],
+        addons: [],
       });
 
       // Node interactions
       this.renderer.setCallback('nodeClick', (evt, node) => {
         const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
-        this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
+        this.renderer.hideNeighborhood();
+        this.renderer.showNeighborhood(neighborhood);
         this.$emit('node-click', node.datum());
       });
 
@@ -68,24 +67,29 @@
       // Edge interactions
       this.renderer.setCallback('edgeClick', (evt, edge) => {
         const neighborhood = calculateEdgeNeighborhood(edge.datum());
-        this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
+        this.renderer.hideNeighborhood();
+        this.renderer.showNeighborhood(neighborhood);
         // this.$emit('edge-click', edge.datum());
       });
 
       this.renderer.setCallback('edgeMouseEnter', (evt, edge, renderer) => {
         const edgeData = edge.datum();
-        const label = ' Statement type:' + edgeData.data.edgeType + ' Curated state:' + edgeData.data.metadata.curated;
+        const label = ' Statement type:' + edgeData.data.edgeType + ' Curated state:' + edgeData.data.curated;
 
         // Get edge control's coordinates to place the tooltip
         const transform = edge.select('.edge-control').attr('transform');
         const splitted = transform.split(',');
-        let x = splitted [0].split("(")[1];
-        let y = splitted [1].split(")")[0];  
+        const x = splitted[0].split('(')[1];
+        const y = splitted[1].split(')')[0];
         showTooltip(renderer.chart, label, [x, y], null, null);
       });
 
       this.renderer.setCallback('edgeMouseLeave', (evt, edge, renderer) => {
         hideTooltip(renderer.chart);
+      });
+
+      this.renderer.setCallback('backgroundClick', () => {
+        this.renderer.hideNeighborhood();
       });
 
       this.refresh();
