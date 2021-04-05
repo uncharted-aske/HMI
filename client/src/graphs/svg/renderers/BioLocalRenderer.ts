@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import _ from 'lodash';
 
 import { SVGRenderer } from 'svg-flowgraph';
 
@@ -28,7 +29,6 @@ const DEFAULT_STYLE = {
 };
 
 const edgeOpacityScale = d3.scaleLog().domain([0.01, 1]).range([0.3, 1]);
-
 
 export default class BioLocalRenderer extends SVGRenderer {
   constructor (options:SVGRendererOptionsInterface) {
@@ -164,28 +164,29 @@ export default class BioLocalRenderer extends SVGRenderer {
       });
   }
 
-    // hideNeighbourhood (): void {
-    //   const chart = this.chart;
-    //   chart.selectAll('.node-ui').style('opacity', 1);
-    //   chart.selectAll('.edge').style('opacity', 1);
-    // }
+  hideNeighborhood (): void {
+    const chart = (this as any).chart;
+    chart.selectAll('.highlight-path').remove();
+    chart.selectAll('.node-ui').select('rect').style('stroke', DEFAULT_STYLE.node.stroke).style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+  }
 
-    showNeighborhood (subgraph: any): void {
-      const chart = (this as any).chart;
-    //   // FIXME: not very efficient
-      const nodes = subgraph.nodes;
-      const edges = subgraph.edges;
+  showNeighborhood (subgraph: any): void {
+    const chart = (this as any).chart;
+    // FIXME: not very efficient
+    const nodes = subgraph.nodes;
+    const edges = subgraph.edges;
 
-      chart.selectAll('.edge').append('path')
+    const neighborNodes = chart.selectAll('.node-ui').filter(d => nodes.map(node => node).includes(d.id));
+    neighborNodes.select('rect').style('stroke', Colors.HIGHLIGHT).style('stroke-width', DEFAULT_STYLE.node.strokeWidth * 2.5);
+
+    const neighborEdges = chart.selectAll('.edge').filter(d => _.some(edges, edge => edge.source === d.source && edge.target === d.target));
+    const highlightedEdges = neighborEdges.append('path')
+      .classed('highlight-path', true)
       .attr('d', d => pathFn(d.points))
       .style('fill', DEFAULT_STYLE.edge.fill)
       .style('stroke', Colors.HIGHLIGHT)
-      .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth * 2.5)
-      // .style('opacity', 0.5)
-    //   const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => !nodes.map(node => node.id).includes(d.id));
-    //   nonNeighborNodes.style('opacity', 0.1);
+      .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth * 2);
 
-    // const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.source && edge.target === d.target));
-    // nonNeighborEdges.style('opacity', 0.1);
+    highlightedEdges.lower(); // Display highlighted edges at the bottom of the edge group
   }
 }
