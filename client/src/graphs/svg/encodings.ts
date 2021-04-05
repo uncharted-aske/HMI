@@ -25,7 +25,7 @@ export abstract class Colors {
   };
 
   static readonly EDGES: Record<string, any> = {
-    DEFAULT: '#c2c7d1',
+    DEFAULT: '#C2C7D1',
     OVERLAPPING: Colors.HIGHLIGHT,
   };
 
