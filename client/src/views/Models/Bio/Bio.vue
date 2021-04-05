@@ -41,7 +41,7 @@
           </div>
         </settings-bar>
         <loader :loading="subgraphLoading" />
-        <local-graph :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
+        <local-graph v-if="subgraph" :data="subgraph" :nodeSizeScale="nodeSizeScale"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
@@ -53,6 +53,7 @@
 
 <script lang="ts">
   import _ from 'lodash';
+  import * as d3 from 'd3';
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
@@ -122,6 +123,7 @@
     isSplitView = false;
     subgraph: GraphInterface = null;
     subgraphLoading: boolean = false;
+    nodeSizeScale: any = null;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -194,11 +196,17 @@
       if (this.isSplitView) {
         if (this.bgraphInstance) {
           //Experiment for visual encodings
-          const query = deepCopy(this.bgraphInstance.v().filter(document => document._type === 'edge' && document.belief > 0.99 && document.doc_ids.length > 3 && document.evidence_ids.length > 8 && document.tested === true)
+          const query = deepCopy(this.bgraphInstance.v().filter(document => document._type === 'edge' && document.belief > 0.99 && document.doc_ids.length > 10 && document.evidence_ids.length > 20 && document.tested === true)
                       .as('edges').out().as('out_nodes').back('edges').in().as('in_nodes').merge('edges', 'in_nodes', 'out_nodes').run(), ['_in', '_out']);
 
           // const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
           this.subgraph = formatBGraphOutputToLocalGraph(query);
+          const nodes = this.subgraph.nodes.map(node => ({ ...node, degree: (node as any).in_degree + (node as any).out_degree }));
+          const maxNodeDgree = _.maxBy(nodes, n => n.degree).degree;
+          const minNodeDgree = _.minBy(nodes, n => n.degree).degree;
+          const nodeSizeScale = d3.scaleLinear().domain([minNodeDgree, maxNodeDgree]).range([10, 200]);
+          this.nodeSizeScale = nodeSizeScale;
+
           this.subgraphLoading = true;
         }
       } else {
