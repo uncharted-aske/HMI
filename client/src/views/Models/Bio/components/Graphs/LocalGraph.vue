@@ -3,7 +3,6 @@
 </template>
 
 <script lang="ts">
-  import * as d3 from 'd3';
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
@@ -15,7 +14,6 @@
   import { layered } from '@/graphs/svg/elk/layouts';
   import { calculateNodeNeighborhood, calculateEdgeNeighborhood } from '@/graphs/svg/util.js';
   import { showTooltip, hideTooltip } from '@/utils/SVGUtil.js';
-  import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
