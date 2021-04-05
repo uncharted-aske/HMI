@@ -7,7 +7,7 @@ import { GraphInterface } from '@/types/typesGraphs';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
 
-const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
+export const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
   let value, key;
 
   if (typeof inObject !== 'object' || inObject === null) {
@@ -118,17 +118,25 @@ export const formatBGraphOutputToLocalGraph = (data: any): GraphInterface => {
   const nodes = [];
   const edges = [];
   const dataDeepCopy = deepCopy(data);
+  let curated = 0; //FIXME: Remove when update to v4 of data schema
   dataDeepCopy.forEach(d => {
     if (d._type === 'node') {
+      d.id = d._id; 
       d.label = d.name;
       delete d.name;
       nodes.push(d);
     } else {
+      if (curated > 3) {
+        curated = 0;
+      }
       d.source = d.source_id;
       d.target = d.target_id;
+      d.curated = curated;
+      d.edgeType = d.type;
       delete d.source_id;
       delete d.target_id;
       edges.push(d);
+      curated ++;
     }
   });
   return {

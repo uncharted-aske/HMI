@@ -136,7 +136,7 @@ export default class BioLocalRenderer extends SVGRenderer {
 
     // Semi-circle just added for partially curated statements
     edgeSelection
-      .filter(d => d.data.metadata.curated === EdgeTypes.CURATION_STATUS.PARTIAL)
+      .filter(d => d.data.curated === EdgeTypes.CURATION_STATUS.PARTIAL)
       .append('path')
       .attr('d', arcGenerator)
       .attr('fill', Colors.CURATION.CORRECT);
@@ -147,7 +147,7 @@ export default class BioLocalRenderer extends SVGRenderer {
       .classed('edge-path', true)
       .attr('d', d => pathFn(d.points))
       .style('fill', DEFAULT_STYLE.edge.fill)
-      .style('opacity', d => edgeOpacityScale(d.data.metadata.belief))
+      // .style('opacity', d => edgeOpacityScale(d.data.metadata.belief))
       .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
       .style('stroke', d => calcEdgeColor(d))
       .attr('marker-end', d => {

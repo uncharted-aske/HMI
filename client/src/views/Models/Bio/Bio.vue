@@ -8,7 +8,7 @@
     </left-side-panel>
     <div class="search-row">
       <search-bar :placeholder="`Search for model components...`" />
-      <button class="btn btn-primary m-1" @click="onSplitView">
+      <button class="btn btn-primary m-1" @click="onSplitView" :disabled="canOpenLocalView">
         <font-awesome-icon :icon="['fas', getIcon ]" />
         <span>{{ getMessage }}</span>
       </button>
@@ -166,41 +166,44 @@
     }
 
     get canOpenLocalView (): boolean {
-      return !isEmpty(this.getFilters);
+      return !isEmpty(this.bgraphInstance);
     }
 
     async mounted (): Promise<void> {
       const [bgNodes, bgEdges] = await loadBGraphData();
-      this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
+      this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);   
     }
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
 
-      // Get the COVID-19 model subgraph
-      const modelsList = this.getModelsList;
-      const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
-      this.subgraph = selectedModel.subgraph;
+      // // Get the COVID-19 model subgraph
+      // const modelsList = this.getModelsList;
+      // const selectedModel = modelsList.find(model => model.id === 4); // Get COVID-19 model
+      // this.subgraph = selectedModel.subgraph;
 
-      this.subgraph.edges = this.subgraph.edges.map((edge, idx) => {
-        const e = Object.assign({}, edge);
-        if (idx === 1 || idx === 2) {
-          (e as any).edgeType = 'Inhibition';
-        }
-        e.metadata.curated = idx;
-        return e;
-      });
-
-      // if (this.isSplitView) {
-      //   if (this.bgraphInstance) {
-      //     //Experiment for visual encodings
-      //     // const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
-      //     // this.subgraph = fsubgraphBGraphOutputToLocalGraph(subgraph);
-      //     // this.subgraphLoading = true;
+      // this.subgraph.edges = this.subgraph.edges.map((edge, idx) => {
+      //   const e = Object.assign({}, edge);
+      //   if (idx === 1 || idx === 2) {
+      //     (e as any).edgeType = 'Inhibition';
       //   }
-      // } else {
-      //   this.subgraph = null;
-      // }
+      //   e.metadata.curated = idx;
+      //   return e;
+      // });
+  
+      if (this.isSplitView) {
+        if (this.bgraphInstance) {
+          //Experiment for visual encodings
+          const query = deepCopy(this.bgraphInstance.v().filter(document => document._type === 'edge' && document.belief > 0.99 && document.doc_ids.length > 3 && document.evidence_ids.length > 8 && document.tested === true)
+                      .as('edges').out().as('out_nodes').back('edges').in().as('in_nodes').merge('edges', 'in_nodes', 'out_nodes').run(), ['_in', '_out']);
+
+          // const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+          this.subgraph = formatBGraphOutputToLocalGraph(query);
+          this.subgraphLoading = true;
+        }
+      } else {
+        this.subgraph = null;
+      }
     }
 
     onTabClick (tabId: string): void {
