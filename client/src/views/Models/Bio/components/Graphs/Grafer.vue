@@ -34,6 +34,7 @@
     public mounted (): void {
       this.loadGraph().then(data => {
         this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
+        this.forwardEvents(this.controller);
         this.loading = false;
       });
     }
@@ -49,6 +50,25 @@
       const layers = await this.loadModelLayers(points);
 
       return { points, colors, layers };
+    }
+
+    forwardEvents (controller: GraferController): void {
+      /*
+       * This exposes the grafer events in vue using their symbol descriptions since vue doesn't support
+       * messages using symbols. Available events are:
+       * grafer_hover_on - for mouse over a graph element
+       * grafer_hover_off - for mouse off a graph element
+       * grafer_click - for a full mouse click (mouse down + mouse up on the same element) on a graph element
+       *
+       * Events are emmited with a single argument which is an object with the following properties:
+       * layer {string} - The name of the layer that emmoted the event
+       * type {string} - The type of object that triggered the event, "node" or "edge" (only nodes emit events in grafer's current version)
+       * id {string} - The ID of the graph object that triggered the event as defined in the data
+       */
+      const forwardEvent = (event: symbol, ...args: any[]) => {
+        this.$emit(event.description, ...args);
+      };
+      controller.on(GraferController.omniEvent, forwardEvent);
     }
 
     getModelColors (): string[] {
