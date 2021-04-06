@@ -16,7 +16,9 @@ export const nodeEdgeOptions = {
 
 // TODO: Move all common Grafer layer configurations to utility to reduce boilerplate code within
 //       application logic
-export const buildHighlightClusterLayer = (name: string, edges: GraferLayerData, clusters: GraferLayerData): GraferLayerData => {
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+export const buildHighlightClusterLayer = (name: string, edges: GraferLayerData, clusters: GraferLayerData) => {
   return {
     name,
     labels: {
@@ -47,7 +49,8 @@ export const buildHighlightClusterLayer = (name: string, edges: GraferLayerData,
   };
 };
 
-export const buildHighlightNodeLayer = (name: string, nodes: GraferLayerData, edges: GraferLayerData): GraferLayerData => {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+export const buildHighlightNodeLayer = (name: string, nodes: GraferLayerData, edges: GraferLayerData) => {
   return {
     name,
     nodes: {

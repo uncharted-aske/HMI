@@ -46,8 +46,8 @@
     }
 
     created (): void {
-      this.bus.$on('new-query-results', (args) => {
-          this.addLayer(args);
+      this.bus.$on('new-query-results', (layers) => {
+          this.addLayer(layers);
       });
     }
 
@@ -92,18 +92,11 @@
 
     // TODO: Fix argument type once bgraph sends query result typing
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    async addLayer (arg: any): Promise<void> {
+    async addLayer (layers: any[]): Promise<void> {
       // TODO: Use the query results to build the layers
       // eslint-disable-next-line no-console
-      console.log(arg);
-
-      const highlightClusterEdges = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/inter_edges.jsonl`, clusterEdgeOptions);
-      const highlightClusters = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`, clusterLabelOptions);
-      const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', highlightClusterEdges, highlightClusters);
-
-      const highlightNodeData = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`, nodeOptions);
-      const highlightNodeEdges = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/intra_edges.jsonl`, nodeEdgeOptions);
-      const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', highlightNodeData, highlightNodeEdges);
+      console.log(layers);
+      const [highlightClusterLayer, highlightNodeLayer] = layers;
 
       this.controller.removeLayerByName('highlightClusterLayer');
       this.controller.removeLayerByName('highlightNodeLayer');

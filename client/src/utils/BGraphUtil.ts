@@ -5,6 +5,7 @@ import { DataFile } from '@dekkai/data-source';
 import { Filters, Filter } from '@/types/typesLex';
 import { GraphInterface } from '@/types/typesGraphs';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
+import { buildHighlightClusterLayer, buildHighlightNodeLayer } from '@/utils/GraferUtil';
 import { isEmpty } from './FiltersUtil';
 
 const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
@@ -135,4 +136,29 @@ export const formatBGraphOutputToLocalGraph = (data: any): GraphInterface => {
     nodes,
     edges,
   };
+};
+
+// TODO: Fix argument type once BGraph sends proper result types
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
+export const formatBGraphOutputToGraferLayers = (queryResults: any) => {
+  const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', [], []);
+  const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', [], []);
+
+  const queryResultsDeepCopy = deepCopy(queryResults);
+
+  for (let i = 0; i < queryResultsDeepCopy.length; i++) {
+    const result = queryResultsDeepCopy[i];
+    if (result._type === 'node') {
+      // Set node color on query result
+      highlightNodeLayer.nodes.data.push(result);
+    } else if (result._type === 'edge') {
+      // Set edge color on query result
+      highlightClusterLayer.edges.data.push(result);
+      // TODO: Differentiate between edges bw/ clusters and edges bw/ nodes
+    } else if (result._type === 'cluster') {
+      // TODO: Handle adding cluster result types
+    }
+  }
+
+  return [highlightClusterLayer, highlightNodeLayer];
 };

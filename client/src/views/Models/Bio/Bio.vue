@@ -64,7 +64,7 @@
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
-  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
+  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph, formatBGraphOutputToGraferLayers } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
@@ -137,7 +137,7 @@
         } else {
           this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
           this.subgraphLoading = true;
-          this.bus.$emit('new-query-results', subgraph);
+          this.bus.$emit('new-query-results', formatBGraphOutputToGraferLayers(subgraph));
         }
       }
     }
