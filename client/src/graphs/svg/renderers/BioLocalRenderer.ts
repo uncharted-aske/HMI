@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import { SVGRenderer } from 'svg-flowgraph';
 
-import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
+import { SVGRendererOptionsInterface, SubgraphInterface } from '@/types/typesGraphs';
 
 import { calcEdgeColor, calcEdgeControlBackground, flatten } from '@/graphs/svg/util';
 import { Colors, EdgeTypes } from '@/graphs/svg/encodings';
@@ -27,8 +27,6 @@ const DEFAULT_STYLE = {
     controlStrokeColor: Colors.NODES.DEFAULT,
   },
 };
-
-const edgeOpacityScale = d3.scaleLog().domain([0.01, 1]).range([0.3, 1]);
 
 export default class BioLocalRenderer extends SVGRenderer {
   constructor (options:SVGRendererOptionsInterface) {
@@ -147,7 +145,6 @@ export default class BioLocalRenderer extends SVGRenderer {
       .classed('edge-path', true)
       .attr('d', d => pathFn(d.points))
       .style('fill', DEFAULT_STYLE.edge.fill)
-      // .style('opacity', d => edgeOpacityScale(d.data.metadata.belief))
       .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
       .style('stroke', d => calcEdgeColor(d))
       .attr('marker-end', d => {
@@ -170,7 +167,7 @@ export default class BioLocalRenderer extends SVGRenderer {
     chart.selectAll('.node-ui').select('rect').style('stroke', DEFAULT_STYLE.node.stroke).style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
   }
 
-  showNeighborhood (subgraph: any): void {
+  showNeighborhood (subgraph: SubgraphInterface): void {
     const chart = (this as any).chart;
     // FIXME: not very efficient
     const nodes = subgraph.nodes;

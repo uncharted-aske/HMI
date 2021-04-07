@@ -118,10 +118,10 @@ export const formatBGraphOutputToLocalGraph = (data: any): GraphInterface => {
   const nodes = [];
   const edges = [];
   const dataDeepCopy = deepCopy(data);
-  let curated = 0; //FIXME: Remove when update to v4 of data schema
+  let curated = 0; // FIXME: Remove when update to v4 of data schema
   dataDeepCopy.forEach(d => {
     if (d._type === 'node') {
-      d.id = d._id; 
+      d.id = d._id;
       d.label = d.name;
       delete d.name;
       nodes.push(d);
@@ -136,7 +136,7 @@ export const formatBGraphOutputToLocalGraph = (data: any): GraphInterface => {
       delete d.source_id;
       delete d.target_id;
       edges.push(d);
-      curated ++;
+      curated++;
     }
   });
   return {

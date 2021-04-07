@@ -39,21 +39,7 @@ abstract: GraphInterface,
 detailed: GraphInterface
 }
 
-export interface SubgraphEdgeInterface {
-edgeType?: string,
-id?: string,
-metadata?: any,
-source: string,
-source_label?: string,
-target: string,
-target_label?: string,
-}
-
-export interface SubgraphNodeInterface {
-id: string,
-}
-
 export interface SubgraphInterface {
-nodes: SubgraphNodeInterface[],
-edges: SubgraphEdgeInterface[],
+nodes: string[],
+edges: GraphEdgeInterface[],
 }

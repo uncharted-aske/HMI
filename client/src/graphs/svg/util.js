@@ -201,21 +201,3 @@ export const calcEdgeControlBackground = (edge) => {
   }
   return Colors.CURATION.UNCURATED;
 };
-
-export const calculateEdgeControlLabels = (edge) => {
-  const type = edge.data.edgeType;
-  switch (type) {
-    case EdgeTypes.EDGES.ACTIVATION:
-      return 'A';
-    case EdgeTypes.EDGES.INHIBITION:
-      return 'I';
-    case EdgeTypes.EDGES.INCREASEAMOUNT:
-      return '+';
-    case EdgeTypes.EDGES.PHOSPORYLATION:
-      return 'P';
-    case EdgeTypes.EDGES.DEPHOSPORYLATION:
-      return 'D';
-    default:
-      return '';
-  }
-};

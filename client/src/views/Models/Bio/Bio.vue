@@ -173,7 +173,7 @@
 
     async mounted (): Promise<void> {
       const [bgNodes, bgEdges] = await loadBGraphData();
-      this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);   
+      this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
     }
 
     onSplitView (): void {
@@ -192,12 +192,12 @@
       //   e.metadata.curated = idx;
       //   return e;
       // });
-  
+
       if (this.isSplitView) {
         if (this.bgraphInstance) {
-          //Experiment for visual encodings
+          // Experiment for visual encodings
           const query = deepCopy(this.bgraphInstance.v().filter(document => document._type === 'edge' && document.belief > 0.99 && document.doc_ids.length > 10 && document.evidence_ids.length > 20 && document.tested === true)
-                      .as('edges').out().as('out_nodes').back('edges').in().as('in_nodes').merge('edges', 'in_nodes', 'out_nodes').run(), ['_in', '_out']);
+                      .as('edges').out().as('out_nodes').back('edges').in().as('in_nodes').merge('edges', 'in_nodes', 'out_nodes').unique().run(), ['_in', '_out']);
 
           // const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
           this.subgraph = formatBGraphOutputToLocalGraph(query);

@@ -27,7 +27,6 @@ export const layered = {
       'elk.randomSeed': 666, // might as well be a coool number
       'elk.padding': '[top=25, left=25, bottom=25, right=25]',
       'elk.validateGraph': true,
-      // 'elk.partitioning.activate': true,
       ...spacingOptions,
     };
   },

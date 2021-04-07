@@ -26,7 +26,6 @@
     @Prop({ default: null }) data: GraphInterface;
     @Prop({ default: null }) nodeSizeScale: any;
 
-
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
 
@@ -38,12 +37,7 @@
     mounted (): void {
       this.renderer = new BioLocalRenderer({
         el: this.$refs.graph,
-        adapter: new Adapter({
-          nodeWidth: 120,
-          nodeHeight: 40,
-          layout: layered,
-          nodeSizeScale: this.nodeSizeScale,
-        }),
+        adapter: new Adapter(Object.assign(DEFAULT_RENDERING_OPTIONS, { nodeSizeScale: this.nodeSizeScale })),
         renderMode: 'basic',
         useEdgeControl: true,
         edgeControlOffset: 0.5,
