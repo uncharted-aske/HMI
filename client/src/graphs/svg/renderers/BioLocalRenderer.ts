@@ -107,12 +107,23 @@ export default class BioLocalRenderer extends SVGRenderer {
         .style('stroke', DEFAULT_STYLE.node.stroke)
         .style('stroke-width', d => (d as any).nodes ? 5 : DEFAULT_STYLE.node.strokeWidth);
 
-      selection.append('text')
+      selection
+        .filter(d=> (d as any).height > 20) // Don't show labels for small nodes
+        .append('text')
         .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
-        .attr('y', d => (d as any).nodes ? -5 : 25)
         .style('font-weight', d => (d as any).nodes ? '800' : '500')
         .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
-        .text(d => truncateString((d as any).label, 10));
+        .text(d => truncateString((d as any).label, 10))
+        .style("font-size", "1px")
+        .each(function(d) {
+          //Set the text size based on the size of the container
+          let bbox = this.getBBox();
+          let containerBbox = (this.parentNode as any).getBBox();
+          let scale = Math.min(containerBbox.width/bbox.width, containerBbox.height/bbox.height);
+          (d as any).scale = scale;
+          return d;
+        }).style("font-size", (d)=>  (d as any).scale + "px")
+          .attr('y', d => (d as any).nodes ? -5 : (0.5 * (d as any).height + 0.5 * (d as any).scale) );
     });
   }
 
