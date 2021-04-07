@@ -10,8 +10,8 @@
   import Component from 'vue-class-component';
   import { Getter, Action } from 'vuex-class';
   import { Watch } from 'vue-property-decorator';
-  import _ from 'lodash';
-  import { Lex, ValueState } from '@uncharted.software/lex/dist/lex';
+  import { Lex } from '@uncharted.software/lex/dist/lex';
+  import { initializeLex, setPills } from '@/utils/LexUtil';
   import * as filtersUtil from '@/utils/FiltersUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
   import PathQueryPill from '@/search/pills/PathQueryPill';
@@ -25,7 +25,7 @@
     @Action setFilters;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
-      this.setQuery();
+      setPills({ lex: this.lex, pills: this.pills, filters: this.getFilters });
       // HACK FOR DEMO IN FEB.12TH
       if (!filtersUtil.isEmpty(this.getFilters)) {
         this.$emit('run-query');
@@ -36,62 +36,20 @@
       /* add pills here */
       this.pills = [new PathQueryPill(QUERY_FIELDS_MAP.PATH_QUERY)];
 
-      const language = Lex.from('field', ValueState, {
-        name: 'Choose a field to search',
-        suggestions: _.sortBy(this.pills, p => p.searchDisplay).map(pill =>
-          pill.makeOption(),
-        ),
-        suggestionLimit: 30,
-        icon: v => {
-          if (_.isNil(v)) return '<i class="fas fa-search"></i>';
-          const pill = this.pills.find(
-            pill => pill.searchKey === v.meta.searchKey,
-          );
-          return pill.makeIcon();
-        },
-      }).branch(...this.pills.map(pill => pill.makeBranch()));
-
-      // Initialize lex instance
-      this.lex = new Lex({
-        language: language,
-        tokenXIcon: '<i class="fas fa-times"></i>',
-        placeholder: 'Search model components, paths...',
-      });
-
-      this.lex.on('query changed', (...args /* [newModel, oldModel, newUnboxedModel, oldUnboxedModel, nextTokenStarted] */) => {
-        const newModel = args[0];
-        const newFilters = filtersUtil.newFilters();
-
-        newModel.forEach(item => {
-          const pill = this.pills.find(
-            pill => pill.searchKey === item.field.meta.searchKey,
-          );
-          if (!_.isNil(pill)) {
-            pill.lex2Filters(item, newFilters);
+      this.lex = initializeLex({
+        pills: this.pills,
+        onChange: (newFilters) => {
+          if (filtersUtil.isEqual(this.getFilters, newFilters) === false) {
+            this.setFilters(newFilters);
           }
-        });
-
-        if (filtersUtil.isEqual(this.getFilters, newFilters) === false) {
-          this.setFilters(newFilters);
-        }
+        },
+        placeholder: 'Search model components, paths...',
+        fieldName: 'Choose a field to search',
       });
 
       // Render our search bar into our desired element
       this.lex.render(this.$refs.lexContainer);
-      this.setQuery();
-    }
-
-    setQuery (): void {
-      if (!this.lex) return;
-      const lexQuery = [];
-      this.getFilters.clauses.forEach(clause => {
-        const pill = this.pills.find(pill => pill.searchKey === clause.field);
-        if (!_.isNil(pill)) {
-          const selectedPill = pill.makeOption();
-          pill.filters2Lex(clause, selectedPill, lexQuery);
-        }
-      });
-      this.lex.setQuery(lexQuery, false);
+      setPills({ lex: this.lex, pills: this.pills, filters: this.getFilters });
     }
   }
 </script>
