@@ -197,4 +197,31 @@ export default class BioLocalRenderer extends SVGRenderer {
 
     highlightedEdges.lower(); // Display highlighted edges at the bottom of the edge group
   }
+
+
+  trace(nodeId) {
+    const checked = {};
+    const data = (this as any).layout || { edges: [] };
+    const tracedEdges = [];
+
+    function backtrack(id) {
+      if ({}.hasOwnProperty.call(checked, id)) return;
+      checked[id] = 1;
+
+      const edges = data.edges.filter(edge => edge.data.target === id);
+      edges.forEach(edge => {
+        tracedEdges.push(edge);
+        backtrack(edge.data.source);
+      });
+    }
+    backtrack(nodeId);
+
+    return {
+      edges: tracedEdges.map(edge => {
+        return { source: edge.data.source, target: edge.data.target };
+      }),
+      nodes: _.uniq([...tracedEdges.map(e => e.data.source), ...tracedEdges.map(e => e.data.target)])
+    };
+  }
+
 }
