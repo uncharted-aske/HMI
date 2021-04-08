@@ -188,7 +188,7 @@
         } else {
           if (subgraph.length <= MAX_RESULTS_LOCAL_VIEW) {
             this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
-        
+
             this.subgraphLoading = true;
             this.showMessageEmpty = false;
             this.showMessageTooLarge = false;

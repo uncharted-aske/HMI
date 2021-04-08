@@ -34,7 +34,7 @@
     mounted (): void {
       this.renderer = new BioLocalRenderer({
         el: this.$refs.graph,
-        adapter: new Adapter(DEFAULT_RENDERING_OPTIONS),        
+        adapter: new Adapter(DEFAULT_RENDERING_OPTIONS),
         renderMode: 'basic',
         useEdgeControl: true,
         edgeControlOffset: 0.5,
