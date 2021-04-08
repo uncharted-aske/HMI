@@ -42,10 +42,10 @@
         </settings-bar>
         <loader :loading="subgraphLoading" />
         <local-graph v-if="subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
-        <div v-if="showMessageTooLarge" class="py-2 alert alert-info" role="alert">
+        <div v-if="showMessageTooLarge" class="alert alert-info mr-2" role="alert">
           Results are too large. Keep adding filters to reduce the size.
         </div>
-        <div v-if="showMessageEmpty" class="py-2 alert alert-info" role="alert">
+        <div v-if="showMessageEmpty" class="alert alert-info mr-2" role="alert">
           Results are empty. Try another query.
         </div>
       </div>
