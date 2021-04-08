@@ -22,7 +22,6 @@
   @Component
   export default class LocalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
-    @Prop({ default: null }) nodeSizeScale: any;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
@@ -35,7 +34,8 @@
     mounted (): void {
       this.renderer = new BioLocalRenderer({
         el: this.$refs.graph,
-        adapter: new Adapter(Object.assign(DEFAULT_RENDERING_OPTIONS, { nodeSizeScale: this.nodeSizeScale })),        renderMode: 'basic',
+        adapter: new Adapter(DEFAULT_RENDERING_OPTIONS),        
+        renderMode: 'basic',
         useEdgeControl: true,
         edgeControlOffset: 0.5,
         useZoom: true,
