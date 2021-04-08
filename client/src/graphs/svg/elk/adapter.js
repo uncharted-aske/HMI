@@ -74,9 +74,12 @@ const injectELKOptions = (renderGraph, options) => {
     }
     node.ports = ports;
 
+    const nodeSizeScale = options.nodeSizeScale;
     if (!node.nodes || node.nodes.length === 0) {
-      node.width = node.width || options.nodeWidth;
-      node.height = node.height || options.nodeHeight;
+      const degree = node.data.in_degree + node.data.out_degree;
+      console.log(degree);
+      node.width = nodeSizeScale(degree) || options.nodeWidth;
+      node.height = nodeSizeScale(degree) * 0.5 || options.nodeHeight;
     } else {
       delete node.width;
       delete node.height;

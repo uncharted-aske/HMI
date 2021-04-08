@@ -41,7 +41,7 @@
           </div>
         </settings-bar>
         <loader :loading="subgraphLoading" />
-        <local-graph v-if="subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
+        <local-graph v-if="subgraph" :data="subgraph" :node-size-scale="nodeSizeScale"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
         <div v-if="showMessageTooLarge" class="py-2 alert alert-info" role="alert">
           Results are too large. Keep adding filters to reduce the size.
         </div>
@@ -59,6 +59,7 @@
 
 <script lang="ts">
   import _ from 'lodash';
+  import * as d3 from 'd3';
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
@@ -130,10 +131,10 @@
     isSplitView = false;
     subgraph: GraphInterface = null;
     subgraphLoading: boolean = false;
+    nodeSizeScale: any = null;
 
     showMessageTooLarge: boolean = false;
     showMessageEmpty: boolean = false;
-
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -180,7 +181,7 @@
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
     }
 
-    evaluateSubgraph(subgraph: any): void {
+    evaluateSubgraph (subgraph: any): void {
       if (_.isEmpty(subgraph)) {
           this.showMessageEmpty = true;
           this.showMessageTooLarge = false;
@@ -188,10 +189,16 @@
         } else {
           if (subgraph.length <= MAX_RESULTS_LOCAL_VIEW) {
             this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
+            //Compute node degree
+            const nodes = this.subgraph.nodes.map(node => ({ ...node, degree: (node as any).in_degree + (node as any).out_degree }));
+            const maxNodeDegree = _.maxBy(nodes, n => n.degree).degree;
+            const minNodeDegree = _.minBy(nodes, n => n.degree).degree;
+            const nodeSizeScale = d3.scaleLinear().domain([minNodeDegree, maxNodeDegree]).range([10, 200]);
+            this.nodeSizeScale = nodeSizeScale;
+
             this.subgraphLoading = true;
             this.showMessageEmpty = false;
             this.showMessageTooLarge = false;
-
           } else {
             this.showMessageTooLarge = true;
             this.showMessageEmpty = false;
