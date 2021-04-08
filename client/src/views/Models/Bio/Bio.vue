@@ -59,7 +59,6 @@
 
 <script lang="ts">
   import _ from 'lodash';
-  import * as d3 from 'd3';
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
@@ -160,11 +159,11 @@
     }
 
     get subgraphNodeCount (): number {
-      return this.subgraph && this.subgraph.nodes.length || 0;
+      return (this.subgraph && this.subgraph.nodes.length) || 0;
     }
 
     get subgraphEdgeCount (): number {
-      return this.subgraph && this.subgraph.edges.length || 0;
+      return (this.subgraph && this.subgraph.edges.length) || 0;
     }
 
     get gridMap (): string[][] {
@@ -180,6 +179,7 @@
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     evaluateSubgraph (subgraph: any): void {
       if (_.isEmpty(subgraph)) {
           this.showMessageEmpty = true;
