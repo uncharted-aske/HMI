@@ -51,6 +51,12 @@ interface CardInterface {
   raw: any;
 }
 
+interface GraferEventDetail {
+  layer: string;
+  type: string;
+  id: string;
+}
+
 export {
   TabInterface,
   ViewInterface,
@@ -59,4 +65,5 @@ export {
   ModelComponentMetadataInterface,
   ModelsState,
   CardInterface,
+  GraferEventDetail,
 };

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   CosmosSearchInterface,
   CosmosArtifactInterface,
@@ -35,7 +36,7 @@ export const cosmosArtifactSrc = (id: string): Promise<CosmosSearchInterface> =>
 const COSMOS_ARTIFACT_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/cosmos/api/document';
 
 // eslint-disable-next-line camelcase
-export const cosmosArtifactsMem = async (paramObj: {doi: string}): Promise<CosmosArtifactInterface> => {
+export const cosmosArtifactsMem = async (paramObj: {doi: string, image_type?: string}): Promise<CosmosArtifactInterface> => {
   const artifactList = await getUtilMem(COSMOS_ARTIFACT_URL, { api_key: COSMOS_API_KEY, ...paramObj });
   artifactList.objects.map(async (artifact, index) =>
     Object.assign(artifactList.objects[index], artifact.children[0]));
@@ -47,12 +48,16 @@ export const cosmosArtifactsMem = async (paramObj: {doi: string}): Promise<Cosmo
 const COSMOS_SIMILAR_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/doc2vec/api/similar';
 
 // eslint-disable-next-line camelcase
-export const cosmosSimilar = async (paramObj: {doi: string}): Promise<CosmosSimilarInterface> => {
-  const similarList = await getUtilMem(COSMOS_SIMILAR_URL, { api_key: COSMOS_API_KEY, ...paramObj });
-  await Promise.all(similarList.data.map(async (similar, index) => {
-    const response = await cosmosArtifactsMem({ doi: similar.bibjson.identifier[0].id });
-    similarList.data[index].objects = response.objects;
-  }));
+export const cosmosSimilar = async (paramObj: {doi: string, image_type?: string}): Promise<CosmosSimilarInterface> => {
+  const similarList = await getUtilMem(COSMOS_SIMILAR_URL, { api_key: COSMOS_API_KEY, doi: paramObj.doi });
+  if (_.isArray(similarList.data)) {
+    await Promise.all(similarList.data.map(async (similar, index) => {
+      const response = await cosmosArtifactsMem({ doi: similar.bibjson.identifier[0].id, image_type: paramObj.image_type });
+      similarList.data[index].objects = response.objects;
+    }));
+  } else {
+    similarList.data = [];
+  }
   return similarList;
 };
 

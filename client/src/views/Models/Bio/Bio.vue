@@ -26,7 +26,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false"></grafer>
+        <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false" @grafer_click="onGraferClick"></grafer>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -66,7 +66,7 @@
 
   import { bgraph } from '@uncharted.software/bgraph';
 
-  import { TabInterface, ModelInterface } from '@/types/types';
+  import { TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
@@ -198,6 +198,10 @@
             this.subgraph = null;
           }
         }
+    }
+    
+    onGraferClick (detail: GraferEventDetail): void {
+      console.log(`a [${detail.type}] with id [${detail.id}] on layer [${detail.layer}] was clicked!`);
     }
 
     onSplitView (): void {
