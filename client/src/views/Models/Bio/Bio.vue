@@ -199,8 +199,9 @@
           }
         }
     }
-    
+
     onGraferClick (detail: GraferEventDetail): void {
+      // eslint-disable-next-line
       console.log(`a [${detail.type}] with id [${detail.id}] on layer [${detail.layer}] was clicked!`);
     }
 
