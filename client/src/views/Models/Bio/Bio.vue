@@ -59,6 +59,7 @@
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
+  import { GraferNodesData, GraferEdgesData } from '@uncharted.software/grafer';
 
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
@@ -82,6 +83,8 @@
   import NodePane from './components/DrilldownPanel/NodePane.vue';
 
   import Grafer from './components/Graphs/Grafer.vue';
+  import { clusterEdgeOptions, nodeEdgeOptions, nodeOptions } from '@/utils/GraferUtil';
+  import { loadJSONLFile } from '@/utils/FileLoaderUtil';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -109,6 +112,10 @@
   export default class Bio extends Vue {
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any = undefined;
+    graferNodesData: GraferNodesData = undefined;
+    graferIntraEdgesData: GraferEdgesData = undefined;
+    graferInterEdgesData: GraferEdgesData = undefined;
+    model: string = 'covid-19';
 
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
@@ -137,7 +144,7 @@
         } else {
           this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
           this.subgraphLoading = true;
-          this.bus.$emit('new-query-results', formatBGraphOutputToGraferLayers(subgraph));
+          this.bus.$emit('new-query-results', formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData));
         }
       }
     }
@@ -172,8 +179,35 @@
     }
 
     async mounted (): Promise<void> {
+      const {
+        graferNodesData,
+        graferIntraEdgesData,
+        graferInterEdgesData,
+      } = await this.loadGraferData();
+      this.graferNodesData = graferNodesData;
+      this.graferIntraEdgesData = graferIntraEdgesData;
+      this.graferInterEdgesData = graferInterEdgesData;
+      this.bus.$emit('layer-data-loaded', {
+        graferNodesData,
+        graferInterEdgesData,
+        graferIntraEdgesData,
+      });
       const [bgNodes, bgEdges] = await loadBGraphData();
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async loadGraferData () {
+      // TODO: Add
+      const graferNodesData: GraferNodesData = await loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, nodeOptions);
+      const graferIntraEdgesData: GraferEdgesData = await loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, nodeEdgeOptions);
+      const graferInterEdgesData: GraferEdgesData = await loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, clusterEdgeOptions);
+
+      return {
+        graferNodesData,
+        graferIntraEdgesData,
+        graferInterEdgesData,
+      };
     }
 
     onSplitView (): void {

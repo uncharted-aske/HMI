@@ -4,6 +4,7 @@ import { DataFile } from '@dekkai/data-source';
 
 import { Filters, Filter } from '@/types/typesLex';
 import { GraphInterface } from '@/types/typesGraphs';
+import { GraferNodesData, GraferEdgesData } from '@uncharted.software/grafer';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { buildHighlightClusterLayer, buildHighlightNodeLayer } from '@/utils/GraferUtil';
 import { isEmpty } from './FiltersUtil';
@@ -140,21 +141,27 @@ export const formatBGraphOutputToLocalGraph = (data: any): GraphInterface => {
 
 // TODO: Fix argument type once BGraph sends proper result types
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
-export const formatBGraphOutputToGraferLayers = (queryResults: any) => {
+export const formatBGraphOutputToGraferLayers = (
+  queryResults: any[],
+  graferNodesData = [] as GraferNodesData,
+  graferIntraEdgesData = [] as GraferEdgesData,
+  graferInterEdgesData = [] as GraferEdgesData,
+) => {
   const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', [], []);
   const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', [], []);
-
   const queryResultsDeepCopy = deepCopy(queryResults);
 
   for (let i = 0; i < queryResultsDeepCopy.length; i++) {
     const result = queryResultsDeepCopy[i];
-    if (result._type === 'node') {
+    if (result._type === 'node' && result.grafer_id != null) {
       // Set node color on query result
-      highlightNodeLayer.nodes.data.push(result);
-    } else if (result._type === 'edge') {
-      // Set edge color on query result
-      highlightClusterLayer.edges.data.push(result);
-      // TODO: Differentiate between edges bw/ clusters and edges bw/ nodes
+      highlightNodeLayer.nodes.data.push(graferNodesData[result.grafer_id]);
+    } else if (result._type === 'edge' && result.intra_edge_id != null) {
+      // Set intra edge color on query result
+      highlightClusterLayer.edges.data.push(graferIntraEdgesData[result.intra_edge_id]);
+    } else if (result._type === 'edge' && result.inter_edge_id != null) {
+      // Set inter edge color on query result
+      highlightClusterLayer.edges.data.push(graferInterEdgesData[result.inter_edge_id]);
     } else if (result._type === 'cluster') {
       // TODO: Handle adding cluster result types
     }

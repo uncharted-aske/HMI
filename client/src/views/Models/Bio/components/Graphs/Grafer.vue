@@ -38,28 +38,27 @@
     @Prop({ default: null })
     private bus: any;
 
-    public mounted (): void {
-      this.loadGraph().then(data => {
-        this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
-        this.loading = false;
-      });
-    }
-
     created (): void {
       this.bus.$on('new-query-results', (layers) => {
           this.addLayer(layers);
       });
+      this.bus.$on('layer-data-loaded', (layerData) => {
+        this.loadGraph(layerData).then(data => {
+          this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
+          this.loading = false;
+        });
+      });
     }
 
     // temporary demo functions
-    async loadGraph (): Promise<GraferControllerData> {
+    async loadGraph (layerData): Promise<GraferControllerData> {
       const points = {
         data: await loadJSONLFile(`/grafer/${this.model}/points.jsonl`),
       };
 
       const colors = this.getModelColors();
 
-      const layers = await this.loadModelLayers(points);
+      const layers = await this.loadModelLayers(points, layerData);
 
       return { points, colors, layers };
     }
@@ -83,9 +82,9 @@
       ];
     }
 
-    async loadModelLayers (points: GraferPointsData): Promise<GraferLayerData[]> {
+    async loadModelLayers (points: GraferPointsData, layerData): Promise<GraferLayerData[]> {
       if (this.model === 'covid-19') {
-        return await this.loadBioLayers();
+        return await this.loadBioLayers(layerData);
       }
       return await this.loadKnowledgeLayers(points);
     }
@@ -105,23 +104,21 @@
       this.controller.render();
     }
 
-    async loadBioLayers (): Promise<GraferLayerData[]> {
+    async loadBioLayers (layerData): Promise<GraferLayerData[]> {
       const layers = [];
-
-      const nodeData = await loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, nodeOptions);
 
       const nodeLayer = {
         name: 'Nodes',
         nodes: {
           type: 'Circle',
-          data: nodeData,
+          data: layerData.graferNodesData,
           options: {
             nearDepth: 0.5,
             farDepth: 1.0,
           },
         },
         edges: {
-          data: await loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, nodeEdgeOptions),
+          data: layerData.graferIntraEdgesData,
           options: {
             alpha: 0.55,
             nearDepth: 0.6,
@@ -130,7 +127,7 @@
         },
         labels: {
           type: 'PointLabel',
-          data: nodeData,
+          data: layerData.graferNodesData,
           mappings: {
             background: (): boolean => true,
             fontSize: (): number => 12,
@@ -169,7 +166,7 @@
         },
         edges: {
           type: 'ClusterBundle',
-          data: await loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, clusterEdgeOptions),
+          data: layerData.graferInterEdgesData,
           options: {
             alpha: 0.04,
             nearDepth: 0.7,
