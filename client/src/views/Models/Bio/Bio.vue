@@ -45,7 +45,10 @@
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
-      <node-pane v-if="drilldownActivePaneId === 'node'" slot="content" :data="drilldownMetadata"/>
+      <node-pane v-if="drilldownActivePaneId === 'node'" slot="content"
+        :model="selectedModel && selectedModel.metadata.id"
+        :data="drilldownMetadata"
+      />
       <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content" :data="drilldownMetadata"/>
     </drilldown-panel>
   </div>
@@ -108,7 +111,7 @@
   @Component({ components })
   export default class Bio extends Vue {
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
-    bgraphInstance: any = undefined;
+    bgraphInstance: any;
 
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
@@ -208,7 +211,7 @@
 
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = 'Type: Node';
-      this.drilldownMetadata = node.metadata;
+      this.drilldownMetadata = node.data;
     }
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {
