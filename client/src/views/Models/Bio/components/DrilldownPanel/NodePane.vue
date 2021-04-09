@@ -2,7 +2,10 @@
   <collapsible-container :isEmpty="isEmptyMetadata">
     <collapsible-item slot="item" v-for="(values, dataObjectKey) in dataObject" :key="dataObjectKey">
       <div slot="title">{{dataObjectKey}}</div>
-      <div slot="content">
+      <div slot="content" v-if="dataObjectKey === 'Evidence'">
+        <a :href="values">{{dbRef.namespace}}</a>
+      </div>
+      <div slot="content" v-else>
         {{values}}
       </div>
     </collapsible-item>
@@ -50,12 +53,19 @@
       this.fetchExternalData();
     }
 
-    async fetchExternalData (): Promise<void> {
+    get dbRef (): { namespace: string, id: string } {
       const dbRefPriority = this.data.db_ref_priority.indexOf(':');
-      const namespace = this.data.db_ref_priority.slice(0, dbRefPriority);
-      const id = this.data.db_ref_priority.slice(dbRefPriority + 1);
+      return {
+        namespace: this.data.db_ref_priority.slice(0, dbRefPriority),
+        id: this.data.db_ref_priority.slice(dbRefPriority + 1),
+      };
+    }
 
-      const response = await emmaaEntityInfo({ modelName: this.model, namespace, id });
+    async fetchExternalData (): Promise<void> {
+      const response = await emmaaEntityInfo({
+        modelName: this.model,
+        ...this.dbRef,
+      });
       this.externalData = response;
       this.dataObject = this.computeDataObject();
     }
@@ -64,7 +74,7 @@
       const { data, externalData } = this;
       const output: Record<any, any> = {};
       if (externalData) {
-        output.Description = externalData.definition;
+        output.Definition = externalData.definition;
         output.Evidence = externalData.url;
       }
       output.Incoming = data.in_degree;
