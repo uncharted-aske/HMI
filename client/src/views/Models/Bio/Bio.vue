@@ -8,7 +8,7 @@
     </left-side-panel>
     <div class="search-row">
       <search-bar :placeholder="`Search for model components...`" />
-      <button class="btn btn-primary m-1" @click="onSplitView" :disabled="!canOpenLocalView">
+      <button v-if="canOpenLocalView" class="btn btn-primary m-1" @click="onSplitView">
         <font-awesome-icon :icon="['fas', getIcon ]" />
         <span>{{ getMessage }}</span>
       </button>
@@ -41,7 +41,13 @@
           </div>
         </settings-bar>
         <loader :loading="subgraphLoading" />
-        <local-graph :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
+        <local-graph v-if="subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
+        <div v-if="showMessageTooLarge" class="alert alert-info mr-2" role="alert">
+          Results are too large. Keep adding filters to reduce the size.
+        </div>
+        <div v-if="showMessageEmpty" class="alert alert-info mr-2" role="alert">
+          Results are empty. Try another query.
+        </div>
       </div>
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
@@ -88,6 +94,8 @@
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
+  const MAX_RESULTS_LOCAL_VIEW = 500;
+
   const components = {
     SearchBar,
     SettingsBar,
@@ -123,6 +131,9 @@
     subgraph: GraphInterface = null;
     subgraphLoading: boolean = false;
 
+    showMessageTooLarge: boolean = false;
+    showMessageEmpty: boolean = false;
+
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Getter getFilters;
@@ -130,13 +141,7 @@
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
         const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
-        if (_.isEmpty(subgraph)) {
-          this.isSplitView = false;
-          this.subgraph = null;
-        } else {
-          this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
-          this.subgraphLoading = true;
-        }
+        this.evaluateSubgraph(subgraph);
       }
     }
 
@@ -154,11 +159,11 @@
     }
 
     get subgraphNodeCount (): number {
-      return this.subgraph && this.subgraph.nodes.length;
+      return (this.subgraph && this.subgraph.nodes.length) || 0;
     }
 
     get subgraphEdgeCount (): number {
-      return this.subgraph && this.subgraph.edges.length;
+      return (this.subgraph && this.subgraph.edges.length) || 0;
     }
 
     get gridMap (): string[][] {
@@ -174,19 +179,38 @@
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    evaluateSubgraph (subgraph: any): void {
+      if (_.isEmpty(subgraph)) {
+          this.showMessageEmpty = true;
+          this.showMessageTooLarge = false;
+          this.subgraph = null;
+        } else {
+          if (subgraph.length <= MAX_RESULTS_LOCAL_VIEW) {
+            this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
+
+            this.subgraphLoading = true;
+            this.showMessageEmpty = false;
+            this.showMessageTooLarge = false;
+          } else {
+            this.showMessageTooLarge = true;
+            this.showMessageEmpty = false;
+            this.subgraph = null;
+          }
+        }
+    }
+
     onGraferClick (detail: GraferEventDetail): void {
+      // eslint-disable-next-line
       console.log(`a [${detail.type}] with id [${detail.id}] on layer [${detail.layer}] was clicked!`);
     }
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
+      const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
 
       if (this.isSplitView) {
-        if (this.bgraphInstance) {
-          const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
-          this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
-          this.subgraphLoading = true;
-        }
+        this.evaluateSubgraph(subgraph);
       } else {
         this.subgraph = null;
       }
