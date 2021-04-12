@@ -46,10 +46,13 @@
     </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
       <node-pane v-if="drilldownActivePaneId === 'node'" slot="content"
-        :model="selectedModel && selectedModel.metadata.id"
+        :model="selectedModelId"
         :data="drilldownMetadata"
       />
-      <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content" :data="drilldownMetadata"/>
+      <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content"
+        :model="selectedModelId"
+        :data="drilldownMetadata"
+      />
     </drilldown-panel>
   </div>
 </template>
@@ -66,7 +69,6 @@
   import { TabInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
 
-  import { emmaaEvidence } from '@/services/EmmaaFetchService';
   import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
 
@@ -156,6 +158,10 @@
       return modelsList.find(model => model.metadata.id === 'covid19'); // Only COVID-19 model for now
     }
 
+    get selectedModelId (): string {
+      return this.selectedModel && this.selectedModel.metadata.id;
+    }
+
     get subgraphNodeCount (): number {
       return this.subgraph && this.subgraph.nodes.length;
     }
@@ -220,12 +226,7 @@
 
       this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
       this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
-      this.drilldownMetadata = await emmaaEvidence({
-        stmt_hash: edge.metadata.statement_id,
-        source: 'model_statement',
-        model: this.selectedModel.metadata.id,
-        format: 'json',
-      });
+      this.drilldownMetadata = edge.metadata;
     }
   }
 </script>

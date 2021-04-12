@@ -43,7 +43,7 @@
     externalData: EmmaaEntityInfoInterface;
     dataObject: Record<any, any> = {};
 
-    @Watch('data') async onDataChange (): Promise<void> {
+    @Watch('data') onDataChange (): void {
       this.dataObject = this.computeDataObject();
       this.fetchExternalData();
     }
