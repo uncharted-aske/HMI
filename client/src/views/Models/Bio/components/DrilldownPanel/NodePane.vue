@@ -1,8 +1,8 @@
 <template>
   <collapsible-container :isEmpty="isEmptyMetadata">
-    <collapsible-item slot="item" v-for="(values, dataObjectKey) in dataObject" :key="dataObjectKey">
+    <collapsible-item slot="item" expanded="true" v-for="(values, dataObjectKey) in dataObject" :key="dataObjectKey">
       <div slot="title">{{dataObjectKey}}</div>
-      <div slot="content" v-if="dataObjectKey === 'Evidence'">
+      <div slot="content" v-if="dataObjectKey === 'URL'">
         <a :href="values">{{dbRef.namespace}}</a>
       </div>
       <div slot="content" v-else>
@@ -75,7 +75,7 @@
       const output: Record<any, any> = {};
       if (externalData) {
         output.Definition = externalData.definition;
-        output.Evidence = externalData.url;
+        output.URL = externalData.url;
       }
       output.Incoming = data.in_degree;
       output.Outgoing = data.out_degree;
