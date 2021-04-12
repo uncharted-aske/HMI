@@ -10,6 +10,7 @@
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
   import { loadJSONLFile } from '@/utils/FileLoaderUtil';
+  import { BIO_GRAPH_COLORS, CLUSTER_GRAPH_COLORS } from '@/utils/GraferUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
 
@@ -73,21 +74,9 @@
 
     getModelColors (): string[] {
       if (this.model === 'covid-19') {
-        return [
-          '#5e81ac',
-          '#d08770',
-          '#ebcb8b',
-          '#81a1c1',
-        ];
+        return BIO_GRAPH_COLORS;
       }
-      return [
-        '#bf616a',
-        '#d08770',
-        '#ebcb8b',
-        '#a3be8c',
-        '#b48ead',
-        '#d8dee9',
-      ];
+      return CLUSTER_GRAPH_COLORS;
     }
 
     async loadModelLayers (points: GraferPointsData): Promise<GraferLayerData[]> {
