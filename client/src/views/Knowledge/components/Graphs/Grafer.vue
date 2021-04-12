@@ -10,7 +10,7 @@
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
   import { loadJSONLFile } from '@/utils/FileLoaderUtil';
-  import { BIO_GRAPH_COLORS, CLUSTER_GRAPH_COLORS } from '@/utils/GraferUtil';
+  import { CLUSTER_GRAPH_COLORS } from '@/utils/GraferUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
 
@@ -23,7 +23,7 @@
     private loading: boolean = true;
     private controller: GraferController;
 
-    @Prop({ default: 'covid-19' })
+    @Prop({ default: 'wisconsin-knowledge' })
     private model: string;
 
     @Prop({ default: null })
@@ -46,8 +46,7 @@
         data: await loadJSONLFile(`/grafer/${this.model}/points.jsonl`),
       };
 
-      const colors = this.getModelColors();
-
+      const colors = CLUSTER_GRAPH_COLORS;
       const layers = await this.loadModelLayers(points);
 
       return { points, colors, layers };
@@ -72,194 +71,7 @@
       controller.on(GraferController.omniEvent, forwardEvent);
     }
 
-    getModelColors (): string[] {
-      if (this.model === 'covid-19') {
-        return BIO_GRAPH_COLORS;
-      }
-      return CLUSTER_GRAPH_COLORS;
-    }
-
     async loadModelLayers (points: GraferPointsData): Promise<GraferLayerData[]> {
-      if (this.model === 'covid-19') {
-        return await this.loadBioLayers();
-      }
-      return await this.loadKnowledgeLayers(points);
-    }
-
-    async loadBioLayers (): Promise<GraferLayerData[]> {
-      const layers = [];
-
-      const nodeOptions = { color: 1 };
-      const nodeEdgeOptions = {
-        sourceColor: 2,
-        targetColor: 2,
-      };
-      const nodeData = await loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, nodeOptions);
-
-      const nodeLayer = {
-        name: 'Nodes',
-        nodes: {
-          type: 'Circle',
-          data: nodeData,
-          options: {
-            nearDepth: 0.5,
-            farDepth: 1.0,
-          },
-        },
-        edges: {
-          data: await loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, nodeEdgeOptions),
-          options: {
-            alpha: 0.55,
-            nearDepth: 0.6,
-            farDepth: 1.0,
-          },
-        },
-        labels: {
-          type: 'PointLabel',
-          data: nodeData,
-          mappings: {
-            background: (): boolean => true,
-            fontSize: (): number => 12,
-            padding: (): [number, number] => [8, 5],
-          },
-          options: {
-            visibilityThreshold: 8,
-            labelPlacement: graph.labels.PointLabelPlacement.TOP,
-          },
-        },
-      };
-      layers.push(nodeLayer);
-
-      const clusterLabelOptions = { color: 3 };
-      const clusterEdgeOptions = {
-        sourceColor: 0,
-        targetColor: 0,
-      };
-
-      const clusterLayer = {
-        name: 'Clusters',
-        // nodes: {
-        //   type: 'Ring',
-        //   data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, clusterLabelOptions),
-        //   options: {},
-        // },
-        labels: {
-          type: 'RingLabel',
-          data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, clusterLabelOptions),
-          mappings: {
-            background: (): boolean => false,
-            fontSize: (): number => 14,
-            padding: (): number => 0,
-          },
-          options: {
-            visibilityThreshold: 160,
-            repeatLabel: -1,
-            repeatGap: 64,
-            nearDepth: 0.5,
-            farDepth: 1.0,
-          },
-        },
-        edges: {
-          type: 'ClusterBundle',
-          data: await loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, clusterEdgeOptions),
-          options: {
-            alpha: 0.04,
-            nearDepth: 0.7,
-            farDepth: 1.0,
-          },
-        },
-      };
-      layers.push(clusterLayer);
-
-      if (this.layer) {
-        // change the layers properties
-        const fadedOptions = {
-          alpha: 1.0,
-          fade: 0.7,
-          desaturate: 0.5,
-        };
-
-        nodeLayer.nodes.options = Object.assign(nodeLayer.nodes.options, fadedOptions);
-        nodeLayer.edges.options = Object.assign(nodeLayer.edges.options, fadedOptions, { fade: 0.9, enabled: this.backEdges });
-        nodeLayer.labels.options = Object.assign(nodeLayer.labels.options, fadedOptions);
-
-        // clusterLayer.nodes.options = Object.assign(clusterLayer.nodes.options, fadedOptions);
-        clusterLayer.edges.options = Object.assign(clusterLayer.edges.options, fadedOptions, { fade: 0.9, enabled: this.backEdges });
-        clusterLayer.labels.options = Object.assign(clusterLayer.labels.options, fadedOptions);
-
-        // load the layers
-        // 3710
-        const highlightClusterEdges = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/inter_edges.jsonl`, clusterEdgeOptions);
-        const highlightClusterLayer = {
-          name: 'Highlights - Clusters',
-          labels: {
-            type: 'RingLabel',
-            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`, clusterLabelOptions),
-            mappings: {
-              background: (): boolean => false,
-              fontSize: (): number => 14,
-              padding: (): number => 0,
-            },
-            options: {
-              visibilityThreshold: 160,
-              repeatLabel: -1,
-              repeatGap: 64,
-              nearDepth: 0.0,
-              farDepth: 0.4,
-            },
-          },
-          edges: {
-            type: 'ClusterBundle',
-            data: highlightClusterEdges,
-            options: {
-              alpha: Math.min(0.99, Math.max(0.2, 1 - ((1 / 4100) * highlightClusterEdges.length))),
-              nearDepth: 0.1,
-              farDepth: 0.4,
-            },
-          },
-        };
-        layers.unshift(highlightClusterLayer);
-
-        const highlightNodeData = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`, nodeOptions);
-        const highlightNodeLayer = {
-          name: 'Highlights - Nodes',
-          nodes: {
-            type: 'Circle',
-            data: highlightNodeData,
-            options: {
-              nearDepth: 0.0,
-              farDepth: 0.4,
-            },
-          },
-          edges: {
-            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/intra_edges.jsonl`, nodeEdgeOptions),
-            options: {
-              alpha: 0.55,
-            },
-          },
-          labels: {
-            type: 'PointLabel',
-            data: highlightNodeData,
-            mappings: {
-              background: (): boolean => true,
-              fontSize: (): number => 12,
-              padding: (): [number, number] => [8, 5],
-            },
-            options: {
-              visibilityThreshold: 8,
-              labelPlacement: graph.labels.PointLabelPlacement.TOP,
-              nearDepth: 0.0,
-              farDepth: 0.4,
-            },
-          },
-        };
-        layers.unshift(highlightNodeLayer);
-      }
-
-      return layers;
-    }
-
-    async loadKnowledgeLayers (points: GraferPointsData): Promise<GraferLayerData[]> {
       const layers = [];
       const nodeLayer = {
         name: 'Nodes',

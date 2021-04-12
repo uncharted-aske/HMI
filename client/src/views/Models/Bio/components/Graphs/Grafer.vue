@@ -6,11 +6,11 @@
 </template>
 
 <script lang="ts">
-  import { GraferController, GraferControllerData, GraferPointsData, graph, GraferLayerData } from '@uncharted.software/grafer';
+  import { GraferController, GraferControllerData, graph, GraferLayerData } from '@uncharted.software/grafer';
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
   import { loadJSONLFile } from '@/utils/FileLoaderUtil';
-  import { BIO_GRAPH_COLORS, CLUSTER_GRAPH_COLORS } from '@/utils/GraferUtil';
+  import { BIO_GRAPH_COLORS } from '@/utils/GraferUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
 
@@ -46,9 +46,8 @@
         data: await loadJSONLFile(`/grafer/${this.model}/points.jsonl`),
       };
 
-      const colors = this.getModelColors();
-
-      const layers = await this.loadModelLayers(points);
+      const colors = BIO_GRAPH_COLORS;
+      const layers = await this.loadModelLayers();
 
       return { points, colors, layers };
     }
@@ -72,21 +71,7 @@
       controller.on(GraferController.omniEvent, forwardEvent);
     }
 
-    getModelColors (): string[] {
-      if (this.model === 'covid-19') {
-        return BIO_GRAPH_COLORS;
-      }
-      return CLUSTER_GRAPH_COLORS;
-    }
-
-    async loadModelLayers (points: GraferPointsData): Promise<GraferLayerData[]> {
-      if (this.model === 'covid-19') {
-        return await this.loadBioLayers();
-      }
-      return await this.loadKnowledgeLayers(points);
-    }
-
-    async loadBioLayers (): Promise<GraferLayerData[]> {
+    async loadModelLayers (): Promise<GraferLayerData[]> {
       const layers = [];
 
       const nodeOptions = { color: 1 };
@@ -250,87 +235,6 @@
               labelPlacement: graph.labels.PointLabelPlacement.TOP,
               nearDepth: 0.0,
               farDepth: 0.4,
-            },
-          },
-        };
-        layers.unshift(highlightNodeLayer);
-      }
-
-      return layers;
-    }
-
-    async loadKnowledgeLayers (points: GraferPointsData): Promise<GraferLayerData[]> {
-      const layers = [];
-      const nodeLayer = {
-        name: 'Nodes',
-        nodes: {
-          type: 'Circle',
-          data: await loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`),
-          options: {
-            pixelSizing: true,
-            nearDepth: 0.75,
-            farDepth: 1.0,
-          },
-        },
-        edges: null,
-        labels: {
-          type: 'PointLabel',
-          data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`),
-          mappings: {
-            background: (): boolean => true,
-            fontSize: (): number => 12,
-            padding: (): [number, number] => [8, 5],
-          },
-          options: {
-            visibilityThreshold: 5,
-            labelPlacement: graph.labels.PointLabelPlacement.CENTER,
-            nearDepth: 0.5,
-            farDepth: 0.74,
-          },
-        },
-      };
-      layers.push(nodeLayer);
-
-      if (this.layer) {
-        // change the layers properties
-        const fadedOptions = {
-          alpha: 1.0,
-          fade: 0.9,
-          desaturate: 0.5,
-        };
-
-        nodeLayer.nodes.options = Object.assign(nodeLayer.nodes.options, fadedOptions);
-        nodeLayer.labels.options = Object.assign(nodeLayer.labels.options, fadedOptions);
-
-        // load the extra points
-        points.data.push(...await loadJSONLFile(`/grafer/${this.model}/${this.layer}/points.jsonl`));
-
-        // load the layer
-        const highlightNodeLayer = {
-          name: 'Nodes',
-          nodes: {
-            type: 'Circle',
-            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`),
-            options: {
-              pixelSizing: true,
-              nearDepth: 0.25,
-              farDepth: 0.5,
-            },
-          },
-          edges: null,
-          labels: {
-            type: 'PointLabel',
-            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`),
-            mappings: {
-              background: (): boolean => true,
-              fontSize: (): number => 12,
-              padding: (): [number, number] => [8, 5],
-            },
-            options: {
-              visibilityThreshold: 0,
-              labelPlacement: graph.labels.PointLabelPlacement.TOP,
-              nearDepth: 0.0,
-              farDepth: 0.24,
             },
           },
         };
