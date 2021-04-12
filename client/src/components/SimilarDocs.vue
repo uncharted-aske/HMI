@@ -2,14 +2,14 @@
   <div>
     <h3 v-if="similarDocList.length > 0">Related documents</h3>
     <div class="row mr-0">
-      <div class="col" v-for="(similarDoc) in similarDocList" :key="similarDoc.bibjson._gddid">
+      <div class="col-3" v-for="(similarDoc) in similarDocList" :key="similarDoc.bibjson._gddid">
         <a :href="similarDoc.bibjson.link[0].url" target="_blank">
           <h6>{{similarDoc.bibjson.title}}</h6>
         </a>
       </div>
     </div>
     <div class="row mr-0">
-      <div class="d-flex col justify-content-between" v-for="(similarDoc) in similarDocList" :key="similarDoc.bibjson._gddid">
+      <div class="d-flex col-3 justify-content-between" v-for="(similarDoc) in similarDocList" :key="similarDoc.bibjson._gddid">
         <div v-for="(artifact) in similarDoc.objects" :key="artifact.id"
           class="similar-img shadow"
           :style="imageStyle(artifact.bytes)"
