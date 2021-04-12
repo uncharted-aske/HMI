@@ -11,6 +11,40 @@ export interface SVGRendererOptionsInterface {
   addons?: any
 }
 
+export interface GraphNodeDataInterface {
+  belief: number,
+  cluster_ids: number,
+  cluster_level: number,
+  db_ref_priority: string,
+  db_refs: Record<any, any>
+  doc_ids: number,
+  doi_map: number,
+  edge_ids_source: number[],
+  edge_ids_target: number[],
+  evidence_ids: number,
+  grafer_id: number,
+  grounded: boolean,
+  grounded_cluster: number,
+  grounded_onto: boolean,
+  id: number,
+  in_degree: number,
+  inter_edge_id: number,
+  intra_edge_id: number,
+  label: string,
+  model_id: number,
+  ontocat_ids: number[],
+  ontocat_level: number,
+  ontocat_map: Record<any, any>,
+  out_degree: number,
+  source_id: number,
+  statement_id: number,
+  target_id: number,
+  tested: boolean,
+  type: string,
+  _id: string,
+  _type: string,
+}
+
 export interface GraphNodeInterface {
 id: string,
 concept?: string,
@@ -18,7 +52,8 @@ label: string,
 nodeType?: string,
 nodeSubType?: string,
 dataType?:string,
-metadata?: any
+data?: GraphNodeDataInterface,
+metadata?: any,
 }
 
 export interface GraphEdgeInterface {
