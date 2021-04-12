@@ -1,55 +1,57 @@
 <template>
-  <div class="view-container">
+  <div class="view-container flex-row">
     <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
           <div slot="content">
             <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel && selectedModel.metadata"/>
             <!-- <facets-pane v-if="activeTabId === 'facets'" /> -->
           </div>
     </left-side-panel>
-    <div class="search-row">
-      <search-bar :placeholder="`Search for model components...`" />
-      <button v-if="canOpenLocalView" class="btn btn-primary m-1" @click="onSplitView">
-        <font-awesome-icon :icon="['fas', getIcon ]" />
-        <span>{{ getMessage }}</span>
-      </button>
+    <div class="d-flex flex-column flex-grow-1 position-relative">
+      <div class="search-row">
+        <search-bar :placeholder="`Search for model components...`" />
+        <button v-if="canOpenLocalView" class="btn btn-primary m-1" @click="onSplitView">
+          <font-awesome-icon :icon="['fas', getIcon ]" />
+          <span>{{ getMessage }}</span>
+        </button>
+      </div>
+      <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
+        <div slot="1" class="h-100 w-100 d-flex flex-column">
+          <settings-bar>
+            <div slot="left">
+              <counters
+                :title="selectedModel && selectedModel.metadata.name"
+                :data="[`448723 Nodes`, `44104 Edges`]"
+              />
+            </div>
+            <div slot="settings">
+              <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
+            </div>
+          </settings-bar>
+          <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false" @grafer_click="onGraferClick"></grafer>
+        </div>
+        <div slot="2" class="h-100 w-100 d-flex flex-column">
+          <settings-bar>
+            <div slot="right">
+              <counters
+                :title="`Subgraph`"
+                :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
+              />
+            </div>
+            <div slot="right">
+              <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
+            </div>
+          </settings-bar>
+          <loader :loading="subgraphLoading" />
+          <local-graph v-if="subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
+          <div v-if="showMessageTooLarge" class="alert alert-info mr-2" role="alert">
+            Results are too large. Keep adding filters to reduce the size.
+          </div>
+          <div v-if="showMessageEmpty" class="alert alert-info mr-2" role="alert">
+            Results are empty. Try another query.
+          </div>
+        </div>
+      </resizable-grid>
     </div>
-    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
-      <div slot="1" class="h-100 w-100 d-flex flex-column">
-        <settings-bar>
-          <div slot="left">
-            <counters
-              :title="selectedModel && selectedModel.metadata.name"
-              :data="[`448723 Nodes`, `44104 Edges`]"
-            />
-          </div>
-          <div slot="settings">
-            <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
-          </div>
-        </settings-bar>
-        <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false" @grafer_click="onGraferClick"></grafer>
-      </div>
-      <div slot="2" class="h-100 w-100 d-flex flex-column">
-        <settings-bar>
-          <div slot="right">
-            <counters
-              :title="`Subgraph`"
-              :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
-            />
-          </div>
-          <div slot="right">
-            <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
-          </div>
-        </settings-bar>
-        <loader :loading="subgraphLoading" />
-        <local-graph v-if="subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
-        <div v-if="showMessageTooLarge" class="alert alert-info mr-2" role="alert">
-          Results are too large. Keep adding filters to reduce the size.
-        </div>
-        <div v-if="showMessageEmpty" class="alert alert-info mr-2" role="alert">
-          Results are empty. Try another query.
-        </div>
-      </div>
-    </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
       <node-pane v-if="drilldownActivePaneId === 'node'" slot="content"
         :model="selectedModelId"
@@ -261,6 +263,10 @@
 
 <style lang="scss" scoped>
   @import "@/styles/variables";
+
+  .view-container > .drilldown-panel-container {
+    position: static;
+  }
 
   .content {
     display: flex;
