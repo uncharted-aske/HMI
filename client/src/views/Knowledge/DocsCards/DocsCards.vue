@@ -40,7 +40,7 @@
   import { Getter } from 'vuex-class';
   import _ from 'lodash';
 
-  import { CosmosSearchInterface, CosmosSearchObjectsInterface } from '@/types/typesCosmos';
+  import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { FacetTermsSelectionMap } from '@/types/typesFacets';
   import { TabInterface, CardInterface } from '@/types/types';
 
@@ -199,14 +199,14 @@
           subtitle: `${item.bibjson.year} ?? 'Unknown Year'} - ${getAuthorList(item)}`,
           type: item.bibjson.type,
           previewImageSrc: item.children[0].bytes,
-          raw: item
+          raw: item,
         } as CardInterface
       ));
 
       if (!this.isOpenDrilldown) return cards;
 
       // If the drilldown is open, we highlight the corresponding card.
-      cards.forEach(card => card.checked = this.isDrilldownCard(card));
+      cards.forEach(card => { card.checked = this.isDrilldownCard(card); });
       return cards;
     }
 
@@ -229,11 +229,11 @@
       this.closeDrilldown();
     }
 
-    isDrilldownCard(card: CardInterface): boolean {
+    isDrilldownCard (card: CardInterface): boolean {
       return this.drilldownData?.id === card.id;
     }
 
-    closeDrilldown(): void {
+    closeDrilldown (): void {
       this.isOpenDrilldown = false;
       this.drilldownData = null;
       this.drilldownActiveTabId = null;
