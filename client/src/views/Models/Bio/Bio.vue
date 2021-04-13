@@ -264,10 +264,6 @@
 <style lang="scss" scoped>
   @import "@/styles/variables";
 
-  .view-container > .drilldown-panel-container {
-    position: static;
-  }
-
   .content {
     display: flex;
     flex-direction: column;
