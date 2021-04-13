@@ -1,6 +1,6 @@
-const esbuild = require('esbuild');
-const yargs = require('yargs');
-const dotenv = require('dotenv');
+const esbuild = require("esbuild");
+const yargs = require("yargs");
+const dotenv = require("dotenv");
 
 // Load environment file config
 const dotenvConfig = dotenv.config();
@@ -10,53 +10,59 @@ if (dotenvConfig.error) {
 
 // defineGlobalVarsFromDotEnvConfig produces an object that is compatible with esbuild.BuildOptions.define
 //  and converts each dot environment `[KEY]` to a `process.env.[KEY]`
-function defineGlobalVarsFromDotEnvConfig (dotenvConfig) {
+function defineGlobalVarsFromDotEnvConfig(dotenvConfig) {
   const result = {};
-  Object.keys(dotenvConfig.parsed).map(key => {
+  Object.keys(dotenvConfig.parsed).map((key) => {
     result[`process.env.${key}`] = JSON.stringify(dotenvConfig.parsed[key]);
   });
   return result;
 }
 
-function getDistBuildOptions () {
+function getDistBuildOptions() {
   return {
-    entryPoints: ['./build/js/main.js'],
+    entryPoints: ["./build/js/main.js"],
     minify: true,
     bundle: true,
     sourcemap: false,
-    target: 'es2020',
-    outfile: './dist/js/main.js',
-    define: Object.assign({
-      'process.env.BASE_URL': '"/"',
-      'process.env.NODE_ENV': '"production"',
-      global: 'window',
-    }, defineGlobalVarsFromDotEnvConfig(dotenvConfig)),
+    target: "es2020",
+    outfile: "./dist/js/main.js",
+    define: Object.assign(
+      {
+        "process.env.BASE_URL": '"/"',
+        "process.env.NODE_ENV": '"production"',
+        global: "window",
+      },
+      defineGlobalVarsFromDotEnvConfig(dotenvConfig)
+    ),
   };
 }
 
-function getDevBuildOptions () {
+function getDevBuildOptions() {
   return {
-    entryPoints: ['./build/js/main.js'],
+    entryPoints: ["./build/js/main.js"],
     bundle: true,
     sourcemap: true,
-    target: 'es2020',
-    outfile: './dev/js/main.js',
-    define: Object.assign({
-      'process.env.BASE_URL': '"/"',
-      'process.env.NODE_ENV': '"production"',
-      global: 'window',
-    }, defineGlobalVarsFromDotEnvConfig(dotenvConfig)),
+    target: "es2020",
+    outfile: "./dev/js/main.js",
+    define: Object.assign(
+      {
+        "process.env.BASE_URL": '"/"',
+        "process.env.NODE_ENV": '"development"',
+        global: "window",
+      },
+      defineGlobalVarsFromDotEnvConfig(dotenvConfig)
+    ),
   };
 }
 
-function getDevServeOptions () {
+function getDevServeOptions() {
   return {
     port: 8090,
-    servedir: './dev/',
+    servedir: "./dev/",
   };
 }
 
-async function main (options) {
+async function main(options) {
   const promises = [];
 
   try {
