@@ -13,9 +13,9 @@
         </div>
       </settings-bar>
       <card-container
-          :header="`Knowledge`"
-          :cards="docsCards"
-          @click-card="onCardClick"
+        :header="`Knowledge`"
+        :cards="docsCards"
+        @click-card="onClickCard"
       />
       <loader :loading="dataLoading" />
     </div>
@@ -94,7 +94,7 @@
     drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown: boolean = false;
     drilldownActiveTabId: string = '';
-    drilldownData: CosmosSearchObjectsInterface | Record<any, never> = {};
+    drilldownData: CardInterface | Record<any, never> = {};
 
     showModalDocuments: boolean = false;
 
@@ -190,32 +190,53 @@
 
     get docsCards (): CardInterface[] {
       const data = this.data as CosmosSearchInterface;
-      return data.objects && data.objects.map((item, index) => ({
-        id: index,
-        title: item.bibjson.title,
-        subtitle: `${item.bibjson.year} ?? 'Unknown Year'} - ${getAuthorList(item)}`,
-        type: item.bibjson.type,
-        previewImageSrc: item.children[0].bytes,
-        raw: item,
-      }));
+      if (!data.objects) return [];
+
+      const cards = data.objects.map((item, index) => (
+        {
+          id: index,
+          title: item.bibjson.title,
+          subtitle: `${item.bibjson.year} ?? 'Unknown Year'} - ${getAuthorList(item)}`,
+          type: item.bibjson.type,
+          previewImageSrc: item.children[0].bytes,
+          raw: item
+        } as CardInterface
+      ));
+
+      if (!this.isOpenDrilldown) return cards;
+
+      // If the drilldown is open, we highlight the corresponding card.
+      cards.forEach(card => card.checked = this.isDrilldownCard(card));
+      return cards;
     }
 
     onDrilldownTabClick (tabId: string): void {
       this.drilldownActiveTabId = tabId;
     }
 
-    onCardClick (card: CosmosSearchObjectsInterface): void {
-      this.isOpenDrilldown = true;
-      this.drilldownActiveTabId = 'preview';
-
-      this.drilldownData = card;
+    onClickCard (card: CardInterface): void {
+      // If the card is the one already selected
+      if (this.isDrilldownCard(card)) {
+        this.closeDrilldown();
+      } else {
+        this.isOpenDrilldown = true;
+        this.drilldownActiveTabId = 'preview';
+        this.drilldownData = card;
+      }
     }
 
     onCloseDrilldownPanel (): void {
+      this.closeDrilldown();
+    }
+
+    isDrilldownCard(card: CardInterface): boolean {
+      return this.drilldownData?.id === card.id;
+    }
+
+    closeDrilldown(): void {
       this.isOpenDrilldown = false;
+      this.drilldownData = null;
+      this.drilldownActiveTabId = null;
     }
   }
 </script>
-
-<style lang="scss" scoped>
-</style>

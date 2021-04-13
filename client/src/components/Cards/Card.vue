@@ -116,6 +116,7 @@
     min-height: 300px;
 
     background-color: $bg-body;
+    border: transparent solid 2px;
     color: $text-color-light;
     position: relative;
     border-radius: 3px;
@@ -150,6 +151,10 @@
       &::after {
         opacity: 1;
       }
+    }
+
+    &.checked {
+      border-color: $selection;
     }
   }
 </style>

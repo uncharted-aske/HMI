@@ -160,12 +160,4 @@
 .view-button {
   padding: 2px 5px;
 }
-
-.model-cards ::v-deep .card {
-  border: transparent solid 2px;
-}
-
-.model-cards ::v-deep .card.checked {
-  border-color: $selection;
-}
 </style>
