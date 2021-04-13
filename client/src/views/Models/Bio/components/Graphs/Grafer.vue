@@ -10,7 +10,7 @@
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
   import { loadJSONLFile } from '@/utils/FileLoaderUtil';
-  import { BIO_GRAPH_COLORS } from '@/utils/GraferUtil';
+  import { BIO_CLUSTER_LAYERS_EDGE_OPTIONS, BIO_CLUSTER_LAYERS_LABEL_OPTIONS, BIO_GRAPH_COLORS, BIO_NODE_LAYERS_EDGE_OPTIONS, BIO_NODE_LAYERS_NODE_OPTIONS } from '@/utils/GraferUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
 
@@ -74,12 +74,7 @@
     async loadModelLayers (): Promise<GraferLayerData[]> {
       const layers = [];
 
-      const nodeOptions = { color: 1 };
-      const nodeEdgeOptions = {
-        sourceColor: 2,
-        targetColor: 2,
-      };
-      const nodeData = await loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, nodeOptions);
+      const nodeData = await loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, BIO_NODE_LAYERS_NODE_OPTIONS);
 
       const nodeLayer = {
         name: 'Nodes',
@@ -92,7 +87,7 @@
           },
         },
         edges: {
-          data: await loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, nodeEdgeOptions),
+          data: await loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, BIO_NODE_LAYERS_EDGE_OPTIONS),
           options: {
             alpha: 0.55,
             nearDepth: 0.6,
@@ -115,22 +110,16 @@
       };
       layers.push(nodeLayer);
 
-      const clusterLabelOptions = { color: 3 };
-      const clusterEdgeOptions = {
-        sourceColor: 0,
-        targetColor: 0,
-      };
-
       const clusterLayer = {
         name: 'Clusters',
         // nodes: {
         //   type: 'Ring',
-        //   data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, clusterLabelOptions),
+        //   data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
         //   options: {},
         // },
         labels: {
           type: 'RingLabel',
-          data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, clusterLabelOptions),
+          data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
           mappings: {
             background: (): boolean => false,
             fontSize: (): number => 14,
@@ -146,7 +135,7 @@
         },
         edges: {
           type: 'ClusterBundle',
-          data: await loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, clusterEdgeOptions),
+          data: await loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, BIO_CLUSTER_LAYERS_EDGE_OPTIONS),
           options: {
             alpha: 0.04,
             nearDepth: 0.7,
@@ -174,12 +163,12 @@
 
         // load the layers
         // 3710
-        const highlightClusterEdges = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/inter_edges.jsonl`, clusterEdgeOptions);
+        const highlightClusterEdges = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/inter_edges.jsonl`, BIO_CLUSTER_LAYERS_EDGE_OPTIONS);
         const highlightClusterLayer = {
           name: 'Highlights - Clusters',
           labels: {
             type: 'RingLabel',
-            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`, clusterLabelOptions),
+            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
             mappings: {
               background: (): boolean => false,
               fontSize: (): number => 14,
@@ -205,7 +194,7 @@
         };
         layers.unshift(highlightClusterLayer);
 
-        const highlightNodeData = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`, nodeOptions);
+        const highlightNodeData = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`, BIO_NODE_LAYERS_NODE_OPTIONS);
         const highlightNodeLayer = {
           name: 'Highlights - Nodes',
           nodes: {
@@ -217,7 +206,7 @@
             },
           },
           edges: {
-            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/intra_edges.jsonl`, nodeEdgeOptions),
+            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/intra_edges.jsonl`, BIO_NODE_LAYERS_EDGE_OPTIONS),
             options: {
               alpha: 0.55,
             },
