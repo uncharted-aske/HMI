@@ -59,6 +59,7 @@
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
+  import { GraferNodesData, GraferEdgesData } from '@uncharted.software/grafer';
 
   import { TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
@@ -66,7 +67,7 @@
   import eventHub from '@/eventHub';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
-  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
+  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph, formatBGraphOutputToGraferLayers } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
@@ -114,6 +115,12 @@
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any = undefined;
 
+    // Initialize as undefined to prevent Vue from observing changes within these large datasets
+    // Grafer data is stored in Bio view data as they are required for mapping bgraph queries to grafer layers
+    graferNodesData: GraferNodesData = undefined;
+    graferIntraEdgesData: GraferEdgesData = undefined;
+    graferInterEdgesData: GraferEdgesData = undefined;
+
     model: string = 'covid-19';
 
     tabs: TabInterface[] = TABS;
@@ -136,6 +143,18 @@
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
         const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+
+        // Render grafer query layers
+        const graferQueryLayerNames = ['highlightClusterLayer', 'highlightNodeLayer'];
+        if (_.isEmpty(subgraph)) {
+          // Clear query layers if no results
+          eventHub.$emit('remove-layers', graferQueryLayerNames);
+        } else {
+          const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData);
+          eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
+        }
+
+        // Render subgraph
         if (_.isEmpty(subgraph)) {
           this.isSplitView = false;
           this.subgraph = null;
@@ -180,10 +199,14 @@
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
 
       const graferLayerData = await this.loadGraferData();
+      this.graferNodesData = graferLayerData.graferNodesData;
+      this.graferIntraEdgesData = graferLayerData.graferIntraEdgesData;
+      this.graferInterEdgesData = graferLayerData.graferInterEdgesData;
+
       this.$nextTick(() => {
         // Ensure Grafer component has been mounted before sending
         // layer data. See: https://vuejs.org/v2/api/?#mounted
-        eventHub.$emit('layer-data-loaded', graferLayerData);
+        eventHub.$emit('load-layers', graferLayerData);
       });
     }
 

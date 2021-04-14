@@ -9,8 +9,7 @@
   import { GraferController, GraferControllerData, graph, GraferLayerData } from '@uncharted.software/grafer';
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
-  import { loadJSONLFile } from '@/utils/FileLoaderUtil';
-  import { BIO_CLUSTER_LAYERS_EDGE_OPTIONS, BIO_CLUSTER_LAYERS_LABEL_OPTIONS, BIO_GRAPH_COLORS, BIO_NODE_LAYERS_EDGE_OPTIONS, BIO_NODE_LAYERS_NODE_OPTIONS } from '@/utils/GraferUtil';
+  import { BIO_GRAPH_COLORS } from '@/utils/GraferUtil';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
 
   import Loader from '@/components/widgets/Loader.vue';
@@ -35,24 +34,46 @@
     private backEdges: boolean;
 
     public mounted (): void {
-      eventHub.$on('layer-data-loaded', (layerData: BioGraferLayerDataPayloadInterface) => {
-        this.loadGraph(layerData).then(data => {
-          this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
-          this.forwardEvents(this.controller);
-          this.loading = false;
-        });
+      eventHub.$on('load-layers', (layerData: BioGraferLayerDataPayloadInterface) => {
+        const data = this.loadGraph(layerData);
+        this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
+        this.forwardEvents(this.controller);
+        this.loading = false;
+      });
+      eventHub.$on('update-layers', (layers: GraferLayerData[], layerNames: string[]) => {
+          this.updateLayers(layers, layerNames);
+      });
+      eventHub.$on('remove-layers', (layerNames: string[]) => {
+          this.removeLayers(layerNames);
       });
     }
 
-    async loadGraph (layerData: BioGraferLayerDataPayloadInterface): Promise<GraferControllerData> {
+    loadGraph (layerData: BioGraferLayerDataPayloadInterface): GraferControllerData {
       const points = {
         data: layerData.graferPointsData,
       };
 
       const colors = BIO_GRAPH_COLORS;
-      const layers = await this.loadModelLayers(layerData);
+      const layers = this.loadModelLayers(layerData);
 
       return { points, colors, layers };
+    }
+
+    removeLayers (layerNames: string[]): void {
+      for (const layerName of layerNames) {
+        this.controller.removeLayerByName(layerName);
+      }
+      this.controller.render();
+    }
+
+    updateLayers (layers: GraferLayerData[], layerNames: string[]): void {
+      for (const layerName of layerNames) {
+        this.controller.removeLayerByName(layerName);
+      }
+      for (let i = 0; i < layers.length; i++) {
+        this.controller.addLayer(layers[i], layerNames[i]);
+      }
+      this.controller.render();
     }
 
     forwardEvents (controller: GraferController): void {
@@ -74,7 +95,7 @@
       controller.on(GraferController.omniEvent, forwardEvent);
     }
 
-    async loadModelLayers (layerData: BioGraferLayerDataPayloadInterface): Promise<GraferLayerData[]> {
+    loadModelLayers (layerData: BioGraferLayerDataPayloadInterface): GraferLayerData[] {
       const layers = [];
 
       const nodeData = layerData.graferNodesData;
@@ -163,74 +184,6 @@
         // clusterLayer.nodes.options = Object.assign(clusterLayer.nodes.options, fadedOptions);
         clusterLayer.edges.options = Object.assign(clusterLayer.edges.options, fadedOptions, { fade: 0.9, enabled: this.backEdges });
         clusterLayer.labels.options = Object.assign(clusterLayer.labels.options, fadedOptions);
-
-        // load the layers
-        // 3710
-        const highlightClusterEdges = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/inter_edges.jsonl`, BIO_CLUSTER_LAYERS_EDGE_OPTIONS);
-        const highlightClusterLayer = {
-          name: 'Highlights - Clusters',
-          labels: {
-            type: 'RingLabel',
-            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/clusters.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
-            mappings: {
-              background: (): boolean => false,
-              fontSize: (): number => 14,
-              padding: (): number => 0,
-            },
-            options: {
-              visibilityThreshold: 160,
-              repeatLabel: -1,
-              repeatGap: 64,
-              nearDepth: 0.0,
-              farDepth: 0.4,
-            },
-          },
-          edges: {
-            type: 'ClusterBundle',
-            data: highlightClusterEdges,
-            options: {
-              alpha: Math.min(0.99, Math.max(0.2, 1 - ((1 / 4100) * highlightClusterEdges.length))),
-              nearDepth: 0.1,
-              farDepth: 0.4,
-            },
-          },
-        };
-        layers.unshift(highlightClusterLayer);
-
-        const highlightNodeData = await loadJSONLFile(`/grafer/${this.model}/${this.layer}/nodes.jsonl`, BIO_NODE_LAYERS_NODE_OPTIONS);
-        const highlightNodeLayer = {
-          name: 'Highlights - Nodes',
-          nodes: {
-            type: 'Circle',
-            data: highlightNodeData,
-            options: {
-              nearDepth: 0.0,
-              farDepth: 0.4,
-            },
-          },
-          edges: {
-            data: await loadJSONLFile(`/grafer/${this.model}/${this.layer}/intra_edges.jsonl`, BIO_NODE_LAYERS_EDGE_OPTIONS),
-            options: {
-              alpha: 0.55,
-            },
-          },
-          labels: {
-            type: 'PointLabel',
-            data: highlightNodeData,
-            mappings: {
-              background: (): boolean => true,
-              fontSize: (): number => 12,
-              padding: (): [number, number] => [8, 5],
-            },
-            options: {
-              visibilityThreshold: 8,
-              labelPlacement: graph.labels.PointLabelPlacement.TOP,
-              nearDepth: 0.0,
-              farDepth: 0.4,
-            },
-          },
-        };
-        layers.unshift(highlightNodeLayer);
       }
 
       return layers;
