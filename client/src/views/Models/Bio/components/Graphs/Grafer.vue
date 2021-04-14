@@ -11,8 +11,10 @@
   import Vue from 'vue';
   import { loadJSONLFile } from '@/utils/FileLoaderUtil';
   import { BIO_CLUSTER_LAYERS_EDGE_OPTIONS, BIO_CLUSTER_LAYERS_LABEL_OPTIONS, BIO_GRAPH_COLORS, BIO_NODE_LAYERS_EDGE_OPTIONS, BIO_NODE_LAYERS_NODE_OPTIONS } from '@/utils/GraferUtil';
+  import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
 
   import Loader from '@/components/widgets/Loader.vue';
+  import eventHub from '@/eventHub';
 
   const components = {
     Loader,
@@ -33,21 +35,22 @@
     private backEdges: boolean;
 
     public mounted (): void {
-      this.loadGraph().then(data => {
-        this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
-        this.forwardEvents(this.controller);
-        this.loading = false;
+      eventHub.$on('layer-data-loaded', (layerData: BioGraferLayerDataPayloadInterface) => {
+        this.loadGraph(layerData).then(data => {
+          this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
+          this.forwardEvents(this.controller);
+          this.loading = false;
+        });
       });
     }
 
-    // temporary demo functions
-    async loadGraph (): Promise<GraferControllerData> {
+    async loadGraph (layerData: BioGraferLayerDataPayloadInterface): Promise<GraferControllerData> {
       const points = {
-        data: await loadJSONLFile(`/grafer/${this.model}/points.jsonl`),
+        data: layerData.graferPointsData,
       };
 
       const colors = BIO_GRAPH_COLORS;
-      const layers = await this.loadModelLayers();
+      const layers = await this.loadModelLayers(layerData);
 
       return { points, colors, layers };
     }
@@ -71,10 +74,10 @@
       controller.on(GraferController.omniEvent, forwardEvent);
     }
 
-    async loadModelLayers (): Promise<GraferLayerData[]> {
+    async loadModelLayers (layerData: BioGraferLayerDataPayloadInterface): Promise<GraferLayerData[]> {
       const layers = [];
 
-      const nodeData = await loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, BIO_NODE_LAYERS_NODE_OPTIONS);
+      const nodeData = layerData.graferNodesData;
 
       const nodeLayer = {
         name: 'Nodes',
@@ -87,7 +90,7 @@
           },
         },
         edges: {
-          data: await loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, BIO_NODE_LAYERS_EDGE_OPTIONS),
+          data: layerData.graferIntraEdgesData,
           options: {
             alpha: 0.55,
             nearDepth: 0.6,
@@ -114,12 +117,12 @@
         name: 'Clusters',
         // nodes: {
         //   type: 'Ring',
-        //   data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
+        //   data: layerData.graferClustersLabelsData,
         //   options: {},
         // },
         labels: {
           type: 'RingLabel',
-          data: await loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
+          data: layerData.graferClustersLabelsData,
           mappings: {
             background: (): boolean => false,
             fontSize: (): number => 14,
@@ -135,7 +138,7 @@
         },
         edges: {
           type: 'ClusterBundle',
-          data: await loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, BIO_CLUSTER_LAYERS_EDGE_OPTIONS),
+          data: layerData.graferInterEdgesData,
           options: {
             alpha: 0.04,
             nearDepth: 0.7,

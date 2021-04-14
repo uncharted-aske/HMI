@@ -26,7 +26,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false" @grafer_click="onGraferClick"></grafer>
+        <grafer class="grafer" :model="model" layer="boutique" :back-edges="false" @grafer_click="onGraferClick"></grafer>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -62,6 +62,8 @@
 
   import { TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
+  import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
+  import eventHub from '@/eventHub';
 
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
   import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
@@ -82,6 +84,8 @@
   import NodePane from './components/DrilldownPanel/NodePane.vue';
 
   import Grafer from './components/Graphs/Grafer.vue';
+  import { loadJSONLFile } from '@/utils/FileLoaderUtil';
+  import { BIO_CLUSTER_LAYERS_EDGE_OPTIONS, BIO_CLUSTER_LAYERS_LABEL_OPTIONS, BIO_NODE_LAYERS_EDGE_OPTIONS, BIO_NODE_LAYERS_NODE_OPTIONS } from '@/utils/GraferUtil';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -109,6 +113,8 @@
   export default class Bio extends Vue {
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any = undefined;
+
+    model: string = 'covid-19';
 
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
@@ -172,6 +178,37 @@
     async mounted (): Promise<void> {
       const [bgNodes, bgEdges] = await loadBGraphData();
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
+
+      const graferLayerData = await this.loadGraferData();
+      this.$nextTick(() => {
+        // Ensure Grafer component has been mounted before sending
+        // layer data. See: https://vuejs.org/v2/api/?#mounted
+        eventHub.$emit('layer-data-loaded', graferLayerData);
+      });
+    }
+
+    async loadGraferData (): Promise<BioGraferLayerDataPayloadInterface> {
+      const [
+        graferPointsData,
+        graferNodesData,
+        graferIntraEdgesData,
+        graferInterEdgesData,
+        graferClustersLabelsData,
+      ] = await Promise.all([
+        loadJSONLFile(`/grafer/${this.model}/points.jsonl`),
+        loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, BIO_NODE_LAYERS_NODE_OPTIONS),
+        loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, BIO_NODE_LAYERS_EDGE_OPTIONS),
+        loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, BIO_CLUSTER_LAYERS_EDGE_OPTIONS),
+        loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
+      ]);
+
+      return {
+        graferPointsData,
+        graferNodesData,
+        graferIntraEdgesData,
+        graferInterEdgesData,
+        graferClustersLabelsData,
+      };
     }
 
     onGraferClick (detail: GraferEventDetail): void {
