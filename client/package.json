@@ -40,6 +40,7 @@
     "preact": "8.x",
     "sigma": "1.2.1",
     "svg-flowgraph": "^0.2.0",
+    "tiny-emitter": "^2.1.0",
     "tweakpane": "^1.5.8",
     "vue": "^2.6.12",
     "vue-class-component": "^7.2.5",
