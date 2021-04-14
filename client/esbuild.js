@@ -43,7 +43,7 @@ function getDevBuildOptions () {
     outfile: './dev/js/main.js',
     define: Object.assign({
       'process.env.BASE_URL': '"/"',
-      'process.env.NODE_ENV': '"production"',
+      'process.env.NODE_ENV': '"development"',
       global: 'window',
     }, defineGlobalVarsFromDotEnvConfig(dotenvConfig)),
   };
