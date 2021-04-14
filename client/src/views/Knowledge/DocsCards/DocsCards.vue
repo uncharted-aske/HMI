@@ -20,9 +20,9 @@
       <loader :loading="dataLoading" />
     </div>
     <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" :active-tab-id="drilldownActiveTabId" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
-        <knowledge-preview-pane v-if="drilldownActiveTabId ===  'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true"/>
-        <models-pane v-if="drilldownActiveTabId ===  'models'" slot="content" :data="drilldownData"/>
-        <entities-pane v-if="drilldownActiveTabId ===  'entities'" slot="content" :data="drilldownData"/>
+      <knowledge-preview-pane v-if="drilldownActiveTabId === 'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true"/>
+      <models-pane v-if="drilldownActiveTabId === 'models'" slot="content" :data="drilldownData"/>
+      <entities-pane v-if="drilldownActiveTabId === 'entities'" slot="content" :data="drilldownData"/>
     </drilldown-panel>
     <modal-document
       v-if="showModalDocuments"
@@ -206,7 +206,11 @@
       if (!this.isOpenDrilldown) return cards;
 
       // If the drilldown is open, we highlight the corresponding card.
-      cards.forEach(card => { card.checked = this.isDrilldownCard(card); });
+      cards.forEach((card) => {
+        if (this.isDrilldownCard(card)) {
+          card.highlighted = true;
+        }
+      });
       return cards;
     }
 
