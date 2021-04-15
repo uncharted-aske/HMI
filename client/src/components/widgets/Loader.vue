@@ -5,16 +5,12 @@
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
   @Component
   export default class Loader extends Vue {
      @Prop({ default: false }) loading: boolean;
   }
-
 </script>
-
-<style lang="scss" scoped>
-</style>
