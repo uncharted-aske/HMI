@@ -203,14 +203,14 @@
         } as CardInterface
       ));
 
-      if (!this.isOpenDrilldown) return cards;
-
       // If the drilldown is open, we highlight the corresponding card.
-      cards.forEach((card) => {
-        if (this.isDrilldownCard(card)) {
-          card.highlighted = true;
-        }
-      });
+      if (this.isOpenDrilldown) {
+        cards.forEach((card) => {
+          if (this.isDrilldownCard(card)) {
+            card.highlighted = true;
+          }
+        });
+      }
       return cards;
     }
 
