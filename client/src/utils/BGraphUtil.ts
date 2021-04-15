@@ -139,8 +139,6 @@ export const formatBGraphOutputToGraferLayers = (
     } else if (result._type === 'edge' && result.inter_edge_id != null) {
       // Set inter edge color on query result
       graferInterEdgesDataResults.push(graferInterEdgesData[result.inter_edge_id]);
-    } else if (result._type === 'cluster') {
-      // TODO: Handle adding cluster result types
     }
   }
 
