@@ -31,6 +31,10 @@
     private layer: string;
 
     public mounted (): void {
+      // NOTE: An event hub pattern is used here instead of passing these as Vue data properties from the
+      //       parent component (ie. <grafer :layer-data="layerData" ...>) to reduce the risk of large
+      //       layer data being kept as memory both in the parent and within the Grafer's library
+      //       internal memory stack unintentionally.
       eventHub.$on('load-layers', (layerData: BioGraferLayerDataPayloadInterface) => {
         const data = this.loadGraph(layerData);
         this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
