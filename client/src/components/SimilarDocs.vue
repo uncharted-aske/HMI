@@ -69,11 +69,11 @@
     }
 
     // Check that we have similar document to display.
-    get hasDocuments(): boolean {
+    get hasDocuments (): boolean {
       return this.similarDocList?.length > 0;
     }
 
-    get title(): string {
+    get title (): string {
       const nbDocuments = this.similarDocList?.length ?? 0;
       if (nbDocuments > 1) {
         return nbDocuments + ' Related documents';
