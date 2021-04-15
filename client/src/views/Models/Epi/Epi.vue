@@ -1,46 +1,48 @@
 <template>
-  <div class="view-container">
+  <div class="view-container flex-row">
     <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
           <div slot="content">
             <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/>
             <facets-pane v-if="activeTabId === 'facets'" />
           </div>
     </left-side-panel>
-    <div class="search-row">
-      <search-bar :placeholder="`Search for model components...`" @run-query="onRunQuery"/>
-      <button class="btn btn-primary m-1" @click="onSplitView">
-        Add Subgraph
-      </button>
+    <div class="d-flex flex-column flex-grow-1 position-relative">
+      <div class="search-row">
+        <search-bar :placeholder="`Search for model components...`" @run-query="onRunQuery"/>
+        <button class="btn btn-primary m-1" @click="onSplitView">
+          Add Subgraph
+        </button>
+      </div>
+      <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
+        <div slot="1" class="h-100 w-100 d-flex flex-column">
+          <settings-bar>
+            <div slot="left">
+              <counters
+                :title="selectedModel.metadata.name"
+                :data="[`${nodeCount} Nodes`, `${edgeCount} Edges`]"
+              />
+            </div>
+            <div slot="right">
+              <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
+            </div>
+          </settings-bar>
+          <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
+        </div>
+        <div slot="2" class="h-100 w-100 d-flex flex-column">
+          <settings-bar>
+            <div slot="left">
+              <counters
+                :title="`Subgraph`"
+                :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
+              />          </div>
+            <div slot="right">
+              <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
+            </div>
+          </settings-bar>
+          <local-graph v-if="isSplitView" :data="subgraph" @node-click="onNodeClick"/>
+        </div>
+      </resizable-grid>
     </div>
-    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
-      <div slot="1" class="h-100 w-100 d-flex flex-column">
-        <settings-bar>
-          <div slot="left">
-            <counters
-              :title="selectedModel.metadata.name"
-              :data="[`${nodeCount} Nodes`, `${edgeCount} Edges`]"
-            />
-          </div>
-          <div slot="right">
-            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div>
-        </settings-bar>
-        <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
-      </div>
-      <div slot="2" class="h-100 w-100 d-flex flex-column">
-        <settings-bar>
-          <div slot="left">
-            <counters
-              :title="`Subgraph`"
-              :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
-            />          </div>
-          <div slot="right">
-            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div>
-        </settings-bar>
-        <local-graph v-if="isSplitView" :data="subgraph" @node-click="onNodeClick"/>
-      </div>
-    </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :active-tab-id="drilldownActiveTabId" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
       <metadata-pane v-if="drilldownActiveTabId ===  'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
       <parameters-pane v-if="drilldownActiveTabId ===  'parameters'" slot="content" :data="drilldownParameters" :related="drilldownRelatedParameters" @open-modal="onOpenModalParameters"/>
