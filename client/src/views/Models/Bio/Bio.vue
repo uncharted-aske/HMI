@@ -26,7 +26,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <grafer class="grafer" :model="model" layer="boutique" :back-edges="false" @grafer_click="onGraferClick"></grafer>
+        <grafer class="grafer" :model="model" layer="boutique" @grafer_click="onGraferClick"></grafer>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>

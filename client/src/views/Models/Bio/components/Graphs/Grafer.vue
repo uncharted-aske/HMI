@@ -30,9 +30,6 @@
     @Prop({ default: null })
     private layer: string;
 
-    @Prop({ default: true })
-    private backEdges: boolean;
-
     public mounted (): void {
       eventHub.$on('load-layers', (layerData: BioGraferLayerDataPayloadInterface) => {
         const data = this.loadGraph(layerData);
@@ -178,11 +175,11 @@
         };
 
         nodeLayer.nodes.options = Object.assign(nodeLayer.nodes.options, fadedOptions);
-        nodeLayer.edges.options = Object.assign(nodeLayer.edges.options, fadedOptions, { fade: 0.9, enabled: this.backEdges });
+        nodeLayer.edges.options = Object.assign(nodeLayer.edges.options, fadedOptions, { fade: 0.9, enabled: false });
         nodeLayer.labels.options = Object.assign(nodeLayer.labels.options, fadedOptions);
 
         // clusterLayer.nodes.options = Object.assign(clusterLayer.nodes.options, fadedOptions);
-        clusterLayer.edges.options = Object.assign(clusterLayer.edges.options, fadedOptions, { fade: 0.9, enabled: this.backEdges });
+        clusterLayer.edges.options = Object.assign(clusterLayer.edges.options, fadedOptions, { fade: 0.9, enabled: false });
         clusterLayer.labels.options = Object.assign(clusterLayer.labels.options, fadedOptions);
       }
 
