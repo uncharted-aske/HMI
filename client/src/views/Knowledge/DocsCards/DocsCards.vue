@@ -1,5 +1,5 @@
 <template>
-  <div class="view-container">
+  <div class="view-container flex-row">
     <div class="d-flex flex-column h-100">
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for documents including a specific keyword (e.g. IL-6)...`" />
@@ -29,7 +29,6 @@
       @close="showModalDocuments = false"
       :data="drilldownData"
     />
-
   </div>
 </template>
 
