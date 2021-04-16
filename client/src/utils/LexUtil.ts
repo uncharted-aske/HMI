@@ -6,7 +6,7 @@ import * as filtersUtil from '@/utils/FiltersUtil';
 const SUGGESTIONS_LIMIT = 10;
 
 /* Create suggestions by sorting the Pills first. */
-const _getSuggestions = function (pills: any[]): any[] {
+function _getSuggestions (pills: any[]): any[] {
   return pills.sort((a, b) => {
     if (a.order !== b.order) {
       // DESC order
@@ -16,7 +16,7 @@ const _getSuggestions = function (pills: any[]): any[] {
       return a.searchDisplay < b.searchDisplay ? -1 : 1 ?? 0;
     }
   }).map(pill => pill.makeOption());
-};
+}
 
 export const initializeLex = (config: {
   pills: any[],
