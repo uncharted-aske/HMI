@@ -1,5 +1,8 @@
 <template>
-  <div :class="['card', checked ? 'checked' : '']" @click="onCardClick">
+  <div
+    :class="['card', { checked: checked }, { highlight: isHighlighted }]"
+    @click="onCardClick"
+  >
     <div
       v-if="hasImage"
       :class="['preview-img', hasImage ? '' : 'no-image']"
@@ -34,6 +37,8 @@
 
     @Prop({ default: undefined }) checked: boolean;
 
+    @Prop({ default: false }) highlighted: boolean;
+
     get classCheckbox (): string {
       return this.checked === undefined ? 'invisible' : 'visible';
     }
@@ -61,6 +66,10 @@
       }
 
       return { backgroundImage };
+    }
+
+    get isHighlighted (): boolean {
+      return this.highlighted || Boolean(this.checked);
     }
 
     onCardClick (): void {
@@ -116,6 +125,7 @@
     min-height: 300px;
 
     background-color: $bg-body;
+    border: transparent solid 2px;
     color: $text-color-light;
     position: relative;
     border-radius: 3px;
@@ -150,6 +160,10 @@
       &::after {
         opacity: 1;
       }
+    }
+
+    &.highlight {
+      border-color: $selection;
     }
   }
 </style>

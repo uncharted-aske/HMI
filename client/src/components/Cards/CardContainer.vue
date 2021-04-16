@@ -10,6 +10,7 @@
         :subtitle="card.subtitle"
         :icon="card.type"
         :checked="card.checked"
+        :highlighted="card.highlighted"
         @click="onClick(card)"
       />
     </div>
