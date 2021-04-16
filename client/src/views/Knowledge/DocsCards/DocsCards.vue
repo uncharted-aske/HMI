@@ -191,7 +191,7 @@
       const data = this.data as CosmosSearchInterface;
       if (!data.objects) return [];
 
-      const cards = data.objects.map((item, index) => (
+      return data.objects.map((item, index) => (
         {
           id: index,
           title: item.bibjson.title,
@@ -199,18 +199,10 @@
           type: item.bibjson.type,
           previewImageSrc: item.children[0].bytes,
           raw: item,
+          // If the drilldown is open, we highlight the corresponding card.
+          highlighted: this.isDrilldownCard(index),
         } as CardInterface
       ));
-
-      // If the drilldown is open, we highlight the corresponding card.
-      if (this.isOpenDrilldown) {
-        cards.forEach((card) => {
-          if (this.isDrilldownCard(card)) {
-            card.highlighted = true;
-          }
-        });
-      }
-      return cards;
     }
 
     onDrilldownTabClick (tabId: string): void {
@@ -219,7 +211,7 @@
 
     onClickCard (card: CardInterface): void {
       // If the card is the one already selected
-      if (this.isDrilldownCard(card)) {
+      if (this.isDrilldownCard(card.id)) {
         this.closeDrilldown();
       } else {
         this.isOpenDrilldown = true;
@@ -232,8 +224,8 @@
       this.closeDrilldown();
     }
 
-    isDrilldownCard (card: CardInterface): boolean {
-      return this.drilldownData?.id === card.id;
+    isDrilldownCard (cardId: number): boolean {
+      return this.drilldownData?.id === cardId;
     }
 
     closeDrilldown (): void {

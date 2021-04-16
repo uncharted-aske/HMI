@@ -69,7 +69,7 @@
     }
 
     get isHighlighted (): boolean {
-      return this.highlighted || !!this.checked;
+      return this.highlighted || Boolean(this.checked);
     }
 
     onCardClick (): void {
