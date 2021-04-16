@@ -83,10 +83,10 @@ export const executeBgraph = (bgraph: any, clause: Filter): any => {
       return bgraph.filter(node => node.grounded_onto === Boolean(clause.values[0]));
     }
     case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: {
-      return bgraph.filter(node => node.in_degree === Number(clause.values[0]));
+      return bgraph.filter(node => clause.values.some(value => node.in_degree === Number(value)));
     }
     case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: {
-      return bgraph.filter(node => node.out_degree === Number(clause.values[0]));
+      return bgraph.filter(node => clause.values.some(value => node.out_degree === Number(value)));
     }
     default: {
       return bgraph;
