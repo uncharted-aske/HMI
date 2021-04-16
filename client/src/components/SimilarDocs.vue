@@ -121,20 +121,23 @@
 }
 
 .list-documents {
-  --list-height: 14em;
-  --list-gap: 2em;
+  --list-height: 15em;
+  --list-gap: 1.25em;
   display: grid;
-  gap: var(--list-gap);
   grid-template-columns: 1fr 1fr 1fr; // 3 documents per row
   height: var(--list-height); // Display one row at the time
   list-style: none;
   margin: 0;
   overflow-y: auto; // Scrollbar for more that 3 documents lists
-  padding: 0 calc(var(--list-gap)/2);
+  padding: 0;
+}
+
+.list-documents li {
+  padding: var(--list-gap);
 }
 
 .document {
-  --document-height: calc(var(--list-height) - var(--list-gap));
+  --document-height: calc(var(--list-height) - var(--list-gap) * 2);
   --artifact-height: calc(var(--list-height) / 2);
   --title-height: calc(var(--document-height) - var(--artifact-height));
   display: grid;
