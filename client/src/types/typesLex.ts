@@ -15,6 +15,7 @@ export interface QueryFieldEntry {
   searchable?: boolean, // searchable fields are queryable from lex
   searchDisplay?: string, // text to display on search
   ranged?: boolean, // if search is ranged
+  order?: number, // used to sort fields
   // baseType/lexType defines the type conversion required from/to base/lex types
   baseType: LexConvertType,
   lexType: LexConvertType
