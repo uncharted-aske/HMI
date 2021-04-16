@@ -26,8 +26,8 @@
     </drilldown-panel>
     <modal-document
       v-if="showModalDocuments"
-      @close="showModalDocuments = false"
       :data="drilldownData"
+      @close="showModalDocuments = false"
     />
   </div>
 </template>

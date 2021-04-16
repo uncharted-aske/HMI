@@ -32,7 +32,7 @@
           </div>
         </div>
       </div>
-      <similar-docs :doi="doi" class="d-flex flex-column m-3"/>
+      <similar-docs :doi="doi" class="m-3"/>
     </div>
   </modal>
 </template>
