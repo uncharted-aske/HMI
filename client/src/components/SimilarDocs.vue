@@ -12,19 +12,14 @@
     <template v-else>
       <h3>{{ title }}</h3>
       <ul class="list-documents">
-        <li
-          v-for="(similarDoc, index) in similarDocList" :key="index"
-          class="document"
-        >
-          <a :href="similarDoc.bibjson.link[0].url" target="_blank">
-            <h6>{{similarDoc.bibjson.title}}</h6>
-            <div class="d-flex justify-content-between">
-              <div v-for="(artifact) in similarDoc.objects" :key="artifact.id"
-                class="similar-img shadow"
-                :style="imageStyle(artifact.bytes)"
-                :title="artifact.header_content"
-              />
-            </div>
+        <li v-for="(similarDoc, index) in similarDocList" :key="index">
+          <a class="document" :href="similarDoc.bibjson.link[0].url" target="_blank">
+            <h6 class="title">{{ similarDoc.bibjson.title }}</h6>
+            <div v-for="(artifact) in similarDoc.objects" :key="artifact.id"
+              class="artifact shadow"
+              :style="imageStyle(artifact.bytes)"
+              :title="artifact.header_content"
+            />
           </a>
         </li>
       </ul>
@@ -48,7 +43,6 @@
     Loader,
   };
 
-  const SIMILAR_DOC_LIMIT = 4;
   const ARTIFACT_LIMIT = 2;
 
   @Component({ components })
@@ -88,7 +82,7 @@
           similarDoc.objects = similarDoc.objects.filter(object => object.bytes !== null).slice(0, ARTIFACT_LIMIT);
           return similarDoc;
         });
-        this.similarDocList = response.data.filter(similarDoc => similarDoc.objects.length > 0).slice(0, SIMILAR_DOC_LIMIT);
+        this.similarDocList = response.data.filter(similarDoc => similarDoc.objects.length > 0);
       }
       this.isLoading = false;
     }
@@ -127,31 +121,42 @@
 }
 
 .list-documents {
+  --list-height: 14em;
+  --list-gap: 2em;
   display: grid;
-  gap: 2em;
+  gap: var(--list-gap);
   grid-template-columns: 1fr 1fr 1fr; // 3 documents per row
-  height: 12em; // Display one row at the time
+  height: var(--list-height); // Display one row at the time
   list-style: none;
   margin: 0;
   overflow-y: auto; // Scrollbar for more that 3 documents lists
-  padding: 0;
+  padding: 0 calc(var(--list-gap)/2);
 }
 
-.document a {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.document {
+  --document-height: calc(var(--list-height) - var(--list-gap));
+  --artifact-height: calc(var(--list-height) / 2);
+  --title-height: calc(var(--document-height) - var(--artifact-height));
+  display: grid;
+  height: var(--document-height);
+  grid-template-areas: "title title"". .";
+  grid-template-rows: var(--title-height) var(--artifact-height);
 }
 
-.similar-img {
-  width: 45%;
-  height: 0;
-  padding-top: 45%;
-  background-size: cover;
-  background-repeat: no-repeat;
+.title {
+  grid-area: title;
+  margin: 0;
+}
+
+.artifact {
+  background-color: $nord4;
   background-position: center;
-  background-color: #EAEBEC;
+  background-repeat: no-repeat;
+  background-size: cover;
   border: $icon-color solid 1px;
   border-radius: 10px;
+  height: var(--artifact-height);
+  justify-self: center;
+  width: var(--artifact-height);
 }
 </style>
