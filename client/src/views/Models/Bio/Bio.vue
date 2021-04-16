@@ -26,7 +26,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <grafer class="grafer" :model="model" layer="boutique" @grafer_click="onGraferClick"></grafer>
+        <grafer class="grafer" :model="model" layer="boutique" @loaded="mainGraphLoading = false" @grafer_click="onGraferClick"></grafer>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -135,6 +135,7 @@
     isSplitView = false;
     subgraph: GraphInterface = null;
     subgraphLoading: boolean = false;
+    mainGraphLoading: boolean = true;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -145,13 +146,20 @@
         const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
 
         // Render grafer query layers
-        const graferQueryLayerNames = ['highlightClusterLayer', 'highlightNodeLayer'];
-        if (_.isEmpty(subgraph)) {
-          // Clear query layers if no results
-          eventHub.$emit('remove-layers', graferQueryLayerNames);
-        } else {
-          const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData);
-          eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
+        if (!this.mainGraphLoading) {
+          // Queries can only be sent to grafer once it has been loaded.
+          // TODO: A query that is made before Grafer has been rendered will not be called again.
+          //       This problem is highlighted when you have an existing query in the search bar
+          //       that gets run before Grafer has had a chance to load. To avoid this issue
+          //       queries must be stored or re-run once the renderer has loaded.
+          const graferQueryLayerNames = ['highlightClusterLayer', 'highlightNodeLayer'];
+          if (_.isEmpty(subgraph)) {
+            // Clear query layers if no results
+            eventHub.$emit('remove-layers', graferQueryLayerNames);
+          } else {
+            const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData);
+            eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
+          }
         }
 
         // Render subgraph

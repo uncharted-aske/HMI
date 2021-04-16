@@ -40,6 +40,7 @@
         this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
         this.forwardEvents(this.controller);
         this.loading = false;
+        this.$emit('loaded');
       });
       eventHub.$on('update-layers', (layers: GraferLayerData[], layerNames: string[]) => {
           this.updateLayers(layers, layerNames);
