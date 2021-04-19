@@ -7,7 +7,7 @@
 
 <script lang="ts">
   import _ from 'lodash';
-  import { GraferController, GraferControllerData, graph, GraferLayerData } from '@uncharted.software/grafer';
+  import { GraferController, GraferControllerData, GraferLayerData } from '@uncharted.software/grafer';
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
   import { BIO_CLUSTERS_LAYERS_CONFIG, BIO_GRAPH_COLORS, BIO_NODES_LAYERS_CONFIG } from '@/utils/GraferUtil';
@@ -147,18 +147,11 @@
         nodes: {
           type: 'Circle',
           data: nodeData,
-          options: {
-            nearDepth: 0.5,
-            farDepth: 1.0,
-          },
+          options: BIO_NODES_LAYERS_CONFIG.options.foreground.nodes,
         },
         edges: {
           data: layerData.graferIntraEdgesData,
-          options: {
-            alpha: 0.55,
-            nearDepth: 0.6,
-            farDepth: 1.0,
-          },
+          options: BIO_NODES_LAYERS_CONFIG.options.foreground.edges,
         },
         labels: {
           type: 'PointLabel',
@@ -168,21 +161,13 @@
             fontSize: (): number => 12,
             padding: (): [number, number] => [8, 5],
           },
-          options: {
-            visibilityThreshold: 8,
-            labelPlacement: graph.labels.PointLabelPlacement.TOP,
-          },
+          options: BIO_NODES_LAYERS_CONFIG.options.foreground.labels,
         },
       };
       layers.push(nodeLayer);
 
       const clusterLayer = {
         name: 'Clusters',
-        // nodes: {
-        //   type: 'Ring',
-        //   data: layerData.graferClustersLabelsData,
-        //   options: {},
-        // },
         labels: {
           type: 'RingLabel',
           data: layerData.graferClustersLabelsData,
@@ -191,22 +176,12 @@
             fontSize: (): number => 14,
             padding: (): number => 0,
           },
-          options: {
-            visibilityThreshold: 160,
-            repeatLabel: -1,
-            repeatGap: 64,
-            nearDepth: 0.5,
-            farDepth: 1.0,
-          },
+          options: BIO_CLUSTERS_LAYERS_CONFIG.options.foreground.labels,
         },
         edges: {
           type: 'ClusterBundle',
           data: layerData.graferInterEdgesData,
-          options: {
-            alpha: 0.04,
-            nearDepth: 0.7,
-            farDepth: 1.0,
-          },
+          options: BIO_CLUSTERS_LAYERS_CONFIG.options.foreground.edges,
         },
       };
       layers.push(clusterLayer);
