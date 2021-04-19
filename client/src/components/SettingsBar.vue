@@ -19,13 +19,12 @@
 @import "@/styles/variables";
 
 .settings-bar-container {
-  height: calc(#{$secondary-bar-width} - 15px);
-  min-height: calc(#{$secondary-bar-width} - 15px);
-  // border-bottom: 1px solid $border;
-  display: flex;
   align-items: center;
-  padding: 0 10px;
+  display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
+  min-height: calc(#{$secondary-bar-width} - 15px);
+  padding: 0 10px;
 
   ::v-deep > div {
     height: 100%;
