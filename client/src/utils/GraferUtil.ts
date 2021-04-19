@@ -21,6 +21,108 @@ export const BIO_CLUSTER_LAYERS_EDGE_OPTIONS = {
   sourceColor: 0,
   targetColor: 0,
 };
+export const BIO_NODES_LAYERS_CONFIG = {
+  name: 'Nodes',
+  options: {
+    // Foreground options are meant for layers that a user should focus on
+    foreground: {
+      nodes: {
+        alpha: 1,
+        desaturate: 0,
+        fade: 0,
+        nearDepth: 0.5,
+        farDepth: 1.0,
+      },
+      edges: {
+        fade: 0,
+        desaturate: 0,
+        alpha: 0.55,
+        enabled: true,
+        nearDepth: 0.6,
+        farDepth: 1.0,
+      },
+      labels: {
+        alpha: 1,
+        desaturate: 0,
+        fade: 0,
+        visibilityThreshold: 8,
+        labelPlacement: graph.labels.PointLabelPlacement.TOP,
+      },
+    },
+    // Background options are meant for layers that act as context
+    background: {
+      nodes: {
+        alpha: 1.0,
+        fade: 0.7,
+        desaturate: 0.5,
+        nearDepth: 0.5,
+        farDepth: 1.0,
+      },
+      edges: {
+        alpha: 1.0,
+        fade: 0.9,
+        desaturate: 0.5,
+        enabled: false,
+        nearDepth: 0.6,
+        farDepth: 1.0,
+      },
+      labels: {
+        alpha: 1.0,
+        fade: 0.7,
+        desaturate: 0.5,
+        visibilityThreshold: 8,
+        labelPlacement: graph.labels.PointLabelPlacement.TOP,
+      },
+    },
+  },
+};
+export const BIO_CLUSTERS_LAYERS_CONFIG = {
+  name: 'Clusters',
+  options: {
+    // Foreground options are meant for layers that a user should focus on
+    foreground: {
+      edges: {
+        alpha: 0.04,
+        fade: 0,
+        enabled: true,
+        desaturate: 0,
+        nearDepth: 0.7,
+        farDepth: 1.0,
+      },
+      labels: {
+        alpha: 1,
+        fade: 0,
+        desaturate: 0,
+        visibilityThreshold: 160,
+        repeatLabel: -1,
+        repeatGap: 64,
+        nearDepth: 0.5,
+        farDepth: 1.0,
+      },
+    },
+    // Background options are meant for layers that act as context
+    background: {
+      edges: {
+        alpha: 1.0,
+        fade: 0.9,
+        desaturate: 0.5,
+        enabled: false,
+        nearDepth: 0.7,
+        farDepth: 1.0,
+      },
+      labels: {
+        alpha: 1.0,
+        fade: 0.7,
+        desaturate: 0.5,
+        visibilityThreshold: 160,
+        repeatLabel: -1,
+        repeatGap: 64,
+        nearDepth: 0.5,
+        farDepth: 1.0,
+      },
+    },
+  },
+};
 
 // Knowledge Cluster Graph Layer configuration options
 export const CLUSTER_GRAPH_COLORS = [

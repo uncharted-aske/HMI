@@ -26,7 +26,7 @@
             <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
           </div>
         </settings-bar>
-        <grafer class="grafer" :model="model" layer="boutique" @loaded="mainGraphLoading = false" @grafer_click="onGraferClick"></grafer>
+        <grafer class="grafer" :model="model" @loaded="mainGraphLoading = false" @grafer_click="onGraferClick"></grafer>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
         <settings-bar>
@@ -121,6 +121,9 @@
     graferIntraEdgesData: GraferEdgesData = undefined;
     graferInterEdgesData: GraferEdgesData = undefined;
 
+    // Set true when the full graph layers are rendered as background context (ie. faded)
+    grafersFullGraphContextIsBackgrounded: boolean = false;
+
     model: string = 'covid-19';
 
     tabs: TabInterface[] = TABS;
@@ -156,9 +159,19 @@
           if (_.isEmpty(subgraph)) {
             // Clear query layers if no results
             eventHub.$emit('remove-layers', graferQueryLayerNames);
+            if (this.grafersFullGraphContextIsBackgrounded) {
+              // No query layers full graph is the main context
+              eventHub.$emit('foreground-full-graph');
+              this.grafersFullGraphContextIsBackgrounded = false;
+            }
           } else {
             const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData);
             eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
+            if (!this.grafersFullGraphContextIsBackgrounded) {
+              // Query layer set full graph acts as background context
+              eventHub.$emit('background-full-graph');
+              this.grafersFullGraphContextIsBackgrounded = true;
+            }
           }
         }
 

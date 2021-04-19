@@ -6,10 +6,11 @@
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
   import { GraferController, GraferControllerData, graph, GraferLayerData } from '@uncharted.software/grafer';
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
-  import { BIO_GRAPH_COLORS } from '@/utils/GraferUtil';
+  import { BIO_CLUSTERS_LAYERS_CONFIG, BIO_GRAPH_COLORS, BIO_NODES_LAYERS_CONFIG } from '@/utils/GraferUtil';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
 
   import Loader from '@/components/widgets/Loader.vue';
@@ -26,9 +27,6 @@
 
     @Prop({ default: 'covid-19' })
     private model: string;
-
-    @Prop({ default: null })
-    private layer: string;
 
     public mounted (): void {
       // NOTE: An event hub pattern is used here instead of passing these as Vue data properties from the
@@ -47,6 +45,12 @@
       });
       eventHub.$on('remove-layers', (layerNames: string[]) => {
           this.removeLayers(layerNames);
+      });
+      eventHub.$on('foreground-full-graph', () => {
+          this.foregroundFullGraph();
+      });
+      eventHub.$on('background-full-graph', () => {
+          this.backgroundFullGraph();
       });
     }
 
@@ -76,6 +80,42 @@
         this.controller.addLayer(layers[i], layerNames[i]);
       }
       this.controller.render();
+    }
+
+    foregroundFullGraph (): void {
+      // Get internal pointer to graph layers
+      // NOTE: This is a temporary interface, Grafer is developing a user interface into layers that
+      //       this should be replaced with
+      const layers = this.controller.viewport.graph.layers;
+      const nodesLayer = _.find(layers, layer => layer.name === 'Nodes');
+      const clustersLayer = _.find(layers, layer => layer.name === 'Clusters');
+
+      // Foreground nodes layer
+      Object.assign(nodesLayer.nodes, BIO_NODES_LAYERS_CONFIG.options.foreground.nodes);
+      Object.assign(nodesLayer.edges, BIO_NODES_LAYERS_CONFIG.options.foreground.edges);
+      Object.assign(nodesLayer.labels, BIO_NODES_LAYERS_CONFIG.options.foreground.labels);
+
+      // Foreground clusters layer
+      Object.assign(clustersLayer.edges, BIO_CLUSTERS_LAYERS_CONFIG.options.foreground.edges);
+      Object.assign(clustersLayer.labels, BIO_CLUSTERS_LAYERS_CONFIG.options.foreground.labels);
+    }
+
+    backgroundFullGraph (): void {
+      // Get internal pointer to graph layers
+      // NOTE: This is a temporary interface, Grafer is developing a user interface into layers that
+      //       this should be replaced with
+      const layers = this.controller.viewport.graph.layers;
+      const nodesLayer = _.find(layers, layer => layer.name === 'Nodes');
+      const clustersLayer = _.find(layers, layer => layer.name === 'Clusters');
+
+      // Background nodes layer
+      Object.assign(nodesLayer.nodes, BIO_NODES_LAYERS_CONFIG.options.background.nodes);
+      Object.assign(nodesLayer.edges, BIO_NODES_LAYERS_CONFIG.options.background.edges);
+      Object.assign(nodesLayer.labels, BIO_NODES_LAYERS_CONFIG.options.background.labels);
+
+      // Background clusters layer
+      Object.assign(clustersLayer.edges, BIO_CLUSTERS_LAYERS_CONFIG.options.background.edges);
+      Object.assign(clustersLayer.labels, BIO_CLUSTERS_LAYERS_CONFIG.options.background.labels);
     }
 
     forwardEvents (controller: GraferController): void {
@@ -170,23 +210,6 @@
         },
       };
       layers.push(clusterLayer);
-
-      if (this.layer) {
-        // change the layers properties
-        const fadedOptions = {
-          alpha: 1.0,
-          fade: 0.7,
-          desaturate: 0.5,
-        };
-
-        nodeLayer.nodes.options = Object.assign(nodeLayer.nodes.options, fadedOptions);
-        nodeLayer.edges.options = Object.assign(nodeLayer.edges.options, fadedOptions, { fade: 0.9, enabled: false });
-        nodeLayer.labels.options = Object.assign(nodeLayer.labels.options, fadedOptions);
-
-        // clusterLayer.nodes.options = Object.assign(clusterLayer.nodes.options, fadedOptions);
-        clusterLayer.edges.options = Object.assign(clusterLayer.edges.options, fadedOptions, { fade: 0.9, enabled: false });
-        clusterLayer.labels.options = Object.assign(clusterLayer.labels.options, fadedOptions);
-      }
 
       return layers;
     }
