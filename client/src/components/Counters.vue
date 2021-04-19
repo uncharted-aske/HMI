@@ -9,10 +9,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
-
-  function shorterNb (value: number): string {
-    return new Intl.NumberFormat('en', { notation: 'compact' }).format(value);
-  }
+  import { shorterNb } from '@/utils/NumberUtil';
 
   @Component
   export default class Counters extends Vue {
