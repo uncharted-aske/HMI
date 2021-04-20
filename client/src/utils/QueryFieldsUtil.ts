@@ -83,12 +83,14 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     ..._searchable('Keyword', false),
     baseType: 'string',
     lexType: 'string',
+    order: 2,
   },
   COSMOS_TYPE: {
     ..._field('cosmosType', 'Doc Artifact Type'),
     ..._searchable('Doc Artifact Type', false),
     baseType: 'integer',
     lexType: 'string',
+    order: 1,
   },
   COSMOS_INCLUSIVE: {
     ..._field('cosmosInclusive', 'Inclusive'),
@@ -115,7 +117,6 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'string',
   },
-
   // Mocked-up fields
   PATH_QUERY: {
     ..._field('pathQuery', 'Path Query'),
