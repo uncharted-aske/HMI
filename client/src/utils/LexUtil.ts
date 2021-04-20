@@ -13,7 +13,7 @@ function _getSuggestions (pills: any[]): any[] {
       return b.order - a.order;
     } else {
       // ASC searchDisplay
-      return a.searchDisplay < b.searchDisplay ? -1 : 1 ?? 0;
+      return a.searchDisplay < b.searchDisplay ? -1 : 1;
     }
   }).map(pill => pill.makeOption());
 }
