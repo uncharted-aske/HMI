@@ -1,11 +1,14 @@
 <template>
   <div class="view-container">
-    <left-side-panel :tabs="tabs" :activeTabId="activeTabId">
+    <left-side-panel
+      class="left-side-panel"
+      :activeTabId="activeTabId"
+      :tabs="tabs"
+    >
       <div slot="content">
         <facets-pane />
       </div>
     </left-side-panel>
-
     <div class="d-flex flex-column h-100">
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for models...`"/>
@@ -156,6 +159,10 @@
 
 <style lang="scss" scoped>
 @import "@/styles/variables";
+
+.left-side-panel {
+  flex-shrink: 0;
+}
 
 .view-button {
   padding: 2px 5px;
