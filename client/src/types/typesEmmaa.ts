@@ -48,3 +48,9 @@ export interface EmmaaEvidenceInterface {
   matches_hash: string,
   supported_by: string[],
 }
+
+export interface EmmaaEntityInfoInterface {
+  definition: string,
+  name: string,
+  url: string,
+}

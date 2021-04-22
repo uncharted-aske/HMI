@@ -74,10 +74,9 @@
 @import "@/styles/variables";
 
 .drilldown-panel-container {
-  width: 25vw;
+  min-width: 25vw;
   height: 100%;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  position: absolute;
   top: 0;
   right: 0;
   display: flex;

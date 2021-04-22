@@ -1,52 +1,66 @@
 <template>
-  <div class="view-container">
+  <div class="view-container flex-row">
     <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
           <div slot="content">
             <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel && selectedModel.metadata"/>
             <!-- <facets-pane v-if="activeTabId === 'facets'" /> -->
           </div>
     </left-side-panel>
-    <div class="search-row">
-      <search-bar :placeholder="`Search for model components...`" />
-      <button class="btn btn-primary m-1" @click="onSplitView" :disabled="!canOpenLocalView">
-        <font-awesome-icon :icon="['fas', getIcon ]" />
-        <span>{{ getMessage }}</span>
-      </button>
+    <div class="d-flex flex-column flex-grow-1 position-relative">
+      <div class="search-row">
+        <search-bar :placeholder="`Search for model components...`" />
+        <button v-if="canOpenLocalView" class="btn btn-primary m-1" @click="onSplitView">
+          <font-awesome-icon :icon="['fas', getIcon ]" />
+          <span>{{ getMessage }}</span>
+        </button>
+      </div>
+      <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
+        <div slot="1" class="h-100 w-100 d-flex flex-column">
+          <settings-bar>
+            <div slot="left">
+              <counters
+                :title="selectedModel && selectedModel.metadata.name"
+                :data="[`448723 Nodes`, `44104 Edges`]"
+              />
+            </div>
+            <div slot="settings">
+              <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
+            </div>
+          </settings-bar>
+          <grafer class="grafer" :model="model" @loaded="mainGraphLoading = false" @grafer_click="onGraferClick"></grafer>
+        </div>
+        <div slot="2" class="h-100 w-100 d-flex flex-column">
+          <settings-bar>
+            <div slot="right">
+              <counters
+                :title="`Subgraph`"
+                :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
+              />
+            </div>
+            <div slot="right">
+              <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
+            </div>
+          </settings-bar>
+          <loader :loading="subgraphLoading" />
+          <local-graph v-if="subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
+          <div v-if="showMessageTooLarge" class="alert alert-info mr-2" role="alert">
+            Results are too large. Keep adding filters to reduce the size.
+          </div>
+          <div v-if="showMessageEmpty" class="alert alert-info mr-2" role="alert">
+            Results are empty. Try another query.
+          </div>
+        </div>
+      </resizable-grid>
     </div>
-    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
-      <div slot="1" class="h-100 w-100 d-flex flex-column">
-        <settings-bar>
-          <div slot="left">
-            <counters
-              :title="selectedModel && selectedModel.metadata.name"
-              :data="[`448723 Nodes`, `44104 Edges`]"
-            />
-          </div>
-          <div slot="settings">
-            <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
-          </div>
-        </settings-bar>
-        <grafer class="grafer" :model="model" @loaded="mainGraphLoading = false" @grafer_click="onGraferClick"></grafer>
-      </div>
-      <div slot="2" class="h-100 w-100 d-flex flex-column">
-        <settings-bar>
-          <div slot="right">
-            <counters
-              :title="`Subgraph`"
-              :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
-            />
-          </div>
-          <div slot="right">
-            <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
-          </div>
-        </settings-bar>
-        <loader :loading="subgraphLoading" />
-        <local-graph :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
-      </div>
-    </resizable-grid>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
-      <node-pane v-if="drilldownActivePaneId === 'node'" slot="content" :data="drilldownMetadata"/>
-      <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content" :data="drilldownMetadata"/>
+      <node-pane v-if="drilldownActivePaneId === 'node'" slot="content"
+        :model="selectedModelId"
+        :data="drilldownMetadata"
+      />
+      <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content"
+        :model="selectedModelId"
+        :data="drilldownMetadata"
+      />
     </drilldown-panel>
   </div>
 </template>
@@ -66,7 +80,6 @@
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
   import eventHub from '@/eventHub';
 
-  import { emmaaEvidence } from '@/services/EmmaaFetchService';
   import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph, formatBGraphOutputToGraferLayers } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
 
@@ -93,6 +106,8 @@
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
+  const MAX_RESULTS_LOCAL_VIEW = 500;
+
   const components = {
     SearchBar,
     SettingsBar,
@@ -113,7 +128,7 @@
   @Component({ components })
   export default class Bio extends Vue {
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
-    bgraphInstance: any = undefined;
+    bgraphInstance: any;
 
     // Initialize as undefined to prevent Vue from observing changes within these large datasets
     // Grafer data is stored in Bio view data as they are required for mapping bgraph queries to grafer layers
@@ -140,6 +155,9 @@
     subgraphLoading: boolean = false;
     mainGraphLoading: boolean = true;
 
+    showMessageTooLarge: boolean = false;
+    showMessageEmpty: boolean = false;
+
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Getter getFilters;
@@ -148,41 +166,9 @@
       if (this.bgraphInstance) {
         const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
 
-        // Render grafer query layers
-        if (!this.mainGraphLoading) {
-          // Queries can only be sent to grafer once it has been loaded.
-          // TODO: A query that is made before Grafer has been rendered will not be called again.
-          //       This problem is highlighted when you have an existing query in the search bar
-          //       that gets run before Grafer has had a chance to load. To avoid this issue
-          //       queries must be stored or re-run once the renderer has loaded.
-          const graferQueryLayerNames = ['highlightClusterLayer', 'highlightNodeLayer'];
-          if (_.isEmpty(subgraph)) {
-            // Clear query layers if no results
-            eventHub.$emit('remove-layers', graferQueryLayerNames);
-            if (this.grafersFullGraphContextIsBackgrounded) {
-              // No query layers full graph is the main context
-              eventHub.$emit('foreground-full-graph');
-              this.grafersFullGraphContextIsBackgrounded = false;
-            }
-          } else {
-            const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData);
-            eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
-            if (!this.grafersFullGraphContextIsBackgrounded) {
-              // Query layer set full graph acts as background context
-              eventHub.$emit('background-full-graph');
-              this.grafersFullGraphContextIsBackgrounded = true;
-            }
-          }
-        }
-
-        // Render subgraph
-        if (_.isEmpty(subgraph)) {
-          this.isSplitView = false;
-          this.subgraph = null;
-        } else {
-          this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
-          this.subgraphLoading = true;
-        }
+        // Render subgraph as grafer query layers
+        this.renderSubgraphAsGraferLayers(subgraph);
+        this.evaluateSubgraph(subgraph);
       }
     }
 
@@ -199,12 +185,16 @@
       return modelsList.find(model => model.metadata.id === 'covid19'); // Only COVID-19 model for now
     }
 
+    get selectedModelId (): string {
+      return this.selectedModel && this.selectedModel.metadata.id;
+    }
+
     get subgraphNodeCount (): number {
-      return this.subgraph && this.subgraph.nodes.length;
+      return (this.subgraph && this.subgraph.nodes.length) || 0;
     }
 
     get subgraphEdgeCount (): number {
-      return this.subgraph && this.subgraph.edges.length;
+      return (this.subgraph && this.subgraph.edges.length) || 0;
     }
 
     get gridMap (): string[][] {
@@ -255,19 +245,68 @@
       };
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    evaluateSubgraph (subgraph: any): void {
+      if (_.isEmpty(subgraph)) {
+          this.showMessageEmpty = true;
+          this.showMessageTooLarge = false;
+          this.subgraph = null;
+        } else {
+          if (subgraph.length <= MAX_RESULTS_LOCAL_VIEW) {
+            this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
+
+            this.subgraphLoading = true;
+            this.showMessageEmpty = false;
+            this.showMessageTooLarge = false;
+          } else {
+            this.showMessageTooLarge = true;
+            this.showMessageEmpty = false;
+            this.subgraph = null;
+          }
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    renderSubgraphAsGraferLayers (subgraph: any): void {
+      // Render grafer query layers
+      if (!this.mainGraphLoading) {
+        // Queries can only be sent to grafer once it has been loaded.
+        // TODO: A query that is made before Grafer has been rendered will not be called again.
+        //       This problem is highlighted when you have an existing query in the search bar
+        //       that gets run before Grafer has had a chance to load. To avoid this issue
+        //       queries must be stored or re-run once the renderer has loaded.
+        const graferQueryLayerNames = ['highlightClusterLayer', 'highlightNodeLayer'];
+        if (_.isEmpty(subgraph)) {
+          // Clear query layers if no results
+          eventHub.$emit('remove-layers', graferQueryLayerNames);
+          if (this.grafersFullGraphContextIsBackgrounded) {
+            // No query layers full graph is the main context
+            eventHub.$emit('foreground-full-graph');
+            this.grafersFullGraphContextIsBackgrounded = false;
+          }
+        } else {
+          const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData);
+          eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
+          if (!this.grafersFullGraphContextIsBackgrounded) {
+            // Query layer set full graph acts as background context
+            eventHub.$emit('background-full-graph');
+            this.grafersFullGraphContextIsBackgrounded = true;
+          }
+        }
+      }
+    }
+
     onGraferClick (detail: GraferEventDetail): void {
+      // eslint-disable-next-line
       console.log(`a [${detail.type}] with id [${detail.id}] on layer [${detail.layer}] was clicked!`);
     }
 
     onSplitView (): void {
       this.isSplitView = !this.isSplitView;
+      const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
 
       if (this.isSplitView) {
-        if (this.bgraphInstance) {
-          const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
-          this.subgraph = formatBGraphOutputToLocalGraph(subgraph);
-          this.subgraphLoading = true;
-        }
+        this.evaluateSubgraph(subgraph);
       } else {
         this.subgraph = null;
       }
@@ -293,7 +332,7 @@
 
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = 'Type: Node';
-      this.drilldownMetadata = node.metadata;
+      this.drilldownMetadata = node.data;
     }
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {
@@ -302,12 +341,7 @@
 
       this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
       this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
-      this.drilldownMetadata = await emmaaEvidence({
-        stmt_hash: edge.metadata.statement_id,
-        source: 'model_statement',
-        model: this.selectedModel.metadata.id,
-        format: 'json',
-      });
+      this.drilldownMetadata = edge.metadata;
     }
   }
 </script>

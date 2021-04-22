@@ -8,7 +8,7 @@
         <slot name="title" />
       </div>
     </div>
-    <div class="flex-grow-1 position-relative" v-if="expanded">
+    <div class="flex-grow-1 position-relative" v-if="expandedState">
       <slot name="content" />
     </div>
   </div>
@@ -17,7 +17,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Prop } from 'vue-property-decorator';
+  import { Prop, Watch } from 'vue-property-decorator';
 
 /**
  * A collapsible wrapper component that allows the injection of two external
@@ -39,23 +39,23 @@
 
   @Component
   export default class CollapsibleItem extends Vue {
-    @Prop({ default: false }) defaultExpand: boolean;
-    expanded: boolean = false;
+    @Prop({ default: false }) expanded: boolean;
+    expandedState: boolean = false;
+
+    @Watch('expanded') onExpandedChange (): void {
+      this.expandedState = this.expanded;
+    }
+
+    mounted (): void {
+      this.expandedState = this.expanded;
+    }
 
     get getIcon (): string {
-        return this.expanded ? 'caret-down' : 'caret-right';
-    }
-
-    expand (): void {
-      this.expanded = true;
-    }
-
-    collapse (): void {
-      this.expanded = false;
+        return this.expandedState ? 'caret-down' : 'caret-right';
     }
 
     toggle (): void {
-      this.expanded = !this.expanded;
+      this.expandedState = !this.expandedState;
     }
   }
 

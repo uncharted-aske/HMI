@@ -49,6 +49,8 @@ interface CardInterface {
   subtitle: string;
   type: string;
   raw: any;
+  highlighted?: boolean;
+  checked?: boolean;
 }
 
 interface GraferEventDetail {

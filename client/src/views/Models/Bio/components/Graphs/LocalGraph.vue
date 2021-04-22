@@ -43,16 +43,16 @@
         addons: [],
       });
 
-    //   this.renderer.setCallback('nodeClick', (node) => {
-    //     // Clear previous highlights
-    //     this.renderer.hideNeighbourhood();
-    //     // Show neighborhood
-    //     const neighborhood = calculateNodeNeighborhood(this.graph, node.datum());
-    //     this.renderer.showNeighborhood(neighborhood);
-    //     this.$emit('node-click', node.datum());
-    //   });
+      this.renderer.setCallback('nodeClick', (e: PointerEvent, node) => {
+        // Clear previous highlights
+        // this.renderer.hideNeighbourhood();
+        // Show neighborhood
+        // const neighborhood = calculateNodeNeighborhood(this.graph, node.datum());
+        // this.renderer.showNeighborhood(neighborhood);
+        this.$emit('node-click', node.datum());
+      });
 
-    //   this.renderer.setCallback('edgeClick', (edge) => {
+    //   this.renderer.setCallback('edgeClick', (e: PointerEvent, edge) => {
     //     // Clear previous highlights
     //     this.renderer.hideNeighbourhood();
     //     // Show neighborhood
@@ -89,9 +89,11 @@
     }
 
     async refresh (): Promise<void> {
-      this.renderer.setData(this.data);
-      await this.renderer.render();
-      this.$emit('loaded');
+      if (this.data) {
+        this.renderer.setData(this.data);
+        await this.renderer.render();
+        this.$emit('loaded');
+      }
     }
   }
 </script>
