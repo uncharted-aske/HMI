@@ -29,9 +29,6 @@
     @Prop({ default: null })
     private layer: string;
 
-    @Prop({ default: true })
-    private backEdges: boolean;
-
     public mounted (): void {
       this.loadGraph().then(data => {
         this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
