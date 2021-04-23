@@ -76,11 +76,13 @@ const filterTermToPriorityRank = {
 export const executeBgraph = (bgraph: any, clause: Filter): any => {
   switch (clause.field) {
     case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
-      const names = clause.values as string[];
+      let names = clause.values as string[];
+      // Filter matching case insensitive names
+      names = names.map(name => name.toLowerCase());
       return bgraph.filter(document => {
         if (document._type === 'node') {
           const node = document;
-          return names.some(name => name.toLowerCase() === node.name.toLowerCase());
+          return names.some(name => name === node.name.toLowerCase());
         }
         // Document is not a node
         return false;
