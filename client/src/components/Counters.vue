@@ -1,5 +1,5 @@
 <template>
-  <div ref="counterContainer" class="counters-container">
+  <div class="counters-container">
     <span class="title" v-if="title">{{ title }}</span>
     <span v-for="(counter, index) in processedData" :key="index">{{ counter }}</span>
   </div>
