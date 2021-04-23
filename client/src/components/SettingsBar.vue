@@ -19,16 +19,11 @@
 @import "@/styles/variables";
 
 .settings-bar-container {
-  align-items: center;
   display: flex;
   flex-shrink: 0;
+  gap: 5px;
   justify-content: space-between;
   min-height: calc(#{$secondary-bar-width} - 15px);
-  padding: 0 10px;
-
-  ::v-deep > div {
-    height: 100%;
-  }
+  padding: 5px;
 }
-
 </style>

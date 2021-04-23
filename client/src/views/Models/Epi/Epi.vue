@@ -16,37 +16,42 @@
       <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
         <div slot="1" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
-            <div slot="left">
-              <counters
-                :title="selectedModel.metadata.name"
-                :data="[`${nodeCount} Nodes`, `${edgeCount} Edges`]"
-              />
-            </div>
-            <div slot="right">
-              <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-            </div>
+            <counters
+              slot="left"
+              :title="selectedModel.metadata.name"
+              :data="[`${nodeCount} Nodes`, `${edgeCount} Edges`]"
+            />
+            <settings
+              slot="right"
+              :selected-view-id="selectedViewId"
+              :views="views"
+              @view-change="onSetView"
+            />
           </settings-bar>
           <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
         </div>
         <div slot="2" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
-            <div slot="left">
-              <counters
-                :title="`Subgraph`"
-                :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
-              />          </div>
-            <div slot="right">
-              <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-            </div>
+            <counters
+              slot="left"
+              :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
+              :title="`Subgraph`"
+            />
+            <settings
+              slot="right"
+              :selected-view-id="selectedViewId"
+              :views="views"
+              @view-change="onSetView"
+            />
           </settings-bar>
           <local-graph v-if="isSplitView" :data="subgraph" @node-click="onNodeClick"/>
         </div>
       </resizable-grid>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :active-tab-id="drilldownActiveTabId" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
-      <metadata-pane v-if="drilldownActiveTabId ===  'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
-      <parameters-pane v-if="drilldownActiveTabId ===  'parameters'" slot="content" :data="drilldownParameters" :related="drilldownRelatedParameters" @open-modal="onOpenModalParameters"/>
-      <knowledge-pane v-if="drilldownActiveTabId ===  'knowledge'" slot="content" :data="drilldownKnowledge"/>
+      <metadata-pane v-if="drilldownActiveTabId === 'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
+      <parameters-pane v-if="drilldownActiveTabId === 'parameters'" slot="content" :data="drilldownParameters" :related="drilldownRelatedParameters" @open-modal="onOpenModalParameters"/>
+      <knowledge-pane v-if="drilldownActiveTabId === 'knowledge'" slot="content" :data="drilldownKnowledge"/>
     </drilldown-panel>
     <modal-parameters
       v-if="showModalParameters"

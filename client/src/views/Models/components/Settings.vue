@@ -1,27 +1,27 @@
 <template>
   <div class="settings-container">
-    <button type="button" class="btn btn-secondary mr-1" @click="toggleViews">
+    <button type="button" class="btn btn-secondary" @click="toggleViews">
       Views:
       <span class="view-name">{{selectedViewName}} </span>
       <font-awesome-icon :icon="['fas', 'caret-down' ]" />
     </button>
     <dropdown v-if="showDropdownViews" class="dropdown-settings">
-      <div slot="content">
-        <div class="btn-group btn-group-sm"  v-for="view in views" :key="view.id">
-          <!-- Disabled visual summary temporarily -->
-          <button
-          type="button"
+      <div slot="content" class="btn-group btn-group-sm">
+        <!-- Disabled visual summary temporarily -->
+        <button
+          v-for="view in views" :key="view.id"
           class="btn btn-light"
+          type="button"
           :class="{'active': view.id === selectedViewId}"
           :disabled="view.id === 'summary' || view.id === 'clustered'"
-          @click="onViewSelection(view.id)" >
-          {{view.name}}
-          </button>
-        </div>
+          @click="onViewSelection(view.id)"
+        >
+          {{ view.name }}
+        </button>
       </div>
     </dropdown>
-    <button type="button" class="btn btn-secondary mr-1" disabled>Layouts</button>
-    <button type="button" class="btn btn-secondary mr-1" disabled>Settings</button>
+    <button type="button" class="btn btn-secondary" disabled>Layouts</button>
+    <button type="button" class="btn btn-secondary" disabled>Settings</button>
   </div>
 </template>
 
@@ -69,29 +69,24 @@
 @import "@/styles/variables";
 
 .settings-container {
-  position: relative;
-  display: flex;
   align-items: center;
-  height: 100%;
-  padding: 2px 5px;
-  .btn {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    .view-name {
-      font-weight: bold;
-      margin: 5px;
-    }
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  position: relative;
+
+  .view-name {
+    font-weight: bold;
   }
 }
 
 .dropdown-settings {
-  display: flex;
   align-items: center;
-  position: absolute;
-  top: calc(#{$secondary-bar-width} - 15px);
+  display: flex;
   height: calc(#{$secondary-bar-width});
   padding: 10px;
+  position: absolute;
+  top: calc(#{$secondary-bar-width} - 15px);
 }
 
 </style>

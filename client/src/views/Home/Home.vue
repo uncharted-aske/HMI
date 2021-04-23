@@ -1,33 +1,30 @@
 <template>
   <div class="view-container">
     <left-side-panel :tabs="tabs" :activeTabId="activeTabId">
-      <div slot="content">
-        <facets-pane />
-      </div>
+      <facets-pane slot="content" />
     </left-side-panel>
-
     <div class="d-flex flex-column h-100">
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for models...`"/>
       </div>
       <settings-bar>
-        <div slot="left">
-          <counters :data="countersData"/>
-        </div>
-        <div slot="middle" class="view-button" v-if="selectedButtonContent">
-          <button type="button" class="btn btn-primary h-100 d-flex align-items-center" @click="onClickCompare">
-            {{selectedButtonContent}}
-          </button>
-        </div>
-        <div slot="right">
-          <settings/>
-        </div>
+        <counters slot="left" :data="countersData"/>
+        <button
+          v-if="selectedButtonContent"
+          class="btn btn-primary"
+          slot="middle"
+          type="button"
+          @click="onClickCompare"
+        >
+          {{ selectedButtonContent }}
+        </button>
+        <settings slot="right"/>
       </settings-bar>
       <card-container
-          class="model-cards"
-          :header="`Models`"
-          :cards="modelsCards"
-          @click-card="onClickCard"
+        class="model-cards"
+        :cards="modelsCards"
+        :header="`Models`"
+        @click-card="onClickCard"
       />
     </div>
   </div>
@@ -153,11 +150,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
-.view-button {
-  padding: 2px 5px;
-}
-</style>

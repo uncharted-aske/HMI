@@ -42,6 +42,7 @@
   display: flex;
   flex-wrap: wrap;
   height: 100%;
+  padding: 0 5px;
 
   > * {
     margin-right: 5px;
