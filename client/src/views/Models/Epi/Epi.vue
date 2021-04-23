@@ -13,7 +13,7 @@
           Add Subgraph
         </button>
       </div>
-      <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
+      <resizable-grid :map="gridMap" :dimensions="gridDimensions">
         <div slot="1" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
             <counters
@@ -421,6 +421,27 @@
 
     get gridMap (): string[][] {
       return this.isSplitView ? [['1', '3', '2']] : [['1']];
+    }
+
+    get gridDimensions (): any {
+      if (this.isSplitView) {
+        return {
+          // Keep the cell between 25% and 75% of container
+          1: {
+            widthMax: 0.75,
+            widthMin: 0.25,
+          },
+          2: {
+            widthMax: 0.75,
+            widthMin: 0.25,
+          },
+          // Middle element to visually resize the columns
+          3: {
+            width: '10px',
+            widthFixed: true,
+          },
+        };
+      }
     }
 
     onSplitView (): void {
