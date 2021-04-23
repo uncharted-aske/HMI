@@ -19,10 +19,11 @@
   import ResizableGridContent from './ResizableGridContent.vue';
 
   import {
-    DimensionsInterface,
-    CellPositionInterface,
     CellBorderInterface,
+    CellDimensionsInterface,
+    CellPositionInterface,
     ContentInterface,
+    DimensionsInterface,
   } from '@/types/typesResizableGrid';
 
   // reverse the position of the key and values in an object, placing the former keys in an array
@@ -108,6 +109,29 @@
         ? this.$el.getBoundingClientRect()
         : { width: 0, height: 0, top: 0, left: 0 };
       return { width, height, top, left };
+    }
+
+    /** Return the dimensions of a cell */
+    cellDim (id: string): CellDimensionsInterface {
+      // Set some default.
+      const defaultDim = {
+        width: null,
+        widthFixed: false,
+        widthMax: 1,
+        widthMin: 0,
+        height: null,
+        heightFixed: false,
+        heightMax: 1,
+        heightMin: 0,
+      } as CellDimensionsInterface;
+
+      // Fetch the dimensions set by the user.
+      const dimensions = this.dimensions?.[id];
+      if (dimensions) {
+        return { ...defaultDim, ...dimensions };
+      } else {
+        return defaultDim;
+      }
     }
 
     generateContentArray (): ContentInterface[] {
@@ -376,7 +400,7 @@
 
     /** Calculate the current width limitation of a cell based on its container. */
     cellWidthLimits (id: string): { min: number, max: number } {
-      const { widthMin = 0, widthMax = 1 } = this.dimensions[id];
+      const { widthMin, widthMax } = this.cellDim(id);
       return {
         min: widthMin * this.containerDim.width,
         max: widthMax * this.containerDim.width,
@@ -385,7 +409,7 @@
 
     /** Calculate the current height limitation of a cell based on its container. */
     cellHeightLimits (id: string): { min: number, max: number } {
-      const { heightMin = 0, heightMax = 1 } = this.dimensions[id];
+      const { heightMin, heightMax } = this.cellDim(id);
       return {
         min: heightMin * this.containerDim.height,
         max: heightMax * this.containerDim.height,
