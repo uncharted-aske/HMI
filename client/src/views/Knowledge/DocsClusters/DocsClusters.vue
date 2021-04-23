@@ -40,4 +40,7 @@
 </script>
 
 <style lang="scss" scoped>
+.view-container {
+  flex-direction: column;
+}
 </style>

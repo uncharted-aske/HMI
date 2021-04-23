@@ -66,20 +66,21 @@
 @import "@/styles/variables";
 
 .left-side-panel-container {
-  width: 25vw;
-  height: $content-full-height;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  position: absolute;
-  display: flex;
-  flex-direction: column;
   background-color: #ffffff;
   box-sizing: border-box;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  height: $content-full-height;
   padding: 5px;
+  position: relative; // for .navigation-control
+  width: 25vw;
+  will-change: width;
   z-index: map-get($z-index-order, side-panel);
 
   &.closed {
+    padding: 0px;
     width: 0px;
-    padding:0px;
 
     .tab-panel, .panel-content {
       display: none;
@@ -115,5 +116,4 @@
 .nav-link:not(.active) {
   cursor: pointer;
 }
-
 </style>

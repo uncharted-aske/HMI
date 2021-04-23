@@ -1,12 +1,11 @@
 @import "variables";
 
 .view-container {
+  background-color: $bg-body;
   display: flex;
-  flex-direction: column;
-  position: relative;
   height: $content-full-height;
   overflow: hidden;
-  background-color: $bg-body;
+  position: relative;
 }
 
 .search-row {
