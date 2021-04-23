@@ -22,7 +22,7 @@
     get processedData () : string[] {
       return this.data.reduce((acc: string[], val: string) => {
         if (val) {
-          const info = val.split(' ');
+          const info = val.split(/ (.+)/);
           const value = shorterNb(Number(info[0] ?? 0));
           const name = info[1] ?? '';
           acc.push(`${value} ${name}`);
