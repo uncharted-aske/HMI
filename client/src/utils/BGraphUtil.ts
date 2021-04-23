@@ -1,11 +1,13 @@
 import s3Client from '@/services/S3Service';
 import { loadJSONLFile } from '@/utils/FileLoaderUtil';
 import { DataFile } from '@dekkai/data-source';
+import { GraferNodesData, GraferEdgesData, GraferLayerData } from '@uncharted.software/grafer';
 
 import { Filters, Filter } from '@/types/typesLex';
 import { GraphInterface } from '@/types/typesGraphs';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
+import { buildHighlightClusterLayer, buildHighlightNodeLayer } from './GraferUtil';
 
 const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
   let value, key;
@@ -111,6 +113,39 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
     });
     return deepCopy(bgraphQuery.run(), ['_in', '_out']);
   }
+};
+
+// TODO: Specify queryResults type once bgraph has result types
+export const formatBGraphOutputToGraferLayers = (
+  queryResults: any[],
+  graferNodesData: GraferNodesData,
+  graferIntraEdgesData: GraferEdgesData,
+  graferInterEdgesData: GraferEdgesData,
+): GraferLayerData[] => {
+  // Deep copy results to avoid mutating passed in data
+  const queryResultsDeepCopy = deepCopy(queryResults);
+  const graferNodesDataResults = [];
+  const graferIntraEdgesDataResults = [];
+  const graferInterEdgesDataResults = [];
+
+  for (let i = 0; i < queryResultsDeepCopy.length; i++) {
+    const result = queryResultsDeepCopy[i];
+    if (result._type === 'node' && result.grafer_id != null) {
+      // Set node color on query result
+      graferNodesDataResults.push(graferNodesData[result.grafer_id]);
+    } else if (result._type === 'edge' && result.intra_edge_id != null) {
+      // Set intra edge color on query result
+      graferIntraEdgesDataResults.push(graferIntraEdgesData[result.intra_edge_id]);
+    } else if (result._type === 'edge' && result.inter_edge_id != null) {
+      // Set inter edge color on query result
+      graferInterEdgesDataResults.push(graferInterEdgesData[result.inter_edge_id]);
+    }
+  }
+
+  const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', graferIntraEdgesDataResults, []);
+  const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', graferNodesDataResults, graferInterEdgesDataResults);
+
+  return [highlightClusterLayer, highlightNodeLayer];
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

@@ -1,10 +1,15 @@
 <template>
-  <div class="view-container flex-row">
-    <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
-          <div slot="content">
-            <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel.metadata"/>
-            <facets-pane v-if="activeTabId === 'facets'" />
-          </div>
+  <div class="view-container">
+    <left-side-panel
+      class="left-side-panel"
+      :activeTabId="activeTabId"
+      :tabs="tabs"
+      @tab-click="onTabClick"
+    >
+      <div slot="content">
+        <metadata-panel v-if="activeTabId === 'metadata'" :metadata="selectedModel.metadata"/>
+        <facets-pane v-if="activeTabId === 'facets'" />
+      </div>
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
       <div class="search-row">
@@ -545,4 +550,7 @@
 <style lang="scss" scoped>
   @import "@/styles/variables";
 
+  .left-side-panel {
+    flex-shrink: 0;
+  }
 </style>

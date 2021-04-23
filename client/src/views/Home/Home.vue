@@ -1,6 +1,10 @@
 <template>
   <div class="view-container">
-    <left-side-panel :tabs="tabs" :activeTabId="activeTabId">
+    <left-side-panel
+      class="left-side-panel"
+      :activeTabId="activeTabId"
+      :tabs="tabs"
+    >
       <facets-pane slot="content" />
     </left-side-panel>
     <div class="d-flex flex-column h-100">
@@ -150,3 +154,11 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+@import "@/styles/variables";
+
+.left-side-panel {
+  flex-shrink: 0;
+}
+</style>

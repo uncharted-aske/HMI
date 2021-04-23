@@ -11,6 +11,7 @@ import { LexConvertType, QueryFieldEntry, Filter, Filters } from '@/types/typesL
 export default class BasePill {
   public searchDisplay: string;
   public searchKey: string;
+  public order: number;
   public baseType: LexConvertType;
   public lexType: LexConvertType;
   public icon: string;
@@ -27,6 +28,7 @@ export default class BasePill {
     this.lexType = config.lexType;
     this.icon = config.icon || null;
     this.iconText = config.iconText || '';
+    this.order = config.order || -1;
 
     this.displayFormatter = (v):string => v; // default pass-thru
   }

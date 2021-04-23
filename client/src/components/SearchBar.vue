@@ -1,11 +1,10 @@
 <template>
   <div class="search-bar-container">
-    <div ref="lexContainer"></div>
+    <div ref="lexContainer" />
   </div>
 </template>
 
 <script lang="ts">
-
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Getter, Action } from 'vuex-class';
@@ -59,11 +58,9 @@
 
 <style lang="scss" scoped>
 @import "@/styles/overrides";
-
 </style>
 
 <style lang="scss">
 // Note: Scoped imports not attached to rendered elements
 @import "~@uncharted.software/lex/dist/lex.scss";
-
 </style>

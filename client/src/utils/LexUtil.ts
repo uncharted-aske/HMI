@@ -5,6 +5,19 @@ import * as filtersUtil from '@/utils/FiltersUtil';
 
 const SUGGESTIONS_LIMIT = 10;
 
+/* Create suggestions by sorting the Pills first. */
+function _getSuggestions (pills: any[]): any[] {
+  return pills.sort((a, b) => {
+    if (a.order !== b.order) {
+      // DESC order
+      return b.order - a.order;
+    } else {
+      // ASC searchDisplay
+      return a.searchDisplay < b.searchDisplay ? -1 : 1;
+    }
+  }).map(pill => pill.makeOption());
+}
+
 export const initializeLex = (config: {
   pills: any[],
   onChange: (newFilters: Filters) => void,
@@ -16,9 +29,7 @@ export const initializeLex = (config: {
 
   const language = Lex.from('field', ValueState, {
     name: fieldName ?? 'Choose a field to search',
-    suggestions: _.sortBy(pills, p => p.searchDisplay).map(pill =>
-      pill.makeOption(),
-    ),
+    suggestions: _getSuggestions(pills),
     suggestionLimit: suggestionLimit ?? SUGGESTIONS_LIMIT,
     icon: v => {
       if (_.isNil(v)) return '<i class="fas fa-search"></i>';
