@@ -76,7 +76,15 @@ const filterTermToPriorityRank = {
 export const executeBgraph = (bgraph: any, clause: Filter): any => {
   switch (clause.field) {
     case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
-      return bgraph.filter(node => clause.values.indexOf(node.name) !== -1);
+      const names = clause.values as string[];
+      return bgraph.filter(document => {
+        if (document._type === 'node') {
+          const node = document;
+          return names.some(name => name.toLowerCase() === node.name.toLowerCase());
+        }
+        // Document is not a node
+        return false;
+      });
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: {
       return bgraph.filter(node => node.grounded === Boolean(clause.values[0]));
