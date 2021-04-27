@@ -50,6 +50,12 @@
         ),
         new TextPill(QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE),
         new TextPill(QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE),
+        new KeyValuePill(
+          QUERY_FIELDS_MAP.BIO_EDGE_TESTED,
+          BOOLEAN_OPTIONS,
+          '',
+          { single: true, multiValue: false },
+        ),
       ];
 
       this.lex = initializeLex({

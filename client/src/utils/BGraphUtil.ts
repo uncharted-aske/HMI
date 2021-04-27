@@ -75,6 +75,16 @@ const filterTermToPriorityRank = {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const executeBgraph = (bgraph: any, clause: Filter): any => {
   switch (clause.field) {
+    case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: {
+      return bgraph.filter(document => {
+        if (document._type === 'edge') {
+          const edge = document;
+          return edge.tested === Boolean(clause.values[0]);
+        }
+        // Document is not an edge
+        return false;
+      });
+    }
     case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
       let names = clause.values as string[];
       // Filter matching case insensitive names

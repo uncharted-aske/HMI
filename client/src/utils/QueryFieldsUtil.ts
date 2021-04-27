@@ -77,6 +77,12 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'integer',
   },
+  BIO_EDGE_TESTED: {
+    ..._field('bioEdgeTested', 'Edge Tested'),
+    ..._searchable('Edge Tested', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
   // COSMOS
   COSMOS_QUERY: {
     ..._field('cosmosQuery', 'Keyword'),
