@@ -432,6 +432,7 @@
       if (this.isSplitView) {
         return {
           // Keep the cell between 25% and 75% of container
+          /* Future features to be developed.
           1: {
             widthMax: 0.75,
             widthMin: 0.25,
@@ -440,6 +441,7 @@
             widthMax: 0.75,
             widthMin: 0.25,
           },
+          */
           // Middle element to visually resize the columns
           3: {
             width: '10px',

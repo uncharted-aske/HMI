@@ -418,6 +418,8 @@
 
     adjustCellsFromTheLeft (cells: string[], movement: number): void {
       cells.forEach(id => {
+        this.cellTopLeftX[id] = this.cellTopLeftX[id] + movement;
+        /*
         // Find the new width of the cell
         const newX = this.cellTopLeftX[id] + movement;
         const newWidth = this.cellBotRightX[id] - newX;
@@ -427,11 +429,14 @@
         if (limit.min <= newWidth && newWidth <= limit.max) {
           this.cellTopLeftX[id] = newX;
         }
+        */
       });
     }
 
     adjustCellsFromTheRight (cells: string[], movement: number): void {
       cells.forEach(id => {
+        this.cellBotRightX[id] = this.cellBotRightX[id] + movement;
+        /*
         // Find the new width of the cell
         const newX = this.cellBotRightX[id] + movement;
         const newWidth = newX - this.cellTopLeftX[id];
@@ -441,6 +446,7 @@
         if (limit.min <= newWidth && newWidth <= limit.max) {
           this.cellBotRightX[id] = newX;
         }
+        */
       });
     }
 
