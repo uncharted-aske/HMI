@@ -8,6 +8,7 @@ import { GraphInterface } from '@/types/typesGraphs';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
 import { buildHighlightClusterLayer, buildHighlightNodeLayer } from './GraferUtil';
+import { BIO_EDGE_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
 
 const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
   let value, key;
@@ -85,6 +86,30 @@ export const executeBgraph = (bgraph: any, clause: Filter): any => {
         return false;
       });
     }
+    case QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field: {
+      return bgraph.filter(document => {
+        if (document._type === 'edge') {
+          const edge = document;
+          return clause.values.some(typeIdx => BIO_EDGE_TYPE_OPTIONS[typeIdx] === edge.type);
+        }
+        // Document is not an edge
+        return false;
+      });
+    }
+    case QUERY_FIELDS_MAP.BIO_EDGE_DOI.field: {
+      let dois = clause.values as string[];
+      dois = dois.map(doi => doi.toLowerCase());
+      return bgraph.filter(document => {
+        if (document._type === 'edge') {
+          const edge = document;
+          return dois.some(doi => Object.keys(edge.doi_map).some(edgeDoi => {
+            return edgeDoi.toLowerCase().includes(doi);
+          }));
+        }
+        // Document is not an edge
+        return false;
+      });
+    }
     case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
       let names = clause.values as string[];
       // Filter matching case insensitive names
@@ -99,16 +124,44 @@ export const executeBgraph = (bgraph: any, clause: Filter): any => {
       });
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: {
-      return bgraph.filter(node => node.grounded === Boolean(clause.values[0]));
+      return bgraph.filter(document => {
+        if (document._type === 'node') {
+          const node = document;
+          return node.grounded === Boolean(clause.values[0]);
+        }
+        // Document type is an edge
+        return false;
+      });
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field: {
-      return bgraph.filter(node => node.grounded_onto === Boolean(clause.values[0]));
+      return bgraph.filter(document => {
+        if (document._type === 'node') {
+          const node = document;
+          return node.grounded_onto === Boolean(clause.values[0]);
+        }
+        // Document type is an edge
+        return false;
+      });
     }
     case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: {
-      return bgraph.filter(node => clause.values.some(value => node.in_degree === Number(value)));
+      return bgraph.filter(document => {
+        if (document._type === 'node') {
+          const node = document;
+          return clause.values.some(value => node.in_degree === Number(value));
+        }
+        // Document type is an edge
+        return false;
+      });
     }
     case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: {
-      return bgraph.filter(node => clause.values.some(value => node.out_degree === Number(value)));
+      return bgraph.filter(document => {
+        if (document._type === 'node') {
+          const node = document;
+          return clause.values.some(value => node.out_degree === Number(value));
+        }
+        // Document type is an edge
+        return false;
+      });
     }
     default: {
       return bgraph;
