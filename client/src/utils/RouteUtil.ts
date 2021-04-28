@@ -4,28 +4,28 @@
 
 import { Location } from 'vue-router';
 import Router from '@/router';
-import { Filters } from '@/types/typesFilters';
+import { Filtres } from '@/types/typesFiltres';
 
-/** Remove the filters from the Route */
-function clearFilters (): void {
-  const query = { filters: null };
+/** Remove the filtres from the Route */
+function clearFiltres (): void {
+  const query = { filtres: null };
   Router.getRouter().push({ query } as Location);
 }
 
-/** Fetch the filters from the Route  */
-function getFilters (): Filters {
-  return Router?.query?.filters;
+/** Fetch the filtres from the Route  */
+function getFiltres (): Filtres {
+  return Router?.query?.filtres;
 }
 
-/** Update the filters in the Route */
-function updateFilters (filters: Filters): void {
-  const filtersInJSON = JSON.stringify(Array.from(filters.values()));
-  const query = { filters: filtersInJSON };
+/** Update the filtres in the Route */
+function updateFiltres (filtres: Filtres): void {
+  const filtresInJSON = JSON.stringify(Array.from(filtres.values()));
+  const query = { filtres: filtresInJSON };
   Router.getRouter().push({ query } as Location);
 }
 
 export {
-  clearFilters,
-  getFilters,
-  updateFilters,
+  clearFiltres,
+  getFiltres,
+  updateFiltres,
 };
