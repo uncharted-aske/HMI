@@ -162,8 +162,8 @@ export const formatBGraphOutputToGraferLayers = (
     }
   }
 
-  const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', graferIntraEdgesDataResults, []);
-  const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', graferNodesDataResults, graferInterEdgesDataResults);
+  const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', graferInterEdgesDataResults, []);
+  const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', graferNodesDataResults, graferIntraEdgesDataResults);
 
   return [highlightClusterLayer, highlightNodeLayer];
 };
