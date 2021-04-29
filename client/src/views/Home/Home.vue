@@ -39,7 +39,7 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
 
-  import { TabInterface, CardInterface } from '@/types/types';
+  import { CardInterface, Counter, TabInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import Counters from '@/components/Counters.vue';
@@ -99,10 +99,10 @@
       ];
     }
 
-    get countersData (): Array<string> {
+    get countersData (): Array<Counter> {
       const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
       if (modelsList) {
-        return [`${modelsList.length} Models`];
+        return [{ name: 'Models', value: modelsList.length }];
       }
     }
 

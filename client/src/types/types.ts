@@ -59,13 +59,20 @@ interface GraferEventDetail {
   id: string;
 }
 
+type Counter = {
+  name: string,
+  value?: number,
+  inverse?: boolean,
+};
+
 export {
-  TabInterface,
-  ViewInterface,
+  CardInterface,
+  Counter,
+  GraferEventDetail,
+  ModelComponentMetadataInterface,
   ModelInterface,
   ModelMetadataInterface,
-  ModelComponentMetadataInterface,
   ModelsState,
-  CardInterface,
-  GraferEventDetail,
+  TabInterface,
+  ViewInterface,
 };

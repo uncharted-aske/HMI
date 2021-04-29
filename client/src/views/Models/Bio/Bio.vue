@@ -25,7 +25,10 @@
             <div slot="left">
               <counters
                 :title="selectedModel && selectedModel.metadata.name"
-                :data="[`448723 Nodes`, `44104 Edges`]"
+                :data="[
+                  { name: 'Nodes', value: 448723 },
+                  { name: 'Edges', value: 44104 },
+                ]"
               />
             </div>
             <div slot="settings">
@@ -39,7 +42,10 @@
             <div slot="right">
               <counters
                 :title="`Subgraph`"
-                :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
+                :data="[
+                  { name: 'Nodes', value: subgraphNodeCount },
+                  { name: 'Edges', value: subgraphEdgeCount },
+                ]"
               />
             </div>
             <div slot="right">

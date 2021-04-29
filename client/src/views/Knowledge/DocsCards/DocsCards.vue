@@ -41,7 +41,7 @@
 
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { FacetTermsSelectionMap } from '@/types/typesFacets';
-  import { TabInterface, CardInterface } from '@/types/types';
+  import { CardInterface, Counter, TabInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import TextPill from '@/search/pills/TextPill';
@@ -180,10 +180,13 @@
       ];
     }
 
-    get countersData (): Array<string> {
+    get countersData (): Array<Counter> {
       const data = this.data as CosmosSearchInterface;
       if (data && data.total !== undefined && data.page !== undefined) {
-        return [`${data.total} Documents`, `Page ${data.page + 1}`];
+        return [
+          { name: 'Documents', value: data.total },
+          { name: 'Page', value: (data.page + 1), inverse: true },
+        ];
       }
     }
 

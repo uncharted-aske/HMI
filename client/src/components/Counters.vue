@@ -10,6 +10,7 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
   import { shorterNb } from '@/utils/NumberUtil';
+  import { Counter } from '@/types/types';
 
   @Component
   export default class Counters extends Vue {
@@ -17,15 +18,17 @@
     title: string;
 
     @Prop({ default: () => [] })
-    data: Array<string>;
+    data: Array<Counter>;
 
     get processedData () : string[] {
-      return this.data.reduce((acc: string[], val: string) => {
-        if (val) {
-          const info = val.split(/ (.+)/);
-          const value = shorterNb(Number(info[0] ?? 0));
-          const name = info[1] ?? '';
-          acc.push(`${value} ${name}`);
+      return this.data.reduce((acc: string[], counter: Counter) => {
+        const value = counter.value ? shorterNb(Number(counter.value)) : NaN;
+        if (Number.isNaN(value)) {
+          acc.push(counter.name);
+        } else if (counter.inverse) {
+          acc.push(counter.name + ' ' + value);
+        } else {
+          acc.push(value + ' ' + counter.name);
         }
         return acc;
       }, []);

@@ -24,7 +24,10 @@
             <counters
               slot="left"
               :title="selectedModel.metadata.name"
-              :data="[`${nodeCount} Nodes`, `${edgeCount} Edges`]"
+              :data="[
+                { name: 'Nodes', value: nodeCount },
+                { name: 'Edges', value: edgeCount },
+              ]"
             />
             <settings
               slot="right"
@@ -39,7 +42,10 @@
           <settings-bar>
             <counters
               slot="left"
-              :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
+              :data="[
+                { name: 'Nodes', value: subgraphNodeCount },
+                { name: 'Edges', value: subgraphEdgeCount },
+              ]"
               :title="`Subgraph`"
             />
             <settings
