@@ -2,8 +2,14 @@ const esbuild = require('esbuild');
 const yargs = require('yargs');
 const dotenv = require('dotenv');
 
+const options = yargs(process.argv).argv;
+
 // Load environment file config
-const dotenvConfig = dotenv.config();
+const dotenvOptions = {};
+if (options.dev) {
+  dotenvOptions.path = process.cwd() + '/.env.local';
+}
+const dotenvConfig = dotenv.config(dotenvOptions);
 if (dotenvConfig.error) {
   throw dotenvConfig.error;
 }
@@ -74,4 +80,4 @@ async function main (options) {
   }
 }
 
-main(yargs(process.argv).argv);
+main(options);
