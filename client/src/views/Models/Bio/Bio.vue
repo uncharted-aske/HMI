@@ -78,7 +78,7 @@
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
-  import { GraferNodesData, GraferEdgesData } from '@uncharted.software/grafer';
+  import { GraferNodesData, GraferEdgesData, GraferLabelsData } from '@uncharted.software/grafer';
 
   import { TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
@@ -140,6 +140,7 @@
     graferNodesData: GraferNodesData = undefined;
     graferIntraEdgesData: GraferEdgesData = undefined;
     graferInterEdgesData: GraferEdgesData = undefined;
+    graferClustersLabelsData: GraferLabelsData = undefined;
 
     // Set true when the full graph layers are rendered as background context (ie. faded)
     grafersFullGraphContextIsBackgrounded: boolean = false;
@@ -218,6 +219,7 @@
       this.graferNodesData = graferLayerData.graferNodesData;
       this.graferIntraEdgesData = graferLayerData.graferIntraEdgesData;
       this.graferInterEdgesData = graferLayerData.graferInterEdgesData;
+      this.graferClustersLabelsData = graferLayerData.graferClustersLabelsData;
 
       this.$nextTick(() => {
         // Ensure Grafer component has been mounted before sending
@@ -290,7 +292,7 @@
             this.grafersFullGraphContextIsBackgrounded = false;
           }
         } else {
-          const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData);
+          const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData, this.graferClustersLabelsData);
           eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
           if (!this.grafersFullGraphContextIsBackgrounded) {
             // Query layer set full graph acts as background context

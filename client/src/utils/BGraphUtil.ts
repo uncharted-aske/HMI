@@ -1,7 +1,7 @@
 import s3Client from '@/services/S3Service';
 import { loadJSONLFile } from '@/utils/FileLoaderUtil';
 import { DataFile } from '@dekkai/data-source';
-import { GraferNodesData, GraferEdgesData, GraferLayerData } from '@uncharted.software/grafer';
+import { GraferNodesData, GraferEdgesData, GraferLayerData, GraferLabelsData } from '@uncharted.software/grafer';
 
 import { Filters, Filter } from '@/types/typesLex';
 import { GraphInterface } from '@/types/typesGraphs';
@@ -131,18 +131,21 @@ export const formatBGraphOutputToGraferLayers = (
   graferNodesData: GraferNodesData,
   graferIntraEdgesData: GraferEdgesData,
   graferInterEdgesData: GraferEdgesData,
+  graferClustersLabelsData: GraferLabelsData,
 ): GraferLayerData[] => {
   // Deep copy results to avoid mutating passed in data
   const queryResultsDeepCopy = deepCopy(queryResults);
   const graferNodesDataResults = [];
   const graferIntraEdgesDataResults = [];
   const graferInterEdgesDataResults = [];
+  const graferClusterIds = new Set();
 
   for (let i = 0; i < queryResultsDeepCopy.length; i++) {
     const result = queryResultsDeepCopy[i];
     if (result._type === 'node' && result.grafer_id != null) {
       // Set node color on query result
       graferNodesDataResults.push(graferNodesData[result.grafer_id]);
+      result.grafer_cluster_ids.map(graferClusterId => graferClusterIds.add(graferClusterId));
     } else if (result._type === 'edge' && result.intra_edge_id != null) {
       // Set intra edge color on query result
       graferIntraEdgesDataResults.push(graferIntraEdgesData[result.intra_edge_id]);
@@ -152,7 +155,10 @@ export const formatBGraphOutputToGraferLayers = (
     }
   }
 
-  const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', graferIntraEdgesDataResults, []);
+  const graferClusterDataResults = [];
+  graferClusterIds.forEach(clusterId => graferClusterDataResults.push(graferClustersLabelsData[clusterId]));
+
+  const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', graferIntraEdgesDataResults, graferClusterDataResults);
   const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', graferNodesDataResults, graferInterEdgesDataResults);
 
   return [highlightClusterLayer, highlightNodeLayer];
