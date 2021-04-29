@@ -1,10 +1,8 @@
 <template>
   <div class="view-container flex-row">
     <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
-          <div slot="content">
-            <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel && selectedModel.metadata"/>
-            <!-- <facets-pane v-if="activeTabId === 'facets'" /> -->
-          </div>
+      <metadata-panel v-if="activeTabId === 'metadata'" slot="content" :metadata="selectedModel && selectedModel.metadata"/>
+      <facets-pane v-else-if="activeTabId === 'facets'" slot="content" />
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
       <div class="search-row">
