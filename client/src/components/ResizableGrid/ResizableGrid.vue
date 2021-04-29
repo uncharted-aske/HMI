@@ -452,6 +452,8 @@
 
     adjustCellsFromTheTop (cells: string[], movement: number): void {
       cells.forEach(id => {
+        this.cellTopLeftY[id] = this.cellTopLeftY[id] + movement;
+        /*
         // Find the new height of the cell
         const newY = this.cellTopLeftY[id] + movement;
         const newHeight = this.cellBotRightY[id] - newY;
@@ -461,11 +463,14 @@
         if (limit.min <= newHeight && newHeight <= limit.max) {
           this.cellTopLeftY[id] = newY;
         }
+        */
       });
     }
 
     adjustCellsFromTheBottom (cells: string[], movement: number): void {
       cells.forEach(id => {
+        this.cellBotRightY[id] = this.cellBotRightY[id] + movement;
+        /*
         // Find the new height of the cell
         const newY = this.cellBotRightY[id] + movement;
         const newHeight = newY - this.cellTopLeftY[id];
@@ -475,6 +480,7 @@
         if (limit.min <= newHeight && newHeight <= limit.max) {
           this.cellBotRightY[id] = newY;
         }
+        */
       });
     }
   }

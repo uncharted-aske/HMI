@@ -210,14 +210,14 @@
       if (this.isSplitView) {
         return {
           // Keep the cell between 25% and 75% of container
-          1: {
-            widthMax: 0.75,
-            widthMin: 0.25,
-          },
-          2: {
-            widthMax: 0.75,
-            widthMin: 0.25,
-          },
+          // 1: {
+          //   widthMax: 0.75,
+          //   widthMin: 0.25,
+          // },
+          // 2: {
+          //   widthMax: 0.75,
+          //   widthMin: 0.25,
+          // },
           // Middle element to visually resize the columns
           3: {
             width: '10px',
