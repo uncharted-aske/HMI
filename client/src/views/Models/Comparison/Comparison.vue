@@ -54,7 +54,6 @@
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
   import Settings from '@/views/Models/components/Settings.vue';
-  import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import GlobalGraph from '@/views/Models/Epi/components/Graphs/GlobalGraph.vue';
   import IntersectionGraph from './components/Graphs/IntersectionGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
@@ -76,7 +75,6 @@
     SettingsBar,
     Counters,
     Settings,
-    LeftSidePanel,
     GlobalGraph,
     IntersectionGraph,
     ResizableGrid,
@@ -179,5 +177,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables';
+.view-container {
+  flex-direction: column;
+}
 </style>

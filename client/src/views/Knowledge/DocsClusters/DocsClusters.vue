@@ -9,7 +9,7 @@
           <settings />
         </div>
       </settings-bar>
-      <grafer class="grafer" model="wisconsin-knowledge" layer="epi" :back-edges="true"/>
+      <grafer class="grafer" model="wisconsin-knowledge" layer="epi" />
     </div>
   </div>
 </template>
@@ -40,4 +40,7 @@
 </script>
 
 <style lang="scss" scoped>
+.view-container {
+  flex-direction: column;
+}
 </style>

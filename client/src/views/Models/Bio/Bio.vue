@@ -1,6 +1,11 @@
 <template>
-  <div class="view-container flex-row">
-    <left-side-panel :tabs="tabs" :activeTabId="activeTabId" @tab-click="onTabClick">
+  <div class="view-container">
+    <left-side-panel
+      class="left-side-panel"
+      :activeTabId="activeTabId"
+      :tabs="tabs"
+      @tab-click="onTabClick"
+    >
       <metadata-panel v-if="activeTabId === 'metadata'" slot="content" :metadata="selectedModel && selectedModel.metadata"/>
       <facets-pane v-else-if="activeTabId === 'facets'" slot="content" />
     </left-side-panel>
@@ -25,7 +30,7 @@
               <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
             </div>
           </settings-bar>
-          <grafer class="grafer" model="covid-19" layer="boutique" :back-edges="false" @grafer_click="onGraferClick"></grafer>
+          <grafer class="grafer" :model="model" @loaded="mainGraphLoading = false" @grafer_click="onGraferClick"></grafer>
         </div>
         <div slot="2" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
@@ -71,11 +76,14 @@
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
+  import { GraferNodesData, GraferEdgesData } from '@uncharted.software/grafer';
 
   import { TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
+  import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
+  import eventHub from '@/eventHub';
 
-  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph } from '@/utils/BGraphUtil';
+  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph, formatBGraphOutputToGraferLayers } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
@@ -93,6 +101,8 @@
   import NodePane from './components/DrilldownPanel/NodePane.vue';
 
   import Grafer from './components/Graphs/Grafer.vue';
+  import { loadJSONLFile } from '@/utils/FileLoaderUtil';
+  import { BIO_CLUSTER_LAYERS_EDGE_OPTIONS, BIO_CLUSTER_LAYERS_LABEL_OPTIONS, BIO_NODE_LAYERS_EDGE_OPTIONS, BIO_NODE_LAYERS_NODE_OPTIONS } from '@/utils/GraferUtil';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -123,6 +133,17 @@
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any;
 
+    // Initialize as undefined to prevent Vue from observing changes within these large datasets
+    // Grafer data is stored in Bio view data as they are required for mapping bgraph queries to grafer layers
+    graferNodesData: GraferNodesData = undefined;
+    graferIntraEdgesData: GraferEdgesData = undefined;
+    graferInterEdgesData: GraferEdgesData = undefined;
+
+    // Set true when the full graph layers are rendered as background context (ie. faded)
+    grafersFullGraphContextIsBackgrounded: boolean = false;
+
+    model: string = 'covid-19';
+
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
@@ -135,6 +156,7 @@
     isSplitView = false;
     subgraph: GraphInterface = null;
     subgraphLoading: boolean = false;
+    mainGraphLoading: boolean = true;
 
     showMessageTooLarge: boolean = false;
     showMessageEmpty: boolean = false;
@@ -146,6 +168,9 @@
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
         const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+
+        // Render subgraph as grafer query layers
+        this.renderSubgraphAsGraferLayers(subgraph);
         this.evaluateSubgraph(subgraph);
       }
     }
@@ -186,6 +211,41 @@
     async mounted (): Promise<void> {
       const [bgNodes, bgEdges] = await loadBGraphData();
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
+
+      const graferLayerData = await this.loadGraferData();
+      this.graferNodesData = graferLayerData.graferNodesData;
+      this.graferIntraEdgesData = graferLayerData.graferIntraEdgesData;
+      this.graferInterEdgesData = graferLayerData.graferInterEdgesData;
+
+      this.$nextTick(() => {
+        // Ensure Grafer component has been mounted before sending
+        // layer data. See: https://vuejs.org/v2/api/?#mounted
+        eventHub.$emit('load-layers', graferLayerData);
+      });
+    }
+
+    async loadGraferData (): Promise<BioGraferLayerDataPayloadInterface> {
+      const [
+        graferPointsData,
+        graferNodesData,
+        graferIntraEdgesData,
+        graferInterEdgesData,
+        graferClustersLabelsData,
+      ] = await Promise.all([
+        loadJSONLFile(`/grafer/${this.model}/points.jsonl`),
+        loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, BIO_NODE_LAYERS_NODE_OPTIONS),
+        loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, BIO_NODE_LAYERS_EDGE_OPTIONS),
+        loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, BIO_CLUSTER_LAYERS_EDGE_OPTIONS),
+        loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
+      ]);
+
+      return {
+        graferPointsData,
+        graferNodesData,
+        graferIntraEdgesData,
+        graferInterEdgesData,
+        graferClustersLabelsData,
+      };
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -207,6 +267,36 @@
             this.subgraph = null;
           }
         }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    renderSubgraphAsGraferLayers (subgraph: any): void {
+      // Render grafer query layers
+      if (!this.mainGraphLoading) {
+        // Queries can only be sent to grafer once it has been loaded.
+        // TODO: A query that is made before Grafer has been rendered will not be called again.
+        //       This problem is highlighted when you have an existing query in the search bar
+        //       that gets run before Grafer has had a chance to load. To avoid this issue
+        //       queries must be stored or re-run once the renderer has loaded.
+        const graferQueryLayerNames = ['highlightClusterLayer', 'highlightNodeLayer'];
+        if (_.isEmpty(subgraph)) {
+          // Clear query layers if no results
+          eventHub.$emit('remove-layers', graferQueryLayerNames);
+          if (this.grafersFullGraphContextIsBackgrounded) {
+            // No query layers full graph is the main context
+            eventHub.$emit('foreground-full-graph');
+            this.grafersFullGraphContextIsBackgrounded = false;
+          }
+        } else {
+          const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData);
+          eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
+          if (!this.grafersFullGraphContextIsBackgrounded) {
+            // Query layer set full graph acts as background context
+            eventHub.$emit('background-full-graph');
+            this.grafersFullGraphContextIsBackgrounded = true;
+          }
+        }
+      }
     }
 
     onGraferClick (detail: GraferEventDetail): void {
@@ -271,5 +361,9 @@
 
   .grafer {
     flex-grow: 1;
+  }
+
+  .left-side-panel {
+    flex-shrink: 0;
   }
 </style>
