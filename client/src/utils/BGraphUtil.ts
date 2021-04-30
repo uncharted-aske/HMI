@@ -200,10 +200,10 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
   if (bgraph && !isEmpty(filters)) {
     const { clauses } = filters;
 
-    clauses.push(QUERY_FIELDS_MAP.BIO_NODE_PRE);
-    clauses.push(QUERY_FIELDS_MAP.BIO_NODE_POST);
-    clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_PRE);
-    clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_POST);
+    clauses.push(QUERY_FIELDS_MAP.BIO_NODE_PRE as unknown as Filter);
+    clauses.push(QUERY_FIELDS_MAP.BIO_NODE_POST as unknown as Filter);
+    clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_PRE as unknown as Filter);
+    clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_POST as unknown as Filter);
 
     const hasNodeFilters = clauses.some(clause => filterTermToPriorityRank[clause.field] === NODE_PRIORITY_RANK);
     const hasEdgeFilters = clauses.some(clause => filterTermToPriorityRank[clause.field] === EDGE_PRIORITY_RANK);
