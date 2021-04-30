@@ -24,8 +24,14 @@
           <settings-bar>
             <div slot="left">
               <counters
+                v-if="!subgraph"
                 :title="selectedModel && selectedModel.metadata.name"
                 :data="[`448723 Nodes`, `44104 Edges`]"
+              />
+               <counters
+                v-else
+                :title="selectedModel && selectedModel.metadata.name"
+                :data="[`448723 Nodes`, `44104 Edges`, `${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
               />
             </div>
             <div slot="settings">

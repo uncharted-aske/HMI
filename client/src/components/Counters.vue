@@ -3,7 +3,7 @@
     <div class="title" v-if="title">
     {{title}}
     </div>
-    <div v-for="(counter) in processedData" :key="counter">
+    <div v-for="(counter, idx) in processedData" :key="counter" :class="[(idx === 2 || idx === 3) ? 'highlights' : (idx !== 2 || idx !== 3), '']">
       {{counter}}
     </div>
   </div>
@@ -45,6 +45,8 @@
   div:first-child {
     margin-right: 5px;
   }
+
+ 
   div:not(:first-child)::before {
     content: "|";
     margin: 5px;
@@ -53,6 +55,10 @@
     font-weight: bold;
   }
 
+}
+
+.highlights {
+  color: $text-color-highlight;
 }
 
 </style>
