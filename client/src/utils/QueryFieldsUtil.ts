@@ -47,6 +47,12 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     lexType: 'string',
   },
   // BIO MODELS
+  BIO_NODE_PRE: {
+    ..._field('bioNodePre', 'Node Pre'),
+    ..._searchable('Node Pre', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
   BIO_NODE_NAME: {
     ..._field('bioNodeName', 'Node Name'),
     ..._searchable('Node Name', false),
@@ -77,6 +83,18 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'integer',
   },
+  BIO_NODE_POST: {
+    ..._field('bioNodePost', 'Node Post'),
+    ..._searchable('Node Post', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_EDGE_PRE: {
+    ..._field('bioEdgePre', 'Edge Pre'),
+    ..._searchable('Edge Pre', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
   BIO_EDGE_TESTED: {
     ..._field('bioEdgeTested', 'Edge Tested'),
     ..._searchable('Edge Tested', false),
@@ -95,6 +113,12 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'string',
     order: 1,
+  },
+  BIO_EDGE_POST: {
+    ..._field('bioEdgePost', 'Edge Post'),
+    ..._searchable('Edge Post', false),
+    baseType: 'integer',
+    lexType: 'integer',
   },
   // COSMOS
   COSMOS_QUERY: {
