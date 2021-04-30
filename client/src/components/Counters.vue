@@ -46,7 +46,6 @@
     margin-right: 5px;
   }
 
- 
   div:not(:first-child)::before {
     content: "|";
     margin: 5px;
