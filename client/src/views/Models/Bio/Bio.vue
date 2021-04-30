@@ -281,7 +281,7 @@
         //       that gets run before Grafer has had a chance to load. To avoid this issue
         //       queries must be stored or re-run once the renderer has loaded.
         const graferQueryLayerNames = ['highlightClusterLayer', 'highlightNodeLayer'];
-        if (_.isEmpty(subgraph)) {
+        if (!subgraph && _.isEmpty(this.getFilters?.clauses)) {
           // Clear query layers if no results
           eventHub.$emit('remove-layers', graferQueryLayerNames);
           if (this.grafersFullGraphContextIsBackgrounded) {
