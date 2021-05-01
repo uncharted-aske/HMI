@@ -32,7 +32,7 @@
               <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
             </div>
           </settings-bar>
-          <grafer class="grafer" :model="model" @loaded="mainGraphLoading = false" @grafer_click="onGraferClick"></grafer>
+          <!-- <grafer class="grafer" :model="model" @loaded="mainGraphLoading = false" @grafer_click="onGraferClick"></grafer> -->
         </div>
         <div slot="2" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
@@ -170,6 +170,7 @@
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
         const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+        console.log(subgraph);
 
         // Render subgraph as grafer query layers
         this.renderSubgraphAsGraferLayers(subgraph);
@@ -344,9 +345,9 @@
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'edge';
 
-      this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
-      this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
-      this.drilldownMetadata = edge.metadata;
+      this.drilldownPaneTitle = `${edge.data.sourceLabel} → ${edge.data.targetLabel}`;
+      this.drilldownPaneSubtitle = `Type: ${edge.data.type}`;
+      this.drilldownMetadata = edge.data;
     }
   }
 </script>
