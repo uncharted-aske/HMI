@@ -170,7 +170,6 @@
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
         const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
-        console.log(subgraph);
 
         // Render subgraph as grafer query layers
         this.renderSubgraphAsGraferLayers(subgraph);

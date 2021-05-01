@@ -269,7 +269,6 @@ export const formatBGraphOutputToLocalGraph = (data: any): GraphInterface => {
       delete d.source_id;
       delete d.target_id;
       edges.push(d);
-
     }
   });
   return {
