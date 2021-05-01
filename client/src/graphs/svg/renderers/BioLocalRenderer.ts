@@ -120,7 +120,8 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', DEFAULT_STYLE.edge.controlRadius)
-      .attr('fill', d => calcEdgeControlBackground(d))
+      .attr('fill', '#FFFFFF') 
+      // .attr('fill', d => calcEdgeControlBackground(d)) // FIXME: Enable when v4.0
       .attr('stroke', 'white')
       .attr('stroke-width', DEFAULT_STYLE.edge.controlStrokeWidth);
 
