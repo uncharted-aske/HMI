@@ -19,8 +19,11 @@ function getFiltres (): Filtres {
 
 /** Update the filtres in the Route */
 function updateFiltres (filtres: Filtres): void {
-  const filtresInJSON = JSON.stringify(Array.from(filtres.values()));
-  const query = { filtres: filtresInJSON };
+  const filtresWithoutAggregates = Array.from(filtres.values()).map(filtre => {
+    const { field, clauses } = filtre;
+    return { field, clauses };
+  });
+  const query = { filtres: JSON.stringify(filtresWithoutAggregates) };
   Router.getRouter().push({ query } as Location);
 }
 

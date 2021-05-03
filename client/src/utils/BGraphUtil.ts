@@ -11,6 +11,8 @@ import { isEmpty } from './FiltersUtil';
 import { buildHighlightClusterLayer, buildHighlightNodeLayer } from './GraferUtil';
 import { EdgeTypes } from '@/graphs/svg/encodings';
 
+import * as FiltresUtil from '@/utils/FiltresUtil';
+
 const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
   let value, key;
 
@@ -135,22 +137,18 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
 /** Filters a BGraph, and returns back the filtres with aggregates. */
 export function getBGraphAggregatesFromFiltres (bgraph: any, filtres: Filtres, fields: string[]): Filtres {
   fields.forEach(field => {
-    let aggregates = bgraph.v()
+    const bgraphResult = bgraph.v()
       .filter({ _type: FILTRES[field].graphType })
       .property(FILTRES[field].name)
       .run();
 
+    let aggregates;
     switch (FILTRES[field].type) {
       case 'histogram':
-      default:
-        // Reduce the aggregates into an histogram of 10 bucket.
-        aggregates = aggregates.reduce(function (acc, value) {
-          value = Math.floor(value * 10) / 10;
-          if (value in acc) acc[value]++;
-          else acc[value] = 1;
-          return acc;
-        }, {});
+        aggregates = FiltresUtil.bgraphResultsToHistogram(bgraphResult);
         break;
+      default:
+        aggregates = null;
     }
 
     const filtre: Filtre = Object.assign(filtres.get(field), { aggregates });
@@ -160,8 +158,7 @@ export function getBGraphAggregatesFromFiltres (bgraph: any, filtres: Filtres, f
   return filtres;
 }
 
-/** Filters a BGraph, and returns a subgraph. */
-/*
+/** Filters a BGraph, and returns a subgraph. *//*
 export function getSubgraphFromFiltres (bgraph: any, filtres: Filtres): any {
   let bgraphQuery = bgraph.v();
 

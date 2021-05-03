@@ -17,8 +17,8 @@
  */
 
 export type FiltreAggregate = {
-  value: string | number,
-  aggregate: number,
+  name: string | number,
+  value: number,
 };
 
 export type FiltreClause = string | number;
