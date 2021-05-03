@@ -4,7 +4,7 @@ import { SVGRenderer } from 'svg-flowgraph';
 
 import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
 
-import { calcEdgeColor, calculateEdgeControlLabels, flatten } from '@/graphs/svg/util';
+import { calcEdgeColor, flatten } from '@/graphs/svg/util';
 import { Colors, EdgeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 import { truncateString } from '@/utils/StringUtil';
@@ -124,16 +124,6 @@ export default class BioLocalRenderer extends SVGRenderer {
       // .attr('fill', d => calcEdgeControlBackground(d)) // FIXME: Enable when v4.0
       .attr('stroke', 'white')
       .attr('stroke-width', DEFAULT_STYLE.edge.controlStrokeWidth);
-
-    edgeSelection.append('text')
-      .attr('x', -(DEFAULT_STYLE.edge.controlRadius * 0.5) + 1)
-      .attr('y', (DEFAULT_STYLE.edge.controlRadius * 0.5) - 1)
-      .style('font-size', DEFAULT_STYLE.edge.controlRadius)
-      .style('stroke', 'none')
-      .style('font-weight', '800')
-      .style('fill', DEFAULT_STYLE.edge.controlStrokeColor)
-      .style('cursor', 'pointer')
-      .text(d => calculateEdgeControlLabels(d));
   }
 
   renderEdge (edgeSelection:d3.Selection<any, any, any, any>):void {

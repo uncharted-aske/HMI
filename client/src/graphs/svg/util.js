@@ -173,10 +173,10 @@ export const calcLabelColor = (node) => {
  */
 
 export const calcEdgeColor = (edge) => {
-  if (edge.data.edgeType) {
-    if (edge.data.edgeType === EdgeTypes.EDGES.ACTIVATION || edge.data.edgeType === EdgeTypes.EDGES.INCREASEAMOUNT) {
+  if (edge.data.type) {
+    if (edge.data.type === EdgeTypes.EDGES.ACTIVATION || edge.data.type === EdgeTypes.EDGES.INCREASEAMOUNT) {
       return Colors.POLARITY.POSITIVE;
-    } else if (edge.data.edgeType === EdgeTypes.EDGES.INHIBITION || edge.data.edgeType === EdgeTypes.EDGES.DECREASEAMOUNT) {
+    } else if (edge.data.type === EdgeTypes.EDGES.INHIBITION || edge.data.type === EdgeTypes.EDGES.DECREASEAMOUNT) {
       return Colors.POLARITY.NEGATIVE;
     } else return Colors.EDGES.DEFAULT;
   }
@@ -191,7 +191,7 @@ export const calcEdgeColor = (edge) => {
  * uncurated - 3
  */
 export const calcEdgeControlBackground = (edge) => {
-  const curated = edge.data.metadata.curated;
+  const curated = edge.data.curated;
   if (curated === EdgeTypes.CURATION_STATUS.INCORRECT) {
     return Colors.CURATION.INCORRECT;
   } else if (curated === EdgeTypes.CURATION_STATUS.CORRECT) {
@@ -202,20 +202,3 @@ export const calcEdgeControlBackground = (edge) => {
   return Colors.CURATION.UNCURATED;
 };
 
-export const calculateEdgeControlLabels = (edge) => {
-  const type = edge.data.edgeType;
-  switch (type) {
-    case EdgeTypes.EDGES.ACTIVATION:
-      return 'A';
-    case EdgeTypes.EDGES.INHIBITION:
-      return 'I';
-    case EdgeTypes.EDGES.INCREASEAMOUNT:
-      return '+';
-    case EdgeTypes.EDGES.PHOSPORYLATION:
-      return 'P';
-    case EdgeTypes.EDGES.DEPHOSPORYLATION:
-      return 'D';
-    default:
-      return '';
-  }
-};
