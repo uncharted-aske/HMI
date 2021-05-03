@@ -25,10 +25,7 @@
             <div slot="left">
               <counters
                 :title="selectedModel && selectedModel.metadata.name"
-                :data="[
-                  { name: 'Nodes', value: 448723 },
-                  { name: 'Edges', value: 44104 },
-                ]"
+                :data="countersData"
               />
             </div>
             <div slot="settings">
@@ -86,7 +83,7 @@
   import { bgraph } from '@uncharted.software/bgraph';
   import { GraferNodesData, GraferEdgesData, GraferLabelsData } from '@uncharted.software/grafer';
 
-  import { TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
+  import { Counter, TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
   import eventHub from '@/eventHub';
@@ -182,6 +179,12 @@
         this.renderSubgraphAsGraferLayers(subgraph);
         this.evaluateSubgraph(subgraph);
       }
+    }
+
+    get countersData (): Array<Counter> {
+      return !this.subgraph ? [{ name: 'Nodes', value: 448723 }, { name: 'Edges', value: 44104 }]
+                              : [{ name: 'Nodes', value: 448723 }, { name: 'Edges', value: 44104 },
+                              { name: 'Nodes', value: this.subgraphNodeCount, highlighted: true }, { name: 'Edges', value: this.subgraphEdgeCount, highlighted: true }];
     }
 
     get getIcon (): string {

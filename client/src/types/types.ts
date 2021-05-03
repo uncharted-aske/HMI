@@ -62,6 +62,7 @@ interface GraferEventDetail {
 type Counter = {
   name: string,
   value?: number,
+  highlighted?: boolean,
   inverse?: boolean,
 };
 
