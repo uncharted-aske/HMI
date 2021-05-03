@@ -1,7 +1,7 @@
 <template>
   <div class="counters-container">
     <span class="title" v-if="title">{{ title }}</span>
-    <span v-for="(counter, index) in processedData" :key="index">{{ counter }}</span>
+    <span v-for="(counter, index) in processedData" :key="index" :class="{ 'highlighted': data[index].highlighted, '': !data[index].highlighted }">{{ counter }}</span>
   </div>
 </template>
 
@@ -30,6 +30,8 @@
         } else {
           acc.push(value + ' ' + counter.name);
         }
+
+        
         return acc;
       }, []);
     }
@@ -59,5 +61,9 @@
 
 .title {
   font-weight: bold;
+}
+
+.highlighted {
+  color: $text-color-highlight;
 }
 </style>

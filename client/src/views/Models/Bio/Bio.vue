@@ -182,8 +182,8 @@
 
     get countersData():  Array<Counter> {
       return !this.subgraph ? [{ name: 'Nodes', value: 448723 },{ name: 'Edges', value: 44104 }]: 
-                              [{ name: 'Nodes', value: 448723 },{ name: 'Edges', value: 44104 }, { name: 'Subgraph Nodes', value: this.subgraphNodeCount}, 
-                              { name: 'Subgraph Edges', value: this.subgraphEdgeCount}];
+                              [{ name: 'Nodes', value: 448723 },{ name: 'Edges', value: 44104 }, 
+                              { name: 'Nodes', value: this.subgraphNodeCount, highlighted: true}, { name: 'Edges', value: this.subgraphEdgeCount, highlighted: true}];
     } 
 
     get getIcon (): string {
