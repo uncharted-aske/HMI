@@ -198,15 +198,18 @@ export const executeBgraph = (bgraph: any, clause: Filter, hasNodeFilters: boole
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const filterToBgraph = (bgraph: any, filters: Filters): any => {
   if (bgraph && !isEmpty(filters)) {
-    const { clauses } = filters;
-
-    clauses.push(QUERY_FIELDS_MAP.BIO_NODE_PRE as unknown as Filter);
-    clauses.push(QUERY_FIELDS_MAP.BIO_NODE_POST as unknown as Filter);
-    clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_PRE as unknown as Filter);
-    clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_POST as unknown as Filter);
+    const clauses = deepCopy(filters.clauses);
 
     const hasNodeFilters = clauses.some(clause => filterTermToPriorityRank[clause.field] === NODE_PRIORITY_RANK);
+    if (hasNodeFilters) {
+      clauses.push(QUERY_FIELDS_MAP.BIO_NODE_PRE as unknown as Filter);
+      clauses.push(QUERY_FIELDS_MAP.BIO_NODE_POST as unknown as Filter);
+    }
     const hasEdgeFilters = clauses.some(clause => filterTermToPriorityRank[clause.field] === EDGE_PRIORITY_RANK);
+    if (hasEdgeFilters) {
+      clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_PRE as unknown as Filter);
+      clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_POST as unknown as Filter);
+    }
 
     const sortedClauses = clauses.sort((clause1, clause2) =>
       filterTermToPriorityRank[clause1.field] - filterTermToPriorityRank[clause2.field]);
