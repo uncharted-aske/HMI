@@ -218,7 +218,7 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
     sortedClauses.map(clause => {
       bgraphQuery = executeBgraph(bgraphQuery, clause, hasNodeFilters, hasEdgeFilters);
     });
-    return deepCopy(bgraphQuery.run(), ['_in', '_out']);
+    return deepCopy(bgraphQuery.unique().run(), ['_in', '_out']);
   }
 };
 
