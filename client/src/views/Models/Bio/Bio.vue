@@ -72,7 +72,7 @@
   import _ from 'lodash';
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter } from 'vuex-class';
+  import { Action, Getter } from 'vuex-class';
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
@@ -81,9 +81,16 @@
   import { TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
+  import { FILTRES_FIELDS } from '@/types/typesFiltres';
   import eventHub from '@/eventHub';
 
-  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph, formatBGraphOutputToGraferLayers } from '@/utils/BGraphUtil';
+  import {
+    loadBGraphData,
+    filterToBgraph,
+    formatBGraphOutputToLocalGraph,
+    formatBGraphOutputToGraferLayers,
+    getBGraphAggregatesFromFiltres,
+  } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
@@ -107,6 +114,11 @@
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
+  ];
+
+  /** List of filtres fields displayed in the facets panel */
+  const FACETS_FIELDS: string[] = [
+    FILTRES_FIELDS.BELIEF_SCORE,
   ];
 
   const MAX_RESULTS_LOCAL_VIEW = 500;
@@ -164,6 +176,9 @@
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Getter getFilters;
+    @Getter getFiltres;
+    @Action addFiltres;
+    @Action setFiltres;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
@@ -212,6 +227,7 @@
       const [bgNodes, bgEdges] = await loadBGraphData();
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
 
+      /*
       const graferLayerData = await this.loadGraferData();
       this.graferNodesData = graferLayerData.graferNodesData;
       this.graferIntraEdgesData = graferLayerData.graferIntraEdgesData;
@@ -222,6 +238,12 @@
         // layer data. See: https://vuejs.org/v2/api/?#mounted
         eventHub.$emit('load-layers', graferLayerData);
       });
+      */
+
+      // Initialize the filtres with what we display in the facets panel.
+      this.setFiltres(FACETS_FIELDS);
+      const newFiltres = getBGraphAggregatesFromFiltres(this.bgraphInstance, this.getFiltres, FACETS_FIELDS);
+      this.addFiltres(newFiltres);
     }
 
     async loadGraferData (): Promise<BioGraferLayerDataPayloadInterface> {

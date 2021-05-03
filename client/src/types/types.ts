@@ -24,9 +24,9 @@ interface ModelInterface {
 }
 
 interface TabInterface {
-    name: string;
-    icon: string;
-    id: string;
+  name: string;
+  icon: string;
+  id: string;
 }
 
 interface ViewInterface {

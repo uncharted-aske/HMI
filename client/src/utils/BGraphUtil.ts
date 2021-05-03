@@ -4,10 +4,12 @@ import { DataFile } from '@dekkai/data-source';
 import { GraferNodesData, GraferEdgesData, GraferLayerData } from '@uncharted.software/grafer';
 
 import { Filters, Filter } from '@/types/typesLex';
+import { Filtre, Filtres, FILTRES } from '@/types/typesFiltres';
 import { GraphInterface } from '@/types/typesGraphs';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
 import { buildHighlightClusterLayer, buildHighlightNodeLayer } from './GraferUtil';
+import { EdgeTypes } from '@/graphs/svg/encodings';
 
 const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
   let value, key;
@@ -33,6 +35,11 @@ const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
 
   return outObject;
 };
+
+// Get a subgraph result from a BGraph query.
+function getSubGraphFromBGraphQuery (bgraphQuery): any {
+  return deepCopy(bgraphQuery.run(), ['_in', '_out']);
+}
 
 // FIXME: Fix return type once bgraph library types are added
 export const loadBGraphData = (): Promise<any[]> => {
@@ -124,6 +131,52 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
     return deepCopy(bgraphQuery.run(), ['_in', '_out']);
   }
 };
+
+/** Filters a BGraph, and returns back the filtres with aggregates. */
+export function getBGraphAggregatesFromFiltres (bgraph: any, filtres: Filtres, fields: string[]): Filtres {
+  fields.forEach(field => {
+    let aggregates = bgraph.v()
+      .filter({ _type: FILTRES[field].graphType })
+      .property(FILTRES[field].name)
+      .run();
+
+    switch (FILTRES[field].type) {
+      case 'histogram':
+      default:
+        // Reduce the aggregates into an histogram of 10 bucket.
+        aggregates = aggregates.reduce(function (acc, value) {
+          value = Math.floor(value * 10) / 10;
+          if (value in acc) acc[value]++;
+          else acc[value] = 1;
+          return acc;
+        }, {});
+        break;
+    }
+
+    const filtre: Filtre = Object.assign(filtres.get(field), { aggregates });
+    filtres.set(field, filtre);
+  });
+
+  return filtres;
+}
+
+/** Filters a BGraph, and returns a subgraph. */
+/*
+export function getSubgraphFromFiltres (bgraph: any, filtres: Filtres): any {
+  let bgraphQuery = bgraph.v();
+
+  filtres.forEach(filtre => {
+    // TODO - Right now we only filtres belief scores, so this function is pretty sommaires
+    if (filtre.field === FILTRES.BELIEF_SCORE.name) {
+      bgraphQuery = bgraphQuery
+        .filter({ _type: FILTRES.BELIEF_SCORE.graphType })
+        .filter(node => Boolean(node[FILTRES.BELIEF_SCORE.name]));
+    }
+  });
+
+  return getSubGraphFromBGraphQuery(bgraphQuery);
+}
+*/
 
 // TODO: Specify queryResults type once bgraph has result types
 export const formatBGraphOutputToGraferLayers = (

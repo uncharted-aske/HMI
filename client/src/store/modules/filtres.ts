@@ -11,13 +11,13 @@ import * as Route from '@/utils/RouteUtil';
 const state = new Map() as Filtres;
 
 const getters: GetterTree<Filtres, any> = {
-  /** Return an Array or Filtre. */
-  getFiltres (state): Filtre[] {
-    return Array.from(state.values());
+  /** Return an Array of Filtres. */
+  getFiltres (state): Filtres {
+    return state;
   },
 
   /** Return a Filtre based on its field. */
-  getFiltre (state, field: string): Filtre {
+  getFiltre (state, field: FiltreField): Filtre {
     return state.get(field) ?? null;
   },
 };
@@ -25,6 +25,11 @@ const getters: GetterTree<Filtres, any> = {
 const actions: ActionTree<Filtres, any> = {
   addFiltre ({ state, commit }, filtre: Filtre): void {
     commit('addFiltre', filtre);
+    Route.updateFiltres(state);
+  },
+
+  addFiltres ({ state, commit }, filtres: Filtres): void {
+    filtres.forEach(filtre => commit('addFiltre', filtre));
     Route.updateFiltres(state);
   },
 
@@ -38,39 +43,42 @@ const actions: ActionTree<Filtres, any> = {
     Route.updateFiltres(state);
   },
 
-  setFiltre ({ commit }): void {
-    const filtres = Route.getFiltres();
-    if (filtres) {
-      commit('setFiltre', filtres);
-    }
-  },
+  setFiltres ({ commit }, fields: string[]): void {
+    // We check if the route as some
+    const filtres = Route.getFiltres() ?? new Map() as Filtres;
+    commit('setFiltre', filtres);
 
-  updateFiltre ({ state, commit }, filtre: Filtre): void {
-    if (filtre.values.length > 0) {
-      commit('addFiltre', filtre);
-    } else {
-      commit('removeFiltre', filtre.field);
+    // If fields are provided we add them.
+    if (fields) {
+      fields.forEach(field => commit('addFiltre', { field } as Filtre));
     }
+
     Route.updateFiltres(state);
   },
 };
 
 const mutations: MutationTree<Filtres> = {
   addFiltre (state, filtre: Filtre): void {
-    state.set(filtre.field, filtre);
+    if (!state.has(filtre.field)) {
+      state.set(filtre.field, filtre);
+    } else {
+      const currentFiltre = state.get(filtre.field);
+      const updatedFiltre = { ...currentFiltre, ...filtre };
+      state.set(filtre.field, updatedFiltre);
+    }
   },
 
   clearFiltres (state): void {
     state.clear();
   },
 
-  removeFiltre (state, field: string): void {
+  removeFiltre (state, field: FiltreField): void {
     state.delete(field);
   },
 
   setFiltre (state, filtres: Filtres): void {
     state.clear();
-    filtres.forEach(filtre => state.set(filtre.field, filtre));
+    state = filtres;
   },
 };
 
