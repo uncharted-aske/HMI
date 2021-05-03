@@ -24,17 +24,8 @@
           <settings-bar>
             <div slot="left">
               <counters
-                v-if="!subgraph"
                 :title="selectedModel && selectedModel.metadata.name"
-                :data="[
-                  { name: 'Nodes', value: 448723 },
-                  { name: 'Edges', value: 44104 },
-                ]"
-              />
-               <counters
-                v-else
-                :title="selectedModel && selectedModel.metadata.name"
-                :data="[`448723 Nodes`, `44104 Edges`, `${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
+                :data="countersData"
               />
             </div>
             <div slot="settings">
@@ -92,7 +83,7 @@
   import { bgraph } from '@uncharted.software/bgraph';
   import { GraferNodesData, GraferEdgesData } from '@uncharted.software/grafer';
 
-  import { TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
+  import { Counter, TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
   import eventHub from '@/eventHub';
@@ -188,6 +179,12 @@
         this.evaluateSubgraph(subgraph);
       }
     }
+
+    get countersData():  Array<Counter> {
+      return !this.subgraph ? [{ name: 'Nodes', value: 448723 },{ name: 'Edges', value: 44104 }]: 
+                              [{ name: 'Nodes', value: 448723 },{ name: 'Edges', value: 44104 }, { name: 'Subgraph Nodes', value: this.subgraphNodeCount}, 
+                              { name: 'Subgraph Edges', value: this.subgraphEdgeCount}];
+    } 
 
     get getIcon (): string {
       return this.isSplitView ? 'window-maximize' : 'columns';
