@@ -5,32 +5,30 @@
       :activeTabId="activeTabId"
       :tabs="tabs"
     >
-      <div slot="content">
-        <facets-pane />
-      </div>
+      <facets-pane slot="content" />
     </left-side-panel>
     <div class="d-flex flex-column h-100">
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for models...`"/>
       </div>
       <settings-bar>
-        <div slot="left">
-          <counters :data="countersData"/>
-        </div>
-        <div slot="middle" class="view-button" v-if="selectedButtonContent">
-          <button type="button" class="btn btn-primary h-100 d-flex align-items-center" @click="onClickCompare">
-            {{selectedButtonContent}}
-          </button>
-        </div>
-        <div slot="right">
-          <settings/>
-        </div>
+        <counters slot="left" :data="countersData"/>
+        <button
+          v-if="selectedButtonContent"
+          class="btn btn-primary"
+          slot="middle"
+          type="button"
+          @click="onClickCompare"
+        >
+          {{ selectedButtonContent }}
+        </button>
+        <settings slot="right"/>
       </settings-bar>
       <card-container
-          class="model-cards"
-          :header="`Models`"
-          :cards="modelsCards"
-          @click-card="onClickCard"
+        class="model-cards"
+        :cards="modelsCards"
+        :header="`Models`"
+        @click-card="onClickCard"
       />
     </div>
   </div>
@@ -41,7 +39,7 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
 
-  import { TabInterface, CardInterface } from '@/types/types';
+  import { CardInterface, Counter, TabInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import Counters from '@/components/Counters.vue';
@@ -101,10 +99,10 @@
       ];
     }
 
-    get countersData (): Array<string> {
+    get countersData (): Array<Counter> {
       const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
       if (modelsList) {
-        return [`${modelsList.length} Models`];
+        return [{ name: 'Models', value: modelsList.length }];
       }
     }
 
@@ -162,9 +160,5 @@
 
 .left-side-panel {
   flex-shrink: 0;
-}
-
-.view-button {
-  padding: 2px 5px;
 }
 </style>
