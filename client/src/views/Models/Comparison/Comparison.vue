@@ -10,7 +10,10 @@
           <div slot="left">
            <counters
               :title="model.metadata.name"
-              :data="[`${model.graph.detailed.nodes.length} Nodes`, `${model.graph.detailed.edges.length} Edges`]"
+              :data="[
+                { name: 'Nodes', value: model.graph.detailed.nodes.length },
+                { name: 'Edges', value: model.graph.detailed.edges.length },
+              ]"
             />
           </div>
           <div slot="right">
@@ -25,7 +28,10 @@
           <div slot="left">
             <counters
               :title="`Intersection Graph`"
-              :data="[`${nodeCountIntersectionGraph} Nodes`, `${edgeCountIntersectionGraph} Edges`]"
+              :data="[
+                { name: 'Nodes', value: nodeCountIntersectionGraph },
+                { name: 'Edges', value: edgeCountIntersectionGraph },
+              ]"
             />          </div>
           <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>

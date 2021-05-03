@@ -1,11 +1,8 @@
 <template>
   <div class="position-relative flex-grow-1" ref="container">
-    <resizable-grid-content v-for="(content) in contentArray" :key="content.id"
-      :id="content.id"
-      :left="content.left + 'px'"
-      :top="content.top + 'px'"
-      :width="content.width + 'px'"
-      :height="content.height + 'px'"
+    <resizable-grid-content
+      v-for="content in contentArray" :key="content.id"
+      :content="content"
       @mousedown-border="onMousedown"
     >
       <slot :name="content.id"/>
@@ -21,7 +18,13 @@
 
   import ResizableGridContent from './ResizableGridContent.vue';
 
-  import { DimensionsInterface, CellPositionInterface, CellBorderInterface, ContentInterface } from '@/types/typesResizableGrid';
+  import {
+    CellBorderInterface,
+    CellDimensionsInterface,
+    CellPositionInterface,
+    ContentInterface,
+    DimensionsInterface,
+  } from '@/types/typesResizableGrid';
 
   // reverse the position of the key and values in an object, placing the former keys in an array
   // e.g. invertObject({x: 1, y: 1, z: 2}) ---> {1: ["x","y"], 2:["z"]}
@@ -86,7 +89,7 @@
     cellBotRightX: CellPositionInterface;
     cellBotRightY: CellPositionInterface;
 
-    // cell neighbors
+    // cell neighbours, the cells bordering the current cell
     cellLeft: CellBorderInterface;
     cellRight: CellBorderInterface;
     cellTop: CellBorderInterface;
@@ -106,6 +109,29 @@
         ? this.$el.getBoundingClientRect()
         : { width: 0, height: 0, top: 0, left: 0 };
       return { width, height, top, left };
+    }
+
+    /** Return the dimensions of a cell */
+    cellDim (id: string): CellDimensionsInterface {
+      // Set some default.
+      const defaultDim = {
+        width: null,
+        widthFixed: false,
+        widthMax: 1,
+        widthMin: 0,
+        height: null,
+        heightFixed: false,
+        heightMax: 1,
+        heightMin: 0,
+      } as CellDimensionsInterface;
+
+      // Fetch the dimensions set by the user.
+      const dimensions = this.dimensions?.[id];
+      if (dimensions) {
+        return { ...defaultDim, ...dimensions };
+      } else {
+        return defaultDim;
+      }
     }
 
     generateContentArray (): ContentInterface[] {
@@ -145,7 +171,7 @@
       this.cellBotRightX = {};
       this.cellBotRightY = {};
 
-      // cell neighbors
+      // cell neighbours
       this.cellLeft = {};
       this.cellRight = {};
       this.cellTop = {};
@@ -271,7 +297,7 @@
     }
 
     isWidthFixed (id: string): boolean {
-      return this.dimensions[id] && this.dimensions[id].widthFixed;
+      return Boolean(this.dimensions[id]?.widthFixed);
     }
 
     findActiveBorders (id: string, position: string, _selfCall?: boolean): any {
@@ -343,25 +369,24 @@
         const { position, positive, negative } = this.activeBorder;
         const { movementX, movementY } = e;
 
-        if (movementX === 0 && movementY === 0) {
-          return;
-        }
+        // If there is no movement
+        if (movementX === 0 && movementY === 0) return;
 
         if (position === 'left') {
-          positive.map(id => { this.cellTopLeftX[id] += movementX; });
-          negative.map(id => { this.cellBotRightX[id] += movementX; });
+          this.adjustCellsFromTheLeft(positive, movementX);
+          this.adjustCellsFromTheRight(negative, movementX);
         }
         if (position === 'right') {
-          positive.map(id => { this.cellBotRightX[id] += movementX; });
-          negative.map(id => { this.cellTopLeftX[id] += movementX; });
+          this.adjustCellsFromTheRight(positive, movementX);
+          this.adjustCellsFromTheLeft(negative, movementX);
         }
         if (position === 'top') {
-          positive.map(id => { this.cellTopLeftY[id] += movementY; });
-          negative.map(id => { this.cellBotRightY[id] += movementY; });
+          this.adjustCellsFromTheTop(positive, movementY);
+          this.adjustCellsFromTheBottom(negative, movementY);
         }
         if (position === 'bottom') {
-          positive.map(id => { this.cellBotRightY[id] += movementY; });
-          negative.map(id => { this.cellTopLeftY[id] += movementY; });
+          this.adjustCellsFromTheBottom(positive, movementY);
+          this.adjustCellsFromTheTop(negative, movementY);
         }
 
         this.contentArray = this.generateContentArray();
@@ -372,10 +397,91 @@
       // hack to force re-render
       // this.borderPosition = this.borderPosition + Math.random() * 0.0001;
     }
+
+    /** Calculate the current width limitation of a cell based on its container. */
+    cellWidthLimits (id: string): { min: number, max: number } {
+      const { widthMin, widthMax } = this.cellDim(id);
+      return {
+        min: widthMin * this.containerDim.width,
+        max: widthMax * this.containerDim.width,
+      };
+    }
+
+    /** Calculate the current height limitation of a cell based on its container. */
+    cellHeightLimits (id: string): { min: number, max: number } {
+      const { heightMin, heightMax } = this.cellDim(id);
+      return {
+        min: heightMin * this.containerDim.height,
+        max: heightMax * this.containerDim.height,
+      };
+    }
+
+    adjustCellsFromTheLeft (cells: string[], movement: number): void {
+      cells.forEach(id => {
+        this.cellTopLeftX[id] = this.cellTopLeftX[id] + movement;
+        /*
+        // Find the new width of the cell
+        const newX = this.cellTopLeftX[id] + movement;
+        const newWidth = this.cellBotRightX[id] - newX;
+
+        // If it's within the limits
+        const limit = this.cellWidthLimits(id);
+        if (limit.min <= newWidth && newWidth <= limit.max) {
+          this.cellTopLeftX[id] = newX;
+        }
+        */
+      });
+    }
+
+    adjustCellsFromTheRight (cells: string[], movement: number): void {
+      cells.forEach(id => {
+        this.cellBotRightX[id] = this.cellBotRightX[id] + movement;
+        /*
+        // Find the new width of the cell
+        const newX = this.cellBotRightX[id] + movement;
+        const newWidth = newX - this.cellTopLeftX[id];
+
+        // If it's within the limits
+        const limit = this.cellWidthLimits(id);
+        if (limit.min <= newWidth && newWidth <= limit.max) {
+          this.cellBotRightX[id] = newX;
+        }
+        */
+      });
+    }
+
+    adjustCellsFromTheTop (cells: string[], movement: number): void {
+      cells.forEach(id => {
+        this.cellTopLeftY[id] = this.cellTopLeftY[id] + movement;
+        /*
+        // Find the new height of the cell
+        const newY = this.cellTopLeftY[id] + movement;
+        const newHeight = this.cellBotRightY[id] - newY;
+
+        // Update the height if it's within the limits
+        const limit = this.cellHeightLimits(id);
+        if (limit.min <= newHeight && newHeight <= limit.max) {
+          this.cellTopLeftY[id] = newY;
+        }
+        */
+      });
+    }
+
+    adjustCellsFromTheBottom (cells: string[], movement: number): void {
+      cells.forEach(id => {
+        this.cellBotRightY[id] = this.cellBotRightY[id] + movement;
+        /*
+        // Find the new height of the cell
+        const newY = this.cellBotRightY[id] + movement;
+        const newHeight = newY - this.cellTopLeftY[id];
+
+        // Update the height if it's within the limits
+        const limit = this.cellHeightLimits(id);
+        if (limit.min <= newHeight && newHeight <= limit.max) {
+          this.cellBotRightY[id] = newY;
+        }
+        */
+      });
+    }
   }
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
-</style>

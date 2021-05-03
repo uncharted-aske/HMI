@@ -1,8 +1,8 @@
 <template>
   <div class="settings-container">
-    <button type="button" class="btn btn-secondary mr-1" disabled>Views</button>
-    <button type="button" class="btn btn-secondary mr-1" disabled>Layouts</button>
-    <button type="button" class="btn btn-secondary mr-1" disabled>Settings</button>
+    <button type="button" class="btn btn-secondary" disabled>Views</button>
+    <button type="button" class="btn btn-secondary" disabled>Layouts</button>
+    <button type="button" class="btn btn-secondary" disabled>Settings</button>
   </div>
 </template>
 
@@ -24,29 +24,23 @@
 @import "@/styles/variables";
 
 .settings-container {
-  position: relative;
-  display: flex;
   align-items: center;
-  height: 100%;
-  padding: 2px 5px;
-  .btn {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    .view-name {
-      font-weight: bold;
-      margin: 5px;
-    }
+  display: flex;
+  gap: 5px;
+  position: relative;
+
+  .view-name {
+    font-weight: bold;
   }
 }
 
 .dropdown-settings {
-  display: flex;
   align-items: center;
-  position: absolute;
-  top: calc(#{$secondary-bar-width} - 15px);
+  display: flex;
   height: calc(#{$secondary-bar-width});
   padding: 10px;
+  position: absolute;
+  top: calc(#{$secondary-bar-width} - 15px);
 }
 
 </style>
