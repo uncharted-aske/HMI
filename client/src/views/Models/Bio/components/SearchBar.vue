@@ -17,7 +17,7 @@
 
   import * as filtersUtil from '@/utils/FiltersUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
-  import { BOOLEAN_OPTIONS } from '@/utils/ModelTypeUtil';
+  import { BOOLEAN_OPTIONS, BIO_EDGE_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
   import { initializeLex, setPills } from '@/utils/LexUtil';
 
   @Component
@@ -50,6 +50,19 @@
         ),
         new TextPill(QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE),
         new TextPill(QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE),
+        new KeyValuePill(
+          QUERY_FIELDS_MAP.BIO_EDGE_TESTED,
+          BOOLEAN_OPTIONS,
+          '',
+          { single: true, multiValue: false },
+        ),
+        new TextPill(QUERY_FIELDS_MAP.BIO_EDGE_DOI),
+        new KeyValuePill(
+          QUERY_FIELDS_MAP.BIO_EDGE_TYPE,
+          BIO_EDGE_TYPE_OPTIONS,
+          '',
+          { single: true, multiValue: true },
+        ),
       ];
 
       this.lex = initializeLex({

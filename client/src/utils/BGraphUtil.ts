@@ -8,6 +8,7 @@ import { GraphInterface } from '@/types/typesGraphs';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
 import { buildHighlightClusterLayer, buildHighlightNodeLayer } from './GraferUtil';
+import { BIO_EDGE_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
 
 const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
   let value, key;
@@ -66,15 +67,72 @@ export const loadBGraphData = (): Promise<any[]> => {
 };
 
 // Add filter terms here to change the order in which they are processed in bgraph
-// e.g. QUERY_FIELDS_MAP.BIO_NODE_NAME.field: 1
+const NODE_PRIORITY_RANK = 1;
+const EDGE_PRIORITY_RANK = 4;
 const filterTermToPriorityRank = {
-
+  // Node Terms
+  [QUERY_FIELDS_MAP.BIO_NODE_PRE.field]: 0,
+  [QUERY_FIELDS_MAP.BIO_NODE_NAME.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_POST.field]: 2,
+  // Edge Terms
+  [QUERY_FIELDS_MAP.BIO_EDGE_PRE.field]: 3,
+  [QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field]: EDGE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field]: EDGE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_EDGE_DOI.field]: EDGE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_EDGE_POST.field]: 5,
 };
 
 // Assume that bgraph instance passed in has already been initialized
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const executeBgraph = (bgraph: any, clause: Filter): any => {
+export const executeBgraph = (bgraph: any, clause: Filter, hasNodeFilters: boolean, hasEdgeFilters: boolean): any => {
   switch (clause.field) {
+    case QUERY_FIELDS_MAP.BIO_EDGE_PRE.field: {
+      return bgraph;
+    }
+    case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: {
+      return bgraph.filter(document => {
+        if (document._type === 'edge') {
+          const edge = document;
+          return edge.tested === Boolean(clause.values[0]);
+        }
+        // Document is not an edge
+        return hasNodeFilters;
+      });
+    }
+    case QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field: {
+      return bgraph.filter(document => {
+        if (document._type === 'edge') {
+          const edge = document;
+          return clause.values.some(typeIdx => BIO_EDGE_TYPE_OPTIONS[typeIdx] === edge.type);
+        }
+        // Document is not an edge
+        return hasNodeFilters;
+      });
+    }
+    case QUERY_FIELDS_MAP.BIO_EDGE_DOI.field: {
+      let dois = clause.values as string[];
+      dois = dois.map(doi => doi.toLowerCase());
+      return bgraph.filter(document => {
+        if (document._type === 'edge') {
+          const edge = document;
+          return dois.some(doi => Object.keys(edge.doi_map).some(edgeDoi => {
+            return edgeDoi.toLowerCase().includes(doi);
+          }));
+        }
+        // Document is not an edge
+        return hasNodeFilters;
+      });
+    }
+    case QUERY_FIELDS_MAP.BIO_EDGE_POST.field: {
+      return bgraph.as('edgeOnly').out().as('target').back('edgeOnly').in().as('source').merge('edgeOnly', 'source', 'target');
+    }
+    case QUERY_FIELDS_MAP.BIO_NODE_PRE.field: {
+      return bgraph;
+    }
     case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
       let names = clause.values as string[];
       // Filter matching case insensitive names
@@ -85,20 +143,51 @@ export const executeBgraph = (bgraph: any, clause: Filter): any => {
           return names.some(name => name === node.name.toLowerCase());
         }
         // Document is not a node
-        return false;
+        return hasEdgeFilters;
       });
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: {
-      return bgraph.filter(node => node.grounded === Boolean(clause.values[0]));
+      return bgraph.filter(document => {
+        if (document._type === 'node') {
+          const node = document;
+          return node.grounded === Boolean(clause.values[0]);
+        }
+        // Document type is an edge
+        return hasEdgeFilters;
+      });
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field: {
-      return bgraph.filter(node => node.grounded_onto === Boolean(clause.values[0]));
+      return bgraph.filter(document => {
+        if (document._type === 'node') {
+          const node = document;
+          return node.grounded_onto === Boolean(clause.values[0]);
+        }
+        // Document type is an edge
+        return hasEdgeFilters;
+      });
     }
     case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: {
-      return bgraph.filter(node => clause.values.some(value => node.in_degree === Number(value)));
+      return bgraph.filter(document => {
+        if (document._type === 'node') {
+          const node = document;
+          return clause.values.some(value => node.in_degree === Number(value));
+        }
+        // Document type is an edge
+        return hasEdgeFilters;
+      });
     }
     case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: {
-      return bgraph.filter(node => clause.values.some(value => node.out_degree === Number(value)));
+      return bgraph.filter(document => {
+        if (document._type === 'node') {
+          const node = document;
+          return clause.values.some(value => node.out_degree === Number(value));
+        }
+        // Document type is an edge
+        return hasEdgeFilters;
+      });
+    }
+    case QUERY_FIELDS_MAP.BIO_NODE_POST.field: {
+      return bgraph;
     }
     default: {
       return bgraph;
@@ -111,15 +200,20 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
   if (bgraph && !isEmpty(filters)) {
     const { clauses } = filters;
 
-    const mapped = clauses.map((clause, index) => {
-      return { index, value: filterTermToPriorityRank[clause.field] ?? 0 };
-    });
+    clauses.push(QUERY_FIELDS_MAP.BIO_NODE_PRE as unknown as Filter);
+    clauses.push(QUERY_FIELDS_MAP.BIO_NODE_POST as unknown as Filter);
+    clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_PRE as unknown as Filter);
+    clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_POST as unknown as Filter);
 
-    const sortedClauses = mapped.map(v => clauses[v.index]);
+    const hasNodeFilters = clauses.some(clause => filterTermToPriorityRank[clause.field] === NODE_PRIORITY_RANK);
+    const hasEdgeFilters = clauses.some(clause => filterTermToPriorityRank[clause.field] === EDGE_PRIORITY_RANK);
+
+    const sortedClauses = clauses.sort((clause1, clause2) =>
+      filterTermToPriorityRank[clause1.field] - filterTermToPriorityRank[clause2.field]);
 
     let bgraphQuery = bgraph.v();
     sortedClauses.map(clause => {
-      bgraphQuery = executeBgraph(bgraphQuery, clause);
+      bgraphQuery = executeBgraph(bgraphQuery, clause, hasNodeFilters, hasEdgeFilters);
     });
     return deepCopy(bgraphQuery.run(), ['_in', '_out']);
   }
@@ -152,8 +246,8 @@ export const formatBGraphOutputToGraferLayers = (
     }
   }
 
-  const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', graferIntraEdgesDataResults, []);
-  const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', graferNodesDataResults, graferInterEdgesDataResults);
+  const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', graferInterEdgesDataResults, []);
+  const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', graferNodesDataResults, graferIntraEdgesDataResults);
 
   return [highlightClusterLayer, highlightNodeLayer];
 };
@@ -165,6 +259,7 @@ export const formatBGraphOutputToLocalGraph = (data: any): GraphInterface => {
   const dataDeepCopy = deepCopy(data);
   dataDeepCopy.forEach(d => {
     if (d._type === 'node') {
+      d.id = d._id;
       d.label = d.name;
       delete d.name;
       nodes.push(d);

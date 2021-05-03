@@ -61,7 +61,7 @@ id?: string,
 source: string,
 target: string,
 edgeType?: string,
-metadata?: any
+data?: any
 }
 
 export interface GraphInterface {

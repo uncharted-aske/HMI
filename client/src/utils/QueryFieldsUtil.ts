@@ -47,6 +47,12 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     lexType: 'string',
   },
   // BIO MODELS
+  BIO_NODE_PRE: {
+    ..._field('bioNodePre', 'Node Pre'),
+    ..._searchable('Node Pre', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
   BIO_NODE_NAME: {
     ..._field('bioNodeName', 'Node Name'),
     ..._searchable('Node Name', false),
@@ -74,6 +80,43 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
   BIO_NODE_OUT_DEGREE: {
     ..._field('bioNodeOutDegree', 'Node Out-degree'),
     ..._searchable('Node Out-degree', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_NODE_POST: {
+    ..._field('bioNodePost', 'Node Post'),
+    ..._searchable('Node Post', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_EDGE_PRE: {
+    ..._field('bioEdgePre', 'Edge Pre'),
+    ..._searchable('Edge Pre', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_EDGE_TESTED: {
+    ..._field('bioEdgeTested', 'Edge Tested'),
+    ..._searchable('Edge Tested', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_EDGE_DOI: {
+    ..._field('bioEdgeDoi', 'Edge DOI'),
+    ..._searchable('Edge DOI', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
+  BIO_EDGE_TYPE: {
+    ..._field('bioEdgeType', 'Edge Type'),
+    ..._searchable('Edge Type', false),
+    baseType: 'integer',
+    lexType: 'string',
+    order: 1,
+  },
+  BIO_EDGE_POST: {
+    ..._field('bioEdgePost', 'Edge Post'),
+    ..._searchable('Edge Post', false),
     baseType: 'integer',
     lexType: 'integer',
   },
