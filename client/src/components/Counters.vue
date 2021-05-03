@@ -31,7 +31,6 @@
           acc.push(value + ' ' + counter.name);
         }
 
-        
         return acc;
       }, []);
     }
