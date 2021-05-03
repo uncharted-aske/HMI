@@ -14,7 +14,10 @@ function clearFiltres (): void {
 
 /** Fetch the filtres from the Route  */
 function getFiltres (): Filtres {
-  return Router?.query?.filtres;
+  const filtresJSON = Router?.query?.filtres;
+  if (filtresJSON) {
+    return JSON.parse(Router?.query?.filtres);
+  }
 }
 
 /** Update the filtres in the Route */
@@ -23,8 +26,11 @@ function updateFiltres (filtres: Filtres): void {
     const { field, clauses } = filtre;
     return { field, clauses };
   });
-  const query = { filtres: JSON.stringify(filtresWithoutAggregates) };
-  Router.getRouter().push({ query } as Location);
+  const filtresJSON = JSON.stringify(filtresWithoutAggregates);
+  if (Router?.query?.filtres !== filtresJSON) {
+    const query = { filtres: filtresJSON };
+    Router.getRouter().push({ query } as Location).catch(e => console.debug(e));
+  }
 }
 
 export {

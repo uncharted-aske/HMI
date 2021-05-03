@@ -17,9 +17,7 @@ const getters: GetterTree<Filtres, any> = {
   },
 
   /** Return a Filtre based on its field. */
-  getFiltre (state, field: FiltreField): Filtre {
-    return state.get(field) ?? null;
-  },
+  getFiltre: (state) => (field: FiltreField): Filtre => state.get(field) ?? null,
 };
 
 const actions: ActionTree<Filtres, any> = {

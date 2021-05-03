@@ -227,7 +227,6 @@
       const [bgNodes, bgEdges] = await loadBGraphData();
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
 
-      /*
       const graferLayerData = await this.loadGraferData();
       this.graferNodesData = graferLayerData.graferNodesData;
       this.graferIntraEdgesData = graferLayerData.graferIntraEdgesData;
@@ -238,7 +237,6 @@
         // layer data. See: https://vuejs.org/v2/api/?#mounted
         eventHub.$emit('load-layers', graferLayerData);
       });
-      */
 
       // Initialize the filtres with what we display in the facets panel.
       this.setFiltres(FACETS_FIELDS);

@@ -9,7 +9,7 @@ import { GraphInterface } from '@/types/typesGraphs';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
 import { buildHighlightClusterLayer, buildHighlightNodeLayer } from './GraferUtil';
-import { EdgeTypes } from '@/graphs/svg/encodings';
+// import { EdgeTypes } from '@/graphs/svg/encodings';
 
 import * as FiltresUtil from '@/utils/FiltresUtil';
 
@@ -39,9 +39,9 @@ const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
 };
 
 // Get a subgraph result from a BGraph query.
-function getSubGraphFromBGraphQuery (bgraphQuery): any {
-  return deepCopy(bgraphQuery.run(), ['_in', '_out']);
-}
+// function getSubGraphFromBGraphQuery (bgraphQuery): any {
+//   return deepCopy(bgraphQuery.run(), ['_in', '_out']);
+// }
 
 // FIXME: Fix return type once bgraph library types are added
 export const loadBGraphData = (): Promise<any[]> => {

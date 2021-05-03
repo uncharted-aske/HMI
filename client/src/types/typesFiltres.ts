@@ -30,7 +30,7 @@ export type FiltreField = string;
 export type FiltreType = 'categorical' | 'histogram' | 'datetime';
 
 export type Filtre = {
-  aggregates: FiltreAggregate[],
+  aggregates?: FiltreAggregate[],
   clauses: FiltreClause[],
   field: FiltreField,
 }
