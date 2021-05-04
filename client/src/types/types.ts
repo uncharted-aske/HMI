@@ -7,6 +7,7 @@ interface ModelMetadataInterface {
   version?: string,
   knowledge?: string
 }
+
 interface ModelComponentMetadataInterface {
   name: string,
   description: string,
