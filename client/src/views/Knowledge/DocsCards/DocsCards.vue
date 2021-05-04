@@ -62,7 +62,7 @@
   import KnowledgePreviewPane from '../components/DrilldownPanel/KnowledgePreviewPane.vue';
   import ModelsPane from '../components/DrilldownPanel/ModelsPane.vue';
   import EntitiesPane from '../components/DrilldownPanel/EntitiesPane.vue';
-  import ModalDocument from '../components/Modals/ModalDocument.vue';
+  import ModalDocument from '@/components/Modals/ModalDocument.vue';
 
   const DRILLDOWN_TABS: TabInterface[] = [
     { name: 'Preview', icon: '', id: 'preview' },
