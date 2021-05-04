@@ -17,13 +17,13 @@
           <span>{{ getMessage }}</span>
         </button>
       </div>
-      <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
+      <resizable-grid :map="gridMap" :dimensions="gridDimensions">
         <div slot="1" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
             <div slot="left">
               <counters
                 :title="selectedModel && selectedModel.metadata.name"
-                :data="[`448723 Nodes`, `44104 Edges`]"
+                :data="countersData"
               />
             </div>
             <div slot="settings">
@@ -37,7 +37,10 @@
             <div slot="right">
               <counters
                 :title="`Subgraph`"
-                :data="[`${subgraphNodeCount} Nodes`, `${subgraphEdgeCount} Edges`]"
+                :data="[
+                  { name: 'Nodes', value: subgraphNodeCount },
+                  { name: 'Edges', value: subgraphEdgeCount },
+                ]"
               />
             </div>
             <div slot="right">
@@ -76,9 +79,9 @@
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
-  import { GraferNodesData, GraferEdgesData } from '@uncharted.software/grafer';
+  import { GraferNodesData, GraferEdgesData, GraferLabelsData } from '@uncharted.software/grafer';
 
-  import { TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
+  import { Counter, TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
   import { FILTRES_FIELDS } from '@/types/typesFiltres';
@@ -150,6 +153,7 @@
     graferNodesData: GraferNodesData = undefined;
     graferIntraEdgesData: GraferEdgesData = undefined;
     graferInterEdgesData: GraferEdgesData = undefined;
+    graferClustersLabelsData: GraferLabelsData = undefined;
 
     // Set true when the full graph layers are rendered as background context (ie. faded)
     grafersFullGraphContextIsBackgrounded: boolean = false;
@@ -190,6 +194,12 @@
       }
     }
 
+    get countersData (): Array<Counter> {
+      return !this.subgraph ? [{ name: 'Nodes', value: 448723 }, { name: 'Edges', value: 44104 }]
+                              : [{ name: 'Nodes', value: 448723 }, { name: 'Edges', value: 44104 },
+                              { name: 'Nodes', value: this.subgraphNodeCount, highlighted: true }, { name: 'Edges', value: this.subgraphEdgeCount, highlighted: true }];
+    }
+
     get getIcon (): string {
       return this.isSplitView ? 'window-maximize' : 'columns';
     }
@@ -219,6 +229,27 @@
       return this.isSplitView ? [['1', '3', '2']] : [['1']];
     }
 
+    get gridDimensions (): any {
+      if (this.isSplitView) {
+        return {
+          // Keep the cell between 25% and 75% of container
+          // 1: {
+          //   widthMax: 0.75,
+          //   widthMin: 0.25,
+          // },
+          // 2: {
+          //   widthMax: 0.75,
+          //   widthMin: 0.25,
+          // },
+          // Middle element to visually resize the columns
+          3: {
+            width: '10px',
+            widthFixed: true,
+          },
+        };
+      }
+    }
+
     get canOpenLocalView (): boolean {
       return !isEmpty(this.getFilters);
     }
@@ -231,6 +262,7 @@
       this.graferNodesData = graferLayerData.graferNodesData;
       this.graferIntraEdgesData = graferLayerData.graferIntraEdgesData;
       this.graferInterEdgesData = graferLayerData.graferInterEdgesData;
+      this.graferClustersLabelsData = graferLayerData.graferClustersLabelsData;
 
       this.$nextTick(() => {
         // Ensure Grafer component has been mounted before sending
@@ -299,7 +331,7 @@
         //       that gets run before Grafer has had a chance to load. To avoid this issue
         //       queries must be stored or re-run once the renderer has loaded.
         const graferQueryLayerNames = ['highlightClusterLayer', 'highlightNodeLayer'];
-        if (_.isEmpty(subgraph)) {
+        if (!subgraph && _.isEmpty(this.getFilters?.clauses)) {
           // Clear query layers if no results
           eventHub.$emit('remove-layers', graferQueryLayerNames);
           if (this.grafersFullGraphContextIsBackgrounded) {
@@ -308,7 +340,7 @@
             this.grafersFullGraphContextIsBackgrounded = false;
           }
         } else {
-          const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData);
+          const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData, this.graferClustersLabelsData);
           eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
           if (!this.grafersFullGraphContextIsBackgrounded) {
             // Query layer set full graph acts as background context
@@ -362,9 +394,9 @@
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'edge';
 
-      this.drilldownPaneTitle = `${edge.metadata.sourceLabel} → ${edge.metadata.targetLabel}`;
-      this.drilldownPaneSubtitle = `Type: ${edge.metadata.type}`;
-      this.drilldownMetadata = edge.metadata;
+      this.drilldownPaneTitle = `${edge.data.sourceLabel} → ${edge.data.targetLabel}`;
+      this.drilldownPaneSubtitle = `Type: ${edge.data.type}`;
+      this.drilldownMetadata = edge.data;
     }
   }
 </script>
@@ -375,8 +407,8 @@
   .content {
     display: flex;
     flex-direction: column;
-    width: 100%;
     height: 100%;
+    width: 100%;
   }
 
   .grafer {
