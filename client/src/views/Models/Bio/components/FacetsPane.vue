@@ -18,9 +18,11 @@
     FacetHistogram,
   };
 
+  const LOADING_FACETS_DATA: FacetBarsBaseData = [null, null, null, null, null, null, null, null, null, null];
+
   @Component({ components })
   export default class FacetsPane extends Vue {
-    beliefsData: FacetBarsBaseData = [];
+    beliefsData = LOADING_FACETS_DATA;
     beliefsTitle: string = FILTRES[FILTRES_FIELDS.BELIEF_SCORE].displayName;
 
     @Getter getFiltres;
@@ -37,7 +39,7 @@
       const beliefsFiltre = this.getFiltres.get(FILTRES_FIELDS.BELIEF_SCORE) as Filtre;
       if (beliefsFiltre) {
         const beliefsAggregate = beliefsFiltre.aggregates;
-        const beliefsFacetBars = FiltresUtil.aggregatesToFacetsBars(beliefsAggregate) as FacetBarsBaseData;
+        const beliefsFacetBars = FiltresUtil.aggregatesToFacetsBars(beliefsAggregate);
         this.beliefsData = beliefsFacetBars;
       }
     }
