@@ -258,14 +258,22 @@
     }
 
     async mounted (): Promise<void> {
-      const [bgNodes, bgEdges] = await loadBGraphData();
+      const [bgNodes, bgEdges] = await loadBGraphData(
+        `${process.env.S3_BGRAPH_MODELS}/${this.selectedModelId}/nodes.jsonl`,
+        `${process.env.S3_BGRAPH_MODELS}/${this.selectedModelId}/edges.jsonl`,
+      );
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
 
       const graferLayerData = await this.loadGraferData();
-      this.graferNodesData = graferLayerData.graferNodesData;
-      this.graferIntraEdgesData = graferLayerData.graferIntraEdgesData;
-      this.graferInterEdgesData = graferLayerData.graferInterEdgesData;
-      this.graferClustersLabelsData = graferLayerData.graferClustersLabelsData;
+      // TODO: This takes up a lot of memory and will likely scale poorly
+      this.graferNodesData = new Map();
+      graferLayerData.graferNodesData.forEach(v => this.graferNodesData.set(v.id, v));
+      this.graferIntraEdgesData = new Map();
+      graferLayerData.graferIntraEdgesData.forEach(v => this.graferIntraEdgesData.set(v.id, v));
+      this.graferInterEdgesData = new Map();
+      graferLayerData.graferInterEdgesData.forEach(v => this.graferInterEdgesData.set(v.id, v));
+      this.graferClustersLabelsData = new Map();
+      graferLayerData.graferClustersLabelsData.forEach(v => this.graferClustersLabelsData.set(v.id, v));
 
       this.$nextTick(() => {
         // Ensure Grafer component has been mounted before sending
@@ -291,7 +299,7 @@
         getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/nodes.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_NODE_OPTIONS)),
         getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/intra_edges.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_EDGE_OPTIONS)),
         getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/inter_edges.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_EDGE_OPTIONS)),
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/clusters.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_LABEL_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/groups.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_LABEL_OPTIONS)),
       ]);
 
       return {

@@ -5,7 +5,7 @@
           {{data.sourceLabel}} <font-awesome-icon :icon="['fas', 'long-arrow-alt-right' ]" /> {{data.targetLabel}}
           <font-awesome-icon v-if="data.curated === 1" :icon="['fas', 'check-circle' ]" />
         </h5>
-      <h6>Type: <span class="emphasis">{{data.type}}</span> | Belief score: <span class="emphasis">{{data.belief | precision-formatter}}</span></h6>
+      <h6>Type: <span class="emphasis">{{data.statement_type}}</span> | Belief score: <span class="emphasis">{{data.belief | precision-formatter}}</span></h6>
 
     </div>
 

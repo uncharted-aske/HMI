@@ -49,11 +49,11 @@ export default class BioLocalRenderer extends SVGRenderer {
 
     // Arrowheads
     defs
-      .filter(d => (d as any).data.type !== EdgeTypes.EDGES.COMPLEX)
+      .filter(d => (d as any).data.statement_type !== EdgeTypes.EDGES.COMPLEX)
       .attr('id', d => {
-        const source = (d as any).source.replace(/\s/g, '');
-        const target = (d as any).target.replace(/\s/g, '');
-        const type = (d as any).data.type;
+        const source = (d as any).source.toString().replace(/\s/g, '');
+        const target = (d as any).target.toString().replace(/\s/g, '');
+        const type = (d as any).data.statement_type;
         return `arrowhead-${source}-${target}-${type}`;
       })
       .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
@@ -71,11 +71,11 @@ export default class BioLocalRenderer extends SVGRenderer {
 
     // Circles
     defs
-      .filter(d => (d as any).data.type === EdgeTypes.EDGES.COMPLEX)
+      .filter(d => (d as any).data.statement_type === EdgeTypes.EDGES.COMPLEX)
       .attr('id', d => {
-        const source = (d as any).source.replace(/\s/g, '');
-        const target = (d as any).target.replace(/\s/g, '');
-        const type = (d as any).data.type;
+        const source = (d as any).source.toString().replace(/\s/g, '');
+        const target = (d as any).target.toString().replace(/\s/g, '');
+        const type = (d as any).data.statement_type;
         return `arrowhead-${source}-${target}-${type}`;
       })
       .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
@@ -134,15 +134,15 @@ export default class BioLocalRenderer extends SVGRenderer {
       .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
       .style('stroke', d => calcEdgeColor(d))
       .attr('marker-end', d => {
-        const source = d.source.replace(/\s/g, '');
-        const target = d.target.replace(/\s/g, '');
-        const type = (d as any).data.type;
+        const source = d.source.toString().replace(/\s/g, '');
+        const target = d.target.toString().replace(/\s/g, '');
+        const type = (d as any).data.statement_type;
         return `url(#arrowhead-${source}-${target}-${type})`;
       })
       .attr('marker-start', d => {
-        const source = d.source.replace(/\s/g, '');
-        const target = d.target.replace(/\s/g, '');
-        const type = (d as any).data.type;
+        const source = d.source.toString().replace(/\s/g, '');
+        const target = d.target.toString().replace(/\s/g, '');
+        const type = (d as any).data.statement_type;
         return `url(#start-${source}-${target}-${type})`;
       });
   }

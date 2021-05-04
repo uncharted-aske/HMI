@@ -173,10 +173,10 @@ export const calcLabelColor = (node) => {
  */
 
 export const calcEdgeColor = (edge) => {
-  if (edge.data.type) {
-    if (edge.data.type === EdgeTypes.EDGES.ACTIVATION || edge.data.type === EdgeTypes.EDGES.INCREASEAMOUNT) {
+  if (edge.data.statement_type) {
+    if (edge.data.statement_type === EdgeTypes.EDGES.ACTIVATION || edge.data.statement_type === EdgeTypes.EDGES.INCREASEAMOUNT) {
       return Colors.POLARITY.POSITIVE;
-    } else if (edge.data.type === EdgeTypes.EDGES.INHIBITION || edge.data.type === EdgeTypes.EDGES.DECREASEAMOUNT) {
+    } else if (edge.data.statement_type === EdgeTypes.EDGES.INHIBITION || edge.data.statement_type === EdgeTypes.EDGES.DECREASEAMOUNT) {
       return Colors.POLARITY.NEGATIVE;
     } else return Colors.EDGES.DEFAULT;
   }
