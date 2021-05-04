@@ -6,6 +6,7 @@
           <font-awesome-icon v-if="data.tested" :icon="['fas', 'check-circle' ]" />
         </h5>
       <h6>Type: <span class="emphasis">{{data.type}}</span> | Belief score: <span class="emphasis">{{data.belief | precision-formatter}}</span></h6>
+
     </div>
 
     <collapsible-container class="mt-3" :isEmpty="isEmptyMetadata">
@@ -42,11 +43,12 @@
     CollapsibleItem,
   };
 
+
   @Component({ components })
   export default class EdgePane extends Vue {
     @Prop({ default: null }) data: any;
     @Prop({ default: null }) model: string;
-    externalData: any = {};
+    externalData: any = {};    
 
     @Watch('data') onDataChange (): void {
       this.fetchExternalData();
@@ -80,6 +82,8 @@
 
  ul{
    list-style-type: none;
+   margin-left: 0;
+   padding-left: 0;
     li {
       padding: 4px 8px;
       border: 1px solid $border;

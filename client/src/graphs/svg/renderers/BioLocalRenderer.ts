@@ -5,7 +5,7 @@ import { SVGRenderer } from 'svg-flowgraph';
 
 import { SVGRendererOptionsInterface, SubgraphInterface } from '@/types/typesGraphs';
 
-import { calcEdgeColor, flatten } from '@/graphs/svg/util';
+import { calcEdgeColor, calcEdgeControlBackground, flatten } from '@/graphs/svg/util';
 import { Colors, EdgeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 import { truncateString } from '@/utils/StringUtil';
@@ -49,11 +49,11 @@ export default class BioLocalRenderer extends SVGRenderer {
 
     // Arrowheads
     defs
-      .filter(d => (d as any).data.edgeType !== EdgeTypes.EDGES.COMPLEX)
+      .filter(d => (d as any).data.type !== EdgeTypes.EDGES.COMPLEX)
       .attr('id', d => {
         const source = (d as any).source.replace(/\s/g, '');
         const target = (d as any).target.replace(/\s/g, '');
-        const type = (d as any).data.edgeType;
+        const type = (d as any).data.type;
         return `arrowhead-${source}-${target}-${type}`;
       })
       .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
@@ -71,11 +71,11 @@ export default class BioLocalRenderer extends SVGRenderer {
 
     // Circles
     defs
-      .filter(d => (d as any).data.edgeType === EdgeTypes.EDGES.COMPLEX)
+      .filter(d => (d as any).data.type === EdgeTypes.EDGES.COMPLEX)
       .attr('id', d => {
         const source = (d as any).source.replace(/\s/g, '');
         const target = (d as any).target.replace(/\s/g, '');
-        const type = (d as any).data.edgeType;
+        const type = (d as any).data.type;
         return `arrowhead-${source}-${target}-${type}`;
       })
       .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
@@ -122,7 +122,7 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('cy', 0)
       .attr('r', DEFAULT_STYLE.edge.controlRadius)
       .attr('fill', '#FFFFFF')
-      // .attr('fill', d => calcEdgeControlBackground(d)) // FIXME: Enable when v4.0
+      .attr('fill', d => calcEdgeControlBackground(d)) 
       .attr('stroke', 'white')
       .attr('stroke-width', DEFAULT_STYLE.edge.controlStrokeWidth);
   }
@@ -136,13 +136,13 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('marker-end', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');
-        const type = (d as any).data.edgeType;
+        const type = (d as any).data.type;
         return `url(#arrowhead-${source}-${target}-${type})`;
       })
       .attr('marker-start', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');
-        const type = (d as any).data.edgeType;
+        const type = (d as any).data.type;
         return `url(#start-${source}-${target}-${type})`;
       });
   }

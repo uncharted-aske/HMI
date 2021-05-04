@@ -87,10 +87,14 @@
   import { Counter, TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
+  import { CosmosSearchInterface } from '@/types/typesCosmos';
   import eventHub from '@/eventHub';
 
   import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph, formatBGraphOutputToGraferLayers } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
+
+  import { cosmosArtifactSrc } from '@/services/CosmosFetchService';
+
 
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
@@ -372,14 +376,22 @@
     }
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {
+      console.log(edge);
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'edge';
 
       this.drilldownMetadata = edge.data;
     }
 
-    onEvidenceClick (doi:string): void {
-      console.log(doi);
+    async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
+      const response = await cosmosArtifactSrc(id);
+      return response;
+    }
+
+    async onEvidenceClick (doi:string): Promise<void> {
+      const response = await this.getSingleArtifact(doi);
+      console.log(response);
+
     }
   }
 </script>
