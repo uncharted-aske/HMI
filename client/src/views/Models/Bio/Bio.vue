@@ -381,11 +381,6 @@
       this.drilldownMetadata = edge.data;
     }
 
-    // async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
-    //   const response = await cosmosArtifactSrc(id);
-    //   return response;
-    // }
-
     async onEvidenceClick (doi:string): Promise<void> {
       const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
        // eslint-disable-next-line
