@@ -122,7 +122,7 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('cy', 0)
       .attr('r', DEFAULT_STYLE.edge.controlRadius)
       .attr('fill', '#FFFFFF')
-      .attr('fill', d => calcEdgeControlBackground(d)) 
+      .attr('fill', d => calcEdgeControlBackground(d))
       .attr('stroke', 'white')
       .attr('stroke-width', DEFAULT_STYLE.edge.controlStrokeWidth);
   }

@@ -95,7 +95,6 @@
 
   import { cosmosArtifactSrc } from '@/services/CosmosFetchService';
 
-
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -376,22 +375,14 @@
     }
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {
-      console.log(edge);
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'edge';
 
       this.drilldownMetadata = edge.data;
     }
 
-    async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
-      const response = await cosmosArtifactSrc(id);
-      return response;
-    }
-
     async onEvidenceClick (doi:string): Promise<void> {
-      const response = await this.getSingleArtifact(doi);
-      console.log(response);
-
+      //TODO: Fetch doc info from COSMOS
     }
   }
 </script>

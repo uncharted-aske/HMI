@@ -43,12 +43,11 @@
     CollapsibleItem,
   };
 
-
   @Component({ components })
   export default class EdgePane extends Vue {
     @Prop({ default: null }) data: any;
     @Prop({ default: null }) model: string;
-    externalData: any = {};    
+    externalData: any = {};
 
     @Watch('data') onDataChange (): void {
       this.fetchExternalData();
