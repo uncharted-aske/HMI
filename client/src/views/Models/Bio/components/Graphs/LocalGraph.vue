@@ -12,6 +12,8 @@
   import BioLocalRenderer from '@/graphs/svg/renderers/BioLocalRenderer';
   import Adapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
+  import { calculateNodeNeighborhood, calculateEdgeNeighborhood } from '@/graphs/svg/util';
+
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -45,19 +47,19 @@
 
       this.renderer.setCallback('nodeClick', (e: PointerEvent, node) => {
         // Clear previous highlights
-        // this.renderer.hideNeighbourhood();
+        this.renderer.hideNeighbourhood();
         // Show neighborhood
-        // const neighborhood = calculateNodeNeighborhood(this.graph, node.datum());
-        // this.renderer.showNeighborhood(neighborhood);
+        const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
+        this.renderer.showNeighborhood(neighborhood);
         this.$emit('node-click', node.datum());
       });
 
       this.renderer.setCallback('edgeClick', (e: PointerEvent, edge) => {
         // Clear previous highlights
-        // this.renderer.hideNeighbourhood();
-        // // Show neighborhood
-        // const neighborhood = calculateEdgeNeighborhood(edge.datum());
-        // this.renderer.showNeighborhood(neighborhood);
+        this.renderer.hideNeighbourhood();
+        // Show neighborhood
+        const neighborhood = calculateEdgeNeighborhood(edge.datum());
+        this.renderer.showNeighborhood(neighborhood);
         // Hack: get labels for source and target
         const sourceNode = this.renderer.layout.data.nodes.find(node => node.id === edge.datum().source);
         const targetNode = this.renderer.layout.data.nodes.find(node => node.id === edge.datum().target);
@@ -67,10 +69,10 @@
         this.$emit('edge-click', edge.datum());
       });
 
-    //   this.renderer.setCallback('backgroundDblClick', () => {
-    //     this.renderer.hideNeighbourhood();
-    //     this.$emit('background-dbl-click');
-    //   });
+      this.renderer.setCallback('backgroundDblClick', () => {
+        this.renderer.hideNeighbourhood();
+        this.$emit('background-dbl-click');
+      });
 
     //   this.renderer.setCallback('nodeMouseEnter', (node) => {
     //     const nodeData = node.datum();

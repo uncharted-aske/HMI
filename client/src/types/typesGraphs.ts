@@ -75,13 +75,9 @@ detailed: GraphInterface
 }
 
 export interface SubgraphEdgeInterface {
-edgeType?: string,
-id?: string,
-metadata?: any,
-source: string,
-source_label?: string,
-target: string,
-target_label?: string,
+  id?: string,
+  source: string,
+  target: string,
 }
 
 export interface SubgraphNodeInterface {
