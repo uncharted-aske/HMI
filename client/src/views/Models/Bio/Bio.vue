@@ -60,7 +60,7 @@
         </div>
       </resizable-grid>
     </div>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown">
       <node-pane v-if="drilldownActivePaneId === 'node'" slot="content"
         :model="selectedModelId"
         :data="drilldownMetadata"
@@ -367,8 +367,6 @@
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'node';
 
-      this.drilldownPaneTitle = node.label;
-      this.drilldownPaneSubtitle = 'Type: Node';
       this.drilldownMetadata = node.data;
     }
 
@@ -376,8 +374,6 @@
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'edge';
 
-      this.drilldownPaneTitle = `${edge.data.sourceLabel} → ${edge.data.targetLabel}`;
-      this.drilldownPaneSubtitle = `Type: ${edge.data.type}  Belief Score: ${edge.data.belief.toFixed(2)}`;
       this.drilldownMetadata = edge.data;
     }
   }

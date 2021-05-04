@@ -1,5 +1,14 @@
 <template>
-    <collapsible-container :isEmpty="isEmptyMetadata">
+  <div class="edge-pane-container">
+     <div class="border-bottom">
+        <h5>
+          {{data.sourceLabel}} <font-awesome-icon :icon="['fas', 'long-arrow-alt-right' ]" /> {{data.targetLabel}} 
+          <font-awesome-icon v-if="data.tested" :icon="['fas', 'check-circle' ]" />
+        </h5>
+      <h6>Type: <span class="emphasis">{{data.type}}</span> | Belief score: <span class="emphasis">{{data.belief | precision-formatter}}</span></h6>
+    </div>
+
+    <collapsible-container class="mt-3" :isEmpty="isEmptyMetadata">
       <collapsible-item class="flex-grow-1" slot="item" v-if="externalData.evidence" expanded="true">
         <div slot="title">Evidence ({{externalData.evidence.length}})</div>
         <div slot="content" class="h-100 position-absolute">
@@ -13,6 +22,7 @@
         No metadata at the moment
       </div>
     </collapsible-container>
+  </div>
 </template>
 
 <script lang="ts">
@@ -62,5 +72,8 @@
 <style lang="scss" scoped>
   .edge-pane-container {
     padding: 5px;
+  }
+  .emphasis {
+    font-weight: bold;
   }
 </style>
