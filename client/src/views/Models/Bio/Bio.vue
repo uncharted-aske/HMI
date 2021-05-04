@@ -30,7 +30,7 @@
               <!-- <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/> -->
             </div>
           </settings-bar>
-          <grafer class="grafer" :model="model" @loaded="mainGraphLoading = false" @grafer_click="onGraferClick"></grafer>
+          <grafer class="grafer" @loaded="mainGraphLoading = false" @grafer_click="onGraferClick"></grafer>
         </div>
         <div slot="2" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
@@ -103,6 +103,9 @@
     getBGraphAggregatesFromFiltres,
   } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
+  import { loadJSONLFile } from '@/utils/FileLoaderUtil';
+  import { BIO_CLUSTER_LAYERS_EDGE_OPTIONS, BIO_CLUSTER_LAYERS_LABEL_OPTIONS, BIO_NODE_LAYERS_EDGE_OPTIONS, BIO_NODE_LAYERS_NODE_OPTIONS } from '@/utils/GraferUtil';
+  import { getS3Util } from '@/utils/FetchUtil';
 
   import { cosmosArtifactsMem } from '@/services/CosmosFetchService';
 
@@ -122,8 +125,6 @@
   import Settings from '@/views/Models/components/Settings.vue';
 
   import Grafer from './components/Graphs/Grafer.vue';
-  import { loadJSONLFile } from '@/utils/FileLoaderUtil';
-  import { BIO_CLUSTER_LAYERS_EDGE_OPTIONS, BIO_CLUSTER_LAYERS_LABEL_OPTIONS, BIO_NODE_LAYERS_EDGE_OPTIONS, BIO_NODE_LAYERS_NODE_OPTIONS } from '@/utils/GraferUtil';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -170,8 +171,6 @@
     // Set true when the full graph layers are rendered as background context (ie. faded)
     grafersFullGraphContextIsBackgrounded: boolean = false;
 
-    model: string = 'covid-19';
-
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
@@ -212,8 +211,8 @@
 
     get countersData (): Counter[] {
       const counters: Counter[] = [
-        { name: 'Nodes', value: 448723 },
-        { name: 'Edges', value: 44104 },
+        { name: 'Nodes', value: 44104 },
+        { name: 'Edges', value: 448723 },
       ];
 
       if (this.subgraph) {
@@ -236,11 +235,11 @@
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
-      return modelsList.find(model => model.metadata.id === 'covid19'); // Only COVID-19 model for now
+      return this.getSelectedModelIds.length ? modelsList[this.getSelectedModelIds[0]] : modelsList.find(model => model.metadata.id === 'covid19'); // Default to covid19 model
     }
 
     get selectedModelId (): string {
-      return this.selectedModel && this.selectedModel.metadata.id;
+      return this.selectedModel?.metadata.id;
     }
 
     get subgraphNodeCount (): number {
@@ -310,11 +309,11 @@
         graferInterEdgesData,
         graferClustersLabelsData,
       ] = await Promise.all([
-        loadJSONLFile(`/grafer/${this.model}/points.jsonl`),
-        loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, BIO_NODE_LAYERS_NODE_OPTIONS),
-        loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, BIO_NODE_LAYERS_EDGE_OPTIONS),
-        loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, BIO_CLUSTER_LAYERS_EDGE_OPTIONS),
-        loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/points.jsonl`).then(data => loadJSONLFile(data)),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/nodes.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_NODE_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/intra_edges.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_EDGE_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/inter_edges.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_EDGE_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/clusters.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_LABEL_OPTIONS)),
       ]);
 
       return {
@@ -424,7 +423,6 @@
     async onEvidenceClick (doi:string): Promise<void> {
       const artifact: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
       this.modalDocumentArtifact = artifact;
-      console.log(artifact);
       this.showModalDocument = true;
     }
   }
