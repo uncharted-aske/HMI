@@ -29,7 +29,8 @@ function updateFiltres (filtres: Filtres): void {
   const filtresJSON = JSON.stringify(filtresWithoutAggregates);
   if (Router?.query?.filtres !== filtresJSON) {
     const query = { filtres: filtresJSON };
-    Router.getRouter().push({ query } as Location).catch(e => console.debug(e));
+    Router.getRouter().push({ query } as Location)
+      .catch(e => console.debug(e)); // eslint-disable-line no-console
   }
 }
 

@@ -4,7 +4,7 @@ import { DataFile } from '@dekkai/data-source';
 import { GraferNodesData, GraferEdgesData, GraferLayerData } from '@uncharted.software/grafer';
 
 import { Filters, Filter } from '@/types/typesLex';
-import { Filtre, Filtres, FILTRES } from '@/types/typesFiltres';
+import { Filtre, FiltreAggregate, Filtres, FILTRES } from '@/types/typesFiltres';
 import { GraphInterface } from '@/types/typesGraphs';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
@@ -135,14 +135,18 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
 };
 
 /** Filters a BGraph, and returns back the filtres with aggregates. */
-export function getBGraphAggregatesFromFiltres (bgraph: any, filtres: Filtres, fields: string[]): Filtres {
+export function getBGraphAggregatesFromFiltres (
+  bgraph: any, // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
+  filtres: Filtres,
+  fields: string[],
+): Filtres {
   fields.forEach(field => {
     const bgraphResult = bgraph.v()
       .filter({ _type: FILTRES[field].graphType })
       .property(FILTRES[field].name)
       .run();
 
-    let aggregates;
+    let aggregates: FiltreAggregate[];
     switch (FILTRES[field].type) {
       case 'histogram':
         aggregates = FiltresUtil.bgraphResultsToHistogram(bgraphResult);
@@ -151,8 +155,11 @@ export function getBGraphAggregatesFromFiltres (bgraph: any, filtres: Filtres, f
         aggregates = null;
     }
 
-    const filtre: Filtre = Object.assign(filtres.get(field), { aggregates });
-    filtres.set(field, filtre);
+    const currentFiltre = filtres.get(field);
+    if (currentFiltre) {
+      const filtre: Filtre = Object.assign(filtres.get(field), { aggregates });
+      filtres.set(field, filtre);
+    }
   });
 
   return filtres;
