@@ -24,9 +24,9 @@ interface ModelInterface {
 }
 
 interface TabInterface {
-    name: string;
-    icon: string;
-    id: string;
+  name: string;
+  icon: string;
+  id: string;
 }
 
 interface ViewInterface {
@@ -62,6 +62,7 @@ interface GraferEventDetail {
 type Counter = {
   name: string,
   value?: number,
+  highlighted?: boolean,
   inverse?: boolean,
 };
 
