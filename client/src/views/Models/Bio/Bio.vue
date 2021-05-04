@@ -58,7 +58,7 @@
         </div>
       </resizable-grid>
     </div>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown">
       <node-pane v-if="drilldownActivePaneId === 'node'" slot="content"
         :model="selectedModelId"
         :data="drilldownMetadata"
@@ -66,6 +66,7 @@
       <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content"
         :model="selectedModelId"
         :data="drilldownMetadata"
+        @evidence-click="onEvidenceClick"
       />
     </drilldown-panel>
   </div>
@@ -84,6 +85,7 @@
   import { Counter, TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
+  import { CosmosArtifactInterface } from '@/types/typesCosmos';
   import { FILTRES_FIELDS } from '@/types/typesFiltres';
   import eventHub from '@/eventHub';
 
@@ -95,6 +97,8 @@
     getBGraphAggregatesFromFiltres,
   } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
+
+  import { cosmosArtifactsMem } from '@/services/CosmosFetchService';
 
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
@@ -385,8 +389,6 @@
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'node';
 
-      this.drilldownPaneTitle = node.label;
-      this.drilldownPaneSubtitle = 'Type: Node';
       this.drilldownMetadata = node.data;
     }
 
@@ -394,9 +396,13 @@
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'edge';
 
-      this.drilldownPaneTitle = `${edge.data.sourceLabel} → ${edge.data.targetLabel}`;
-      this.drilldownPaneSubtitle = `Type: ${edge.data.type}`;
       this.drilldownMetadata = edge.data;
+    }
+
+    async onEvidenceClick (doi:string): Promise<void> {
+      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
+      console.log(response); // eslint-disable-line
+      // TODO: Take this response and show it into a modal (quite similar to the one we have in the knowledge view: `ModalDocument.vue`)
     }
   }
 </script>

@@ -1,10 +1,11 @@
+import _ from 'lodash';
 import * as d3 from 'd3';
 
 import { SVGRenderer } from 'svg-flowgraph';
 
-import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
+import { SVGRendererOptionsInterface, SubgraphInterface } from '@/types/typesGraphs';
 
-import { calcEdgeColor, calculateEdgeControlLabels, flatten } from '@/graphs/svg/util';
+import { calcEdgeColor, calcEdgeControlBackground, flatten } from '@/graphs/svg/util';
 import { Colors, EdgeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 import { truncateString } from '@/utils/StringUtil';
@@ -48,11 +49,11 @@ export default class BioLocalRenderer extends SVGRenderer {
 
     // Arrowheads
     defs
-      .filter(d => (d as any).data.edgeType !== EdgeTypes.EDGES.COMPLEX)
+      .filter(d => (d as any).data.type !== EdgeTypes.EDGES.COMPLEX)
       .attr('id', d => {
         const source = (d as any).source.replace(/\s/g, '');
         const target = (d as any).target.replace(/\s/g, '');
-        const type = (d as any).data.edgeType;
+        const type = (d as any).data.type;
         return `arrowhead-${source}-${target}-${type}`;
       })
       .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
@@ -70,11 +71,11 @@ export default class BioLocalRenderer extends SVGRenderer {
 
     // Circles
     defs
-      .filter(d => (d as any).data.edgeType === EdgeTypes.EDGES.COMPLEX)
+      .filter(d => (d as any).data.type === EdgeTypes.EDGES.COMPLEX)
       .attr('id', d => {
         const source = (d as any).source.replace(/\s/g, '');
         const target = (d as any).target.replace(/\s/g, '');
-        const type = (d as any).data.edgeType;
+        const type = (d as any).data.type;
         return `arrowhead-${source}-${target}-${type}`;
       })
       .attr('viewBox', SVGUtil.MARKER_VIEWBOX)
@@ -121,19 +122,9 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('cy', 0)
       .attr('r', DEFAULT_STYLE.edge.controlRadius)
       .attr('fill', '#FFFFFF')
-      // .attr('fill', d => calcEdgeControlBackground(d)) // FIXME: Enable when v4.0
+      .attr('fill', d => calcEdgeControlBackground(d))
       .attr('stroke', 'white')
       .attr('stroke-width', DEFAULT_STYLE.edge.controlStrokeWidth);
-
-    edgeSelection.append('text')
-      .attr('x', -(DEFAULT_STYLE.edge.controlRadius * 0.5) + 1)
-      .attr('y', (DEFAULT_STYLE.edge.controlRadius * 0.5) - 1)
-      .style('font-size', DEFAULT_STYLE.edge.controlRadius)
-      .style('stroke', 'none')
-      .style('font-weight', '800')
-      .style('fill', DEFAULT_STYLE.edge.controlStrokeColor)
-      .style('cursor', 'pointer')
-      .text(d => calculateEdgeControlLabels(d));
   }
 
   renderEdge (edgeSelection:d3.Selection<any, any, any, any>):void {
@@ -145,32 +136,32 @@ export default class BioLocalRenderer extends SVGRenderer {
       .attr('marker-end', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');
-        const type = (d as any).data.edgeType;
+        const type = (d as any).data.type;
         return `url(#arrowhead-${source}-${target}-${type})`;
       })
       .attr('marker-start', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');
-        const type = (d as any).data.edgeType;
+        const type = (d as any).data.type;
         return `url(#start-${source}-${target}-${type})`;
       });
   }
 
-  //   hideNeighbourhood (): void {
-  //     const chart = this.chart;
-  //     chart.selectAll('.node-ui').style('opacity', 1);
-  //     chart.selectAll('.edge').style('opacity', 1);
-  //   }
+  hideNeighbourhood (): void {
+    const chart = (this as any).chart;
+    chart.selectAll('.node-ui').style('opacity', 1);
+    chart.selectAll('.edge').style('opacity', 1);
+  }
 
-  //   showNeighborhood (subgraph: SubgraphInterface): void {
-  //     const chart = this.chart;
-  //     // FIXME: not very efficient
-  //     const nodes = subgraph.nodes;
-  //     const edges = subgraph.edges;
-  //     const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => !nodes.map(node => node.id).includes(d.id));
-  //     nonNeighborNodes.style('opacity', 0.1);
+  showNeighborhood (subgraph: SubgraphInterface): void {
+    const chart = (this as any).chart;
+    // FIXME: not very efficient
+    const nodes = subgraph.nodes;
+    const edges = subgraph.edges;
+    const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => !nodes.map(node => node).includes(d.id));
+    nonNeighborNodes.style('opacity', 0.1);
 
-//     const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.source && edge.target === d.target));
-//     nonNeighborEdges.style('opacity', 0.1);
-//   }
+    const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.source && edge.target === d.target));
+    nonNeighborEdges.style('opacity', 0.1);
+  }
 }

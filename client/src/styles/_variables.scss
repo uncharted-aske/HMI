@@ -8,9 +8,9 @@ $bg-secondary: $nord1;
 $bg-tertiary: $nord2;
 $bg-body: $nord3;
 
-$border: darkgray;
+$border: lightgray;
 
-$drilldown-header: $nord6;
+$drilldown-header: $nord4;
 
 $text-color-light: $nord6;
 $text-color-dark: $nord1;
@@ -33,6 +33,8 @@ $navbar-outer-height: 56px;
 $content-full-height: calc(100vh - #{$navbar-outer-height});
 // Secondary bars width
 $secondary-bar-width: 50px;
+
+$curation-correct: #7ca25c;
 
 $z-index-order: (
   resizable-grid: 0,
