@@ -26,8 +26,8 @@
               <counters
                 :title="selectedModel && selectedModel.metadata.name"
                 :data="[
-                  { name: 'Nodes', value: 448723 },
-                  { name: 'Edges', value: 44104 },
+                  { name: 'Nodes', value: 44104 },
+                  { name: 'Edges', value: 448723 },
                 ]"
               />
             </div>
