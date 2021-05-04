@@ -377,7 +377,7 @@
       this.drilldownActivePaneId = 'edge';
 
       this.drilldownPaneTitle = `${edge.data.sourceLabel} → ${edge.data.targetLabel}`;
-      this.drilldownPaneSubtitle = `Type: ${edge.data.type}`;
+      this.drilldownPaneSubtitle = `Type: ${edge.data.type}  Belief Score: ${edge.data.belief.toFixed(2)}`;
       this.drilldownMetadata = edge.data;
     }
   }

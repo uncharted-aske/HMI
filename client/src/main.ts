@@ -21,6 +21,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterFormatter';
 import UnderscoreRemoverFormatter from './filters/UnderscoreRemoverFormatter';
 import RemoveBracesFormatter from './filters/RemoveBracesFormatter';
+import PrecisionFormatter from './filters/PrecisionFormatter';
+
 
 import App from './App.vue';
 import Router from './router';
@@ -56,6 +58,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.filter('CapitalizeFirstLetterFormatter', CapitalizeFirstLetterFormatter);
 Vue.filter('UnderscoreRemoverFormatter', UnderscoreRemoverFormatter);
 Vue.filter('RemoveBracesFormatter', RemoveBracesFormatter);
+Vue.filter('PrecisionFormatter', PrecisionFormatter);
 
 async function main (): Promise<void> {
   const app = new Vue({
