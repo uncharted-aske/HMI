@@ -1,3 +1,6 @@
+import { DataFile, DataSource } from '@dekkai/data-source';
+import s3Client from '@/services/S3Service';
+
 const memoizedStore = new Map();
 
 export const getUtil = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
@@ -30,4 +33,18 @@ export const getUtilMem = async (urlStr: string, paramObj: Record<string, any>):
       return e;
     }
   }
+};
+
+// TODO: @dekkai/data-source is unable to properly stream in gzipped files so we
+// are using a workaround by fetching a blob until the following issue is fixed:
+// https://github.com/dekkai-data/data-source/issues/1
+export const getS3Util = (s3PathUrl: string): Promise<DataSource> => {
+  const getSignedBGraphNodesUrl = s3Client.getSignedUrl('getObject', {
+    Bucket: process.env.S3_BUCKET,
+    Key: s3PathUrl,
+  });
+
+  return fetch(getSignedBGraphNodesUrl)
+    .then(rawData => rawData.blob())
+    .then(bgNodesBlob => DataFile.fromLocalSource(bgNodesBlob));
 };
