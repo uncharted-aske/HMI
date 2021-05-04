@@ -201,4 +201,3 @@ export const calcEdgeControlBackground = (edge) => {
   }
   return Colors.CURATION.UNCURATED;
 };
-
