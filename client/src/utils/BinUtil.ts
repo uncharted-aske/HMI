@@ -19,9 +19,12 @@ export const binFromValue = (
   return binNumber;
 };
 
-export const binFromValueMap = (
-  args: {valueArr:Array<number>, binInterval:number, binMax:number, binMin:number},
-): Array<number> =>
+export const binFromValueMap = (args: {
+  valueArr:Array<number>,
+  binInterval:number,
+  binMax:number,
+  binMin:number
+}): Array<number> =>
   args.valueArr.map(value =>
     binFromValue({
       binInterval: args.binInterval,
