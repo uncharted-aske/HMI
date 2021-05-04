@@ -1,8 +1,7 @@
 import _ from 'lodash';
 
-import s3Client from '@/services/S3Service';
+import { getS3Util } from '@/utils/FetchUtil';
 import { loadJSONLFile } from '@/utils/FileLoaderUtil';
-import { DataFile } from '@dekkai/data-source';
 import { GraferNodesData, GraferEdgesData, GraferLayerData, GraferLabelsData } from '@uncharted.software/grafer';
 
 import { Filters, Filter } from '@/types/typesLex';
@@ -39,31 +38,10 @@ const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
 
 // FIXME: Fix return type once bgraph library types are added
 export const loadBGraphData = (): Promise<any[]> => {
-  const output = [];
-
-  const getSignedBGraphNodesUrl = s3Client.getSignedUrl('getObject', {
-    Bucket: process.env.S3_BUCKET,
-    Key: process.env.S3_BGRAPH_NODES_KEY,
-  });
-  // TODO: @dekkai/data-source is unable to properly stream in gzipped files so we
-  // are using a workaround by fetching a blob until the following issue is fixed:
-  // https://github.com/dekkai-data/data-source/issues/1
-  output[0] = fetch(getSignedBGraphNodesUrl)
-    .then(rawData => rawData.blob())
-    .then(bgNodesBlob => DataFile.fromLocalSource(bgNodesBlob))
-    .then(bgNodesData => loadJSONLFile(bgNodesData));
-
-  const getSignedBGraphEdgesUrl = s3Client.getSignedUrl('getObject', {
-    Bucket: process.env.S3_BUCKET,
-    Key: process.env.S3_BGRAPH_EDGES_KEY,
-  });
-  // TODO: @dekkai/data-source is unable to properly stream in gzipped files so we
-  // are using a workaround by fetching a blob until the following issue is fixed:
-  // https://github.com/dekkai-data/data-source/issues/1
-  output[1] = fetch(getSignedBGraphEdgesUrl)
-    .then(rawData => rawData.blob())
-    .then(bgEdgesBlob => DataFile.fromLocalSource(bgEdgesBlob))
-    .then(bgEdgesData => loadJSONLFile(bgEdgesData));
+  const output = [
+    getS3Util(process.env.S3_BGRAPH_NODES_KEY).then(bgNodesData => loadJSONLFile(bgNodesData)),
+    getS3Util(process.env.S3_BGRAPH_EDGES_KEY).then(bgNodesData => loadJSONLFile(bgNodesData)),
+  ];
 
   return Promise.all(output);
 };
