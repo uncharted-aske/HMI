@@ -63,11 +63,11 @@
     }
 
     get bibjson (): CosmosSearchBibjsonInterface {
-      return this.artifact.bibjson ?? this.data?.raw.bibjson;
+      return this.artifact?.bibjson ?? this.data?.raw.bibjson;
     }
 
     get children (): CosmosSearchChildrenInterface[] | CosmosArtifactObjectInterface[] {
-      return this.artifact.objects ?? this.data?.raw.children ?? [];
+      return this.artifact?.objects ?? this.data?.raw.children ?? [];
     }
 
     get doi (): string {
