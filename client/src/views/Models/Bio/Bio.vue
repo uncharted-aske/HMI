@@ -69,6 +69,12 @@
         @evidence-click="onEvidenceClick"
       />
     </drilldown-panel>
+
+    <modal-document
+      v-if="showModalDocument"
+      :artifact="modalDocumentArtifact"
+      @close="showModalDocument = false"
+    />
   </div>
 </template>
 
@@ -100,19 +106,20 @@
 
   import { cosmosArtifactsMem } from '@/services/CosmosFetchService';
 
-  import Loader from '@/components/widgets/Loader.vue';
-  import SearchBar from './components/SearchBar.vue';
-  import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
-  import Settings from '@/views/Models/components/Settings.vue';
-  import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
-  import FacetsPane from './components/FacetsPane.vue';
-  import LocalGraph from './components/Graphs/LocalGraph.vue';
-  import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import EdgePane from './components/DrilldownPanel/EdgePane.vue';
+  import FacetsPane from './components/FacetsPane.vue';
+  import LeftSidePanel from '@/components/LeftSidePanel.vue';
+  import Loader from '@/components/widgets/Loader.vue';
+  import LocalGraph from './components/Graphs/LocalGraph.vue';
+  import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
+  import ModalDocument from '@/components/Modals/ModalDocument.vue';
   import NodePane from './components/DrilldownPanel/NodePane.vue';
+  import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
+  import SearchBar from './components/SearchBar.vue';
+  import SettingsBar from '@/components/SettingsBar.vue';
+  import Settings from '@/views/Models/components/Settings.vue';
 
   import Grafer from './components/Graphs/Grafer.vue';
   import { loadJSONLFile } from '@/utils/FileLoaderUtil';
@@ -131,20 +138,21 @@
   const MAX_RESULTS_LOCAL_VIEW = 500;
 
   const components = {
-    SearchBar,
-    SettingsBar,
     Counters,
-    Settings,
-    LeftSidePanel,
-    MetadataPanel,
-    FacetsPane,
-    LocalGraph,
-    ResizableGrid,
     DrilldownPanel,
-    NodePane,
     EdgePane,
+    FacetsPane,
     Grafer,
+    LeftSidePanel,
     Loader,
+    LocalGraph,
+    MetadataPanel,
+    ModalDocument,
+    NodePane,
+    ResizableGrid,
+    SearchBar,
+    Settings,
+    SettingsBar,
   };
 
   @Component({ components })
@@ -181,6 +189,10 @@
     showMessageTooLarge: boolean = false;
     showMessageEmpty: boolean = false;
 
+    // Modal Document
+    modalDocumentArtifact: any = null;
+    showModalDocument: boolean = false;
+
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Getter getFilters;
@@ -198,10 +210,20 @@
       }
     }
 
-    get countersData (): Array<Counter> {
-      return !this.subgraph ? [{ name: 'Nodes', value: 448723 }, { name: 'Edges', value: 44104 }]
-                              : [{ name: 'Nodes', value: 448723 }, { name: 'Edges', value: 44104 },
-                              { name: 'Nodes', value: this.subgraphNodeCount, highlighted: true }, { name: 'Edges', value: this.subgraphEdgeCount, highlighted: true }];
+    get countersData (): Counter[] {
+      const counters: Counter[] = [
+        { name: 'Nodes', value: 448723 },
+        { name: 'Edges', value: 44104 },
+      ];
+
+      if (this.subgraph) {
+        counters.push(
+          { name: 'Nodes', value: this.subgraphNodeCount, highlighted: true },
+          { name: 'Edges', value: this.subgraphEdgeCount, highlighted: true },
+        );
+      }
+
+      return counters;
     }
 
     get getIcon (): string {
@@ -400,9 +422,10 @@
     }
 
     async onEvidenceClick (doi:string): Promise<void> {
-      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
-      console.log(response); // eslint-disable-line
-      // TODO: Take this response and show it into a modal (quite similar to the one we have in the knowledge view: `ModalDocument.vue`)
+      const artifact: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
+      this.modalDocumentArtifact = artifact;
+      console.log(artifact);
+      this.showModalDocument = true;
     }
   }
 </script>

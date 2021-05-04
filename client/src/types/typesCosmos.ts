@@ -1,13 +1,13 @@
 /* eslint camelcase: 0 */
 
 export interface CosmosSearchChildrenInterface {
-  id: string;
+  base_confidence: number;
   bytes: string;
   cls: string;
-  postprocessing_confidence: number;
-  base_confidence: number;
   content: string;
   header_content: string | null;
+  id: string;
+  postprocessing_confidence: number;
 }
 
 export interface CosmosSearchBibjsonInterface {
@@ -50,11 +50,11 @@ export interface CosmosSearchInterface {
 
 export interface CosmosArtifactObjectInterface {
   base_confidence: number,
+  bytes: string,
   cls: string,
   content: string,
   header_content: string | null;
   postprocessing_confidence: number,
-  bytes: string,
 }
 
 export interface CosmosArtifactInterface {
