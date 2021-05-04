@@ -18,7 +18,7 @@
     FacetHistogram,
   };
 
-  const LOADING_FACETS_DATA: FacetBarsBaseData = [null, null, null, null, null, null, null, null, null, null];
+  const LOADING_FACETS_DATA: FacetBarsBaseData = [null, null, null, null, null];
 
   @Component({ components })
   export default class FacetsPane extends Vue {
