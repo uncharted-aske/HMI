@@ -37,7 +37,6 @@
 
   import { EmmaaEvidenceEvidenceInterface } from '@/types/typesEmmaa';
 
-
   const components = {
     CollapsibleContainer,
     CollapsibleItem,
@@ -83,11 +82,10 @@
    list-style-type: none;
     li {
       padding: 4px 8px;
-      border: 1px solid $border; 
+      border: 1px solid $border;
       cursor: pointer;
     }
  }
-
 
   .emphasis {
     font-weight: bold;

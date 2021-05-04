@@ -377,7 +377,8 @@
 
       this.drilldownMetadata = edge.data;
     }
-    onEvidenceClick(doi:string): void {
+
+    onEvidenceClick (doi:string): void {
       console.log(doi);
     }
   }
