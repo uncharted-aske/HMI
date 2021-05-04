@@ -8,7 +8,7 @@
 <script lang="ts">
   import _ from 'lodash';
   import { GraferController, GraferControllerData, GraferLayerData } from '@uncharted.software/grafer';
-  import { Component, Prop } from 'vue-property-decorator';
+  import { Component } from 'vue-property-decorator';
   import Vue from 'vue';
   import { BIO_CLUSTERS_LAYERS_CONFIG, BIO_GRAPH_COLORS, BIO_NODES_LAYERS_CONFIG } from '@/utils/GraferUtil';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
@@ -24,9 +24,6 @@
   export default class Grafer extends Vue {
     private loading: boolean = true;
     private controller: GraferController;
-
-    @Prop({ default: 'covid-19' })
-    private model: string;
 
     public mounted (): void {
       // NOTE: An event hub pattern is used here instead of passing these as Vue data properties from the
@@ -52,6 +49,14 @@
       eventHub.$on('background-full-graph', () => {
           this.backgroundFullGraph();
       });
+    }
+
+    destroyed (): void {
+      eventHub.$off('load-layers');
+      eventHub.$off('update-layers');
+      eventHub.$off('remove-layers');
+      eventHub.$off('foreground-full-graph');
+      eventHub.$off('background-full-graph');
     }
 
     loadGraph (layerData: BioGraferLayerDataPayloadInterface): GraferControllerData {
