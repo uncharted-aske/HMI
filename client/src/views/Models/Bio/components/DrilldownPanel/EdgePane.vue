@@ -13,7 +13,7 @@
         <div slot="title">Evidence ({{externalData.evidence.length}})</div>
         <div slot="content" class="h-100 position-absolute">
           <ul class="pl-4 h-100 overflow-auto">
-            <li v-for="(evidence, index) in externalData.evidence" :key="index">{{evidence.text}}</li>
+            <li v-for="(evidence, index) in externalData.evidence" :key="index" @click="onClickEvidence(evidence)">{{evidence.text}}</li>
           </ul>
         </div>
       </collapsible-item>
@@ -34,6 +34,9 @@
   import CollapsibleContainer from '@/components/Collapsible/CollapsibleContainer.vue';
   import CollapsibleItem from '@/components/Collapsible/CollapsibleItem.vue';
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
+
+  import { EmmaaEvidenceEvidenceInterface } from '@/types/typesEmmaa';
+
 
   const components = {
     CollapsibleContainer,
@@ -66,13 +69,26 @@
     get isEmptyMetadata (): boolean {
       return _.isEmpty(this.data);
     }
+
+    onClickEvidence (evidence: EmmaaEvidenceEvidenceInterface): void {
+      this.$emit('evidence-click', evidence.text_refs.DOI);
+    }
   }
 </script>
 
 <style lang="scss" scoped>
-  .edge-pane-container {
-    padding: 5px;
-  }
+@import "@/styles/variables";
+
+ ul{
+   list-style-type: none;
+    li {
+      padding: 4px 8px;
+      border: 1px solid $border; 
+      cursor: pointer;
+    }
+ }
+
+
   .emphasis {
     font-weight: bold;
   }

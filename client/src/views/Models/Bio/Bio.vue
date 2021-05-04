@@ -68,6 +68,7 @@
       <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content"
         :model="selectedModelId"
         :data="drilldownMetadata"
+        @evidence-click="onEvidenceClick"
       />
     </drilldown-panel>
   </div>
@@ -375,6 +376,9 @@
       this.drilldownActivePaneId = 'edge';
 
       this.drilldownMetadata = edge.data;
+    }
+    onEvidenceClick(doi:string): void {
+      console.log(doi);
     }
   }
 </script>
