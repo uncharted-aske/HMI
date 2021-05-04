@@ -383,9 +383,8 @@
 
     async onEvidenceClick (doi:string): Promise<void> {
       const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
-       // eslint-disable-next-line
-      // @ts-ignore
-      console.log(response); // TODO: Take this response and show it into a modal (quite similar to the one we have in the knowledge view: `ModalDocument.vue`)
+      console.log(response); // eslint-disable-line
+      // TODO: Take this response and show it into a modal (quite similar to the one we have in the knowledge view: `ModalDocument.vue`)
     }
   }
 </script>
