@@ -243,10 +243,15 @@
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
 
       const graferLayerData = await this.loadGraferData();
-      this.graferNodesData = graferLayerData.graferNodesData;
-      this.graferIntraEdgesData = graferLayerData.graferIntraEdgesData;
-      this.graferInterEdgesData = graferLayerData.graferInterEdgesData;
-      this.graferClustersLabelsData = graferLayerData.graferClustersLabelsData;
+      // TODO: This takes up a lot of memory and will likely scale poorly
+      this.graferNodesData = new Map();
+      graferLayerData.graferNodesData.forEach(v => this.graferNodesData.set(v.id, v));
+      this.graferIntraEdgesData = new Map();
+      graferLayerData.graferIntraEdgesData.forEach(v => this.graferIntraEdgesData.set(v.id, v));
+      this.graferInterEdgesData = new Map();
+      graferLayerData.graferInterEdgesData.forEach(v => this.graferInterEdgesData.set(v.id, v));
+      this.graferClustersLabelsData = new Map();
+      graferLayerData.graferClustersLabelsData.forEach(v => this.graferClustersLabelsData.set(v.id, v));
 
       this.$nextTick(() => {
         // Ensure Grafer component has been mounted before sending
@@ -267,7 +272,7 @@
         loadJSONLFile(`/grafer/${this.model}/nodes.jsonl`, BIO_NODE_LAYERS_NODE_OPTIONS),
         loadJSONLFile(`/grafer/${this.model}/intra_edges.jsonl`, BIO_NODE_LAYERS_EDGE_OPTIONS),
         loadJSONLFile(`/grafer/${this.model}/inter_edges.jsonl`, BIO_CLUSTER_LAYERS_EDGE_OPTIONS),
-        loadJSONLFile(`/grafer/${this.model}/clusters.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
+        loadJSONLFile(`/grafer/${this.model}/groups.jsonl`, BIO_CLUSTER_LAYERS_LABEL_OPTIONS),
       ]);
 
       return {
