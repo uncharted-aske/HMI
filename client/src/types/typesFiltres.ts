@@ -48,7 +48,7 @@ export enum FILTRES_FIELDS {
  */
 export const FILTRES = {
   [FILTRES_FIELDS.BELIEF_SCORE]: {
-    displayName: 'Belief',
+    displayName: 'Belief Score (0—1)',
     name: 'belief',
     graphType: 'edge',
     type: 'histogram',

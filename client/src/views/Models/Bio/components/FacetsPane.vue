@@ -1,6 +1,6 @@
 <template>
   <div class="facets-pane-container">
-    <facet-histogram label="Beliefs" :data="beliefs" />
+    <facet-histogram :data="beliefsData" :label="beliefsTitle" />
   </div>
 </template>
 
@@ -11,7 +11,7 @@
   import { Watch } from 'vue-property-decorator';
   import FacetHistogram from '@/components/FacetHistogram.vue';
   import { FacetBarsBaseData } from '@uncharted.software/facets-core/dist/types/facet-bars-base/FacetBarsBase';
-  import { Filtre, FILTRES_FIELDS } from '@/types/typesFiltres';
+  import { Filtre, FILTRES, FILTRES_FIELDS } from '@/types/typesFiltres';
   import * as FiltresUtil from '@/utils/FiltresUtil';
 
   const components = {
@@ -20,7 +20,8 @@
 
   @Component({ components })
   export default class FacetsPane extends Vue {
-    beliefs: FacetBarsBaseData = [];
+    beliefsData: FacetBarsBaseData = [];
+    beliefsTitle: string = FILTRES[FILTRES_FIELDS.BELIEF_SCORE].displayName;
 
     @Getter getFiltres;
 
@@ -37,7 +38,7 @@
       if (beliefsFiltre) {
         const beliefsAggregate = beliefsFiltre.aggregates;
         const beliefsFacetBars = FiltresUtil.aggregatesToFacetsBars(beliefsAggregate) as FacetBarsBaseData;
-        this.beliefs = beliefsFacetBars;
+        this.beliefsData = beliefsFacetBars;
       }
     }
   }

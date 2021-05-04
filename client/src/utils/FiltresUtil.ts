@@ -20,7 +20,7 @@ export function bgraphResultsToHistogram (bgraphResult: Array<any>): FiltreAggre
   return Array.from(bin(bgraphResult))
     .map(function (bin) {
       return {
-        name: bin.x0, // display the lower limit of the bin
+        name: bin.x0.toString(), // display the lower limit of the bin
         value: bin.length,
       } as FiltreAggregate;
     });
