@@ -87,13 +87,13 @@
   import { Counter, TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
-  import { CosmosSearchInterface } from '@/types/typesCosmos';
+  import { CosmosArtifactInterface } from '@/types/typesCosmos';
   import eventHub from '@/eventHub';
 
   import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph, formatBGraphOutputToGraferLayers } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
 
-  import { cosmosArtifactSrc } from '@/services/CosmosFetchService';
+  import { cosmosArtifactsMem } from '@/services/CosmosFetchService';
 
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
@@ -381,8 +381,14 @@
       this.drilldownMetadata = edge.data;
     }
 
+    // async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
+    //   const response = await cosmosArtifactSrc(id);
+    //   return response;
+    // }
+
     async onEvidenceClick (doi:string): Promise<void> {
-      //TODO: Fetch doc info from COSMOS
+      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
+      console.log(response); //TODO: Take this response and show it into a modal (quite similar to the one we have in the knowledge view: `ModalDocument.vue`)
     }
   }
 </script>
