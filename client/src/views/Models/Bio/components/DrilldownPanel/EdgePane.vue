@@ -2,7 +2,7 @@
   <div class="edge-pane-container">
      <div class="border-bottom">
         <h5>
-          {{data.sourceLabel}} <font-awesome-icon :icon="['fas', 'long-arrow-alt-right' ]" /> {{data.targetLabel}} 
+          {{data.sourceLabel}} <font-awesome-icon :icon="['fas', 'long-arrow-alt-right' ]" /> {{data.targetLabel}}
           <font-awesome-icon v-if="data.tested" :icon="['fas', 'check-circle' ]" />
         </h5>
       <h6>Type: <span class="emphasis">{{data.type}}</span> | Belief score: <span class="emphasis">{{data.belief | precision-formatter}}</span></h6>

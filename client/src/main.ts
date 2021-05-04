@@ -25,7 +25,6 @@ import UnderscoreRemoverFormatter from './filters/UnderscoreRemoverFormatter';
 import RemoveBracesFormatter from './filters/RemoveBracesFormatter';
 import PrecisionFormatter from './filters/PrecisionFormatter';
 
-
 import App from './App.vue';
 import Router from './router';
 import { store } from './store';
