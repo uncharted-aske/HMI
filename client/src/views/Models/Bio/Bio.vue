@@ -6,10 +6,8 @@
       :tabs="tabs"
       @tab-click="onTabClick"
     >
-      <div slot="content">
-        <metadata-panel v-if="activeTabId ===  'metadata'" :metadata="selectedModel && selectedModel.metadata"/>
-        <!-- <facets-pane v-if="activeTabId === 'facets'" /> -->
-      </div>
+      <metadata-panel v-if="activeTabId === 'metadata'" slot="content" :metadata="selectedModel && selectedModel.metadata"/>
+      <facets-pane v-else-if="activeTabId === 'facets'" slot="content" />
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
       <div class="search-row">
@@ -25,10 +23,7 @@
             <div slot="left">
               <counters
                 :title="selectedModel && selectedModel.metadata.name"
-                :data="[
-                  { name: 'Nodes', value: 44104 },
-                  { name: 'Edges', value: 448723 },
-                ]"
+                :data="countersData"
               />
             </div>
             <div slot="settings">
@@ -63,7 +58,7 @@
         </div>
       </resizable-grid>
     </div>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle">
+    <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown">
       <node-pane v-if="drilldownActivePaneId === 'node'" slot="content"
         :model="selectedModelId"
         :data="drilldownMetadata"
@@ -71,6 +66,7 @@
       <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content"
         :model="selectedModelId"
         :data="drilldownMetadata"
+        @evidence-click="onEvidenceClick"
       />
     </drilldown-panel>
   </div>
@@ -80,22 +76,32 @@
   import _ from 'lodash';
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter } from 'vuex-class';
+  import { Action, Getter } from 'vuex-class';
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
   import { GraferNodesData, GraferEdgesData, GraferLabelsData } from '@uncharted.software/grafer';
 
-  import { TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
+  import { Counter, TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
+  import { CosmosArtifactInterface } from '@/types/typesCosmos';
+  import { FILTRES_FIELDS } from '@/types/typesFiltres';
   import eventHub from '@/eventHub';
 
-  import { loadBGraphData, filterToBgraph, formatBGraphOutputToLocalGraph, formatBGraphOutputToGraferLayers } from '@/utils/BGraphUtil';
+  import {
+    loadBGraphData,
+    filterToBgraph,
+    formatBGraphOutputToLocalGraph,
+    formatBGraphOutputToGraferLayers,
+    getBGraphAggregatesFromFiltres,
+  } from '@/utils/BGraphUtil';
   import { isEmpty } from '@/utils/FiltersUtil';
   import { loadJSONLFile } from '@/utils/FileLoaderUtil';
   import { BIO_CLUSTER_LAYERS_EDGE_OPTIONS, BIO_CLUSTER_LAYERS_LABEL_OPTIONS, BIO_NODE_LAYERS_EDGE_OPTIONS, BIO_NODE_LAYERS_NODE_OPTIONS } from '@/utils/GraferUtil';
   import { getS3Util } from '@/utils/FetchUtil';
+
+  import { cosmosArtifactsMem } from '@/services/CosmosFetchService';
 
   import Loader from '@/components/widgets/Loader.vue';
   import SearchBar from './components/SearchBar.vue';
@@ -116,6 +122,11 @@
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
+  ];
+
+  /** List of filtres fields displayed in the facets panel */
+  const FACETS_FIELDS: string[] = [
+    FILTRES_FIELDS.BELIEF_SCORE,
   ];
 
   const MAX_RESULTS_LOCAL_VIEW = 500;
@@ -172,6 +183,9 @@
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Getter getFilters;
+    @Getter getFiltres;
+    @Action addFiltres;
+    @Action setFiltres;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
@@ -181,6 +195,12 @@
         this.renderSubgraphAsGraferLayers(subgraph);
         this.evaluateSubgraph(subgraph);
       }
+    }
+
+    get countersData (): Array<Counter> {
+      return !this.subgraph ? [{ name: 'Nodes', value: 44104 }, { name: 'Edges', value: 448723 }]
+                              : [{ name: 'Nodes', value: 44104 }, { name: 'Edges', value: 448723 },
+                              { name: 'Nodes', value: this.subgraphNodeCount, highlighted: true }, { name: 'Edges', value: this.subgraphEdgeCount, highlighted: true }];
     }
 
     get getIcon (): string {
@@ -252,6 +272,11 @@
         // layer data. See: https://vuejs.org/v2/api/?#mounted
         eventHub.$emit('load-layers', graferLayerData);
       });
+
+      // Initialize the filtres with what we display in the facets panel.
+      this.setFiltres(FACETS_FIELDS);
+      const newFiltres = getBGraphAggregatesFromFiltres(this.bgraphInstance, this.getFiltres, FACETS_FIELDS);
+      this.addFiltres(newFiltres);
     }
 
     async loadGraferData (): Promise<BioGraferLayerDataPayloadInterface> {
@@ -363,8 +388,6 @@
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'node';
 
-      this.drilldownPaneTitle = node.label;
-      this.drilldownPaneSubtitle = 'Type: Node';
       this.drilldownMetadata = node.data;
     }
 
@@ -372,9 +395,13 @@
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'edge';
 
-      this.drilldownPaneTitle = `${edge.data.sourceLabel} → ${edge.data.targetLabel}`;
-      this.drilldownPaneSubtitle = `Type: ${edge.data.type}`;
       this.drilldownMetadata = edge.data;
+    }
+
+    async onEvidenceClick (doi:string): Promise<void> {
+      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
+      console.log(response); // eslint-disable-line
+      // TODO: Take this response and show it into a modal (quite similar to the one we have in the knowledge view: `ModalDocument.vue`)
     }
   }
 </script>

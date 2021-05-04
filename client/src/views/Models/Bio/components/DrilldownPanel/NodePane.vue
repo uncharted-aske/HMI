@@ -1,4 +1,11 @@
 <template>
+  <div class="node-pane-container">
+     <div class="border-bottom">
+        <h5>{{data.label}}
+        </h5>
+      <h6>Type: <span class="emphasis">{{data.type}}</span></h6>
+    </div>
+
   <collapsible-container :isEmpty="isEmptyMetadata">
     <collapsible-item slot="item" expanded="true" v-for="(values, dataObjectKey) in dataObject" :key="dataObjectKey">
       <div slot="title">{{dataObjectKey}}</div>
@@ -14,6 +21,7 @@
       No metadata at the moment
     </div>
   </collapsible-container>
+</div>
 </template>
 
 <script lang="ts">
