@@ -9,7 +9,7 @@
           <settings />
         </div>
       </settings-bar>
-      <grafer class="grafer" model="wisconsin-knowledge" layer="epi" />
+      <grafer class="grafer" layer="epi" />
     </div>
   </div>
 </template>

@@ -8,7 +8,7 @@
 <script lang="ts">
   import _ from 'lodash';
   import { GraferController, GraferControllerData, GraferLayerData } from '@uncharted.software/grafer';
-  import { Component, Prop } from 'vue-property-decorator';
+  import { Component } from 'vue-property-decorator';
   import Vue from 'vue';
   import { BIO_CLUSTERS_LAYERS_CONFIG, BIO_GRAPH_COLORS, BIO_NODES_LAYERS_CONFIG } from '@/utils/GraferUtil';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
@@ -25,20 +25,19 @@
     private loading: boolean = true;
     private controller: GraferController;
 
-    @Prop({ default: 'covid-19' })
-    private model: string;
-
     public mounted (): void {
       // NOTE: An event hub pattern is used here instead of passing these as Vue data properties from the
       //       parent component (ie. <grafer :layer-data="layerData" ...>) to reduce the risk of large
       //       layer data being kept as memory both in the parent and within the Grafer's library
       //       internal memory stack unintentionally.
       eventHub.$on('load-layers', (layerData: BioGraferLayerDataPayloadInterface) => {
-        const data = this.loadGraph(layerData);
-        this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
-        this.forwardEvents(this.controller);
-        this.loading = false;
-        this.$emit('loaded');
+        if (this.$refs.canvas) {
+          const data = this.loadGraph(layerData);
+          this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
+          this.forwardEvents(this.controller);
+          this.loading = false;
+          this.$emit('loaded');
+        }
       });
       eventHub.$on('update-layers', (layers: GraferLayerData[], layerNames: string[]) => {
           this.updateLayers(layers, layerNames);
