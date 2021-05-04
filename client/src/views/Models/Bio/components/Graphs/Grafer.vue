@@ -31,13 +31,11 @@
       //       layer data being kept as memory both in the parent and within the Grafer's library
       //       internal memory stack unintentionally.
       eventHub.$on('load-layers', (layerData: BioGraferLayerDataPayloadInterface) => {
-        if (this.$refs.canvas) {
-          const data = this.loadGraph(layerData);
-          this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
-          this.forwardEvents(this.controller);
-          this.loading = false;
-          this.$emit('loaded');
-        }
+        const data = this.loadGraph(layerData);
+        this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
+        this.forwardEvents(this.controller);
+        this.loading = false;
+        this.$emit('loaded');
       });
       eventHub.$on('update-layers', (layers: GraferLayerData[], layerNames: string[]) => {
           this.updateLayers(layers, layerNames);
@@ -51,6 +49,14 @@
       eventHub.$on('background-full-graph', () => {
           this.backgroundFullGraph();
       });
+    }
+
+    destroyed (): void {
+      eventHub.$off('load-layers');
+      eventHub.$off('update-layers');
+      eventHub.$off('remove-layers');
+      eventHub.$off('foreground-full-graph');
+      eventHub.$off('background-full-graph');
     }
 
     loadGraph (layerData: BioGraferLayerDataPayloadInterface): GraferControllerData {

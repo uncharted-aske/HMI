@@ -193,7 +193,7 @@
 
     get selectedModel (): ModelInterface {
       const modelsList = this.getModelsList;
-      return this.getSelectedModelIds.length ? modelsList[this.getSelectedModelIds] : modelsList.find(model => model.metadata.id === 'covid19'); // Default to covid19 model
+      return this.getSelectedModelIds.length ? modelsList[this.getSelectedModelIds[0]] : modelsList.find(model => model.metadata.id === 'covid19'); // Default to covid19 model
     }
 
     get selectedModelId (): string {
