@@ -61,18 +61,6 @@
     @Prop({ default: [[]] })
     map: string[][];
 
-    @Watch('map') onMapChange (newMap: string[][], oldMap: string[][]): any {
-      if (!isEqual(newMap, oldMap)) {
-        this.initializeMap();
-      }
-    }
-
-    @Watch('dimensions') onDimensionsChange (newDim: DimensionsInterface, oldDim: DimensionsInterface): any {
-      if (!isEqual(newDim, oldDim)) {
-        this.initializeMap();
-      }
-    }
-
     @Prop({ default: () => ({}) })
     dimensions: DimensionsInterface;
 
@@ -98,6 +86,18 @@
     contentArray: ContentInterface[] = [];
 
     activeBorder: any;
+
+    @Watch('map') onMapChange (newMap: string[][], oldMap: string[][]): any {
+      if (!isEqual(newMap, oldMap)) {
+        this.initializeMap();
+      }
+    }
+
+    @Watch('dimensions') onDimensionsChange (newDim: DimensionsInterface, oldDim: DimensionsInterface): any {
+      if (!isEqual(newDim, oldDim)) {
+        this.initializeMap();
+      }
+    }
 
     constructor (...args: unknown[]) {
       super(...args);
@@ -309,12 +309,17 @@
           if (this.cellLeft[id]) {
             positiveBorders.push(id);
             this.cellLeft[id].map(negId => {
-              if (this.isWidthFixed(negId)) {
+              // If we have a fixed width, we want to know what's behind it, as to be moved as well.
+              if (this.isWidthFixed(negId) && !_selfCall) {
                 const opposingBorders = this.findActiveBorders(negId, 'right');
                 positiveBorders = positiveBorders.concat(opposingBorders.negative);
                 negativeBorders = negativeBorders.concat(opposingBorders.positive);
               } else {
                 negativeBorders.push(negId);
+                if (!_selfCall) {
+                  const opposingBorders = this.findActiveBorders(negId, 'right', true);
+                  positiveBorders = positiveBorders.concat(opposingBorders.negative);
+                }
               }
             });
             if (this.isWidthFixed(id) && !_selfCall) {
@@ -328,12 +333,16 @@
           if (this.cellRight[id]) {
             positiveBorders.push(id);
             this.cellRight[id].map(negId => {
-              if (this.isWidthFixed(negId)) {
+              if (this.isWidthFixed(negId) && !_selfCall) {
                 const opposingBorders = this.findActiveBorders(negId, 'left');
                 positiveBorders = positiveBorders.concat(opposingBorders.negative);
                 negativeBorders = negativeBorders.concat(opposingBorders.positive);
               } else {
                 negativeBorders.push(negId);
+                if (!_selfCall) {
+                  const opposingBorders = this.findActiveBorders(negId, 'left', true);
+                  positiveBorders = positiveBorders.concat(opposingBorders.negative);
+                }
               }
             });
             if (this.isWidthFixed(id) && !_selfCall) {
@@ -388,6 +397,13 @@
           this.adjustCellsFromTheBottom(positive, movementY);
           this.adjustCellsFromTheTop(negative, movementY);
         }
+
+        const [cellLeft, cellRight] = this.findCommonBorders(this.cellTopLeftX, this.cellBotRightX, this.cellTopLeftY, this.cellBotRightY);
+        const [cellTop, cellBot] = this.findCommonBorders(this.cellTopLeftY, this.cellBotRightY, this.cellTopLeftX, this.cellBotRightX);
+        this.cellLeft = cellLeft;
+        this.cellRight = cellRight;
+        this.cellTop = cellTop;
+        this.cellBot = cellBot;
 
         this.contentArray = this.generateContentArray();
       }
