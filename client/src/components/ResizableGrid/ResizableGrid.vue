@@ -305,11 +305,21 @@
       this.isDraggable = true;
 
       const { positive, negative } = this.findActiveCells(id, direction);
+      const cellStuck = this.isCellStuck({ positive, negative }, direction);
       this.activeBorder = {
         direction,
-        positive,
-        negative,
+        positive: cellStuck ? [] : positive,
+        negative: cellStuck ? [] : negative,
       };
+    }
+
+    /** Find if all cells are immobile, by being against a side of the grid container, or an immobile cell. */
+    isCellStuck (cells: OppositeCells, direction: string): boolean {
+      if (['left', 'top'].includes(direction)) {
+        return cells.negative.every(id => this.isCellFixed(id, direction));
+      } else {
+        return cells.positive.every(id => this.isCellFixed(id, direction));
+      }
     }
 
     /** Return the list of cells that should move with and against the current cell id. */
@@ -318,8 +328,6 @@
       let positiveCells = [];
       let negativeCells = [];
       visitedCells.push(id);
-      // console.group(id + ' ' + direction);
-      // console.log('neighbours', directionCellNeighbours);
 
       if (directionCellNeighbours) {
         positiveCells.push(id);
@@ -340,11 +348,11 @@
           negativeCells = negativeCells.concat(opposingCells.positive);
         });
       }
-      // console.groupEnd();
+
       return { positive: uniq(positiveCells), negative: uniq(negativeCells) };
     }
 
-    /** Which fixed dimensions we are testing based on direction */
+    /** Which axis a cell is fixed based on direction. i.e. width for left right direction. */
     private isCellFixed (id: string, direction: string) {
       return ['left', 'right'].includes(direction)
         ? this.cellDim(id).widthFixed
