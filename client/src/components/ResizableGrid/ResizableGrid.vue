@@ -155,6 +155,10 @@
           top: this.cellTopLeftY[id],
           width: this.cellBotRightX[id] - this.cellTopLeftX[id],
           height: this.cellBotRightY[id] - this.cellTopLeftY[id],
+          borderLeftDisable: this.cellTopLeftX[id] === 0,
+          borderRightDisable: this.cellBotRightX[id] === this.containerDim.width,
+          borderTopDisable: this.cellTopLeftY[id] === 0,
+          borderBottomDisable: this.cellBotRightY[id] === this.containerDim.height,
         });
       }
 

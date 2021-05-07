@@ -4,10 +4,10 @@
     :id="content.id"
     :style="style"
   >
-    <div class="panel-content-border panel-content-border-bottom" @mousedown="(e) => handleMousedown(e, 'bottom')"/>
-    <div class="panel-content-border panel-content-border-right" @mousedown="(e) => handleMousedown(e, 'right')"/>
-    <div class="panel-content-border panel-content-border-left" @mousedown="(e) => handleMousedown(e, 'left')"/>
-    <div class="panel-content-border panel-content-border-top" @mousedown="(e) => handleMousedown(e, 'top')"/>
+    <div v-if="!content.borderBottomDisable" class="panel-content-border panel-content-border-bottom" @mousedown="(e) => handleMousedown(e, 'bottom')"/>
+    <div v-if="!content.borderRightDisable" class="panel-content-border panel-content-border-right" @mousedown="(e) => handleMousedown(e, 'right')"/>
+    <div v-if="!content.borderLeftDisable" class="panel-content-border panel-content-border-left" @mousedown="(e) => handleMousedown(e, 'left')"/>
+    <div v-if="!content.borderTopDisable" class="panel-content-border panel-content-border-top" @mousedown="(e) => handleMousedown(e, 'top')"/>
     <slot/>
   </div>
 </template>
@@ -41,7 +41,7 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-$border-select-margin: 10px;
+$border-select-margin: 5px;
 
 .panel-content-border {
   position: absolute;
