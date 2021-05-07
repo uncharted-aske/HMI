@@ -124,7 +124,7 @@
     }
 
     /** Return the dimensions of a cell */
-    cellDim (id: string): CellDimensionsInterface {
+    private cellDim (id: string): CellDimensionsInterface {
       // Set some default.
       const defaultDim = {
         width: null,
@@ -146,7 +146,7 @@
       }
     }
 
-    generateContentArray (): ContentInterface[] {
+    private generateContentArray (): ContentInterface[] {
       const output = [];
       for (const id of this.idSet) {
         output.push({
@@ -166,11 +166,11 @@
     }
 
     // incomplete - validate that all shapes in the map are rectangular and connected
-    isMapValid (): boolean {
+    private isMapValid (): boolean {
       return true;
     }
 
-    mounted (): void {
+    private mounted (): void {
       window.addEventListener('mouseup', this.onMouseup);
       this.$el.addEventListener('mousemove', this.onMousemove);
       window.addEventListener('resize', this.onResize);
@@ -284,24 +284,24 @@
       return [primaryCell, secondaryCell];
     }
 
-    isTopLeftCorner (col: number, row: number): boolean {
+    private isTopLeftCorner (col: number, row: number): boolean {
       const id = this.map[row][col];
       return (col === 0 || this.map[row][col - 1] !== id) && (row === 0 || this.map[row - 1][col] !== id);
     }
 
-    isBottomRightCorner (col: number, row: number): boolean {
+    private isBottomRightCorner (col: number, row: number): boolean {
       const id = this.map[row][col];
       return (col === this.map[row].length - 1 || this.map[row][col + 1] !== id) &&
       (row === this.map.length - 1 || this.map[row + 1][col] !== id);
     }
 
-    beforeDestroy (): void {
+    private beforeDestroy (): void {
       window.removeEventListener('mouseup', this.onMouseup);
       this.$el.removeEventListener('mousemove', this.onMousemove);
       window.removeEventListener('resize', this.onResize);
     }
 
-    onMousedown (e: MouseEvent, id: string, direction: string): void {
+    private onMousedown (e: MouseEvent, id: string, direction: string): void {
       this.isDraggable = true;
 
       const { positive, negative } = this.findActiveCells(id, direction);
@@ -314,7 +314,7 @@
     }
 
     /** Find if all cells are immobile, by being against a side of the grid container, or an immobile cell. */
-    isCellStuck (cells: OppositeCells, direction: string): boolean {
+    private isCellStuck (cells: OppositeCells, direction: string): boolean {
       if (['left', 'top'].includes(direction)) {
         return cells.negative.every(id => this.isCellFixed(id, direction));
       } else {
@@ -323,7 +323,7 @@
     }
 
     /** Return the list of cells that should move with and against the current cell id. */
-    findActiveCell (id: string, direction: string, directionCellNeighbours: string[], visitedCells?: string[]): OppositeCells {
+    private findActiveCell (id: string, direction: string, directionCellNeighbours: string[], visitedCells?: string[]): OppositeCells {
       const opposingDirection = OPPOSING_DIRECTION_MAP[direction];
       let positiveCells = [];
       let negativeCells = [];
@@ -360,7 +360,7 @@
     }
 
     /** Returns all the cells that needs to be moved based on a specified direction. */
-    findActiveCells (id: string, direction: string, visitedCells = []): OppositeCells {
+    private findActiveCells (id: string, direction: string, visitedCells = []): OppositeCells {
       const findTopActiveCell = () => this.findActiveCell(id, 'top', this.cellTop[id], visitedCells);
       const findLeftActiveCell = () => this.findActiveCell(id, 'left', this.cellLeft[id], visitedCells);
       const findRightActiveCell = () => this.findActiveCell(id, 'right', this.cellRight[id], visitedCells);
@@ -401,11 +401,11 @@
       }
     }
 
-    onMouseup (): void {
+    private onMouseup (): void {
         this.isDraggable = false;
     }
 
-    onMousemove (e: MouseEvent): void {
+    private onMousemove (e: MouseEvent): void {
       if (this.isDraggable) {
         const { direction, positive, negative } = this.activeBorder;
         const { movementX, movementY } = e;
@@ -443,13 +443,13 @@
       }
     }
 
-    onResize (): void {
+    private onResize (): void {
       // hack to force re-render
       // this.borderPosition = this.borderPosition + Math.random() * 0.0001;
     }
 
     /** Calculate the current width limitation of a cell based on its container. */
-    cellWidthLimits (id: string): { min: number, max: number } {
+    private cellWidthLimits (id: string): { min: number, max: number } {
       const { widthMin, widthMax } = this.cellDim(id);
       return {
         min: widthMin * this.containerDim.width,
@@ -458,7 +458,7 @@
     }
 
     /** Calculate the current height limitation of a cell based on its container. */
-    cellHeightLimits (id: string): { min: number, max: number } {
+    private cellHeightLimits (id: string): { min: number, max: number } {
       const { heightMin, heightMax } = this.cellDim(id);
       return {
         min: heightMin * this.containerDim.height,
@@ -466,7 +466,7 @@
       };
     }
 
-    adjustCellsFromTheLeft (cells: string[], movement: number): void {
+    private adjustCellsFromTheLeft (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellTopLeftX[id] = this.cellTopLeftX[id] + movement;
         /*
@@ -483,7 +483,7 @@
       });
     }
 
-    adjustCellsFromTheRight (cells: string[], movement: number): void {
+    private adjustCellsFromTheRight (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellBotRightX[id] = this.cellBotRightX[id] + movement;
         /*
@@ -500,7 +500,7 @@
       });
     }
 
-    adjustCellsFromTheTop (cells: string[], movement: number): void {
+    private adjustCellsFromTheTop (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellTopLeftY[id] = this.cellTopLeftY[id] + movement;
         /*
@@ -517,7 +517,7 @@
       });
     }
 
-    adjustCellsFromTheBottom (cells: string[], movement: number): void {
+    private adjustCellsFromTheBottom (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellBotRightY[id] = this.cellBotRightY[id] + movement;
         /*
