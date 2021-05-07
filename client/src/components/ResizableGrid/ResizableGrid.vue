@@ -57,6 +57,13 @@
     return /[A-Za-z]+$/.test(str);
   }
 
+  enum OPPOSING_DIRECTION_MAP {
+    left = 'right',
+    right = 'left',
+    top = 'bottom',
+    bottom = 'top',
+  }
+
   const components = {
     ResizableGridContent,
   };
@@ -260,8 +267,8 @@
       const primaryCell: {[key: string]: string[]} = {};
       const secondaryCell: {[key: string]: string[]} = {};
 
-      commonObjectKeys(primaryCellTopLeftInvert, primaryCellBotRightInvert).map(val => {
-        primaryCellTopLeftInvert[val].map(leftBorderId => primaryCellBotRightInvert[val].map(rightBorderId => {
+      commonObjectKeys(primaryCellTopLeftInvert, primaryCellBotRightInvert).map(cell => {
+        primaryCellTopLeftInvert[cell].map(leftBorderId => primaryCellBotRightInvert[cell].map(rightBorderId => {
           if (secondaryCellTopLeft[leftBorderId] < secondaryCellBotRight[rightBorderId] &&
             secondaryCellTopLeft[rightBorderId] < secondaryCellBotRight[leftBorderId]) {
             (primaryCell[leftBorderId] = primaryCell[leftBorderId] ? primaryCell[leftBorderId] : []).push(rightBorderId);
@@ -294,6 +301,8 @@
       this.isDraggable = true;
 
       const { positive, negative } = this.findActiveCells(id, position);
+      // console.log('final result');
+      // console.log({ positive, negative });
       this.activeBorder = {
         position,
         positive,
@@ -306,46 +315,75 @@
     }
 
     /** Return the list of cells that should move with and against the current cell id. */
-    findActiveCell (id: string, opposingDirection: string, cellNeighbours: string[], _selfCall?: boolean): OppositeCells {
-      let positiveBorders = [];
-      let negativeBorders = [];
+    findActiveCell (id: string, direction: string, directionCellNeighbours: string[], visitedCells?: string[]): OppositeCells {
+      const opposingDirection = OPPOSING_DIRECTION_MAP[direction];
+      let positiveCells = [];
+      let negativeCells = [];
+      visitedCells.push(id);
+      // console.group(id + ' ' + direction);
+      // console.log('neighbours', directionCellNeighbours);
 
-      if (cellNeighbours) {
-        positiveBorders.push(id);
-        cellNeighbours.map(neighbourId => {
-          // If we have a fixed width, we want to know what's behind it, as to be moved as well.
-          if (this.isWidthFixed(neighbourId) && !_selfCall) {
-            const opposingBorders = this.findActiveCells(neighbourId, opposingDirection);
-            positiveBorders = positiveBorders.concat(opposingBorders.negative);
-            negativeBorders = negativeBorders.concat(opposingBorders.positive);
-          } else {
-            negativeBorders.push(neighbourId);
-            if (!_selfCall) {
-              const opposingBorders = this.findActiveCells(neighbourId, opposingDirection, true);
-              positiveBorders = positiveBorders.concat(opposingBorders.negative);
-            }
-          }
-        });
-        if (this.isWidthFixed(id) && !_selfCall) {
-          const opposingBorders = this.findActiveCells(id, opposingDirection, true);
-          positiveBorders = positiveBorders.concat(opposingBorders.negative);
-          negativeBorders = negativeBorders.concat(opposingBorders.positive);
+      if (directionCellNeighbours) {
+        positiveCells.push(id);
+
+        // If current cell is width fixed then add negative
+        if (this.isWidthFixed(id)) {
+          negativeCells.push(id);
         }
-      }
 
-      return { positive: uniq(positiveBorders), negative: uniq(negativeBorders) };
+        // Now we move the neighbours in the same direction
+        directionCellNeighbours.map(neighbourId => {
+          if (visitedCells.includes(neighbourId)) {
+            return;
+          }
+
+          const opposingCells = this.findActiveCells(neighbourId, opposingDirection, visitedCells);
+          positiveCells = positiveCells.concat(opposingCells.negative);
+          negativeCells = negativeCells.concat(opposingCells.positive);
+        });
+      }
+      // console.groupEnd();
+      return { positive: uniq(positiveCells), negative: uniq(negativeCells) };
     }
 
-    findActiveCells (id: string, position: string, _selfCall?: boolean): OppositeCells {
-      switch (position) {
-        case 'left':
-          return this.findActiveCell(id, 'right', this.cellLeft[id], _selfCall);
-        case 'right':
-          return this.findActiveCell(id, 'left', this.cellRight[id], _selfCall);
-        case 'top':
-          return this.findActiveCell(id, 'bottom', this.cellTop[id], _selfCall);
-        case 'bottom':
-          return this.findActiveCell(id, 'top', this.cellBottom[id], _selfCall);
+    /** Returns all the cells that needs to be moved based on a specified direction. */
+    findActiveCells (id: string, position: string, visitedCells = []): OppositeCells {
+      if (this.isWidthFixed(id)) {
+        switch (position) {
+          case 'left': {
+            const left = this.findActiveCell(id, 'left', this.cellLeft[id], visitedCells);
+            const right = this.findActiveCell(id, 'right', this.cellRight[id], visitedCells);
+            return {
+              // We move in a positive left the cell on our left and on our right
+              positive: uniq(left.positive.concat(right.negative)),
+              // opposite
+              negative: uniq(left.negative.concat(right.positive)),
+            } as OppositeCells;
+          }
+          case 'right': {
+            const left = this.findActiveCell(id, 'left', this.cellLeft[id], visitedCells);
+            const right = this.findActiveCell(id, 'right', this.cellRight[id], visitedCells);
+            return {
+              negative: uniq(right.negative.concat(left.positive)),
+              positive: uniq(right.positive.concat(left.negative)),
+            } as OppositeCells;
+          }
+          case 'top':
+            return this.findActiveCell(id, 'top', this.cellTop[id], visitedCells);
+          case 'bottom':
+            return this.findActiveCell(id, 'bottom', this.cellBottom[id], visitedCells);
+        }
+      } else {
+        switch (position) {
+          case 'left':
+            return this.findActiveCell(id, 'left', this.cellLeft[id], visitedCells);
+          case 'right':
+            return this.findActiveCell(id, 'right', this.cellRight[id], visitedCells);
+          case 'top':
+            return this.findActiveCell(id, 'top', this.cellTop[id], visitedCells);
+          case 'bottom':
+            return this.findActiveCell(id, 'bottom', this.cellBottom[id], visitedCells);
+        }
       }
     }
 
