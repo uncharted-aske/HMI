@@ -129,12 +129,12 @@
       const defaultDim = {
         width: null,
         widthFixed: false,
-        widthMax: 1,
-        widthMin: 0,
+        widthMax: 0.75,
+        widthMin: 0.25,
         height: null,
         heightFixed: false,
-        heightMax: 1,
-        heightMin: 0,
+        heightMax: 0.75,
+        heightMin: 0.25,
       } as CellDimensionsInterface;
 
       // Fetch the dimensions set by the user.
@@ -301,18 +301,6 @@
       window.removeEventListener('resize', this.onResize);
     }
 
-    private onMousedown (e: MouseEvent, id: string, direction: string): void {
-      this.isDraggable = true;
-
-      const { positive, negative } = this.findActiveCells(id, direction);
-      const cellStuck = this.isCellStuck({ positive, negative }, direction);
-      this.activeBorder = {
-        direction,
-        positive: cellStuck ? [] : positive,
-        negative: cellStuck ? [] : negative,
-      };
-    }
-
     /** Find if all cells are immobile, by being against a side of the grid container, or an immobile cell. */
     private isCellStuck (cells: OppositeCells, direction: string): boolean {
       if (['left', 'top'].includes(direction)) {
@@ -401,17 +389,91 @@
       }
     }
 
+    private isCellsMovementXLegal (cells: string[], movementX: number, direction: string, isPositive: boolean) {
+      return cells.every(id => {
+        if (this.cellDim(id).widthFixed) return true;
+
+        const limit = this.cellWidthLimits(id);
+        const currentWidth = this.cellBotRightX[id] - this.cellTopLeftX[id];
+        const adjustedX = movementX * (isPositive ? 1 : -1);
+
+        const newWidth = direction !== 'right'
+          // If adjusting from the left border then the element will shrink when the mouse movement vector is positive
+          ? this.cellBotRightX[id] - (this.cellTopLeftX[id] + adjustedX)
+          // If adjusting from the right border then the element will grow when the mouse movement vector is positive
+          : (this.cellBotRightX[id] + adjustedX) - this.cellTopLeftX[id];
+
+        return !(newWidth <= limit.min || newWidth >= limit.max) || // The cell is going out of limits OR
+          (currentWidth <= limit.min && newWidth > currentWidth) || // Want to grow out of the min limit OR
+          (currentWidth >= limit.max && newWidth <= currentWidth); // Want to shrink out of the max limit
+      });
+    }
+
+    private isCellsMovementYLegal (cells: string[], movementY: number, direction: string, isPositive: boolean) {
+      return cells.every(id => {
+        if (this.cellDim(id).heightFixed) return true;
+
+        const limit = this.cellHeightLimits(id);
+        const currentHeight = this.cellBotRightY[id] - this.cellTopLeftY[id];
+        const adjustedY = movementY * (isPositive ? 1 : -1);
+
+        const newHeight = direction !== 'bottom'
+          // If adjusting from the top border then the element will shrink when the mouse movement vector is positive
+          ? this.cellBotRightY[id] - (this.cellTopLeftY[id] + adjustedY)
+          // If adjusting from the bottom border then the element will grow when the mouse movement vector is positive
+          : (this.cellBotRightY[id] + adjustedY) - this.cellTopLeftY[id];
+
+        return !(newHeight <= limit.min || newHeight >= limit.max) || // The cell is going out of limits OR
+          (currentHeight <= limit.min && newHeight > currentHeight) || // Want to grow out of the min limit OR
+          (currentHeight >= limit.max && newHeight <= currentHeight); // Want to shrink out of the max limit
+      });
+    }
+
+    /** Check if a movement is legal based on cell min/max limitations */
+    private isMovementLegal (direction: string, cells: OppositeCells, movement: { movementX: number, movementY: number }): boolean {
+      const { movementX, movementY } = movement;
+      const { positive, negative } = cells;
+
+      if (['left', 'right'].includes(direction) && movementX !== 0) {
+        return this.isCellsMovementXLegal(positive, movementX, direction, true) &&
+          this.isCellsMovementXLegal(negative, movementX, direction, false);
+      } else if (['top', 'bottom'].includes(direction) && movementY !== 0) {
+        return this.isCellsMovementYLegal(positive, movementY, direction, true) &&
+          this.isCellsMovementYLegal(negative, movementY, direction, false);
+      } else {
+        return false;
+      }
+    }
+
+    // When the user select a border
+    private onMousedown (e: MouseEvent, id: string, direction: string): void {
+      this.isDraggable = true;
+
+      const { positive, negative } = this.findActiveCells(id, direction);
+      const cellStuck = this.isCellStuck({ positive, negative }, direction);
+      this.activeBorder = {
+        direction,
+        positive: cellStuck ? [] : positive,
+        negative: cellStuck ? [] : negative,
+      };
+    }
+
     private onMouseup (): void {
         this.isDraggable = false;
     }
 
     private onMousemove (e: MouseEvent): void {
       if (this.isDraggable) {
-        const { direction, positive, negative } = this.activeBorder;
         const { movementX, movementY } = e;
-
         // If there is no movement
-        if (movementX === 0 && movementY === 0) return;
+        if (movementX === 0 && movementY === 0) {
+          return;
+        }
+
+        const { direction, positive, negative } = this.activeBorder;
+        if (!this.isMovementLegal(direction, { positive, negative }, { movementX, movementY })) {
+          return;
+        }
 
         switch (direction) {
           case 'left':
@@ -452,8 +514,8 @@
     private cellWidthLimits (id: string): { min: number, max: number } {
       const { widthMin, widthMax } = this.cellDim(id);
       return {
-        min: widthMin * this.containerDim.width,
-        max: widthMax * this.containerDim.width,
+        min: Math.floor(widthMin * this.containerDim.width),
+        max: Math.ceil(widthMax * this.containerDim.width),
       };
     }
 
@@ -461,76 +523,32 @@
     private cellHeightLimits (id: string): { min: number, max: number } {
       const { heightMin, heightMax } = this.cellDim(id);
       return {
-        min: heightMin * this.containerDim.height,
-        max: heightMax * this.containerDim.height,
+        min: Math.floor(heightMin * this.containerDim.height),
+        max: Math.ceil(heightMax * this.containerDim.height),
       };
     }
 
     private adjustCellsFromTheLeft (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellTopLeftX[id] = this.cellTopLeftX[id] + movement;
-        /*
-        // Find the new width of the cell
-        const newX = this.cellTopLeftX[id] + movement;
-        const newWidth = this.cellBotRightX[id] - newX;
-
-        // If it's within the limits
-        const limit = this.cellWidthLimits(id);
-        if (limit.min <= newWidth && newWidth <= limit.max) {
-          this.cellTopLeftX[id] = newX;
-        }
-        */
       });
     }
 
     private adjustCellsFromTheRight (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellBotRightX[id] = this.cellBotRightX[id] + movement;
-        /*
-        // Find the new width of the cell
-        const newX = this.cellBotRightX[id] + movement;
-        const newWidth = newX - this.cellTopLeftX[id];
-
-        // If it's within the limits
-        const limit = this.cellWidthLimits(id);
-        if (limit.min <= newWidth && newWidth <= limit.max) {
-          this.cellBotRightX[id] = newX;
-        }
-        */
       });
     }
 
     private adjustCellsFromTheTop (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellTopLeftY[id] = this.cellTopLeftY[id] + movement;
-        /*
-        // Find the new height of the cell
-        const newY = this.cellTopLeftY[id] + movement;
-        const newHeight = this.cellBotRightY[id] - newY;
-
-        // Update the height if it's within the limits
-        const limit = this.cellHeightLimits(id);
-        if (limit.min <= newHeight && newHeight <= limit.max) {
-          this.cellTopLeftY[id] = newY;
-        }
-        */
       });
     }
 
     private adjustCellsFromTheBottom (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellBotRightY[id] = this.cellBotRightY[id] + movement;
-        /*
-        // Find the new height of the cell
-        const newY = this.cellBotRightY[id] + movement;
-        const newHeight = newY - this.cellTopLeftY[id];
-
-        // Update the height if it's within the limits
-        const limit = this.cellHeightLimits(id);
-        if (limit.min <= newHeight && newHeight <= limit.max) {
-          this.cellBotRightY[id] = newY;
-        }
-        */
       });
     }
   }
