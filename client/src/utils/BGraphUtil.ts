@@ -44,10 +44,10 @@ const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
 // }
 
 // FIXME: Fix return type once bgraph library types are added
-export const loadBGraphData = (): Promise<any[]> => {
+export const loadBGraphData = (nodesPath: string, edgesPath: string): Promise<any[]> => {
   const output = [
-    getS3Util(process.env.S3_BGRAPH_NODES_KEY).then(bgNodesData => loadJSONLFile(bgNodesData)),
-    getS3Util(process.env.S3_BGRAPH_EDGES_KEY).then(bgNodesData => loadJSONLFile(bgNodesData)),
+    getS3Util(nodesPath).then(bgNodesData => loadJSONLFile(bgNodesData)),
+    getS3Util(edgesPath).then(bgNodesData => loadJSONLFile(bgNodesData)),
   ];
 
   return Promise.all(output);
@@ -95,7 +95,7 @@ export const executeBgraphEdges = (bgraphEdgeQuery: any, clause: Filter): any =>
       return bgraphEdgeQuery.filter(document => {
         if (document._type === 'edge') {
           const edge = document;
-          return clause.values.some(typeIdx => BIO_EDGE_TYPE_OPTIONS[typeIdx] === edge.type);
+          return clause.values.some(typeIdx => BIO_EDGE_TYPE_OPTIONS[typeIdx] === edge.statement_type);
         }
         // Document is not an edge
         return false;
@@ -148,7 +148,7 @@ export const executeBgraphNodes = (bgraphNodeQuery: any, clause: Filter): any =>
       return bgraphNodeQuery.filter(document => {
         if (document._type === 'node') {
           const node = document;
-          return node.grounded === Boolean(clause.values[0]);
+          return node.grounded_db === Boolean(clause.values[0]);
         }
         // Document type is an edge
         return false;
@@ -158,7 +158,7 @@ export const executeBgraphNodes = (bgraphNodeQuery: any, clause: Filter): any =>
       return bgraphNodeQuery.filter(document => {
         if (document._type === 'node') {
           const node = document;
-          return node.grounded_onto === Boolean(clause.values[0]);
+          return node.grounded_group === Boolean(clause.values[0]);
         }
         // Document type is an edge
         return false;
@@ -283,35 +283,35 @@ export function getSubgraphFromFiltres (bgraph: any, filtres: Filtres): any {
 // TODO: Specify queryResults type once bgraph has result types
 export const formatBGraphOutputToGraferLayers = (
   queryResults: any[],
-  graferNodesData: GraferNodesData,
-  graferIntraEdgesData: GraferEdgesData,
-  graferInterEdgesData: GraferEdgesData,
-  graferClustersLabelsData: GraferLabelsData,
+  graferNodesData: Map<number, any>, // TODO: Change any type to Nodes Data Object in Grafer
+  graferIntraEdgesData: Map<number, any>,
+  graferInterEdgesData: Map<number, any>,
+  graferClustersLabelsData: Map<number, any>,
 ): GraferLayerData[] => {
   // Deep copy results to avoid mutating passed in data
   const queryResultsDeepCopy = deepCopy(queryResults);
   const graferNodesDataResults = [];
   const graferIntraEdgesDataResults = [];
   const graferInterEdgesDataResults = [];
-  const graferClusterIds = new Set();
+  const graferClusterIds: Set<number> = new Set();
 
   for (let i = 0; i < queryResultsDeepCopy.length; i++) {
     const result = queryResultsDeepCopy[i];
     if (result._type === 'node' && result.grafer_id != null) {
       // Set node color on query result
-      graferNodesDataResults.push(graferNodesData[result.grafer_id]);
-      result.grafer_cluster_ids.map(graferClusterId => graferClusterIds.add(graferClusterId));
+      graferNodesDataResults.push(graferNodesData.get(result.grafer_id));
+      result.group_ids.map(id => graferClusterIds.add(id));
     } else if (result._type === 'edge' && result.intra_edge_id != null) {
       // Set intra edge color on query result
-      graferIntraEdgesDataResults.push(graferIntraEdgesData[result.intra_edge_id]);
+      graferIntraEdgesDataResults.push(graferIntraEdgesData.get(result.intra_edge_id));
     } else if (result._type === 'edge' && result.inter_edge_id != null) {
       // Set inter edge color on query result
-      graferInterEdgesDataResults.push(graferInterEdgesData[result.inter_edge_id]);
+      graferInterEdgesDataResults.push(graferInterEdgesData.get(result.inter_edge_id));
     }
   }
 
   const graferClusterDataResults = [];
-  graferClusterIds.forEach(clusterId => graferClusterDataResults.push(graferClustersLabelsData[clusterId]));
+  graferClusterIds.forEach(clusterId => graferClusterDataResults.push(graferClustersLabelsData.get(clusterId)));
 
   const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', graferInterEdgesDataResults, graferClusterDataResults);
   const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', graferNodesDataResults, graferIntraEdgesDataResults);

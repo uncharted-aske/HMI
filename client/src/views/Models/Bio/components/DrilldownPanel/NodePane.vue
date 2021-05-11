@@ -62,11 +62,7 @@
     }
 
     get dbRef (): { namespace: string, id: string } {
-      const dbRefPriority = this.data.db_ref_priority.indexOf(':');
-      return {
-        namespace: this.data.db_ref_priority.slice(0, dbRefPriority),
-        id: this.data.db_ref_priority.slice(dbRefPriority + 1),
-      };
+      return this.data.db_ids[0];
     }
 
     async fetchExternalData (): Promise<void> {

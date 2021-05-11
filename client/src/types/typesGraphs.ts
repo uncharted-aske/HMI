@@ -15,8 +15,7 @@ export interface GraphNodeDataInterface {
   belief: number,
   cluster_ids: number,
   cluster_level: number,
-  db_ref_priority: string,
-  db_refs: Record<any, any>
+  db_ids: {namespace: string, id: string }[],
   doc_ids: number,
   doi_map: number,
   edge_ids_source: number[],
