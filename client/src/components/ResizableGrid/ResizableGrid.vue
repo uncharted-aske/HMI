@@ -194,7 +194,7 @@
       this.initializeMap();
     }
 
-    private destroyed (): void {
+    private beforeDestroy (): void {
       this.resizeOberver.disconnect();
       window.removeEventListener('mouseup', this.onMouseup);
       this.$el.removeEventListener('mousemove', this.onMousemove);
@@ -315,12 +315,6 @@
       const id = this.map[row][col];
       return (col === this.map[row].length - 1 || this.map[row][col + 1] !== id) &&
       (row === this.map.length - 1 || this.map[row + 1][col] !== id);
-    }
-
-    private beforeDestroy (): void {
-      window.removeEventListener('mouseup', this.onMouseup);
-      this.$el.removeEventListener('mousemove', this.onMousemove);
-      window.removeEventListener('resize', this.onResize);
     }
 
     /** Find if all cells are immobile, by being against a side of the grid container, or an immobile cell. */
