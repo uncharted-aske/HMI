@@ -31,6 +31,13 @@
     positive: string[],
   }
 
+  type DOMdimensions = {
+    top: number,
+    left: number
+    width: number,
+    height: number,
+  };
+
   // reverse the direction of the key and values in an object, placing the former keys in an array
   // e.g. invertObject({x: 1, y: 1, z: 2}) ---> {1: ["x","y"], 2:["z"]}
   function invertObject (json: Record<string, any>): Record<string, any> {
@@ -99,6 +106,11 @@
 
     activeBorder: any;
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    resizeOberver: ResizeObserver;
+    resizeTimeout: ReturnType<typeof setTimeout>;
+
     @Watch('map') onMapChange (newMap: string[][], oldMap: string[][]): any {
       if (!isEqual(newMap, oldMap)) {
         this.initializeMap();
@@ -116,7 +128,7 @@
       this.resetMapVariables();
     }
 
-    get containerDim (): {width: number, height: number, top: number, left: number} {
+    private containerDim (): DOMdimensions {
       const { width, height, top, left } = this.$el
         ? this.$el.getBoundingClientRect()
         : { width: 0, height: 0, top: 0, left: 0 };
@@ -148,6 +160,7 @@
 
     private generateContentArray (): ContentInterface[] {
       const output = [];
+      const { width, height } = this.containerDim();
       for (const id of this.idSet) {
         output.push({
           id,
@@ -156,9 +169,9 @@
           width: this.cellBotRightX[id] - this.cellTopLeftX[id],
           height: this.cellBotRightY[id] - this.cellTopLeftY[id],
           borderLeftDisable: this.cellTopLeftX[id] === 0,
-          borderRightDisable: this.cellBotRightX[id] === this.containerDim.width,
+          borderRightDisable: this.cellBotRightX[id] === width,
           borderTopDisable: this.cellTopLeftY[id] === 0,
-          borderBottomDisable: this.cellBotRightY[id] === this.containerDim.height,
+          borderBottomDisable: this.cellBotRightY[id] === height,
         });
       }
 
@@ -171,11 +184,20 @@
     }
 
     private mounted (): void {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.resizeOberver = new ResizeObserver(this.onResize);
+      this.resizeOberver.observe(this.$el);
       window.addEventListener('mouseup', this.onMouseup);
       this.$el.addEventListener('mousemove', this.onMousemove);
-      window.addEventListener('resize', this.onResize);
 
       this.initializeMap();
+    }
+
+    private destroyed (): void {
+      this.resizeOberver.disconnect();
+      window.removeEventListener('mouseup', this.onMouseup);
+      this.$el.removeEventListener('mousemove', this.onMousemove);
     }
 
     private resetMapVariables () {
@@ -205,7 +227,7 @@
 
       this.resetMapVariables();
 
-      const { width, height } = this.containerDim;
+      const { width, height } = this.containerDim();
 
       // TO-DO: Add equivalent colAccumulatingTotal block for height
       const rowAccumulatingTotal = [];
@@ -447,15 +469,18 @@
 
     // When the user select a border
     private onMousedown (e: MouseEvent, id: string, direction: string): void {
-      this.isDraggable = true;
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('panel-content-border')) {
+        this.isDraggable = true;
 
-      const { positive, negative } = this.findActiveCells(id, direction);
-      const cellStuck = this.isCellStuck({ positive, negative }, direction);
-      this.activeBorder = {
-        direction,
-        positive: cellStuck ? [] : positive,
-        negative: cellStuck ? [] : negative,
-      };
+        const { positive, negative } = this.findActiveCells(id, direction);
+        const cellStuck = this.isCellStuck({ positive, negative }, direction);
+        this.activeBorder = {
+          direction,
+          positive: cellStuck ? [] : positive,
+          negative: cellStuck ? [] : negative,
+        };
+      }
     }
 
     private onMouseup (): void {
@@ -506,25 +531,27 @@
     }
 
     private onResize (): void {
-      // hack to force re-render
-      // this.borderPosition = this.borderPosition + Math.random() * 0.0001;
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(this.initializeMap, 300);
     }
 
     /** Calculate the current width limitation of a cell based on its container. */
     private cellWidthLimits (id: string): { min: number, max: number } {
       const { widthMin, widthMax } = this.cellDim(id);
+      const { width } = this.containerDim();
       return {
-        min: Math.floor(widthMin * this.containerDim.width),
-        max: Math.ceil(widthMax * this.containerDim.width),
+        min: Math.floor(widthMin * width),
+        max: Math.ceil(widthMax * width),
       };
     }
 
     /** Calculate the current height limitation of a cell based on its container. */
     private cellHeightLimits (id: string): { min: number, max: number } {
       const { heightMin, heightMax } = this.cellDim(id);
+      const { height } = this.containerDim();
       return {
-        min: Math.floor(heightMin * this.containerDim.height),
-        max: Math.ceil(heightMax * this.containerDim.height),
+        min: Math.floor(heightMin * height),
+        max: Math.ceil(heightMax * height),
       };
     }
 
