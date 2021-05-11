@@ -63,7 +63,7 @@
     }
 
     get bibjson (): CosmosSearchBibjsonInterface {
-      return this.artifact?.bibjson ?? this.data?.raw.bibjson;
+      return this.artifact?.bibjson ?? this.data?.raw?.bibjson;
     }
 
     get children (): CosmosSearchChildrenInterface[] | CosmosArtifactObjectInterface[] {
@@ -71,19 +71,19 @@
     }
 
     get doi (): string {
-      return this.bibjson.identifier[0].id;
+      return this.bibjson?.identifier[0]?.id;
     }
 
     get publisher (): string {
-      return this.bibjson.publisher || 'None';
+      return this.bibjson?.publisher || 'None';
     }
 
     get url (): string {
-      return this.bibjson.link[0].url;
+      return this.bibjson?.link?.[0]?.url;
     }
 
     get title (): string {
-      return this.bibjson.title ?? this.data?.title ?? '';
+      return this.bibjson?.title ?? this.data?.title ?? '';
     }
 
     get excerpt (): string {
@@ -91,11 +91,11 @@
     }
 
     get publicationYear (): string {
-      return this.bibjson.year || 'None';
+      return this.bibjson?.year || 'None';
     }
 
     get imagePreview (): string {
-      return this.children?.[0].bytes ?? this.data?.previewImageSrc;
+      return this.children?.[0]?.bytes ?? this.data?.previewImageSrc;
     }
 
     get imageStyle (): any {
