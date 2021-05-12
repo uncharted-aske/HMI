@@ -26,7 +26,19 @@
     DimensionsInterface,
   } from '@/types/typesResizableGrid';
 
-  // reverse the position of the key and values in an object, placing the former keys in an array
+  type OppositeCells = {
+    negative: string[],
+    positive: string[],
+  }
+
+  type DOMdimensions = {
+    top: number,
+    left: number
+    width: number,
+    height: number,
+  };
+
+  // reverse the direction of the key and values in an object, placing the former keys in an array
   // e.g. invertObject({x: 1, y: 1, z: 2}) ---> {1: ["x","y"], 2:["z"]}
   function invertObject (json: Record<string, any>): Record<string, any> {
     var ret = {};
@@ -52,6 +64,13 @@
     return /[A-Za-z]+$/.test(str);
   }
 
+  enum OPPOSING_DIRECTION_MAP {
+    left = 'right',
+    right = 'left',
+    top = 'bottom',
+    bottom = 'top',
+  }
+
   const components = {
     ResizableGridContent,
   };
@@ -60,18 +79,6 @@
   export default class ResizableGrid extends Vue {
     @Prop({ default: [[]] })
     map: string[][];
-
-    @Watch('map') onMapChange (newMap: string[][], oldMap: string[][]): any {
-      if (!isEqual(newMap, oldMap)) {
-        this.initializeMap();
-      }
-    }
-
-    @Watch('dimensions') onDimensionsChange (newDim: DimensionsInterface, oldDim: DimensionsInterface): any {
-      if (!isEqual(newDim, oldDim)) {
-        this.initializeMap();
-      }
-    }
 
     @Prop({ default: () => ({}) })
     dimensions: DimensionsInterface;
@@ -93,18 +100,35 @@
     cellLeft: CellBorderInterface;
     cellRight: CellBorderInterface;
     cellTop: CellBorderInterface;
-    cellBot: CellBorderInterface;
+    cellBottom: CellBorderInterface;
 
     contentArray: ContentInterface[] = [];
 
     activeBorder: any;
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    resizeOberver: ResizeObserver;
+    resizeTimeout: ReturnType<typeof setTimeout>;
+
+    @Watch('map') onMapChange (newMap: string[][], oldMap: string[][]): any {
+      if (!isEqual(newMap, oldMap)) {
+        this.initializeMap();
+      }
+    }
+
+    @Watch('dimensions') onDimensionsChange (newDim: DimensionsInterface, oldDim: DimensionsInterface): any {
+      if (!isEqual(newDim, oldDim)) {
+        this.initializeMap();
+      }
+    }
 
     constructor (...args: unknown[]) {
       super(...args);
       this.resetMapVariables();
     }
 
-    get containerDim (): {width: number, height: number, top: number, left: number} {
+    private containerDim (): DOMdimensions {
       const { width, height, top, left } = this.$el
         ? this.$el.getBoundingClientRect()
         : { width: 0, height: 0, top: 0, left: 0 };
@@ -112,17 +136,17 @@
     }
 
     /** Return the dimensions of a cell */
-    cellDim (id: string): CellDimensionsInterface {
+    private cellDim (id: string): CellDimensionsInterface {
       // Set some default.
       const defaultDim = {
         width: null,
         widthFixed: false,
-        widthMax: 1,
-        widthMin: 0,
+        widthMax: 0.75,
+        widthMin: 0.25,
         height: null,
         heightFixed: false,
-        heightMax: 1,
-        heightMin: 0,
+        heightMax: 0.75,
+        heightMin: 0.25,
       } as CellDimensionsInterface;
 
       // Fetch the dimensions set by the user.
@@ -134,8 +158,9 @@
       }
     }
 
-    generateContentArray (): ContentInterface[] {
+    private generateContentArray (): ContentInterface[] {
       const output = [];
+      const { width, height } = this.containerDim();
       for (const id of this.idSet) {
         output.push({
           id,
@@ -143,6 +168,10 @@
           top: this.cellTopLeftY[id],
           width: this.cellBotRightX[id] - this.cellTopLeftX[id],
           height: this.cellBotRightY[id] - this.cellTopLeftY[id],
+          borderLeftDisable: this.cellTopLeftX[id] === 0,
+          borderRightDisable: this.cellBotRightX[id] === width,
+          borderTopDisable: this.cellTopLeftY[id] === 0,
+          borderBottomDisable: this.cellBotRightY[id] === height,
         });
       }
 
@@ -150,16 +179,25 @@
     }
 
     // incomplete - validate that all shapes in the map are rectangular and connected
-    isMapValid (): boolean {
+    private isMapValid (): boolean {
       return true;
     }
 
-    mounted (): void {
+    private mounted (): void {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.resizeOberver = new ResizeObserver(this.onResize);
+      this.resizeOberver.observe(this.$el);
       window.addEventListener('mouseup', this.onMouseup);
       this.$el.addEventListener('mousemove', this.onMousemove);
-      window.addEventListener('resize', this.onResize);
 
       this.initializeMap();
+    }
+
+    private beforeDestroy (): void {
+      this.resizeOberver.disconnect();
+      window.removeEventListener('mouseup', this.onMouseup);
+      this.$el.removeEventListener('mousemove', this.onMousemove);
     }
 
     private resetMapVariables () {
@@ -175,7 +213,7 @@
       this.cellLeft = {};
       this.cellRight = {};
       this.cellTop = {};
-      this.cellBot = {};
+      this.cellBottom = {};
 
       this.contentArray = [];
 
@@ -189,7 +227,7 @@
 
       this.resetMapVariables();
 
-      const { width, height } = this.containerDim;
+      const { width, height } = this.containerDim();
 
       // TO-DO: Add equivalent colAccumulatingTotal block for height
       const rowAccumulatingTotal = [];
@@ -234,11 +272,11 @@
       }
 
       const [cellLeft, cellRight] = this.findCommonBorders(this.cellTopLeftX, this.cellBotRightX, this.cellTopLeftY, this.cellBotRightY);
-      const [cellTop, cellBot] = this.findCommonBorders(this.cellTopLeftY, this.cellBotRightY, this.cellTopLeftX, this.cellBotRightX);
+      const [cellTop, cellBottom] = this.findCommonBorders(this.cellTopLeftY, this.cellBotRightY, this.cellTopLeftX, this.cellBotRightX);
       this.cellLeft = cellLeft;
       this.cellRight = cellRight;
       this.cellTop = cellTop;
-      this.cellBot = cellBot;
+      this.cellBottom = cellBottom;
 
       this.contentArray = this.generateContentArray();
     }
@@ -255,8 +293,8 @@
       const primaryCell: {[key: string]: string[]} = {};
       const secondaryCell: {[key: string]: string[]} = {};
 
-      commonObjectKeys(primaryCellTopLeftInvert, primaryCellBotRightInvert).map(val => {
-        primaryCellTopLeftInvert[val].map(leftBorderId => primaryCellBotRightInvert[val].map(rightBorderId => {
+      commonObjectKeys(primaryCellTopLeftInvert, primaryCellBotRightInvert).map(cell => {
+        primaryCellTopLeftInvert[cell].map(leftBorderId => primaryCellBotRightInvert[cell].map(rightBorderId => {
           if (secondaryCellTopLeft[leftBorderId] < secondaryCellBotRight[rightBorderId] &&
             secondaryCellTopLeft[rightBorderId] < secondaryCellBotRight[leftBorderId]) {
             (primaryCell[leftBorderId] = primaryCell[leftBorderId] ? primaryCell[leftBorderId] : []).push(rightBorderId);
@@ -268,219 +306,270 @@
       return [primaryCell, secondaryCell];
     }
 
-    isTopLeftCorner (col: number, row: number): boolean {
+    private isTopLeftCorner (col: number, row: number): boolean {
       const id = this.map[row][col];
       return (col === 0 || this.map[row][col - 1] !== id) && (row === 0 || this.map[row - 1][col] !== id);
     }
 
-    isBottomRightCorner (col: number, row: number): boolean {
+    private isBottomRightCorner (col: number, row: number): boolean {
       const id = this.map[row][col];
       return (col === this.map[row].length - 1 || this.map[row][col + 1] !== id) &&
       (row === this.map.length - 1 || this.map[row + 1][col] !== id);
     }
 
-    beforeDestroy (): void {
-      window.removeEventListener('mouseup', this.onMouseup);
-      this.$el.removeEventListener('mousemove', this.onMousemove);
-      window.removeEventListener('resize', this.onResize);
+    /** Find if all cells are immobile, by being against a side of the grid container, or an immobile cell. */
+    private isCellStuck (cells: OppositeCells, direction: string): boolean {
+      if (['left', 'top'].includes(direction)) {
+        return cells.negative.every(id => this.isCellFixed(id, direction));
+      } else {
+        return cells.positive.every(id => this.isCellFixed(id, direction));
+      }
     }
 
-    onMousedown (e: MouseEvent, id: string, position: string): void {
-      this.isDraggable = true;
+    /** Return the list of cells that should move with and against the current cell id. */
+    private findActiveCell (id: string, direction: string, directionCellNeighbours: string[], visitedCells?: string[]): OppositeCells {
+      const opposingDirection = OPPOSING_DIRECTION_MAP[direction];
+      let positiveCells = [];
+      let negativeCells = [];
+      visitedCells.push(id);
 
-      const { positive, negative } = this.findActiveBorders(id, position);
-      this.activeBorder = {
-        position,
-        positive,
-        negative,
-      };
-    }
+      if (directionCellNeighbours) {
+        positiveCells.push(id);
 
-    isWidthFixed (id: string): boolean {
-      return Boolean(this.dimensions[id]?.widthFixed);
-    }
+        // If current cell is width fixed then add negative
+        if (this.isCellFixed(id, direction)) {
+          negativeCells.push(id);
+        }
 
-    findActiveBorders (id: string, position: string, _selfCall?: boolean): any {
-      let positiveBorders = [];
-      let negativeBorders = [];
-
-      switch (position) {
-        case 'left':
-          if (this.cellLeft[id]) {
-            positiveBorders.push(id);
-            this.cellLeft[id].map(negId => {
-              if (this.isWidthFixed(negId)) {
-                const opposingBorders = this.findActiveBorders(negId, 'right');
-                positiveBorders = positiveBorders.concat(opposingBorders.negative);
-                negativeBorders = negativeBorders.concat(opposingBorders.positive);
-              } else {
-                negativeBorders.push(negId);
-              }
-            });
-            if (this.isWidthFixed(id) && !_selfCall) {
-              const opposingBorders = this.findActiveBorders(id, 'right', true);
-              positiveBorders = positiveBorders.concat(opposingBorders.negative);
-              negativeBorders = negativeBorders.concat(opposingBorders.positive);
-            }
+        // Now we move the neighbours in the same direction
+        directionCellNeighbours.map(neighbourId => {
+          if (visitedCells.includes(neighbourId)) {
+            return;
           }
+
+          const opposingCells = this.findActiveCells(neighbourId, opposingDirection, visitedCells);
+          positiveCells = positiveCells.concat(opposingCells.negative);
+          negativeCells = negativeCells.concat(opposingCells.positive);
+        });
+      }
+
+      return { positive: uniq(positiveCells), negative: uniq(negativeCells) };
+    }
+
+    /** Which axis a cell is fixed based on direction. i.e. width for left right direction. */
+    private isCellFixed (id: string, direction: string) {
+      return ['left', 'right'].includes(direction)
+        ? this.cellDim(id).widthFixed
+        : this.cellDim(id).heightFixed;
+    }
+
+    /** Returns all the cells that needs to be moved based on a specified direction. */
+    private findActiveCells (id: string, direction: string, visitedCells = []): OppositeCells {
+      const findTopActiveCell = () => this.findActiveCell(id, 'top', this.cellTop[id], visitedCells);
+      const findLeftActiveCell = () => this.findActiveCell(id, 'left', this.cellLeft[id], visitedCells);
+      const findRightActiveCell = () => this.findActiveCell(id, 'right', this.cellRight[id], visitedCells);
+      const findBottomActiveCell = () => this.findActiveCell(id, 'bottom', this.cellBottom[id], visitedCells);
+
+      const args: any = {};
+      switch (direction) {
+        case 'left':
+          args.concurrentCells = findLeftActiveCell;
+          args.opposingCells = findRightActiveCell;
           break;
         case 'right':
-          if (this.cellRight[id]) {
-            positiveBorders.push(id);
-            this.cellRight[id].map(negId => {
-              if (this.isWidthFixed(negId)) {
-                const opposingBorders = this.findActiveBorders(negId, 'left');
-                positiveBorders = positiveBorders.concat(opposingBorders.negative);
-                negativeBorders = negativeBorders.concat(opposingBorders.positive);
-              } else {
-                negativeBorders.push(negId);
-              }
-            });
-            if (this.isWidthFixed(id) && !_selfCall) {
-              const opposingBorders = this.findActiveBorders(id, 'left', true);
-              positiveBorders = positiveBorders.concat(opposingBorders.negative);
-              negativeBorders = negativeBorders.concat(opposingBorders.positive);
-            }
-          }
+          args.concurrentCells = findRightActiveCell;
+          args.opposingCells = findLeftActiveCell;
           break;
         case 'top':
-          if (this.cellTop[id]) {
-            positiveBorders.push(id);
-            this.cellTop[id].map(negId => negativeBorders.push(negId));
-          }
+          args.concurrentCells = findTopActiveCell;
+          args.opposingCells = findBottomActiveCell;
           break;
         case 'bottom':
-          if (this.cellBot[id]) {
-            positiveBorders.push(id);
-            this.cellBot[id].map(negId => negativeBorders.push(negId));
-          }
+          args.concurrentCells = findBottomActiveCell;
+          args.opposingCells = findTopActiveCell;
           break;
       }
 
-      return { positive: uniq(positiveBorders), negative: uniq(negativeBorders) };
+      // Get the cell that move in the same direction
+      const concurrent = args.concurrentCells();
+      // But if we are dealing with a fixed cell, we add the cell in the opposite direction
+      if (this.isCellFixed(id, direction)) {
+        const opposing = args.opposingCells();
+        return {
+          // i.e. We move in a positive left the cell on our left and on our right
+          positive: uniq(concurrent.positive.concat(opposing.negative)),
+          negative: uniq(concurrent.negative.concat(opposing.positive)),
+        } as OppositeCells;
+      } else {
+        return concurrent;
+      }
     }
 
-    onMouseup (): void {
+    private isCellsMovementXLegal (cells: string[], movementX: number, direction: string, isPositive: boolean) {
+      return cells.every(id => {
+        if (this.cellDim(id).widthFixed) return true;
+
+        const limit = this.cellWidthLimits(id);
+        const currentWidth = this.cellBotRightX[id] - this.cellTopLeftX[id];
+        const adjustedX = movementX * (isPositive ? 1 : -1);
+
+        const newWidth = direction !== 'right'
+          // If adjusting from the left border then the element will shrink when the mouse movement vector is positive
+          ? this.cellBotRightX[id] - (this.cellTopLeftX[id] + adjustedX)
+          // If adjusting from the right border then the element will grow when the mouse movement vector is positive
+          : (this.cellBotRightX[id] + adjustedX) - this.cellTopLeftX[id];
+
+        return !(newWidth <= limit.min || newWidth >= limit.max) || // The cell is going out of limits OR
+          (currentWidth <= limit.min && newWidth > currentWidth) || // Want to grow out of the min limit OR
+          (currentWidth >= limit.max && newWidth <= currentWidth); // Want to shrink out of the max limit
+      });
+    }
+
+    private isCellsMovementYLegal (cells: string[], movementY: number, direction: string, isPositive: boolean) {
+      return cells.every(id => {
+        if (this.cellDim(id).heightFixed) return true;
+
+        const limit = this.cellHeightLimits(id);
+        const currentHeight = this.cellBotRightY[id] - this.cellTopLeftY[id];
+        const adjustedY = movementY * (isPositive ? 1 : -1);
+
+        const newHeight = direction !== 'bottom'
+          // If adjusting from the top border then the element will shrink when the mouse movement vector is positive
+          ? this.cellBotRightY[id] - (this.cellTopLeftY[id] + adjustedY)
+          // If adjusting from the bottom border then the element will grow when the mouse movement vector is positive
+          : (this.cellBotRightY[id] + adjustedY) - this.cellTopLeftY[id];
+
+        return !(newHeight <= limit.min || newHeight >= limit.max) || // The cell is going out of limits OR
+          (currentHeight <= limit.min && newHeight > currentHeight) || // Want to grow out of the min limit OR
+          (currentHeight >= limit.max && newHeight <= currentHeight); // Want to shrink out of the max limit
+      });
+    }
+
+    /** Check if a movement is legal based on cell min/max limitations */
+    private isMovementLegal (direction: string, cells: OppositeCells, movement: { movementX: number, movementY: number }): boolean {
+      const { movementX, movementY } = movement;
+      const { positive, negative } = cells;
+
+      if (['left', 'right'].includes(direction) && movementX !== 0) {
+        return this.isCellsMovementXLegal(positive, movementX, direction, true) &&
+          this.isCellsMovementXLegal(negative, movementX, direction, false);
+      } else if (['top', 'bottom'].includes(direction) && movementY !== 0) {
+        return this.isCellsMovementYLegal(positive, movementY, direction, true) &&
+          this.isCellsMovementYLegal(negative, movementY, direction, false);
+      } else {
+        return false;
+      }
+    }
+
+    // When the user select a border
+    private onMousedown (e: MouseEvent, id: string, direction: string): void {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('panel-content-border')) {
+        this.isDraggable = true;
+
+        const { positive, negative } = this.findActiveCells(id, direction);
+        const cellStuck = this.isCellStuck({ positive, negative }, direction);
+        this.activeBorder = {
+          direction,
+          positive: cellStuck ? [] : positive,
+          negative: cellStuck ? [] : negative,
+        };
+      }
+    }
+
+    private onMouseup (): void {
         this.isDraggable = false;
     }
 
-    onMousemove (e: MouseEvent): void {
+    private onMousemove (e: MouseEvent): void {
       if (this.isDraggable) {
-        const { position, positive, negative } = this.activeBorder;
         const { movementX, movementY } = e;
-
         // If there is no movement
-        if (movementX === 0 && movementY === 0) return;
+        if (movementX === 0 && movementY === 0) {
+          return;
+        }
 
-        if (position === 'left') {
-          this.adjustCellsFromTheLeft(positive, movementX);
-          this.adjustCellsFromTheRight(negative, movementX);
+        const { direction, positive, negative } = this.activeBorder;
+        if (!this.isMovementLegal(direction, { positive, negative }, { movementX, movementY })) {
+          return;
         }
-        if (position === 'right') {
-          this.adjustCellsFromTheRight(positive, movementX);
-          this.adjustCellsFromTheLeft(negative, movementX);
+
+        switch (direction) {
+          case 'left':
+            this.adjustCellsFromTheLeft(positive, movementX);
+            this.adjustCellsFromTheRight(negative, movementX);
+            break;
+          case 'right':
+            this.adjustCellsFromTheRight(positive, movementX);
+            this.adjustCellsFromTheLeft(negative, movementX);
+            break;
+          case 'top':
+            this.adjustCellsFromTheTop(positive, movementY);
+            this.adjustCellsFromTheBottom(negative, movementY);
+            break;
+          case 'bottom':
+            this.adjustCellsFromTheBottom(positive, movementY);
+            this.adjustCellsFromTheTop(negative, movementY);
+            break;
         }
-        if (position === 'top') {
-          this.adjustCellsFromTheTop(positive, movementY);
-          this.adjustCellsFromTheBottom(negative, movementY);
-        }
-        if (position === 'bottom') {
-          this.adjustCellsFromTheBottom(positive, movementY);
-          this.adjustCellsFromTheTop(negative, movementY);
-        }
+
+        const [cellLeft, cellRight] = this.findCommonBorders(this.cellTopLeftX, this.cellBotRightX, this.cellTopLeftY, this.cellBotRightY);
+        const [cellTop, cellBottom] = this.findCommonBorders(this.cellTopLeftY, this.cellBotRightY, this.cellTopLeftX, this.cellBotRightX);
+        this.cellLeft = cellLeft;
+        this.cellRight = cellRight;
+        this.cellTop = cellTop;
+        this.cellBottom = cellBottom;
 
         this.contentArray = this.generateContentArray();
       }
     }
 
-    onResize (): void {
-      // hack to force re-render
-      // this.borderPosition = this.borderPosition + Math.random() * 0.0001;
+    private onResize (): void {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(this.initializeMap, 300);
     }
 
     /** Calculate the current width limitation of a cell based on its container. */
-    cellWidthLimits (id: string): { min: number, max: number } {
+    private cellWidthLimits (id: string): { min: number, max: number } {
       const { widthMin, widthMax } = this.cellDim(id);
+      const { width } = this.containerDim();
       return {
-        min: widthMin * this.containerDim.width,
-        max: widthMax * this.containerDim.width,
+        min: Math.floor(widthMin * width),
+        max: Math.ceil(widthMax * width),
       };
     }
 
     /** Calculate the current height limitation of a cell based on its container. */
-    cellHeightLimits (id: string): { min: number, max: number } {
+    private cellHeightLimits (id: string): { min: number, max: number } {
       const { heightMin, heightMax } = this.cellDim(id);
+      const { height } = this.containerDim();
       return {
-        min: heightMin * this.containerDim.height,
-        max: heightMax * this.containerDim.height,
+        min: Math.floor(heightMin * height),
+        max: Math.ceil(heightMax * height),
       };
     }
 
-    adjustCellsFromTheLeft (cells: string[], movement: number): void {
+    private adjustCellsFromTheLeft (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellTopLeftX[id] = this.cellTopLeftX[id] + movement;
-        /*
-        // Find the new width of the cell
-        const newX = this.cellTopLeftX[id] + movement;
-        const newWidth = this.cellBotRightX[id] - newX;
-
-        // If it's within the limits
-        const limit = this.cellWidthLimits(id);
-        if (limit.min <= newWidth && newWidth <= limit.max) {
-          this.cellTopLeftX[id] = newX;
-        }
-        */
       });
     }
 
-    adjustCellsFromTheRight (cells: string[], movement: number): void {
+    private adjustCellsFromTheRight (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellBotRightX[id] = this.cellBotRightX[id] + movement;
-        /*
-        // Find the new width of the cell
-        const newX = this.cellBotRightX[id] + movement;
-        const newWidth = newX - this.cellTopLeftX[id];
-
-        // If it's within the limits
-        const limit = this.cellWidthLimits(id);
-        if (limit.min <= newWidth && newWidth <= limit.max) {
-          this.cellBotRightX[id] = newX;
-        }
-        */
       });
     }
 
-    adjustCellsFromTheTop (cells: string[], movement: number): void {
+    private adjustCellsFromTheTop (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellTopLeftY[id] = this.cellTopLeftY[id] + movement;
-        /*
-        // Find the new height of the cell
-        const newY = this.cellTopLeftY[id] + movement;
-        const newHeight = this.cellBotRightY[id] - newY;
-
-        // Update the height if it's within the limits
-        const limit = this.cellHeightLimits(id);
-        if (limit.min <= newHeight && newHeight <= limit.max) {
-          this.cellTopLeftY[id] = newY;
-        }
-        */
       });
     }
 
-    adjustCellsFromTheBottom (cells: string[], movement: number): void {
+    private adjustCellsFromTheBottom (cells: string[], movement: number): void {
       cells.forEach(id => {
         this.cellBotRightY[id] = this.cellBotRightY[id] + movement;
-        /*
-        // Find the new height of the cell
-        const newY = this.cellBotRightY[id] + movement;
-        const newHeight = newY - this.cellTopLeftY[id];
-
-        // Update the height if it's within the limits
-        const limit = this.cellHeightLimits(id);
-        if (limit.min <= newHeight && newHeight <= limit.max) {
-          this.cellBotRightY[id] = newY;
-        }
-        */
       });
     }
   }
