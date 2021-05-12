@@ -56,9 +56,11 @@
       if (this.doi) {
         this.getSimilar(this.doi);
       }
+      this.isLoading = false;
     }
 
     @Watch('doi') onDoiChanged (doi: string): void {
+      this.isLoading = true;
       this.getSimilar(doi);
     }
 
