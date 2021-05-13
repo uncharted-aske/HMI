@@ -34,6 +34,7 @@ const fetchInitialModelData = async () => {
     `${window.location.origin}/NOAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
     `${window.location.origin}/subgraph.json`, // Boutique subgraph for COVID-19 model.
     `${window.location.origin}/xdd_parameters_table.json`, // Boutique subgraph for COVID-19 model.
+    `${window.location.origin}/toy-example-GroMEt.json`, // Toy example GroMEt
   ];
 
   const [
@@ -54,6 +55,8 @@ const fetchInitialModelData = async () => {
     NOAP1SIRPaths,
     subgraphJSON,
     paramsData,
+    toyGroMEt,
+
   ] = await Promise.all(
     staticFileURLs.map(url => getUtil(url, {})),
   );
@@ -76,6 +79,7 @@ const fetchInitialModelData = async () => {
     NOAP1SIRPaths,
     subgraphJSON,
     paramsData,
+    toyGroMEt,
   };
 };
 
@@ -90,6 +94,7 @@ const buildInitialModelsList = ({
   DoubleEpi,
   nestedDoubleEpiCAG,
   nestedDoubleEpiGrFN,
+  toyGroMEt,
 }): ModelInterface[] => {
   return [
     {
@@ -118,6 +123,15 @@ const buildInitialModelsList = ({
       graph: {
         abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
         detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
+      },
+      type: 'computational',
+    },
+    {
+      id: 3,
+      metadata: {},
+      graph: {
+        abstract: _.pick(toyGroMEt, ['nodes', 'edges']),
+        detailed: _.pick(toyGroMEt, ['nodes', 'edges']),
       },
       type: 'computational',
     },
@@ -173,6 +187,7 @@ const actions: ActionTree<ModelsState, any> = {
       NOAP1SIRPaths,
       subgraphJSON,
       paramsData,
+      toyGroMEt,
     } = await fetchInitialModelData();
 
     commit('setParameters', paramsData);
@@ -189,6 +204,7 @@ const actions: ActionTree<ModelsState, any> = {
       DoubleEpi,
       nestedDoubleEpiCAG,
       nestedDoubleEpiGrFN,
+      toyGroMEt,
     });
     commit('setModelsList', initialModelsList);
 

@@ -1,0 +1,430 @@
+{
+    "nodes": [
+      {
+        "id": "B:toy1",
+        "concept": "Function",
+        "label": "toy1",
+        "nodeType": "Box",
+        "dataType": null,
+        "parent": null,
+        "nodeSubType": [
+          "Function"
+        ],
+        "metadata": {
+          "syntax": "Function",
+          "uid": "B:toy1",
+          "name": "toy1",
+          "wiring": [
+            "W:toy1_x",
+            "W:toy1_y",
+            "W:toy1_set_z1",
+            "W:toy1_set_z2",
+            "W:toy1_reset_x"
+          ],
+          "metadata": null,
+          "input_ports": [],
+          "output_ports": []
+        }
+      },
+      {
+        "id": "B:toy1_set_z_exp",
+        "concept": "Expression",
+        "label": "toy1_set_z_exp",
+        "nodeType": "Box",
+        "dataType": null,
+        "parent": "B:toy1",
+        "nodeSubType": [
+          "Expression"
+        ],
+        "metadata": {
+          "syntax": "Expression",
+          "uid": "B:toy1_set_z_exp",
+          "name": null,
+          "wiring": {
+            "syntax": "Exp",
+            "operator": "*",
+            "args": [
+              "P:toy1_set_z_exp.in.x",
+              "P:toy1_set_z_exp.in.y"
+            ]
+          },
+          "metadata": null,
+          "input_ports": [
+            "P:toy1_set_z_exp.in.x",
+            "P:toy1_set_z_exp.in.y"
+          ],
+          "output_ports": "P:toy1_set_z_exp.out.z"
+        }
+      },
+      {
+        "id": "B:toy1_reset_x_exp",
+        "concept": "Expression",
+        "label": "toy1_reset_x_exp",
+        "nodeType": "Box",
+        "dataType": null,
+        "parent": "B:toy1_set_z_exp",
+        "nodeSubType": [
+          "Expression"
+        ],
+        "metadata": {
+          "syntax": "Expression",
+          "uid": "B:toy1_reset_x_exp",
+          "name": null,
+          "wiring": {
+            "syntax": "Exp",
+            "operator": "add1",
+            "args": [
+              "P:toy1_reset_x_exp.in.z"
+            ]
+          },
+          "metadata": null,
+          "input_ports": [
+            "P:toy1_reset_x_exp.in.z"
+          ],
+          "output_ports": "P:toy1_reset_x_exp.out.x"
+        }
+      },
+      {
+        "id": "B:add1",
+        "concept": "Function",
+        "label": "add1",
+        "nodeType": "Box",
+        "dataType": null,
+        "parent": "B:toy1_reset_x_exp",
+        "nodeSubType": [
+          "Function"
+        ],
+        "metadata": {
+          "syntax": "Function",
+          "uid": "B:add1",
+          "name": "add1",
+          "wiring": [
+            "W:add1_x",
+            "W:add1_result"
+          ],
+          "metadata": null,
+          "input_ports": [
+            "P:add1.in.x"
+          ],
+          "output_ports": [
+            "P:add1.out.result"
+          ]
+        }
+      },
+      {
+        "id": "B:add1_exp",
+        "concept": "Expression",
+        "label": "add1_exp",
+        "nodeType": "Box",
+        "dataType": null,
+        "parent": "B:add1",
+        "nodeSubType": [
+          "Expression"
+        ],
+        "metadata": {
+          "syntax": "Expression",
+          "uid": "B:add1_exp",
+          "name": null,
+          "wiring": {
+            "syntax": "Exp",
+            "operator": "+",
+            "args": [
+              "P:add1_exp.in.x",
+              {
+                "syntax": "Literal",
+                "uid": null,
+                "type": "Int",
+                "value": {
+                  "syntax": "Val",
+                  "val": "1"
+                },
+                "metadata": null
+              }
+            ]
+          },
+          "metadata": null,
+          "input_ports": [
+            "P:add1_exp.in.x"
+          ],
+          "output_ports": "P:add1_exp.out.result"
+        }
+      },
+      {
+        "id": "P:toy1.in.x",
+        "concept": "Port",
+        "label": "x",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:toy1",
+        "nodeSubType": [
+          "InPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:toy1.in.x",
+          "box": "B:toy1",
+          "type": "T:Float",
+          "name": "x",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:toy1.in.y",
+        "concept": "Port",
+        "label": "y",
+        "nodeType": "Port",
+        "dataType": "Int",
+        "parent": "B:toy1",
+        "nodeSubType": [
+          "InPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:toy1.in.y",
+          "box": "B:toy1",
+          "type": "T:Int",
+          "name": "y",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:toy1.out.x",
+        "concept": "Port",
+        "label": "x1",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:toy1",
+        "nodeSubType": [
+          "OutPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:toy1.out.x",
+          "box": "B:toy1",
+          "type": "T:Float",
+          "name": "x1",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:toy1.out.z",
+        "concept": "Port",
+        "label": "x1",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:toy1",
+        "nodeSubType": [
+          "OutPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:toy1.out.z",
+          "box": "B:toy1",
+          "type": "T:Float",
+          "name": "x1",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:toy1_set_z_exp.in.x",
+        "concept": "Port",
+        "label": "x",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:toy1_set_z_exp",
+        "nodeSubType": [
+          "InPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:toy1_set_z_exp.in.x",
+          "box": "B:toy1_set_z_exp",
+          "type": "T:Float",
+          "name": "x",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:toy1_set_z_exp.in.y",
+        "concept": "Port",
+        "label": "y",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:toy1_set_z_exp",
+        "nodeSubType": [
+          "InPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:toy1_set_z_exp.in.y",
+          "box": "B:toy1_set_z_exp",
+          "type": "T:Float",
+          "name": "y",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:toy1_set_z_exp.out.z",
+        "concept": "Port",
+        "label": "z",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:toy1_set_z_exp",
+        "nodeSubType": [
+          "OutPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:toy1_set_z_exp.out.z",
+          "box": "B:toy1_set_z_exp",
+          "type": "T:Float",
+          "name": "z",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:toy1_reset_x_exp.in.z",
+        "concept": "Port",
+        "label": "z",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:toy1_reset_x_exp",
+        "nodeSubType": [
+          "InPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:toy1_reset_x_exp.in.z",
+          "box": "B:toy1_reset_x_exp",
+          "type": "T:Float",
+          "name": "z",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:toy1_reset_x_exp.out.x",
+        "concept": "Port",
+        "label": "x",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:toy1_reset_x_exp",
+        "nodeSubType": [
+          "OutPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:toy1_reset_x_exp.out.x",
+          "box": "B:toy1_reset_x_exp",
+          "type": "T:Float",
+          "name": "x",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:add1.in.x",
+        "concept": "Port",
+        "label": "x",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:add1",
+        "nodeSubType": [
+          "InPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:add1.in.x",
+          "box": "B:add1",
+          "type": "T:Float",
+          "name": "x",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:add1.out.result",
+        "concept": "Port",
+        "label": "add1.out.result",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:add1",
+        "nodeSubType": [
+          "OutPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:add1.out.result",
+          "box": "B:add1",
+          "type": "T:Float",
+          "name": null,
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:add1_exp.in.x",
+        "concept": "Port",
+        "label": "x",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:add1_exp",
+        "nodeSubType": [
+          "InPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:add1_exp.in.x",
+          "box": "B:add1_exp",
+          "type": "T:Float",
+          "name": "x",
+          "metadata": null
+        }
+      },
+      {
+        "id": "P:add1_exp.out.result",
+        "concept": "Port",
+        "label": "add1_exp.out.result",
+        "nodeType": "Port",
+        "dataType": "Float",
+        "parent": "B:add1_exp",
+        "nodeSubType": [
+          "OutPort"
+        ],
+        "metadata": {
+          "syntax": "Port",
+          "uid": "P:add1_exp.out.result",
+          "box": "B:add1_exp",
+          "type": "T:Float",
+          "name": null,
+          "metadata": null
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "P:add1.in.x",
+        "target": "P:add1_exp.in.x"
+      },
+      {
+        "source": "P:add1_exp.out.result",
+        "target": "P:add1.out.result"
+      },
+      {
+        "source": "P:toy1.in.x",
+        "target": "P:toy1_set_z_exp.in.x"
+      },
+      {
+        "source": "P:toy1.in.y",
+        "target": "P:toy1_set_z_exp.in.y"
+      },
+      {
+        "source": "P:toy1_set_z_exp.out.z",
+        "target": "P:toy1_reset_x_exp.in.z"
+      },
+      {
+        "source": "P:toy1_set_z_exp.out.z",
+        "target": "P:toy1.out.z"
+      },
+      {
+        "source": "P:toy1_reset_x_exp.out.x",
+        "target": "P:toy1.out.x"
+      }
+    ]
+  }
