@@ -1,4 +1,5 @@
 import { QueryFieldMap } from '@/types/typesLex';
+import { FILTRES, FILTRES_FIELDS } from '@/types/typesFiltres';
 
 /**
  * Marking a field as searchable makes known to LEX.
@@ -47,6 +48,18 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     lexType: 'string',
   },
   // BIO MODELS
+  BIO_BELIEF: {
+    ..._field(
+      FILTRES[FILTRES_FIELDS.BELIEF_SCORE].name,
+      FILTRES[FILTRES_FIELDS.BELIEF_SCORE].displayName,
+    ),
+    ..._searchable(
+      FILTRES[FILTRES_FIELDS.BELIEF_SCORE].displayName,
+      false,
+    ),
+    baseType: 'integer',
+    lexType: 'string',
+  },
   BIO_NODE_PRE: {
     ..._field('bioNodePre', 'Node Pre'),
     ..._searchable('Node Pre', false),

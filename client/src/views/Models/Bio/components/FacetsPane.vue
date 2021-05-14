@@ -1,6 +1,12 @@
 <template>
   <div class="facets-pane-container">
-    <facet-histogram :data="beliefsData" :label="beliefsTitle" />
+    <facet-histogram
+      :data="beliefsData"
+      :field="beliefName"
+      :label="beliefsTitle"
+      :selection="beliefSelection"
+      normalized
+    />
   </div>
 </template>
 
@@ -12,23 +18,36 @@
   import FacetHistogram from '@/components/FacetHistogram.vue';
   import { FacetBarsBaseData } from '@uncharted.software/facets-core/dist/types/facet-bars-base/FacetBarsBase';
   import { Filtre, FILTRES, FILTRES_FIELDS } from '@/types/typesFiltres';
+  import { Filter } from '@/types/typesLex';
   import * as FiltresUtil from '@/utils/FiltresUtil';
 
   const components = {
     FacetHistogram,
   };
 
-  const LOADING_FACETS_DATA: FacetBarsBaseData = [null, null, null, null, null];
+  const LOADING_FACETS_DATA: FacetBarsBaseData = new Array(10).fill(null);
 
   @Component({ components })
   export default class FacetsPane extends Vue {
     beliefsData = LOADING_FACETS_DATA;
+    beliefName: string = FILTRES[FILTRES_FIELDS.BELIEF_SCORE].name;
     beliefsTitle: string = FILTRES[FILTRES_FIELDS.BELIEF_SCORE].displayName;
 
     @Getter getFiltres;
+    @Getter getFilters;
 
     @Watch('getFiltres') onGetFiltresChanged (): void {
       this.updateBeliefFacets();
+    }
+
+    get beliefSelection (): number[] {
+      const filters: Filter[] = this.getFilters?.clauses;
+      if (filters) {
+        const beliefFilter: Filter = filters.find(filter => filter.field === this.beliefName);
+        if (beliefFilter) {
+          return beliefFilter.values as number[];
+        }
+      }
     }
 
     mounted (): void {
@@ -36,7 +55,7 @@
     }
 
     updateBeliefFacets (): void {
-      const beliefsFiltre = this.getFiltres.get(FILTRES_FIELDS.BELIEF_SCORE) as Filtre;
+      const beliefsFiltre = this.getFiltres.get(this.beliefName) as Filtre;
       if (beliefsFiltre) {
         const beliefsAggregate = beliefsFiltre.aggregates;
         const beliefsFacetBars = FiltresUtil.aggregatesToFacetsBars(beliefsAggregate);

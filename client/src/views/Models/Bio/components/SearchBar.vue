@@ -12,8 +12,9 @@
   import { Watch } from 'vue-property-decorator';
 
   import { Lex } from '@uncharted.software/lex/dist/lex';
-  import TextPill from '@/search/pills/TextPill';
   import KeyValuePill from '@/search/pills/KeyValuePill';
+  import RangePill from '@/search/pills/RangePill';
+  import TextPill from '@/search/pills/TextPill';
 
   import * as filtersUtil from '@/utils/FiltersUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
@@ -63,6 +64,7 @@
           '',
           { single: true, multiValue: true },
         ),
+        new RangePill(QUERY_FIELDS_MAP.BIO_BELIEF),
       ];
 
       this.lex = initializeLex({
@@ -85,11 +87,9 @@
 
 <style lang="scss" scoped>
 @import "@/styles/overrides";
-
 </style>
 
 <style lang="scss">
 // Note: Scoped imports not attached to rendered elements
 @import "~@uncharted.software/lex/dist/lex.scss";
-
 </style>

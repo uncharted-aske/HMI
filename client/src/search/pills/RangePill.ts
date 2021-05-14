@@ -1,8 +1,8 @@
 import {
-  Lex,
-  TransitionFactory,
-  NumericEntryState,
   LabelState,
+  Lex,
+  NumericEntryState,
+  TransitionFactory,
   ValueStateValue,
 } from '@uncharted.software/lex/dist/lex';
 import { StateTemplate } from '@uncharted.software/lex/src/lib/state.js';

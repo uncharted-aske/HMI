@@ -6,7 +6,7 @@ import { FacetBarsValueData } from '@uncharted.software/facets-core/dist/types/f
 
 /* ---- BGraph to Filtres Utils ---- */
 
-// Reduce the results of a BGraph into an histogram.
+/** Reduce the results of a BGraph into an histogram. */
 export function bgraphResultsToHistogram (bgraphResult: Array<any>): FiltreAggregate[] {
   const NB_BINS = 10;
   // Create a nice domain for the histogram
@@ -28,7 +28,7 @@ export function bgraphResultsToHistogram (bgraphResult: Array<any>): FiltreAggre
 
 /* ---- Filtres to Facets Utils---- */
 
-/** Transforma a Filtre aggregates into data for Facets Bars. */
+/** Transform a Filtre aggregates into data for Facets Bars. */
 export function aggregatesToFacetsBars (aggregates: FiltreAggregate[]): FacetBarsBaseData {
   const data: FacetBarsBaseData = [];
   if (aggregates) {

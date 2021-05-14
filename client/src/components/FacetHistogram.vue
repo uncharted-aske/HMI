@@ -31,7 +31,7 @@
     @Prop({ required: true, type: String }) private label: string;
     @Prop({ required: false, type: String }) private field: string;
     @Prop({ required: true, type: Array }) private data: FacetBarsBaseData;
-    @Prop({ required: false, type: Array }) private selection: Array<number>;
+    @Prop({ required: false, type: Array }) private selection: number[];
     @Prop({ required: false, type: Boolean }) private disabled: boolean;
 
     @Prop({ required: false, type: Boolean }) private normalized?: boolean;
