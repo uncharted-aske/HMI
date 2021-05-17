@@ -149,7 +149,7 @@
         this.$router.push({ name: 'comparison' });
       } else {
         const card = this.getModelsList.find(model => model.id === this.getSelectedModelIds[0]);
-        this.$router.push({ name: card.type === 'computational' ? 'epi' : 'bio' });
+        this.$router.push({ name: card.type === 'computational' ? 'models' : 'graphs' });
       }
     }
   }

@@ -28,13 +28,13 @@ const RouterSingleton = ((): any => {
           component: GraphExperiment,
         },
         {
-          path: '/models/bio',
-          name: 'bio',
+          path: '/graphs',
+          name: 'graphs',
           component: Bio,
         },
         {
-          path: '/models/epi',
-          name: 'epi',
+          path: '/models',
+          name: 'models',
           component: Epi,
         },
         {
