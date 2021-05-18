@@ -20,7 +20,7 @@
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
         </settings-bar>
-        <global-graph class="h-100" :data="model.graph.detailed"/>
+        <!-- <global-graph class="h-100" :data="model.graph.detailed"/> -->
         </div>
       </div>
       <div slot="2" class="h-100 w-100 d-flex flex-column">
@@ -60,7 +60,7 @@
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
   import Settings from '@/views/Models/components/Settings.vue';
-  import GlobalGraph from '@/views/Models/Epi/components/Graphs/GlobalGraph.vue';
+  // import GlobalGraph from '@/views/Models/Epi/components/Graphs/GlobalGraph.vue';
   import IntersectionGraph from './components/Graphs/IntersectionGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   // import DrilldownPanel from '@/components/DrilldownPanel.vue';
@@ -81,7 +81,7 @@
     SettingsBar,
     Counters,
     Settings,
-    GlobalGraph,
+    // GlobalGraph,
     IntersectionGraph,
     ResizableGrid,
     // DrilldownPanel,

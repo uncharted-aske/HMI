@@ -6,10 +6,10 @@
       <li class="nav-item" :class="{ underlined: isCurrentView('docsCards', 'docsClusters') }">
         <a class="nav-link" href="#/knowledge/docsCards">Knowledge</a>
       </li>
-      <li class="nav-item" :class="{ underlined: isCurrentView('graphs', 'comparison') }">
+      <li class="nav-item" :class="{ underlined: isCurrentView('graphs', 'graph', 'comparison') }">
         <a class="nav-link" href="#/graphs">Graphs</a>
       </li>
-      <li class="nav-item" :class="{ underlined: isCurrentView('models') }">
+      <li class="nav-item" :class="{ underlined: isCurrentView('models', 'model') }">
         <a class="nav-link" href="#/models">Models</a>
       </li>
     </ul>
@@ -22,7 +22,7 @@
 
   export default class NavBar extends Vue {
     get displayNav () : boolean {
-      return this.isCurrentView('home', 'graphs', 'models', 'comparison', 'docsCards', 'docsClusters');
+      return this.isCurrentView('home', 'graphs', 'graph', 'models', 'model', 'comparison', 'docsCards', 'docsClusters');
     }
 
     get currentView (): string {

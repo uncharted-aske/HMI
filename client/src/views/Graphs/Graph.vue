@@ -111,20 +111,21 @@
 
   import Counters from '@/components/Counters.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import EdgePane from './components/DrilldownPanel/EdgePane.vue';
-  import FacetsPane from './components/FacetsPane.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import Loader from '@/components/widgets/Loader.vue';
-  import LocalGraph from './components/Graphs/LocalGraph.vue';
-  import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import ModalDocument from '@/components/Modals/ModalDocument.vue';
-  import NodePane from './components/DrilldownPanel/NodePane.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
-  import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
-  import Settings from '@/views/Models/components/Settings.vue';
 
-  import Grafer from './components/Graphs/Grafer.vue';
+  import FacetsPane from '@/views/Graphs/components/FacetsPane.vue';
+  import MetadataPanel from '@/views/Graphs/components/MetadataPanel.vue';
+  import SearchBar from '@/views/Graphs/components/SearchBar.vue';
+  import Settings from '@/views/Graphs/components/Settings.vue';
+
+  import EdgePane from '@/views/Graphs/components/DrilldownPanel/EdgePane.vue';
+  import NodePane from '@/views/Graphs/components/DrilldownPanel/NodePane.vue';
+  import Grafer from '@/views/Graphs/components/Graphs/Grafer.vue';
+  import LocalGraph from '@/views/Graphs/components/Graphs/LocalGraph.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
