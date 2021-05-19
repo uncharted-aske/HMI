@@ -7,14 +7,14 @@ import {
 } from '@uncharted.software/lex/dist/lex';
 import { StateTemplate } from '@uncharted.software/lex/src/lib/state.js';
 
-import BetweenRelationState from '../BetweenRelationState';
+import FromToState from '../FromToState';
 import BasePill from './BasePill';
 import { addSearchTerm } from '@/utils/FiltersUtil';
 import { Filter, Filters } from '@/types/typesLex';
 
-export default class RangePill extends BasePill {
+export default class PathQueryPill extends BasePill {
   makeBranch (): StateTemplate {
-    return Lex.from('relation', BetweenRelationState, TransitionFactory.valueMetaCompare({ searchKey: this.searchKey }))
+    return Lex.from('relation', FromToState, TransitionFactory.valueMetaCompare({ searchKey: this.searchKey }))
       .branch(
         Lex.from('value', TextEntryState, TransitionFactory.valueKeyIs('from'))
           .to(LabelState, { label: 'to' })
@@ -44,7 +44,7 @@ export default class RangePill extends BasePill {
     const values = clause.values;
     lexQuery.push({
       field: selectedPill,
-      relation: BetweenRelationState.BETWEEN,
+      relation: FromToState.FROMTO,
       value: new ValueStateValue(values[0][0]),
       secondaryValue: new ValueStateValue(values[0][1]),
     });
