@@ -9,7 +9,7 @@
     </left-side-panel> -->
     <div class="d-flex flex-column h-100">
       <div class="search-row">
-        <search-bar :pills="searchPills" :placeholder="`Search for Graphs...`"/>
+        <search-bar :pills="searchPills" :placeholder="`Search for Models...`"/>
       </div>
       <settings-bar>
         <counters slot="left" :data="countersData"/>
@@ -25,9 +25,9 @@
         <settings slot="right"/>
       </settings-bar>
       <card-container
-        class="graphs-cards"
-        :cards="graphsCards"
-        :header="`Graphs`"
+        class="models-cards"
+        :cards="modelsCards"
+        :header="`Models`"
         @click-card="onClickCard"
       />
     </div>
@@ -54,7 +54,9 @@
   import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
-  import COVID19Screenshot from '@/assets/img/COVID19.png';
+  import CHIMEScreenshot from '@/assets/img/CHIME.png';
+  import SIRScreenshot from '@/assets/img/SIR.png';
+  import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
 
   // Services
   import * as modelsService from '@/services/ModelsService';
@@ -74,7 +76,7 @@
   };
 
   @Component({ components })
-  export default class GraphsList extends Vue {
+  export default class ModelsList extends Vue {
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'facets';
 
@@ -83,8 +85,8 @@
     @Getter getSelectedModelIds;
     @Mutation setSelectedModels;
 
-    get graphs (): ModelInterface[] {
-      return modelsService.fetchGraphs(this.getModelsList, this.getFilters);
+    get models (): ModelInterface[] {
+      return modelsService.fetchModels(this.getModelsList, this.getFilters);
     }
 
     get searchPills (): any {
@@ -94,8 +96,8 @@
     }
 
     get countersData (): Counter[] {
-      if (this.graphs) {
-        return [{ name: 'Graph Models', value: this.graphs.length }];
+      if (this.models) {
+        return [{ name: 'Computational Models', value: this.models.length }];
       }
     }
 
@@ -103,13 +105,27 @@
       return this.getSelectedModelIds.length;
     }
 
-    get graphsCards (): CardInterface[] {
+    get modelsCards (): CardInterface[] {
       const selectedModelsList = new Set(this.getSelectedModelIds);
-      return this.graphs.map(model => {
+      return this.models.map(model => {
+        // Screenshot as placeholder for UX image
+        let previewImageSrc = null;
+        switch (model.id) {
+          case 0:
+            previewImageSrc = SIRScreenshot;
+            break;
+          case 1:
+            previewImageSrc = CHIMEScreenshot;
+            break;
+          case 2:
+            previewImageSrc = DoubleEpiScreenshot;
+            break;
+        }
+
         return {
           id: model.id,
           type: model.type,
-          previewImageSrc: COVID19Screenshot,
+          previewImageSrc,
           title: model.metadata.name,
           subtitle: model.metadata.description,
           checked: selectedModelsList.has(model.id),
@@ -122,7 +138,7 @@
     }
 
     onClickAction (): void {
-      const name = this.nbSelectedModelsIds > 1 ? 'comparison' : 'graph';
+      const name = this.nbSelectedModelsIds > 1 ? 'comparison' : 'model';
       this.$router.push({ name });
     }
   }
