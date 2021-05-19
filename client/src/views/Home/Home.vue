@@ -10,7 +10,6 @@
   export default class Home extends Vue {}
 </script>
 
-// <style lang="scss" scoped>
-// @import "@/styles/variables";
-
-// </style>
+<style lang="scss" scoped>
+@import "@/styles/variables";
+</style>

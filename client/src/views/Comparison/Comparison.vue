@@ -32,7 +32,8 @@
                 { name: 'Nodes', value: nodeCountIntersectionGraph },
                 { name: 'Edges', value: edgeCountIntersectionGraph },
               ]"
-            />          </div>
+            />
+          </div>
           <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>

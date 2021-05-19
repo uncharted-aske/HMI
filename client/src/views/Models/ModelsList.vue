@@ -50,7 +50,7 @@
 
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
 
-  import FacetsPane from './components/FacetsPane.vue';
+  import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots

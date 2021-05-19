@@ -1,20 +1,20 @@
 <template>
-  <nav class="navbar navbar-expand-lg fixed-top">
-    <a class="navbar-brand" href="#/">ASKE-E HMI</a>
-    <div class="collapse navbar-collapse">
-      <ul v-if="displayNav" class="navbar-nav">
-        <li class="nav-item" :class="{ underlined: isCurrentView('docsCards', 'docsClusters') }">
-          <a class="nav-link" href="#/knowledge/docsCards">Knowledge</a>
-        </li>
-        <li class="nav-item" :class="{ underlined: isCurrentView('graphs', 'graph', 'comparison') }">
-          <a class="nav-link" href="#/graphs">Graphs</a>
-        </li>
-        <li class="nav-item" :class="{ underlined: isCurrentView('models', 'model') }">
-          <a class="nav-link" href="#/models">Models</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+<nav class="navbar navbar-expand-lg fixed-top">
+  <a class="navbar-brand" href="#/">ASKE-E HMI</a>
+  <div class="collapse navbar-collapse">
+    <ul v-if="displayNav" class="navbar-nav">
+      <li class="nav-item" :class="{ underlined: isCurrentView('docsCards', 'docsClusters') }">
+        <a class="nav-link" href="#/knowledge/docsCards">Knowledge</a>
+      </li>
+      <li class="nav-item" :class="{ underlined: isCurrentView('graphs', 'graph', 'comparison') }">
+        <a class="nav-link" href="#/graphs">Graphs</a>
+      </li>
+      <li class="nav-item" :class="{ underlined: isCurrentView('models', 'model') }">
+        <a class="nav-link" href="#/models">Models</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 </template>
 
 <script lang="ts">
