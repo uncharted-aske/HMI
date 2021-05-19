@@ -8,8 +8,11 @@
 
 <script lang="ts">
   import Vue from 'vue';
+  import Component from 'vue-class-component';
 
-  export default class SettingsBar extends Vue {}
+  @Component
+  export default class SettingsBar extends Vue {
+  }
 </script>
 
 <style lang="scss" scoped>

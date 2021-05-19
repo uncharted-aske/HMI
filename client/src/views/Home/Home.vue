@@ -1,15 +1,10 @@
 <template>
   <div class="view-container">
-    HOMEPAGE
+    <h1>Homepage</h1>
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
-
   export default class Home extends Vue {}
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/variables";
-</style>

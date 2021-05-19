@@ -1,19 +1,20 @@
 <template>
   <div id="app">
-    <nav-bar />
-    <router-view />
+    <nav-bar></nav-bar>
+    <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import NavBar from '@/components/NavBar.vue';
+  import NavBar from 'components/NavBar.vue';
 
-  @Component({
-    components: { NavBar },
-  })
-  export default class App extends Vue {}
+  const components = { NavBar };
+
+  @Component({ components })
+  export default class App extends Vue {
+  }
 </script>
 
 <style lang="scss">

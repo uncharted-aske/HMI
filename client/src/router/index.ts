@@ -2,7 +2,7 @@ import { VueConstructor } from 'vue';
 import Router from 'vue-router';
 import Home from '@/views/Home/Home.vue';
 import NotFound from '@/views/NotFound/NotFound.vue';
-import GraphExperiment from '@/views/GraphExperiment/GraphExperiment.vue';
+// import GraphExperiment from '@/views/GraphExperiment/GraphExperiment.vue';
 import Graph from '@/views/Graphs/Graph.vue';
 import GraphsList from '@/views/Graphs/GraphsList.vue';
 import Model from '@/views/Models/Model.vue';
@@ -23,12 +23,12 @@ const RouterSingleton = ((): any => {
           path: '/',
           name: 'home',
           component: Home,
-        },
+        }, /*
         {
           path: '/graphExperiment',
           name: 'graphExperiment',
           component: GraphExperiment,
-        },
+        }, */
         {
           path: '/graphs',
           name: 'graphs',
@@ -50,7 +50,7 @@ const RouterSingleton = ((): any => {
           component: Model,
         },
         {
-          path: '/models/comparison',
+          path: '/comparison',
           name: 'comparison',
           component: Comparison,
         },
