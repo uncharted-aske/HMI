@@ -120,7 +120,7 @@
     get modelsCards (): CardInterface[] {
       const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
       const selectedModelsList = new Set(this.getSelectedModelIds);
-      const modelsCards = modelsList.map(model => {
+      return modelsList.map(model => {
         let previewImageSrc = null;
         switch (model.id) {
         case 0:
@@ -135,9 +135,8 @@
           default:
             previewImageSrc = COVID19Screenshot;
         }
-        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.description, checked: selectedModelsList.has(model.id) });
+        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.description, checked: selectedModelsList.has(model.id) }) as CardInterface;
       });
-      return modelsCards;
     }
 
     onClickCard (card: CardInterface): void {

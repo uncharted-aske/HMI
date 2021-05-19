@@ -1,12 +1,12 @@
 <template>
   <div class="view-container">
-    <left-side-panel
+    <!-- <left-side-panel
       class="left-side-panel"
       :activeTabId="activeTabId"
       :tabs="tabs"
     >
       <facets-pane slot="content" />
-    </left-side-panel>
+    </left-side-panel> -->
     <div class="d-flex flex-column h-100">
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for Graphs...`"/>
@@ -14,13 +14,13 @@
       <settings-bar>
         <counters slot="left" :data="countersData"/>
         <button
-          v-if="selectedButtonContent"
+          v-if="nbSelectedModelsIds > 0"
           class="btn btn-primary"
           slot="middle"
           type="button"
-          @click="onClickCompare"
+          @click="onClickAction"
         >
-          {{ selectedButtonContent }}
+          {{ nbSelectedModelsIds > 1 ? 'Compare' : 'View' }}
         </button>
         <settings slot="right"/>
       </settings-bar>
@@ -39,16 +39,14 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
 
-  import { CardInterface, Counter, TabInterface } from '@/types/types';
+  import { CardInterface, Counter, ModelInterface, TabInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from './components/Settings.vue';
-  import KeyValuePill from '@/search/pills/KeyValuePill';
   import RangePill from '@/search/pills/RangePill';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
-  import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
 
@@ -56,9 +54,6 @@
   import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
-  import CHIMEScreenshot from '@/assets/img/CHIME.png';
-  import SIRScreenshot from '@/assets/img/SIR.png';
-  import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
   import COVID19Screenshot from '@/assets/img/COVID19.png';
 
   // Services
@@ -69,13 +64,13 @@
   ];
 
   const components = {
-    SearchBar,
-    Counters,
-    SettingsBar,
-    Settings,
-    LeftSidePanel,
-    FacetsPane,
     CardContainer,
+    Counters,
+    FacetsPane,
+    LeftSidePanel,
+    SearchBar,
+    Settings,
+    SettingsBar,
   };
 
   @Component({ components })
@@ -88,64 +83,46 @@
     @Getter getSelectedModelIds;
     @Mutation setSelectedModels;
 
+    get graphs (): ModelInterface[] {
+      return modelsService.fetchGraphs(this.getModelsList, this.getFilters);
+    }
+
     get searchPills (): any {
       return [
-        new KeyValuePill(
-          QUERY_FIELDS_MAP.MODEL_TYPE,
-          modelTypeUtil.MODEL_TYPE_OPTIONS,
-          'Select model type..',
-        ),
         new RangePill(QUERY_FIELDS_MAP.HISTOGRAM),
       ];
     }
 
-    get countersData (): Array<Counter> {
-      const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
-      if (modelsList) {
-        return [{ name: 'Models', value: modelsList.length }];
+    get countersData (): Counter[] {
+      if (this.graphs) {
+        return [{ name: 'Graph Models', value: this.graphs.length }];
       }
     }
 
-    get selectedButtonContent (): string {
-      const selectedModelIdLength = this.getSelectedModelIds.length;
-      if (selectedModelIdLength === 0) {
-        return '';
-      } else if (selectedModelIdLength === 1) {
-        return 'View';
-      } else {
-        return 'Compare';
-      }
+    get nbSelectedModelsIds (): number {
+      return this.getSelectedModelIds.length;
     }
 
     get graphsCards (): CardInterface[] {
-      const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
       const selectedModelsList = new Set(this.getSelectedModelIds);
-      const modelsCards = modelsList.map(model => {
-        let previewImageSrc = null;
-        switch (model.id) {
-        case 0:
-            previewImageSrc = SIRScreenshot;
-            break;
-          case 1:
-            previewImageSrc = CHIMEScreenshot;
-            break;
-          case 2:
-            previewImageSrc = DoubleEpiScreenshot;
-            break;
-          default:
-            previewImageSrc = COVID19Screenshot;
-        }
-        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.description, checked: selectedModelsList.has(model.id) });
+      return this.graphs.map(model => {
+        return {
+          id: model.id,
+          type: model.type,
+          previewImageSrc: COVID19Screenshot,
+          title: model.metadata.name,
+          subtitle: model.metadata.description,
+          checked: selectedModelsList.has(model.id),
+        } as CardInterface;
       });
-      return modelsCards;
     }
 
     onClickCard (card: CardInterface): void {
       this.setSelectedModels(card.id);
     }
 
-    onClickCompare (): void {
-      const name = this.getSelectedModelIds.length > 1 ? 'comparison' : 'graphs';
+    onClickAction (): void {
+      const name = this.nbSelectedModelsIds > 1 ? 'comparison' : 'graph';
       this.$router.push({ name });
     }
   }
@@ -154,7 +131,7 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.left-side-panel {
-  flex-shrink: 0;
-}
+// .left-side-panel {
+//   flex-shrink: 0;
+// }
 </style>

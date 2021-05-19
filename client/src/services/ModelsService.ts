@@ -18,11 +18,17 @@ const isModelFiltered = (model: ModelInterface, filters: any): boolean => {
   });
 };
 
-const fetchModels = (models: Array<ModelInterface>, filters: Array<any>): any => {
-  return models.filter(model => !isModelFiltered(model, filters));
-};
+/** Return a filtered list of Graph Models */
+function fetchGraphs (models: ModelInterface[], filters: any[]): ModelInterface[] {
+  return models.filter(model => model.type === 'biomechanism' && !isModelFiltered(model, filters));
+}
 
-const fetchModelTypesAgg = (models: Array<ModelInterface>, filters: Array<any>): any => {
+/** Return a filtered list of Computational Models */
+function fetchModels (models: ModelInterface[], filters: any[]): ModelInterface[] {
+  return models.filter(model => model.type === 'computational' && !isModelFiltered(model, filters));
+}
+
+const fetchModelTypesAgg = (models: ModelInterface[], filters: any[]): any => {
   const result = _(models)
     .groupBy('type')
     .map((modelGroup, type) => {
@@ -38,6 +44,7 @@ const fetchModelTypesAgg = (models: Array<ModelInterface>, filters: Array<any>):
 };
 
 export {
+  fetchGraphs,
   fetchModels,
   fetchModelTypesAgg,
 };

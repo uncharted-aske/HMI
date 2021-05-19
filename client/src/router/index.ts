@@ -7,7 +7,7 @@ import Graph from '@/views/Graphs/Graph.vue';
 import GraphsList from '@/views/Graphs/GraphsList.vue';
 // import Model from '@/views/Models/Model.vue';
 // import ModelsList from '@/views/Models/ModelsList.vue';
-// import Comparison from '@/views/Comparison/Comparison.vue';
+import Comparison from '@/views/Comparison/Comparison.vue';
 import DocsCards from '@/views/Knowledge/DocsCards/DocsCards.vue';
 import DocsClusters from '@/views/Knowledge/DocsClusters/DocsClusters.vue';
 
@@ -49,11 +49,11 @@ const RouterSingleton = ((): any => {
         //   name: 'model',
         //   component: Model,
         // },
-        // {
-        //   path: '/models/comparison',
-        //   name: 'comparison',
-        //   component: Comparison,
-        // },
+        {
+          path: '/models/comparison',
+          name: 'comparison',
+          component: Comparison,
+        },
         {
           path: '/knowledge/docsCards',
           name: 'docsCards',
