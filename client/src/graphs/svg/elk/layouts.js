@@ -24,7 +24,7 @@ export const layered = {
       'elk.hierarchyHandling': 'INCLUDE_CHILDREN',
       'elk.edgeRouting': 'POLYLINE', // [POLYLINE, ORTHOGONAL, SPLINES]
       'elk.direction': 'RIGHT',
-      'elk.randomSeed': 666, // might as well be a coool number
+      'elk.randomSeed': 644,
       'elk.padding': '[top=25, left=25, bottom=25, right=25]',
       'elk.validateGraph': true,
       ...spacingOptions,
