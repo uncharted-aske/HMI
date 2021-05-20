@@ -19,7 +19,9 @@
 
 <script lang="ts">
   import Vue from 'vue';
+  import Component from 'vue-class-component';
 
+  @Component
   export default class NavBar extends Vue {
     get displayNav () : boolean {
       return this.isCurrentView('home', 'graphs', 'graph', 'models', 'model', 'comparison', 'docsCards', 'docsClusters');

@@ -18,7 +18,7 @@ const isModelFiltered = (model: ModelInterface, filters: any): boolean => {
   });
 };
 
-/** Return a filtered list of Graph Models */
+/** Return a filtered list of Knowledge Graphs */
 function fetchGraphs (models: ModelInterface[], filters: any[]): ModelInterface[] {
   return models.filter(model => model.type === 'biomechanism' && !isModelFiltered(model, filters));
 }
