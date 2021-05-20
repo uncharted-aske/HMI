@@ -73,7 +73,7 @@
     }
 
     &:hover {
-      outline-color: $nord13;
+      outline-color: $selection;
     }
 
     h3 {
