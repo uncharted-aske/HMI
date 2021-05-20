@@ -79,7 +79,7 @@
   };
 
   @Component({ components })
-  export default class Home extends Vue {
+  export default class GraphsList extends Vue {
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'facets';
 

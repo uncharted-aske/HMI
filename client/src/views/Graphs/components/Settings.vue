@@ -48,7 +48,7 @@
     showDropdownViews: boolean = false;
 
     get selectedViewName (): string {
-      return this.views.find(view => view.id === this.selectedViewId).name;
+      return this.views.find(view => view.id === this.selectedViewId)?.name;
     }
 
     toggleViews (): void {

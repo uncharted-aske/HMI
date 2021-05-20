@@ -158,7 +158,7 @@
   };
 
   @Component({ components })
-  export default class Bio extends Vue {
+  export default class Graph extends Vue {
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any;
 
