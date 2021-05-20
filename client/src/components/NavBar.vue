@@ -6,10 +6,10 @@
         <li class="nav-item" :class="{ underlined: isCurrentView('docsCards', 'docsClusters') }">
           <a class="nav-link" href="#/knowledge/docsCards">Knowledge</a>
         </li>
-        <li class="nav-item" :class="{ underlined: isCurrentView('graphs', 'graph', 'comparison') }">
+        <li class="nav-item" :class="{ underlined: isCurrentView('graphs', 'graph') }">
           <a class="nav-link" href="#/graphs">Graphs</a>
         </li>
-        <li class="nav-item" :class="{ underlined: isCurrentView('models', 'model') }">
+        <li class="nav-item" :class="{ underlined: isCurrentView('models', 'model', 'comparison') }">
           <a class="nav-link" href="#/models">Models</a>
         </li>
       </ul>

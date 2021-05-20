@@ -95,7 +95,7 @@
 
     get countersData (): Counter[] {
       if (this.graphs) {
-        return [{ name: 'Graph Models', value: this.graphs.length }];
+        return [{ name: 'Graph(s)', value: this.graphs.length }];
       }
     }
 

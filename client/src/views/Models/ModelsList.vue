@@ -97,7 +97,7 @@
 
     get countersData (): Counter[] {
       if (this.models) {
-        return [{ name: 'Computational Models', value: this.models.length }];
+        return [{ name: 'Computational Model(s)', value: this.models.length }];
       }
     }
 
