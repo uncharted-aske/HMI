@@ -223,6 +223,14 @@ const getters: GetterTree<ModelsState, any> = {
   getParameters: state => state.parameters,
   getModelsList: state => state.modelsList,
   getComparisonHighlights: state => state.comparisonHighlights,
+
+  getNbComputationalModels: function (state: ModelsState): number {
+    return state.modelsList.filter(model => model.type === 'computational').length;
+  },
+
+  getNbGraphsModels: function (state: ModelsState): number {
+    return state.modelsList.filter(model => model.type === 'biomechanism').length;
+  },
 };
 
 const mutations: MutationTree<ModelsState> = {

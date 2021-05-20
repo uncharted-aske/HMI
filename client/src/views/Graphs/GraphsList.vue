@@ -7,7 +7,7 @@
     >
       <facets-pane slot="content" />
     </left-side-panel> -->
-    <div class="d-flex flex-column h-100">
+    <main>
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for Graphs...`"/>
       </div>
@@ -30,7 +30,7 @@
         :header="`Graphs`"
         @click-card="onClickCard"
       />
-    </div>
+    </main>
   </div>
 </template>
 
@@ -129,9 +129,14 @@
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/variables";
-
 // .left-side-panel {
 //   flex-shrink: 0;
 // }
+
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
 </style>
