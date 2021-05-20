@@ -96,7 +96,7 @@
   import Settings from '@/views/Models/components/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
-  import FacetsPane from './components/FacetsPane.vue';
+  import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import GlobalGraph from './components/Graphs/GlobalGraph.vue';
   import LocalGraph from './components/Graphs/LocalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';

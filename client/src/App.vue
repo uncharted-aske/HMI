@@ -10,9 +10,9 @@
   import Component from 'vue-class-component';
   import NavBar from '@/components/NavBar.vue';
 
-@Component({
-  components: { NavBar },
-})
+  const components = { NavBar };
+
+  @Component({ components })
   export default class App extends Vue {
   }
 </script>

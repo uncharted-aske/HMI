@@ -1,9 +1,16 @@
 <template>
   <div class="settings-container">
-    <button type="button" class="btn btn-secondary" @click="toggleViews">
-      Views:
-      <span class="view-name">{{selectedViewName}} </span>
-      <font-awesome-icon :icon="['fas', 'caret-down' ]" />
+    <button
+      class="btn btn-secondary"
+      :disabled="!views.length"
+      type="button"
+      @click="toggleViews"
+    >
+      Views
+      <template v-if="views.length">:
+        <span class="view-name">{{ selectedViewName }}</span>
+        <font-awesome-icon :icon="['fas', 'caret-down' ]" />
+      </template>
     </button>
     <dropdown v-if="showDropdownViews" class="dropdown-settings">
       <div slot="content" class="btn-group btn-group-sm">
@@ -39,10 +46,10 @@
   };
   @Component({ components })
   export default class Settings extends Vue {
-    @Prop({ default: [] })
+    @Prop({ default: () => [] })
     views: ViewInterface[];
 
-    @Prop({ default: '' })
+    @Prop({ default: null })
     selectedViewId: string;
 
     showDropdownViews: boolean = false;
@@ -55,7 +62,7 @@
       this.showDropdownViews = !this.showDropdownViews;
     }
 
-    onViewSelection (viewId:string):void {
+    onViewSelection (viewId:string): void {
       this.$emit('view-change', viewId);
     }
 
@@ -88,5 +95,4 @@
   position: absolute;
   top: calc(#{$secondary-bar-width} - 15px);
 }
-
 </style>
