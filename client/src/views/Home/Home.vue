@@ -1,28 +1,43 @@
 <template>
-  <div class="view-container">
-    <main>
-      <a class="nav-view" href="#/knowledge/docsCards">
-        <h3>Knowledge</h3>
+  <!-- <div class="view-container"> -->
+  <main>
+    <h1>ASKE-E HMI</h1>
+    <nav>
+      <section>
         <p>Discover relevant documents and links to existing graphs and&nbsp;models.</p>
-      </a>
-      <a class="nav-view" href="#/graphs">
-        <h3>Graphs</h3>
+        <a class="nav-view" href="#/knowledge/docsCards">
+          <h2>Knowledge</h2>
+          <p>Documents <strong>{{ nbKnowledge }}</strong></p>
+        </a>
+      </section>
+      <section>
         <p>Extraction of relevant subgraphs and their link back to scientific&nbsp;knowledge.</p>
-        <p>{{ nbGraphsModels }} Knowledgable Graphs</p>
-      </a>
-      <a class="nav-view" href="#/models">
-        <h3>Models</h3>
+        <a class="nav-view" href="#/graphs">
+          <h2>Graphs</h2>
+          <p>Knowledgable Graphs <strong>{{ nbGraphsModels }}</strong></p>
+        </a>
+      </section>
+      <section>
         <p>Model understanding, comparison and&nbsp;simulation.</p>
-        <p>{{ nbComputationalModels }} Computational Models</p>
-      </a>
-    </main>
-  </div>
+        <a class="nav-view" href="#/models">
+          <h2>Models</h2>
+          <p>Computational Models <strong>{{ nbComputationalModels }}</strong></p>
+        </a>
+      </section>
+    </nav>
+  </main>
+  <!-- </div> -->
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Getter } from 'vuex-class';
+
+  import { CosmosSearchInterface } from '@/types/typesCosmos';
+  import { cosmosSearch } from '@/services/CosmosFetchService';
+
+  import { shorterNb } from '@/utils/NumberUtil';
 
   // -- DO NOT REMOVE
   // https://github.com/uncharted-aske/HMI/issues/208
@@ -32,15 +47,33 @@
 
   @Component
   export default class Home extends Vue {
+    cosmos: CosmosSearchInterface = null;
+
     @Getter getNbGraphsModels;
     @Getter getNbComputationalModels;
 
-    get nbGraphsModels (): number {
-      return this.getNbGraphsModels;
+    mounted (): void {
+      this.fetchCosmos();
     }
 
-    get nbComputationalModels (): number {
-      return this.getNbComputationalModels;
+    async fetchCosmos (): Promise<void> {
+      try {
+        this.cosmos = await cosmosSearch(null);
+      } catch (e) {
+        throw Error(e);
+      }
+    }
+
+    get nbGraphsModels (): string {
+      return shorterNb(this.getNbGraphsModels);
+    }
+
+    get nbComputationalModels (): string {
+      return shorterNb(this.getNbComputationalModels);
+    }
+
+    get nbKnowledge (): string {
+      return shorterNb(this.cosmos?.total ?? 0);
     }
   }
 </script>
@@ -51,40 +84,70 @@
   main {
     --gap: 2rem;
     align-content: center;
-    display: grid;
-    grid-template-columns: 1fr repeat(3, minmax(20em, 25em)) 1fr;
+    color: $text-color-light;
+    display: flex;
+    flex-direction: column;
     gap: var(--gap);
     height: 100%;
-    justify-content: space-evenly;
+    justify-content: center;
     padding: var(--gap);
-    width: 100%;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--gap);
+  }
+
+  nav section {
+    --gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+
+    p:first-of-type {
+      flex-shrink: 0;
+    }
   }
 
   .nav-view {
     background-color: $bg-primary;
+    color: inherit;
+    display: block;
+    flex-grow: 1;
     outline: transparent solid 3px;
     border-radius: 3px;
-    color: $text-color-light;
-    padding: 1rem;
     text-decoration: none;
-
-    &:first-of-type {
-      grid-column-start: 2;
-    }
 
     &:hover {
       outline-color: $selection;
     }
 
-    h3 {
-      border-bottom: 2px solid;
-      margin-bottom: 1em;
-      padding-bottom: .5em;
-      text-align: center;
+    & > * {
+      padding: var(--gap);
     }
 
-    h3 + p {
-      font-style: italic;
+    p:last-of-type {
+      margin-bottom: 0;
+    }
+
+    strong {
+      display: block;
+      font-size: 4rem;
+      line-height: 1;
+      margin-top: .25em;
+    }
+
+    h2 {
+      background-color: $bg-secondary;
+      font-size: 1.5em;
+      font-weight: normal;
+      line-height: 1;
+      margin: 0;
     }
   }
 </style>
