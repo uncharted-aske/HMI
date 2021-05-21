@@ -259,6 +259,10 @@ const mutations: MutationTree<ModelsState> = {
     // Trigger change by providing new Set instance
     state.selectedModelIds = new Set(state.selectedModelIds);
   },
+
+  clearSelectedModels (state) {
+    state.selectedModelIds.clear();
+  },
 };
 
 export const models = {

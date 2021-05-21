@@ -19,9 +19,7 @@
           slot="middle"
           type="button"
           @click="onClickAction"
-        >
-          {{ nbSelectedModelsIds > 1 ? 'Compare' : 'View' }}
-        </button>
+        >View</button>
         <settings slot="right"/>
       </settings-bar>
       <card-container
@@ -82,6 +80,12 @@
     @Getter getModelsList;
     @Getter getSelectedModelIds;
     @Mutation setSelectedModels;
+    @Mutation clearSelectedModels;
+
+    mounted (): void {
+      // Has of now we do not compare Knowledge Graphs and Computationol Models.
+      this.clearSelectedModels();
+    }
 
     get graphs (): ModelInterface[] {
       return modelsService.fetchGraphs(this.getModelsList, this.getFilters);
