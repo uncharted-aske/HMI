@@ -82,11 +82,6 @@
     @Mutation setSelectedModels;
     @Mutation clearSelectedModels;
 
-    mounted (): void {
-      // As of now we do not compare Knowledge Graphs and Computationol Models.
-      this.clearSelectedModels();
-    }
-
     get graphs (): ModelInterface[] {
       return modelsService.fetchGraphs(this.getModelsList, this.getFilters);
     }
@@ -123,24 +118,25 @@
 
     onClickCard (card: CardInterface): void {
       // As of now we only allow one Knowledgable Graph to be selected at a time.
-      this.clearSelectedModels();
+      if (!this.getSelectedModelIds.includes(card.id)) {
+        this.clearSelectedModels();
+      }
       this.setSelectedModels(card.id);
     }
 
     onClickView (): void {
+      const options: RawLocation = { name: 'graph' };
+
       // As of now we only allow one Knowledgable Graph to be selected at a time.
       const selectedModel: ModelInterface = this.graphs.find(graph => graph.id === this.getSelectedModelIds[0]);
       const modelId = selectedModel?.metadata?.id;
-
       if (modelId) {
-        const options: RawLocation = {
-          name: 'graph',
-          params: {
-            model_id: modelId.toString(),
-          },
+        options.params = {
+          model_id: modelId.toString(),
         };
-        this.$router.push(options);
       }
+
+      this.$router.push(options);
     }
   }
 </script>

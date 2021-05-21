@@ -45,7 +45,7 @@ const RouterSingleton = ((): any => {
           component: ModelsList,
         },
         {
-          path: '/model',
+          path: '/model/:model_id',
           name: 'model',
           component: Model,
         },

@@ -27,7 +27,6 @@
       <card-container
         class="models-cards"
         :cards="modelsCards"
-        :header="`Models`"
         @click-card="onClickCard"
       />
     </main>
@@ -38,6 +37,7 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
+  import { RawLocation } from 'vue-router';
 
   import { CardInterface, Counter, ModelInterface, TabInterface } from '@/types/types';
 
@@ -84,6 +84,7 @@
     @Getter getModelsList;
     @Getter getSelectedModelIds;
     @Mutation setSelectedModels;
+    @Mutation clearSelectedModels;
 
     get models (): ModelInterface[] {
       return modelsService.fetchModels(this.getModelsList, this.getFilters);
@@ -138,8 +139,20 @@
     }
 
     onClickAction (): void {
-      const name = this.nbSelectedModelsIds > 1 ? 'comparison' : 'model';
-      this.$router.push({ name });
+      const options: RawLocation = {};
+      if (this.nbSelectedModelsIds > 1) {
+        options.name = 'comparison';
+      } else {
+        options.name = 'model';
+
+        const selectedModel: ModelInterface = this.models.find(model => model.id === this.getSelectedModelIds[0]);
+        if (selectedModel) {
+          options.params = {
+            model_id: selectedModel?.metadata?.id,
+          };
+        }
+      }
+      this.$router.push(options);
     }
   }
 </script>
