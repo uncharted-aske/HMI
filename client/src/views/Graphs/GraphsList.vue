@@ -18,7 +18,7 @@
           class="btn btn-primary"
           slot="middle"
           type="button"
-          @click="onClickAction"
+          @click="onClickView"
         >View</button>
         <settings slot="right"/>
       </settings-bar>
@@ -35,6 +35,7 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
+  import { RawLocation } from 'vue-router';
 
   import { CardInterface, Counter, ModelInterface, TabInterface } from '@/types/types';
 
@@ -82,7 +83,7 @@
     @Mutation clearSelectedModels;
 
     mounted (): void {
-      // Has of now we do not compare Knowledge Graphs and Computationol Models.
+      // As of now we do not compare Knowledge Graphs and Computationol Models.
       this.clearSelectedModels();
     }
 
@@ -121,12 +122,25 @@
     }
 
     onClickCard (card: CardInterface): void {
+      // As of now we only allow one Knowledgable Graph to be selected at a time.
+      this.clearSelectedModels();
       this.setSelectedModels(card.id);
     }
 
-    onClickAction (): void {
-      // const name = this.nbSelectedModelsIds > 1 ? 'comparison' : 'graph';
-      this.$router.push({ name: 'graph' });
+    onClickView (): void {
+      // As of now we only allow one Knowledgable Graph to be selected at a time.
+      const selectedModel: ModelInterface = this.graphs.find(graph => graph.id === this.getSelectedModelIds[0]);
+      const modelId = selectedModel?.metadata?.id;
+
+      if (modelId) {
+        const options: RawLocation = {
+          name: 'graph',
+          params: {
+            model_id: modelId.toString(),
+          },
+        };
+        this.$router.push(options);
+      }
     }
   }
 </script>

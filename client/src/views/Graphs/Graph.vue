@@ -82,7 +82,7 @@
   import _ from 'lodash';
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Action, Getter } from 'vuex-class';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
@@ -199,6 +199,7 @@
     @Getter getFiltres;
     @Action addFiltres;
     @Action setFiltres;
+    @Mutation setSelectedModels;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
@@ -235,8 +236,7 @@
     }
 
     get selectedModel (): ModelInterface {
-      const modelsList = this.getModelsList;
-      return this.getSelectedModelIds.length ? modelsList[this.getSelectedModelIds[0]] : modelsList.find(model => model.metadata.id === 'covid19'); // Default to covid19 model
+      return this.getModelsList[this.getSelectedModelIds[0]];
     }
 
     get selectedModelId (): string {
@@ -244,11 +244,11 @@
     }
 
     get subgraphNodeCount (): number {
-      return (this.subgraph && this.subgraph.nodes.length) || 0;
+      return this.subgraph?.nodes.length ?? 0;
     }
 
     get subgraphEdgeCount (): number {
-      return (this.subgraph && this.subgraph.edges.length) || 0;
+      return this.subgraph?.edges.length ?? 0;
     }
 
     get gridMap (): string[][] {
@@ -280,7 +280,24 @@
       return !isEmpty(this.getFilters);
     }
 
-    async mounted (): Promise<void> {
+    @Watch('getModelsList') async onGetModelsListChanged (): Promise<void> {
+      // If we do not have a selected model, we try to find one from the route.
+      if (!this.selectedModel) {
+        const model = this.getModelsList
+          .find(model => model.metadata.id === this.$route.params.model_id);
+        // We can set the one in the route has the selected one in the store.
+        if (model) {
+          this.setSelectedModels(model.id);
+        }
+      }
+
+      // Once we have a selected model available we can load the graph.
+      if (this.selectedModel) {
+        await this.loadData();
+      }
+    }
+
+    async loadData (): Promise<void> {
       const [bgNodes, bgEdges] = await loadBGraphData(
         `${process.env.S3_BGRAPH_MODELS}/${this.selectedModelId}/nodes.jsonl`,
         `${process.env.S3_BGRAPH_MODELS}/${this.selectedModelId}/edges.jsonl`,

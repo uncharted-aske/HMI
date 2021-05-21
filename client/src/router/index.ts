@@ -35,7 +35,7 @@ const RouterSingleton = ((): any => {
           component: GraphsList,
         },
         {
-          path: '/graph',
+          path: '/graph/:model_id',
           name: 'graph',
           component: Graph,
         },
