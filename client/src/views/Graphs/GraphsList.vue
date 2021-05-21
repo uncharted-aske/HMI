@@ -25,7 +25,6 @@
       <card-container
         class="graphs-cards"
         :cards="graphsCards"
-        :header="`Graphs`"
         @click-card="onClickCard"
       />
     </main>
@@ -126,8 +125,8 @@
     }
 
     onClickAction (): void {
-      const name = this.nbSelectedModelsIds > 1 ? 'comparison' : 'graph';
-      this.$router.push({ name });
+      // const name = this.nbSelectedModelsIds > 1 ? 'comparison' : 'graph';
+      this.$router.push({ name: 'graph' });
     }
   }
 </script>
