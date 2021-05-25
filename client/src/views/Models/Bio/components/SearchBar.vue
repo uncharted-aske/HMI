@@ -36,6 +36,7 @@
       /* add pills here */
       this.pills = [
         new TextPill(QUERY_FIELDS_MAP.BIO_NODE_NAME),
+        new TextPill(QUERY_FIELDS_MAP.BIO_NODE_GROUP),
         new KeyValuePill(
           QUERY_FIELDS_MAP.BIO_NODE_GROUNDED,
           BOOLEAN_OPTIONS,

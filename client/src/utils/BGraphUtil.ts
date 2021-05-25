@@ -60,6 +60,7 @@ const filterTermToPriorityRank = {
   // Node Terms
   [QUERY_FIELDS_MAP.BIO_NODE_PRE.field]: 0,
   [QUERY_FIELDS_MAP.BIO_NODE_NAME.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_GROUP.field]: NODE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field]: NODE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field]: NODE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field]: NODE_PRIORITY_RANK,
@@ -141,6 +142,16 @@ export const executeBgraphNodes = (bgraphNodeQuery: any, clause: Filter): any =>
           return names.some(name => name === node.name.toLowerCase());
         }
         // Document is not a node
+        return false;
+      });
+    }
+    case QUERY_FIELDS_MAP.BIO_NODE_GROUP.field: {
+      return bgraphNodeQuery.filter(document => {
+        if (document._type === 'node') {
+          const node = document;
+          return clause.values.some(group => node.group_map[group] !== undefined);
+        }
+        // Document type is an edge
         return false;
       });
     }
