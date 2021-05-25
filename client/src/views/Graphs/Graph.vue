@@ -211,6 +211,31 @@
       }
     }
 
+    @Watch('getModelsList') async onGetModelsListChanged (): Promise<void> {
+      // If we do not have a selected model, we try to find one from the route.
+      if (!this.selectedModel) {
+        const model = this.getModelsList
+          .find(model => model.metadata.id === this.$route.params.model_id);
+        // We can set the one in the route has the selected one in the store.
+        if (model) {
+          this.setSelectedModels(model.id);
+        }
+      }
+
+      // Once we have a selected model available we can load the graph.
+      if (this.selectedModel) {
+        await this.loadData();
+      }
+    }
+
+    async mounted (): Promise<void> {
+      // Load the graph only if we have a selected model,
+      // otherwise wait until the getModelsList as loaded.
+      if (this.selectedModel) {
+        await this.loadData();
+      }
+    }
+
     get countersData (): Counter[] {
       const counters: Counter[] = [
         { name: 'Nodes', value: 44104 },
@@ -278,23 +303,6 @@
 
     get canOpenLocalView (): boolean {
       return !isEmpty(this.getFilters);
-    }
-
-    @Watch('getModelsList') async onGetModelsListChanged (): Promise<void> {
-      // If we do not have a selected model, we try to find one from the route.
-      if (!this.selectedModel) {
-        const model = this.getModelsList
-          .find(model => model.metadata.id === this.$route.params.model_id);
-        // We can set the one in the route has the selected one in the store.
-        if (model) {
-          this.setSelectedModels(model.id);
-        }
-      }
-
-      // Once we have a selected model available we can load the graph.
-      if (this.selectedModel) {
-        await this.loadData();
-      }
     }
 
     async loadData (): Promise<void> {

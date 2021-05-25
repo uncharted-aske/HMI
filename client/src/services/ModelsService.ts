@@ -19,14 +19,14 @@ const isModelFiltered = (model: ModelInterface, filters: any): boolean => {
 };
 
 /** Return a filtered list of Knowledge Graphs */
-function fetchGraphs (models: ModelInterface[], filters: any[]): ModelInterface[] {
+const fetchGraphs = (models: ModelInterface[], filters: any[]): ModelInterface[] => {
   return models.filter(model => model.type === 'biomechanism' && !isModelFiltered(model, filters));
-}
+};
 
 /** Return a filtered list of Computational Models */
-function fetchModels (models: ModelInterface[], filters: any[]): ModelInterface[] {
+const fetchModels = (models: ModelInterface[], filters: any[]): ModelInterface[] => {
   return models.filter(model => model.type === 'computational' && !isModelFiltered(model, filters));
-}
+};
 
 const fetchModelTypesAgg = (models: ModelInterface[], filters: any[]): any => {
   const result = _(models)

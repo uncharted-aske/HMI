@@ -146,9 +146,10 @@
         options.name = 'model';
 
         const selectedModel: ModelInterface = this.models.find(model => model.id === this.getSelectedModelIds[0]);
+        const modelId = selectedModel?.id;
         if (selectedModel) {
           options.params = {
-            model_id: selectedModel?.metadata?.id,
+            model_id: modelId.toString(),
           };
         }
       }

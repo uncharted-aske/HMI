@@ -7,7 +7,10 @@
       @tab-click="onTabClick"
     >
       <div slot="content">
-        <metadata-panel v-if="activeTabId === 'metadata'" :metadata="selectedModel.metadata"/>
+        <metadata-panel
+          v-if="activeTabId === 'metadata'"
+          :metadata="selectedModel && selectedModel.metadata"
+        />
         <facets-pane v-if="activeTabId === 'facets'" />
       </div>
     </left-side-panel>
@@ -23,7 +26,7 @@
           <settings-bar>
             <counters
               slot="left"
-              :title="selectedModel.metadata.name"
+              :title="selectedModel && selectedModel.metadata.name"
               :data="[
                 { name: 'Nodes', value: nodeCount },
                 { name: 'Edges', value: edgeCount },
@@ -80,7 +83,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter } from 'vuex-class';
+  import { Getter, Mutation } from 'vuex-class';
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
@@ -374,7 +377,7 @@
   };
 
   @Component({ components })
-  export default class EpiView extends Vue {
+  export default class Model extends Vue {
     views: ViewInterface[] = VIEWS;
     selectedViewId = 'causal';
 
@@ -403,31 +406,37 @@
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Getter getParameters;
+    @Mutation setSelectedModels;
 
     get selectedModel (): ModelInterface {
-      const modelsList = this.getModelsList;
-      return modelsList.find(model => model.id === (this.getSelectedModelIds && this.getSelectedModelIds[0]));
+      // If we do not have a selected model, we try to find one from the route.
+      if (!this.getSelectedModelIds?.[0]) {
+        console.debug('we have updated the store with the selected model');
+        this.setSelectedModels(this.$route.params.model_id);
+      }
+      console.debug('selectedModelId', this.getSelectedModelIds[0]);
+      console.debug(this.getModelsList);
+      return this.getModelsList.find(model => model.id === this.getSelectedModelIds[0]);
     }
 
     get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
+      return this.selectedViewId === 'causal' ? this.selectedModel?.graph?.abstract : this.selectedModel?.graph?.detailed;
     }
 
     get nodeCount (): number {
-      const leafNodesCount = this.selectedGraph.nodes.filter(n => n.nodeType && n.nodeType !== NodeTypes.NODES.CONTAINER).length;
-      return leafNodesCount;
+      return this.selectedGraph?.nodes.filter(n => n?.nodeType !== NodeTypes.NODES.CONTAINER).length;
     }
 
     get edgeCount (): number {
-      return this.selectedGraph && this.selectedGraph.edges.length;
+      return this.selectedGraph?.edges.length;
     }
 
     get subgraphNodeCount (): number {
-      return this.subgraph && this.subgraph.nodes.length;
+      return this.subgraph?.nodes.length;
     }
 
     get subgraphEdgeCount (): number {
-      return this.subgraph && this.subgraph.edges.length;
+      return this.subgraph?.edges.length;
     }
 
     get gridMap (): string[][] {

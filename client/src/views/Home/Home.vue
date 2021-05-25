@@ -14,7 +14,7 @@
         <p>Extraction of relevant subgraphs and their link back to scientific&nbsp;knowledge.</p>
         <a class="nav-view" href="#/graphs">
           <h2>Graphs</h2>
-          <p>Knowledgable Graphs <strong>{{ nbGraphsModels }}</strong></p>
+          <p>Graphs <strong>{{ nbGraphsModels }}</strong></p>
         </a>
       </section>
       <section>
@@ -111,6 +111,7 @@
 
     p:first-of-type {
       flex-shrink: 0;
+      min-height: 3rem;
     }
   }
 
@@ -119,12 +120,13 @@
     color: inherit;
     display: block;
     flex-grow: 1;
-    outline: transparent solid 3px;
     border-radius: 3px;
     text-decoration: none;
+    will-change: transform;
 
     &:hover {
-      outline-color: $selection;
+      cursor: pointer;
+      transform: translateY(-2px);
     }
 
     & > * {
