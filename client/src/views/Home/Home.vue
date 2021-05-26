@@ -45,6 +45,11 @@
   initializeLex({ pills: [], onChange: () => null });
   // -- DO NOT REMOVE
 
+  /** Display number for the card and avoid the 0 while loading. */
+  function displayNb (number: number): string {
+    return number < 1 ? '-' : shorterNb(number);
+  }
+
   @Component
   export default class Home extends Vue {
     cosmos: CosmosSearchInterface = null;
@@ -65,15 +70,15 @@
     }
 
     get nbGraphsModels (): string {
-      return shorterNb(this.getNbGraphsModels);
+      return displayNb(this.getNbGraphsModels);
     }
 
     get nbComputationalModels (): string {
-      return shorterNb(this.getNbComputationalModels);
+      return displayNb(this.getNbComputationalModels);
     }
 
     get nbKnowledge (): string {
-      return shorterNb(this.cosmos?.total ?? 0);
+      return displayNb(this.cosmos?.total ?? 0);
     }
   }
 </script>
