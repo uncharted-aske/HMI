@@ -409,8 +409,12 @@
     @Mutation setSelectedModels;
 
     get selectedModel (): ModelInterface {
-      // If we do not have a selected model, we try to find one from the route.
-      if (!this.getSelectedModelIds?.[0]) {
+      if (
+        !this.getSelectedModelIds?.[0]?.toString() && // Are we missing the selectedModelId, toString to test id 0 as well,
+        this.$route.params.model_id && // Does the model id is available from the route parameters,
+        !Number.isNaN(this.$route.params.model_id) // Make sure the model id from the route is not a NaN.
+      ) {
+        // Set the model id from the route as the selected model.
         this.setSelectedModels(Number(this.$route.params.model_id));
       }
       return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
