@@ -411,12 +411,9 @@
     get selectedModel (): ModelInterface {
       // If we do not have a selected model, we try to find one from the route.
       if (!this.getSelectedModelIds?.[0]) {
-        console.debug('we have updated the store with the selected model');
-        this.setSelectedModels(this.$route.params.model_id);
+        this.setSelectedModels(Number(this.$route.params.model_id));
       }
-      console.debug('selectedModelId', this.getSelectedModelIds[0]);
-      console.debug(this.getModelsList);
-      return this.getModelsList.find(model => model.id === this.getSelectedModelIds[0]);
+      return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
     }
 
     get selectedGraph (): GraphInterface {
