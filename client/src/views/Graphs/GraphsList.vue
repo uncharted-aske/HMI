@@ -14,7 +14,7 @@
       <settings-bar>
         <counters slot="left" :data="countersData"/>
         <button
-          v-if="nbSelectedModelsIds > 0"
+          v-if="getSelectedGraph"
           class="btn btn-primary"
           slot="middle"
           type="button"
@@ -78,8 +78,8 @@
 
     @Getter getFilters;
     @Getter getModelsList;
-    @Getter getSelectedModelIds;
-    @Mutation setSelectedModels;
+    @Getter getSelectedGraph;
+    @Mutation setSelectedGraph;
     @Mutation clearSelectedModels;
 
     get graphs (): ModelInterface[] {
@@ -98,38 +98,29 @@
       }
     }
 
-    get nbSelectedModelsIds (): number {
-      return this.getSelectedModelIds.length;
-    }
-
     get graphsCards (): CardInterface[] {
-      const selectedModelsList = new Set(this.getSelectedModelIds);
-      return this.graphs.map(model => {
+      return this.graphs.map(graph => {
         return {
-          id: model.id,
-          type: model.type,
+          id: graph.id,
+          type: graph.type,
           previewImageSrc: COVID19Screenshot,
-          title: model.metadata.name,
-          subtitle: model.metadata.description,
-          checked: selectedModelsList.has(model.id),
-        } as CardInterface;
+          title: graph.metadata.name,
+          subtitle: graph.metadata.description,
+          checked: this.getSelectedGraph === graph.id,
+        };
       });
     }
 
     onClickCard (card: CardInterface): void {
-      // As of now we only allow one Knowledgable Graph to be selected at a time.
-      if (!this.getSelectedModelIds.includes(card.id)) {
-        this.clearSelectedModels();
-      }
-      this.setSelectedModels(card.id);
+      this.setSelectedGraph(card.id);
     }
 
     onClickView (): void {
       const options: RawLocation = { name: 'graph' };
 
       // As of now we only allow one Knowledgable Graph to be selected at a time.
-      const selectedModel: ModelInterface = this.graphs.find(graph => graph.id === this.getSelectedModelIds[0]);
-      const modelId = selectedModel?.metadata?.id;
+      const selectedGraph: ModelInterface = this.graphs.find(graph => graph.id === this.getSelectedGraph);
+      const modelId = selectedGraph?.metadata?.id;
       if (modelId) {
         options.params = {
           model_id: modelId.toString(),

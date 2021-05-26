@@ -12,6 +12,7 @@ const state: ModelsState = {
   parameters: {},
   comparisonHighlights: {},
   modelsList: [],
+  selectedGraph: null,
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -231,6 +232,8 @@ const getters: GetterTree<ModelsState, any> = {
   getNbGraphsModels: function (state: ModelsState): number {
     return state.modelsList.filter(model => model.type === 'biomechanism').length;
   },
+
+  getSelectedGraph: state => state.selectedGraph,
 };
 
 const mutations: MutationTree<ModelsState> = {
@@ -262,6 +265,11 @@ const mutations: MutationTree<ModelsState> = {
 
   clearSelectedModels (state) {
     state.selectedModelIds.clear();
+  },
+
+  setSelectedGraph (state, value: number | string) {
+    if (state.selectedGraph === value) value = null;
+    state.selectedGraph = value;
   },
 };
 

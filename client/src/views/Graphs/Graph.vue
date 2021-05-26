@@ -6,7 +6,7 @@
       :tabs="tabs"
       @tab-click="onTabClick"
     >
-      <metadata-panel v-if="activeTabId === 'metadata'" slot="content" :metadata="selectedModel && selectedModel.metadata"/>
+      <metadata-panel v-if="activeTabId === 'metadata'" slot="content" :metadata="selectedGraph && selectedGraph.metadata"/>
       <facets-pane v-else-if="activeTabId === 'facets'" slot="content" />
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
@@ -22,7 +22,7 @@
           <settings-bar>
             <div slot="left">
               <counters
-                :title="selectedModel && selectedModel.metadata.name"
+                :title="selectedGraph && selectedGraph.metadata.name"
                 :data="countersData"
               />
             </div>
@@ -60,11 +60,11 @@
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown">
       <node-pane v-if="drilldownActivePaneId === 'node'" slot="content"
-        :model="selectedModelId"
+        :model="selectedGraphId"
         :data="drilldownMetadata"
       />
       <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content"
-        :model="selectedModelId"
+        :model="selectedGraphId"
         :data="drilldownMetadata"
         @evidence-click="onEvidenceClick"
       />
@@ -193,13 +193,13 @@
     modalDocumentArtifact: any = null;
     showModalDocument: boolean = false;
 
-    @Getter getSelectedModelIds;
+    @Getter getSelectedGraph;
     @Getter getModelsList;
     @Getter getFilters;
     @Getter getFiltres;
     @Action addFiltres;
     @Action setFiltres;
-    @Mutation setSelectedModels;
+    @Mutation setSelectedGraph;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
@@ -213,17 +213,17 @@
 
     @Watch('getModelsList') async onGetModelsListChanged (): Promise<void> {
       // If we do not have a selected model, we try to find one from the route.
-      if (!this.selectedModel) {
+      if (!this.selectedGraph) {
         const model = this.getModelsList
           .find(model => model.metadata.id === this.$route.params.model_id);
         // We can set the one in the route has the selected one in the store.
         if (model) {
-          this.setSelectedModels(model.id);
+          this.setSelectedGraph(model.id);
         }
       }
 
       // Once we have a selected model available we can load the graph.
-      if (this.selectedModel) {
+      if (this.selectedGraph) {
         await this.loadData();
       }
     }
@@ -231,7 +231,7 @@
     async mounted (): Promise<void> {
       // Load the graph only if we have a selected model,
       // otherwise wait until the getModelsList as loaded.
-      if (this.selectedModel) {
+      if (this.selectedGraph) {
         await this.loadData();
       }
     }
@@ -260,12 +260,12 @@
       return this.isSplitView ? 'Close Local View' : 'Open Local View';
     }
 
-    get selectedModel (): ModelInterface {
-      return this.getModelsList[this.getSelectedModelIds[0]];
+    get selectedGraph (): ModelInterface {
+      return this.getModelsList[this.getSelectedGraph];
     }
 
-    get selectedModelId (): string {
-      return this.selectedModel?.metadata.id;
+    get selectedGraphId (): string {
+      return this.selectedGraph?.metadata.id;
     }
 
     get subgraphNodeCount (): number {
@@ -307,8 +307,8 @@
 
     async loadData (): Promise<void> {
       const [bgNodes, bgEdges] = await loadBGraphData(
-        `${process.env.S3_BGRAPH_MODELS}/${this.selectedModelId}/nodes.jsonl`,
-        `${process.env.S3_BGRAPH_MODELS}/${this.selectedModelId}/edges.jsonl`,
+        `${process.env.S3_BGRAPH_MODELS}/${this.selectedGraphId}/nodes.jsonl`,
+        `${process.env.S3_BGRAPH_MODELS}/${this.selectedGraphId}/edges.jsonl`,
       );
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
 
@@ -343,11 +343,11 @@
         graferInterEdgesData,
         graferClustersLabelsData,
       ] = await Promise.all([
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/points.jsonl`).then(data => loadJSONLFile(data)),
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/nodes.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_NODE_OPTIONS)),
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/intra_edges.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_EDGE_OPTIONS)),
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/inter_edges.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_EDGE_OPTIONS)),
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedModelId}/groups.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_LABEL_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedGraphId}/points.jsonl`).then(data => loadJSONLFile(data)),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedGraphId}/nodes.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_NODE_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedGraphId}/intra_edges.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_EDGE_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedGraphId}/inter_edges.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_EDGE_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedGraphId}/groups.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_LABEL_OPTIONS)),
       ]);
 
       return {

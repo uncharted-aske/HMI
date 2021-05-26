@@ -18,7 +18,7 @@
         </a>
       </section>
       <section>
-        <p>Model understanding, comparison and&nbsp;simulation.</p>
+        <p>Model understanding, comparison, and&nbsp;simulation.</p>
         <a class="nav-view" href="#/models">
           <h2>Models</h2>
           <p>Computational Models <strong>{{ nbComputationalModels }}</strong></p>
@@ -121,11 +121,12 @@
   }
 
   .nav-view {
+    --radius: 3px;
     background-color: $bg-primary;
     color: inherit;
     display: block;
     flex-grow: 1;
-    border-radius: 3px;
+    border-radius: var(--radius);
     text-decoration: none;
     will-change: transform;
 
@@ -151,6 +152,7 @@
 
     h2 {
       background-color: $bg-secondary;
+      border-radius: var(--radius) var(--radius) 0 0;
       font-size: 1.5em;
       font-weight: normal;
       line-height: 1;

@@ -41,6 +41,7 @@ interface ModelsState {
   modelsList: ModelInterface[],
   parameters?: any,
   comparisonHighlights?: any,
+  selectedGraph?: string | number,
 }
 
 interface CardInterface {
