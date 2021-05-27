@@ -16,15 +16,14 @@ $text-color-light: $nord6;
 $text-color-dark: $nord1;
 $text-color-highlight: $nord12;
 $text-background-color-hovered: rgba(38,50,56, 0.5);
-$icon-color: $nord4; 
-$icon-color-dark: $nord1; 
+$icon-color: $nord4;
+$icon-color-dark: $nord1;
 
+$selection: $nord13;
 $selection-dark: $nord10;
+$selection-highlight: #006AEB;
 $selection-highlight-dark: $nord9;
 
-
-$selection: #0091EA;
-$selection-highlight: #006AEB;
 $muted: #B6C3CE;
 $muted-highlight: #86B3D0;
 // Main navbar height
@@ -43,13 +42,3 @@ $z-index-order: (
   modal:1200,
   dropdown: 500
 );
-
-
-
-
-
-
-
-
-
-

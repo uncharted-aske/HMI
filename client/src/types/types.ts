@@ -21,7 +21,7 @@ interface ModelInterface {
   metadata: ModelMetadataInterface,
   graph: any,
   subgraph?: any,
-  type: string
+  type: 'computational' | 'biomechanism'
 }
 
 interface TabInterface {
@@ -41,6 +41,7 @@ interface ModelsState {
   modelsList: ModelInterface[],
   parameters?: any,
   comparisonHighlights?: any,
+  selectedGraph?: string | number,
 }
 
 interface CardInterface {
@@ -49,7 +50,7 @@ interface CardInterface {
   title: string;
   subtitle: string;
   type: string;
-  raw: any;
+  raw?: any;
   highlighted?: boolean;
   checked?: boolean;
 }

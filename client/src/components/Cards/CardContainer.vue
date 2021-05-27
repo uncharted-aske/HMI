@@ -1,17 +1,18 @@
 <template>
   <div class="card-container">
-    <h4 class="section-header">{{ header }}</h4>
+    <h4 v-if="header" class="section-header">{{ header }}</h4>
     <div class="card-list">
       <card
-        v-for="(card, i) in cards"
-        :key="i"
+        v-for="(card, index) in cards"
+        :id="index"
+        :key="index"
         :preview-image-src="card.previewImageSrc"
         :title="card.title"
         :subtitle="card.subtitle"
         :icon="card.type"
         :checked="card.checked"
         :highlighted="card.highlighted"
-        @click="onClick(card)"
+        @click.native="onClick(card)"
       />
     </div>
   </div>
@@ -31,8 +32,7 @@
 
   @Component({ components })
   export default class CardContainer extends Vue {
-    @Prop({ default: '' }) header: string;
-
+    @Prop({ default: null }) header: string;
     @Prop({ default: () => [] }) cards: CardInterface[];
 
     onClick (card: CardInterface): void {

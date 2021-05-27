@@ -49,7 +49,7 @@
     @Prop({ default: () => [] })
     views: ViewInterface[];
 
-    @Prop({ default: '' })
+    @Prop({ default: null })
     selectedViewId: string;
 
     showDropdownViews: boolean = false;
@@ -62,7 +62,7 @@
       this.showDropdownViews = !this.showDropdownViews;
     }
 
-    onViewSelection (viewId:string):void {
+    onViewSelection (viewId:string): void {
       this.$emit('view-change', viewId);
     }
 
