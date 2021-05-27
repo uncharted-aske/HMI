@@ -225,11 +225,11 @@ const getters: GetterTree<ModelsState, any> = {
   getModelsList: state => state.modelsList,
   getComparisonHighlights: state => state.comparisonHighlights,
 
-  getNbComputationalModels: function (state: ModelsState): number {
+  getCountComputationalModels: function (state: ModelsState): number {
     return state.modelsList.filter(model => model.type === 'computational').length;
   },
 
-  getNbGraphsModels: function (state: ModelsState): number {
+  getCountGraphsModels: function (state: ModelsState): number {
     return state.modelsList.filter(model => model.type === 'biomechanism').length;
   },
 
