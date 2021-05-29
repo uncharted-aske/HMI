@@ -14,7 +14,7 @@ export enum DonuRequestCommand {
 
 enum DonuType {
   EASEL = 'easel',
-  // DIIF_EQ = 'diff-eq',
+  // DIFF_EQ = 'diff-eq',
   // GROMET = 'gromet',
 }
 
