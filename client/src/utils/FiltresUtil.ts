@@ -13,11 +13,21 @@ export function bgraphResultsToHistogram (bgraphResult: Array<any>): FiltreAggre
   const scale = d3.scaleLinear()
     .domain(d3.extent(bgraphResult))
     .nice();
-  const bin = d3.bin()
+  const bins = d3.bin()
     .domain(scale.domain() as [number, number])
-    .thresholds(scale.ticks(NB_BINS));
+    .thresholds(scale.ticks(NB_BINS))(bgraphResult);
 
-  return Array.from(bin(bgraphResult))
+  // The last bin produced by D3 has a width of 0, as opposed to all the other bins which have a
+  // width equivalent to the bin interval (binMax - binMin), with a value equal to the max bin range.
+  // This results in errors at the histogram rendering level and the selected bin to selected range
+  // translation level, due to this 0 width bin being treated the same way as the interval width bins.
+  // To correct, combine the two last bins by adding the results of the last bin (with bin width of 0)
+  // to the results of the second last bin. Throw away the empty last bin when rendering.
+  for (let i = bins[bins.length - 1].length; i >= 0; i--) {
+    bins[bins.length - 2].push(bins[bins.length - 1].pop());
+  }
+
+  return Array.from(bins)
     .map(function (bin) {
       return {
         name: bin.x0.toString(), // display the lower limit of the bin

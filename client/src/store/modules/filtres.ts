@@ -8,7 +8,7 @@ import { Filtres, Filtre, FiltreField } from '@/types/typesFiltres';
 import { GetterTree, ActionTree, MutationTree } from 'vuex';
 import * as Route from '@/utils/RouteUtil';
 
-const state = new Map() as Filtres;
+const state = [] as unknown as Filtres;
 
 const getters: GetterTree<Filtres, any> = {
   /** Return an Array of Filtres. */
@@ -17,7 +17,7 @@ const getters: GetterTree<Filtres, any> = {
   },
 
   /** Return a Filtre based on its field. */
-  getFiltre: (state) => (field: FiltreField): Filtre => state.get(field) ?? null,
+  getFiltre: (state) => (field: FiltreField): Filtre => state.find(filtre => filtre.field === field) ?? null,
 };
 
 const actions: ActionTree<Filtres, any> = {
@@ -43,7 +43,7 @@ const actions: ActionTree<Filtres, any> = {
 
   setFiltres ({ commit }, fields: string[]): void {
     // We check if the route as some
-    const filtres = Route.getFiltres() ?? new Map() as Filtres;
+    const filtres = Route.getFiltres() ?? [] as Filtres;
     commit('setFiltre', filtres);
 
     // If fields are provided we add them.
@@ -57,30 +57,35 @@ const actions: ActionTree<Filtres, any> = {
 
 const mutations: MutationTree<Filtres> = {
   addFiltre (state, filtre: Filtre): void {
-    if (!state.has(filtre.field)) {
-      state.set(filtre.field, filtre);
+    if (!state.some(f => filtre.field === f.field)) {
+      state.push(filtre);
     } else {
-      const currentFiltre = state.get(filtre.field);
+      const currentFiltre = state.find(f => f.field === filtre.field);
       const updatedFiltre = { ...currentFiltre, ...filtre };
-      state.set(filtre.field, updatedFiltre);
+      state.push(updatedFiltre);
     }
+    // Trigger change by providing new Set instance
+    // Because @Watch does not refresh on elements changes of a Map(),
+    // only the Map itself.
+    // state = new Map(state);
+    state = [...new Set(state)];
   },
 
   clearFiltres (state): void {
-    state.clear();
+    // eslint-disable-next-line
+    state = [] as Filtres;
   },
 
-  removeFiltre (state, field: FiltreField): void {
-    state.delete(field);
+  removeFiltre (state, field: string): void {
+    state = state.filter(f => f.field !== field);
   },
 
   setFiltre (state, filtres: Filtres): void {
-    state.clear();
-    state = filtres;
+    state = [...new Set(filtres)];
   },
 };
 
-export {
+export const filtres = {
   actions,
   getters,
   mutations,

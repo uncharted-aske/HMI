@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import * as filtres from './modules/filtres';
+import { filtres } from './modules/filtres';
 import { models } from './modules/models';
 import { query } from './modules/query';
 

@@ -48,18 +48,6 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     lexType: 'string',
   },
   // BIO MODELS
-  BIO_BELIEF: {
-    ..._field(
-      FILTRES[FILTRES_FIELDS.BELIEF_SCORE].name,
-      FILTRES[FILTRES_FIELDS.BELIEF_SCORE].displayName,
-    ),
-    ..._searchable(
-      FILTRES[FILTRES_FIELDS.BELIEF_SCORE].displayName,
-      false,
-    ),
-    baseType: 'integer',
-    lexType: 'string',
-  },
   BIO_NODE_PRE: {
     ..._field('bioNodePre', 'Node Pre'),
     ..._searchable('Node Pre', false),
@@ -126,6 +114,18 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'string',
     order: 1,
+  },
+  BIO_EDGE_BELIEF: {
+    ..._field(
+      FILTRES[FILTRES_FIELDS.BELIEF_SCORE].name,
+      FILTRES[FILTRES_FIELDS.BELIEF_SCORE].displayName,
+    ),
+    ..._searchable(
+      FILTRES[FILTRES_FIELDS.BELIEF_SCORE].displayName,
+      false,
+    ),
+    baseType: 'integer',
+    lexType: 'string',
   },
   BIO_EDGE_POST: {
     ..._field('bioEdgePost', 'Edge Post'),

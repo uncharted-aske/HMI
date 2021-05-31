@@ -35,7 +35,7 @@ export type Filtre = {
   field: FiltreField,
 }
 
-export type Filtres = Map<FiltreField, Filtre>;
+export type Filtres = Filtre[];
 
 /** List of ALL Filtres fields name */
 export enum FILTRES_FIELDS {

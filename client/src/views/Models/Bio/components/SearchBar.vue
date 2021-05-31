@@ -13,27 +13,51 @@
 
   import { Lex } from '@uncharted.software/lex/dist/lex';
   import KeyValuePill from '@/search/pills/KeyValuePill';
-  import RangePill from '@/search/pills/RangePill';
+  import RangeKeyValuePill from '@/search/pills/RangeKeyValuePill';
   import TextPill from '@/search/pills/TextPill';
 
   import * as filtersUtil from '@/utils/FiltersUtil';
+  import * as FiltresUtil from '@/utils/FiltresUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
   import { BOOLEAN_OPTIONS, BIO_EDGE_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
   import { initializeLex, setPills } from '@/utils/LexUtil';
+
+  import { Filtre, FILTRES, FILTRES_FIELDS } from '@/types/typesFiltres';
 
   @Component
   export default class SearchBar extends Vue {
     private lex: Lex = null;
     private pills: any = [];
 
+    @Getter getFiltres;
     @Getter getFilters;
     @Action setFilters;
 
-    @Watch('getFilters') async onGetFiltersChanged (): Promise<void> {
+    @Watch('getFiltres') onGetFiltresChanged (): void {
+      this.initialize();
+    }
+
+    @Watch('getFilters') onGetFiltersChanged (): void {
       setPills({ lex: this.lex, pills: this.pills, filters: this.getFilters });
     }
 
-    async mounted (): Promise<void> {
+    get beliefLabels (): string[] {
+      const beliefName = FILTRES[FILTRES_FIELDS.BELIEF_SCORE].name;
+      const beliefsFiltre = this.getFiltres.find(f => f.field === beliefName) as Filtre;
+
+      if (beliefsFiltre) {
+        const beliefsAggregate = beliefsFiltre.aggregates;
+        return (FiltresUtil.aggregatesToFacetsBars(beliefsAggregate) as any[]).map(val => val.label);
+      }
+
+      return [];
+    }
+
+    mounted (): void {
+      this.initialize();
+    }
+
+    initialize (): void {
       /* add pills here */
       this.pills = [
         new TextPill(QUERY_FIELDS_MAP.BIO_NODE_NAME),
@@ -64,7 +88,11 @@
           '',
           { single: true, multiValue: true },
         ),
-        new RangePill(QUERY_FIELDS_MAP.BIO_BELIEF),
+        new RangeKeyValuePill(
+          QUERY_FIELDS_MAP.BIO_EDGE_BELIEF,
+          this.beliefLabels,
+          '',
+        ),
       ];
 
       this.lex = initializeLex({

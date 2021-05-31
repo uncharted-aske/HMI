@@ -70,6 +70,7 @@ const filterTermToPriorityRank = {
   [QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field]: EDGE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field]: EDGE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_EDGE_DOI.field]: EDGE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_EDGE_BELIEF.field]: EDGE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_EDGE_POST.field]: 5,
 };
 
@@ -110,6 +111,19 @@ export const executeBgraphEdges = (bgraphEdgeQuery: any, clause: Filter): any =>
           return dois.some(doi => Object.keys(edge.doi_map).some(edgeDoi => {
             return edgeDoi.toLowerCase().includes(doi);
           }));
+        }
+        // Document is not an edge
+        return false;
+      });
+    }
+    case QUERY_FIELDS_MAP.BIO_EDGE_BELIEF.field: {
+      const beliefRange = clause.values as string[];
+      const beliefLowerBound = Number(beliefRange[0][0]);
+      const beliefUpperBound = Number(beliefRange[0][1]);
+      return bgraphEdgeQuery.filter(document => {
+        if (document._type === 'edge') {
+          const edge = document;
+          return edge.belief <= beliefUpperBound && edge.belief >= beliefLowerBound;
         }
         // Document is not an edge
         return false;
@@ -253,10 +267,10 @@ export function getBGraphAggregatesFromFiltres (
         aggregates = null;
     }
 
-    const currentFiltre = filtres.get(field);
+    const currentFiltre = filtres.find(f => f.field === field);
     if (currentFiltre) {
-      const filtre: Filtre = Object.assign(filtres.get(field), { aggregates });
-      filtres.set(field, filtre);
+      const filtre: Filtre = Object.assign(currentFiltre, { aggregates });
+      filtres.push(filtre);
     }
   });
 

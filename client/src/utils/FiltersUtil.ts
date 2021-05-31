@@ -75,6 +75,10 @@ const removeSearchTerm = (filters: Filters, field: QueryFieldKey, term: LexConve
 
   if (!_.isNil(existingClause)) {
     _.remove(existingClause.values, v => {
+      if (_.isNil(term)) {
+        return true;
+      }
+
       return _.isEqual(v, term);
     });
 

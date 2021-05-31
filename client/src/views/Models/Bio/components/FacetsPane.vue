@@ -5,12 +5,12 @@
       :field="beliefName"
       :label="beliefsTitle"
       :selection="beliefSelection"
-      normalized
     />
   </div>
 </template>
 
 <script lang="ts">
+  import { invert } from 'lodash';
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter } from 'vuex-class';
@@ -42,11 +42,15 @@
 
     get beliefSelection (): number[] {
       const filters: Filter[] = this.getFilters?.clauses;
-      if (filters) {
+      const beliefsFiltre = this.getFiltres.find(f => f.field === this.beliefName) as Filtre;
+
+      if (filters && beliefsFiltre) {
         const beliefFilter: Filter = filters.find(filter => filter.field === this.beliefName);
-        if (beliefFilter) {
-          return beliefFilter.values as number[];
-        }
+
+        const beliefsAggregate = beliefsFiltre.aggregates;
+        const keyMapInverted = invert((FiltresUtil.aggregatesToFacetsBars(beliefsAggregate) as any[]).map(val => val.label));
+
+        return (beliefFilter?.values?.[0] as unknown as number[]).map(v => Number(keyMapInverted[v]));
       }
     }
 
@@ -55,7 +59,7 @@
     }
 
     updateBeliefFacets (): void {
-      const beliefsFiltre = this.getFiltres.get(this.beliefName) as Filtre;
+      const beliefsFiltre = this.getFiltres.find(f => f.field === this.beliefName) as Filtre;
       if (beliefsFiltre) {
         const beliefsAggregate = beliefsFiltre.aggregates;
         const beliefsFacetBars = FiltresUtil.aggregatesToFacetsBars(beliefsAggregate);
