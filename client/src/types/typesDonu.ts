@@ -12,7 +12,7 @@ export enum DonuRequestCommand {
   // UPLOAD_MODEL = 'upload-model',
 }
 
-enum DonuType {
+export enum DonuType {
   EASEL = 'easel',
   // DIFF_EQ = 'diff-eq',
   // GROMET = 'gromet',

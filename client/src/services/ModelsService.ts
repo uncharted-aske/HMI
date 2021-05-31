@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
-import { ModelInterface } from '@/types/types';
+import { ModelInterface, ModelInterfaceType } from '@/types/types';
 
 const isModelFiltered = (model: ModelInterface, filters: any): boolean => {
   if (!filters) return false;
@@ -20,12 +20,12 @@ const isModelFiltered = (model: ModelInterface, filters: any): boolean => {
 
 /** Return a filtered list of Knowledge Graphs */
 const fetchGraphs = (models: ModelInterface[], filters: any[]): ModelInterface[] => {
-  return models.filter(model => model.type === 'biomechanism' && !isModelFiltered(model, filters));
+  return models.filter(model => model.type === ModelInterfaceType.biomechanism && !isModelFiltered(model, filters));
 };
 
 /** Return a filtered list of Computational Models */
 const fetchModels = (models: ModelInterface[], filters: any[]): ModelInterface[] => {
-  return models.filter(model => model.type === 'computational' && !isModelFiltered(model, filters));
+  return models.filter(model => model.type === ModelInterfaceType.computational && !isModelFiltered(model, filters));
 };
 
 const fetchModelTypesAgg = (models: ModelInterface[], filters: any[]): any => {

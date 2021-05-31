@@ -16,12 +16,17 @@ interface ModelComponentMetadataInterface {
   knowledge: string
 }
 
+export enum ModelInterfaceType {
+  computational = 'computational',
+  biomechanism = 'biomechanism',
+}
+
 interface ModelInterface {
-  id: number;
+  id?: number;
   metadata: ModelMetadataInterface,
-  graph: any,
+  graph?: any,
   subgraph?: any,
-  type: 'computational' | 'biomechanism'
+  type: ModelInterfaceType
 }
 
 interface TabInterface {

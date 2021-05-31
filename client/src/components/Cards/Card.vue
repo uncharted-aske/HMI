@@ -41,7 +41,7 @@
     }
 
     get hasImage (): boolean {
-      return this.previewImageSrc !== '';
+      return this.previewImageSrc && this.previewImageSrc !== '';
     }
 
     get iconType (): string {
