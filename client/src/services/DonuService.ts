@@ -1,7 +1,9 @@
 import { ModelInterface } from '@/types/types';
 import {
   DonuModelDefinition,
+  DonuModelParameter,
   DonuResponse,
+  DonuResponseStatus,
   DonuRequest,
   DonuRequestCommand,
   DonuType,
@@ -27,7 +29,7 @@ export async function fetchDonuModels (): Promise<ModelInterface[]> {
   return donuToModel(response?.models) ?? null;
 }
 
-export async function getModelParameters (model: ModelInterface): Promise<DonuResponse> {
+export async function getModelParameters (model: ModelInterface): Promise<DonuModelParameter[]> {
   const request: DonuRequest = {
     command: DonuRequestCommand.DESCRIBE_MODEL_INTERFACE,
     definition: {
@@ -37,6 +39,9 @@ export async function getModelParameters (model: ModelInterface): Promise<DonuRe
   };
 
   const response = await callDonu(request);
-  // TODO - transform DonuResponse into ModelInterface
-  return response;
+  if (response.status === DonuResponseStatus.success) {
+    return response?.result?.parameters ?? null;
+  } else {
+    console.error('[DONU]', response);
+  }
 }

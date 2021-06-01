@@ -18,14 +18,18 @@ export enum DonuType {
   // GROMET = 'gromet',
 }
 
-type DonuModelVariables = {
-  metadata: any,
+type DonuMetadata = {
+  Description: string,
+}
+
+type DonuModelVariable = {
+  metadata: DonuMetadata,
   name: string,
 }
 
-type DonuModelParameters = {
+export type DonuModelParameter = {
   defaultValue: number,
-  metadate: any,
+  metadata: DonuMetadata,
   name: string,
 }
 
@@ -36,9 +40,9 @@ type DonuDataSource = {
 export type DonuModelDefinition = {
   description?: string,
   name?: string,
-  parameters?: DonuModelParameters,
+  parameters?: DonuModelParameter[],
   source: DonuDataSource,
-  stateVars?: DonuModelVariables,
+  stateVars?: DonuModelVariable[],
   type: DonuType;
 }
 
@@ -53,9 +57,14 @@ export type DonuRequest = {
   // type?: string;
 }
 
+export enum DonuResponseStatus {
+  success = 'success',
+  failure = 'failure',
+}
+
 export type DonuResponse = {
   error?: string,
   models?: DonuModelDefinition[],
   result?: DonuModelDefinition,
-  status?: 'success' | 'failure',
+  status?: DonuResponseStatus,
 }
