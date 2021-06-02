@@ -2,7 +2,7 @@
  * https://galoisinc.github.io/ASKE-E/donu.html
  */
 
-export enum DonuRequestCommand {
+enum RequestCommand {
   // CONVERT_MODEL = 'convert-model',
   DESCRIBE_MODEL_INTERFACE = 'describe-model-interface',
   // GET_MODEL_SCHEMATIC = 'get-model-schematic',
@@ -12,43 +12,43 @@ export enum DonuRequestCommand {
   // UPLOAD_MODEL = 'upload-model',
 }
 
-export enum DonuType {
+enum Type {
   EASEL = 'easel',
   // DIFF_EQ = 'diff-eq',
   // GROMET = 'gromet',
 }
 
-type DonuMetadata = {
+type Metadata = {
   Description: string,
 }
 
-type DonuModelVariable = {
-  metadata: DonuMetadata,
+type ModelVariable = {
+  metadata: Metadata,
   name: string,
 }
 
-export type DonuModelParameter = {
+type ModelParameter = {
   defaultValue: number,
-  metadata: DonuMetadata,
+  metadata: Metadata,
   name: string,
 }
 
-type DonuDataSource = {
+type DataSource = {
   file: string;
 }
 
-export type DonuModelDefinition = {
+type ModelDefinition = {
   description?: string,
   name?: string,
-  parameters?: DonuModelParameter[],
-  source: DonuDataSource,
-  stateVars?: DonuModelVariable[],
-  type: DonuType;
+  parameters?: ModelParameter[],
+  source: DataSource,
+  stateVars?: ModelVariable[],
+  type: Type;
 }
 
-export type DonuRequest = {
-  command: DonuRequestCommand;
-  definition?: string | DonuModelDefinition;
+type Request = {
+  command: RequestCommand;
+  definition?: string | ModelDefinition;
   // 'dest-type'?: string;
   end?: number;
   // name?: string;
@@ -57,14 +57,27 @@ export type DonuRequest = {
   // type?: string;
 }
 
-export enum DonuResponseStatus {
+enum ResponseStatus {
   success = 'success',
   failure = 'failure',
 }
 
-export type DonuResponse = {
+type Response = {
   error?: string,
-  models?: DonuModelDefinition[],
-  result?: DonuModelDefinition,
-  status?: DonuResponseStatus,
+  models?: ModelDefinition[],
+  result?: ModelDefinition,
+  status?: ResponseStatus,
 }
+
+export {
+  DataSource,
+  Metadata,
+  ModelDefinition,
+  ModelParameter,
+  ModelVariable,
+  Request,
+  RequestCommand,
+  Response,
+  ResponseStatus,
+  Type,
+};

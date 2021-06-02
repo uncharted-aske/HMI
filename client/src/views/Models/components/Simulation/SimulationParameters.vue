@@ -12,11 +12,11 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
-  import { DonuModelParameter } from '@/types/typesDonu';
+  import * as Donu from '@/types/typesDonu';
 
   @Component
   export default class SimulationParameters extends Vue {
-    @Prop({ default: [] }) parameters: DonuModelParameter[];
+    @Prop({ default: [] }) parameters: Donu.ModelParameter[];
   }
 </script>
 

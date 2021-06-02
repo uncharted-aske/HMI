@@ -1,47 +1,61 @@
 import { ModelInterface } from '@/types/types';
-import {
-  DonuModelDefinition,
-  DonuModelParameter,
-  DonuResponse,
-  DonuResponseStatus,
-  DonuRequest,
-  DonuRequestCommand,
-  DonuType,
-} from '@/types/typesDonu';
+import * as Donu from '@/types/typesDonu';
 import { donuToModel } from '@/utils/DonuUtil';
 
 /** Send the request to Donu */
-async function callDonu (request: DonuRequest): Promise<DonuResponse> {
-  const response = await fetch(process.env.DONU_ENDPOINT, {
-    body: JSON.stringify(request),
-    method: 'POST',
-  });
-  return response.json() as DonuResponse;
+async function callDonu (request: Donu.Request): Promise<Donu.Response> {
+  try {
+    const response = await fetch(process.env.DONU_ENDPOINT, {
+      body: JSON.stringify(request),
+      method: 'POST',
+    });
+    return response.json() as Donu.Response;
+  } catch (error) {
+    console.error('[DONU Service] — callDonu', error); // eslint-disable-line no-console
+  }
 }
 
 /** Fetch a complete list of available models from Donu API */
 export async function fetchDonuModels (): Promise<ModelInterface[]> {
-  const request: DonuRequest = {
-    command: DonuRequestCommand.LIST_MODELS,
+  const request: Donu.Request = {
+    command: Donu.RequestCommand.LIST_MODELS,
   };
   const response = await callDonu(request);
-  // TODO - transform DonuResponse into ModelInterface
   return donuToModel(response?.models) ?? null;
 }
 
-export async function getModelParameters (model: ModelInterface): Promise<DonuModelParameter[]> {
-  const request: DonuRequest = {
-    command: DonuRequestCommand.DESCRIBE_MODEL_INTERFACE,
+/** Fetch the parameters of a model */
+export async function getModelParameters (model: ModelInterface): Promise<Donu.ModelParameter[]> {
+  const request: Donu.Request = {
+    command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
     definition: {
       source: { file: model.metadata.source },
-      type: DonuType.EASEL,
-    } as DonuModelDefinition,
+      type: model.metadata.type as Donu.Type,
+    } as Donu.ModelDefinition,
   };
 
   const response = await callDonu(request);
-  if (response.status === DonuResponseStatus.success) {
+  if (response.status === Donu.ResponseStatus.success) {
     return response?.result?.parameters ?? null;
   } else {
-    console.error('[DONU]', response);
+    console.error('[DONU Service] — getModelParameters', response); // eslint-disable-line no-console
+  }
+}
+
+/** Fetch the state variable of a model */
+export async function getModelVariables (model: ModelInterface): Promise<Donu.ModelVariable[]> {
+  const request: Donu.Request = {
+    command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
+    definition: {
+      source: { file: model.metadata.source },
+      type: model.metadata.type as Donu.Type,
+    } as Donu.ModelDefinition,
+  };
+
+  const response = await callDonu(request);
+  if (response.status === Donu.ResponseStatus.success) {
+    return response?.result?.stateVars ?? null;
+  } else {
+    console.error('[DONU Service] — getModelVariables', response); // eslint-disable-line no-console
   }
 }

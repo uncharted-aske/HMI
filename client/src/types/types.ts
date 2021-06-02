@@ -4,6 +4,7 @@ interface ModelMetadataInterface {
   description?: string,
   created?: string,
   source?: string,
+  type?: string, // Mostly used by DonuType
   version?: string,
   knowledge?: string
 }
