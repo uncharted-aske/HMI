@@ -18,7 +18,7 @@
 
   @Component
   export default class SearchBar extends Vue {
-    @Prop({ default: [] })
+    @Prop({ default: () => [] })
     pills: (KeyValuePill | RangePill | TextPill)[];
 
     @Prop({ default: 30 })
