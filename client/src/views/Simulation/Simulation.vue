@@ -189,18 +189,6 @@
 
     get gridDimensions (): any {
       return {
-        // Keep the cell between 25% and 75% of container
-        /* Future features to be developed.
-        1: {
-          widthMax: 0.75,
-          widthMin: 0.25,
-        },
-        2: {
-          widthMax: 0.75,
-          widthMin: 0.25,
-        },
-        */
-        // Middle element to visually resize the columns
         div1: {
           width: '10px',
           widthFixed: true,
