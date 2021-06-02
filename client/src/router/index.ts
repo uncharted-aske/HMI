@@ -11,7 +11,6 @@ import Simulation from '@/views/Simulation/Simulation.vue';
 import Comparison from '@/views/Comparison/Comparison.vue';
 import DocsCards from '@/views/Knowledge/DocsCards/DocsCards.vue';
 import DocsClusters from '@/views/Knowledge/DocsClusters/DocsClusters.vue';
-import SimulationTest from '@/views/Models/components/Simulation/SimulationTest.vue';
 
 const RouterSingleton = ((): any => {
   let router: Router;
@@ -30,11 +29,6 @@ const RouterSingleton = ((): any => {
           path: '/graphExperiment',
           name: 'graphExperiment',
           component: GraphExperiment,
-        },
-        {
-          path: '/simulation-test',
-          name: 'SimulationTest',
-          component: SimulationTest,
         },
         {
           path: '/graphs',

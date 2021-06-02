@@ -51,9 +51,9 @@
           <settings-bar>
             <counters
               slot="left"
-              title="3 Parameters"
+              :title="(this.parameters.length + ' Parameters')"
               :data="[
-                { name: 'Hidden', value: '4' },
+                { name: 'Hidden', value: '0' },
               ]"
             />
             <div slot="right">
@@ -63,7 +63,7 @@
               </button>
             </div>
           </settings-bar>
-          <global-graph v-if="selectedModel" :data="selectedGraph"/>
+          <simulation-parameters :parameters="parameters" />
         </div>
         <div slot="variables" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
@@ -89,21 +89,26 @@
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { Watch } from 'vue-property-decorator';
   import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
+  import * as Donu from '@/types/typesDonu';
 
-  import SettingsBar from '@/components/SettingsBar.vue';
+  import { getModelParameters } from '@/services/DonuService';
+
   import Counters from '@/components/Counters.vue';
-  import SearchBar from '@/components/SearchBar.vue';
-  import Settings from '@/views/Models/components/Settings.vue';
   import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
+  import Settings from '@/views/Models/components/Settings.vue';
+  import SettingsBar from '@/components/SettingsBar.vue';
+  import SearchBar from '@/components/SearchBar.vue';
+  import SimulationParameters from '@/views/Simulation/components/SimulationParameters.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -120,13 +125,14 @@
   **/
 
   const components = {
-    SettingsBar,
     Counters,
-    SearchBar,
-    Settings,
     FacetsPane,
     GlobalGraph,
     ResizableGrid,
+    SearchBar,
+    Settings,
+    SettingsBar,
+    SimulationParameters,
   };
 
   @Component({ components })
@@ -138,12 +144,21 @@
     activeTabId: string = 'metadata';
 
     subgraph: GraphInterface = null;
+    parameters: Donu.ModelParameter[] = [];
 
     expandedId: string = '';
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Mutation setSelectedModels;
+
+    @Watch('selectedModel') onSelectedModelChanged (): void {
+      this.fetchParameters();
+    }
+
+    mounted (): void {
+      this.fetchParameters();
+    }
 
     get selectedModel (): ModelInterface {
       if (
@@ -198,6 +213,10 @@
       }
 
       this.$router.push(options);
+    }
+
+    async fetchParameters (): Promise<void> {
+      this.parameters = await getModelParameters(this.selectedModel) ?? [];
     }
   }
 </script>

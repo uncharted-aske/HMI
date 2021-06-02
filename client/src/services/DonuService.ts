@@ -26,6 +26,8 @@ export async function fetchDonuModels (): Promise<ModelInterface[]> {
 
 /** Fetch the parameters of a model */
 export async function getModelParameters (model: ModelInterface): Promise<Donu.ModelParameter[]> {
+  if (!model) return;
+
   const request: Donu.Request = {
     command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
     definition: {
@@ -44,6 +46,8 @@ export async function getModelParameters (model: ModelInterface): Promise<Donu.M
 
 /** Fetch the state variable of a model */
 export async function getModelVariables (model: ModelInterface): Promise<Donu.ModelVariable[]> {
+  if (!model) return;
+
   const request: Donu.Request = {
     command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
     definition: {
