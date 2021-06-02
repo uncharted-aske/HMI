@@ -20,6 +20,9 @@
         <button class="btn btn-primary m-1" @click="onSplitView">
           Add Subgraph
         </button>
+        <button class="btn btn-primary m-1" @click="onOpenSimView">
+          Open Simulation View
+        </button>
       </div>
       <resizable-grid :map="gridMap" :dimensions="gridDimensions">
         <div slot="1" class="h-100 w-100 d-flex flex-column">
@@ -84,6 +87,7 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
+  import { RawLocation } from 'vue-router';
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
@@ -465,6 +469,20 @@
           },
         };
       }
+    }
+
+    onOpenSimView (): void {
+      const options: RawLocation = { name: 'simulation' };
+
+      // As of now we only allow one Knowledgable Graph to be selected at a time.
+      const modelId = this.$route.params.model_id;
+      if (modelId) {
+        options.params = {
+          model_id: modelId.toString(),
+        };
+      }
+
+      this.$router.push(options);
     }
 
     onSplitView (): void {

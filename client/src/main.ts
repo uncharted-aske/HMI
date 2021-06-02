@@ -15,7 +15,7 @@ import {
   faCaretDown,
   faCaretRight,
   faColumns,
-  faWindowMaximize,
+  faExpandAlt,
   faLongArrowAltRight,
   faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -48,7 +48,7 @@ library.add(
   faCaretDown,
   faCaretRight,
   faColumns,
-  faWindowMaximize,
+  faExpandAlt,
   faLongArrowAltRight,
   faCheckCircle,
 );
