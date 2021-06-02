@@ -6,7 +6,7 @@
           <search-bar />
         </div>
         <div class="search-col mx-3 justify-content-between">
-          <button class="btn btn-primary m-1">
+          <button class="btn btn-primary blue m-1">
             Simulate
           </button>
           <button class="btn btn-primary m-1">
@@ -22,7 +22,7 @@
             <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
             <label class="form-check-label" for="inlineCheckbox1">Auto Run</label>
           </div>
-          <button class="btn btn-primary m-1" @click="onCloseSimView">
+          <button class="btn btn-primary blue m-1" @click="onCloseSimView">
             Run
           </button>
           <button class="btn btn-primary m-1" @click="onCloseSimView">
@@ -97,8 +97,6 @@
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
 
-  import { NodeTypes } from '@/graphs/svg/encodings';
-
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
   import SearchBar from '@/components/SearchBar.vue';
@@ -163,22 +161,6 @@
       return this.selectedViewId === 'causal' ? this.selectedModel?.graph?.abstract : this.selectedModel?.graph?.detailed;
     }
 
-    get nodeCount (): number {
-      return this.selectedGraph?.nodes.filter(n => n?.nodeType !== NodeTypes.NODES.CONTAINER).length;
-    }
-
-    get edgeCount (): number {
-      return this.selectedGraph?.edges.length;
-    }
-
-    get subgraphNodeCount (): number {
-      return this.subgraph?.nodes.length;
-    }
-
-    get subgraphEdgeCount (): number {
-      return this.subgraph?.edges.length;
-    }
-
     get gridMap (): string[][] {
       return this.expandedId
       ? [[this.expandedId]]
@@ -222,6 +204,11 @@
 
 <style lang="scss" scoped>
   @import "@/styles/variables";
+
+  .btn-primary.blue {
+    background: $muted-highlight;
+    border-color: $muted-highlight;
+  }
 
   .btn-settings {
     height: 25px;
