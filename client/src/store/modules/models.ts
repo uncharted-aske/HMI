@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
 
-import { ModelsState, ModelInterface } from '@/types/types';
+import { ModelsState, ModelInterface, ModelInterfaceType } from '@/types/types';
 
 import { emmaaModelList } from '@/services/EmmaaFetchService';
 import { getUtil } from '@/utils/FetchUtil';
+import { fetchDonuModels } from '@/services/DonuService';
 
 const state: ModelsState = {
   isInitialized: false,
@@ -101,7 +102,7 @@ const buildInitialModelsList = ({
         detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
       },
       subgraph: _.pick(comparisonJSON.subgraphs[0], ['nodes', 'edges']),
-      type: 'computational',
+      type: ModelInterfaceType.computational,
     },
     {
       id: 1,
@@ -111,7 +112,7 @@ const buildInitialModelsList = ({
         detailed: _.pick(nestedCHIMEGrFN, ['nodes', 'edges']),
       },
       subgraph: _.pick(comparisonJSON.subgraphs[1], ['nodes', 'edges']),
-      type: 'computational',
+      type: ModelInterfaceType.computational,
     },
     {
       id: 2,
@@ -120,7 +121,7 @@ const buildInitialModelsList = ({
         abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
         detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
       },
-      type: 'computational',
+      type: ModelInterfaceType.computational,
     },
   ];
 };
@@ -214,6 +215,10 @@ const actions: ActionTree<ModelsState, any> = {
     });
     commit('setComparisonHighlights', initialComparisonHighlights);
 
+    // Add DONU models
+    const donuModels = await fetchDonuModels();
+    donuModels.forEach(model => commit('addModel', model));
+
     commit('setIsInitialized', true);
   },
 };
@@ -226,11 +231,11 @@ const getters: GetterTree<ModelsState, any> = {
   getComparisonHighlights: state => state.comparisonHighlights,
 
   getCountComputationalModels: function (state: ModelsState): number {
-    return state.modelsList.filter(model => model.type === 'computational').length;
+    return state.modelsList.filter(model => model.type === ModelInterfaceType.computational).length;
   },
 
   getCountGraphsModels: function (state: ModelsState): number {
-    return state.modelsList.filter(model => model.type === 'biomechanism').length;
+    return state.modelsList.filter(model => model.type === ModelInterfaceType.biomechanism).length;
   },
 
   getSelectedGraph: state => state.selectedGraph,
