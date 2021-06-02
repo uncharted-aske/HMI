@@ -1,85 +1,84 @@
 <template>
   <div class="view-container">
-    <left-side-panel
-      class="left-side-panel"
-      :activeTabId="activeTabId"
-      :tabs="tabs"
-      @tab-click="onTabClick"
-    >
-      <div slot="content">
-        <metadata-panel
-          v-if="activeTabId === 'metadata'"
-          :metadata="selectedModel && selectedModel.metadata"
-        />
-        <facets-pane v-if="activeTabId === 'facets'" />
-      </div>
-    </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
       <div class="search-row">
-        <search-bar :placeholder="`Search for model components...`" @run-query="onRunQuery"/>
-        <button class="btn btn-primary m-1" @click="onSplitView">
-          Add Subgraph
-        </button>
-        <button class="btn btn-primary m-1" @click="onOpenSimView">
-          Open Simulation View
-        </button>
+        <div class="search-col flex-column">
+          <search-bar />
+        </div>
+        <div class="search-col mx-3 justify-content-between">
+          <button class="btn btn-primary m-1">
+            Simulate
+          </button>
+          <button class="btn btn-primary m-1">
+            Provenence Graph
+          </button>
+          <div class="btn-group m-1" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-primary" @click="onCloseSimView">Reset</button>
+            <button type="button" class="btn btn-primary" @click="onCloseSimView">Save</button>
+          </div>
+        </div>
+        <div class="search-col justify-content-end">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+            <label class="form-check-label" for="inlineCheckbox1">Auto Run</label>
+          </div>
+          <button class="btn btn-primary m-1" @click="onCloseSimView">
+            Run
+          </button>
+          <button class="btn btn-primary m-1" @click="onCloseSimView">
+            Close Simulation View
+          </button>
+        </div>
       </div>
       <resizable-grid :map="gridMap" :dimensions="gridDimensions">
-        <div slot="1" class="h-100 w-100 d-flex flex-column">
+        <div slot="model" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
             <counters
               slot="left"
               :title="selectedModel && selectedModel.metadata.name"
               :data="[
-                { name: 'Nodes', value: nodeCount },
-                { name: 'Edges', value: edgeCount },
+                { name: 'Parameters', value: 6 },
+                { name: 'Variables', value: 3 },
               ]"
             />
-            <settings
-              slot="right"
-              :selected-view-id="selectedViewId"
-              :views="views"
-              @view-change="onSetView"
-            />
+            <button slot="right" type="button" class="btn btn-primary btn-settings" @click="setExpandedId('model')">B</button>
           </settings-bar>
           <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
         </div>
-        <div slot="2" class="h-100 w-100 d-flex flex-column">
+        <div slot="parameters" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
             <counters
               slot="left"
+              title="3 Parameters"
               :data="[
-                { name: 'Nodes', value: subgraphNodeCount },
-                { name: 'Edges', value: subgraphEdgeCount },
+                { name: 'Hidden', value: '4' },
               ]"
-              :title="`Subgraph`"
             />
-            <settings
-              slot="right"
-              :selected-view-id="selectedViewId"
-              :views="views"
-              @view-change="onSetView"
-            />
+            <div slot="right">
+              <button type="button" class="btn btn-primary btn-settings" @click="onCloseSimView">Settings</button>
+              <button type="button" class="btn btn-primary btn-settings" @click="setExpandedId('parameters')">B</button>
+            </div>
           </settings-bar>
-          <local-graph v-if="isSplitView" :data="subgraph" @node-click="onNodeClick"/>
+          <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
+        </div>
+        <div slot="variables" class="h-100 w-100 d-flex flex-column">
+          <settings-bar>
+            <counters
+              slot="left"
+              title="0 Variables"
+              :data="[
+                { name: 'Hidden', value: '0' },
+              ]"
+            />
+            <div slot="right">
+              <button type="button" class="btn btn-primary btn-settings" @click="onCloseSimView">Settings</button>
+              <button type="button" class="btn btn-primary btn-settings" @click="setExpandedId('variables')">B</button>
+            </div>
+          </settings-bar>
+          <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
         </div>
       </resizable-grid>
     </div>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :active-tab-id="drilldownActiveTabId" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
-      <metadata-pane v-if="drilldownActiveTabId === 'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
-      <parameters-pane v-if="drilldownActiveTabId === 'parameters'" slot="content" :data="drilldownParameters" :related="drilldownRelatedParameters" @open-modal="onOpenModalParameters"/>
-      <knowledge-pane v-if="drilldownActiveTabId === 'knowledge'" slot="content" :data="drilldownKnowledge"/>
-    </drilldown-panel>
-    <modal-parameters
-      v-if="showModalParameters"
-      :data="modalDataParameters"
-      @close="showModalParameters = false"
-     />
-     <modal-doc-metadata
-      v-if="showModalMetadata"
-      :data="modalDataMetadata"
-      @close="showModalMetadata = false"
-     />
   </div>
 </template>
 
@@ -90,29 +89,17 @@
   import { RawLocation } from 'vue-router';
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
-  import { GraphInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
-  import { CosmosSearchInterface } from '@/types/typesCosmos';
-  import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
-  import { filterToParamObj } from '@/utils/CosmosDataUtil';
+  import { GraphInterface, GraphNodeInterface } from '@/types/typesGraphs';
 
   import { NodeTypes } from '@/graphs/svg/encodings';
 
-  import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
+  import SearchBar from '@/components/SearchBar.vue';
   import Settings from '@/views/Models/components/Settings.vue';
-  import LeftSidePanel from '@/components/LeftSidePanel.vue';
-  import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from '@/views/Models/components/FacetsPane.vue';
-  import GlobalGraph from './components/Graphs/GlobalGraph.vue';
-  import LocalGraph from './components/Graphs/LocalGraph.vue';
+  import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
-  import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  import MetadataPane from './components/DrilldownPanel/MetadataPane.vue';
-  import KnowledgePane from './components/DrilldownPanel/KnowledgePane.vue';
-  import ParametersPane from './components/DrilldownPanel/ParametersPane.vue';
-  import ModalParameters from './components/Modals/ModalParameters.vue';
-  import ModalDocMetadata from './components/Modals/ModalDocMetadata.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -122,12 +109,6 @@
   const VIEWS: ViewInterface[] = [
     { name: 'Causal', id: 'causal' },
     { name: 'Functional', id: 'functional' },
-  ];
-
-  const DRILLDOWN_TABS: TabInterface[] = [
-    { name: 'Metadata', icon: '', id: 'metadata' },
-    { name: 'Parameters', icon: '', id: 'parameters' },
-    { name: 'Knowledge', icon: '', id: 'knowledge' },
   ];
 
   /**
@@ -362,22 +343,13 @@
                  },
   ];
   const components = {
-    SearchBar,
     SettingsBar,
     Counters,
+    SearchBar,
     Settings,
-    LeftSidePanel,
-    MetadataPanel,
     FacetsPane,
     GlobalGraph,
-    LocalGraph,
     ResizableGrid,
-    DrilldownPanel,
-    MetadataPane,
-    ParametersPane,
-    KnowledgePane,
-    ModalParameters,
-    ModalDocMetadata,
   };
 
   @Component({ components })
@@ -388,28 +360,12 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
-    drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
-    isOpenDrilldown = false;
-    drilldownActiveTabId: string = 'metadata';
-    drilldownPaneTitle = '';
-    drilldownPaneSubtitle = '';
-    drilldownMetadata: any = null;
-    drilldownKnowledge: CosmosSearchInterface | Record<any, never> = {};
-    drilldownRelatedParameters: any = null;
-    drilldownParameters: any = null;
-
-    isSplitView = false;
     subgraph: GraphInterface = null;
-    showModalParameters: boolean = false;
-    showModalMetadata: boolean = false;
-    modalDataParameters: any = null;
-    modalDataMetadata: any = null;
-    highlights: SubgraphInterface = null;
-    pathsCounter: number = 0;
+
+    expandedId: string = '';
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
-    @Getter getParameters;
     @Mutation setSelectedModels;
 
     get selectedModel (): ModelInterface {
@@ -445,34 +401,44 @@
     }
 
     get gridMap (): string[][] {
-      return this.isSplitView ? [['1', '3', '2']] : [['1']];
+      return this.expandedId
+      ? [[this.expandedId]]
+      : [
+          ['model', 'div1', 'parameters', 'div2', 'variables'],
+        ];
     }
 
     get gridDimensions (): any {
-      if (this.isSplitView) {
-        return {
-          // Keep the cell between 25% and 75% of container
-          /* Future features to be developed.
-          1: {
-            widthMax: 0.75,
-            widthMin: 0.25,
-          },
-          2: {
-            widthMax: 0.75,
-            widthMin: 0.25,
-          },
-          */
-          // Middle element to visually resize the columns
-          3: {
-            width: '10px',
-            widthFixed: true,
-          },
-        };
-      }
+      return {
+        // Keep the cell between 25% and 75% of container
+        /* Future features to be developed.
+        1: {
+          widthMax: 0.75,
+          widthMin: 0.25,
+        },
+        2: {
+          widthMax: 0.75,
+          widthMin: 0.25,
+        },
+        */
+        // Middle element to visually resize the columns
+        div1: {
+          width: '10px',
+          widthFixed: true,
+        },
+        div2: {
+          width: '10px',
+          widthFixed: true,
+        },
+      };
     }
 
-    onOpenSimView (): void {
-      const options: RawLocation = { name: 'simulation' };
+    setExpandedId (id = ''): void {
+      this.expandedId = id !== this.expandedId ? id : '';
+    }
+
+    onCloseSimView (): void {
+      const options: RawLocation = { name: 'model' };
 
       // As of now we only allow one Knowledgable Graph to be selected at a time.
       const modelId = this.$route.params.model_id;
@@ -485,106 +451,25 @@
       this.$router.push(options);
     }
 
-    onSplitView (): void {
-      this.isSplitView = !this.isSplitView;
-      if (!this.highlights) return;
-
-      // Get path from highlights
-      const path = this.highlights;
-      const edges = path.edges;
-      const nodes = path.nodes.map(node => this.selectedGraph.nodes.find(n => n.id === node.id));
-
-      this.subgraph = { nodes, edges };
-    }
-
-    onTabClick (tabId: string): void {
-      this.activeTabId = tabId;
-    }
-
-    onDrilldownTabClick (tabId: string): void {
-      this.drilldownActiveTabId = tabId;
-    }
-
-    onCloseDrilldownPanel ():void {
-      this.isOpenDrilldown = false;
-      this.drilldownActiveTabId = '';
-      this.drilldownPaneTitle = '';
-      this.drilldownPaneSubtitle = '';
-      this.drilldownMetadata = null;
-    }
-
-    onSetView (viewId: string): void {
-      this.selectedViewId = viewId;
-    }
-
-    async searchCosmos (keyword: string): Promise<void> {
-        try {
-          const response = await cosmosSearch(filterToParamObj({ cosmosQuery: [keyword] }));
-          this.drilldownKnowledge = response;
-        } catch (e) {
-          throw Error(e);
-        }
-    }
-
-    async getRelatedParameters (keyword: string): Promise<void> {
-      const response = await cosmosRelatedParameters({ word: keyword, model: 'trigram', n: 10 });
-      this.drilldownRelatedParameters = response.data;
-    }
-
-    formatParametersData (): any {
-      const parametersArray = [];
-      Object.keys(this.getParameters).forEach(key => {
-        parametersArray.push(this.getParameters[key]);
-      });
-      this.drilldownParameters = parametersArray;
-    }
-
     onNodeClick (node: GraphNodeInterface): void {
-      this.isOpenDrilldown = true;
-      this.drilldownActiveTabId = 'metadata';
-
-      this.drilldownPaneTitle = node.label;
-      this.drilldownPaneSubtitle = node.nodeType;
-      this.drilldownMetadata = null;
-
       const nodeMetadata = node.metadata;
-      if (nodeMetadata) {
-        const nodeKnowledge = { knowledge: bakedData.success.data }; // To show some text snippets
-        this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
-
-        // This probably will need to be refactored since we don't want to do all the queries at the same time, just on demand given the active tab
-        const textDefinition = nodeMetadata.attributes[0].text_definition;
-        this.formatParametersData();
-        this.getRelatedParameters(textDefinition);
-        this.searchCosmos(textDefinition);
-      }
-    }
-
-     async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
-      const response = await cosmosArtifactSrc(id);
-      return response;
-    }
-
-    async onOpenModalParameters (id: string):Promise<void> {
-      const response = await this.getSingleArtifact(id);
-      this.modalDataParameters = response;
-      this.showModalParameters = true;
-    }
-
-    onOpenModalMetadata ():void {
-      this.modalDataMetadata = bibjson;
-      this.showModalMetadata = true;
-    }
-
-    onRunQuery (): void {
-      this.highlights = paths[this.pathsCounter];
-      this.pathsCounter++;
+      console.log(node);
     }
   }
 </script>
 
 <style lang="scss" scoped>
   @import "@/styles/variables";
+
+  .btn-settings {
+    height: 25px;
+    line-height: 0;
+  }
+
+  .search-col {
+    display: flex;
+    flex: 1;
+  }
 
   .left-side-panel {
     flex-shrink: 0;
