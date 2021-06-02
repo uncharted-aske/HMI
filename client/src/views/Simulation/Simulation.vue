@@ -41,7 +41,9 @@
                 { name: 'Variables', value: 3 },
               ]"
             />
-            <button slot="right" type="button" class="btn btn-primary btn-settings" @click="setExpandedId('model')">B</button>
+            <button slot="right" type="button" class="btn btn-primary py-0 btn-settings" @click="setExpandedId('model')">
+              <i class="fas fa-expand-alt"/>
+            </button>
           </settings-bar>
           <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
         </div>
@@ -56,7 +58,9 @@
             />
             <div slot="right">
               <button type="button" class="btn btn-primary btn-settings" @click="onCloseSimView">Settings</button>
-              <button type="button" class="btn btn-primary btn-settings" @click="setExpandedId('parameters')">B</button>
+              <button type="button" class="btn btn-primary py-0 btn-settings" @click="setExpandedId('parameters')">
+                <i class="fas fa-expand-alt"/>
+              </button>
             </div>
           </settings-bar>
           <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
@@ -72,7 +76,9 @@
             />
             <div slot="right">
               <button type="button" class="btn btn-primary btn-settings" @click="onCloseSimView">Settings</button>
-              <button type="button" class="btn btn-primary btn-settings" @click="setExpandedId('variables')">B</button>
+              <button type="button" class="btn btn-primary py-0 btn-settings" @click="setExpandedId('variables')">
+                <i class="fas fa-expand-alt"/>
+              </button>
             </div>
           </settings-bar>
           <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
