@@ -1,3 +1,5 @@
+import * as Donu from '@/types/typesDonu';
+
 interface ModelMetadataInterface {
   name: string,
   id?: string,
@@ -74,6 +76,10 @@ type Counter = {
   inverse?: boolean,
 };
 
+interface SimulationParameter extends Donu.ModelParameter {
+  hidden?: boolean,
+}
+
 export {
   CardInterface,
   Counter,
@@ -82,6 +88,7 @@ export {
   ModelInterface,
   ModelMetadataInterface,
   ModelsState,
+  SimulationParameter,
   TabInterface,
   ViewInterface,
 };

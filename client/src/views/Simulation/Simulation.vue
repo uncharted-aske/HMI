@@ -41,30 +41,18 @@
                 { name: 'Variables', value: 3 },
               ]"
             />
-            <button slot="right" type="button" class="btn btn-primary py-0 btn-settings" @click="setExpandedId('model')">
+            <button slot="right" type="button" class="btn btn-primary" @click="setExpandedId('model')">
               <i class="fas fa-expand-alt"/>
             </button>
           </settings-bar>
           <global-graph v-if="selectedModel" :data="selectedGraph"/>
         </div>
-        <div slot="parameters" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              :title="(this.parameters.length + ' Parameters')"
-              :data="[
-                { name: 'Hidden', value: '0' },
-              ]"
-            />
-            <div slot="right">
-              <button type="button" class="btn btn-primary btn-settings" @click="onCloseSimView">Settings</button>
-              <button type="button" class="btn btn-primary py-0 btn-settings" @click="setExpandedId('parameters')">
-                <i class="fas fa-expand-alt"/>
-              </button>
-            </div>
-          </settings-bar>
-          <simulation-parameters :parameters="parameters" />
-        </div>
+        <simulation-parameters
+          slot="parameters" class="h-100 w-100 d-flex flex-column"
+          :parameters="parameters"
+          @settings="onCloseSimView"
+          @expand="setExpandedId('parameters')"
+        />
         <div slot="variables" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
             <counters
@@ -75,8 +63,8 @@
               ]"
             />
             <div slot="right">
-              <button type="button" class="btn btn-primary btn-settings" @click="onCloseSimView">Settings</button>
-              <button type="button" class="btn btn-primary py-0 btn-settings" @click="setExpandedId('variables')">
+              <button type="button" class="btn btn-primary" @click="onCloseSimView">Settings</button>
+              <button type="button" class="btn btn-primary" @click="setExpandedId('variables')">
                 <i class="fas fa-expand-alt"/>
               </button>
             </div>
@@ -224,14 +212,16 @@
 <style lang="scss" scoped>
   @import "@/styles/variables";
 
+  .view-container::v-deep .settings-bar-container button {
+    height: 2em;
+    line-height: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+
   .btn-primary.blue {
     background: $muted-highlight;
     border-color: $muted-highlight;
-  }
-
-  .btn-settings {
-    height: 25px;
-    line-height: 0;
   }
 
   .search-col {
