@@ -1,8 +1,26 @@
 <template>
   <section class="simulation-parameters-container">
     <settings-bar>
+      <div class="btn-group" slot="left" aria-label="Show/Hide Parameters">
+        <button
+          class="btn btn-primary"
+          title="Show all parameters"
+          type="button"
+          @click="onShowAllParameters"
+        >
+          <font-awesome-icon :icon="['fas', 'eye']" />
+        </button>
+        <button
+          class="btn btn-primary"
+          title="Hide all parameters"
+          type="button"
+          @click="onHideAllParameters"
+        >
+          <font-awesome-icon :icon="['fas', 'eye-slash']" />
+        </button>
+      </div>
       <counters
-        slot="left"
+        slot="middle"
         :title="countersTitle"
         :data="countersData"
       />
@@ -18,7 +36,7 @@
           title="Expand Parameters view"
           type="button"
           @click="$emit('expand')">
-          <i class="fas fa-expand-alt"/>
+          <font-awesome-icon :icon="['fas', 'expand-alt']" />
         </button>
       </div>
     </settings-bar>
@@ -60,6 +78,14 @@
       if (hidden > 0) {
         return [{ name: 'Hidden', value: 0 }];
       }
+    }
+
+    onHideAllParameters (): void {
+      this.parameters.forEach(parameter => { parameter.hidden = true; });
+    }
+
+    onShowAllParameters (): void {
+      this.parameters.forEach(parameter => { parameter.hidden = false; });
     }
   }
 </script>
