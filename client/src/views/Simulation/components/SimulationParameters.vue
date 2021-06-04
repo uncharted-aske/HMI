@@ -180,12 +180,11 @@
         .y(([param]) => yScale(param));
 
       // Add the runs
-      graph.append('g')
-        .attr('fill', 'none').attr('stroke-width', 5) // .attr('stroke-opacity', 1)
+      graph.append('g').attr('fill', 'none')
         .selectAll('path')
           .data(this.runs)
           .join('path')
-            .attr('stroke', 'chartreuse')
+            .attr('class', 'run')
             /* @ts-ignore */
             .attr('d', d => line(d3.cross(params, [d], (param, d) => [param, d[param]])))
           .append('title')
@@ -246,18 +245,57 @@
   }
 
   .parameter {
+    display: grid;
+    grid-template-areas:
+      ". . action"
+      "name . ."
+      "value . ."
+    ;
+    grid-template-columns: min-content auto min-content;
+    grid-template-rows: 1fr 2em 1fr;
     height: var(--parameter-height);
+    padding: var(--padding);
   }
 
-  .parameter .btn-group button {
-    padding-bottom: 0;
-    padding-top: 0;
+  .parameter h4 {
+    font-size: 1em;
+    font-weight: bold;
+    grid-area: name;
+    line-height: 2em;
+    margin: 0;
+  }
+
+  .parameter input {
+    background-color: $bg-body;
+    border: none;
+    border-radius: 3px;
+    color: inherit;
+    font-size: .8em;
+    font-weight: bold;
+    grid-area: value;
+    padding: .25em .5em;
+    width: 5em;
+  }
+
+  .parameter .btn-group {
+    grid-area: action;
+
+    button {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
   }
 
   .parameter.hidden {
-    input {
-      display: none;
-      pointer-events: none;
-    }
+    opacity: 0.5;
+  }
+</style>
+<style lang="scss">
+  /* For SVG you cannot scope the style */
+  @import "@/styles/variables";
+
+  .parameters-graph .run {
+    stroke: $selection-dark;
+    stroke-width: 5;
   }
 </style>
