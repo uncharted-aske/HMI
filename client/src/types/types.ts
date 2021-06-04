@@ -80,6 +80,10 @@ interface SimulationParameter extends Donu.ModelParameter {
   hidden?: boolean,
 }
 
+type SimulationRun = {
+  [key: string]: number,
+};
+
 export {
   CardInterface,
   Counter,
@@ -89,6 +93,7 @@ export {
   ModelMetadataInterface,
   ModelsState,
   SimulationParameter,
+  SimulationRun,
   TabInterface,
   ViewInterface,
 };

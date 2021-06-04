@@ -49,7 +49,8 @@
         </div>
         <simulation-parameters
           slot="parameters" class="h-100 w-100 d-flex flex-column"
-          :parameters="parameters"
+          :donu-parameters="parameters"
+          :expanded="expandedId === 'parameters'"
           @settings="onCloseSimView"
           @expand="setExpandedId('parameters')"
         />
@@ -86,6 +87,7 @@
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
   import * as Donu from '@/types/typesDonu';
+  import { DimensionsInterface } from '@/types/typesResizableGrid';
 
   import { getModelParameters } from '@/services/DonuService';
 
@@ -172,7 +174,7 @@
         ];
     }
 
-    get gridDimensions (): any {
+    get gridDimensions (): DimensionsInterface {
       return {
         div1: {
           width: '10px',
@@ -212,6 +214,7 @@
 <style lang="scss" scoped>
   @import "@/styles/variables";
 
+  // Uniform styling for the button in the settings-bars
   .view-container::v-deep .settings-bar-container button {
     height: 2em;
     line-height: 0;
