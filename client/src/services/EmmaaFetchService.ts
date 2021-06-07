@@ -8,7 +8,7 @@ import {
 
 /// /////////////////////////////////////////////
 
-const EMMAA_MODEL_INFO = 'https://emmaa.indra.bio/model_info/';
+const EMMAA_MODEL_INFO = 'https://emmaa.indra.bio/metadata/model_info/';
 
 export const emmaaModelInfo = (paramObj: {modelName: string}): Promise<EmmaaModelInfoInterface> => {
   return getUtilMem(EMMAA_MODEL_INFO + paramObj.modelName, {});
@@ -16,7 +16,7 @@ export const emmaaModelInfo = (paramObj: {modelName: string}): Promise<EmmaaMode
 
 /// /////////////////////////////////////////////
 
-const EMMAA_MODEL_LIST = 'https://emmaa.indra.bio/models';
+const EMMAA_MODEL_LIST = 'https://emmaa.indra.bio/metadata/models';
 
 export const emmaaModelList = async (): Promise<any> => {
   const modelList = await getUtilMem(EMMAA_MODEL_LIST, {});
@@ -43,7 +43,7 @@ export const emmaaEvidence = (paramObj: {stmt_hash: number, source: string, mode
 
 /// /////////////////////////////////////////////
 
-const EMMAA_ENTITYINFO = 'https://emmaa.indra.bio/entity_info/';
+const EMMAA_ENTITYINFO = 'https://emmaa.indra.bio/metadata/entity_info/';
 
 // eslint-disable-next-line camelcase
 export const emmaaEntityInfo = (paramObj: {modelName: string, namespace: string, id: string}): Promise<EmmaaEntityInfoInterface> => {
