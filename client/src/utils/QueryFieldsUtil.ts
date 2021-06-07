@@ -66,10 +66,16 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     lexType: 'integer',
   },
   BIO_NODE_GROUNDED_ONTO: {
-    ..._field('bioNodeGroundedOnto', 'Node Group'),
-    ..._searchable('Node Group', false),
+    ..._field('bioNodeGroundedOnto', 'Node Grounded Onto'),
+    ..._searchable('Node Grounded Onto', false),
     baseType: 'integer',
     lexType: 'integer',
+  },
+  BIO_NODE_GROUP: {
+    ..._field('bioNodeGroup', 'Node Group'),
+    ..._searchable('Node Group', false),
+    baseType: 'string',
+    lexType: 'string',
   },
   BIO_NODE_IN_DEGREE: {
     ..._field('bioNodeInDegree', 'Node In-degree'),
