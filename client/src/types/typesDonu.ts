@@ -49,6 +49,7 @@ type ModelDefinition = {
 type Request = {
   command: RequestCommand;
   definition?: string | ModelDefinition;
+  parameters?: any,
   // 'dest-type'?: string;
   end?: number;
   // name?: string;

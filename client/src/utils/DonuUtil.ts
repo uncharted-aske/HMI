@@ -16,3 +16,16 @@ export function donuToModel (donuModels: Donu.ModelDefinition[]): ModelInterface
     } as ModelInterface;
   });
 }
+
+export function donuSimulateToD3 (response: any): any {
+  const output = [];
+  for (const key in response.values) {
+    const keyOutput: any = [];
+    keyOutput.name = key;
+    keyOutput.hidden = false;
+
+    keyOutput.push(response.values[key].map((y, i) => ({ x: response.times[i], y })));
+    output.push(keyOutput);
+  }
+  return output;
+}

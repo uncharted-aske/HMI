@@ -63,3 +63,21 @@ export async function getModelVariables (model: ModelInterface): Promise<Donu.Mo
     console.error('[DONU Service] — getModelVariables', response); // eslint-disable-line no-console
   }
 }
+
+export async function getModelResult (model: ModelInterface, parameters: any): Promise<Donu.Response> {
+  const request: Donu.Request = {
+    command: Donu.RequestCommand.SIMULATE,
+    definition: {
+      source: { file: model.metadata.source },
+      type: model.metadata.type,
+    } as Donu.ModelDefinition,
+    parameters: parameters,
+    end: 120,
+    start: 0,
+    step: 30,
+  };
+
+  const response = await callDonu(request);
+  // TODO - transform DonuResponse into ModelInterface
+  return response;
+}

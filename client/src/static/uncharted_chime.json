@@ -1,6 +1,7 @@
 {
   "metadata": {
-    "source": "Penn Medicine Predictive Healthcare Team",
+    "source": "modelRepo/easel/sir.easel",
+    "type": "easel",
     "version": "1.0",
     "knowledge": "https://code-for-philly.gitbook.io/chime/",
     "name": "CHIME SIR Model",

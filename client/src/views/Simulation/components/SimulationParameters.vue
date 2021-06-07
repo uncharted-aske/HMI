@@ -58,7 +58,7 @@
           :class="{ hidden: parameter.hidden }"
         >
           <h4>{{ parameter.name }}</h4>
-          <input type="text" :value="parameter.defaultValue" />
+          <input type="text" :value="parameter.value" @change="e => onParameterChange(parameter.name, e)" />
           <aside class="btn-group">
             <button type="button" class="btn btn-primary btn-sm">
               <font-awesome-icon :icon="['fas', 'tools']" />
@@ -81,6 +81,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
+  import { Action, Getter } from 'vuex-class';
   import { Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
 
@@ -96,14 +97,29 @@
 
   @Component({ components })
   export default class SimulationParameters extends Vue {
-    @Prop({ default: [] }) parameters: HMI.SimulationParameter[];
+    @Prop({ default: [] }) simParameters: HMI.SimulationParameter[];
     @Prop({ default: false }) expanded: boolean;
+
+    @Getter getDonuParameters;
+    @Action setDonuParameters;
+    @Action setDonuParameterValue;
 
     private padding: number = 5;
     private parameterHeight: number = 100;
 
+    @Watch('simParameters') onSimParametersChanged (): void {
+      const parameters = this.simParameters.map(donuParameter => {
+        return { ...donuParameter, hidden: false, value: donuParameter.defaultValue } as HMI.SimulationParameter;
+      });
+      this.setDonuParameters(parameters);
+    }
+
     @Watch('parameters') onParametersChanged (): void {
       this.drawGraph();
+    }
+
+    get parameters (): HMI.SimulationParameter[] {
+      return this.getDonuParameters;
     }
 
     get countersTitle (): string {
@@ -144,6 +160,10 @@
 
     get graphViewBox (): string {
       return `0 0 ${this.graphWidth()} ${this.graphHeight()}`;
+    }
+
+    onParameterChange (name: string, event: any): void {
+      this.setDonuParameterValue({ name, value: Number(event.target.value) });
     }
 
     drawGraph (): void {

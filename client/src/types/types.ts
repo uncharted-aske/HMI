@@ -78,6 +78,7 @@ type Counter = {
 
 interface SimulationParameter extends Donu.ModelParameter {
   hidden?: boolean,
+  value?: number,
 }
 
 type SimulationRun = {

@@ -49,29 +49,16 @@
         </div>
         <simulation-parameters
           slot="parameters" class="h-100 w-100 d-flex flex-column"
-          :parameters="parameters"
+          :simParameters="parameters"
           :expanded="expandedId === 'parameters'"
           @expand="setExpandedId('parameters')"
           @settings="onCloseSimView"
         />
-        <div slot="variables" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              title="0 Variables"
-              :data="[
-                { name: 'Hidden', value: '0' },
-              ]"
-            />
-            <div slot="right">
-              <button type="button" class="btn btn-primary" @click="onCloseSimView">Settings</button>
-              <button type="button" class="btn btn-primary" @click="setExpandedId('variables')">
-                <i class="fas fa-expand-alt"/>
-              </button>
-            </div>
-          </settings-bar>
-          <global-graph v-if="selectedModel" :data="selectedGraph"/>
-        </div>
+        <variable-panel
+          :model="selectedModel"
+          slot="variables"
+          @expand="setExpandedId('variables')"
+        />
       </resizable-grid>
     </div>
   </div>
@@ -99,6 +86,8 @@
   import SearchBar from '@/components/SearchBar.vue';
   import SimulationParameters from '@/views/Simulation/components/SimulationParameters.vue';
 
+  import VariablePanel from './components/VariablePanel.vue';
+
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
@@ -122,6 +111,7 @@
     Settings,
     SettingsBar,
     SimulationParameters,
+    VariablePanel,
   };
 
   @Component({ components })
