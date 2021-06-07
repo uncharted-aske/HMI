@@ -16,12 +16,17 @@ interface ModelComponentMetadataInterface {
   knowledge: string
 }
 
+export enum ModelInterfaceType {
+  computational = 'computational',
+  biomechanism = 'biomechanism',
+}
+
 interface ModelInterface {
-  id: number;
+  id?: number;
   metadata: ModelMetadataInterface,
-  graph: any,
+  graph?: any,
   subgraph?: any,
-  type: string
+  type: ModelInterfaceType
 }
 
 interface TabInterface {
@@ -41,6 +46,7 @@ interface ModelsState {
   modelsList: ModelInterface[],
   parameters?: any,
   comparisonHighlights?: any,
+  selectedGraph?: string | number,
 }
 
 interface CardInterface {
@@ -49,7 +55,7 @@ interface CardInterface {
   title: string;
   subtitle: string;
   type: string;
-  raw: any;
+  raw?: any;
   highlighted?: boolean;
   checked?: boolean;
 }

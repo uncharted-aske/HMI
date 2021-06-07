@@ -1,6 +1,6 @@
 <template>
   <div class="view-container">
-    <div class="d-flex flex-column h-100">
+    <main>
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for documents including a specific keyword (e.g. IL-6)...`" />
       </div>
@@ -18,7 +18,7 @@
         @click-card="onClickCard"
       />
       <loader :loading="dataLoading" />
-    </div>
+    </main>
     <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" :active-tab-id="drilldownActiveTabId" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
       <knowledge-preview-pane v-if="drilldownActiveTabId === 'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true"/>
       <models-pane v-if="drilldownActiveTabId === 'models'" slot="content" :data="drilldownData"/>
@@ -238,3 +238,12 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+</style>

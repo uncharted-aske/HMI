@@ -32,7 +32,8 @@
                 { name: 'Nodes', value: nodeCountIntersectionGraph },
                 { name: 'Edges', value: edgeCountIntersectionGraph },
               ]"
-            />          </div>
+            />
+          </div>
           <div slot="right">
             <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
           </div>
@@ -49,8 +50,8 @@
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
   import { Getter } from 'vuex-class';
 
   import { TabInterface, ViewInterface, ModelComponentMetadataInterface } from '@/types/types';
@@ -60,7 +61,7 @@
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
   import Settings from '@/views/Models/components/Settings.vue';
-  import GlobalGraph from '@/views/Models/Epi/components/Graphs/GlobalGraph.vue';
+  import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
   import IntersectionGraph from './components/Graphs/IntersectionGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   // import DrilldownPanel from '@/components/DrilldownPanel.vue';

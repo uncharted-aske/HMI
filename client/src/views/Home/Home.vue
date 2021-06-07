@@ -1,164 +1,162 @@
 <template>
-  <div class="view-container">
-    <left-side-panel
-      class="left-side-panel"
-      :activeTabId="activeTabId"
-      :tabs="tabs"
-    >
-      <facets-pane slot="content" />
-    </left-side-panel>
-    <div class="d-flex flex-column h-100">
-      <div class="search-row">
-        <search-bar :pills="searchPills" :placeholder="`Search for models...`"/>
-      </div>
-      <settings-bar>
-        <counters slot="left" :data="countersData"/>
-        <button
-          v-if="selectedButtonContent"
-          class="btn btn-primary"
-          slot="middle"
-          type="button"
-          @click="onClickCompare"
-        >
-          {{ selectedButtonContent }}
-        </button>
-        <settings slot="right"/>
-      </settings-bar>
-      <card-container
-        class="model-cards"
-        :cards="modelsCards"
-        :header="`Models`"
-        @click-card="onClickCard"
-      />
-    </div>
-  </div>
+  <!-- <div class="view-container"> -->
+  <main>
+    <h1>ASKE-E HMI</h1>
+    <nav>
+      <section>
+        <p>Discover relevant documents and links to existing graphs and&nbsp;models.</p>
+        <a class="nav-view" href="#/knowledge/docsCards">
+          <h2>Knowledge</h2>
+          <p>Documents <strong>{{ nbKnowledge }}</strong></p>
+        </a>
+      </section>
+      <section>
+        <p>Extraction of relevant subgraphs and their link back to scientific&nbsp;knowledge.</p>
+        <a class="nav-view" href="#/graphs">
+          <h2>Graphs</h2>
+          <p>Graphs <strong>{{ nbGraphsModels }}</strong></p>
+        </a>
+      </section>
+      <section>
+        <p>Model understanding, comparison, and&nbsp;simulation.</p>
+        <a class="nav-view" href="#/models">
+          <h2>Models</h2>
+          <p>Computational Models <strong>{{ nbComputationalModels }}</strong></p>
+        </a>
+      </section>
+    </nav>
+  </main>
+  <!-- </div> -->
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter, Mutation } from 'vuex-class';
+  import Component from 'vue-class-component';
+  import { Getter } from 'vuex-class';
 
-  import { CardInterface, Counter, TabInterface } from '@/types/types';
+  import { CosmosSearchInterface } from '@/types/typesCosmos';
+  import { cosmosSearch } from '@/services/CosmosFetchService';
 
-  import SearchBar from '@/components/SearchBar.vue';
-  import Counters from '@/components/Counters.vue';
-  import SettingsBar from '@/components/SettingsBar.vue';
-  import Settings from './components/Settings.vue';
-  import KeyValuePill from '@/search/pills/KeyValuePill';
-  import RangePill from '@/search/pills/RangePill';
-  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
-  import * as modelTypeUtil from '@/utils/ModelTypeUtil';
+  import { shorterNb } from '@/utils/NumberUtil';
 
-  import LeftSidePanel from '@/components/LeftSidePanel.vue';
+  // -- DO NOT REMOVE
+  // https://github.com/uncharted-aske/HMI/issues/208
+  import { initializeLex } from '@/utils/LexUtil';
+  initializeLex({ pills: [], onChange: () => null });
+  // -- DO NOT REMOVE
 
-  import FacetsPane from './components/FacetsPane.vue';
-  import CardContainer from '@/components/Cards/CardContainer.vue';
+  /** Display number for the card and avoid the 0 while loading. */
+  function displayNb (number: number): string {
+    return number < 1 ? '-' : shorterNb(number);
+  }
 
-  // Screenshots
-  import CHIMEScreenshot from '@/assets/img/CHIME.png';
-  import SIRScreenshot from '@/assets/img/SIR.png';
-  import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
-  import COVID19Screenshot from '@/assets/img/COVID19.png';
-
-  // Services
-  import * as modelsService from '@/services/ModelsService';
-
-  const TABS: TabInterface[] = [
-    { name: 'Facets', icon: 'filter', id: 'facets' },
-  ];
-
-  const components = {
-    SearchBar,
-    Counters,
-    SettingsBar,
-    Settings,
-    LeftSidePanel,
-    FacetsPane,
-    CardContainer,
-  };
-
-  @Component({ components })
+  @Component
   export default class Home extends Vue {
-    tabs: TabInterface[] = TABS;
-    activeTabId: string = 'facets';
+    cosmos: CosmosSearchInterface = null;
 
-    @Getter getFilters;
-    @Getter getModelsList;
-    @Getter getSelectedModelIds;
-    @Mutation setSelectedModels;
+    @Getter getCountGraphsModels;
+    @Getter getCountComputationalModels;
 
-    get searchPills (): any {
-      return [
-        new KeyValuePill(
-          QUERY_FIELDS_MAP.MODEL_TYPE,
-          modelTypeUtil.MODEL_TYPE_OPTIONS,
-          'Select model type..',
-        ),
-        new RangePill(QUERY_FIELDS_MAP.HISTOGRAM),
-      ];
+    mounted (): void {
+      this.fetchCosmos();
     }
 
-    get countersData (): Array<Counter> {
-      const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
-      if (modelsList) {
-        return [{ name: 'Models', value: modelsList.length }];
+    async fetchCosmos (): Promise<void> {
+      try {
+        this.cosmos = await cosmosSearch(null);
+      } catch (e) {
+        throw Error(e);
       }
     }
 
-    get selectedButtonContent (): string {
-      const selectedModelIdLength = this.getSelectedModelIds.length;
-      if (selectedModelIdLength === 0) {
-        return '';
-      } else if (selectedModelIdLength === 1) {
-        return 'View';
-      } else {
-        return 'Compare';
-      }
+    get nbGraphsModels (): string {
+      return displayNb(this.getCountGraphsModels);
     }
 
-    get modelsCards (): CardInterface[] {
-      const modelsList = modelsService.fetchModels(this.getModelsList, this.getFilters);
-      const selectedModelsList = new Set(this.getSelectedModelIds);
-      const modelsCards = modelsList.map(model => {
-        let previewImageSrc = null;
-        switch (model.id) {
-        case 0:
-            previewImageSrc = SIRScreenshot;
-            break;
-          case 1:
-            previewImageSrc = CHIMEScreenshot;
-            break;
-          case 2:
-            previewImageSrc = DoubleEpiScreenshot;
-            break;
-          default:
-            previewImageSrc = COVID19Screenshot;
-        }
-        return Object.assign({}, model, { previewImageSrc, title: model.metadata.name, subtitle: model.metadata.description, checked: selectedModelsList.has(model.id) });
-      });
-      return modelsCards;
+    get nbComputationalModels (): string {
+      return displayNb(this.getCountComputationalModels);
     }
 
-    onClickCard (card: CardInterface): void {
-      this.setSelectedModels(card.id);
-    }
-
-    onClickCompare (): void {
-      if (this.getSelectedModelIds.length > 1) {
-        this.$router.push({ name: 'comparison' });
-      } else {
-        const card = this.getModelsList.find(model => model.id === this.getSelectedModelIds[0]);
-        this.$router.push({ name: card.type === 'computational' ? 'epi' : 'bio' });
-      }
+    get nbKnowledge (): string {
+      return displayNb(this.cosmos?.total ?? 0);
     }
   }
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/variables";
+  @import "@/styles/variables";
 
-.left-side-panel {
-  flex-shrink: 0;
-}
+  main {
+    --gap: 2rem;
+    align-content: center;
+    color: $text-color-light;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    height: 100%;
+    justify-content: center;
+    padding: var(--gap);
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--gap);
+  }
+
+  nav section {
+    --gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+
+    p:first-of-type {
+      flex-shrink: 0;
+      min-height: 3rem;
+    }
+  }
+
+  .nav-view {
+    --radius: 3px;
+    background-color: $bg-primary;
+    color: inherit;
+    display: block;
+    flex-grow: 1;
+    border-radius: var(--radius);
+    text-decoration: none;
+    will-change: transform;
+
+    &:hover {
+      cursor: pointer;
+      transform: translateY(-2px);
+    }
+
+    & > * {
+      padding: var(--gap);
+    }
+
+    p:last-of-type {
+      margin-bottom: 0;
+    }
+
+    strong {
+      display: block;
+      font-size: 4rem;
+      line-height: 1;
+      margin-top: .25em;
+    }
+
+    h2 {
+      background-color: $bg-secondary;
+      border-radius: var(--radius) var(--radius) 0 0;
+      font-size: 1.5em;
+      font-weight: normal;
+      line-height: 1;
+      margin: 0;
+    }
+  }
 </style>

@@ -7,7 +7,10 @@
       @tab-click="onTabClick"
     >
       <div slot="content">
-        <metadata-panel v-if="activeTabId === 'metadata'" :metadata="selectedModel.metadata"/>
+        <metadata-panel
+          v-if="activeTabId === 'metadata'"
+          :metadata="selectedModel && selectedModel.metadata"
+        />
         <facets-pane v-if="activeTabId === 'facets'" />
       </div>
     </left-side-panel>
@@ -17,13 +20,16 @@
         <button class="btn btn-primary m-1" @click="onSplitView">
           Add Subgraph
         </button>
+        <button class="btn btn-primary m-1" @click="onOpenSimView">
+          Open Simulation View
+        </button>
       </div>
       <resizable-grid :map="gridMap" :dimensions="gridDimensions">
         <div slot="1" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
             <counters
               slot="left"
-              :title="selectedModel.metadata.name"
+              :title="selectedModel && selectedModel.metadata.name"
               :data="[
                 { name: 'Nodes', value: nodeCount },
                 { name: 'Edges', value: edgeCount },
@@ -80,7 +86,8 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter } from 'vuex-class';
+  import { Getter, Mutation } from 'vuex-class';
+  import { RawLocation } from 'vue-router';
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
@@ -96,7 +103,7 @@
   import Settings from '@/views/Models/components/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
-  import FacetsPane from './components/FacetsPane.vue';
+  import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import GlobalGraph from './components/Graphs/GlobalGraph.vue';
   import LocalGraph from './components/Graphs/LocalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
@@ -374,7 +381,7 @@
   };
 
   @Component({ components })
-  export default class EpiView extends Vue {
+  export default class Model extends Vue {
     views: ViewInterface[] = VIEWS;
     selectedViewId = 'causal';
 
@@ -403,31 +410,38 @@
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Getter getParameters;
+    @Mutation setSelectedModels;
 
     get selectedModel (): ModelInterface {
-      const modelsList = this.getModelsList;
-      return modelsList.find(model => model.id === (this.getSelectedModelIds && this.getSelectedModelIds[0]));
+      if (
+        !this.getSelectedModelIds?.[0]?.toString() && // Are we missing the selectedModelId, toString to test id 0 as well,
+        this.$route.params.model_id && // Does the model id is available from the route parameters,
+        !Number.isNaN(this.$route.params.model_id) // Make sure the model id from the route is not a NaN.
+      ) {
+        // Set the model id from the route as the selected model.
+        this.setSelectedModels(Number(this.$route.params.model_id));
+      }
+      return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
     }
 
     get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 'causal' ? this.selectedModel.graph.abstract : this.selectedModel.graph.detailed;
+      return this.selectedViewId === 'causal' ? this.selectedModel?.graph?.abstract : this.selectedModel?.graph?.detailed;
     }
 
     get nodeCount (): number {
-      const leafNodesCount = this.selectedGraph.nodes.filter(n => n.nodeType && n.nodeType !== NodeTypes.NODES.CONTAINER).length;
-      return leafNodesCount;
+      return this.selectedGraph?.nodes.filter(n => n?.nodeType !== NodeTypes.NODES.CONTAINER).length;
     }
 
     get edgeCount (): number {
-      return this.selectedGraph && this.selectedGraph.edges.length;
+      return this.selectedGraph?.edges.length;
     }
 
     get subgraphNodeCount (): number {
-      return this.subgraph && this.subgraph.nodes.length;
+      return this.subgraph?.nodes.length;
     }
 
     get subgraphEdgeCount (): number {
-      return this.subgraph && this.subgraph.edges.length;
+      return this.subgraph?.edges.length;
     }
 
     get gridMap (): string[][] {
@@ -455,6 +469,20 @@
           },
         };
       }
+    }
+
+    onOpenSimView (): void {
+      const options: RawLocation = { name: 'simulation' };
+
+      // As of now we only allow one Knowledgable Graph to be selected at a time.
+      const modelId = this.$route.params.model_id;
+      if (modelId) {
+        options.params = {
+          model_id: modelId.toString(),
+        };
+      }
+
+      this.$router.push(options);
     }
 
     onSplitView (): void {

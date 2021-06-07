@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
 
-import { ModelsState, ModelInterface } from '@/types/types';
+import { ModelsState, ModelInterface, ModelInterfaceType } from '@/types/types';
 
 import { emmaaModelList } from '@/services/EmmaaFetchService';
 import { getUtil } from '@/utils/FetchUtil';
+import { fetchDonuModels } from '@/services/DonuService';
 
 const state: ModelsState = {
   isInitialized: false,
@@ -12,6 +13,7 @@ const state: ModelsState = {
   parameters: {},
   comparisonHighlights: {},
   modelsList: [],
+  selectedGraph: null,
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -100,7 +102,7 @@ const buildInitialModelsList = ({
         detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
       },
       subgraph: _.pick(comparisonJSON.subgraphs[0], ['nodes', 'edges']),
-      type: 'computational',
+      type: ModelInterfaceType.computational,
     },
     {
       id: 1,
@@ -110,7 +112,7 @@ const buildInitialModelsList = ({
         detailed: _.pick(nestedCHIMEGrFN, ['nodes', 'edges']),
       },
       subgraph: _.pick(comparisonJSON.subgraphs[1], ['nodes', 'edges']),
-      type: 'computational',
+      type: ModelInterfaceType.computational,
     },
     {
       id: 2,
@@ -119,7 +121,7 @@ const buildInitialModelsList = ({
         abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
         detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
       },
-      type: 'computational',
+      type: ModelInterfaceType.computational,
     },
   ];
 };
@@ -213,6 +215,10 @@ const actions: ActionTree<ModelsState, any> = {
     });
     commit('setComparisonHighlights', initialComparisonHighlights);
 
+    // Add DONU models
+    const donuModels = await fetchDonuModels();
+    donuModels.forEach(model => commit('addModel', model));
+
     commit('setIsInitialized', true);
   },
 };
@@ -223,6 +229,16 @@ const getters: GetterTree<ModelsState, any> = {
   getParameters: state => state.parameters,
   getModelsList: state => state.modelsList,
   getComparisonHighlights: state => state.comparisonHighlights,
+
+  getCountComputationalModels: function (state: ModelsState): number {
+    return state.modelsList.filter(model => model.type === ModelInterfaceType.computational).length;
+  },
+
+  getCountGraphsModels: function (state: ModelsState): number {
+    return state.modelsList.filter(model => model.type === ModelInterfaceType.biomechanism).length;
+  },
+
+  getSelectedGraph: state => state.selectedGraph,
 };
 
 const mutations: MutationTree<ModelsState> = {
@@ -250,6 +266,15 @@ const mutations: MutationTree<ModelsState> = {
     }
     // Trigger change by providing new Set instance
     state.selectedModelIds = new Set(state.selectedModelIds);
+  },
+
+  clearSelectedModels (state) {
+    state.selectedModelIds.clear();
+  },
+
+  setSelectedGraph (state, value: number | string) {
+    if (state.selectedGraph === value) value = null;
+    state.selectedGraph = value;
   },
 };
 

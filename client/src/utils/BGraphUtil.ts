@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import { getS3Util } from '@/utils/FetchUtil';
 import { loadJSONLFile } from '@/utils/FileLoaderUtil';
-import { GraferNodesData, GraferEdgesData, GraferLayerData, GraferLabelsData } from '@uncharted.software/grafer';
+import { GraferLayerData } from '@uncharted.software/grafer';
 
 import { Filters, Filter } from '@/types/typesLex';
 import { Filtre, FiltreAggregate, Filtres, FILTRES } from '@/types/typesFiltres';

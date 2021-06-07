@@ -1,50 +1,39 @@
 <template>
-<nav class="navbar navbar-expand-lg fixed-top">
-  <a class="navbar-brand" href="#/">ASKE-E HMI</a>
-  <div class="collapse navbar-collapse">
-    <ul class="navbar-nav">
-      <li
-        v-if="displayNav"
-        class="nav-item"
-        :class="{underlined: currentView === 'docsCards' || currentView === 'docsClusters'}"
-      >
-        <a class="nav-link" href="#/knowledge/docsCards">Knowledge</a>
-      </li>
-      <li
-        v-if="displayNav"
-        class="nav-item"
-        :class="{underlined: currentView === 'epi' || currentView === 'bio' || currentView === 'comparison' || currentView === 'home'}"
-      >
-        <a class="nav-link" href="#/">Models</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <a class="navbar-brand" href="#/">ASKE-E HMI</a>
+    <div class="collapse navbar-collapse">
+      <ul v-if="displayNav" class="navbar-nav">
+        <li class="nav-item" :class="{ underlined: isCurrentView('docsCards', 'docsClusters') }">
+          <a class="nav-link" href="#/knowledge/docsCards">Knowledge</a>
+        </li>
+        <li class="nav-item" :class="{ underlined: isCurrentView('graphs', 'graph') }">
+          <a class="nav-link" href="#/graphs">Graphs</a>
+        </li>
+        <li class="nav-item" :class="{ underlined: isCurrentView('models', 'model', 'comparison') }">
+          <a class="nav-link" href="#/models">Models</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Getter } from 'vuex-class';
+  import Component from 'vue-class-component';
 
+  @Component
   export default class NavBar extends Vue {
-    @Getter getSelectedModelIds;
-
     get displayNav () : boolean {
-      const { currentView } = this;
-      return currentView === 'home' ||
-        currentView === 'bio' ||
-        currentView === 'epi' ||
-        currentView === 'comparison' ||
-        currentView === 'docsCards' ||
-        currentView === 'docsClusters';
+      return this.isCurrentView('home', 'graphs', 'graph', 'models', 'model', 'comparison', 'docsCards', 'docsClusters');
     }
 
-    get currentView () : string {
-      return this.$route && this.$route.name;
+    get currentView (): string {
+      return this.$route?.name;
+    }
+
+    /** Check if one of the views name passed as parameters is the current view. */
+    isCurrentView (...views: string[]): boolean {
+      return Array.from(views).includes(this.currentView);
     }
   }
 </script>
-
-<style lang="scss">
-</style>

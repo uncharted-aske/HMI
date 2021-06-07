@@ -1,8 +1,5 @@
 <template>
-  <div
-    :class="['card', { checked: checked }, { highlight: isHighlighted }]"
-    @click="onCardClick"
-  >
+  <div :class="['card', { checked: checked }, { highlight: isHighlighted }]">
     <div
       v-if="hasImage"
       :class="['preview-img', hasImage ? '' : 'no-image']"
@@ -44,7 +41,7 @@
     }
 
     get hasImage (): boolean {
-      return this.previewImageSrc !== '';
+      return this.previewImageSrc && this.previewImageSrc !== '';
     }
 
     get iconType (): string {
@@ -70,10 +67,6 @@
 
     get isHighlighted (): boolean {
       return this.highlighted || Boolean(this.checked);
-    }
-
-    onCardClick (): void {
-      this.$emit('click');
     }
   }
 </script>

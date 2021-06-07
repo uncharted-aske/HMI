@@ -1,11 +1,21 @@
 @import "variables";
 
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
 .view-container {
   background-color: $bg-body;
   display: flex;
-  height: $content-full-height;
+  height: 100%;
   overflow: hidden;
   position: relative;
+
+  .hasNavBar & {
+    height: $content-full-height;
+  }
 }
 
 .search-row {
@@ -27,9 +37,7 @@
   scrollbar-width: none;  /* Firefox */
 }
 
-
-
-// Loader 
+// Loader
 .loader-container {
   position: absolute;
   height: 100%;
