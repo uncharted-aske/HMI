@@ -193,7 +193,7 @@
 
       this.dataHash = currentDataHash;
 
-      d3.select(this.$refs.container as any).select('svg').remove();
+      d3.select(this.$refs.container as any).selectAll('svg').remove();
 
       const svg = d3.select(this.$refs.container as any).append('svg')
         .attr('preserveAspectRatio', 'xMinYMin meet')
