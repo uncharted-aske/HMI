@@ -57,7 +57,6 @@
   import { getModelResult } from '@/services/DonuService';
 
   import { ModelInterface } from '@/types/types';
-  import * as Donu from '@/types/typesDonu';
   import { donuSimulateToD3 } from '@/utils/DonuUtil';
 
   const components = {
