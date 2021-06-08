@@ -50,7 +50,7 @@
           </settings-bar>
           <global-graph v-if="selectedModel" :data="selectedGraph"/>
         </div>
-        <simulation-parameters
+        <parameters-panel
           slot="parameters" class="h-100 w-100 d-flex flex-column"
           :simParameters="parameters"
           :expanded="expandedId === 'parameters'"
@@ -87,7 +87,7 @@
   import Settings from '@/views/Models/components/Settings.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
-  import SimulationParameters from '@/views/Simulation/components/SimulationParameters.vue';
+  import ParametersPanel from '@/views/Simulation/components/ParametersPanel.vue';
 
   import VariablePanel from './components/VariablePanel.vue';
 
@@ -113,7 +113,7 @@
     SearchBar,
     Settings,
     SettingsBar,
-    SimulationParameters,
+    ParametersPanel,
     VariablePanel,
   };
 
