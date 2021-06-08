@@ -17,11 +17,9 @@
     <div class="d-flex flex-column flex-grow-1 position-relative">
       <div class="search-row">
         <search-bar :placeholder="`Search for model components...`" @run-query="onRunQuery"/>
-        <button class="btn btn-primary m-1" @click="onSplitView">
-          Add Subgraph
-        </button>
         <button class="btn btn-primary m-1" @click="onOpenSimView">
-          Open Simulation View
+          <font-awesome-icon :icon="['fas', 'chart-line' ]" />
+          <span> Open Simulation View </span>
         </button>
       </div>
       <resizable-grid :map="gridMap" :dimensions="gridDimensions">
@@ -474,7 +472,7 @@
     onOpenSimView (): void {
       const options: RawLocation = { name: 'simulation' };
 
-      // As of now we only allow one Knowledgable Graph to be selected at a time.
+      // As of now we only allow one model to be selected at a time.
       const modelId = this.$route.params.model_id;
       if (modelId) {
         options.params = {

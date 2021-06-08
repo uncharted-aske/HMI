@@ -10,12 +10,13 @@
             Simulate
           </button>
           <button class="btn btn-primary m-1">
-            Provenence Graph
+            <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
+            <span>Provenance Graph </span>
           </button>
-          <div class="btn-group m-1" role="group" aria-label="Basic example">
+          <!-- <div class="btn-group m-1" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-primary" @click="onCloseSimView">Reset</button>
             <button type="button" class="btn btn-primary" @click="onCloseSimView">Save</button>
-          </div>
+          </div> -->
         </div>
         <div class="search-col justify-content-end">
           <div class="form-check form-check-inline">
@@ -23,10 +24,12 @@
             <label class="form-check-label" for="inlineCheckbox1">Auto Run</label>
           </div>
           <button class="btn btn-primary blue m-1" @click="onCloseSimView">
-            Run
+            <font-awesome-icon :icon="['fas', 'play' ]" />
+            <span>Run</span>
           </button>
           <button class="btn btn-primary m-1" @click="onCloseSimView">
-            Close Simulation View
+            <font-awesome-icon :icon="['fas', 'chart-line' ]" />
+            <span> Close Simulation View </span>
           </button>
         </div>
       </div>
@@ -226,5 +229,9 @@
 
   .left-side-panel {
     flex-shrink: 0;
+  }
+
+  .form-check-label {
+    color: $text-color-light;
   }
 </style>
