@@ -195,16 +195,20 @@ const actions: ActionTree<ModelsState, any> = {
     commit('setModelsList', initialModelsList);
 
     // Initialize models from emmaa
-    const modelList = await emmaaModelList();
-    modelList.map(metadata => commit('addModel', {
-      metadata,
-      graph: {
-        abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-        detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-      },
-      subgraph: subgraphJSON,
-      type: 'biomechanism',
-    }));
+    try {
+      const modelList = await emmaaModelList();
+      modelList.map(metadata => commit('addModel', {
+        metadata,
+        graph: {
+          abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
+          detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
+        },
+        subgraph: subgraphJSON,
+        type: 'biomechanism',
+      }));
+    } catch (error) {
+      console.warn('EMMAA API is not responding', error); // eslint-disable-line no-console
+    }
 
     const initialComparisonHighlights = buildInitialComparisonHighlights({
       OAP1CHIMEPaths,
@@ -216,8 +220,12 @@ const actions: ActionTree<ModelsState, any> = {
     commit('setComparisonHighlights', initialComparisonHighlights);
 
     // Add DONU models
-    const donuModels = await fetchDonuModels();
-    donuModels.forEach(model => commit('addModel', model));
+    try {
+      const donuModels = await fetchDonuModels();
+      donuModels.forEach(model => commit('addModel', model));
+    } catch (error) {
+      console.warn('Donu API is not responding', error); // eslint-disable-line no-console
+    }
 
     commit('setIsInitialized', true);
   },
