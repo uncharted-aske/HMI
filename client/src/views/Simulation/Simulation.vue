@@ -49,10 +49,10 @@
         </div>
         <simulation-parameters
           slot="parameters" class="h-100 w-100 d-flex flex-column"
-          :donu-parameters="parameters"
+          :parameters="parameters"
           :expanded="expandedId === 'parameters'"
-          @settings="onCloseSimView"
           @expand="setExpandedId('parameters')"
+          @settings="onCloseSimView"
         />
         <div slot="variables" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
@@ -84,9 +84,8 @@
   import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
+  import { SimulationParameter, TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
-  import * as Donu from '@/types/typesDonu';
   import { DimensionsInterface } from '@/types/typesResizableGrid';
 
   import { getModelParameters } from '@/services/DonuService';
@@ -134,7 +133,7 @@
     activeTabId: string = 'metadata';
 
     subgraph: GraphInterface = null;
-    parameters: Donu.ModelParameter[] = [];
+    parameters: SimulationParameter[] = [];
 
     expandedId: string = '';
 
@@ -206,7 +205,10 @@
     }
 
     async fetchParameters (): Promise<void> {
-      this.parameters = await getModelParameters(this.selectedModel) ?? [];
+      const donuParameters = await getModelParameters(this.selectedModel) ?? [];
+      this.parameters = donuParameters.map(donuParameter => {
+        return { ...donuParameter, hidden: false } as SimulationParameter;
+      });
     }
   }
 </script>

@@ -85,7 +85,6 @@
   import * as d3 from 'd3';
 
   import * as HMI from '@/types/types';
-  import * as Donu from '@/types/typesDonu';
 
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -97,18 +96,13 @@
 
   @Component({ components })
   export default class SimulationParameters extends Vue {
-    @Prop({ default: [] }) donuParameters: Donu.ModelParameter[];
+    @Prop({ default: [] }) parameters: HMI.SimulationParameter[];
     @Prop({ default: false }) expanded: boolean;
 
     private padding: number = 5;
     private parameterHeight: number = 100;
-    parameters: HMI.SimulationParameter[] = [];
 
-    @Watch('donuParameters') onDonuParametersChanged (): void {
-      this.parameters = this.donuParameters.map(donuParameter => {
-        return { ...donuParameter, hidden: false } as HMI.SimulationParameter;
-      });
-
+    @Watch('parameters') onParametersChanged (): void {
       this.drawGraph();
     }
 
