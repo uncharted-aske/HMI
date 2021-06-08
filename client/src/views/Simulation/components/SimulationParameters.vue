@@ -100,9 +100,9 @@
     @Prop({ default: [] }) simParameters: HMI.SimulationParameter[];
     @Prop({ default: false }) expanded: boolean;
 
-    @Getter getDonuParameters;
-    @Action setDonuParameters;
-    @Action setDonuParameterValue;
+    @Getter getSimParameters;
+    @Action setSimParameters;
+    @Action setSimParameterValue;
 
     private padding: number = 5;
     private parameterHeight: number = 100;
@@ -111,7 +111,7 @@
       const parameters = this.simParameters.map(donuParameter => {
         return { ...donuParameter, hidden: false, value: donuParameter.defaultValue } as HMI.SimulationParameter;
       });
-      this.setDonuParameters(parameters);
+      this.setSimParameters(parameters);
     }
 
     @Watch('parameters') onParametersChanged (): void {
@@ -119,7 +119,7 @@
     }
 
     get parameters (): HMI.SimulationParameter[] {
-      return this.getDonuParameters;
+      return this.getSimParameters;
     }
 
     get countersTitle (): string {
@@ -163,7 +163,7 @@
     }
 
     onParameterChange (name: string, event: any): void {
-      this.setDonuParameterValue({ name, value: Number(event.target.value) });
+      this.setSimParameterValue({ name, value: Number(event.target.value) });
     }
 
     drawGraph (): void {

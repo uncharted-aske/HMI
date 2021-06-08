@@ -19,7 +19,7 @@
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
         <multi-line-plot
-          v-for="(plot, index) in getDonuVariables"
+          v-for="(plot, index) in getSimVariables"
           :key="index"
           :title="plot.name"
           :data="plot"
@@ -31,9 +31,9 @@
             </button>
             <button
               class="btn btn-primary btn-sm"
-              title="(plot.hidden ? 'Show' : 'Hide' + ' parameter')"
+              :title="(plot.hidden ? 'Show' : 'Hide' + ' parameter')"
               type="button"
-              @click="setDonuVariableVisibility(plot.name)"
+              @click="setSimVariableVisibility(plot.name)"
             >
               <font-awesome-icon :icon="['fas', (plot.hidden ? 'eye' : 'eye-slash')]" />
             </button>
@@ -70,17 +70,17 @@
   export default class VariablePanel extends Vue {
     @Prop({}) model: ModelInterface;
 
-    @Getter getDonuParameterObject;
-    @Action setDonuParameters;
+    @Getter getSimParameterObject;
+    @Action setSimParameters;
 
-    @Getter getDonuVariables;
-    @Action setDonuVariables;
-    @Action setDonuVariableVisibility;
+    @Getter getSimVariables;
+    @Action setSimVariables;
+    @Action setSimVariableVisibility;
 
     async loadResults (): Promise<void> {
       if (this.model) {
-        const response = await getModelResult(this.model, this.getDonuParameterObject);
-        this.setDonuVariables(donuSimulateToD3(response));
+        const response = await getModelResult(this.model, this.getSimParameterObject);
+        this.setSimVariables(donuSimulateToD3(response));
       }
     }
 
@@ -88,7 +88,7 @@
       this.loadResults();
     }
 
-    @Watch('getDonuParameterObject') onDonuParametersChanged (): void {
+    @Watch('getSimParameterObject') onDonuParametersChanged (): void {
       this.loadResults();
     }
   }

@@ -1,9 +1,3 @@
-/**
- * Filtres Storage
- *
- * This is to be concidered the source of thruth and the formating.
- */
-
 import { GetterTree, ActionTree } from 'vuex';
 import * as HMI from '@/types/types';
 // import * as Route from '@/utils/RouteUtil';
@@ -22,28 +16,28 @@ const state: {
 };
 
 const getters: GetterTree<any, HMI.SimulationParameter[]> = {
-  getDonuParameters (state): HMI.SimulationParameter[] {
+  getSimParameters (state): HMI.SimulationParameter[] {
     return state.parameters;
   },
 
-  getDonuParameterObject (state): any {
+  getSimParameterObject (state): any {
     return state.parameters.reduce((obj, parameter) => {
       obj[parameter.name] = parameter.value;
       return obj;
     }, {});
   },
 
-  getDonuVariables (state): any {
+  getSimVariables (state): any {
     return state.variables;
   },
 };
 
 const actions: ActionTree<any, HMI.SimulationParameter[]> = {
-  setDonuParameters ({ state }, paramArr: HMI.SimulationParameter[]): void {
+  setSimParameters ({ state }, paramArr: HMI.SimulationParameter[]): void {
     state.parameters = paramArr;
   },
 
-  setDonuParameterValue ({ state }, args: { name: string, value: number }): void {
+  setSimParameterValue ({ state }, args: { name: string, value: number }): void {
     for (const parameter of state.parameters) {
       if (parameter.name === args.name) {
         parameter.value = args.value;
@@ -51,18 +45,18 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
     }
   },
 
-  setDonuVariables ({ state }, varArr: any): void {
+  setSimVariables ({ state }, varArr: any): void {
     state.variables = varArr;
   },
 
-  setDonuVariablesVisibility ({ state }, args: boolean): void {
+  setSimVariablesVisibility ({ state }, args: boolean): void {
     state.variables = state.variables.map(variable => {
       variable.hidden = Boolean(args);
       return variable;
     });
   },
 
-  setDonuVariableVisibility ({ state }, args: string): void {
+  setSimVariableVisibility ({ state }, args: string): void {
     state.variables = state.variables.map(variable => {
       if (variable.name === args) {
         variable.hidden = !variable.hidden;
