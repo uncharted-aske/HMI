@@ -23,8 +23,10 @@ export function donuSimulateToD3 (response: any): any {
     const keyOutput: any = [];
     keyOutput.name = key;
     keyOutput.hidden = false;
+    keyOutput.values = [];
 
-    keyOutput.push(response.values[key].map((y, i) => ({ x: response.times[i], y })));
+    keyOutput.values.push(response.values[key].map((y, i) => ({ x: response.times[i], y })));
+
     output.push(keyOutput);
   }
   return output;

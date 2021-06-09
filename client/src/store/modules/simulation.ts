@@ -4,7 +4,7 @@ import * as HMI from '@/types/types';
 
 const state: {
     parameters: HMI.SimulationParameter[],
-    variables: any,
+    variables: HMI.SimulationVariable[],
     runs: {
       parameters: any, // list of parameters value { 'beta': 2, 's_initial': 0.07 }
       variables: number[],
@@ -22,12 +22,12 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
 
   getSimParameterObject (state): any {
     return state.parameters.reduce((obj, parameter) => {
-      obj[parameter.name] = parameter.value;
+      obj[parameter.name] = parameter.values[0];
       return obj;
     }, {});
   },
 
-  getSimVariables (state): any {
+  getSimVariables (state): HMI.SimulationVariable[] {
     return state.variables;
   },
 };
@@ -38,11 +38,12 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
   },
 
   setSimParameterValue ({ state }, args: { name: string, value: number }): void {
-    for (const parameter of state.parameters) {
+    state.parameters = state.parameters.map(parameter => {
       if (parameter.name === args.name) {
-        parameter.value = args.value;
+        parameter.values = [args.value];
       }
-    }
+      return parameter;
+    });
   },
 
   setSimVariables ({ state }, varArr: any): void {

@@ -200,7 +200,7 @@
         return {
           ...donuParameter,
           hidden: false,
-          value: donuParameter.defaultValue,
+          value: [donuParameter.defaultValue],
         } as SimulationParameter;
       });
       this.setSimParameters(parameters);

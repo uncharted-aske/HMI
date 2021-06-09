@@ -58,7 +58,7 @@
           :class="{ hidden: parameter.hidden }"
         >
           <h4>{{ parameter.name }}</h4>
-          <input type="text" :value="parameter.value" @change="e => onParameterChange(parameter.name, e)" />
+          <input type="text" :value="parameter.values[0]" @change="e => onParameterChange(parameter.name, e)" />
           <aside class="btn-group">
             <button type="button" class="btn btn-primary btn-sm">
               <font-awesome-icon :icon="['fas', 'tools']" />
@@ -110,6 +110,10 @@
       if (this.resized) {
         this.drawGraph();
       }
+    }
+
+    @Watch('parameters') onParametersChanged (): void {
+      this.drawGraph();
     }
 
     get parameters (): HMI.SimulationParameter[] {
