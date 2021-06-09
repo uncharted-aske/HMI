@@ -110,11 +110,6 @@
 
 .variable .btn-group {
   grid-area: action;
-
-  button {
-    padding-bottom: 0;
-    padding-top: 0;
-  }
 }
 
 .variable.hidden {
