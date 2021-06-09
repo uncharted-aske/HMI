@@ -82,7 +82,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Action, Getter } from 'vuex-class';
-  import { Prop, Watch } from 'vue-property-decorator';
+  import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
 
   import * as HMI from '@/types/types';
@@ -97,25 +97,19 @@
 
   @Component({ components })
   export default class SimulationParameters extends Vue {
-    @Prop({ default: [] }) simParameters: HMI.SimulationParameter[];
     @Prop({ default: false }) expanded: boolean;
+    @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
     @Getter getSimParameters;
-    @Action setSimParameters;
     @Action setSimParameterValue;
 
     private padding: number = 5;
     private parameterHeight: number = 100;
 
-    @Watch('simParameters') onSimParametersChanged (): void {
-      const parameters = this.simParameters.map(donuParameter => {
-        return { ...donuParameter, hidden: false, value: donuParameter.defaultValue } as HMI.SimulationParameter;
-      });
-      this.setSimParameters(parameters);
-    }
-
-    @Watch('parameters') onParametersChanged (): void {
-      this.drawGraph();
+    @Watch('resized') onResponsiveGridResizing (): void {
+      if (this.resized) {
+        this.drawGraph();
+      }
     }
 
     get parameters (): HMI.SimulationParameter[] {

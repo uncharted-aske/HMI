@@ -47,7 +47,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import { Action, Getter } from 'vuex-class';
-  import { Prop, Watch } from 'vue-property-decorator';
+  import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import Vue from 'vue';
 
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -57,7 +57,6 @@
   import { getModelResult } from '@/services/DonuService';
 
   import { ModelInterface } from '@/types/types';
-  import * as Donu from '@/types/typesDonu';
   import { donuSimulateToD3 } from '@/utils/DonuUtil';
 
   const components = {
@@ -69,6 +68,7 @@
   @Component({ components })
   export default class VariablePanel extends Vue {
     @Prop({}) model: ModelInterface;
+    @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
     @Getter getSimParameterObject;
     @Action setSimParameters;
@@ -81,6 +81,12 @@
       if (this.model) {
         const response = await getModelResult(this.model, this.getSimParameterObject);
         this.setSimVariables(donuSimulateToD3(response));
+      }
+    }
+
+    @Watch('resized') onResponsiveGridResizing (): void {
+      if (this.resized) {
+        this.loadResults();
       }
     }
 

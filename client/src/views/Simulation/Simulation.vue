@@ -49,7 +49,6 @@
         </div>
         <simulation-parameters
           slot="parameters" class="h-100 w-100 d-flex flex-column"
-          :simParameters="parameters"
           :expanded="expandedId === 'parameters'"
           @expand="setExpandedId('parameters')"
           @settings="onCloseSimView"
@@ -68,7 +67,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Watch } from 'vue-property-decorator';
-  import { Getter, Mutation } from 'vuex-class';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
   import { SimulationParameter, TabInterface, ViewInterface, ModelInterface } from '@/types/types';
@@ -127,6 +126,7 @@
 
     expandedId: string = '';
 
+    @Action setSimParameters;
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Mutation setSelectedModels;
@@ -195,10 +195,15 @@
     }
 
     async fetchParameters (): Promise<void> {
-      const donuParameters = await getModelParameters(this.selectedModel) ?? [];
-      this.parameters = donuParameters.map(donuParameter => {
-        return { ...donuParameter, hidden: false } as SimulationParameter;
+      const simParameters = await getModelParameters(this.selectedModel) ?? [];
+      const parameters = simParameters.map(donuParameter => {
+        return {
+          ...donuParameter,
+          hidden: false,
+          value: donuParameter.defaultValue,
+        } as SimulationParameter;
       });
+      this.setSimParameters(parameters);
     }
   }
 </script>

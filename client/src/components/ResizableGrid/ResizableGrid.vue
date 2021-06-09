@@ -5,7 +5,7 @@
       :content="content"
       @mousedown-border="onMousedown"
     >
-      <slot :name="content.id"/>
+      <slot :name="content.id" />
     </resizable-grid-content>
   </div>
 </template>
@@ -13,7 +13,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Prop, Watch } from 'vue-property-decorator';
+  import { Prop, ProvideReactive, Watch } from 'vue-property-decorator';
   import { isEqual, uniq } from 'lodash';
 
   import ResizableGridContent from './ResizableGridContent.vue';
@@ -77,17 +77,13 @@
 
   @Component({ components })
   export default class ResizableGrid extends Vue {
-    @Prop({ default: [[]] })
-    map: string[][];
+    @Prop({ default: [[]] }) map: string[][];
+    @Prop({ default: () => ({}) }) dimensions: DimensionsInterface;
+    @Prop({ default: 10 }) edgeBuffer: number;
 
-    @Prop({ default: () => ({}) })
-    dimensions: DimensionsInterface;
-
-    @Prop({ default: 10 })
-    edgeBuffer: number;
+    @ProvideReactive() resized: boolean = false; // eslint-disable-line new-cap
 
     isDraggable: boolean = false;
-
     idSet: Set<string>;
 
     // cell positioning/displacement
@@ -121,6 +117,10 @@
       if (!isEqual(newDim, oldDim)) {
         this.initializeMap();
       }
+    }
+
+    @Watch('isDraggable') onIsDraggableChange (isDraggable: boolean, wasDraggable: boolean): void {
+      this.resized = wasDraggable && !isDraggable;
     }
 
     constructor (...args: unknown[]) {
@@ -478,7 +478,7 @@
     }
 
     private onMouseup (): void {
-        this.isDraggable = false;
+      this.isDraggable = false;
     }
 
     private onMousemove (e: MouseEvent): void {
