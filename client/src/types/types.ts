@@ -81,6 +81,12 @@ interface SimulationParameter extends Donu.ModelParameter {
   value?: number,
 }
 
+interface SimulationVariable {
+  values: {x: number, y: number}[][],
+  hidden: boolean,
+  name: string,
+}
+
 type SimulationRun = {
   [key: string]: number,
 };
@@ -94,6 +100,7 @@ export {
   ModelMetadataInterface,
   ModelsState,
   SimulationParameter,
+  SimulationVariable,
   SimulationRun,
   TabInterface,
   ViewInterface,

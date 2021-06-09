@@ -22,7 +22,7 @@
           v-for="(plot, index) in getSimVariables"
           :key="index"
           :title="plot.name"
-          :data="plot"
+          :data="plot.values"
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
         >
           <aside class="btn-group">
@@ -55,10 +55,9 @@
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
 
   import { getModelResult } from '@/services/DonuService';
+  import { donuSimulateToD3 } from '@/utils/DonuUtil';
 
   import { ModelInterface } from '@/types/types';
-  import * as Donu from '@/types/typesDonu';
-  import { donuSimulateToD3 } from '@/utils/DonuUtil';
 
   const components = {
     SettingsBar,

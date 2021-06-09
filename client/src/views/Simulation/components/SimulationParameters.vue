@@ -58,7 +58,7 @@
           :class="{ hidden: parameter.hidden }"
         >
           <h4>{{ parameter.name }}</h4>
-          <input type="text" :value="parameter.value" @change="e => onParameterChange(parameter.name, e)" />
+          <input type="text" :value="parameter.values[0]" @change="e => onParameterChange(parameter.name, e)" />
           <aside class="btn-group">
             <button type="button" class="btn btn-primary btn-sm">
               <font-awesome-icon :icon="['fas', 'tools']" />
@@ -109,7 +109,7 @@
 
     @Watch('simParameters') onSimParametersChanged (): void {
       const parameters = this.simParameters.map(donuParameter => {
-        return { ...donuParameter, hidden: false, value: donuParameter.defaultValue } as HMI.SimulationParameter;
+        return { ...donuParameter, hidden: false, values: [donuParameter.defaultValue] } as HMI.SimulationParameter;
       });
       this.setSimParameters(parameters);
     }
