@@ -196,13 +196,11 @@
 
     async fetchParameters (): Promise<void> {
       const simParameters = await getModelParameters(this.selectedModel) ?? [];
-      const parameters = simParameters.map(donuParameter => {
-        return {
-          ...donuParameter,
-          hidden: false,
-          value: [donuParameter.defaultValue],
-        } as SimulationParameter;
-      });
+      const parameters: SimulationParameter[] = simParameters.map(donuParameter => ({
+        ...donuParameter,
+        hidden: false,
+        values: [donuParameter.defaultValue],
+      }));
       this.setSimParameters(parameters);
     }
   }
