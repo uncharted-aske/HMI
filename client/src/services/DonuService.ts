@@ -64,7 +64,7 @@ export async function getModelVariables (model: ModelInterface): Promise<Donu.Mo
   }
 }
 
-export async function getModelResult (model: ModelInterface, parameters: any): Promise<Donu.Response> {
+export async function getModelResult (model: ModelInterface, parameters: Donu.RequestParameters): Promise<Donu.SimulationResponse> {
   const request: Donu.Request = {
     command: Donu.RequestCommand.SIMULATE,
     definition: {
@@ -77,7 +77,5 @@ export async function getModelResult (model: ModelInterface, parameters: any): P
     step: 30,
   };
 
-  const response = await callDonu(request);
-  // TODO - transform DonuResponse into ModelInterface
-  return response;
+  return await callDonu(request) as Promise<Donu.SimulationResponse>;
 }

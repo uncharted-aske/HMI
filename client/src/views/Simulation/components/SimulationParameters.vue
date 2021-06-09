@@ -160,8 +160,8 @@
       return `0 0 ${this.graphWidth()} ${this.graphHeight()}`;
     }
 
-    onParameterChange (name: string, event: any): void {
-      this.setSimParameterValue({ name, value: Number(event.target.value) });
+    onParameterChange (name: string, event: Event): void {
+      this.setSimParameterValue({ name, value: Number((event.target as HTMLInputElement).value) });
     }
 
     drawGraph (): void {

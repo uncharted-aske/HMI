@@ -46,10 +46,14 @@ type ModelDefinition = {
   type: Type;
 }
 
+type RequestParameters = {
+  [key: string]: number[],
+}
+
 type Request = {
   command: RequestCommand;
   definition?: string | ModelDefinition;
-  parameters?: any,
+  parameters?: RequestParameters,
   // 'dest-type'?: string;
   end?: number;
   // name?: string;
@@ -70,15 +74,24 @@ type Response = {
   status?: ResponseStatus,
 }
 
+type SimulationResponse = {
+  times: number[],
+  values: {
+    [key: string]: number[],
+  }
+}
+
 export {
   DataSource,
   Metadata,
   ModelDefinition,
   ModelParameter,
   ModelVariable,
+  RequestParameters,
   Request,
   RequestCommand,
   Response,
   ResponseStatus,
   Type,
+  SimulationResponse,
 };
