@@ -1,15 +1,12 @@
 import { ModelInterface } from '@/types/types';
 import * as Donu from '@/types/typesDonu';
 import { donuToModel } from '@/utils/DonuUtil';
+import { postUtilMem } from '@/utils/FetchUtil';
 
 /** Send the request to Donu */
 async function callDonu (request: Donu.Request): Promise<Donu.Response> {
   try {
-    const response = await fetch(process.env.DONU_ENDPOINT, {
-      body: JSON.stringify(request),
-      method: 'POST',
-    });
-    return response.json() as Donu.Response;
+    return postUtilMem(process.env.DONU_ENDPOINT, request);
   } catch (error) {
     console.error('[DONU Service] — callDonu', error); // eslint-disable-line no-console
   }
