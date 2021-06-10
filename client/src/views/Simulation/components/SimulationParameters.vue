@@ -57,7 +57,7 @@
           :key="index"
           :class="{ hidden: parameter.hidden }"
         >
-          <h4>{{ parameter.name }}</h4>
+          <h4 :title="parameter.metadata.Description">{{ parameter.name }}</h4>
           <input type="text" :value="parameter.values[0]" @change="e => onParameterChange(parameter.name, e)" />
           <aside class="btn-group">
             <button type="button" class="btn btn-primary btn-sm">
@@ -161,7 +161,8 @@
     }
 
     onParameterChange (name: string, event: Event): void {
-      this.setSimParameterValue({ name, value: Number((event.target as HTMLInputElement).value) });
+      const value = Number((event.target as HTMLInputElement).value);
+      this.setSimParameterValue({ name, value });
     }
 
     drawGraph (): void {
