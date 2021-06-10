@@ -47,9 +47,7 @@
       </div>
     </settings-bar>
     <div class="parameters">
-      <figure class="parameters-graph" ref="figure">
-        <svg :viewBox="graphViewBox" />
-      </figure>
+      <figure class="parameters-graph" ref="figure"><svg /></figure>
       <ul class="parameters-list">
         <li
           class="parameter"
@@ -84,9 +82,7 @@
   import { Action, Getter } from 'vuex-class';
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
-
   import * as HMI from '@/types/types';
-
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
 
@@ -99,6 +95,7 @@
   export default class SimulationParameters extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
+    @InjectReactive() isResizing!: boolean; // eslint-disable-line new-cap
 
     @Getter getSimParameters;
     @Action setSimParameterValue;
@@ -106,15 +103,13 @@
     private padding: number = 5;
     private parameterHeight: number = 100;
 
-    @Watch('resized') onResponsiveGridResizing (): void {
-      if (this.resized) {
-        this.drawGraph();
-      }
-    }
+    // Condition when to redraw the Graph
+    @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
+    @Watch('expanded') onExpanded (): void { this.drawGraph(); }
+    @Watch('parameters') onParametersChanged (): void { this.drawGraph(); }
 
-    @Watch('parameters') onParametersChanged (): void {
-      this.drawGraph();
-    }
+    // Condition when to clear the Graph
+    @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
     get parameters (): HMI.SimulationParameter[] {
       return this.getSimParameters;
@@ -153,11 +148,7 @@
 
     graphWidth (): number {
       const figure = this.$refs.figure as HTMLElement;
-      return figure?.getBoundingClientRect().width ?? 350;
-    }
-
-    get graphViewBox (): string {
-      return `0 0 ${this.graphWidth()} ${this.graphHeight()}`;
+      return figure?.getBoundingClientRect().width ?? 0;
     }
 
     onParameterChange (name: string, event: Event): void {
@@ -165,13 +156,18 @@
       this.setSimParameterValue({ name, value });
     }
 
+    clearGraph (): void {
+      d3.select('.parameters-graph svg').selectAll('*').remove();
+    }
+
     drawGraph (): void {
       // List of parameters names
       const params = this.parameters.map(parameter => parameter.name);
 
-      // Get and empty the graph
+      // Select the graph and size it
+      this.clearGraph();
       const graph = d3.select('.parameters-graph svg');
-      graph.selectAll('*').remove();
+      graph.attr('viewBox', `0 0 ${this.graphWidth()} ${this.graphHeight()}`);
 
       // Dimensions
       const marginX = this.graphWidth() * 0.25;
@@ -304,7 +300,7 @@
   }
 </style>
 <style lang="scss">
-  /* For SVG you cannot scope the style */
+  /* For SVG you cannot scope the <style> */
   @import "@/styles/variables";
 
   .parameters-graph .run {

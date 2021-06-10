@@ -82,6 +82,7 @@
     @Prop({ default: 10 }) edgeBuffer: number;
 
     @ProvideReactive() resized: boolean = false; // eslint-disable-line new-cap
+    @ProvideReactive() isResizing: boolean = false; // eslint-disable-line new-cap
 
     isDraggable: boolean = false;
     idSet: Set<string>;
@@ -121,6 +122,7 @@
 
     @Watch('isDraggable') onIsDraggableChange (isDraggable: boolean, wasDraggable: boolean): void {
       this.resized = wasDraggable && !isDraggable;
+      this.isResizing = !wasDraggable && isDraggable;
     }
 
     constructor (...args: unknown[]) {
@@ -526,7 +528,13 @@
 
     private onResize (): void {
       clearTimeout(this.resizeTimeout);
-      this.resizeTimeout = setTimeout(this.initializeMap, 300);
+      this.isResizing = true;
+      this.resized = false;
+      this.resizeTimeout = setTimeout(() => {
+        this.isResizing = false;
+        this.resized = true;
+        this.initializeMap();
+      }, 300);
     }
 
     /** Calculate the current width limitation of a cell based on its container. */
