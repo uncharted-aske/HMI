@@ -20,8 +20,14 @@ export async function fetchDonuModels (): Promise<ModelInterface[]> {
   const request: Donu.Request = {
     command: Donu.RequestCommand.LIST_MODELS,
   };
+
   const response = await callDonu(request);
-  return donuToModel(response?.models) ?? null;
+  if (response.status === Donu.ResponseStatus.success) {
+    const models = response?.result as Donu.ModelDefinition[] ?? null;
+    return donuToModel(models);
+  } else {
+    console.error('[DONU Service] — fetchDonuModels', response); // eslint-disable-line no-console
+  }
 }
 
 /** Fetch the parameters of a model */
@@ -38,7 +44,8 @@ export async function getModelParameters (model: ModelInterface): Promise<Donu.M
 
   const response = await callDonu(request);
   if (response.status === Donu.ResponseStatus.success) {
-    return response?.result?.parameters ?? null;
+    const result = response?.result as Donu.ModelDefinition;
+    return result?.parameters ?? null;
   } else {
     console.error('[DONU Service] — getModelParameters', response); // eslint-disable-line no-console
   }
@@ -58,12 +65,14 @@ export async function getModelVariables (model: ModelInterface): Promise<Donu.Mo
 
   const response = await callDonu(request);
   if (response.status === Donu.ResponseStatus.success) {
-    return response?.result?.stateVars ?? null;
+    const result = response?.result as Donu.ModelDefinition;
+    return result?.stateVars ?? null;
   } else {
     console.error('[DONU Service] — getModelVariables', response); // eslint-disable-line no-console
   }
 }
 
+/** Fetch the result of a model simulation */
 export async function getModelResult (model: ModelInterface, parameters: Donu.RequestParameters): Promise<Donu.SimulationResponse> {
   const request: Donu.Request = {
     command: Donu.RequestCommand.SIMULATE,
@@ -77,5 +86,10 @@ export async function getModelResult (model: ModelInterface, parameters: Donu.Re
     step: 30,
   };
 
-  return await callDonu(request) as Promise<Donu.SimulationResponse>;
+  const response = await callDonu(request);
+  if (response.status === Donu.ResponseStatus.success) {
+    return response?.result as Donu.SimulationResponse ?? null;
+  } else {
+    console.error('[DONU Service] — getModelResult', response); // eslint-disable-line no-console
+  }
 }

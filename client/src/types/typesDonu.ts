@@ -46,6 +46,13 @@ type ModelDefinition = {
   type: Type;
 }
 
+type SimulationResponse = {
+  times: number[],
+  values: {
+    [key: string]: number[],
+  }
+}
+
 type RequestParameters = {
   [key: string]: number[],
 }
@@ -67,18 +74,16 @@ enum ResponseStatus {
   failure = 'failure',
 }
 
+type ResponseResult =
+  ModelDefinition |
+  ModelDefinition[] |
+  SimulationResponse
+;
+
 type Response = {
   error?: string,
-  models?: ModelDefinition[],
-  result?: ModelDefinition,
+  result?: ResponseResult,
   status?: ResponseStatus,
-}
-
-type SimulationResponse = {
-  times: number[],
-  values: {
-    [key: string]: number[],
-  }
 }
 
 export {
@@ -87,11 +92,11 @@ export {
   ModelDefinition,
   ModelParameter,
   ModelVariable,
-  RequestParameters,
   Request,
   RequestCommand,
+  RequestParameters,
   Response,
   ResponseStatus,
-  Type,
   SimulationResponse,
+  Type,
 };
