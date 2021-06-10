@@ -21,9 +21,12 @@ body {
 .search-row {
   display: flex;
   background-color: $bg-secondary;
-  > .search-bar-container {
-    flex: 1;
-  }
+
+}
+.search-bar-container {
+  flex: 1;
+  background-color: $nord3;
+  margin: 5px;
 }
 
 .hide-scrollbar {

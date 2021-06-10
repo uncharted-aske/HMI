@@ -23,6 +23,8 @@ import {
   faSearch,
   faTimes,
   faTools,
+  faProjectDiagram,
+  faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterFormatter';
@@ -61,6 +63,8 @@ library.add(
   faSearch,
   faTimes,
   faTools,
+  faProjectDiagram,
+  faPlay,
 );
 // Enable automatic font awesome icon transformations
 dom.watch();
