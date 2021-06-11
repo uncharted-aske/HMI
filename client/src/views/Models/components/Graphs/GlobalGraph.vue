@@ -78,9 +78,10 @@
     }
 
     refresh (): void {
-      const nodesHierarchy = hierarchyFn(this.data.nodes); // Transform the flat nodes structure into a hierarchical one
+      if (!this.data) return;
+      const nodesHierarchy = hierarchyFn(this.data?.nodes); // Transform the flat nodes structure into a hierarchical one
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
-      const data = { nodes: [nodesHierarchy], edges: this.data.edges };
+      const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
 
       this.renderer.setData(data);
       this.renderer.render();

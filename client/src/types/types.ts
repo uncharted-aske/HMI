@@ -1,9 +1,12 @@
+import * as Donu from '@/types/typesDonu';
+
 interface ModelMetadataInterface {
   name: string,
   id?: string,
   description?: string,
   created?: string,
   source?: string,
+  type?: string, // Mostly used by DonuType
   version?: string,
   knowledge?: string
 }
@@ -73,6 +76,21 @@ type Counter = {
   inverse?: boolean,
 };
 
+interface SimulationParameter extends Donu.ModelParameter {
+  hidden?: boolean,
+  values?: number[],
+}
+
+interface SimulationVariable {
+  values: {x: number, y: number}[][],
+  hidden: boolean,
+  name: string,
+}
+
+type SimulationRun = {
+  [key: string]: number,
+};
+
 export {
   CardInterface,
   Counter,
@@ -81,6 +99,9 @@ export {
   ModelInterface,
   ModelMetadataInterface,
   ModelsState,
+  SimulationParameter,
+  SimulationVariable,
+  SimulationRun,
   TabInterface,
   ViewInterface,
 };

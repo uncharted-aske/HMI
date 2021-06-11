@@ -2,49 +2,65 @@
  * https://galoisinc.github.io/ASKE-E/donu.html
  */
 
-export enum DonuRequestCommand {
+enum RequestCommand {
   // CONVERT_MODEL = 'convert-model',
   DESCRIBE_MODEL_INTERFACE = 'describe-model-interface',
   // GET_MODEL_SCHEMATIC = 'get-model-schematic',
   // GET_MODEL_SOURCE = 'get-model-source',
   LIST_MODELS = 'list-models',
-  // SIMULATE = 'simulate',
+  SIMULATE = 'simulate',
   // UPLOAD_MODEL = 'upload-model',
 }
 
-export enum DonuType {
+enum Type {
   EASEL = 'easel',
   // DIFF_EQ = 'diff-eq',
   // GROMET = 'gromet',
 }
 
-type DonuModelVariables = {
-  metadata: any,
+type Metadata = {
+  Description: string,
+}
+
+type ModelVariable = {
+  metadata: Metadata,
   name: string,
 }
 
-type DonuModelParameters = {
+type ModelParameter = {
   defaultValue: number,
-  metadate: any,
+  metadata: Metadata,
   name: string,
 }
 
-type DonuDataSource = {
+type DataSource = {
   file: string;
 }
 
-export type DonuModelDefinition = {
+type ModelDefinition = {
   description?: string,
   name?: string,
-  parameters?: DonuModelParameters,
-  source: DonuDataSource,
-  stateVars?: DonuModelVariables,
-  type: DonuType;
+  parameters?: ModelParameter[],
+  source: DataSource,
+  stateVars?: ModelVariable[],
+  type: Type;
 }
 
-export type DonuRequest = {
-  command: DonuRequestCommand;
-  definition?: string | DonuModelDefinition;
+type SimulationResponse = {
+  times: number[],
+  values: {
+    [key: string]: number[],
+  }
+}
+
+type RequestParameters = {
+  [key: string]: number[],
+}
+
+type Request = {
+  command: RequestCommand;
+  definition?: string | ModelDefinition;
+  parameters?: RequestParameters,
   // 'dest-type'?: string;
   end?: number;
   // name?: string;
@@ -53,9 +69,34 @@ export type DonuRequest = {
   // type?: string;
 }
 
-export type DonuResponse = {
-  error?: string,
-  models?: DonuModelDefinition[],
-  result?: DonuModelDefinition,
-  status?: 'success' | 'failure',
+enum ResponseStatus {
+  success = 'success',
+  failure = 'failure',
 }
+
+type ResponseResult =
+  ModelDefinition |
+  ModelDefinition[] |
+  SimulationResponse
+;
+
+type Response = {
+  error?: string,
+  result?: ResponseResult,
+  status?: ResponseStatus,
+}
+
+export {
+  DataSource,
+  Metadata,
+  ModelDefinition,
+  ModelParameter,
+  ModelVariable,
+  Request,
+  RequestCommand,
+  RequestParameters,
+  Response,
+  ResponseStatus,
+  SimulationResponse,
+  Type,
+};

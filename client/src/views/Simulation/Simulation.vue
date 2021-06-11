@@ -10,12 +10,13 @@
             Simulate
           </button>
           <button class="btn btn-primary m-1">
-            Provenence Graph
+            <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
+            <span>Provenance Graph </span>
           </button>
-          <div class="btn-group m-1" role="group" aria-label="Basic example">
+          <!-- <div class="btn-group m-1" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-primary" @click="onCloseSimView">Reset</button>
             <button type="button" class="btn btn-primary" @click="onCloseSimView">Save</button>
-          </div>
+          </div> -->
         </div>
         <div class="search-col justify-content-end">
           <div class="form-check form-check-inline">
@@ -23,10 +24,12 @@
             <label class="form-check-label" for="inlineCheckbox1">Auto Run</label>
           </div>
           <button class="btn btn-primary blue m-1" @click="onCloseSimView">
-            Run
+            <font-awesome-icon :icon="['fas', 'play' ]" />
+            <span>Run</span>
           </button>
           <button class="btn btn-primary m-1" @click="onCloseSimView">
-            Close Simulation View
+            <font-awesome-icon :icon="['fas', 'chart-line' ]" />
+            <span> Close Simulation View </span>
           </button>
         </div>
       </div>
@@ -41,69 +44,51 @@
                 { name: 'Variables', value: 3 },
               ]"
             />
-            <button slot="right" type="button" class="btn btn-primary py-0 btn-settings" @click="setExpandedId('model')">
+            <button slot="right" type="button" class="btn btn-primary" @click="setExpandedId('model')">
               <i class="fas fa-expand-alt"/>
             </button>
           </settings-bar>
           <global-graph v-if="selectedModel" :data="selectedGraph"/>
         </div>
-        <div slot="parameters" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              title="3 Parameters"
-              :data="[
-                { name: 'Hidden', value: '4' },
-              ]"
-            />
-            <div slot="right">
-              <button type="button" class="btn btn-primary btn-settings" @click="onCloseSimView">Settings</button>
-              <button type="button" class="btn btn-primary py-0 btn-settings" @click="setExpandedId('parameters')">
-                <i class="fas fa-expand-alt"/>
-              </button>
-            </div>
-          </settings-bar>
-          <global-graph v-if="selectedModel" :data="selectedGraph"/>
-        </div>
-        <div slot="variables" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              title="0 Variables"
-              :data="[
-                { name: 'Hidden', value: '0' },
-              ]"
-            />
-            <div slot="right">
-              <button type="button" class="btn btn-primary btn-settings" @click="onCloseSimView">Settings</button>
-              <button type="button" class="btn btn-primary py-0 btn-settings" @click="setExpandedId('variables')">
-                <i class="fas fa-expand-alt"/>
-              </button>
-            </div>
-          </settings-bar>
-          <global-graph v-if="selectedModel" :data="selectedGraph"/>
-        </div>
+        <parameters-panel
+          slot="parameters" class="h-100 w-100 d-flex flex-column"
+          :expanded="expandedId === 'parameters'"
+          @expand="setExpandedId('parameters')"
+          @settings="onCloseSimView"
+        />
+        <variable-panel
+          :model="selectedModel"
+          slot="variables"
+          @expand="setExpandedId('variables')"
+        />
       </resizable-grid>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter, Mutation } from 'vuex-class';
+  import Component from 'vue-class-component';
+  import { Watch } from 'vue-property-decorator';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
+  import { SimulationParameter, TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
+  import { DimensionsInterface } from '@/types/typesResizableGrid';
 
-  import SettingsBar from '@/components/SettingsBar.vue';
+  import { getModelParameters } from '@/services/DonuService';
+
   import Counters from '@/components/Counters.vue';
-  import SearchBar from '@/components/SearchBar.vue';
-  import Settings from '@/views/Models/components/Settings.vue';
   import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
+  import Settings from '@/views/Models/components/Settings.vue';
+  import SettingsBar from '@/components/SettingsBar.vue';
+  import SearchBar from '@/components/SearchBar.vue';
+  import ParametersPanel from '@/views/Simulation/components/ParametersPanel.vue';
+
+  import VariablePanel from './components/VariablePanel.vue';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -120,13 +105,15 @@
   **/
 
   const components = {
-    SettingsBar,
     Counters,
-    SearchBar,
-    Settings,
     FacetsPane,
     GlobalGraph,
     ResizableGrid,
+    SearchBar,
+    Settings,
+    SettingsBar,
+    ParametersPanel,
+    VariablePanel,
   };
 
   @Component({ components })
@@ -138,12 +125,22 @@
     activeTabId: string = 'metadata';
 
     subgraph: GraphInterface = null;
+    parameters: SimulationParameter[] = [];
 
     expandedId: string = '';
 
+    @Action setSimParameters;
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Mutation setSelectedModels;
+
+    @Watch('selectedModel') onSelectedModelChanged (): void {
+      this.fetchParameters();
+    }
+
+    mounted (): void {
+      this.fetchParameters();
+    }
 
     get selectedModel (): ModelInterface {
       if (
@@ -169,7 +166,7 @@
         ];
     }
 
-    get gridDimensions (): any {
+    get gridDimensions (): DimensionsInterface {
       return {
         div1: {
           width: '10px',
@@ -199,20 +196,33 @@
 
       this.$router.push(options);
     }
+
+    async fetchParameters (): Promise<void> {
+      const simParameters = await getModelParameters(this.selectedModel) ?? [];
+      const parameters: SimulationParameter[] = simParameters.map(donuParameter => ({
+        ...donuParameter,
+        hidden: false,
+        values: [donuParameter.defaultValue],
+      }));
+      this.setSimParameters(parameters);
+    }
   }
 </script>
 
 <style lang="scss" scoped>
   @import "@/styles/variables";
 
+  // Uniform styling for the button in the settings-bars
+  .view-container::v-deep .settings-bar-container button {
+    height: 2em;
+    line-height: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+
   .btn-primary.blue {
     background: $muted-highlight;
     border-color: $muted-highlight;
-  }
-
-  .btn-settings {
-    height: 25px;
-    line-height: 0;
   }
 
   .search-col {
@@ -222,5 +232,9 @@
 
   .left-side-panel {
     flex-shrink: 0;
+  }
+
+  .form-check-label {
+    color: $text-color-light;
   }
 </style>
