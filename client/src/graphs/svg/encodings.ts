@@ -5,6 +5,8 @@ export abstract class Colors {
 
   static readonly NODES: Record<string, any> = {
     DEFAULT: '#ECEFF4',
+    OTHER: '#647EA9',
+    AGGREGATE: Colors.HIGHLIGHT,
     ROOT_CONTAINER: '#4C566A',
     CONTAINER: '#2E3440',
     MODEL_VARIABLE: '#88C0D0',

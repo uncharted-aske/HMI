@@ -1,6 +1,5 @@
 import { GetterTree, ActionTree } from 'vuex';
 import * as HMI from '@/types/types';
-// import * as Route from '@/utils/RouteUtil';
 
 const state: {
     parametersMaxCount: number,

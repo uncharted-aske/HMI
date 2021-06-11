@@ -29,6 +29,8 @@
   const DEFAULT_STYLE = {
     node: {
       fill: Colors.NODES.DEFAULT,
+      fillOther: Colors.NODES.OTHER,
+      fillAggregate: Colors.NODES.AGGREGATE,
       stroke: Colors.STROKE,
       strokeWidth: 1,
       borderRadius: 5,
@@ -36,9 +38,9 @@
     edge: {
       fill: 'none',
       strokeWidth: 2.5,
-      controlRadius: 6,
-      controlStrokeWidth: 2,
-      controlStrokeColor: Colors.NODES.DEFAULT,
+      strokeColor: Colors.NODES.DEFAULT,
+      strokeColorOther: Colors.NODES.OTHER,
+      strokeColorAggregate: Colors.NODES.AGGREGATE,
     },
     label: {
       text: Colors.LABELS.LIGHT,
@@ -159,7 +161,7 @@
       svg.append('path')
           .datum(data)
           .attr('fill', 'none')
-          .attr('stroke', Colors.NODES.DEFAULT)
+          .attr('stroke', DEFAULT_STYLE.edge[isLast ? 'strokeColor' : 'strokeColorOther'])
           .attr('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
           .attr('stroke-linejoin', 'round')
           .attr('stroke-linecap', 'round')
@@ -172,7 +174,7 @@
 
       // Draw data dots
       svg.append('g')
-          .attr('fill', 'white')
+          .attr('fill', DEFAULT_STYLE.node.fill)
           .attr('stroke', 'black')
           .attr('stroke-width', DEFAULT_STYLE.node.strokeWidth)
         .selectAll('circle')
