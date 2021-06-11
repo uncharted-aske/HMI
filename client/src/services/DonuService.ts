@@ -4,16 +4,16 @@ import { donuToModel } from '@/utils/DonuUtil';
 import { postUtilMem } from '@/utils/FetchUtil';
 
 /** Send the request to Donu */
-async function callDonu (request: Donu.Request): Promise<Donu.Response> {
+const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
   try {
     return postUtilMem(process.env.DONU_ENDPOINT, request);
   } catch (error) {
     console.error('[DONU Service] — callDonu', error); // eslint-disable-line no-console
   }
-}
+};
 
 /** Fetch a complete list of available models from Donu API */
-export async function fetchDonuModels (): Promise<ModelInterface[]> {
+export const fetchDonuModels = async (): Promise<ModelInterface[]> => {
   const request: Donu.Request = {
     command: Donu.RequestCommand.LIST_MODELS,
   };
@@ -25,10 +25,10 @@ export async function fetchDonuModels (): Promise<ModelInterface[]> {
   } else {
     console.error('[DONU Service] — fetchDonuModels', response); // eslint-disable-line no-console
   }
-}
+};
 
 /** Fetch the parameters of a model */
-export async function getModelParameters (model: ModelInterface): Promise<Donu.ModelParameter[]> {
+export const getModelParameters = async (model: ModelInterface): Promise<Donu.ModelParameter[]> => {
   if (!model) return;
 
   const request: Donu.Request = {
@@ -46,10 +46,10 @@ export async function getModelParameters (model: ModelInterface): Promise<Donu.M
   } else {
     console.error('[DONU Service] — getModelParameters', response); // eslint-disable-line no-console
   }
-}
+};
 
 /** Fetch the state variable of a model */
-export async function getModelVariables (model: ModelInterface): Promise<Donu.ModelVariable[]> {
+export const getModelVariables = async (model: ModelInterface): Promise<Donu.ModelVariable[]> => {
   if (!model) return;
 
   const request: Donu.Request = {
@@ -67,10 +67,10 @@ export async function getModelVariables (model: ModelInterface): Promise<Donu.Mo
   } else {
     console.error('[DONU Service] — getModelVariables', response); // eslint-disable-line no-console
   }
-}
+};
 
 /** Fetch the result of a model simulation */
-export async function getModelResult (model: ModelInterface, parameters: Donu.RequestParameters): Promise<Donu.SimulationResponse> {
+export const getModelResult = async (model: ModelInterface, parameters: Donu.RequestParameters): Promise<Donu.SimulationResponse> => {
   const request: Donu.Request = {
     command: Donu.RequestCommand.SIMULATE,
     definition: {
@@ -89,4 +89,4 @@ export async function getModelResult (model: ModelInterface, parameters: Donu.Re
   } else {
     console.error('[DONU Service] — getModelResult', response); // eslint-disable-line no-console
   }
-}
+};
