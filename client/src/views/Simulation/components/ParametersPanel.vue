@@ -56,7 +56,7 @@
           :class="{ hidden: parameter.hidden }"
         >
           <h4 :title="parameter.metadata.Description">{{ parameter.name }}</h4>
-          <input type="text" :value="parameter.values[0]" @change="e => onParameterChange(parameter.name, e)" />
+          <input type="text" :value="parameter.values.slice(-1)[0]" @change="e => onParameterChange(parameter.name, e)" />
           <aside class="btn-group">
             <button type="button" class="btn btn-primary btn-sm">
               <font-awesome-icon :icon="['fas', 'tools']" />

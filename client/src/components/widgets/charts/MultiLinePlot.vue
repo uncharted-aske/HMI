@@ -152,7 +152,7 @@
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    drawDataset (svg, data): void {
+    drawDataset (svg, data, isLast = false): void {
       const l = this.length(this.line(data));
 
       // Draw data line
@@ -166,7 +166,7 @@
           .attr('stroke-dasharray', `0,${l}`)
           .attr('d', this.line)
         .transition()
-          .duration(500)
+          .duration(isLast ? 500 : 0)
           .ease(d3.easeLinear)
           .attr('stroke-dasharray', `${l},${l}`);
 
@@ -204,7 +204,7 @@
       svg.append('g')
         .call(this.yAxis);
 
-      this.data.map(dataset => this.drawDataset(svg, dataset));
+      this.data.map((dataset, i) => this.drawDataset(svg, dataset, i === this.data.length - 1));
 
       svg.node();
     }
