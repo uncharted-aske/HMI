@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100 w-100 d-flex flex-column">
+  <section class="simulation-variables-panel">
     <settings-bar>
       <counters
         slot="left"
@@ -9,9 +9,9 @@
         ]"
       />
       <div slot="right">
-        <button type="button" class="btn btn-primary btn-settings">Settings</button>
+        <button type="button" disabled class="btn btn-primary btn-settings">Settings</button>
         <button type="button" class="btn btn-primary py-0 btn-settings" @click="$emit('expand')">
-          <i class="fas fa-expand-alt"/>
+          <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
         </button>
       </div>
     </settings-bar>
@@ -41,7 +41,7 @@
         </multi-line-plot>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
@@ -67,6 +67,7 @@
 
   @Component({ components })
   export default class VariablePanel extends Vue {
+    @Prop({ default: false }) expanded: boolean;
     @Prop({}) model: ModelInterface;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 

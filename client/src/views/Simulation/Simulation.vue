@@ -13,10 +13,10 @@
             <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
             <span>Provenance Graph </span>
           </button>
-          <!-- <div class="btn-group m-1" role="group" aria-label="Basic example">
+          <div class="btn-group m-1">
             <button type="button" class="btn btn-primary" @click="onCloseSimView">Reset</button>
             <button type="button" class="btn btn-primary" @click="onCloseSimView">Save</button>
-          </div> -->
+          </div>
         </div>
         <div class="search-col justify-content-end">
           <div class="form-check form-check-inline">
@@ -34,31 +34,24 @@
         </div>
       </div>
       <resizable-grid :map="gridMap" :dimensions="gridDimensions">
-        <div slot="model" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              :title="selectedModel && selectedModel.metadata.name"
-              :data="[
-                { name: 'Parameters', value: 6 },
-                { name: 'Variables', value: 3 },
-              ]"
-            />
-            <button slot="right" type="button" class="btn btn-primary" @click="setExpandedId('model')">
-              <i class="fas fa-expand-alt"/>
-            </button>
-          </settings-bar>
-          <global-graph v-if="selectedModel" :data="selectedGraph"/>
-        </div>
+        <model-panel
+          class="simulation-panel"
+          slot="model"
+          :expanded="expandedId === 'model'"
+          :model="selectedModel"
+          @expand="setExpandedId('model')"
+        />
         <parameters-panel
-          slot="parameters" class="h-100 w-100 d-flex flex-column"
+          class="simulation-panel"
+          slot="parameters"
           :expanded="expandedId === 'parameters'"
           @expand="setExpandedId('parameters')"
-          @settings="onCloseSimView"
         />
         <variable-panel
-          :model="selectedModel"
+          class="simulation-panel"
           slot="variables"
+          :expanded="expandedId === 'variables'"
+          :model="selectedModel"
           @expand="setExpandedId('variables')"
         />
       </resizable-grid>
@@ -73,57 +66,31 @@
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import { SimulationParameter, TabInterface, ViewInterface, ModelInterface } from '@/types/types';
+  import { SimulationParameter, ModelInterface } from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
   import { DimensionsInterface } from '@/types/typesResizableGrid';
 
   import { getModelParameters } from '@/services/DonuService';
 
   import Counters from '@/components/Counters.vue';
-  import FacetsPane from '@/views/Models/components/FacetsPane.vue';
-  import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
-  import Settings from '@/views/Models/components/Settings.vue';
-  import SettingsBar from '@/components/SettingsBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
+
+  import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
   import ParametersPanel from '@/views/Simulation/components/ParametersPanel.vue';
-
-  import VariablePanel from './components/VariablePanel.vue';
-
-  const TABS: TabInterface[] = [
-    { name: 'Facets', icon: 'filter', id: 'facets' },
-    { name: 'Metadata', icon: 'info', id: 'metadata' },
-  ];
-
-  const VIEWS: ViewInterface[] = [
-    { name: 'Causal', id: 'causal' },
-    { name: 'Functional', id: 'functional' },
-  ];
-
-  /**
-  Temporary hack for workshop
-  **/
+  import VariablePanel from '@/views/Simulation/components/VariablePanel.vue';
 
   const components = {
     Counters,
-    FacetsPane,
-    GlobalGraph,
+    ModelPanel,
+    ParametersPanel,
     ResizableGrid,
     SearchBar,
-    Settings,
-    SettingsBar,
-    ParametersPanel,
     VariablePanel,
   };
 
   @Component({ components })
-  export default class Model extends Vue {
-    views: ViewInterface[] = VIEWS;
-    selectedViewId = 'causal';
-
-    tabs: TabInterface[] = TABS;
-    activeTabId: string = 'metadata';
-
+  export default class Simulation extends Vue {
     subgraph: GraphInterface = null;
     parameters: SimulationParameter[] = [];
 
@@ -152,10 +119,6 @@
         this.setSelectedModels(Number(this.$route.params.model_id));
       }
       return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
-    }
-
-    get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 'causal' ? this.selectedModel?.graph?.abstract : this.selectedModel?.graph?.detailed;
     }
 
     get gridMap (): string[][] {
@@ -211,6 +174,14 @@
 
 <style lang="scss" scoped>
   @import "@/styles/variables";
+
+  // Uniform sizing of the panels
+  .simulation-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
 
   // Uniform styling for the button in the settings-bars
   .view-container::v-deep .settings-bar-container button {

@@ -1,6 +1,6 @@
 <template>
   <section
-    class="simulation-parameters-container"
+    class="simulation-parameters-panel"
     :style="{
       '--padding': padding + 'px',
       '--parameter-height': parameterHeight + 'px',
@@ -33,13 +33,14 @@
       <div slot="right">
         <button
           class="btn btn-primary"
+          disabled
           type="button"
           @click="$emit('settings')">
           Settings
         </button>
         <button
           class="btn btn-primary"
-          title="Expand Parameters view"
+          title="Expand Parameters Panel"
           type="button"
           @click="$emit('expand')">
           <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
@@ -92,7 +93,7 @@
   };
 
   @Component({ components })
-  export default class SimulationParameters extends Vue {
+  export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
     @InjectReactive() isResizing!: boolean; // eslint-disable-line new-cap
@@ -103,10 +104,11 @@
     private padding: number = 5;
     private parameterHeight: number = 100;
 
-    // Condition when to redraw the Graph
+    // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
     @Watch('expanded') onExpanded (): void { this.drawGraph(); }
     @Watch('parameters') onParametersChanged (): void { this.drawGraph(); }
+    mounted (): void { this.drawGraph(); }
 
     // Condition when to clear the Graph
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
@@ -222,7 +224,7 @@
 <style lang="scss" scoped>
   @import "@/styles/variables";
 
-  .simulation-parameters-container {
+  .simulation-parameters-panel {
     color: white;
     display: flex;
     flex-direction: column;
