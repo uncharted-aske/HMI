@@ -2,13 +2,29 @@
   <section class="simulation-model-panel">
     <settings-bar>
       <counters slot="left" :title="modelName" />
-      <div slot="right">
-        <button
-          class="btn btn-primary"
-          type="button"
-          @click="$emit('settings')">
-          Settings
-        </button>
+      <aside slot="right">
+        <div class="dropdown">
+          <button
+            class="btn btn-primary dropdown-toggle"
+            type="button"
+            @click="settingsOpen = !settingsOpen">
+            Settings
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" :class="{ 'show': settingsOpen }">
+            <h6 class="dropdown-header">Model view</h6>
+            <div v-for="(view, index) in views" :key="index" class="custom-control custom-radio">
+              <input
+                class="custom-control-input"
+                name="model-view"
+                type="radio"
+                v-model="selectedView"
+                :id="('model-view-'+index)"
+                :value="view.id"
+              >
+              <label class="custom-control-label" :for="('model-view-'+index)">{{ view.name }}</label>
+            </div>
+          </div>
+        </div>
         <button
           class="btn btn-primary"
           title="Expand Model Panel"
@@ -16,7 +32,7 @@
           @click="$emit('expand')">
           <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
         </button>
-      </div>
+      </aside>
     </settings-bar>
     <global-graph v-if="model" :data="graph"/>
   </section>
@@ -50,12 +66,12 @@
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: ModelInterface;
 
-    private views: ViewInterface[] = [
+    selectedView: string = VIEWS.CAUSAL;
+    settingsOpen: boolean = false;
+    views: ViewInterface[] = [
       { name: capitalize(VIEWS.CAUSAL), id: VIEWS.CAUSAL },
       { name: capitalize(VIEWS.FUNCTIONAL), id: VIEWS.FUNCTIONAL },
     ];
-
-    private selectedView: string = VIEWS.CAUSAL;
 
     get graph (): GraphInterface {
       return this.selectedView === VIEWS.CAUSAL
@@ -68,3 +84,18 @@
     }
   }
 </script>
+
+<style scoped>
+  .settings-bar-container aside {
+    display: flex;
+    gap: .3em;
+  }
+
+  .dropdown-menu {
+    padding: 1em;
+  }
+
+  .dropdown-header {
+    padding: 0 1.5em .5em 0;
+  }
+</style>
