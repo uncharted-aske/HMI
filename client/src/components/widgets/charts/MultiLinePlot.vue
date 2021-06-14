@@ -15,6 +15,8 @@
   import { Prop, Watch } from 'vue-property-decorator';
   import { AxisScale } from 'd3';
 
+  import { createChart, axis, pathFn } from '@/utils/SVGUtil';
+
   import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_CONFIG = {
@@ -50,12 +52,7 @@
 @Component
   export default class VariablePanel extends Vue {
     @Prop({ default: 'Title' }) title: string;
-    @Prop({
-      default: () => [
-        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 8, 8, 6, 2, 1].map((v, i) => ({ x: i, y: v })),
-        [1, 2, 3, 3, 5, 9, 2, 1, 5, 6, 8, 3, 6, 8, 2, 4, 5].map((v, i) => ({ x: i, y: v })),
-      ],
-    }) data: any;
+    @Prop({ default: () => [[]] }) data: any;
 
     width: number;
     height: number;
@@ -83,12 +80,8 @@
     }
 
     get line (): any {
-      return d3.line()
-        .curve(d3.curveCatmullRom)
-      // @ts-expect-error: Type
-        .x(d => this.xScale(d.x))
-      // @ts-expect-error: Type
-        .y(d => this.yScale(d.y));
+      return pathFn(this.xScale, this.yScale)
+        .curve(d3.curveCatmullRom);
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -102,16 +95,12 @@
 
     get xScale (): AxisScale<any> {
       const range = d3.extent(this.data.flat(), (d: any) => d.x);
-      return d3.scaleLinear()
-        .domain(range as number[]).nice()
-        .range([this.margin.left, this.width - this.margin.right]);
+      return axis(range, this.margin.left, this.width - this.margin.right);
     }
 
     get yScale (): AxisScale<any> {
       const range = d3.extent(this.data.flat(), (d: any) => d.y);
-      return d3.scaleLinear()
-        .domain(range as number[]).nice()
-        .range([this.height - this.margin.bottom, this.margin.top]);
+      return axis(range, this.height - this.margin.bottom, this.margin.top);
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -196,9 +185,8 @@
 
       d3.select(this.$refs.container as any).selectChildren('svg').remove();
 
-      const svg = d3.select(this.$refs.container as any).append('svg')
-        .attr('preserveAspectRatio', 'xMinYMin meet')
-        .attr('viewBox', `0 0 ${this.width} ${this.height}`);
+      const svg = d3.select(this.$refs.container as any).append('svg');
+      createChart(svg, this.width, this.height, {}, true);
 
       svg.append('g')
         .call(this.xAxis);
