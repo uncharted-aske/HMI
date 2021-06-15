@@ -1,63 +1,61 @@
 <template>
   <div class="view-container">
-    <div class="d-flex flex-column flex-grow-1 position-relative">
-      <div class="search-row">
-        <div class="search-col flex-column">
-          <search-bar />
-        </div>
-        <div class="search-col mx-3 justify-content-between">
-          <button class="btn btn-primary blue m-1">
-            Simulate
-          </button>
-          <button class="btn btn-primary m-1">
-            <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
-            <span>Provenance Graph </span>
-          </button>
-          <button class="btn btn-primary m-1" @click="fetchParameters">
-            <span>Reset</span>
-          </button>
-          <button class="btn btn-primary m-1" @click="incrParametersMaxCount">
-            <span>Save</span>
-          </button>
-        </div>
-        <div class="search-col justify-content-end">
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-            <label class="form-check-label" for="inlineCheckbox1">Auto Run</label>
-          </div>
-          <button class="btn btn-primary blue m-1" @click="onCloseSimView">
-            <font-awesome-icon :icon="['fas', 'play' ]" />
-            <span>Run</span>
-          </button>
-          <button class="btn btn-primary m-1" @click="onCloseSimView">
-            <font-awesome-icon :icon="['fas', 'chart-line' ]" />
-            <span> Close Simulation View </span>
-          </button>
-        </div>
+    <div class="search-row">
+      <div class="search-col flex-column">
+        <search-bar />
       </div>
-      <resizable-grid :map="gridMap" :dimensions="gridDimensions">
-        <model-panel
-          class="simulation-panel"
-          slot="model"
-          :expanded="expandedId === 'model'"
-          :model="selectedModel"
-          @expand="setExpandedId('model')"
-        />
-        <parameters-panel
-          class="simulation-panel"
-          slot="parameters"
-          :expanded="expandedId === 'parameters'"
-          @expand="setExpandedId('parameters')"
-        />
-        <variable-panel
-          class="simulation-panel"
-          slot="variables"
-          :expanded="expandedId === 'variables'"
-          :model="selectedModel"
-          @expand="setExpandedId('variables')"
-        />
-      </resizable-grid>
+      <div class="search-col mx-3 justify-content-between">
+        <button class="btn btn-primary blue m-1">
+          Simulate
+        </button>
+        <button class="btn btn-primary m-1">
+          <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
+          <span>Provenance Graph </span>
+        </button>
+        <button class="btn btn-primary m-1" @click="fetchParameters">
+          <span>Reset</span>
+        </button>
+        <button class="btn btn-primary m-1" @click="incrParametersMaxCount">
+          <span>Save</span>
+        </button>
+      </div>
+      <div class="search-col justify-content-end">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+          <label class="form-check-label" for="inlineCheckbox1">Auto Run</label>
+        </div>
+        <button class="btn btn-primary blue m-1" @click="onCloseSimView">
+          <font-awesome-icon :icon="['fas', 'play' ]" />
+          <span>Run</span>
+        </button>
+        <button class="btn btn-primary m-1" @click="onCloseSimView">
+          <font-awesome-icon :icon="['fas', 'chart-line' ]" />
+          <span> Close Simulation View </span>
+        </button>
+      </div>
     </div>
+    <resizable-grid :map="gridMap" :dimensions="gridDimensions">
+      <model-panel
+        class="simulation-panel"
+        slot="model"
+        :expanded="expandedId === 'model'"
+        :model="selectedModel"
+        @expand="setExpandedId('model')"
+      />
+      <parameters-panel
+        class="simulation-panel"
+        slot="parameters"
+        :expanded="expandedId === 'parameters'"
+        @expand="setExpandedId('parameters')"
+      />
+      <variable-panel
+        class="simulation-panel"
+        slot="variables"
+        :expanded="expandedId === 'variables'"
+        :model="selectedModel"
+        @expand="setExpandedId('variables')"
+      />
+    </resizable-grid>
   </div>
 </template>
 
@@ -177,6 +175,11 @@
 
 <style lang="scss" scoped>
   @import "@/styles/variables";
+
+  .view-container {
+    flex-direction: column;
+    flex-grow: 1;
+  }
 
   // Uniform sizing of the panels
   .simulation-panel {
