@@ -35,6 +35,33 @@ export const getUtilMem = async (urlStr: string, paramObj: Record<string, any>):
   }
 };
 
+export const postUtil = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
+  try {
+    const response = await fetch(urlStr, {
+      body: JSON.stringify(paramObj),
+      method: 'POST',
+    });
+    return await response.json();
+  } catch (e) {
+    return e;
+  }
+};
+
+export const postUtilMem = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
+  const hash = urlStr + JSON.stringify(paramObj);
+  if (memoizedStore.has(hash)) {
+    return Promise.resolve(memoizedStore.get(hash));
+  } else {
+    try {
+      const result = await postUtil(urlStr, paramObj as URLSearchParams);
+      memoizedStore.set(hash, result);
+      return result;
+    } catch (e) {
+      return e;
+    }
+  }
+};
+
 // TODO: @dekkai/data-source is unable to properly stream in gzipped files so we
 // are using a workaround by fetching a blob until the following issue is fixed:
 // https://github.com/dekkai-data/data-source/issues/1

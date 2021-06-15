@@ -8,7 +8,7 @@ import { calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 
-const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
+const pathFn = SVGUtil.pathFn().curve(d3.curveBasis);
 
 const DEFAULT_STYLE = {
   node: {
