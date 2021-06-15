@@ -54,7 +54,6 @@
   import Counters from '@/components/Counters.vue';
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
 
-  import { getModelResult } from '@/services/DonuService';
   import { donuSimulateToD3 } from '@/utils/DonuUtil';
 
   import { ModelInterface } from '@/types/types';
