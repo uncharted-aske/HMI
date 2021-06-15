@@ -75,12 +75,11 @@
     @Getter getSimVariables;
     @Action setSimVariables;
     @Action setSimVariableVisibility;
+    @Action getModelResults;
 
     async loadResults (): Promise<void> {
       if (this.model) {
-        const responseArr: any = await Promise.all(
-          this.getSimParameterArray.map(simParamArr => getModelResult(this.model, simParamArr)),
-        );
+        const responseArr: any = await this.getModelResults(this.model);
         this.setSimVariables(donuSimulateToD3(responseArr));
       }
     }

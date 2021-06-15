@@ -1,5 +1,6 @@
 import { GetterTree, ActionTree } from 'vuex';
 import * as HMI from '@/types/types';
+import { getModelResult } from '@/services/DonuService';
 
 const state: {
     parametersMaxCount: number,
@@ -91,6 +92,12 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
       }
       return variable;
     });
+  },
+
+  async getModelResults ({ getters }, model): Promise<unknown> {
+    return await Promise.all(
+      getters.getSimParameterArray.map(simParamArr => getModelResult(model, simParamArr)),
+    );
   },
 };
 
