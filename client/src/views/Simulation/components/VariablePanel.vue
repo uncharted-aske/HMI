@@ -47,16 +47,12 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import { Action, Getter } from 'vuex-class';
-  import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
+  import { InjectReactive, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
 
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
-
-  import { donuSimulateToD3 } from '@/utils/DonuUtil';
-
-  import { ModelInterface } from '@/types/types';
 
   const components = {
     SettingsBar,
@@ -67,36 +63,10 @@
   @Component({ components })
   export default class VariablePanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
-    @Prop({}) model: ModelInterface;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
-    @Getter getSimParameterArray;
-
     @Getter getSimVariables;
-    @Action setSimVariables;
     @Action setSimVariableVisibility;
-    @Action getModelResults;
-
-    async loadResults (): Promise<void> {
-      if (this.model) {
-        const responseArr: any = await this.getModelResults(this.model);
-        this.setSimVariables(donuSimulateToD3(responseArr));
-      }
-    }
-
-    @Watch('resized') onResponsiveGridResizing (): void {
-      if (this.resized) {
-        this.loadResults();
-      }
-    }
-
-    @Watch('model') onModelChanged (): void {
-      this.loadResults();
-    }
-
-    @Watch('getSimParameterArray') onDonuParametersChanged (): void {
-      this.loadResults();
-    }
   }
 </script>
 

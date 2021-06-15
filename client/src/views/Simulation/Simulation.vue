@@ -20,7 +20,7 @@
         </button>
       </div>
       <div class="search-col justify-content-end">
-        <run-button />
+        <run-button class="m-1" :auto-run.sync="autoRun" @run="fetchVariables" />
         <button class="btn btn-primary m-1" @click="onCloseSimView">
           <font-awesome-icon :icon="['fas', 'chart-line' ]" />
           <span> Close Simulation View </span>
@@ -45,7 +45,6 @@
         class="simulation-panel"
         slot="variables"
         :expanded="expandedId === 'variables'"
-        :model="selectedModel"
         @expand="setExpandedId('variables')"
       />
     </resizable-grid>
@@ -63,6 +62,7 @@
   import { GraphInterface } from '@/types/typesGraphs';
   import { DimensionsInterface } from '@/types/typesResizableGrid';
 
+  import { donuSimulateToD3 } from '@/utils/DonuUtil';
   import { getModelParameters } from '@/services/DonuService';
 
   import Counters from '@/components/Counters.vue';
@@ -86,19 +86,29 @@
 
   @Component({ components })
   export default class Simulation extends Vue {
+    autoRun: boolean = false;
     subgraph: GraphInterface = null;
     parameters: SimulationParameter[] = [];
 
     expandedId: string = '';
 
-    @Action setSimParameters;
+    @Action getModelResults;
     @Action incrParametersMaxCount;
+    @Action setSimParameters;
+    @Action setSimVariables;
     @Getter getSelectedModelIds;
+    @Getter getSimParameterArray;
     @Getter getModelsList;
     @Mutation setSelectedModels;
 
     @Watch('selectedModel') onSelectedModelChanged (): void {
       this.fetchParameters();
+    }
+
+    @Watch('getSimParameterArray') onDonuParametersChanged (): void {
+      if (this.autoRun) {
+        this.fetchVariables();
+      }
     }
 
     mounted (): void {
@@ -165,6 +175,13 @@
       }));
       this.setSimParameters({ parameters, count: 1 });
     }
+
+    async fetchVariables (): Promise<void> {
+      if (this.selectedModel) {
+        const responseArr: any = await this.getModelResults(this.selectedModel);
+        this.setSimVariables(donuSimulateToD3(responseArr));
+      }
+    }
   }
 </script>
 
@@ -192,7 +209,7 @@
     padding-top: 0;
   }
 
-  .btn-primary.blue {
+  .view-container::v-deep .btn-primary.blue {
     background: $muted-highlight;
     border-color: $muted-highlight;
   }
