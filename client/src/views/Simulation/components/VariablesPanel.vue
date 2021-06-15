@@ -56,8 +56,7 @@
   import { getModelResult } from '@/services/DonuService';
   import { donuSimulateToD3 } from '@/utils/DonuUtil';
 
-import * as HMI from '@/types/types';
-import { AnyRecordWithTtl } from 'dns';
+  import * as HMI from '@/types/types';
 
   const components = {
     SettingsBar,

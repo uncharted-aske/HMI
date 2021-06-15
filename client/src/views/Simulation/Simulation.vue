@@ -90,7 +90,6 @@
 
   import VariablesPanel from './components/VariablesPanel.vue';
 
-
   /**
   Temporary hack for workshop
   **/
@@ -138,6 +137,7 @@
       }
       return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
     }
+
     get gridMap (): string[][] {
       return this.expandedId
       ? [[this.expandedId]]
