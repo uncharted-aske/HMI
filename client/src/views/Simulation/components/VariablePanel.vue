@@ -54,7 +54,6 @@
   import Counters from '@/components/Counters.vue';
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
 
-  import { getModelResult } from '@/services/DonuService';
   import { donuSimulateToD3 } from '@/utils/DonuUtil';
 
   import { ModelInterface } from '@/types/types';
@@ -76,12 +75,11 @@
     @Getter getSimVariables;
     @Action setSimVariables;
     @Action setSimVariableVisibility;
+    @Action getModelResults;
 
     async loadResults (): Promise<void> {
       if (this.model) {
-        const responseArr: any = await Promise.all(
-          this.getSimParameterArray.map(simParamArr => getModelResult(this.model, simParamArr)),
-        );
+        const responseArr: any = await this.getModelResults(this.model);
         this.setSimVariables(donuSimulateToD3(responseArr));
       }
     }
