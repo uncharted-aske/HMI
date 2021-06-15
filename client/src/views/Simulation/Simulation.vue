@@ -48,7 +48,7 @@
               <i class="fas fa-expand-alt"/>
             </button>
           </settings-bar>
-          <global-graph v-if="selectedModel" :data="selectedGraph"/>
+          <!-- <global-graph v-if="selectedModel" :data="selectedGraph"/> -->
         </div>
         <parameters-panel
           slot="parameters" class="h-100 w-100 d-flex flex-column"
@@ -56,7 +56,7 @@
           @expand="setExpandedId('parameters')"
           @settings="onCloseSimView"
         />
-        <variable-panel
+        <variables-panel
           :model="selectedModel"
           slot="variables"
           @expand="setExpandedId('variables')"
@@ -73,7 +73,7 @@
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import { SimulationParameter, TabInterface, ViewInterface, ModelInterface } from '@/types/types';
+  import { SimulationParameter, ModelInterface } from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
   import { DimensionsInterface } from '@/types/typesResizableGrid';
 
@@ -88,17 +88,8 @@
   import SearchBar from '@/components/SearchBar.vue';
   import ParametersPanel from '@/views/Simulation/components/ParametersPanel.vue';
 
-  import VariablePanel from './components/VariablePanel.vue';
+  import VariablesPanel from './components/VariablesPanel.vue';
 
-  const TABS: TabInterface[] = [
-    { name: 'Facets', icon: 'filter', id: 'facets' },
-    { name: 'Metadata', icon: 'info', id: 'metadata' },
-  ];
-
-  const VIEWS: ViewInterface[] = [
-    { name: 'Causal', id: 'causal' },
-    { name: 'Functional', id: 'functional' },
-  ];
 
   /**
   Temporary hack for workshop
@@ -113,17 +104,11 @@
     Settings,
     SettingsBar,
     ParametersPanel,
-    VariablePanel,
+    VariablesPanel,
   };
 
   @Component({ components })
-  export default class Model extends Vue {
-    views: ViewInterface[] = VIEWS;
-    selectedViewId = 'causal';
-
-    tabs: TabInterface[] = TABS;
-    activeTabId: string = 'metadata';
-
+  export default class Simulation extends Vue {
     subgraph: GraphInterface = null;
     parameters: SimulationParameter[] = [];
 
@@ -153,11 +138,6 @@
       }
       return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
     }
-
-    get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 'causal' ? this.selectedModel?.graph?.abstract : this.selectedModel?.graph?.detailed;
-    }
-
     get gridMap (): string[][] {
       return this.expandedId
       ? [[this.expandedId]]

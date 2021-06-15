@@ -77,6 +77,7 @@
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Action, Getter } from 'vuex-class';
@@ -92,7 +93,7 @@
   };
 
   @Component({ components })
-  export default class SimulationParameters extends Vue {
+  export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
     @InjectReactive() isResizing!: boolean; // eslint-disable-line new-cap
@@ -112,7 +113,8 @@
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
     get parameters (): HMI.SimulationParameter[] {
-      return this.getSimParameters;
+      // Order by ASC order
+      return _.orderBy(this.getSimParameters, ['name'], ['asc']);
     }
 
     get countersTitle (): string {

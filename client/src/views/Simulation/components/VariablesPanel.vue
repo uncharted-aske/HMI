@@ -3,10 +3,8 @@
     <settings-bar>
       <counters
         slot="left"
-        title="0 Variables"
-        :data="[
-          { name: 'Hidden', value: '0' },
-        ]"
+        :title="countersTitle"
+        :data="countersData"
       />
       <div slot="right">
         <button type="button" class="btn btn-primary btn-settings">Settings</button>
@@ -19,7 +17,7 @@
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
         <multi-line-plot
-          v-for="(plot, index) in getSimVariables"
+          v-for="(plot, index) in sortedSimVariables"
           :key="index"
           :title="plot.name"
           :data="plot.values"
@@ -45,6 +43,7 @@
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
   import Component from 'vue-class-component';
   import { Action, Getter } from 'vuex-class';
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
@@ -57,7 +56,8 @@
   import { getModelResult } from '@/services/DonuService';
   import { donuSimulateToD3 } from '@/utils/DonuUtil';
 
-  import { ModelInterface } from '@/types/types';
+import * as HMI from '@/types/types';
+import { AnyRecordWithTtl } from 'dns';
 
   const components = {
     SettingsBar,
@@ -66,8 +66,8 @@
   };
 
   @Component({ components })
-  export default class VariablePanel extends Vue {
-    @Prop({}) model: ModelInterface;
+  export default class VariablesPanel extends Vue {
+    @Prop({}) model: HMI.ModelInterface;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
     @Getter getSimParameterObject;
@@ -76,6 +76,23 @@
     @Getter getSimVariables;
     @Action setSimVariables;
     @Action setSimVariableVisibility;
+
+    get sortedSimVariables (): HMI.SimulationVariable[] {
+      return _.orderBy(this.getSimVariables, ['name'], ['asc']);
+    }
+
+    get countersTitle (): string {
+      return this.getSimVariables.length + ' Variables';
+    }
+
+    get countersData (): HMI.Counter[] {
+      const count = this.getSimVariables.filter(variable => variable.hidden).length ?? 0;
+      if (count === this.getSimVariables.length) {
+        return [{ name: 'All hidden' }];
+      } else if (count > 0) {
+        return [{ name: 'Hidden', value: count }];
+      }
+    }
 
     async loadResults (): Promise<void> {
       if (this.model) {
