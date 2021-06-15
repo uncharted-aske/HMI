@@ -10,9 +10,11 @@ import * as d3 from 'd3';
  * @param {number} h - height
  * @param {object} viewport - optional x1, y1, x2, y2.
  */
-export const createChart = (svg, w, h, viewport = {}) => {
-  svg.attr('width', w + 'px');
-  svg.attr('height', h + 'px');
+export const createChart = (svg, w, h, viewport = {}, dimNotFixed = false) => {
+  if (!dimNotFixed) {
+    svg.attr('width', w + 'px');
+    svg.attr('height', h + 'px');
+  }
 
   const x1 = viewport.x1 || 0;
   const y1 = viewport.y1 || 0;
@@ -28,10 +30,16 @@ export const createChart = (svg, w, h, viewport = {}) => {
 
 export const translate = (x, y) => { return `translate(${x}, ${y})`; };
 
+export const axis = (range, rangeMin, rangeMax) => {
+  return d3.scaleLinear()
+    .domain(range).nice()
+    .range([rangeMin, rangeMax]);
+};
+
 // A path generator
-export const pathFn = d3.line()
-  .x(d => d.x)
-  .y(d => d.y);
+export const pathFn = (xFn, yFn) => d3.line()
+  .x(d => xFn ? xFn(d.x) : d.x)
+  .y(d => yFn ? yFn(d.y) : d.y);
 
 // Re-arrange data into a hierarchy. This returns data in the following format:
 // https://github.com/d3/d3-hierarchy#stratify

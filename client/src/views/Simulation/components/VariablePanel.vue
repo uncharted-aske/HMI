@@ -71,8 +71,7 @@
     @Prop({}) model: ModelInterface;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
-    @Getter getSimParameterObject;
-    @Action setSimParameters;
+    @Getter getSimParameterArray;
 
     @Getter getSimVariables;
     @Action setSimVariables;
@@ -80,8 +79,10 @@
 
     async loadResults (): Promise<void> {
       if (this.model) {
-        const response = await getModelResult(this.model, this.getSimParameterObject);
-        this.setSimVariables(donuSimulateToD3(response));
+        const responseArr: any = await Promise.all(
+          this.getSimParameterArray.map(simParamArr => getModelResult(this.model, simParamArr)),
+        );
+        this.setSimVariables(donuSimulateToD3(responseArr));
       }
     }
 
@@ -95,7 +96,7 @@
       this.loadResults();
     }
 
-    @Watch('getSimParameterObject') onDonuParametersChanged (): void {
+    @Watch('getSimParameterArray') onDonuParametersChanged (): void {
       this.loadResults();
     }
   }

@@ -55,7 +55,7 @@
 
     renderEdge (edgeSelection: d3.Selection<any, any, any, any>): void {
       edgeSelection.append('path')
-        .attr('d', d => pathFn(d.points))
+        .attr('d', d => pathFn()(d.points))
         .style('fill', 'none')
         .style('stroke', '#000')
         .attr('marker-end', d => {
