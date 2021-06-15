@@ -3,11 +3,11 @@ import * as HMI from '@/types/types';
 import { getModelResult } from '@/services/DonuService';
 
 const state: {
-    parametersMaxCount: number,
+    parametersMaxCount: number, // Holds the maximum number of parameter sets which should be stored
     parameters: HMI.SimulationParameter[],
     variables: HMI.SimulationVariable[],
     runs: {
-      parameters: any, // list of parameters value { 'beta': 2, 's_initial': 0.07 }
+      parameters: any,
       variables: number[],
     }[]
 } = {
