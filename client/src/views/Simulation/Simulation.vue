@@ -20,14 +20,7 @@
         </button>
       </div>
       <div class="search-col justify-content-end">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-          <label class="form-check-label" for="inlineCheckbox1">Auto Run</label>
-        </div>
-        <button class="btn btn-primary blue m-1" @click="onCloseSimView">
-          <font-awesome-icon :icon="['fas', 'play' ]" />
-          <span>Run</span>
-        </button>
+        <run-button />
         <button class="btn btn-primary m-1" @click="onCloseSimView">
           <font-awesome-icon :icon="['fas', 'chart-line' ]" />
           <span> Close Simulation View </span>
@@ -79,12 +72,14 @@
   import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
   import ParametersPanel from '@/views/Simulation/components/ParametersPanel.vue';
   import VariablePanel from '@/views/Simulation/components/VariablePanel.vue';
+  import RunButton from '@/views/Simulation/components/RunButton.vue';
 
   const components = {
     Counters,
     ModelPanel,
     ParametersPanel,
     ResizableGrid,
+    RunButton,
     SearchBar,
     VariablePanel,
   };
