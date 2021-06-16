@@ -13,6 +13,12 @@
             <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
             <span>Provenance Graph </span>
           </button>
+          <button class="btn btn-primary m-1" @click="fetchParameters">
+            <span>Reset</span>
+          </button>
+          <button class="btn btn-primary m-1" @click="incrParametersMaxCount">
+            <span>Save</span>
+          </button>
           <!-- <div class="btn-group m-1" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-primary" @click="onCloseSimView">Reset</button>
             <button type="button" class="btn btn-primary" @click="onCloseSimView">Save</button>
@@ -114,6 +120,7 @@
     expandedId: string = '';
 
     @Action setSimParameters;
+    @Action incrParametersMaxCount;
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Mutation setSelectedModels;
@@ -184,7 +191,7 @@
         hidden: false,
         values: [donuParameter.defaultValue],
       }));
-      this.setSimParameters(parameters);
+      this.setSimParameters({ parameters, count: 1 });
     }
   }
 </script>

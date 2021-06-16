@@ -10,7 +10,7 @@ import { Colors, EdgeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 import { truncateString } from '@/utils/StringUtil';
 
-const pathFn = SVGUtil.pathFn.curve(d3.curveBasis);
+const pathFn = SVGUtil.pathFn().curve(d3.curveBasis);
 
 const DEFAULT_STYLE = {
   node: {

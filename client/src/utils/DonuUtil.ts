@@ -17,17 +17,16 @@ export function donuToModel (donuModels: Donu.ModelDefinition[]): ModelInterface
   });
 }
 
-export function donuSimulateToD3 (response: Donu.SimulationResponse): SimulationVariable[] {
-  const output = [];
-  for (const key in response.values) {
-    const keyOutput: any = [];
-    keyOutput.name = key;
-    keyOutput.hidden = false;
-    keyOutput.values = [];
-
-    keyOutput.values.push(response.values[key].map((y, i) => ({ x: response.times[i], y })));
-
-    output.push(keyOutput);
+export function donuSimulateToD3 (responseArr: Donu.SimulationResponse[]): SimulationVariable[] {
+  const output = {};
+  for (const response of responseArr) {
+    for (const key in response.values) {
+      const keyOutput: any = (output[key] = output[key] || {});
+      keyOutput.name = key;
+      keyOutput.hidden = false;
+      (keyOutput.values = keyOutput.values || []).push(response.values[key].map((y, i) => ({ x: response.times[i], y })));
+    }
   }
-  return output;
+
+  return Object.values(output);
 }

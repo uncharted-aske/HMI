@@ -53,7 +53,6 @@
   import Counters from '@/components/Counters.vue';
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
 
-  import { getModelResult } from '@/services/DonuService';
   import { donuSimulateToD3 } from '@/utils/DonuUtil';
 
   import * as HMI from '@/types/types';
@@ -69,12 +68,12 @@
     @Prop({}) model: HMI.ModelInterface;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
-    @Getter getSimParameterObject;
-    @Action setSimParameters;
+    @Getter getSimParameterArray;
 
     @Getter getSimVariables;
     @Action setSimVariables;
     @Action setSimVariableVisibility;
+    @Action getModelResults;
 
     get sortedSimVariables (): HMI.SimulationVariable[] {
       return _.orderBy(this.getSimVariables, ['name'], ['asc']);
@@ -95,8 +94,8 @@
 
     async loadResults (): Promise<void> {
       if (this.model) {
-        const response = await getModelResult(this.model, this.getSimParameterObject);
-        this.setSimVariables(donuSimulateToD3(response));
+        const responseArr: any = await this.getModelResults(this.model);
+        this.setSimVariables(donuSimulateToD3(responseArr));
       }
     }
 
@@ -110,7 +109,7 @@
       this.loadResults();
     }
 
-    @Watch('getSimParameterObject') onDonuParametersChanged (): void {
+    @Watch('getSimParameterArray') onDonuParametersChanged (): void {
       this.loadResults();
     }
   }
