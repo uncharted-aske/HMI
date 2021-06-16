@@ -3,10 +3,8 @@
     <settings-bar>
       <counters
         slot="left"
-        title="0 Variables"
-        :data="[
-          { name: 'Hidden', value: '0' },
-        ]"
+        :title="countersTitle"
+        :data="countersData"
       />
       <div slot="right">
         <button type="button" disabled class="btn btn-primary btn-settings">Settings</button>
@@ -19,7 +17,7 @@
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
         <multi-line-plot
-          v-for="(plot, index) in getSimVariables"
+          v-for="(plot, index) in sortedSimVariables"
           :key="index"
           :title="plot.name"
           :data="plot.values"
@@ -45,10 +43,13 @@
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component';
-  import { Action, Getter } from 'vuex-class';
-  import { InjectReactive, Prop } from 'vue-property-decorator';
+  import _ from 'lodash';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { InjectReactive, Prop } from 'vue-property-decorator';
+  import { Action, Getter } from 'vuex-class';
+
+  import * as HMI from '@/types/types';
 
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
@@ -67,31 +68,49 @@
 
     @Getter getSimVariables;
     @Action setSimVariableVisibility;
+    @Action getModelResults;
+
+    get sortedSimVariables (): HMI.SimulationVariable[] {
+      return _.orderBy(this.getSimVariables, ['name'], ['asc']);
+    }
+
+    get countersTitle (): string {
+      return this.getSimVariables.length + ' Variables';
+    }
+
+    get countersData (): HMI.Counter[] {
+      const count = this.getSimVariables.filter(variable => variable.hidden).length ?? 0;
+      if (count === this.getSimVariables.length) {
+        return [{ name: 'All hidden' }];
+      } else if (count > 0) {
+        return [{ name: 'Hidden', value: count }];
+      }
+    }
   }
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/variables";
+  @import "@/styles/variables";
 
-.scatterplot-chart-container {
-  flex: 1;
-  background-color: $bg-graphs;
-}
+  .scatterplot-chart-container {
+    flex: 1;
+    background-color: $bg-graphs;
+  }
 
-.variable .btn-group {
-  grid-area: action;
-}
+  .variable .btn-group {
+    grid-area: action;
+  }
 
-.variable.hidden {
-  opacity: 0.5;
-}
+  .variable.hidden {
+    opacity: 0.5;
+  }
 
-.btn-settings {
-  height: 25px;
-  line-height: 0;
-}
+  .btn-settings {
+    height: 25px;
+    line-height: 0;
+  }
 
-.chart {
-  height: auto;
-}
+  .chart {
+    height: auto;
+  }
 </style>

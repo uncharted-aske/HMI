@@ -72,7 +72,7 @@
 
   import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
   import ParametersPanel from '@/views/Simulation/components/ParametersPanel.vue';
-  import VariablePanel from '@/views/Simulation/components/VariablePanel.vue';
+  import VariablesPanel from '@/views/Simulation/components/VariablesPanel.vue';
   import RunButton from '@/views/Simulation/components/RunButton.vue';
 
   const components = {
@@ -82,7 +82,7 @@
     ResizableGrid,
     RunButton,
     SearchBar,
-    VariablePanel,
+    VariablesPanel,
   };
 
   @Component({ components })
