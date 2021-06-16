@@ -1,7 +1,12 @@
 <template>
   <div class="btn-group">
-    <button type="button" class="btn btn-primary blue" @click="$emit('run')">
-      <font-awesome-icon :icon="['fas', 'play' ]" />
+    <button
+      type="button"
+      class="btn btn-primary"
+      :class="{ 'blue' : !autoRunInput }"
+      @click="onClickRun"
+    >
+      <font-awesome-icon :icon="['fas', ( autoRunInput ? 'pause' : 'play') ]" />
       {{ displayText }}
     </button>
     <button
@@ -46,6 +51,15 @@
 
     get displayText (): string {
       return this.autoRunInput ? 'Auto-Run' : 'Run';
+    }
+
+    /* On auto-run, remove the auto-run feature, otherwise, run the simulation. */
+    onClickRun (): void {
+      if (this.autoRunInput) {
+        this.autoRunInput = !this.autoRunInput;
+      } else {
+        this.$emit('run');
+      }
     }
   }
 </script>

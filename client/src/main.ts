@@ -20,11 +20,12 @@ import {
   faFilter,
   faInfo,
   faLongArrowAltRight,
+  faPause,
+  faPlay,
+  faProjectDiagram,
   faSearch,
   faTimes,
   faTools,
-  faProjectDiagram,
-  faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterFormatter';
@@ -60,11 +61,12 @@ library.add(
   faFilter,
   faInfo,
   faLongArrowAltRight,
+  faPause,
+  faPlay,
+  faProjectDiagram,
   faSearch,
   faTimes,
   faTools,
-  faProjectDiagram,
-  faPlay,
 );
 // Enable automatic font awesome icon transformations
 dom.watch();
