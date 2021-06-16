@@ -3,7 +3,7 @@ import { ModelInterface, ModelInterfaceType, SimulationVariable } from '@/types/
 import * as Donu from '@/types/typesDonu';
 
 /** Transform a Donu Model to a ModelInterface */
-export function donuToModel (donuModels: Donu.ModelDefinition[]): ModelInterface[] {
+export const donuToModel = (donuModels: Donu.ModelDefinition[]): ModelInterface[] => {
   return donuModels.map((model, index) => {
     return {
       metadata: {
@@ -15,9 +15,15 @@ export function donuToModel (donuModels: Donu.ModelDefinition[]): ModelInterface
       type: ModelInterfaceType.computational,
     } as ModelInterface;
   });
-}
+};
 
-export function aggregateModelResults (modelResults: Donu.SimulationResponse[], aggregator: (datacolumn: number[]) => number): Donu.SimulationResponse {
+export const aggregateMean = (dataColumn: number[]): number =>
+  dataColumn.reduce((acc, val) => { acc += val; return acc; }, 0) / dataColumn.length;
+
+export const aggregateModelResults = (
+  modelResults: Donu.SimulationResponse[],
+  aggregator = aggregateMean, // calculate MEAN by default
+): Donu.SimulationResponse => {
   if (modelResults.length === 0) {
     return;
   }
@@ -41,20 +47,16 @@ export function aggregateModelResults (modelResults: Donu.SimulationResponse[], 
 
   // Process data column sets using aggregator function to produce a singular value
   for (const dataKeyName in aggregateValues) {
-    aggregateValues[dataKeyName] = aggregateValues[dataKeyName].map(dataColumn => {
-      return aggregator
-        ? aggregator(dataColumn)
-        : dataColumn.reduce((acc, val) => { acc += val; return acc; }, 0) / dataColumn.length; // calculate MEAN by default
-    });
+    aggregateValues[dataKeyName] = aggregateValues[dataKeyName].map(dataColumn => aggregator(dataColumn));
   }
 
   return {
     times: modelResults[0].times,
     values: aggregateValues,
   };
-}
+};
 
-export function donuSimulateToD3 (responseArr: Donu.SimulationResponse[]): SimulationVariable[] {
+export const donuSimulateToD3 = (responseArr: Donu.SimulationResponse[]): SimulationVariable[] => {
   const output = {};
   for (const response of responseArr) {
     for (const key in response.values) {
@@ -66,4 +68,4 @@ export function donuSimulateToD3 (responseArr: Donu.SimulationResponse[]): Simul
   }
 
   return Object.values(output);
-}
+};
