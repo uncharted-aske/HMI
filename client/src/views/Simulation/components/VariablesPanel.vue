@@ -21,6 +21,7 @@
           :key="index"
           :title="plot.name"
           :data="plot.values"
+          :dataAggregate="getSimVariablesAggregate[index].values[0]"
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
         >
           <aside class="btn-group">
@@ -53,9 +54,7 @@
   import Counters from '@/components/Counters.vue';
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
 
-  import { donuSimulateToD3 } from '@/utils/DonuUtil';
-
-  import * as HMI from '@/types/types';
+  import { ModelInterface, SimulationVariable, Counter } from '@/types/types';
 
   const components = {
     SettingsBar,
@@ -65,17 +64,18 @@
 
   @Component({ components })
   export default class VariablesPanel extends Vue {
-    @Prop({}) model: HMI.ModelInterface;
+    @Prop({}) model: ModelInterface;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
     @Getter getSimParameterArray;
 
     @Getter getSimVariables;
+    @Getter getSimVariablesAggregate;
     @Action setSimVariables;
     @Action setSimVariableVisibility;
-    @Action getModelResults;
+    @Action fetchModelResults;
 
-    get sortedSimVariables (): HMI.SimulationVariable[] {
+    get sortedSimVariables (): SimulationVariable[] {
       return _.orderBy(this.getSimVariables, ['name'], ['asc']);
     }
 
@@ -83,7 +83,7 @@
       return this.getSimVariables.length + ' Variables';
     }
 
-    get countersData (): HMI.Counter[] {
+    get countersData (): Counter[] {
       const count = this.getSimVariables.filter(variable => variable.hidden).length ?? 0;
       if (count === this.getSimVariables.length) {
         return [{ name: 'All hidden' }];
@@ -94,8 +94,7 @@
 
     async loadResults (): Promise<void> {
       if (this.model) {
-        const responseArr: any = await this.getModelResults(this.model);
-        this.setSimVariables(donuSimulateToD3(responseArr));
+        this.fetchModelResults({ model: this.model });
       }
     }
 

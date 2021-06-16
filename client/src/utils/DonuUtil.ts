@@ -17,6 +17,43 @@ export function donuToModel (donuModels: Donu.ModelDefinition[]): ModelInterface
   });
 }
 
+export function aggregateModelResults (modelResults: Donu.SimulationResponse[], aggregator: (datacolumn: number[]) => number): Donu.SimulationResponse {
+  if (modelResults.length === 0) {
+    return;
+  }
+
+  // Arrange data into column sets which are arrays containing all values at a given x position
+  const aggregateValues = {};
+  for (const dataset of modelResults) {
+    for (const dataKeyName in dataset.values) {
+      if (!aggregateValues[dataKeyName]) {
+        aggregateValues[dataKeyName] = [];
+      }
+
+      for (let i = 0; i < dataset.values[dataKeyName].length; i++) {
+        if (!aggregateValues[dataKeyName][i]) {
+          aggregateValues[dataKeyName][i] = [];
+        }
+        aggregateValues[dataKeyName][i].push(dataset.values[dataKeyName][i]);
+      }
+    }
+  }
+
+  // Process data column sets using aggregator function to produce a singular value
+  for (const dataKeyName in aggregateValues) {
+    aggregateValues[dataKeyName] = aggregateValues[dataKeyName].map(dataColumn => {
+      return aggregator
+        ? aggregator(dataColumn)
+        : dataColumn.reduce((acc, val) => { acc += val; return acc; }, 0) / dataColumn.length; // calculate MEAN by default
+    });
+  }
+
+  return {
+    times: modelResults[0].times,
+    values: aggregateValues,
+  };
+}
+
 export function donuSimulateToD3 (responseArr: Donu.SimulationResponse[]): SimulationVariable[] {
   const output = {};
   for (const response of responseArr) {

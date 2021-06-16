@@ -1,20 +1,19 @@
 import { GetterTree, ActionTree } from 'vuex';
 import * as HMI from '@/types/types';
+import { SimulationResponse } from '@/types/typesDonu';
 import { getModelResult } from '@/services/DonuService';
+import { aggregateModelResults, donuSimulateToD3 } from '@/utils/DonuUtil';
 
 const state: {
     parametersMaxCount: number, // Holds the maximum number of parameter sets which should be stored
     parameters: HMI.SimulationParameter[],
     variables: HMI.SimulationVariable[],
-    runs: {
-      parameters: any,
-      variables: number[],
-    }[]
+    variablesAggregate: HMI.SimulationVariable[],
 } = {
   parametersMaxCount: 0,
   parameters: [],
   variables: [],
-  runs: [],
+  variablesAggregate: [],
 };
 
 const getSimParametersCount = (state): number => {
@@ -45,6 +44,10 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
   getSimVariables (state): HMI.SimulationVariable[] {
     return state.variables;
   },
+
+  getSimVariablesAggregate (state): HMI.SimulationVariable {
+    return state.variablesAggregate;
+  },
 };
 
 const actions: ActionTree<any, HMI.SimulationParameter[]> = {
@@ -74,7 +77,7 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
     state.parametersMaxCount += 1;
   },
 
-  setSimVariables ({ state }, varArr: any): void {
+  setSimVariables ({ state }, varArr: HMI.SimulationVariable[]): void {
     state.variables = varArr;
   },
 
@@ -94,10 +97,13 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
     });
   },
 
-  async getModelResults ({ getters }, model): Promise<unknown> {
-    return await Promise.all(
+  async fetchModelResults ({ state, getters, dispatch }, { model, aggregator }): Promise<void> {
+    const modelResults: SimulationResponse[] = await Promise.all(
       getters.getSimParameterArray.map(simParamArr => getModelResult(model, simParamArr)),
     );
+    dispatch('setSimVariables', donuSimulateToD3(modelResults as SimulationResponse[]));
+
+    state.variablesAggregate = donuSimulateToD3([aggregateModelResults(modelResults, aggregator)]);
   },
 };
 

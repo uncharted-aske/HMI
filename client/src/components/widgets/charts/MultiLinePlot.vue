@@ -8,6 +8,7 @@
 </template>
 
 <script lang="ts">
+  import { merge, cloneDeep } from 'lodash';
   import * as d3 from 'd3';
 
   import Component from 'vue-class-component';
@@ -31,8 +32,6 @@
   const DEFAULT_STYLE = {
     node: {
       fill: Colors.NODES.DEFAULT,
-      fillOther: Colors.NODES.OTHER,
-      fillAggregate: Colors.NODES.AGGREGATE,
       stroke: Colors.STROKE,
       strokeWidth: 1,
       borderRadius: 5,
@@ -41,18 +40,43 @@
       fill: 'none',
       strokeWidth: 2.5,
       strokeColor: Colors.NODES.DEFAULT,
-      strokeColorOther: Colors.NODES.OTHER,
-      strokeColorAggregate: Colors.NODES.AGGREGATE,
     },
     label: {
       text: Colors.LABELS.LIGHT,
     },
   };
 
+  const AGGREGATE_STYLE = {
+    node: {
+      fill: Colors.NODES.AGGREGATE,
+    },
+    edge: {
+      strokeColor: Colors.NODES.AGGREGATE,
+    },
+  };
+
+  const OTHER_STYLE = {
+    node: {
+      fill: Colors.NODES.OTHER,
+    },
+    edge: {
+      strokeColor: Colors.NODES.OTHER,
+    },
+  };
+
+  const mergeStyle = modifyingStyle => {
+    if (modifyingStyle) {
+      return merge(cloneDeep(DEFAULT_STYLE), modifyingStyle);
+    }
+
+    return DEFAULT_STYLE;
+  };
+
 @Component
   export default class VariablePanel extends Vue {
     @Prop({ default: 'Title' }) title: string;
     @Prop({ default: () => [[]] }) data: any;
+    @Prop({ default: () => [[]] }) dataAggregate: any;
 
     width: number;
     height: number;
@@ -143,15 +167,15 @@
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    drawDataset (svg, data, isLast = false): void {
+    drawDataset (svg, data, style, isLast = false): void {
       const l = this.length(this.line(data));
 
       // Draw data line
       svg.append('path')
           .datum(data)
           .attr('fill', 'none')
-          .attr('stroke', DEFAULT_STYLE.edge[isLast ? 'strokeColor' : 'strokeColorOther'])
-          .attr('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
+          .attr('stroke', style.edge.strokeColor)
+          .attr('stroke-width', style.edge.strokeWidth)
           .attr('stroke-linejoin', 'round')
           .attr('stroke-linecap', 'round')
           .attr('stroke-dasharray', `0,${l}`)
@@ -163,9 +187,9 @@
 
       // Draw data dots
       svg.append('g')
-          .attr('fill', DEFAULT_STYLE.node.fill)
+          .attr('fill', style.node.fill)
           .attr('stroke', 'black')
-          .attr('stroke-width', DEFAULT_STYLE.node.strokeWidth)
+          .attr('stroke-width', style.node.strokeWidth)
         .selectAll('circle')
         .data(data)
         .join('circle')
@@ -175,8 +199,7 @@
     }
 
     refresh (): void {
-      // if (_.isEmpty(this.data)) return;
-      const currentDataHash = JSON.stringify(this.data);
+      const currentDataHash = JSON.stringify(this.data) + JSON.stringify(this.dataAggregate);
       if (currentDataHash === this.dataHash) {
         return;
       }
@@ -194,7 +217,14 @@
       svg.append('g')
         .call(this.yAxis);
 
-      this.data.map((dataset, i) => this.drawDataset(svg, dataset, i === this.data.length - 1));
+      this.data.map((dataset, i) => {
+        const isLast = i === this.data.length - 1;
+        this.drawDataset(svg, dataset, mergeStyle(!isLast && OTHER_STYLE), isLast);
+      });
+
+      if (this.dataAggregate && this.data.length > 1) {
+        this.dataAggregate && this.drawDataset(svg, this.dataAggregate, mergeStyle(AGGREGATE_STYLE));
+      }
 
       svg.node();
     }
