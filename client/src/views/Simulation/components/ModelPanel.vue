@@ -1,7 +1,7 @@
 <template>
   <section class="simulation-model-panel">
     <settings-bar>
-      <counters slot="left" :title="modelName" />
+      <counters slot="left" :title="modelName" :data="countersData" />
       <aside slot="right">
         <div class="dropdown">
           <button
@@ -43,7 +43,7 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
   import { capitalize } from 'lodash';
-  import { ModelInterface, ViewInterface } from '@/types/types';
+  import * as HMI from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -64,11 +64,11 @@
   @Component({ components })
   export default class ModelPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
-    @Prop({ default: null }) model: ModelInterface;
+    @Prop({ default: null }) model: HMI.ModelInterface;
 
     selectedView: string = VIEWS.CAUSAL;
     settingsOpen: boolean = false;
-    views: ViewInterface[] = [
+    views: HMI.ViewInterface[] = [
       { name: capitalize(VIEWS.CAUSAL), id: VIEWS.CAUSAL },
       { name: capitalize(VIEWS.FUNCTIONAL), id: VIEWS.FUNCTIONAL },
     ];
@@ -81,6 +81,13 @@
 
     get modelName (): string {
       return this.model?.metadata?.name;
+    }
+
+    get countersDate (): HMI.Counter[] {
+      return [
+        { name: 'Parameters', value: 6 },
+        { name: 'Variables', value: 3 },
+      ];
     }
   }
 </script>
