@@ -20,7 +20,7 @@
         </button>
       </div>
       <div class="search-col justify-content-end">
-        <run-button class="m-1" :auto-run.sync="autoRun" @run="fetchVariables" />
+        <run-button class="m-1" :auto-run.sync="autoRun" :config.sync="runConfig" @run="fetchVariables" />
         <button class="btn btn-primary m-1" @click="onCloseSimView">
           <font-awesome-icon :icon="['fas', 'chart-line' ]" />
           <span> Close Simulation View </span>
@@ -61,6 +61,7 @@
   import { SimulationParameter, ModelInterface } from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
   import { DimensionsInterface } from '@/types/typesResizableGrid';
+  import * as Donu from '@/types/typesDonu';
 
   import { donuSimulateToD3 } from '@/utils/DonuUtil';
   import { getModelParameters } from '@/services/DonuService';
@@ -87,8 +88,9 @@
   @Component({ components })
   export default class Simulation extends Vue {
     autoRun: boolean = false;
-    subgraph: GraphInterface = null;
     parameters: SimulationParameter[] = [];
+    runConfig: Donu.RequestConfig = { end: 120, start: 0, step: 30 };
+    subgraph: GraphInterface = null;
 
     expandedId: string = '';
 
@@ -178,7 +180,11 @@
 
     async fetchVariables (): Promise<void> {
       if (this.selectedModel) {
-        const responseArr: any = await this.getModelResults(this.selectedModel);
+        const args = {
+          model: this.selectedModel,
+          config: this.runConfig,
+        };
+        const responseArr: Donu.SimulationResponse[] = await this.getModelResults(args);
         this.setSimVariables(donuSimulateToD3(responseArr));
       }
     }

@@ -57,6 +57,12 @@ type RequestParameters = {
   [key: string]: number[],
 }
 
+type RequestConfig = {
+  end: number;
+  start: number;
+  step: number;
+}
+
 type Request = {
   command: RequestCommand;
   definition?: string | ModelDefinition;
@@ -94,6 +100,7 @@ export {
   ModelVariable,
   Request,
   RequestCommand,
+  RequestConfig,
   RequestParameters,
   Response,
   ResponseStatus,

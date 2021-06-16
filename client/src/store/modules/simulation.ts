@@ -1,4 +1,5 @@
 import { GetterTree, ActionTree } from 'vuex';
+import * as Donu from '@/types/typesDonu';
 import * as HMI from '@/types/types';
 import { getModelResult } from '@/services/DonuService';
 
@@ -94,9 +95,14 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
     });
   },
 
-  async getModelResults ({ getters }, model): Promise<unknown> {
+  async getModelResults ({ getters }, args: {
+    model: HMI.ModelInterface,
+    config: Donu.RequestConfig,
+  }): Promise<Donu.SimulationResponse[]> {
     return await Promise.all(
-      getters.getSimParameterArray.map(simParamArr => getModelResult(model, simParamArr)),
+      getters.getSimParameterArray.map(simParamArr => {
+        return getModelResult(args.model, simParamArr, args.config);
+      }),
     );
   },
 };

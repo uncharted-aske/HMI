@@ -22,18 +22,15 @@
         Auto-Run
       </label>
       <div class="dropdown-divider" />
-      <h6 class="dropdown-header">Model view</h6>
-      <!-- <div v-for="(view, index) in views" :key="index" class="custom-control custom-radio">
-        <input
-          class="custom-control-input"
-          name="model-view"
-          type="radio"
-          v-model="selectedView"
-          :id="('model-view-'+index)"
-          :value="view.id"
-        >
-        <label class="custom-control-label" :for="('model-view-'+index)">{{ view.name }}</label>
-      </div> -->
+      <h6 class="dropdown-header">_Sequence_ Settings</h6>
+      <div class="run-config">
+        <label for="run-config-start">Start</label>
+        <input type="number" id="run-config-start" v-model.number="configInput.start" />
+        <label for="run-config-end">End</label>
+        <input type="number" id="run-config-end" v-model.number="configInput.end" />
+        <label for="run-config-step">Step</label>
+        <input type="number" id="run-config-step" v-model.number="configInput.step" />
+      </div>
     </div>
   </div>
 </template>
@@ -42,10 +39,12 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { PropSync } from 'vue-property-decorator';
+  import * as Donu from '@/types/typesDonu';
 
   @Component
   export default class RunButton extends Vue {
     @PropSync('autoRun', { type: Boolean }) autoRunInput!: boolean; // eslint-disable-line new-cap
+    @PropSync('config', { type: Object }) configInput!: Donu.RequestConfig; // eslint-disable-line new-cap
 
     dropdownOpen: boolean = false;
 
@@ -71,5 +70,17 @@
 
   .dropdown-header {
     padding: 0 1.5em .5em 0;
+  }
+
+  .run-config {
+    display: grid;
+    font-size: .9em;
+    gap: .25em;
+    grid-template-columns: 3em auto;
+  }
+
+  .run-config label {
+    line-height: 2;
+    margin: 0;
   }
 </style>
