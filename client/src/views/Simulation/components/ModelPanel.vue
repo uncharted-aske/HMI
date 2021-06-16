@@ -42,6 +42,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
+  import { Getter } from 'vuex-class';
   import { capitalize } from 'lodash';
   import * as HMI from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
@@ -66,6 +67,9 @@
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: HMI.ModelInterface;
 
+    @Getter getSimParameters;
+    @Getter getSimVariables;
+
     selectedView: string = VIEWS.CAUSAL;
     settingsOpen: boolean = false;
     views: HMI.ViewInterface[] = [
@@ -83,11 +87,21 @@
       return this.model?.metadata?.name;
     }
 
-    get countersDate (): HMI.Counter[] {
-      return [
-        { name: 'Parameters', value: 6 },
-        { name: 'Variables', value: 3 },
-      ];
+    get countersData (): HMI.Counter[] {
+      const data = [];
+      if (this.getSimParameters.length > 0) {
+        data.push({
+          name: 'Parameters',
+          value: this.getSimParameters.length,
+        });
+      }
+      if (this.getSimVariables.length > 0) {
+        data.push({
+          name: 'Variables',
+          value: this.getSimVariables.length,
+        });
+      }
+      return data;
     }
   }
 </script>

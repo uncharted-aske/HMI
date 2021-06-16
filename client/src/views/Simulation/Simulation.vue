@@ -20,7 +20,7 @@
         </button>
       </div>
       <div class="search-col justify-content-end">
-        <run-button class="m-1" :auto-run.sync="autoRun" :config.sync="runConfig" @run="fetchVariables" />
+        <run-button class="m-1" :auto-run.sync="autoRun" :config.sync="runConfig" @run="fetchResults" />
         <button class="btn btn-primary m-1" @click="onCloseSimView">
           <font-awesome-icon :icon="['fas', 'chart-line' ]" />
           <span> Close Simulation View </span>
@@ -41,7 +41,7 @@
         :expanded="expandedId === 'parameters'"
         @expand="setExpandedId('parameters')"
       />
-      <variable-panel
+      <variables-panel
         class="simulation-panel"
         slot="variables"
         :expanded="expandedId === 'variables'"
@@ -58,13 +58,13 @@
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import { SimulationParameter, ModelInterface } from '@/types/types';
+  import { SimulationParameter, ModelInterface, SimulationVariable } from '@/types/types';
   import { GraphInterface } from '@/types/typesGraphs';
   import { DimensionsInterface } from '@/types/typesResizableGrid';
   import * as Donu from '@/types/typesDonu';
 
   import { donuSimulateToD3 } from '@/utils/DonuUtil';
-  import { getModelParameters } from '@/services/DonuService';
+  import { getModelParameters, getModelVariables } from '@/services/DonuService';
 
   import Counters from '@/components/Counters.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
@@ -88,10 +88,8 @@
   @Component({ components })
   export default class Simulation extends Vue {
     autoRun: boolean = false;
-    parameters: SimulationParameter[] = [];
     runConfig: Donu.RequestConfig = { end: 120, start: 0, step: 30 };
     subgraph: GraphInterface = null;
-
     expandedId: string = '';
 
     @Action getModelResults;
@@ -105,16 +103,18 @@
 
     @Watch('selectedModel') onSelectedModelChanged (): void {
       this.fetchParameters();
+      this.fetchVariables();
     }
 
     @Watch('getSimParameterArray') onDonuParametersChanged (): void {
       if (this.autoRun) {
-        this.fetchVariables();
+        this.fetchResults();
       }
     }
 
     mounted (): void {
       this.fetchParameters();
+      this.fetchVariables();
     }
 
     get selectedModel (): ModelInterface {
@@ -179,6 +179,16 @@
     }
 
     async fetchVariables (): Promise<void> {
+      const donuVariables = await getModelVariables(this.selectedModel) ?? [];
+      const variables: SimulationVariable[] = donuVariables.map(donuVariable => ({
+        ...donuVariable,
+        hidden: false,
+        values: [[]],
+      }));
+      this.setSimVariables(variables);
+    }
+
+    async fetchResults (): Promise<void> {
       if (this.selectedModel) {
         const args = {
           model: this.selectedModel,

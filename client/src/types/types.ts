@@ -81,10 +81,9 @@ interface SimulationParameter extends Donu.ModelParameter {
   values?: number[],
 }
 
-interface SimulationVariable {
+interface SimulationVariable extends Donu.ModelVariable {
   values: {x: number, y: number}[][],
   hidden: boolean,
-  name: string,
 }
 
 type SimulationRun = {

@@ -50,7 +50,7 @@
   };
 
 @Component
-  export default class VariablePanel extends Vue {
+  export default class MultiLinePlot extends Vue {
     @Prop({ default: 'Title' }) title: string;
     @Prop({ default: () => [[]] }) data: any;
 

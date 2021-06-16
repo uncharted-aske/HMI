@@ -62,7 +62,7 @@
   };
 
   @Component({ components })
-  export default class VariablePanel extends Vue {
+  export default class VariablesPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
@@ -75,16 +75,20 @@
     }
 
     get countersTitle (): string {
-      return this.getSimVariables.length + ' Variables';
+      const count = this.getSimVariables.length;
+      return (count > 0 ? count : '—') + ' Variables';
     }
 
     get countersData (): HMI.Counter[] {
-      const count = this.getSimVariables.filter(variable => variable.hidden).length ?? 0;
-      if (count === this.getSimVariables.length) {
-        return [{ name: 'All hidden' }];
-      } else if (count > 0) {
-        return [{ name: 'Hidden', value: count }];
-      }
+      const count = this.getSimVariables.length;
+      if (count > 0) {
+        const hidden = this.getSimVariables.filter(variable => variable.hidden).length ?? 0;
+        if (hidden === count) {
+          return [{ name: 'All hidden' }];
+        } else if (hidden > 0) {
+          return [{ name: 'Hidden', value: hidden }];
+        }
+      } else return [];
     }
   }
 </script>

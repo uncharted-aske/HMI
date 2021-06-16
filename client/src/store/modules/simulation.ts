@@ -75,7 +75,7 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
     state.parametersMaxCount += 1;
   },
 
-  setSimVariables ({ state }, varArr: any): void {
+  setSimVariables ({ state }, varArr: HMI.SimulationVariable): void {
     state.variables = varArr;
   },
 
