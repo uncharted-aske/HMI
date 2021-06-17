@@ -6,7 +6,7 @@ import { ModelsState, ModelInterface, ModelInterfaceType } from '@/types/types';
 import { emmaaModelList } from '@/services/EmmaaFetchService';
 import { getUtil } from '@/utils/FetchUtil';
 import { fetchDonuModels } from '@/services/DonuService';
-import {GroMEt2Graph} from 'research/gromet/tools/parser/GroMEt2Graph';
+import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 
 const state: ModelsState = {
   isInitialized: false,
@@ -86,8 +86,8 @@ const fetchInitialModelData = async () => {
 };
 
 const buildInitialModelsList = ({
-     SIR_PN,
-     SIR_FN,
+  SIR_PN,
+  SIR_FN,
   // nestedSIRCAG,
   // nestedSIRGrFN,
   // comparisonJSON,
@@ -98,7 +98,6 @@ const buildInitialModelsList = ({
   // nestedDoubleEpiCAG,
   // nestedDoubleEpiGrFN,
 }): ModelInterface[] => {
-
   return [
     {
       id: 0,
@@ -163,8 +162,8 @@ const buildInitialModelsList = ({
 const actions: ActionTree<ModelsState, any> = {
   async setInitialModelsState ({ commit }) {
     const {
-        SIR_PN,
-        SIR_FN,
+      SIR_PN,
+      SIR_FN,
       // nestedCHIMECAG,
       // nestedCHIMEGrFN,
       // SIR,
@@ -187,8 +186,8 @@ const actions: ActionTree<ModelsState, any> = {
 
     // Initialize static models
     const initialModelsList = buildInitialModelsList({
-        SIR_PN,
-        SIR_FN,
+      SIR_PN,
+      SIR_FN,
       // nestedSIRCAG,
       // nestedSIRGrFN,
       // comparisonJSON,
