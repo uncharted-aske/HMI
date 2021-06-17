@@ -1,22 +1,21 @@
 import { GetterTree, ActionTree } from 'vuex';
 import * as Donu from '@/types/typesDonu';
 import * as HMI from '@/types/types';
+import { SimulationResponse } from '@/types/typesDonu';
 import { getModelResult } from '@/services/DonuService';
 import * as lodash from 'lodash';
+import { aggregateModelResults, donuSimulateToVariable } from '@/utils/DonuUtil';
 
 const state: {
     parametersMaxCount: number, // Holds the maximum number of parameter sets which should be stored
     parameters: HMI.SimulationParameter[],
     variables: HMI.SimulationVariable[],
-    runs: {
-      parameters: any,
-      variables: number[],
-    }[]
+    variablesAggregate: HMI.SimulationVariable[],
 } = {
   parametersMaxCount: 0,
   parameters: [],
   variables: [],
-  runs: [],
+  variablesAggregate: [],
 };
 
 const getSimParametersCount = (state): number => {
@@ -46,6 +45,10 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
 
   getSimVariables (state): HMI.SimulationVariable[] {
     return state.variables;
+  },
+
+  getSimVariablesAggregate (state): HMI.SimulationVariable {
+    return state.variablesAggregate;
   },
 
   hasVariablesRuns (state): boolean {
@@ -80,7 +83,7 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
     state.parametersMaxCount += 1;
   },
 
-  setSimVariables ({ state }, varArr: HMI.SimulationVariable): void {
+  setSimVariables ({ state }, varArr: HMI.SimulationVariable[]): void {
     state.variables = varArr;
   },
 
@@ -100,15 +103,13 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
     });
   },
 
-  async getModelResults ({ getters }, args: {
-    model: HMI.ModelInterface,
-    config: Donu.RequestConfig,
-  }): Promise<Donu.SimulationResponse[]> {
-    return await Promise.all(
-      getters.getSimParameterArray.map(simParamArr => {
-        return getModelResult(args.model, simParamArr, args.config);
-      }),
+  async fetchModelResults ({ state, getters, dispatch }, { model, config, aggregator }): Promise<void> {
+    const modelResults: SimulationResponse[] = await Promise.all(
+      getters.getSimParameterArray.map(simParamArr => getModelResult(model, simParamArr, config)),
     );
+    dispatch('setSimVariables', donuSimulateToVariable(modelResults as SimulationResponse[]));
+
+    state.variablesAggregate = donuSimulateToVariable([aggregateModelResults(modelResults, aggregator)]);
   },
 };
 
