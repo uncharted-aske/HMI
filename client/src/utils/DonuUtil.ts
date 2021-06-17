@@ -1,4 +1,5 @@
 /** Utilities to manipulate Donu Types */
+import * as d3 from 'd3';
 import { ModelInterface, ModelInterfaceType, SimulationVariable } from '@/types/types';
 import * as Donu from '@/types/typesDonu';
 
@@ -17,12 +18,9 @@ export const donuToModel = (donuModels: Donu.ModelDefinition[]): ModelInterface[
   });
 };
 
-export const aggregateMean = (dataColumn: number[]): number =>
-  dataColumn.reduce((acc, val) => { acc += val; return acc; }, 0) / dataColumn.length;
-
 export const aggregateModelResults = (
   modelResults: Donu.SimulationResponse[],
-  aggregator = aggregateMean, // calculate MEAN by default
+  aggregator = d3.mean, // calculate MEAN by default
 ): Donu.SimulationResponse => {
   if (modelResults.length === 0) {
     return;
