@@ -64,8 +64,6 @@
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
   import { Colors } from '@/graphs/svg/encodings';
 
-  import { ModelInterface, SimulationVariable, Counter } from '@/types/types';
-
   const DEFAULT_STYLE = {
     node: {
       fill: Colors.NODES.DEFAULT,
@@ -128,7 +126,7 @@
     @Getter getSimVariablesAggregate;
     @Action setSimVariableVisibility;
 
-    get simVariables (): SimulationVariable[] {
+    get simVariables (): HMI.SimulationVariable[] {
       const simVariables = this.getSimVariables;
 
       simVariables.map(simVariable => {

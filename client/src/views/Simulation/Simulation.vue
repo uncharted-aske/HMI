@@ -69,8 +69,6 @@
   import { GraphInterface } from '@/types/typesGraphs';
   import { DimensionsInterface } from '@/types/typesResizableGrid';
   import * as Donu from '@/types/typesDonu';
-
-  import { donuSimulateToD3 } from '@/utils/DonuUtil';
   import { getModelParameters, getModelVariables } from '@/services/DonuService';
 
   import Counters from '@/components/Counters.vue';
@@ -99,7 +97,7 @@
     subgraph: GraphInterface = null;
     expandedId: string = '';
 
-    @Action getModelResults;
+    @Action fetchModelResults;
     @Action incrParametersMaxCount;
     @Action setSimParameters;
     @Action setSimVariables;
@@ -195,14 +193,12 @@
       this.setSimVariables(variables);
     }
 
-    async fetchResults (): Promise<void> {
+    fetchResults (): void {
       if (this.selectedModel) {
-        const args = {
+        this.fetchModelResults({
           model: this.selectedModel,
           config: this.runConfig,
-        };
-        const responseArr: Donu.SimulationResponse[] = await this.getModelResults(args);
-        this.setSimVariables(donuSimulateToD3(responseArr));
+        });
       }
     }
   }

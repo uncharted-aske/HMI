@@ -1,5 +1,4 @@
 import { GetterTree, ActionTree } from 'vuex';
-import * as Donu from '@/types/typesDonu';
 import * as HMI from '@/types/types';
 import { SimulationResponse } from '@/types/typesDonu';
 import { getModelResult } from '@/services/DonuService';
