@@ -56,7 +56,7 @@ export const aggregateModelResults = (
   };
 };
 
-export const donuSimulateToD3 = (responseArr: Donu.SimulationResponse[]): SimulationVariable[] => {
+export const donuSimulateToVariable = (responseArr: Donu.SimulationResponse[]): SimulationVariable[] => {
   const output = {};
   for (const response of responseArr) {
     for (const key in response.values) {

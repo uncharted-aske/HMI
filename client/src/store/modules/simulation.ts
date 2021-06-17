@@ -2,7 +2,7 @@ import { GetterTree, ActionTree } from 'vuex';
 import * as HMI from '@/types/types';
 import { SimulationResponse } from '@/types/typesDonu';
 import { getModelResult } from '@/services/DonuService';
-import { aggregateModelResults, donuSimulateToD3 } from '@/utils/DonuUtil';
+import { aggregateModelResults, donuSimulateToVariable } from '@/utils/DonuUtil';
 
 const state: {
     parametersMaxCount: number, // Holds the maximum number of parameter sets which should be stored
@@ -101,9 +101,9 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
     const modelResults: SimulationResponse[] = await Promise.all(
       getters.getSimParameterArray.map(simParamArr => getModelResult(model, simParamArr)),
     );
-    dispatch('setSimVariables', donuSimulateToD3(modelResults as SimulationResponse[]));
+    dispatch('setSimVariables', donuSimulateToVariable(modelResults as SimulationResponse[]));
 
-    state.variablesAggregate = donuSimulateToD3([aggregateModelResults(modelResults, aggregator)]);
+    state.variablesAggregate = donuSimulateToVariable([aggregateModelResults(modelResults, aggregator)]);
   },
 };
 
