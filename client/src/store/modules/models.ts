@@ -6,6 +6,7 @@ import { ModelsState, ModelInterface, ModelInterfaceType } from '@/types/types';
 import { emmaaModelList } from '@/services/EmmaaFetchService';
 import { getUtil } from '@/utils/FetchUtil';
 import { fetchDonuModels } from '@/services/DonuService';
+import {GroMEt2Graph} from 'research/gromet/tools/parser/GroMEt2Graph';
 
 const state: ModelsState = {
   isInitialized: false,
@@ -19,178 +20,184 @@ const state: ModelsState = {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const fetchInitialModelData = async () => {
   const staticFileURLs = [
-    `${window.location.origin}/uncharted_chime.json`,
-    `${window.location.origin}/nested-CHIME-SIR-CAG.json`,
-    `${window.location.origin}/nested-CHIME-SIR-GrFN.json`,
-    `${window.location.origin}/uncharted_sir.json`,
-    `${window.location.origin}/nested-SIR-simple-CAG.json`,
-    `${window.location.origin}/nested-SIR-simple-GrFN.json`,
-    `${window.location.origin}/uncharted_double_epi.json`,
-    `${window.location.origin}/nested-SARS-COV1-SEIRP-CAG.json`,
-    `${window.location.origin}/nested-SARS-COV1-SEIRP-GrFN.json`,
-    `${window.location.origin}/comparison-SimpleSIR-CHIME.json`, // Overlapping nodes and edges for SIR and CHIME
-    `${window.location.origin}/OAP1-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
-    `${window.location.origin}/OAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
-    `${window.location.origin}/NOAP1-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
-    `${window.location.origin}/NOAP2-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
-    `${window.location.origin}/NOAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
-    `${window.location.origin}/subgraph.json`, // Boutique subgraph for COVID-19 model.
-    `${window.location.origin}/xdd_parameters_table.json`, // Boutique subgraph for COVID-19 model.
+    `${window.location.origin}/gromets/SimpleSIR_gromet_PetriNetClassic.json`,
+    `${window.location.origin}/gromets/SimpleSIR_gromet_FunctionNetwork.json`,
+    // `${window.location.origin}/nested-CHIME-SIR-CAG.json`,
+    // `${window.location.origin}/nested-CHIME-SIR-GrFN.json`,
+    // `${window.location.origin}/uncharted_sir.json`,
+    // `${window.location.origin}/nested-SIR-simple-CAG.json`,
+    // `${window.location.origin}/nested-SIR-simple-GrFN.json`,
+    // `${window.location.origin}/uncharted_double_epi.json`,
+    // `${window.location.origin}/nested-SARS-COV1-SEIRP-CAG.json`,
+    // `${window.location.origin}/nested-SARS-COV1-SEIRP-GrFN.json`,
+    // `${window.location.origin}/comparison-SimpleSIR-CHIME.json`, // Overlapping nodes and edges for SIR and CHIME
+    // `${window.location.origin}/OAP1-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    // `${window.location.origin}/OAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    // `${window.location.origin}/NOAP1-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    // `${window.location.origin}/NOAP2-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    // `${window.location.origin}/NOAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
+    // `${window.location.origin}/subgraph.json`, // Boutique subgraph for COVID-19 model.
+    // `${window.location.origin}/xdd_parameters_table.json`, // Boutique subgraph for COVID-19 model.
   ];
 
   const [
-    CHIME,
-    nestedCHIMECAG,
-    nestedCHIMEGrFN,
-    SIR,
-    nestedSIRCAG,
-    nestedSIRGrFN,
-    DoubleEpi,
-    nestedDoubleEpiCAG,
-    nestedDoubleEpiGrFN,
-    comparisonJSON,
-    OAP1CHIMEPaths,
-    OAP1SIRPaths,
-    NOAP1CHIMEPaths,
-    NOAP2CHIMEPaths,
-    NOAP1SIRPaths,
-    subgraphJSON,
-    paramsData,
+    SIR_PN,
+    SIR_FN,
+    // nestedCHIMECAG,
+    // nestedCHIMEGrFN,
+    // SIR,
+    // nestedSIRCAG,
+    // nestedSIRGrFN,
+    // DoubleEpi,
+    // nestedDoubleEpiCAG,
+    // nestedDoubleEpiGrFN,
+    // comparisonJSON,
+    // OAP1CHIMEPaths,
+    // OAP1SIRPaths,
+    // NOAP1CHIMEPaths,
+    // NOAP2CHIMEPaths,
+    // NOAP1SIRPaths,
+    // subgraphJSON,
+    // paramsData,
   ] = await Promise.all(
     staticFileURLs.map(url => getUtil(url, {})),
   );
 
   return {
-    CHIME,
-    nestedCHIMECAG,
-    nestedCHIMEGrFN,
-    SIR,
-    nestedSIRCAG,
-    nestedSIRGrFN,
-    DoubleEpi,
-    nestedDoubleEpiCAG,
-    nestedDoubleEpiGrFN,
-    comparisonJSON,
-    OAP1CHIMEPaths,
-    OAP1SIRPaths,
-    NOAP1CHIMEPaths,
-    NOAP2CHIMEPaths,
-    NOAP1SIRPaths,
-    subgraphJSON,
-    paramsData,
+    SIR_PN,
+    SIR_FN,
+    // nestedCHIMECAG,
+    // nestedCHIMEGrFN,
+    // SIR,
+    // nestedSIRCAG,
+    // nestedSIRGrFN,
+    // DoubleEpi,
+    // nestedDoubleEpiCAG,
+    // nestedDoubleEpiGrFN,
+    // comparisonJSON,
+    // OAP1CHIMEPaths,
+    // OAP1SIRPaths,
+    // NOAP1CHIMEPaths,
+    // NOAP2CHIMEPaths,
+    // NOAP1SIRPaths,
+    // subgraphJSON,
+    // paramsData,
   };
 };
 
 const buildInitialModelsList = ({
-  SIR,
-  nestedSIRCAG,
-  nestedSIRGrFN,
-  comparisonJSON,
-  CHIME,
-  nestedCHIMECAG,
-  nestedCHIMEGrFN,
-  DoubleEpi,
-  nestedDoubleEpiCAG,
-  nestedDoubleEpiGrFN,
+     SIR_PN,
+     SIR_FN,
+  // nestedSIRCAG,
+  // nestedSIRGrFN,
+  // comparisonJSON,
+  // CHIME,
+  // nestedCHIMECAG,
+  // nestedCHIMEGrFN,
+  // DoubleEpi,
+  // nestedDoubleEpiCAG,
+  // nestedDoubleEpiGrFN,
 }): ModelInterface[] => {
+
   return [
     {
       id: 0,
-      metadata: SIR.metadata,
+      metadata: { name: SIR_PN.name },
       graph: {
-        abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-        detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-      },
-      subgraph: _.pick(comparisonJSON.subgraphs[0], ['nodes', 'edges']),
-      type: ModelInterfaceType.computational,
-    },
-    {
-      id: 1,
-      metadata: CHIME.metadata,
-      graph: {
-        abstract: _.pick(nestedCHIMECAG, ['nodes', 'edges']),
-        detailed: _.pick(nestedCHIMEGrFN, ['nodes', 'edges']),
-      },
-      subgraph: _.pick(comparisonJSON.subgraphs[1], ['nodes', 'edges']),
-      type: ModelInterfaceType.computational,
-    },
-    {
-      id: 2,
-      metadata: DoubleEpi.metadata,
-      graph: {
-        abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
-        detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
+        abstract: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['nodes', 'edges']),
+        detailed: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['nodes', 'edges']),
       },
       type: ModelInterfaceType.computational,
     },
+    // {
+    //   id: 1,
+    //   metadata: CHIME.metadata,
+    //   graph: {
+    //     abstract: _.pick(nestedCHIMECAG, ['nodes', 'edges']),
+    //     detailed: _.pick(nestedCHIMEGrFN, ['nodes', 'edges']),
+    //   },
+    //   subgraph: _.pick(comparisonJSON.subgraphs[1], ['nodes', 'edges']),
+    //   type: ModelInterfaceType.computational,
+    // },
+    // {
+    //   id: 2,
+    //   metadata: DoubleEpi.metadata,
+    //   graph: {
+    //     abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
+    //     detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
+    //   },
+    //   type: ModelInterfaceType.computational,
+    // },
   ];
 };
 
 // TODO: Define ComparisonHighlight type
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const buildInitialComparisonHighlights = ({
-  OAP1CHIMEPaths,
-  OAP1SIRPaths,
-  NOAP1CHIMEPaths,
-  NOAP2CHIMEPaths,
-  NOAP1SIRPaths,
-}) => {
-  return {
-    9: {
-      1: OAP1SIRPaths,
-      2: OAP1CHIMEPaths,
-    },
-    10: {
-      1: NOAP1SIRPaths,
-      2: { nodes: [], edges: [] },
-    },
-    11: {
-      1: { nodes: [], edges: [] },
-      2: NOAP2CHIMEPaths,
-    },
-    12: {
-      1: { nodes: [], edges: [] },
-      2: NOAP1CHIMEPaths,
-    },
-  };
-};
+// const buildInitialComparisonHighlights = ({
+//   OAP1CHIMEPaths,
+//   OAP1SIRPaths,
+//   NOAP1CHIMEPaths,
+//   NOAP2CHIMEPaths,
+//   NOAP1SIRPaths,
+// }) => {
+//   return {
+//     9: {
+//       1: OAP1SIRPaths,
+//       2: OAP1CHIMEPaths,
+//     },
+//     10: {
+//       1: NOAP1SIRPaths,
+//       2: { nodes: [], edges: [] },
+//     },
+//     11: {
+//       1: { nodes: [], edges: [] },
+//       2: NOAP2CHIMEPaths,
+//     },
+//     12: {
+//       1: { nodes: [], edges: [] },
+//       2: NOAP1CHIMEPaths,
+//     },
+//   };
+// };
 
 const actions: ActionTree<ModelsState, any> = {
   async setInitialModelsState ({ commit }) {
     const {
-      CHIME,
-      nestedCHIMECAG,
-      nestedCHIMEGrFN,
-      SIR,
-      nestedSIRCAG,
-      nestedSIRGrFN,
-      DoubleEpi,
-      nestedDoubleEpiCAG,
-      nestedDoubleEpiGrFN,
-      comparisonJSON,
-      OAP1CHIMEPaths,
-      OAP1SIRPaths,
-      NOAP1CHIMEPaths,
-      NOAP2CHIMEPaths,
-      NOAP1SIRPaths,
-      subgraphJSON,
-      paramsData,
+        SIR_PN,
+        SIR_FN,
+      // nestedCHIMECAG,
+      // nestedCHIMEGrFN,
+      // SIR,
+      // nestedSIRCAG,
+      // nestedSIRGrFN,
+      // DoubleEpi,
+      // nestedDoubleEpiCAG,
+      // nestedDoubleEpiGrFN,
+      // comparisonJSON,
+      // OAP1CHIMEPaths,
+      // OAP1SIRPaths,
+      // NOAP1CHIMEPaths,
+      // NOAP2CHIMEPaths,
+      // NOAP1SIRPaths,
+      // subgraphJSON,
+      // paramsData,
     } = await fetchInitialModelData();
 
-    commit('setParameters', paramsData);
+    // commit('setParameters', paramsData);
 
     // Initialize static models
     const initialModelsList = buildInitialModelsList({
-      SIR,
-      nestedSIRCAG,
-      nestedSIRGrFN,
-      comparisonJSON,
-      CHIME,
-      nestedCHIMECAG,
-      nestedCHIMEGrFN,
-      DoubleEpi,
-      nestedDoubleEpiCAG,
-      nestedDoubleEpiGrFN,
+        SIR_PN,
+        SIR_FN,
+      // nestedSIRCAG,
+      // nestedSIRGrFN,
+      // comparisonJSON,
+      // CHIME,
+      // nestedCHIMECAG,
+      // nestedCHIMEGrFN,
+      // DoubleEpi,
+      // nestedDoubleEpiCAG,
+      // nestedDoubleEpiGrFN,
     });
     commit('setModelsList', initialModelsList);
 
@@ -199,25 +206,25 @@ const actions: ActionTree<ModelsState, any> = {
       const modelList = await emmaaModelList();
       modelList.map(metadata => commit('addModel', {
         metadata,
-        graph: {
-          abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-          detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-        },
-        subgraph: subgraphJSON,
+        // graph: {
+        //   abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
+        //   detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
+        // },
+        // subgraph: subgraphJSON,
         type: 'biomechanism',
       }));
     } catch (error) {
       console.warn('EMMAA API is not responding', error); // eslint-disable-line no-console
     }
 
-    const initialComparisonHighlights = buildInitialComparisonHighlights({
-      OAP1CHIMEPaths,
-      OAP1SIRPaths,
-      NOAP1CHIMEPaths,
-      NOAP2CHIMEPaths,
-      NOAP1SIRPaths,
-    });
-    commit('setComparisonHighlights', initialComparisonHighlights);
+    // const initialComparisonHighlights = buildInitialComparisonHighlights({
+    //   OAP1CHIMEPaths,
+    //   OAP1SIRPaths,
+    //   NOAP1CHIMEPaths,
+    //   NOAP2CHIMEPaths,
+    //   NOAP1SIRPaths,
+    // });
+    // commit('setComparisonHighlights', initialComparisonHighlights);
 
     // Add DONU models
     try {
