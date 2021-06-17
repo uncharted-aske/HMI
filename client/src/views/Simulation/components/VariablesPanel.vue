@@ -7,8 +7,8 @@
         :data="countersData"
       />
       <div slot="right">
-        <button type="button" disabled class="btn btn-primary btn-settings">Settings</button>
-        <button type="button" class="btn btn-primary py-0 btn-settings" @click="$emit('expand')">
+        <button type="button" disabled class="btn btn-secondary btn-settings">Settings</button>
+        <button type="button" class="btn btn-secondary py-0 btn-settings" @click="$emit('expand')">
           <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
         </button>
       </div>
@@ -16,7 +16,14 @@
 
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
+        <div
+          v-if="!hasVariablesRuns"
+          class="alert alert-info" role="alert"
+        >
+          Click `Run` to get variables output.
+        </div>
         <multi-line-plot
+          v-else
           v-for="(plot, index) in sortedSimVariables"
           :key="index"
           :title="plot.name"
@@ -24,11 +31,11 @@
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
         >
           <aside class="btn-group">
-            <button type="button" class="btn btn-primary btn-sm">
+            <button type="button" class="btn btn-secondary btn-sm">
               <font-awesome-icon :icon="['fas', 'tools']" />
             </button>
             <button
-              class="btn btn-primary btn-sm"
+              class="btn btn-secondary btn-sm"
               :title="(plot.hidden ? 'Show' : 'Hide' + ' parameter')"
               type="button"
               @click="setSimVariableVisibility(plot.name)"
@@ -67,6 +74,7 @@
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
     @Getter getSimVariables;
+    @Getter hasVariablesRuns;
     @Action setSimVariableVisibility;
     @Action getModelResults;
 

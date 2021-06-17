@@ -2,6 +2,7 @@ import { GetterTree, ActionTree } from 'vuex';
 import * as Donu from '@/types/typesDonu';
 import * as HMI from '@/types/types';
 import { getModelResult } from '@/services/DonuService';
+import * as lodash from 'lodash';
 
 type SimulationState = {
   numberOfSavedRuns: number,
@@ -40,6 +41,10 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
 
   getSimVariables (state: SimulationState): HMI.SimulationVariable[] {
     return state.variables;
+  },
+
+  hasVariablesRuns (state): boolean {
+    return !lodash.isEmpty(state.variables?.[0]?.values?.[0]);
   },
 };
 
