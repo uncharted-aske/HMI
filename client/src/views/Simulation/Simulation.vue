@@ -15,7 +15,7 @@
         <button class="btn btn-primary m-1" @click="fetchParameters">
           <span>Reset</span>
         </button>
-        <button class="btn btn-primary m-1" @click="incrParametersMaxCount">
+        <button class="btn btn-primary m-1" @click="incrNumberOfSavedRuns">
           <span>Save</span>
         </button>
       </div>
@@ -93,7 +93,7 @@
     expandedId: string = '';
 
     @Action getModelResults;
-    @Action incrParametersMaxCount;
+    @Action incrNumberOfSavedRuns;
     @Action setSimParameters;
     @Action setSimVariables;
     @Getter getSelectedModelIds;

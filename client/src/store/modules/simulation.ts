@@ -3,38 +3,33 @@ import * as Donu from '@/types/typesDonu';
 import * as HMI from '@/types/types';
 import { getModelResult } from '@/services/DonuService';
 
-const state: {
-    parametersMaxCount: number, // Holds the maximum number of parameter sets which should be stored
-    parameters: HMI.SimulationParameter[],
-    variables: HMI.SimulationVariable[],
-    runs: {
-      parameters: any,
-      variables: number[],
-    }[]
-} = {
-  parametersMaxCount: 0,
+type SimulationState = {
+  numberOfSavedRuns: number,
+  parameters: HMI.SimulationParameter[],
+  variables: HMI.SimulationVariable[],
+}
+
+const state: SimulationState = {
+  numberOfSavedRuns: 0,
   parameters: [],
   variables: [],
-  runs: [],
 };
 
-const getSimParametersCount = (state): number => {
-  return state.parameters[0]?.values.length;
-};
+const currentNumberOfRuns = (state: SimulationState): number => state.parameters?.[0]?.values.length ?? 0;
 
 const getters: GetterTree<any, HMI.SimulationParameter[]> = {
-  getSimParameters (state): HMI.SimulationParameter[] {
+  getSimParameters (state: SimulationState): HMI.SimulationParameter[] {
     return state.parameters;
   },
 
-  getSimParametersCount (state): number {
-    return getSimParametersCount(state);
+  getRunsCount (state: SimulationState): number {
+    return currentNumberOfRuns(state);
   },
 
-  getSimParameterArray (state): any {
-    const stateParameterCount = getSimParametersCount(state);
-    const output = new Array(stateParameterCount);
-    for (let i = 0; i < stateParameterCount; i++) {
+  getSimParameterArray (state: SimulationState): any {
+    const RunsCount = currentNumberOfRuns(state);
+    const output = new Array(RunsCount);
+    for (let i = 0; i < RunsCount; i++) {
       output[i] = state.parameters.reduce((obj, parameter) => {
         obj[parameter.name] = parameter.values[i];
         return obj;
@@ -43,19 +38,19 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
     return output;
   },
 
-  getSimVariables (state): HMI.SimulationVariable[] {
+  getSimVariables (state: SimulationState): HMI.SimulationVariable[] {
     return state.variables;
   },
 };
 
-const actions: ActionTree<any, HMI.SimulationParameter[]> = {
+const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
   setSimParameters ({ state }, args: { parameters: HMI.SimulationParameter[], count: number }): void {
     state.parameters = args.parameters;
-    state.parametersMaxCount = args.count ?? getSimParametersCount(state);
+    state.numberOfSavedRuns = args.count ?? currentNumberOfRuns(state);
   },
 
   setSimParameterValue ({ state }, args: { name: string, value: number }): void {
-    if (getSimParametersCount(state) < state.parametersMaxCount) {
+    if (currentNumberOfRuns(state) < state.numberOfSavedRuns) {
       state.parameters = state.parameters.map(parameter => {
         const currentParamsCount = parameter.values.length;
         parameter.values[currentParamsCount] = parameter.values[currentParamsCount - 1];
@@ -71,11 +66,11 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
     });
   },
 
-  incrParametersMaxCount ({ state }): void {
-    state.parametersMaxCount += 1;
+  incrNumberOfSavedRuns ({ state }): void {
+    state.numberOfSavedRuns += 1;
   },
 
-  setSimVariables ({ state }, varArr: HMI.SimulationVariable): void {
+  setSimVariables ({ state }, varArr: HMI.SimulationVariable[]): void {
     state.variables = varArr;
   },
 
