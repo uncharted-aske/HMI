@@ -8,7 +8,6 @@
 </template>
 
 <script lang="ts">
-  import { merge, cloneDeep } from 'lodash';
   import * as d3 from 'd3';
 
   import Component from 'vue-class-component';
@@ -20,6 +19,12 @@
 
   import { Colors } from '@/graphs/svg/encodings';
 
+  const DEFAULT_STYLE = {
+    label: {
+      text: Colors.LABELS.LIGHT,
+    },
+  };
+
   const DEFAULT_CONFIG = {
     margin: {
       top: 15,
@@ -29,54 +34,11 @@
     },
   };
 
-  const DEFAULT_STYLE = {
-    node: {
-      fill: Colors.NODES.DEFAULT,
-      stroke: Colors.STROKE,
-      strokeWidth: 1,
-      borderRadius: 5,
-    },
-    edge: {
-      fill: 'none',
-      strokeWidth: 2.5,
-      strokeColor: Colors.NODES.DEFAULT,
-    },
-    label: {
-      text: Colors.LABELS.LIGHT,
-    },
-  };
-
-  const AGGREGATE_STYLE = {
-    node: {
-      fill: Colors.NODES.AGGREGATE,
-    },
-    edge: {
-      strokeColor: Colors.NODES.AGGREGATE,
-    },
-  };
-
-  const OTHER_STYLE = {
-    node: {
-      fill: Colors.NODES.OTHER,
-    },
-    edge: {
-      strokeColor: Colors.NODES.OTHER,
-    },
-  };
-
-  const mergeStyle = modifyingStyle => {
-    if (modifyingStyle) {
-      return merge(cloneDeep(DEFAULT_STYLE), modifyingStyle);
-    }
-
-    return DEFAULT_STYLE;
-  };
-
 @Component
   export default class VariablePanel extends Vue {
     @Prop({ default: 'Title' }) title: string;
     @Prop({ default: () => [[]] }) data: any;
-    @Prop({ default: () => [[]] }) dataAggregate: any;
+    @Prop({ default: () => [] }) styles: any;
 
     width: number;
     height: number;
@@ -167,7 +129,7 @@
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    drawDataset (svg, data, style, isLast = false): void {
+    drawDataset (svg, data, style): void {
       const l = this.length(this.line(data));
 
       // Draw data line
@@ -181,7 +143,7 @@
           .attr('stroke-dasharray', `0,${l}`)
           .attr('d', this.line)
         .transition()
-          .duration(isLast ? 500 : 0)
+          .duration(style.edge.transitionDuration)
           .ease(d3.easeLinear)
           .attr('stroke-dasharray', `${l},${l}`);
 
@@ -199,7 +161,7 @@
     }
 
     refresh (): void {
-      const currentDataHash = JSON.stringify(this.data) + JSON.stringify(this.dataAggregate);
+      const currentDataHash = JSON.stringify(this.data) + JSON.stringify(this.styles);
       if (currentDataHash === this.dataHash) {
         return;
       }
@@ -217,14 +179,7 @@
       svg.append('g')
         .call(this.yAxis);
 
-      this.data.map((dataset, i) => {
-        const isLast = i === this.data.length - 1;
-        this.drawDataset(svg, dataset, mergeStyle(!isLast && OTHER_STYLE), isLast);
-      });
-
-      if (this.dataAggregate && this.data.length > 1) {
-        this.dataAggregate && this.drawDataset(svg, this.dataAggregate, mergeStyle(AGGREGATE_STYLE));
-      }
+      this.data.map((dataset, i) => this.drawDataset(svg, dataset, this.styles[i]));
 
       svg.node();
     }
