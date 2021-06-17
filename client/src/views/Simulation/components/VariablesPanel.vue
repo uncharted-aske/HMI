@@ -135,8 +135,8 @@
       if (this.getSimParametersCount > 1) {
         this.getSimVariablesAggregate.map((simVariableAggregate, i) => {
           const simVariable = simVariables[i];
-          simVariable.values = [...simVariableAggregate.values, ...simVariable.values];
-          simVariable.styles.unshift(mergeStyle(AGGREGATE_STYLE));
+          simVariable.values = [...simVariable.values, ...simVariableAggregate.values];
+          simVariable.styles.push(mergeStyle(AGGREGATE_STYLE));
         });
       }
 
