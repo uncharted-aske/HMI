@@ -17,10 +17,11 @@
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
         <multi-line-plot
-          v-for="(plot, index) in sortedSimVariables"
+          v-for="(plot, index) in simVariables"
           :key="index"
           :title="plot.name"
           :data="plot.values"
+          :styles="plot.styles"
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
         >
           <aside class="btn-group">
@@ -52,10 +53,54 @@
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
+  import { Colors } from '@/graphs/svg/encodings';
 
-  import { donuSimulateToD3 } from '@/utils/DonuUtil';
+  import { ModelInterface, SimulationVariable, Counter } from '@/types/types';
 
-  import * as HMI from '@/types/types';
+  const DEFAULT_STYLE = {
+    node: {
+      fill: Colors.NODES.DEFAULT,
+      stroke: Colors.STROKE,
+      strokeWidth: 1,
+      borderRadius: 5,
+    },
+    edge: {
+      fill: 'none',
+      strokeWidth: 2.5,
+      strokeColor: Colors.NODES.DEFAULT,
+      transitionDuration: 500,
+    },
+    label: {
+      text: Colors.LABELS.LIGHT,
+    },
+  };
+
+  const AGGREGATE_STYLE = {
+    node: {
+      fill: Colors.NODES.AGGREGATE,
+    },
+    edge: {
+      strokeColor: Colors.NODES.AGGREGATE,
+    },
+  };
+
+  const OTHER_STYLE = {
+    node: {
+      fill: Colors.NODES.OTHER,
+    },
+    edge: {
+      strokeColor: Colors.NODES.OTHER,
+      transitionDuration: 0,
+    },
+  };
+
+  const mergeStyle = modifyingStyle => {
+    if (modifyingStyle) {
+      return _.merge(_.cloneDeep(DEFAULT_STYLE), modifyingStyle);
+    }
+
+    return DEFAULT_STYLE;
+  };
 
   const components = {
     SettingsBar,
@@ -65,25 +110,44 @@
 
   @Component({ components })
   export default class VariablesPanel extends Vue {
-    @Prop({}) model: HMI.ModelInterface;
+    @Prop({}) model: ModelInterface;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
+    @Getter getSimParametersCount;
     @Getter getSimParameterArray;
 
     @Getter getSimVariables;
+    @Getter getSimVariablesAggregate;
     @Action setSimVariables;
     @Action setSimVariableVisibility;
-    @Action getModelResults;
+    @Action fetchModelResults;
 
-    get sortedSimVariables (): HMI.SimulationVariable[] {
-      return _.orderBy(this.getSimVariables, ['name'], ['asc']);
+    get simVariables (): SimulationVariable[] {
+      const simVariables = this.getSimVariables;
+
+      simVariables.map(simVariable => {
+        simVariable.styles = simVariable.styles || [];
+        for (let i = 0; i < simVariable.values.length; i++) {
+          simVariable.styles.push(mergeStyle(i !== simVariable.values.length - 1 && OTHER_STYLE));
+        }
+      });
+
+      if (this.getSimParametersCount > 1) {
+        this.getSimVariablesAggregate.map((simVariableAggregate, i) => {
+          const simVariable = simVariables[i];
+          simVariable.values = [...simVariable.values, ...simVariableAggregate.values];
+          simVariable.styles.push(mergeStyle(AGGREGATE_STYLE));
+        });
+      }
+
+      return _.orderBy(simVariables, ['name'], ['asc']);
     }
 
     get countersTitle (): string {
       return this.getSimVariables.length + ' Variables';
     }
 
-    get countersData (): HMI.Counter[] {
+    get countersData (): Counter[] {
       const count = this.getSimVariables.filter(variable => variable.hidden).length ?? 0;
       if (count === this.getSimVariables.length) {
         return [{ name: 'All hidden' }];
@@ -94,8 +158,7 @@
 
     async loadResults (): Promise<void> {
       if (this.model) {
-        const responseArr: any = await this.getModelResults(this.model);
-        this.setSimVariables(donuSimulateToD3(responseArr));
+        this.fetchModelResults({ model: this.model });
       }
     }
 
