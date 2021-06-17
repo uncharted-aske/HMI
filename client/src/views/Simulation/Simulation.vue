@@ -25,7 +25,7 @@
             <font-awesome-icon :icon="['fas', 'bookmark' ]" />
           </button>
           <button class="btn btn-primary" title="Reset all saved runs" @click="fetchParameters">
-            <font-awesome-icon :icon="['fas', 'ban' ]" />
+            <font-awesome-icon :icon="['fas', 'undo' ]" />
           </button>
         </div>
         <button class="btn btn-primary m-1" @click="onCloseSimView">
