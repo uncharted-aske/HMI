@@ -2,8 +2,7 @@
   <div class="btn-group">
     <button
       type="button"
-      class="btn btn-primary"
-      :class="{ 'blue' : !autoRunInput }"
+      class="btn btn-primary blue"
       @click="onClickRun"
     >
       <font-awesome-icon :icon="['fas', ( autoRunInput ? 'pause' : 'play') ]" />
@@ -12,6 +11,7 @@
     <button
       type="button"
       class="btn btn-primary blue dropdown-toggle dropdown-toggle-split"
+      :class="{ 'open': dropdownOpen }"
       @click="dropdownOpen = !dropdownOpen"
     />
     <div class="dropdown-menu dropdown-menu-right" :class="{ 'show': dropdownOpen }">
@@ -22,7 +22,7 @@
         Auto-Run
       </label>
       <div class="dropdown-divider" />
-      <h6 class="dropdown-header">_Sequence_ Settings</h6>
+      <h6 class="dropdown-header">Model Execution Settings</h6>
       <div class="run-config">
         <label for="run-config-start">Start</label>
         <input type="number" id="run-config-start" v-model.number="configInput.start" />
@@ -72,6 +72,17 @@
     padding: 0 1.5em .5em 0;
   }
 
+  /* Make the caret bigger */
+  .dropdown-toggle {
+    font-size: 1.5em;
+  }
+
+  /* Reverse the caret when open */
+  .dropdown-toggle.open::after {
+    border-bottom: 0.3em solid;
+    border-top: 0;
+  }
+
   .run-config {
     display: grid;
     font-size: .9em;
@@ -79,6 +90,7 @@
     grid-template-columns: 3em auto;
   }
 
+  /* Align the label with the inputs */
   .run-config label {
     line-height: 2;
     margin: 0;

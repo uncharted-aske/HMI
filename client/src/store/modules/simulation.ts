@@ -2,6 +2,7 @@ import { GetterTree, ActionTree } from 'vuex';
 import * as Donu from '@/types/typesDonu';
 import * as HMI from '@/types/types';
 import { getModelResult } from '@/services/DonuService';
+import * as lodash from 'lodash';
 
 const state: {
     parametersMaxCount: number, // Holds the maximum number of parameter sets which should be stored
@@ -45,6 +46,10 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
 
   getSimVariables (state): HMI.SimulationVariable[] {
     return state.variables;
+  },
+
+  hasVariablesRuns (state): boolean {
+    return !lodash.isEmpty(state.variables?.[0]?.values?.[0]);
   },
 };
 

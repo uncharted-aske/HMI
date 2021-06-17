@@ -5,7 +5,7 @@
       <aside slot="right">
         <div class="dropdown">
           <button
-            class="btn btn-primary dropdown-toggle"
+            class="btn btn-secondary dropdown-toggle"
             type="button"
             @click="settingsOpen = !settingsOpen">
             Settings
@@ -26,7 +26,7 @@
           </div>
         </div>
         <button
-          class="btn btn-primary"
+          class="btn btn-secondary"
           title="Expand Model Panel"
           type="button"
           @click="$emit('expand')">

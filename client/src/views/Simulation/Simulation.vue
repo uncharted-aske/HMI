@@ -12,18 +12,25 @@
           <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
           <span>Provenance Graph </span>
         </button>
-        <button class="btn btn-primary m-1" @click="fetchParameters">
-          <span>Reset</span>
-        </button>
-        <button class="btn btn-primary m-1" @click="incrParametersMaxCount">
-          <span>Save</span>
-        </button>
       </div>
       <div class="search-col justify-content-end">
-        <run-button class="m-1" :auto-run.sync="autoRun" :config.sync="runConfig" @run="fetchResults" />
+        <run-button
+          class="m-1"
+          :auto-run.sync="autoRun"
+          :config.sync="runConfig"
+          @run="fetchResults"
+        />
+        <div class="btn-group m-1">
+          <button class="btn btn-primary" title="Save current run" @click="incrParametersMaxCount">
+            <font-awesome-icon :icon="['fas', 'bookmark' ]" />
+          </button>
+          <button class="btn btn-primary" title="Reset all saved runs" @click="fetchParameters">
+            <font-awesome-icon :icon="['fas', 'ban' ]" />
+          </button>
+        </div>
         <button class="btn btn-primary m-1" @click="onCloseSimView">
-          <font-awesome-icon :icon="['fas', 'chart-line' ]" />
-          <span> Close Simulation View </span>
+          <font-awesome-icon :icon="['fas', 'sign-out-alt' ]" />
+          <span> Close Simulation </span>
         </button>
       </div>
     </div>
