@@ -64,7 +64,6 @@
   import { Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
-  import { debounce } from 'lodash';
 
   import * as HMI from '@/types/types';
   import * as Graph from '@/types/typesGraphs';
