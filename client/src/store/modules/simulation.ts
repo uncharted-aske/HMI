@@ -2,7 +2,6 @@ import { GetterTree, ActionTree } from 'vuex';
 import * as HMI from '@/types/types';
 import * as Donu from '@/types/typesDonu';
 import { getModelParameters, getModelResult, getModelVariables } from '@/services/DonuService';
-import * as lodash from 'lodash';
 import { aggregateModelResults, donuSimulateToVariable } from '@/utils/DonuUtil';
 
 const state: {
@@ -50,8 +49,8 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
     return state.variablesAggregate;
   },
 
-  hasVariablesRuns (state): boolean {
-    return !lodash.isEmpty(state.variables?.[0]?.values?.[0]);
+  getVariablesRunsCount (state): number {
+    return state.variables?.[0]?.values?.length;
   },
 };
 
@@ -62,6 +61,7 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
   },
 
   setSimParameterValue ({ state }, args: { name: string, value: number }): void {
+    // Initialize value set if current parameters count is less than max parameters count
     if (getSimParametersCount(state) < state.parametersMaxCount) {
       state.parameters = state.parameters.map(parameter => {
         const currentParamsCount = parameter.values.length;
@@ -126,7 +126,7 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
     state.variables = donuVariables.map(donuVariable => ({
       ...donuVariable,
       hidden: false,
-      values: [[]],
+      values: [],
     }));
   },
 
