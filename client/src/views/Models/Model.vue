@@ -118,8 +118,8 @@
   ];
 
   const VIEWS: ViewInterface[] = [
-    { name: 'Causal', id: 'causal' },
-    { name: 'Functional', id: 'functional' },
+    { name: 'Petri Net Classic', id: 'ptc' },
+    { name: 'Functional Network', id: 'fn' },
   ];
 
   const DRILLDOWN_TABS: TabInterface[] = [
@@ -381,7 +381,7 @@
   @Component({ components })
   export default class Model extends Vue {
     views: ViewInterface[] = VIEWS;
-    selectedViewId = 'causal';
+    selectedViewId = 'ptc';
 
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
@@ -423,7 +423,7 @@
     }
 
     get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 'causal' ? this.selectedModel?.graph?.abstract : this.selectedModel?.graph?.detailed;
+      return this.selectedViewId === 'ptc' ? this.selectedModel?.graph?.abstract : this.selectedModel?.graph?.detailed;
     }
 
     get nodeCount (): number {
