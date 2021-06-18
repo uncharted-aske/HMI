@@ -14,8 +14,8 @@
 
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
-  import ElkAdapter from '@/graphs/svg/elk/adapter';
-  import { layered } from '@/graphs/svg/elk/layouts';
+  // import ElkAdapter from '@/graphs/svg/elk/adapter';
+  // import { layered } from '@/graphs/svg/elk/layouts';
   import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
   import { calculateNodeNeighborhood, constructRootNode } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
@@ -23,7 +23,6 @@
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
     nodeHeight: 40,
-    layout: layered,
   };
 
   @Component
