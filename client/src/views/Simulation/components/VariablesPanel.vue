@@ -1,6 +1,24 @@
 <template>
   <section class="simulation-variables-panel">
     <settings-bar>
+      <div class="btn-group" slot="left" aria-label="Show/Hide Parameters">
+        <button
+          class="btn btn-secondary"
+          title="Show all parameters"
+          type="button"
+          @click="onShowAllVariables"
+        >
+          <font-awesome-icon :icon="['fas', 'eye']" />
+        </button>
+        <button
+          class="btn btn-secondary"
+          title="Hide all parameters"
+          type="button"
+          @click="onHideAllVariables"
+        >
+          <font-awesome-icon :icon="['fas', 'eye-slash']" />
+        </button>
+      </div>
       <counters
         slot="left"
         :title="countersTitle"
@@ -160,6 +178,14 @@
           return [{ name: 'Hidden', value: hidden }];
         }
       } else return [];
+    }
+
+    onHideAllVariables (): void {
+      this.getSimVariables.forEach(variable => { variable.hidden = true; });
+    }
+
+    onShowAllVariables (): void {
+      this.getSimVariables.forEach(variable => { variable.hidden = false; });
     }
   }
 </script>
