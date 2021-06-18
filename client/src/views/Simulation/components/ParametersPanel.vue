@@ -1,6 +1,6 @@
 <template>
   <section
-    class="simulation-parameters-container"
+    class="simulation-parameters-panel"
     :style="{
       '--padding': padding + 'px',
       '--parameter-height': parameterHeight + 'px',
@@ -9,7 +9,7 @@
     <settings-bar>
       <div class="btn-group" slot="left" aria-label="Show/Hide Parameters">
         <button
-          class="btn btn-primary"
+          class="btn btn-secondary"
           title="Show all parameters"
           type="button"
           @click="onShowAllParameters"
@@ -17,7 +17,7 @@
           <font-awesome-icon :icon="['fas', 'eye']" />
         </button>
         <button
-          class="btn btn-primary"
+          class="btn btn-secondary"
           title="Hide all parameters"
           type="button"
           @click="onHideAllParameters"
@@ -32,14 +32,15 @@
       />
       <div slot="right">
         <button
-          class="btn btn-primary"
+          class="btn btn-secondary"
+          disabled
           type="button"
           @click="$emit('settings')">
           Settings
         </button>
         <button
-          class="btn btn-primary"
-          title="Expand Parameters view"
+          class="btn btn-secondary"
+          title="Expand Parameters Panel"
           type="button"
           @click="$emit('expand')">
           <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
@@ -58,11 +59,11 @@
           <h4 :title="parameter.metadata.Description">{{ parameter.name }}</h4>
           <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.name, e)" />
           <aside class="btn-group">
-            <button type="button" class="btn btn-primary btn-sm">
+            <button type="button" class="btn btn-secondary btn-sm">
               <font-awesome-icon :icon="['fas', 'tools']" />
             </button>
             <button
-              class="btn btn-primary btn-sm"
+              class="btn btn-secondary btn-sm"
               title="(parameter.hidden ? 'Show' : 'Hide' + ' parameter')"
               type="button"
               @click="parameter.hidden = !parameter.hidden"
@@ -104,10 +105,11 @@
     private padding: number = 5;
     private parameterHeight: number = 100;
 
-    // Condition when to redraw the Graph
+    // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
     @Watch('expanded') onExpanded (): void { this.drawGraph(); }
     @Watch('parameters') onParametersChanged (): void { this.drawGraph(); }
+    mounted (): void { this.drawGraph(); }
 
     // Condition when to clear the Graph
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
@@ -228,7 +230,7 @@
 <style lang="scss" scoped>
   @import "@/styles/variables";
 
-  .simulation-parameters-container {
+  .simulation-parameters-panel {
     color: white;
     display: flex;
     flex-direction: column;

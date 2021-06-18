@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100 w-100 d-flex flex-column">
+  <section class="simulation-variables-panel">
     <settings-bar>
       <counters
         slot="left"
@@ -7,16 +7,23 @@
         :data="countersData"
       />
       <div slot="right">
-        <button type="button" class="btn btn-primary btn-settings">Settings</button>
-        <button type="button" class="btn btn-primary py-0 btn-settings" @click="$emit('expand')">
-          <i class="fas fa-expand-alt"/>
+        <button type="button" disabled class="btn btn-secondary btn-settings">Settings</button>
+        <button type="button" class="btn btn-secondary py-0 btn-settings" @click="$emit('expand')">
+          <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
         </button>
       </div>
     </settings-bar>
 
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
+        <div
+          v-if="!getVariablesRunsCount"
+          class="alert alert-info" role="alert"
+        >
+          Click `Run` to get variables output.
+        </div>
         <multi-line-plot
+          v-else
           v-for="(plot, index) in simVariables"
           :key="index"
           :title="plot.name"
@@ -25,11 +32,11 @@
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
         >
           <aside class="btn-group">
-            <button type="button" class="btn btn-primary btn-sm">
+            <button type="button" class="btn btn-secondary btn-sm">
               <font-awesome-icon :icon="['fas', 'tools']" />
             </button>
             <button
-              class="btn btn-primary btn-sm"
+              class="btn btn-secondary btn-sm"
               :title="(plot.hidden ? 'Show' : 'Hide' + ' parameter')"
               type="button"
               @click="setSimVariableVisibility(plot.name)"
@@ -40,22 +47,22 @@
         </multi-line-plot>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
   import _ from 'lodash';
-  import Component from 'vue-class-component';
-  import { Action, Getter } from 'vuex-class';
-  import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { InjectReactive, Prop } from 'vue-property-decorator';
+  import { Action, Getter } from 'vuex-class';
+
+  import * as HMI from '@/types/types';
 
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
   import { Colors } from '@/graphs/svg/encodings';
-
-  import { ModelInterface, SimulationVariable, Counter } from '@/types/types';
 
   const DEFAULT_STYLE = {
     node: {
@@ -110,21 +117,16 @@
 
   @Component({ components })
   export default class VariablesPanel extends Vue {
-    @Prop({}) model: ModelInterface;
+    @Prop({ default: false }) expanded: boolean;
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
-    @Getter getSimParametersCount;
-    @Getter getSimParameterArray;
-
     @Getter getSimVariables;
+    @Getter getVariablesRunsCount;
     @Getter getSimVariablesAggregate;
-    @Action setSimVariables;
     @Action setSimVariableVisibility;
-    @Action fetchModelResults;
 
-    get simVariables (): SimulationVariable[] {
-      const simVariables = this.getSimVariables;
-
+    get simVariables (): HMI.SimulationVariable[] {
+      const simVariables = _.cloneDeep(this.getSimVariables);
       simVariables.map(simVariable => {
         simVariable.styles = simVariable.styles || [];
         for (let i = 0; i < simVariable.values.length; i++) {
@@ -132,7 +134,7 @@
         }
       });
 
-      if (this.getSimParametersCount > 1) {
+      if (this.getVariablesRunsCount > 1) {
         this.getSimVariablesAggregate.map((simVariableAggregate, i) => {
           const simVariable = simVariables[i];
           simVariable.values = [...simVariable.values, ...simVariableAggregate.values];
@@ -144,62 +146,46 @@
     }
 
     get countersTitle (): string {
-      return this.getSimVariables.length + ' Variables';
+      const count = this.getSimVariables.length;
+      return (count > 0 ? count : '—') + ' Variables';
     }
 
-    get countersData (): Counter[] {
-      const count = this.getSimVariables.filter(variable => variable.hidden).length ?? 0;
-      if (count === this.getSimVariables.length) {
-        return [{ name: 'All hidden' }];
-      } else if (count > 0) {
-        return [{ name: 'Hidden', value: count }];
-      }
-    }
-
-    async loadResults (): Promise<void> {
-      if (this.model) {
-        this.fetchModelResults({ model: this.model });
-      }
-    }
-
-    @Watch('resized') onResponsiveGridResizing (): void {
-      if (this.resized) {
-        this.loadResults();
-      }
-    }
-
-    @Watch('model') onModelChanged (): void {
-      this.loadResults();
-    }
-
-    @Watch('getSimParameterArray') onDonuParametersChanged (): void {
-      this.loadResults();
+    get countersData (): HMI.Counter[] {
+      const count = this.getSimVariables.length;
+      if (count > 0) {
+        const hidden = this.getSimVariables.filter(variable => variable.hidden).length ?? 0;
+        if (hidden === count) {
+          return [{ name: 'All hidden' }];
+        } else if (hidden > 0) {
+          return [{ name: 'Hidden', value: hidden }];
+        }
+      } else return [];
     }
   }
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/variables";
+  @import "@/styles/variables";
 
-.scatterplot-chart-container {
-  flex: 1;
-  background-color: $bg-graphs;
-}
+  .scatterplot-chart-container {
+    flex: 1;
+    background-color: $bg-graphs;
+  }
 
-.variable .btn-group {
-  grid-area: action;
-}
+  .variable .btn-group {
+    grid-area: action;
+  }
 
-.variable.hidden {
-  opacity: 0.5;
-}
+  .variable.hidden {
+    opacity: 0.5;
+  }
 
-.btn-settings {
-  height: 25px;
-  line-height: 0;
-}
+  .btn-settings {
+    height: 25px;
+    line-height: 0;
+  }
 
-.chart {
-  height: auto;
-}
+  .chart {
+    height: auto;
+  }
 </style>

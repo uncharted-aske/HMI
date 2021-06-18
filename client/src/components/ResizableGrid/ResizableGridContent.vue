@@ -1,6 +1,6 @@
 <template>
   <div
-    class="panel-content d-flex position-absolute"
+    class="panel-content"
     :id="content.id"
     :style="style"
   >
@@ -57,6 +57,11 @@
 @import "@/styles/variables";
 
 $border-select-margin: 5px;
+
+.panel-content {
+  display: flex;
+  position: absolute;
+}
 
 .panel-content-border {
   position: absolute;
