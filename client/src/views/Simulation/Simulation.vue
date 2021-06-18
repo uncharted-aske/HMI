@@ -24,7 +24,7 @@
           <button class="btn btn-primary" title="Save current run" @click="incrParametersMaxCount">
             <font-awesome-icon :icon="['fas', 'bookmark' ]" />
           </button>
-          <button class="btn btn-primary" title="Reset all saved runs" @click="fetchParameters">
+          <button class="btn btn-primary" title="Reset all saved runs" @click="onResetSim">
             <font-awesome-icon :icon="['fas', 'undo' ]" />
           </button>
         </div>
@@ -64,12 +64,12 @@
   import { Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
+  import { debounce } from 'lodash';
 
-  import { SimulationParameter, ModelInterface, SimulationVariable } from '@/types/types';
-  import { GraphInterface } from '@/types/typesGraphs';
-  import { DimensionsInterface } from '@/types/typesResizableGrid';
+  import * as HMI from '@/types/types';
+  import * as Graph from '@/types/typesGraphs';
+  import * as RGrid from '@/types/typesResizableGrid';
   import * as Donu from '@/types/typesDonu';
-  import { getModelParameters, getModelVariables } from '@/services/DonuService';
 
   import Counters from '@/components/Counters.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
@@ -94,35 +94,45 @@
   export default class Simulation extends Vue {
     autoRun: boolean = false;
     runConfig: Donu.RequestConfig = { end: 120, start: 0, step: 30 };
-    subgraph: GraphInterface = null;
+    subgraph: Graph.GraphInterface = null;
     expandedId: string = '';
 
     @Action fetchModelResults;
     @Action incrParametersMaxCount;
-    @Action setSimParameters;
-    @Action setSimVariables;
+    @Action initializeSimParameters;
+    @Action initializeSimVariables;
+    @Action resetSim;
     @Getter getSelectedModelIds;
     @Getter getSimParameterArray;
     @Getter getModelsList;
     @Mutation setSelectedModels;
 
-    @Watch('selectedModel') onSelectedModelChanged (): void {
-      this.fetchParameters();
-      this.fetchVariables();
-    }
-
-    @Watch('getSimParameterArray') onDonuParametersChanged (): void {
+    @Watch('triggerFetchResults') onTriggerFetchResults (): void {
       if (this.autoRun) {
         this.fetchResults();
       }
     }
 
-    mounted (): void {
-      this.fetchParameters();
-      this.fetchVariables();
+    @Watch('selectedModel') onModelChanged (): void {
+      this.initializeSim();
     }
 
-    get selectedModel (): ModelInterface {
+    mounted (): void {
+      this.initializeSim();
+    }
+
+    /** Create an object that includes all variables that
+     *  needs to trigger a refresh of the results. */
+    get triggerFetchResults (): string {
+      const { end, start, step } = this.runConfig;
+      const watchObject = {
+        config: { end, start, step },
+        parameters: [...this.getSimParameterArray],
+      };
+      return JSON.stringify(watchObject);
+    }
+
+    get selectedModel (): HMI.ModelInterface {
       if (
         !this.getSelectedModelIds?.[0]?.toString() && // Are we missing the selectedModelId, toString to test id 0 as well,
         this.$route.params.model_id && // Does the model id is available from the route parameters,
@@ -142,7 +152,7 @@
         ];
     }
 
-    get gridDimensions (): DimensionsInterface {
+    get gridDimensions (): RGrid.DimensionsInterface {
       return {
         div1: {
           width: '10px',
@@ -173,24 +183,16 @@
       this.$router.push(options);
     }
 
-    async fetchParameters (): Promise<void> {
-      const simParameters = await getModelParameters(this.selectedModel) ?? [];
-      const parameters: SimulationParameter[] = simParameters.map(donuParameter => ({
-        ...donuParameter,
-        hidden: false,
-        values: [donuParameter.defaultValue],
-      }));
-      this.setSimParameters({ parameters, count: 1 });
+    onResetSim (): void {
+      this.resetSim();
+      this.initializeSim();
     }
 
-    async fetchVariables (): Promise<void> {
-      const donuVariables = await getModelVariables(this.selectedModel) ?? [];
-      const variables: SimulationVariable[] = donuVariables.map(donuVariable => ({
-        ...donuVariable,
-        hidden: false,
-        values: [[]],
-      }));
-      this.setSimVariables(variables);
+    initializeSim (): void {
+      if (this.selectedModel) {
+        this.initializeSimParameters(this.selectedModel);
+        this.initializeSimVariables(this.selectedModel);
+      }
     }
 
     fetchResults (): void {

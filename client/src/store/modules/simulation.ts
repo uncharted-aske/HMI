@@ -1,7 +1,7 @@
 import { GetterTree, ActionTree } from 'vuex';
 import * as HMI from '@/types/types';
-import { SimulationResponse } from '@/types/typesDonu';
-import { getModelResult } from '@/services/DonuService';
+import * as Donu from '@/types/typesDonu';
+import { getModelParameters, getModelResult, getModelVariables } from '@/services/DonuService';
 import * as lodash from 'lodash';
 import { aggregateModelResults, donuSimulateToVariable } from '@/utils/DonuUtil';
 
@@ -103,12 +103,38 @@ const actions: ActionTree<any, HMI.SimulationParameter[]> = {
   },
 
   async fetchModelResults ({ state, getters, dispatch }, { model, config, aggregator }): Promise<void> {
-    const modelResults: SimulationResponse[] = await Promise.all(
+    const modelResults: Donu.SimulationResponse[] = await Promise.all(
       getters.getSimParameterArray.map(simParamArr => getModelResult(model, simParamArr, config)),
     );
-    dispatch('setSimVariables', donuSimulateToVariable(modelResults as SimulationResponse[]));
+    dispatch('setSimVariables', donuSimulateToVariable(modelResults as Donu.SimulationResponse[]));
 
     state.variablesAggregate = donuSimulateToVariable([aggregateModelResults(modelResults, aggregator)]);
+  },
+
+  async initializeSimParameters ({ state }, model: HMI.ModelInterface): Promise<void> {
+    const donuParameters = await getModelParameters(model) ?? [];
+    state.parameters = donuParameters.map(donuParameter => ({
+      ...donuParameter,
+      hidden: false,
+      values: [donuParameter.defaultValue],
+    }));
+    state.parametersMaxCount = 1;
+  },
+
+  async initializeSimVariables ({ state }, model: HMI.ModelInterface): Promise<void> {
+    const donuVariables = await getModelVariables(model) ?? [];
+    state.variables = donuVariables.map(donuVariable => ({
+      ...donuVariable,
+      hidden: false,
+      values: [[]],
+    }));
+  },
+
+  resetSim ({ state }): void {
+    state.parametersMaxCount = 0;
+    state.parameters = [];
+    state.variables = [];
+    state.variablesAggregate = [];
   },
 };
 
