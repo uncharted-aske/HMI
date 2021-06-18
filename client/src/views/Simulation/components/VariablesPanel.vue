@@ -17,7 +17,7 @@
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
         <div
-          v-if="!hasVariablesRuns"
+          v-if="!getVariablesRunsCount"
           class="alert alert-info" role="alert"
         >
           Click `Run` to get variables output.
@@ -121,14 +121,12 @@
     @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
 
     @Getter getSimVariables;
-    @Getter hasVariablesRuns;
-    @Getter getSimParametersCount;
+    @Getter getVariablesRunsCount;
     @Getter getSimVariablesAggregate;
     @Action setSimVariableVisibility;
 
     get simVariables (): HMI.SimulationVariable[] {
-      const simVariables = this.getSimVariables;
-
+      const simVariables = _.cloneDeep(this.getSimVariables);
       simVariables.map(simVariable => {
         simVariable.styles = simVariable.styles || [];
         for (let i = 0; i < simVariable.values.length; i++) {
@@ -136,7 +134,7 @@
         }
       });
 
-      if (this.getSimParametersCount > 1) {
+      if (this.getVariablesRunsCount > 1) {
         this.getSimVariablesAggregate.map((simVariableAggregate, i) => {
           const simVariable = simVariables[i];
           simVariable.values = [...simVariable.values, ...simVariableAggregate.values];

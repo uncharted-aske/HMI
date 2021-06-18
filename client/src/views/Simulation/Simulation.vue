@@ -188,7 +188,7 @@
       const variables: SimulationVariable[] = donuVariables.map(donuVariable => ({
         ...donuVariable,
         hidden: false,
-        values: [[]],
+        values: [],
       }));
       this.setSimVariables(variables);
     }
