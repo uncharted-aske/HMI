@@ -31,6 +31,7 @@
     "aws-sdk": "^2.866.0",
     "bootstrap": "^4.5.2",
     "d3": "^6.6.0",
+    "dagre": "^0.8.5",
     "element-resize-detector": "1.1.x",
     "elkjs": "0.5.1",
     "flatpickr": "4.6.x",
