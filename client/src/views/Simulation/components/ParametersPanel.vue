@@ -96,8 +96,8 @@
   @Component({ components })
   export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
-    @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
-    @InjectReactive() isResizing!: boolean; // eslint-disable-line new-cap
+    @InjectReactive() resized!: boolean;
+    @InjectReactive() isResizing!: boolean;
 
     @Getter getSimParameters;
     @Action setSimParameterValue;
