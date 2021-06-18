@@ -190,11 +190,17 @@
         .y(([param]) => yScale(param));
 
       // Add the runs
-      graph.append('g').attr('fill', 'none')
+      graph.append('g')
         .selectAll('path')
           .data(runs)
           .join('path')
-            .attr('class', 'run')
+            .attr('class', (d, index) => {
+              // the current run is the last index
+              if (index === runs.length - 1) {
+                return 'current run';
+              }
+              return 'run';
+            })
             /* @ts-ignore */
             .attr('d', d => line(d3.cross(params, [d], (param, d) => [param, d[param]])))
           .append('title')
@@ -204,10 +210,11 @@
       graph.append('g')
         .selectAll('g')
           .data(params)
-          .join('g')
+          .join('line')
+            .attr('class', 'axis')
             .attr('transform', d => `translate(0, ${yScale(d)})`)
-            .each(function (d) { d3.select(this).call(d3.axisBottom(xScales.get(d))); })
-            .call(g => g.append('text').text(d => d));
+            .attr('x1', xMinMax[0])
+            .attr('x2', xMinMax[1]);
     }
 
     onHideAllParameters (): void {
@@ -251,7 +258,7 @@
 
   .parameters-list {
     list-style: none;
-    padding: var(--padding);
+    padding: 0;
   }
 
   .parameter {
@@ -302,10 +309,20 @@
 </style>
 <style lang="scss">
   /* For SVG you cannot scope the <style> */
-  @import "@/styles/variables";
+
+  .parameters-graph .axis {
+    fill: none;
+    stroke: var(--colors-nodes-other);
+    stroke-width: 1;
+  }
 
   .parameters-graph .run {
-    stroke: $selection-dark;
-    stroke-width: 5;
+    fill: none;
+    stroke: var(--colors-nodes-other);
+    stroke-width: 3;
+  }
+
+  .parameters-graph .run.current {
+    stroke: var(--colors-nodes-default);
   }
 </style>
