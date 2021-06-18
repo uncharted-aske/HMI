@@ -29,6 +29,7 @@ import {
   faSignOutAlt,
   faTimes,
   faTools,
+  faUndo,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterFormatter';
@@ -73,6 +74,7 @@ library.add(
   faSignOutAlt,
   faTimes,
   faTools,
+  faUndo,
 );
 // Enable automatic font awesome icon transformations
 dom.watch();

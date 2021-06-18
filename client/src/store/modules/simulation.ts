@@ -1,19 +1,21 @@
 import { GetterTree, ActionTree } from 'vuex';
-import * as Donu from '@/types/typesDonu';
 import * as HMI from '@/types/types';
-import { getModelResult } from '@/services/DonuService';
-import * as lodash from 'lodash';
+import * as Donu from '@/types/typesDonu';
+import { getModelParameters, getModelResult, getModelVariables } from '@/services/DonuService';
+import { aggregateModelResults, donuSimulateToVariable } from '@/utils/DonuUtil';
 
 type SimulationState = {
   numberOfSavedRuns: number,
   parameters: HMI.SimulationParameter[],
   variables: HMI.SimulationVariable[],
+  variablesAggregate: HMI.SimulationVariable[],
 }
 
 const state: SimulationState = {
   numberOfSavedRuns: 0,
   parameters: [],
   variables: [],
+  variablesAggregate: [],
 };
 
 const currentNumberOfRuns = (state: SimulationState): number => state.parameters?.[0]?.values.length ?? 0;
@@ -43,8 +45,12 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
     return state.variables;
   },
 
-  hasVariablesRuns (state): boolean {
-    return !lodash.isEmpty(state.variables?.[0]?.values?.[0]);
+  getSimVariablesAggregate (state): HMI.SimulationVariable {
+    return state.variablesAggregate;
+  },
+
+  getVariablesRunsCount (state): number {
+    return state.variables?.[0]?.values?.length;
   },
 };
 
@@ -95,15 +101,39 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     });
   },
 
-  async getModelResults ({ getters }, args: {
-    model: HMI.ModelInterface,
-    config: Donu.RequestConfig,
-  }): Promise<Donu.SimulationResponse[]> {
-    return await Promise.all(
-      getters.getSimParameterArray.map(simParamArr => {
-        return getModelResult(args.model, simParamArr, args.config);
-      }),
+  async fetchModelResults ({ state, getters, dispatch }, { model, config, aggregator }): Promise<void> {
+    const modelResults: Donu.SimulationResponse[] = await Promise.all(
+      getters.getSimParameterArray.map(simParamArr => getModelResult(model, simParamArr, config)),
     );
+    dispatch('setSimVariables', donuSimulateToVariable(modelResults as Donu.SimulationResponse[]));
+
+    state.variablesAggregate = donuSimulateToVariable([aggregateModelResults(modelResults, aggregator)]);
+  },
+
+  async initializeSimParameters ({ state }, model: HMI.ModelInterface): Promise<void> {
+    const donuParameters = await getModelParameters(model) ?? [];
+    state.parameters = donuParameters.map(donuParameter => ({
+      ...donuParameter,
+      hidden: false,
+      values: [donuParameter.defaultValue],
+    }));
+    state.numberOfSavedRuns = 1;
+  },
+
+  async initializeSimVariables ({ state }, model: HMI.ModelInterface): Promise<void> {
+    const donuVariables = await getModelVariables(model) ?? [];
+    state.variables = donuVariables.map(donuVariable => ({
+      ...donuVariable,
+      hidden: false,
+      values: [],
+    }));
+  },
+
+  resetSim ({ state }): void {
+    state.numberOfSavedRuns = 0;
+    state.parameters = [];
+    state.variables = [];
+    state.variablesAggregate = [];
   },
 };
 
