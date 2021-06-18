@@ -18,7 +18,9 @@ const state: SimulationState = {
   variablesAggregate: [],
 };
 
-const currentNumberOfRuns = (state: SimulationState): number => state.parameters?.[0]?.values.length ?? 0;
+const currentNumberOfRuns = (state: SimulationState): number => {
+  return state.parameters?.[0]?.values.length ?? 0;
+};
 
 const getters: GetterTree<any, HMI.SimulationParameter[]> = {
   getSimParameters (state: SimulationState): HMI.SimulationParameter[] {

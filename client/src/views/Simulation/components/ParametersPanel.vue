@@ -100,6 +100,7 @@
     @InjectReactive() isResizing!: boolean;
 
     @Getter getSimParameters;
+    @Getter getSimParameterArray;
     @Action setSimParameterValue;
 
     private padding: number = 5;
@@ -132,20 +133,6 @@
       }
     }
 
-    /** Get the list of parameters values for each runs. */
-    get runs (): HMI.SimulationRun[] {
-      const runs = [];
-
-      // For now, we create a unique fake run.
-      const fakeRun = this.parameters.reduce((run, parameter) => {
-        run[parameter.name] = parameter.defaultValue;
-        return run;
-      }, {});
-      runs.push(fakeRun);
-
-      return runs;
-    }
-
     getCurrentValue (parameter: HMI.SimulationParameter): number {
       return parameter.values.slice(-1)[0];
     }
@@ -172,6 +159,9 @@
       // List of parameters names
       const params = this.parameters.map(parameter => parameter.name);
 
+      // List of runs
+      const runs = this.getSimParameterArray;
+
       // Select the graph and size it
       this.clearGraph();
       const graph = d3.select('.parameters-graph svg');
@@ -184,7 +174,10 @@
       const yMinMax = [marginY, this.graphHeight() - marginY];
 
       // X & Y Scales
-      const xScale = param => d3.scaleLinear(d3.extent(this.runs, d => d[param]), xMinMax);
+      const xScale = param => {
+        const minMax = d3.extent(runs, d => d[param]) as Iterable<d3.NumberValue>;
+        return d3.scaleLinear(minMax, xMinMax);
+      };
       const xScales = new Map(params.map(param => [param, xScale(param)]));
       const yScale = d3.scalePoint(params, yMinMax);
 
@@ -199,7 +192,7 @@
       // Add the runs
       graph.append('g').attr('fill', 'none')
         .selectAll('path')
-          .data(this.runs)
+          .data(runs)
           .join('path')
             .attr('class', 'run')
             /* @ts-ignore */
