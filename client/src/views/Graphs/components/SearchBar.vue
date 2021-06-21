@@ -14,6 +14,7 @@
   import { Lex } from '@uncharted.software/lex/dist/lex';
   import TextPill from '@/search/pills/TextPill';
   import KeyValuePill from '@/search/pills/KeyValuePill';
+  import PathQueryPill from '@/search/pills/PathQueryPill';
 
   import * as filtersUtil from '@/utils/FiltersUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
@@ -64,6 +65,7 @@
           '',
           { single: true, multiValue: true },
         ),
+        new PathQueryPill(QUERY_FIELDS_MAP.BIO_PATH),
       ];
 
       this.lex = initializeLex({
