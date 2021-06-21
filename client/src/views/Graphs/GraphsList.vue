@@ -37,7 +37,7 @@
   import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import { CardInterface, Counter, ModelInterface, TabInterface } from '@/types/types';
+  import { CardInterface, Counter, KnowledgeGraphInterface, TabInterface } from '@/types/types';
 
   import SearchBar from '@/components/SearchBar.vue';
   import Counters from '@/components/Counters.vue';
@@ -82,7 +82,7 @@
     @Mutation setSelectedGraph;
     @Mutation clearSelectedModels;
 
-    get graphs (): ModelInterface[] {
+    get graphs (): KnowledgeGraphInterface[] {
       return modelsService.fetchGraphs(this.getModelsList, this.getFilters);
     }
 
@@ -119,7 +119,7 @@
       const options: RawLocation = { name: 'graph' };
 
       // As of now we only allow one Knowledgable Graph to be selected at a time.
-      const selectedGraph: ModelInterface = this.graphs.find(graph => graph.id === this.getSelectedGraph);
+      const selectedGraph: KnowledgeGraphInterface = this.graphs.find(graph => graph.id === this.getSelectedGraph);
       const modelId = selectedGraph?.metadata?.id;
       if (modelId) {
         options.params = {

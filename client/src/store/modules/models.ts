@@ -1,64 +1,25 @@
 import _ from 'lodash';
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
 
-import { ModelsState, ModelInterface, ModelInterfaceType } from '@/types/types';
+import { ModelsState, ModelInterface } from '@/types/types';
 
+import { staticFileURLs } from '@/static/mockedDataUrl';
 import { emmaaModelList } from '@/services/EmmaaFetchService';
 import { getUtil } from '@/utils/FetchUtil';
-import { fetchDonuModels } from '@/services/DonuService';
 import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 
 const state: ModelsState = {
   isInitialized: false,
   selectedModelIds: new Set(),
-  parameters: {},
-  comparisonHighlights: {},
   modelsList: [],
   selectedGraph: null,
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const fetchInitialModelData = async () => {
-  const staticFileURLs = [
-    `${window.location.origin}/gromets/SimpleSIR_gromet_PetriNetClassic_metadata.json`,
-    `${window.location.origin}/gromets/SimpleSIR_gromet_FunctionNetwork_metadata.json`,
-    // `${window.location.origin}/nested-CHIME-SIR-CAG.json`,
-    // `${window.location.origin}/nested-CHIME-SIR-GrFN.json`,
-    // `${window.location.origin}/uncharted_sir.json`,
-    // `${window.location.origin}/nested-SIR-simple-CAG.json`,
-    // `${window.location.origin}/nested-SIR-simple-GrFN.json`,
-    // `${window.location.origin}/uncharted_double_epi.json`,
-    // `${window.location.origin}/nested-SARS-COV1-SEIRP-CAG.json`,
-    // `${window.location.origin}/nested-SARS-COV1-SEIRP-GrFN.json`,
-    // `${window.location.origin}/comparison-SimpleSIR-CHIME.json`, // Overlapping nodes and edges for SIR and CHIME
-    // `${window.location.origin}/OAP1-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
-    // `${window.location.origin}/OAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
-    // `${window.location.origin}/NOAP1-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
-    // `${window.location.origin}/NOAP2-CHIME-paths.json`, // Overlapping nodes and edges for SIR and CHIME
-    // `${window.location.origin}/NOAP1-SIR-paths.json`, // Overlapping nodes and edges for SIR and CHIME
-    // `${window.location.origin}/subgraph.json`, // Boutique subgraph for COVID-19 model.
-    // `${window.location.origin}/xdd_parameters_table.json`, // Boutique subgraph for COVID-19 model.
-  ];
-
   const [
     SIR_PN,
     SIR_FN,
-    // nestedCHIMECAG,
-    // nestedCHIMEGrFN,
-    // SIR,
-    // nestedSIRCAG,
-    // nestedSIRGrFN,
-    // DoubleEpi,
-    // nestedDoubleEpiCAG,
-    // nestedDoubleEpiGrFN,
-    // comparisonJSON,
-    // OAP1CHIMEPaths,
-    // OAP1SIRPaths,
-    // NOAP1CHIMEPaths,
-    // NOAP2CHIMEPaths,
-    // NOAP1SIRPaths,
-    // subgraphJSON,
-    // paramsData,
   ] = await Promise.all(
     staticFileURLs.map(url => getUtil(url, {})),
   );
@@ -66,56 +27,32 @@ const fetchInitialModelData = async () => {
   return {
     SIR_PN,
     SIR_FN,
-    // nestedCHIMECAG,
-    // nestedCHIMEGrFN,
-    // SIR,
-    // nestedSIRCAG,
-    // nestedSIRGrFN,
-    // DoubleEpi,
-    // nestedDoubleEpiCAG,
-    // nestedDoubleEpiGrFN,
-    // comparisonJSON,
-    // OAP1CHIMEPaths,
-    // OAP1SIRPaths,
-    // NOAP1CHIMEPaths,
-    // NOAP2CHIMEPaths,
-    // NOAP1SIRPaths,
-    // subgraphJSON,
-    // paramsData,
   };
 };
 
 const buildInitialModelsList = ({
   SIR_PN,
   SIR_FN,
-  // nestedSIRCAG,
-  // nestedSIRGrFN,
-  // comparisonJSON,
-  // CHIME,
-  // nestedCHIMECAG,
-  // nestedCHIMEGrFN,
-  // DoubleEpi,
-  // nestedDoubleEpiCAG,
-  // nestedDoubleEpiGrFN,
 }): ModelInterface[] => {
   return [
     {
       id: 0,
       name: SIR_PN.name,
-      metadata: {
-        code: {
-          askeId: '',
-          provenance: { method: '', timestamp: '' },
-        },
-        documents: [
-          {
-            askeId: '',
-            bibjson: [],
-            provenance: { method: '', timestamp: '' },
-          },
-        ],
-        model: { method: '', timestamp: '' },
-      },
+      metadata: null,
+      // metadata: {
+      //   code: {
+      //     askeId: '',
+      //     provenance: { method: '', timestamp: '' },
+      //   },
+      //   documents: [
+      //     {
+      //       askeId: '',
+      //       bibjson: [],
+      //       provenance: { method: '', timestamp: '' },
+      //     },
+      //   ],
+      //   model: { method: '', timestamp: '' },
+      // },
       modelGraph: [
         {
           file: '',
@@ -129,95 +66,21 @@ const buildInitialModelsList = ({
         },
       ],
     },
-    // {
-    //   id: 1,
-    //   metadata: CHIME.metadata,
-    //   graph: {
-    //     abstract: _.pick(nestedCHIMECAG, ['nodes', 'edges']),
-    //     detailed: _.pick(nestedCHIMEGrFN, ['nodes', 'edges']),
-    //   },
-    //   subgraph: _.pick(comparisonJSON.subgraphs[1], ['nodes', 'edges']),
-    //   type: ModelInterfaceType.computational,
-    // },
-    // {
-    //   id: 2,
-    //   metadata: DoubleEpi.metadata,
-    //   graph: {
-    //     abstract: _.pick(nestedDoubleEpiCAG, ['nodes', 'edges']),
-    //     detailed: _.pick(nestedDoubleEpiGrFN, ['nodes', 'edges']),
-    //   },
-    //   type: ModelInterfaceType.computational,
-    // },
   ];
 };
 
-// TODO: Define ComparisonHighlight type
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-// const buildInitialComparisonHighlights = ({
-//   OAP1CHIMEPaths,
-//   OAP1SIRPaths,
-//   NOAP1CHIMEPaths,
-//   NOAP2CHIMEPaths,
-//   NOAP1SIRPaths,
-// }) => {
-//   return {
-//     9: {
-//       1: OAP1SIRPaths,
-//       2: OAP1CHIMEPaths,
-//     },
-//     10: {
-//       1: NOAP1SIRPaths,
-//       2: { nodes: [], edges: [] },
-//     },
-//     11: {
-//       1: { nodes: [], edges: [] },
-//       2: NOAP2CHIMEPaths,
-//     },
-//     12: {
-//       1: { nodes: [], edges: [] },
-//       2: NOAP1CHIMEPaths,
-//     },
-//   };
-// };
 
 const actions: ActionTree<ModelsState, any> = {
   async setInitialModelsState ({ commit }) {
     const {
       SIR_PN,
       SIR_FN,
-      // nestedCHIMECAG,
-      // nestedCHIMEGrFN,
-      // SIR,
-      // nestedSIRCAG,
-      // nestedSIRGrFN,
-      // DoubleEpi,
-      // nestedDoubleEpiCAG,
-      // nestedDoubleEpiGrFN,
-      // comparisonJSON,
-      // OAP1CHIMEPaths,
-      // OAP1SIRPaths,
-      // NOAP1CHIMEPaths,
-      // NOAP2CHIMEPaths,
-      // NOAP1SIRPaths,
-      // subgraphJSON,
-      // paramsData,
     } = await fetchInitialModelData();
-
-    // commit('setParameters', paramsData);
 
     // Initialize static models
     const initialModelsList = buildInitialModelsList({
       SIR_PN,
       SIR_FN,
-      // nestedSIRCAG,
-      // nestedSIRGrFN,
-      // comparisonJSON,
-      // CHIME,
-      // nestedCHIMECAG,
-      // nestedCHIMEGrFN,
-      // DoubleEpi,
-      // nestedDoubleEpiCAG,
-      // nestedDoubleEpiGrFN,
     });
     commit('setModelsList', initialModelsList);
 
@@ -237,23 +100,6 @@ const actions: ActionTree<ModelsState, any> = {
       console.warn('EMMAA API is not responding', error); // eslint-disable-line no-console
     }
 
-    // const initialComparisonHighlights = buildInitialComparisonHighlights({
-    //   OAP1CHIMEPaths,
-    //   OAP1SIRPaths,
-    //   NOAP1CHIMEPaths,
-    //   NOAP2CHIMEPaths,
-    //   NOAP1SIRPaths,
-    // });
-    // commit('setComparisonHighlights', initialComparisonHighlights);
-
-    // Add DONU models
-    try {
-      const donuModels = await fetchDonuModels();
-      donuModels.forEach(model => commit('addModel', model));
-    } catch (error) {
-      console.warn('Donu API is not responding', error); // eslint-disable-line no-console
-    }
-
     commit('setIsInitialized', true);
   },
 };
@@ -261,16 +107,16 @@ const actions: ActionTree<ModelsState, any> = {
 const getters: GetterTree<ModelsState, any> = {
   getIsInitialized: state => state.isInitialized,
   getSelectedModelIds: state => [...state.selectedModelIds],
-  getParameters: state => state.parameters,
   getModelsList: state => state.modelsList,
-  getComparisonHighlights: state => state.comparisonHighlights,
 
-  getCountComputationalModels: function (state: ModelsState): number {
-    return state.modelsList.filter(model => model.type === ModelInterfaceType.computational).length;
+  getCountComputationalModels: (state: ModelsState): number => {
+    return state.modelsList.length;
   },
 
-  getCountGraphsModels: function (state: ModelsState): number {
-    return state.modelsList.filter(model => model.type === ModelInterfaceType.biomechanism).length;
+  // TO REMOVE FROM HERE
+  getCountGraphsModels: (state: ModelsState): number => {
+    return 16;
+    // return state.modelsList.filter(model => model.type === ModelInterfaceType.biomechanism).length;
   },
 
   getSelectedGraph: state => state.selectedGraph,
@@ -284,15 +130,10 @@ const mutations: MutationTree<ModelsState> = {
   setIsInitialized (state, newIsInitialized) {
     state.isInitialized = newIsInitialized;
   },
-  setParameters (state, newParameters) {
-    state.parameters = newParameters;
-  },
   setModelsList (state, newModelsList) {
     state.modelsList = newModelsList;
   },
-  setComparisonHighlights (state, newComparisonHighlights) {
-    state.comparisonHighlights = newComparisonHighlights;
-  },
+
   setSelectedModels (state, newSelectedModelId) {
     if (state.selectedModelIds.has(newSelectedModelId)) {
       state.selectedModelIds.delete(newSelectedModelId);

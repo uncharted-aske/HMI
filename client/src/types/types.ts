@@ -93,7 +93,7 @@ interface CardInterface {
   previewImageSrc?: string,
   title: string;
   subtitle: string;
-  type: string;
+  // type: string;
   raw?: any;
   highlighted?: boolean;
   checked?: boolean;
@@ -133,6 +133,7 @@ export {
   GraferEventDetail,
   ModelComponentMetadataInterface,
   ModelInterface,
+  KnowledgeGraphInterface,
   ModelMetadataInterface,
   ModelsState,
   SimulationParameter,

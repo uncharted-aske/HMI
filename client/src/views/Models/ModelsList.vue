@@ -87,7 +87,8 @@
     @Mutation clearSelectedModels;
 
     get models (): ModelInterface[] {
-      return modelsService.fetchModels(this.getModelsList, this.getFilters);
+      console.log(this.getModelsList);
+      return this.getModelsList;
     }
 
     get searchPills (): any {
@@ -125,10 +126,9 @@
 
         return {
           id: model.id,
-          type: model.type,
           previewImageSrc,
-          title: model.metadata.name,
-          subtitle: model.metadata.description,
+          title: model.name,
+          subtitle:'',
           checked: selectedModelsList.has(model.id),
         } as CardInterface;
       });
