@@ -178,6 +178,7 @@
     @Getter getModelsList;
     @Getter getParameters;
     @Mutation setSelectedModels;
+    @Mutation setSelectedModelGraph;
 
     get selectedModel (): ModelInterface {
       if (
@@ -192,7 +193,9 @@
     }
 
     get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 'ptc' ? this.selectedModel?.modelGraph[0].graph : this.selectedModel?.modelGraph[1].graph;
+      const index = this.selectedViewId === 'ptc' ? 0 : 1;
+      this.setSelectedModelGraph(index);
+      return this.selectedModel?.modelGraph[index].graph;
     }
 
     get nodeCount (): number {

@@ -83,9 +83,7 @@ interface ModelsState {
   isInitialized: boolean,
   selectedModelIds: Set<string>,
   modelsList: ModelInterface[],
-  parameters?: any,
-  comparisonHighlights?: any,
-  selectedGraph?: string | number,
+  selectedModelGraph?: number,
 }
 
 interface CardInterface {

@@ -12,7 +12,7 @@ const state: ModelsState = {
   isInitialized: false,
   selectedModelIds: new Set(),
   modelsList: [],
-  selectedGraph: null,
+  selectedModelGraph: 0, // Refers to the position in the array of graphs for each modeling framework
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -83,7 +83,7 @@ const actions: ActionTree<ModelsState, any> = {
     });
     commit('setModelsList', initialModelsList);
 
-    // Initialize models from emmaa
+    // TO REMOVE FROM HERE: Initialize models from emmaa
     try {
       const modelList = await emmaaModelList();
       modelList.map(metadata => commit('addModel', {
@@ -118,7 +118,7 @@ const getters: GetterTree<ModelsState, any> = {
     // return state.modelsList.filter(model => model.type === ModelInterfaceType.biomechanism).length;
   },
 
-  getSelectedGraph: state => state.selectedGraph,
+  getSelectedModelGraph: state => state.selectedModelGraph,
 };
 
 const mutations: MutationTree<ModelsState> = {
@@ -147,9 +147,9 @@ const mutations: MutationTree<ModelsState> = {
     state.selectedModelIds.clear();
   },
 
-  setSelectedGraph (state, value: number | string) {
-    if (state.selectedGraph === value) value = null;
-    state.selectedGraph = value;
+  setSelectedModelGraph (state, value: number) {
+    if (state.selectedModelGraph === value) value = null;
+    state.selectedModelGraph = value;
   },
 };
 

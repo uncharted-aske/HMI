@@ -80,7 +80,6 @@
     @Mutation clearSelectedModels;
 
     get models (): ModelInterface[] {
-      console.log(this.getModelsList);
       return this.getModelsList;
     }
 
@@ -151,10 +150,6 @@
 </script>
 
 <style lang="scss" scoped>
-// .left-side-panel {
-//   flex-shrink: 0;
-// }
-
 main {
   display: flex;
   flex-direction: column;
