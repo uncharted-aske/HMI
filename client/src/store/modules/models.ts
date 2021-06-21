@@ -20,8 +20,8 @@ const state: ModelsState = {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const fetchInitialModelData = async () => {
   const staticFileURLs = [
-    `${window.location.origin}/gromets/SimpleSIR_gromet_PetriNetClassic.json`,
-    `${window.location.origin}/gromets/SimpleSIR_gromet_FunctionNetwork.json`,
+    `${window.location.origin}/gromets/SimpleSIR_gromet_PetriNetClassic_metadata.json`,
+    `${window.location.origin}/gromets/SimpleSIR_gromet_FunctionNetwork_metadata.json`,
     // `${window.location.origin}/nested-CHIME-SIR-CAG.json`,
     // `${window.location.origin}/nested-CHIME-SIR-GrFN.json`,
     // `${window.location.origin}/uncharted_sir.json`,
