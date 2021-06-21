@@ -101,12 +101,33 @@ const buildInitialModelsList = ({
   return [
     {
       id: 0,
-      metadata: { name: SIR_PN.name },
-      graph: {
-        abstract: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['nodes', 'edges']),
-        detailed: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['nodes', 'edges']),
+      name: SIR_PN.name,
+      metadata: {
+        code: {
+          askeId: '',
+          provenance: { method: '', timestamp: '' },
+        },
+        documents: [
+          {
+            askeId: '',
+            bibjson: [],
+            provenance: { method: '', timestamp: '' },
+          },
+        ],
+        model: { method: '', timestamp: '' },
       },
-      type: ModelInterfaceType.computational,
+      modelGraph: [
+        {
+          file: '',
+          type: 'PetriNetClassic',
+          graph: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['nodes', 'edges']),
+        },
+        {
+          file: '',
+          type: 'FunctionNetwork',
+          graph: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['nodes', 'edges']),
+        },
+      ],
     },
     // {
     //   id: 1,

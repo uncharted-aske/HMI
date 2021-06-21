@@ -1,4 +1,5 @@
 import * as Donu from '@/types/typesDonu';
+import * as Graph from '@/types/typesGraphs';
 
 interface ModelMetadataInterface {
   name: string,
@@ -24,7 +25,42 @@ export enum ModelInterfaceType {
   biomechanism = 'biomechanism',
 }
 
+/* Define a graph (nodes and edges) per type of a model. */
+type ModelGraph = {
+  file: string,
+  type: 'PetriNetClassic' | 'FunctionNetwork',
+  graph: Graph.GraphInterface,
+};
+
+type ModelProvenance = {
+  method: string,
+  timestamp: string, // should be date, ISO format
+}
+
+// Use to populate the model sidebar information
+// to make the model truthful.
+type ModelMetadata = {
+  code: {
+    askeId: string
+    provenance: ModelProvenance,
+  },
+  documents: {
+    askeId: string,
+    bibjson: any
+    provenance: ModelProvenance,
+  }[],
+  model: ModelProvenance,
+};
+
 interface ModelInterface {
+  id: number,
+  name: string,
+  metadata?: ModelMetadata,
+  modelGraph?: ModelGraph[],
+}
+
+// TODO revise this in the future with typesGraphs.ts and how to implement it.
+interface KnowledgeGraphInterface {
   id?: number;
   metadata: ModelMetadataInterface,
   graph?: any,
