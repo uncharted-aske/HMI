@@ -51,9 +51,6 @@
   import SIRScreenshot from '@/assets/img/SIR.png';
   import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
 
-  // Services
-  import * as modelsService from '@/services/ModelsService';
-
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
   ];
