@@ -34,6 +34,7 @@ export function bioPathPost (bgraphPathQuery, clause: Filter): any {
     return false;
   })
     .repeat(5) // TODO: Implement cycle detection in bgraph to remove bio path length limit
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .filter(_ => false)
     .unsuspend();
 }
