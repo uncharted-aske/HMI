@@ -7,11 +7,11 @@
       @tab-click="onTabClick"
     >
       <div slot="content">
-        <metadata-panel
+        <!-- <metadata-panel
           v-if="activeTabId === 'metadata'"
           :metadata="selectedModel && selectedModel.metadata"
         />
-        <facets-pane v-if="activeTabId === 'facets'" />
+        <facets-pane v-if="activeTabId === 'facets'" /> -->
       </div>
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
@@ -27,7 +27,7 @@
           <settings-bar>
             <counters
               slot="left"
-              :title="selectedModel && selectedModel.metadata.name"
+              :title="selectedModel && selectedModel.name"
               :data="[
                 { name: 'Nodes', value: nodeCount },
                 { name: 'Edges', value: edgeCount },
@@ -192,7 +192,7 @@
     }
 
     get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 'ptc' ? this.selectedModel?.graph?.abstract : this.selectedModel?.graph?.detailed;
+      return this.selectedViewId === 'ptc' ? this.selectedModel?.modelGraph[0].graph : this.selectedModel?.modelGraph[1].graph;
     }
 
     get nodeCount (): number {

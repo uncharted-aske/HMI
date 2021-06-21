@@ -69,7 +69,6 @@ const buildInitialModelsList = ({
   ];
 };
 
-
 const actions: ActionTree<ModelsState, any> = {
   async setInitialModelsState ({ commit }) {
     const {

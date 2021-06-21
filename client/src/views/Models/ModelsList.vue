@@ -1,12 +1,5 @@
 <template>
   <div class="view-container">
-    <!-- <left-side-panel
-      class="left-side-panel"
-      :activeTabId="activeTabId"
-      :tabs="tabs"
-    >
-      <facets-pane slot="content" />
-    </left-side-panel> -->
     <main>
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for Models...`"/>
@@ -128,7 +121,7 @@
           id: model.id,
           previewImageSrc,
           title: model.name,
-          subtitle:'',
+          subtitle: '',
           checked: selectedModelsList.has(model.id),
         } as CardInterface;
       });
