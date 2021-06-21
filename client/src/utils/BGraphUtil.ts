@@ -11,7 +11,7 @@ import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
 import { buildHighlightClusterLayer, buildHighlightNodeLayer } from './GraferUtil';
 import * as FiltresUtil from '@/utils/FiltresUtil';
-import { BIO_EDGE_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
+import * as BGraphQueryUtil from '@/utils/BGraphQueryUtil';
 
 const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
   let value, key;
@@ -90,38 +90,13 @@ export const executeBgraphEdges = (bgraphEdgeQuery: any, clause: Filter): any =>
       return bgraphEdgeQuery;
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: {
-      return bgraphEdgeQuery.filter(document => {
-        if (document._type === 'edge') {
-          const edge = document;
-          return edge.tested === Boolean(clause.values[0]);
-        }
-        // Document is not an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioEdgeTested(bgraphEdgeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field: {
-      return bgraphEdgeQuery.filter(document => {
-        if (document._type === 'edge') {
-          const edge = document;
-          return clause.values.some(typeIdx => BIO_EDGE_TYPE_OPTIONS[typeIdx] === edge.statement_type);
-        }
-        // Document is not an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioEdgeType(bgraphEdgeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_DOI.field: {
-      let dois = clause.values as string[];
-      dois = dois.map(doi => doi.toLowerCase());
-      return bgraphEdgeQuery.filter(document => {
-        if (document._type === 'edge') {
-          const edge = document;
-          return dois.some(doi => Object.keys(edge.doi_map).some(edgeDoi => {
-            return edgeDoi.toLowerCase().includes(doi);
-          }));
-        }
-        // Document is not an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioEdgeDOI(bgraphEdgeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_POST.field: {
       return bgraphEdgeQuery.as('edgeOnly').out().as('target').back('edgeOnly').in().as('source').merge('edgeOnly', 'source', 'target');
@@ -138,132 +113,43 @@ export const executeBgraphPathQuery = (bgraphPathQuery: any, clause: Filter): an
   switch (clause.field) {
     // EDGE CLAUSES
     case QUERY_FIELDS_MAP.BIO_PATH_PRE.field: {
-      return bgraphPathQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return node.group_map[clause.values[0]] !== undefined;
-        }
-        // Document type is an edge
-        return false;
-      })
-        .start()
-        .unique();
+      return BGraphQueryUtil.bioPathPre(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_PATH_PRE_NODE_FILTER_LOOP.field: {
-      return bgraphPathQuery.out();
+      return BGraphQueryUtil.bioPathPreNodeFilterLoop(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP.field: {
-      return bgraphPathQuery.out();
+      return BGraphQueryUtil.bioPathPreEdgeFilterLoop(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_PATH_POST.field: {
-      return bgraphPathQuery.suspend(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return node.group_map[clause.values[1]] !== undefined;
-        }
-        // Document type is an edge
-        return false;
-      })
-        .repeat(5)
-        .filter(_ => false)
-        .unsuspend();
+      return BGraphQueryUtil.bioPathPost(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: {
-      return bgraphPathQuery.filter(document => {
-        if (document._type === 'edge') {
-          const edge = document;
-          return edge.tested === Boolean(clause.values[0]);
-        }
-        // Document is not an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioEdgeTested(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field: {
-      return bgraphPathQuery.filter(document => {
-        if (document._type === 'edge') {
-          const edge = document;
-          return clause.values.some(typeIdx => BIO_EDGE_TYPE_OPTIONS[typeIdx] === edge.statement_type);
-        }
-        // Document is not an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioEdgeType(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_DOI.field: {
-      let dois = clause.values as string[];
-      dois = dois.map(doi => doi.toLowerCase());
-      return bgraphPathQuery.filter(document => {
-        if (document._type === 'edge') {
-          const edge = document;
-          return dois.some(doi => Object.keys(edge.doi_map).some(edgeDoi => {
-            return edgeDoi.toLowerCase().includes(doi);
-          }));
-        }
-        // Document is not an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioEdgeDOI(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
-      let names = clause.values as string[];
-      // Filter matching case insensitive names
-      names = names.map(name => name.toLowerCase());
-      return bgraphPathQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return names.some(name => name === node.name.toLowerCase());
-        }
-        // Document is not a node
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeName(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUP.field: {
-      return bgraphPathQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return clause.values.some(group => node.group_map[group] !== undefined);
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeGroup(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: {
-      return bgraphPathQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return node.grounded_db === Boolean(clause.values[0]);
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeGrounded(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field: {
-      return bgraphPathQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return node.grounded_group === Boolean(clause.values[0]);
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeGroundedOnto(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: {
-      return bgraphPathQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return clause.values.some(value => node.in_degree === Number(value));
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeInDegree(bgraphPathQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: {
-      return bgraphPathQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return clause.values.some(value => node.out_degree === Number(value));
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeOutDegree(bgraphPathQuery, clause);
     }
     default: {
       return bgraphPathQuery;
@@ -279,67 +165,22 @@ export const executeBgraphNodes = (bgraphNodeQuery: any, clause: Filter): any =>
       return bgraphNodeQuery;
     }
     case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
-      let names = clause.values as string[];
-      // Filter matching case insensitive names
-      names = names.map(name => name.toLowerCase());
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return names.some(name => name === node.name.toLowerCase());
-        }
-        // Document is not a node
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeName(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUP.field: {
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return clause.values.some(group => node.group_map[group] !== undefined);
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeGroup(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: {
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return node.grounded_db === Boolean(clause.values[0]);
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeGrounded(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field: {
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return node.grounded_group === Boolean(clause.values[0]);
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeGroundedOnto(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: {
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return clause.values.some(value => node.in_degree === Number(value));
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeInDegree(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: {
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return clause.values.some(value => node.out_degree === Number(value));
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeOutDegree(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_POST.field: {
       return bgraphNodeQuery;
