@@ -7,11 +7,11 @@
       @tab-click="onTabClick"
     >
       <div slot="content">
-        <!-- <metadata-panel
+        <metadata-panel
           v-if="activeTabId === 'metadata'"
-          :metadata="selectedModel && selectedModel.metadata"
+          :metadata="selectedModel && selectedModel.modelGraph[getSelectedModelGraph].metadata"
         />
-        <facets-pane v-if="activeTabId === 'facets'" /> -->
+        <!-- <facets-pane v-if="activeTabId === 'facets'" />  -->
       </div>
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
@@ -176,7 +176,7 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
-    @Getter getParameters;
+    @Getter getSelectedModelGraph;
     @Mutation setSelectedModels;
     @Mutation setSelectedModelGraph;
 
@@ -194,7 +194,6 @@
 
     get selectedGraph (): GraphInterface {
       const index = this.selectedViewId === 'ptc' ? 0 : 1;
-      this.setSelectedModelGraph(index);
       return this.selectedModel?.modelGraph[index].graph;
     }
 
@@ -285,6 +284,8 @@
 
     onSetView (viewId: string): void {
       this.selectedViewId = viewId;
+      const index = this.selectedViewId === 'ptc' ? 0 : 1;
+      this.setSelectedModelGraph(index);
     }
 
     async searchCosmos (keyword: string): Promise<void> {
@@ -299,14 +300,6 @@
     async getRelatedParameters (keyword: string): Promise<void> {
       const response = await cosmosRelatedParameters({ word: keyword, model: 'trigram', n: 10 });
       this.drilldownRelatedParameters = response.data;
-    }
-
-    formatParametersData (): any {
-      const parametersArray = [];
-      Object.keys(this.getParameters).forEach(key => {
-        parametersArray.push(this.getParameters[key]);
-      });
-      this.drilldownParameters = parametersArray;
     }
 
     onNodeClick (node: GraphNodeInterface): void {

@@ -38,30 +38,17 @@ const buildInitialModelsList = ({
     {
       id: 0,
       name: SIR_PN.name,
-      metadata: null,
-      // metadata: {
-      //   code: {
-      //     askeId: '',
-      //     provenance: { method: '', timestamp: '' },
-      //   },
-      //   documents: [
-      //     {
-      //       askeId: '',
-      //       bibjson: [],
-      //       provenance: { method: '', timestamp: '' },
-      //     },
-      //   ],
-      //   model: { method: '', timestamp: '' },
-      // },
       modelGraph: [
         {
           file: '',
           type: 'PetriNetClassic',
+          metadata: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['metadata']),
           graph: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['nodes', 'edges']),
         },
         {
           file: '',
           type: 'FunctionNetwork',
+          metadata: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['metadata']),
           graph: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['nodes', 'edges']),
         },
       ],

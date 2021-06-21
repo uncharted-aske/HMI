@@ -29,33 +29,13 @@ export enum ModelInterfaceType {
 type ModelGraph = {
   file: string,
   type: 'PetriNetClassic' | 'FunctionNetwork',
+  metadata?: any,
   graph: Graph.GraphInterface,
-};
-
-type ModelProvenance = {
-  method: string,
-  timestamp: string, // should be date, ISO format
-}
-
-// Use to populate the model sidebar information
-// to make the model truthful.
-type ModelMetadata = {
-  code: {
-    askeId: string
-    provenance: ModelProvenance,
-  },
-  documents: {
-    askeId: string,
-    bibjson: any
-    provenance: ModelProvenance,
-  }[],
-  model: ModelProvenance,
 };
 
 interface ModelInterface {
   id: number,
   name: string,
-  metadata?: ModelMetadata,
   modelGraph?: ModelGraph[],
 }
 
