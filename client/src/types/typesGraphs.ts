@@ -11,6 +11,11 @@ export interface SVGRendererOptionsInterface {
   addons?: any
 }
 
+export interface GraphLayoutInterface {
+  name: string, 
+  id: string,
+}
+
 export interface GraphNodeDataInterface {
   belief: number,
   cluster_ids: number,

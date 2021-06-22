@@ -14,20 +14,18 @@
     </button>
     <dropdown v-if="showDropdownViews" class="dropdown-settings">
       <div slot="content" class="btn-group btn-group-sm">
-        <!-- Disabled visual summary temporarily -->
         <button
           v-for="view in views" :key="view.id"
           class="btn btn-light"
           type="button"
           :class="{'active': view.id === selectedViewId}"
-          :disabled="view.id === 'summary' || view.id === 'clustered'"
           @click="onViewSelection(view.id)"
         >
           {{ view.name }}
         </button>
       </div>
     </dropdown>
-    <button type="button" class="btn btn-secondary" disabled>Layouts</button>
+    <button type="button" class="btn btn-secondary">Layouts</button>
     <button type="button" class="btn btn-secondary" disabled>Settings</button>
   </div>
 </template>
@@ -38,6 +36,7 @@
   import { Prop } from 'vue-property-decorator';
 
   import { ViewInterface } from '@/types/types';
+  import { GraphLayoutInterface } from '@/types/typesGraphs';
 
   import Dropdown from '@/components/Dropdown.vue';
 
@@ -46,11 +45,11 @@
   };
   @Component({ components })
   export default class Settings extends Vue {
-    @Prop({ default: () => [] })
-    views: ViewInterface[];
+    @Prop({ default: () => [] }) views: ViewInterface[];
+    @Prop({ default: () => [] }) layouts: GraphLayoutInterface[];
 
-    @Prop({ default: '' })
-    selectedViewId: string;
+    @Prop({ default: '' }) selectedViewId: string;
+    @Prop({ default: '' }) selectedLayoutId: string;
 
     showDropdownViews: boolean = false;
 

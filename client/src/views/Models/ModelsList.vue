@@ -13,9 +13,8 @@
           type="button"
           @click="onClickAction"
         >
-          {{ nbSelectedModelsIds > 1 ? 'Compare' : 'View' }}
+          {{ nbSelectedModelsIds > 1 ? 'Compare' : 'Open' }}
         </button>
-        <settings slot="right"/>
       </settings-bar>
       <card-container
         class="models-cards"

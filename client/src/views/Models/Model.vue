@@ -56,6 +56,8 @@
               slot="right"
               :selected-view-id="selectedViewId"
               :views="views"
+              :selected-layout-id="selectedLayout"
+              :layouts="layouts"
               @view-change="onSetView"
             />
           </settings-bar>
@@ -89,7 +91,7 @@
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import * as GroMEt from '@/types/typesGroMEt';
-  import { GraphInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
+  import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
@@ -121,6 +123,11 @@
   const VIEWS: ViewInterface[] = [
     { name: 'Petri Net Classic', id: 'ptc' },
     { name: 'Functional Network', id: 'fn' },
+  ];
+
+  const LAYOUTS: GraphLayoutInterface[] = [
+    { name: 'Dagre', id: 'dagre' },
+    { name: 'Layered', id: 'elk' },
   ];
 
   const DRILLDOWN_TABS: TabInterface[] = [
@@ -155,6 +162,9 @@
 
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
+
+    layouts: GraphLayoutInterface[] = LAYOUTS;
+    selectedLayout: string = 'elk';
 
     drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
