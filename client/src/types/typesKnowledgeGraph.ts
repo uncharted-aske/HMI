@@ -19,7 +19,15 @@ type Graph = {
   subgraph?: any,
 };
 
+type State = {
+  isInitialized: boolean,
+  modelsList: Graph[],
+  selectedModelGraph?: number,
+  selectedModelIds: Set<string>,
+};
+
 export {
   Graph,
   Metadata,
+  State,
 };
