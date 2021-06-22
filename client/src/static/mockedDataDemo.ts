@@ -1,16 +1,16 @@
 import _ from 'lodash';
 
-import { ModelInterface } from '@/types/types';
+import * as HMI from '@/types/types';
 import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 import { getUtil } from '@/utils/FetchUtil';
 
 export const staticFileURLs = [
-    `${window.location.origin}/gromets/SimpleSIR_gromet_PetriNetClassic_metadata.json`,
-    `${window.location.origin}/gromets/SimpleSIR_gromet_FunctionNetwork_metadata.json`,
+  `${window.location.origin}/gromets/SimpleSIR_gromet_PetriNetClassic_metadata.json`,
+  `${window.location.origin}/gromets/SimpleSIR_gromet_FunctionNetwork_metadata.json`,
 ];
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const fetchInitialModelData = async () => {
+export const fetchInitialModelData = async (): Promise<any> => {
   const [
     SIR_PN,
     SIR_FN,
@@ -27,7 +27,7 @@ export const fetchInitialModelData = async () => {
 export const buildInitialModelsList = ({
   SIR_PN,
   SIR_FN,
-}): ModelInterface[] => {
+}: any): HMI.ModelInterface[] => {
   return [
     {
       id: 0,
