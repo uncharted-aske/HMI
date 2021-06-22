@@ -1,7 +1,6 @@
-import _ from 'lodash';
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
 
-import { ModelsState, ModelInterface } from '@/types/types';
+import { ModelsState } from '@/types/types';
 
 import { fetchInitialModelData, buildInitialModelsList } from '@/static/mockedDataDemo';
 import { emmaaModelList } from '@/services/EmmaaFetchService';
@@ -12,7 +11,6 @@ const state: ModelsState = {
   modelsList: [],
   selectedModelGraph: 0, // Refers to the position in the array of graphs for each modeling framework
 };
-
 
 const actions: ActionTree<ModelsState, any> = {
   async setInitialModelsState ({ commit }) {

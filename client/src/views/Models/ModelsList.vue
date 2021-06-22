@@ -77,7 +77,6 @@
     @Mutation clearSelectedModels;
 
     get models (): ModelInterface[] {
-      console.log(this.getModelsList);
       return this.getModelsList;
     }
 
