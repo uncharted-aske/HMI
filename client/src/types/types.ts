@@ -47,13 +47,6 @@ interface ViewInterface {
   id: string;
 }
 
-interface ModelsState {
-  isInitialized: boolean,
-  selectedModelIds: Set<string>,
-  modelsList: ModelInterface[],
-  selectedModelGraph?: number,
-}
-
 interface CardInterface {
   id: number;
   previewImageSrc?: string,
@@ -99,7 +92,6 @@ export {
   ModelComponentMetadataInterface,
   ModelInterface,
   ModelMetadataInterface,
-  ModelsState,
   SimulationParameter,
   SimulationVariable,
   SimulationRun,

@@ -1,18 +1,18 @@
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
 
-import { ModelsState } from '@/types/types';
+import * as Model from '@/types/typesModel';
 
 import { fetchInitialModelData, buildInitialModelsList } from '@/static/mockedDataDemo';
 import { emmaaModelList } from '@/services/EmmaaFetchService';
 
-const state: ModelsState = {
+const state: Model.State = {
   isInitialized: false,
   selectedModelIds: new Set(),
   modelsList: [],
   selectedModelGraph: 0, // Refers to the position in the array of graphs for each modeling framework
 };
 
-const actions: ActionTree<ModelsState, any> = {
+const actions: ActionTree<Model.State, any> = {
   async setInitialModelsState ({ commit }) {
     const {
       SIR_PN,
@@ -46,24 +46,24 @@ const actions: ActionTree<ModelsState, any> = {
   },
 };
 
-const getters: GetterTree<ModelsState, any> = {
+const getters: GetterTree<Model.State, any> = {
   getIsInitialized: state => state.isInitialized,
   getSelectedModelIds: state => [...state.selectedModelIds],
   getModelsList: state => state.modelsList,
 
-  getCountComputationalModels: (state: ModelsState): number => {
+  getCountComputationalModels: (state: Model.State): number => {
     return state.modelsList.length;
   },
 
   // TO REMOVE FROM HERE
-  getCountGraphsModels: (state: ModelsState): number => {
+  getCountGraphsModels: (state: Model.State): number => {
     return state.modelsList.length;
   },
 
   getSelectedModelGraph: state => state.selectedModelGraph,
 };
 
-const mutations: MutationTree<ModelsState> = {
+const mutations: MutationTree<Model.State> = {
   addModel (state, newModel) {
     const modelsListLength = state.modelsList.length;
     state.modelsList.push(Object.assign({ id: modelsListLength }, newModel));
@@ -95,7 +95,7 @@ const mutations: MutationTree<ModelsState> = {
   },
 };
 
-export const models = {
+export {
   state,
   getters,
   mutations,
