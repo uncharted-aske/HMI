@@ -84,6 +84,7 @@
   import { Action, Getter } from 'vuex-class';
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
+  import * as SVGUtil from '@/utils/SVGUtil';
   import * as HMI from '@/types/types';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -165,7 +166,7 @@
       // Select the graph and size it
       this.clearGraph();
       const graph = d3.select('.parameters-graph svg');
-      graph.attr('viewBox', `0 0 ${this.graphWidth()} ${this.graphHeight()}`);
+      SVGUtil.createChart(graph, this.graphWidth(), this.graphHeight());
 
       // Dimensions
       const marginX = this.graphWidth() * 0.25;
@@ -183,7 +184,6 @@
 
       // Runs Line method
       const line = d3.line()
-        .defined(([, value]) => value != null)
         /* @ts-ignore */
         .x(([param, value]) => xScales.get(param)(value))
         /* @ts-ignore */
@@ -212,7 +212,7 @@
           .data(params)
           .join('line')
             .attr('class', 'axis')
-            .attr('transform', d => `translate(0, ${yScale(d)})`)
+            .attr('transform', d => SVGUtil.translate(0, yScale(d)))
             .attr('x1', xMinMax[0])
             .attr('x2', xMinMax[1]);
     }
