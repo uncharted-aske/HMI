@@ -29,12 +29,19 @@
   @Component
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
+    @Prop({ default: 'elk' }) layout: string;
+
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
 
     @Watch('data')
     dataChanged (): void {
+      this.refresh();
+    }
+
+    @Watch('layout')
+    layoutChanged (): void {
       this.refresh();
     }
 
@@ -79,6 +86,7 @@
     }
 
     refresh (): void {
+      console.log(this.layout);
       if (!this.data) return;
       const nodesHierarchy = hierarchyFn(this.data?.nodes); // Transform the flat nodes structure into a hierarchical one
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands

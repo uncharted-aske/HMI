@@ -43,7 +43,11 @@
               @layout-change="onSetLayout"
             />
           </settings-bar>
-          <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
+          <global-graph 
+            :data="selectedGraph" 
+            :layout="selectedLayoutId" 
+            @node-click="onNodeClick"
+          />
         </div>
         <div slot="2" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
@@ -309,10 +313,8 @@
 
     onSetLayout (layoutId: string): void {
       this.selectedLayoutId = layoutId;
-      // this.setSelectedModelGraph(index);
     }
 
-selectedLayselectedLayoutId
     async searchCosmos (keyword: string): Promise<void> {
         try {
           const response = await cosmosSearch(filterToParamObj({ cosmosQuery: [keyword] }));
