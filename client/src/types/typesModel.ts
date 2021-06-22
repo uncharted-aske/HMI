@@ -16,11 +16,13 @@ type Metadata = {
   version?: string,
 };
 
+type GraphMetadata = GroMEt.ModelInterface | GroMEt.CodeCollectionInterface | GroMEt.TextualDocumentReferenceSet;
+
 /* Define a graph (nodes and edges) per type of a model. */
 type Graph = {
   file: string,
   type: 'PetriNetClassic' | 'FunctionNetwork',
-  metadata?: Array<GroMEt.ModelInterface | GroMEt.CodeCollectionInterface | GroMEt.TextualDocumentReferenceSet >,
+  metadata?: Array<GraphMetadata>,
   graph: Graph.GraphInterface,
 };
 
@@ -40,6 +42,7 @@ type State = {
 
 export {
   Graph,
+  GraphMetadata,
   Model,
   Metadata,
   State,

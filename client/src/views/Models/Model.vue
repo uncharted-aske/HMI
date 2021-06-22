@@ -89,7 +89,6 @@
 
   import { TabInterface, ViewInterface } from '@/types/types';
   import * as Model from '@/types/typesModel';
-  import * as GroMEt from '@/types/typesGroMEt';
   import { GraphInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
@@ -194,7 +193,7 @@
       return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
     }
 
-    get selectedGraphMetadata (): Array<GroMEt.ModelInterface | GroMEt.CodeCollectionInterface | GroMEt.TextualDocumentReferenceSet > {
+    get selectedGraphMetadata (): Model.GraphMetadata[] {
       return this.selectedModel?.modelGraph[this.getSelectedModelGraph].metadata;
     }
 

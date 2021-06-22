@@ -46,7 +46,7 @@
   import { capitalize } from 'lodash';
   import * as HMI from '@/types/types';
   import * as Model from '@/types/typesModel';
-  import { GraphInterface } from '@/types/typesGraphs';
+  import * as Graph from '@/types/typesGraphs';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
@@ -78,7 +78,7 @@
       { name: capitalize(VIEWS.FUNCTIONAL), id: VIEWS.FUNCTIONAL },
     ];
 
-    get graph (): GraphInterface {
+    get graph (): Graph.GraphInterface {
       return this.model?.modelGraph?.[0]?.graph;
     }
 
