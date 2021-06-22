@@ -30,7 +30,6 @@
     @Prop({ default: null }) data: GraphInterface;
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
 
-
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
 
@@ -47,7 +46,7 @@
     mounted (): void {
        this.renderer = new EpiRenderer({
         el: this.$refs.graph,
-        adapter: new ELKAdapter(Object.assign({}, DEFAULT_RENDERING_OPTIONS, {layout: layered})),
+        adapter: new ELKAdapter(Object.assign({}, DEFAULT_RENDERING_OPTIONS, { layout: layered })),
         renderMode: 'delta',
         useEdgeControl: false,
         useZoom: true,
@@ -88,11 +87,11 @@
       if (!this.data) return;
 
       if (this.layout === GraphLayoutInterfaceType.elk) {
-        this.renderer.adapter = new ELKAdapter(Object.assign({}, DEFAULT_RENDERING_OPTIONS, {layout: layered}));
+        this.renderer.adapter = new ELKAdapter(Object.assign({}, DEFAULT_RENDERING_OPTIONS, { layout: layered }));
       } else {
-        this.renderer.adapter = new DagreAdapter(DEFAULT_RENDERING_OPTIONS); 
+        this.renderer.adapter = new DagreAdapter(DEFAULT_RENDERING_OPTIONS);
       }
-     
+
       const nodesHierarchy = hierarchyFn(this.data?.nodes); // Transform the flat nodes structure into a hierarchical one
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };

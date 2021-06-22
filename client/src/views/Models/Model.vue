@@ -43,9 +43,9 @@
               @layout-change="onSetLayout"
             />
           </settings-bar>
-          <global-graph 
-            :data="selectedGraph" 
-            :layout="selectedLayoutId" 
+          <global-graph
+            :data="selectedGraph"
+            :layout="selectedLayoutId"
             @node-click="onNodeClick"
           />
         </div>
