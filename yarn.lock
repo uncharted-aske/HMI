@@ -561,10 +561,10 @@
     "@typescript-eslint/types" "4.4.0"
     eslint-visitor-keys "^2.0.0"
 
-"@uncharted.software/bgraph@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@uncharted.software/bgraph/-/bgraph-0.1.0.tgz#6ecc71ace9b3a5373002aaaf164e4d4a70f63c08"
-  integrity sha512-BHpnjpYETFybvqYrnv0yxIAlhtVPBO0du3/Mj+uRaRmVmANUQH0GW0QNTgWnbZdE5GmLCT5MRKFs3iZkl7lvWg==
+"@uncharted.software/bgraph@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@uncharted.software/bgraph/-/bgraph-0.2.0.tgz#45b27bb364ffdbfc10c33f7a2e82ae5a10f58119"
+  integrity sha512-LofN+5e/MKYrUAYkEvGQaPlcveBx0tclSXD16YQXig2SBmwnDze4oKSAIdda8fYQajrUjs17LfEuU1RR4eQsWQ==
 
 "@uncharted.software/css-options@^3.1.0":
   version "3.1.0"

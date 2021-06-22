@@ -1,74 +1,60 @@
 <template>
   <div class="view-container">
-    <div class="d-flex flex-column flex-grow-1 position-relative">
-      <div class="search-row">
-        <div class="search-col flex-column">
-          <search-bar />
-        </div>
-        <div class="search-col mx-3 justify-content-between">
-          <button class="btn btn-primary blue m-1">
-            Simulate
-          </button>
-          <button class="btn btn-primary m-1">
-            <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
-            <span>Provenance Graph </span>
-          </button>
-          <button class="btn btn-primary m-1" @click="fetchParameters">
-            <span>Reset</span>
-          </button>
-          <button class="btn btn-primary m-1" @click="incrParametersMaxCount">
-            <span>Save</span>
-          </button>
-          <!-- <div class="btn-group m-1" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-primary" @click="onCloseSimView">Reset</button>
-            <button type="button" class="btn btn-primary" @click="onCloseSimView">Save</button>
-          </div> -->
-        </div>
-        <div class="search-col justify-content-end">
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-            <label class="form-check-label" for="inlineCheckbox1">Auto Run</label>
-          </div>
-          <button class="btn btn-primary blue m-1" @click="onCloseSimView">
-            <font-awesome-icon :icon="['fas', 'play' ]" />
-            <span>Run</span>
-          </button>
-          <button class="btn btn-primary m-1" @click="onCloseSimView">
-            <font-awesome-icon :icon="['fas', 'chart-line' ]" />
-            <span> Close Simulation View </span>
-          </button>
-        </div>
+    <div class="search-row">
+      <div class="search-col flex-column">
+        <search-bar />
       </div>
-      <resizable-grid :map="gridMap" :dimensions="gridDimensions">
-        <div slot="model" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              :title="selectedModel && selectedModel.metadata.name"
-              :data="[
-                { name: 'Parameters', value: 6 },
-                { name: 'Variables', value: 3 },
-              ]"
-            />
-            <button slot="right" type="button" class="btn btn-primary" @click="setExpandedId('model')">
-              <i class="fas fa-expand-alt"/>
-            </button>
-          </settings-bar>
-          <!-- <global-graph v-if="selectedModel" :data="selectedGraph"/> -->
+      <div class="search-col mx-3 justify-content-between">
+        <button class="btn btn-primary blue m-1">
+          Simulate
+        </button>
+        <button class="btn btn-primary m-1">
+          <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
+          <span>Provenance Graph </span>
+        </button>
+      </div>
+      <div class="search-col justify-content-end">
+        <run-button
+          class="m-1"
+          :auto-run.sync="autoRun"
+          :config.sync="runConfig"
+          @run="fetchResults"
+        />
+        <div class="btn-group m-1">
+          <button class="btn btn-primary" title="Save current run" @click="incrNumberOfSavedRuns">
+            <font-awesome-icon :icon="['fas', 'bookmark' ]" />
+          </button>
+          <button class="btn btn-primary" title="Reset all saved runs" @click="onResetSim">
+            <font-awesome-icon :icon="['fas', 'undo' ]" />
+          </button>
         </div>
-        <parameters-panel
-          slot="parameters" class="h-100 w-100 d-flex flex-column"
-          :expanded="expandedId === 'parameters'"
-          @expand="setExpandedId('parameters')"
-          @settings="onCloseSimView"
-        />
-        <variables-panel
-          :model="selectedModel"
-          slot="variables"
-          @expand="setExpandedId('variables')"
-        />
-      </resizable-grid>
+        <button class="btn btn-primary m-1" @click="onCloseSimView">
+          <font-awesome-icon :icon="['fas', 'sign-out-alt' ]" />
+          <span> Close Simulation </span>
+        </button>
+      </div>
     </div>
+    <resizable-grid :map="gridMap" :dimensions="gridDimensions">
+      <model-panel
+        class="simulation-panel"
+        slot="model"
+        :expanded="expandedId === 'model'"
+        :model="selectedModel"
+        @expand="setExpandedId('model')"
+      />
+      <parameters-panel
+        class="simulation-panel"
+        slot="parameters"
+        :expanded="expandedId === 'parameters'"
+        @expand="setExpandedId('parameters')"
+      />
+      <variables-panel
+        class="simulation-panel"
+        slot="variables"
+        :expanded="expandedId === 'variables'"
+        @expand="setExpandedId('variables')"
+      />
+    </resizable-grid>
   </div>
 </template>
 
@@ -79,61 +65,73 @@
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import { SimulationParameter, ModelInterface } from '@/types/types';
-  import { GraphInterface } from '@/types/typesGraphs';
-  import { DimensionsInterface } from '@/types/typesResizableGrid';
-
-  import { getModelParameters } from '@/services/DonuService';
+  import * as HMI from '@/types/types';
+  import * as Graph from '@/types/typesGraphs';
+  import * as RGrid from '@/types/typesResizableGrid';
+  import * as Donu from '@/types/typesDonu';
 
   import Counters from '@/components/Counters.vue';
-  import FacetsPane from '@/views/Models/components/FacetsPane.vue';
-  import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
-  import Settings from '@/views/Models/components/Settings.vue';
-  import SettingsBar from '@/components/SettingsBar.vue';
   import SearchBar from '@/components/SearchBar.vue';
+
+  import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
   import ParametersPanel from '@/views/Simulation/components/ParametersPanel.vue';
-
-  import VariablesPanel from './components/VariablesPanel.vue';
-
-  /**
-  Temporary hack for workshop
-  **/
+  import VariablesPanel from '@/views/Simulation/components/VariablesPanel.vue';
+  import RunButton from '@/views/Simulation/components/RunButton.vue';
 
   const components = {
     Counters,
-    FacetsPane,
-    GlobalGraph,
-    ResizableGrid,
-    SearchBar,
-    Settings,
-    SettingsBar,
+    ModelPanel,
     ParametersPanel,
+    ResizableGrid,
+    RunButton,
+    SearchBar,
     VariablesPanel,
   };
 
   @Component({ components })
   export default class Simulation extends Vue {
-    subgraph: GraphInterface = null;
-    parameters: SimulationParameter[] = [];
-
+    autoRun: boolean = false;
+    runConfig: Donu.RequestConfig = { end: 120, start: 0, step: 30 };
+    subgraph: Graph.GraphInterface = null;
     expandedId: string = '';
 
-    @Action setSimParameters;
-    @Action incrParametersMaxCount;
+    @Action fetchModelResults;
+    @Action incrNumberOfSavedRuns;
+    @Action initializeSimParameters;
+    @Action initializeSimVariables;
+    @Action resetSim;
     @Getter getSelectedModelIds;
+    @Getter getSimParameterArray;
     @Getter getModelsList;
     @Mutation setSelectedModels;
 
-    @Watch('selectedModel') onSelectedModelChanged (): void {
-      this.fetchParameters();
+    @Watch('triggerFetchResults') onTriggerFetchResults (): void {
+      if (this.autoRun) {
+        this.fetchResults();
+      }
+    }
+
+    @Watch('selectedModel') onModelChanged (): void {
+      this.initializeSim();
     }
 
     mounted (): void {
-      this.fetchParameters();
+      this.initializeSim();
     }
 
-    get selectedModel (): ModelInterface {
+    /** Create an object that includes all variables that
+     *  needs to trigger a refresh of the results. */
+    get triggerFetchResults (): string {
+      const { end, start, step } = this.runConfig;
+      const watchObject = {
+        config: { end, start, step },
+        parameters: [...this.getSimParameterArray],
+      };
+      return JSON.stringify(watchObject);
+    }
+
+    get selectedModel (): HMI.ModelInterface {
       if (
         !this.getSelectedModelIds?.[0]?.toString() && // Are we missing the selectedModelId, toString to test id 0 as well,
         this.$route.params.model_id && // Does the model id is available from the route parameters,
@@ -153,7 +151,7 @@
         ];
     }
 
-    get gridDimensions (): DimensionsInterface {
+    get gridDimensions (): RGrid.DimensionsInterface {
       return {
         div1: {
           width: '10px',
@@ -184,20 +182,44 @@
       this.$router.push(options);
     }
 
-    async fetchParameters (): Promise<void> {
-      const simParameters = await getModelParameters(this.selectedModel) ?? [];
-      const parameters: SimulationParameter[] = simParameters.map(donuParameter => ({
-        ...donuParameter,
-        hidden: false,
-        values: [donuParameter.defaultValue],
-      }));
-      this.setSimParameters({ parameters, count: 1 });
+    onResetSim (): void {
+      this.resetSim();
+      this.initializeSim();
+    }
+
+    initializeSim (): void {
+      if (this.selectedModel) {
+        this.initializeSimParameters(this.selectedModel);
+        this.initializeSimVariables(this.selectedModel);
+      }
+    }
+
+    fetchResults (): void {
+      if (this.selectedModel) {
+        this.fetchModelResults({
+          model: this.selectedModel,
+          config: this.runConfig,
+        });
+      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
   @import "@/styles/variables";
+
+  .view-container {
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  // Uniform sizing of the panels
+  .simulation-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
 
   // Uniform styling for the button in the settings-bars
   .view-container::v-deep .settings-bar-container button {
@@ -207,7 +229,7 @@
     padding-top: 0;
   }
 
-  .btn-primary.blue {
+  .view-container::v-deep .btn-primary.blue {
     background: $muted-highlight;
     border-color: $muted-highlight;
   }

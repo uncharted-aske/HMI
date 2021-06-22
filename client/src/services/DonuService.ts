@@ -70,7 +70,11 @@ export const getModelVariables = async (model: any): Promise<Donu.ModelVariable[
 };
 
 /** Fetch the result of a model simulation */
-export const getModelResult = async (model: any, parameters: Donu.RequestParameters): Promise<Donu.SimulationResponse> => {
+export const getModelResult = async (
+  model: ModelInterface,
+  parameters: Donu.RequestParameters,
+  config: Donu.RequestConfig,
+): Promise<Donu.SimulationResponse> => {
   const request: Donu.Request = {
     command: Donu.RequestCommand.SIMULATE,
     definition: {
@@ -78,9 +82,9 @@ export const getModelResult = async (model: any, parameters: Donu.RequestParamet
       type: model.metadata.type,
     } as Donu.ModelDefinition,
     parameters: parameters,
-    end: 120,
-    start: 0,
-    step: 30,
+    end: config.end,
+    start: config.start,
+    step: config.step,
   };
 
   const response = await callDonu(request);

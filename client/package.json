@@ -23,7 +23,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/vue-fontawesome": "^2.0.0",
-    "@uncharted.software/bgraph": "0.1.0",
+    "@uncharted.software/bgraph": "0.2.0",
     "@uncharted.software/facets-core": "^3.1.0",
     "@uncharted.software/facets-plugins": "^3.1.0",
     "@uncharted.software/grafer": "0.3.0",

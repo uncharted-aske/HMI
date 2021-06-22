@@ -99,6 +99,7 @@
           .on('mouseover', (d) => {
             const coords = [xscale(d.value), yscale(d.location)];
             const tooltipText = 'Value: ' + d.value + ' ' + 'Date: ' + d.date;
+            /* @ts-ignore */
             svgUtil.showTooltip(chart, tooltipText, coords);
           })
           .on('mouseout', () => {
