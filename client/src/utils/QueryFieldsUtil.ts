@@ -126,6 +126,36 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'integer',
   },
+  BIO_PATH_PRE: {
+    ..._field('bioPathPre', 'Path Pre'),
+    ..._searchable('Path Pre', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_PATH_PRE_EDGE_FILTER_LOOP: {
+    ..._field('bioPathPreEdgeFilters', 'Path Pre Edge Filters'),
+    ..._searchable('Path Pre', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_PATH_PRE_NODE_FILTER_LOOP: {
+    ..._field('bioPathPreNodeFilters', 'Path Pre Node Filters'),
+    ..._searchable('Path Pre', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  BIO_PATH: {
+    ..._field('pathQuery', 'Path Query'),
+    ..._searchable('Path Query', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
+  BIO_PATH_POST: {
+    ..._field('bioPathPost', 'Path Post'),
+    ..._searchable('Path Post', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
   // COSMOS
   COSMOS_QUERY: {
     ..._field('cosmosQuery', 'Keyword'),

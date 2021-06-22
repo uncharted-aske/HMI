@@ -11,7 +11,7 @@ import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
 import { buildHighlightClusterLayer, buildHighlightNodeLayer } from './GraferUtil';
 import * as FiltresUtil from '@/utils/FiltresUtil';
-import { BIO_EDGE_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
+import * as BGraphQueryUtil from '@/utils/BGraphQueryUtil';
 
 const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
   let value, key;
@@ -54,24 +54,31 @@ export const loadBGraphData = (nodesPath: string, edgesPath: string): Promise<an
 };
 
 // Add filter terms here to change the order in which they are processed in bgraph
-const NODE_PRIORITY_RANK = 1;
-const EDGE_PRIORITY_RANK = 4;
+const EDGE_PRIORITY_RANK = 2;
+const NODE_PRIORITY_RANK = 4;
+const PATH_PRIORITY_RANK = 7;
 const filterTermToPriorityRank = {
+  // Edge Terms
+  [QUERY_FIELDS_MAP.BIO_EDGE_PRE.field]: 1,
+  [QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field]: EDGE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field]: EDGE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_EDGE_DOI.field]: EDGE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_EDGE_POST.field]: 3,
   // Node Terms
-  [QUERY_FIELDS_MAP.BIO_NODE_PRE.field]: 0,
+  [QUERY_FIELDS_MAP.BIO_NODE_PRE.field]: 4,
   [QUERY_FIELDS_MAP.BIO_NODE_NAME.field]: NODE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_NODE_GROUP.field]: NODE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field]: NODE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field]: NODE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field]: NODE_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field]: NODE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_NODE_POST.field]: 2,
-  // Edge Terms
-  [QUERY_FIELDS_MAP.BIO_EDGE_PRE.field]: 3,
-  [QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field]: EDGE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field]: EDGE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_EDGE_DOI.field]: EDGE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_EDGE_POST.field]: 5,
+  [QUERY_FIELDS_MAP.BIO_NODE_POST.field]: 6,
+  // Path Terms
+  [QUERY_FIELDS_MAP.BIO_PATH_PRE.field]: 0,
+  [QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP.field]: 1,
+  [QUERY_FIELDS_MAP.BIO_PATH_PRE_NODE_FILTER_LOOP.field]: 3,
+  [QUERY_FIELDS_MAP.BIO_PATH.field]: PATH_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_PATH_POST.field]: 8,
 };
 
 // Assume that bgraph instance passed in has already been initialized
@@ -83,44 +90,69 @@ export const executeBgraphEdges = (bgraphEdgeQuery: any, clause: Filter): any =>
       return bgraphEdgeQuery;
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: {
-      return bgraphEdgeQuery.filter(document => {
-        if (document._type === 'edge') {
-          const edge = document;
-          return edge.tested === Boolean(clause.values[0]);
-        }
-        // Document is not an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioEdgeTested(bgraphEdgeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field: {
-      return bgraphEdgeQuery.filter(document => {
-        if (document._type === 'edge') {
-          const edge = document;
-          return clause.values.some(typeIdx => BIO_EDGE_TYPE_OPTIONS[typeIdx] === edge.statement_type);
-        }
-        // Document is not an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioEdgeType(bgraphEdgeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_DOI.field: {
-      let dois = clause.values as string[];
-      dois = dois.map(doi => doi.toLowerCase());
-      return bgraphEdgeQuery.filter(document => {
-        if (document._type === 'edge') {
-          const edge = document;
-          return dois.some(doi => Object.keys(edge.doi_map).some(edgeDoi => {
-            return edgeDoi.toLowerCase().includes(doi);
-          }));
-        }
-        // Document is not an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioEdgeDOI(bgraphEdgeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_EDGE_POST.field: {
       return bgraphEdgeQuery.as('edgeOnly').out().as('target').back('edgeOnly').in().as('source').merge('edgeOnly', 'source', 'target');
     }
     default: {
       return bgraphEdgeQuery;
+    }
+  }
+};
+
+// Assume that bgraph instance passed in has already been initialized
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const executeBgraphPathQuery = (bgraphPathQuery: any, clause: Filter): any => {
+  switch (clause.field) {
+    // EDGE CLAUSES
+    case QUERY_FIELDS_MAP.BIO_PATH_PRE.field: {
+      return BGraphQueryUtil.bioPathPre(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_PATH_PRE_NODE_FILTER_LOOP.field: {
+      return BGraphQueryUtil.bioPathPreNodeFilterLoop(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP.field: {
+      return BGraphQueryUtil.bioPathPreEdgeFilterLoop(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: {
+      return BGraphQueryUtil.bioEdgeTested(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field: {
+      return BGraphQueryUtil.bioEdgeType(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_EDGE_DOI.field: {
+      return BGraphQueryUtil.bioEdgeDOI(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
+      return BGraphQueryUtil.bioNodeName(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_NODE_GROUP.field: {
+      return BGraphQueryUtil.bioNodeGroup(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: {
+      return BGraphQueryUtil.bioNodeGrounded(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field: {
+      return BGraphQueryUtil.bioNodeGroundedOnto(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: {
+      return BGraphQueryUtil.bioNodeInDegree(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: {
+      return BGraphQueryUtil.bioNodeOutDegree(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_PATH_POST.field: {
+      return BGraphQueryUtil.bioPathPost(bgraphPathQuery, clause);
+    }
+    default: {
+      return bgraphPathQuery;
     }
   }
 };
@@ -133,67 +165,22 @@ export const executeBgraphNodes = (bgraphNodeQuery: any, clause: Filter): any =>
       return bgraphNodeQuery;
     }
     case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
-      let names = clause.values as string[];
-      // Filter matching case insensitive names
-      names = names.map(name => name.toLowerCase());
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return names.some(name => name === node.name.toLowerCase());
-        }
-        // Document is not a node
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeName(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUP.field: {
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return clause.values.some(group => node.group_map[group] !== undefined);
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeGroup(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: {
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return node.grounded_db === Boolean(clause.values[0]);
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeGrounded(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field: {
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return node.grounded_group === Boolean(clause.values[0]);
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeGroundedOnto(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: {
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return clause.values.some(value => node.in_degree === Number(value));
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeInDegree(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: {
-      return bgraphNodeQuery.filter(document => {
-        if (document._type === 'node') {
-          const node = document;
-          return clause.values.some(value => node.out_degree === Number(value));
-        }
-        // Document type is an edge
-        return false;
-      });
+      return BGraphQueryUtil.bioNodeOutDegree(bgraphNodeQuery, clause);
     }
     case QUERY_FIELDS_MAP.BIO_NODE_POST.field: {
       return bgraphNodeQuery;
@@ -220,26 +207,71 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
       clauses.push(QUERY_FIELDS_MAP.BIO_EDGE_POST as unknown as Filter);
     }
 
+    let hasPathFilters = false;
+    for (const clause of clauses) {
+      if (clause.field === QUERY_FIELDS_MAP.BIO_PATH.field) {
+        hasPathFilters = true;
+        // Set value on PRE- path query clause
+        const prePathClause = QUERY_FIELDS_MAP.BIO_PATH_PRE as unknown as Filter;
+        prePathClause.values = clause.values[0]; // Set "from" value
+        clauses.push(prePathClause);
+        // Set value on -POST path query clause
+        const postPathClause = QUERY_FIELDS_MAP.BIO_PATH_POST as unknown as Filter;
+        postPathClause.values = clause.values[0]; // Set "to" value
+        clauses.push(postPathClause);
+        clauses.push(QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP as unknown as Filter);
+        clauses.push(QUERY_FIELDS_MAP.BIO_PATH_PRE_NODE_FILTER_LOOP as unknown as Filter);
+      }
+    }
+
     const sortedClauses = clauses.sort((clause1, clause2) =>
       filterTermToPriorityRank[clause1.field] - filterTermToPriorityRank[clause2.field]);
 
     let bgraphEdgeQuery = bgraph.v();
     let bgraphNodeQuery = bgraph.v();
-    if (hasNodeFilters) {
+    let bgraphPathQuery = bgraph.v();
+    if (hasPathFilters) {
       sortedClauses.map(clause => {
-        bgraphNodeQuery = executeBgraphNodes(bgraphNodeQuery, clause);
+        bgraphPathQuery = executeBgraphPathQuery(bgraphEdgeQuery, clause);
       });
-    }
-    if (hasEdgeFilters) {
-      sortedClauses.map(clause => {
-        bgraphEdgeQuery = executeBgraphEdges(bgraphEdgeQuery, clause);
-      });
-    }
 
-    const bgraphNodeQueryResults = hasNodeFilters ? bgraphNodeQuery.unique().run() : [];
-    const bgraphEdgeQueryResults = hasEdgeFilters ? bgraphEdgeQuery.unique().run() : [];
-    const bgraphQueryResults = _.uniqBy(bgraphNodeQueryResults.concat(bgraphEdgeQueryResults), '_id');
-    return deepCopy(bgraphQueryResults, ['_in', '_out']);
+      const bgraphPathQueryResults = bgraphPathQuery
+        .unique()
+        .run();
+      const flattenedBGraphPathQueryResults = [];
+      for (let i = 0; i < bgraphPathQueryResults.length; i++) {
+        const result = bgraphPathQueryResults[i].result || bgraphPathQueryResults[i].vertex;
+        flattenedBGraphPathQueryResults.push(result);
+
+        // Append path query results
+        // TODO: Consider adding a way to flatten paths as a bgraph pipeline step
+        const path = bgraphPathQueryResults[i].state?.path || [];
+        for (const vertex of path) {
+          flattenedBGraphPathQueryResults.push(vertex);
+        }
+      }
+      const bgraphQueryResults = _.uniqBy(flattenedBGraphPathQueryResults, '_id');
+      return deepCopy(bgraphQueryResults, ['_in', '_out']);
+    } else {
+      if (hasNodeFilters) {
+        sortedClauses.map(clause => {
+          bgraphNodeQuery = executeBgraphNodes(bgraphNodeQuery, clause);
+        });
+      }
+      if (hasEdgeFilters) {
+        sortedClauses.map(clause => {
+          bgraphEdgeQuery = executeBgraphEdges(bgraphEdgeQuery, clause);
+        });
+      }
+
+      let bgraphNodeQueryResults = hasNodeFilters ? bgraphNodeQuery.unique().run() : [];
+      let bgraphEdgeQueryResults = hasEdgeFilters ? bgraphEdgeQuery.unique().run() : [];
+      bgraphNodeQueryResults = bgraphNodeQueryResults.map(gremlin => gremlin.result || gremlin.vertex);
+      bgraphEdgeQueryResults = bgraphEdgeQueryResults.map(gremlin => gremlin.result || gremlin.vertex);
+
+      const bgraphQueryResults = _.uniqBy(bgraphNodeQueryResults.concat(bgraphEdgeQueryResults), '_id');
+      return deepCopy(bgraphQueryResults, ['_in', '_out']);
+    }
   }
 };
 
