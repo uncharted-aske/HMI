@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as d3 from 'd3';
+import { RoundToPow10 } from '@/utils/NumberUtil';
 
 /* SVG Utility functions */
 
@@ -34,6 +35,23 @@ export const axis = (range, rangeMin, rangeMax) => {
   return d3.scaleLinear()
     .domain(range).nice()
     .range([rangeMin, rangeMax]);
+};
+
+/** Return the extent [min,max] of a list,
+ * but round up to the nearest power of 10.
+ * i.e.  [-12, -4, 0.04] -> [-100, 1]
+ */
+export const extendRoundUpToPow10 = (range, accessor) => {
+  let [min, max] = d3.extent(range, accessor);
+  min = RoundToPow10(min);
+  max = RoundToPow10(max);
+  if (min === max) {
+    if (min < 0) return [min, 0];
+    else return [0, max];
+  } else {
+    if (min > 0) min /= 10;
+    return [min, max];
+  }
 };
 
 // A path generator

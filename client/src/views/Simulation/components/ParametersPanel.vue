@@ -176,7 +176,7 @@
 
       // X & Y Scales
       const xScale = param => {
-        const minMax = d3.extent(runs, d => d[param]) as Iterable<d3.NumberValue>;
+        const minMax = SVGUtil.extendRoundUpToPow10(runs, d => d[param]) as Iterable<d3.NumberValue>;
         return d3.scaleLinear(minMax, xMinMax);
       };
       const xScales = new Map(params.map(param => [param, xScale(param)]));
