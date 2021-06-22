@@ -21,11 +21,6 @@ interface ModelComponentMetadataInterface {
   knowledge: string
 }
 
-export enum ModelInterfaceType {
-  computational = 'computational',
-  biomechanism = 'biomechanism',
-}
-
 /* Define a graph (nodes and edges) per type of a model. */
 type ModelGraph = {
   file: string,
@@ -39,15 +34,6 @@ interface ModelInterface {
   name: string,
   modelGraph?: ModelGraph[],
   metadata?: ModelMetadataInterface,
-}
-
-// TODO revise this in the future with typesGraphs.ts and how to implement it.
-interface KnowledgeGraphInterface {
-  id?: number;
-  metadata: ModelMetadataInterface,
-  graph?: any,
-  subgraph?: any,
-  type: ModelInterfaceType
 }
 
 interface TabInterface {
@@ -112,7 +98,6 @@ export {
   GraferEventDetail,
   ModelComponentMetadataInterface,
   ModelInterface,
-  KnowledgeGraphInterface,
   ModelMetadataInterface,
   ModelsState,
   SimulationParameter,

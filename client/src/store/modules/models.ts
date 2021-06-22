@@ -57,8 +57,7 @@ const getters: GetterTree<ModelsState, any> = {
 
   // TO REMOVE FROM HERE
   getCountGraphsModels: (state: ModelsState): number => {
-    return 16;
-    // return state.modelsList.filter(model => model.type === ModelInterfaceType.biomechanism).length;
+    return state.modelsList.length;
   },
 
   getSelectedModelGraph: state => state.selectedModelGraph,

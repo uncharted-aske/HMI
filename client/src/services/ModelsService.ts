@@ -1,9 +1,8 @@
 import _ from 'lodash';
 import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { MODEL_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
-import { KnowledgeGraphInterface, ModelInterfaceType } from '@/types/types';
 
-const isModelFiltered = (model: KnowledgeGraphInterface, filters: any): boolean => {
+const isModelFiltered = (model: any, filters: any): boolean => {
   if (!filters) return false;
   return _.some(filters.clauses, clause => {
     if (clause.field === QUERY_FIELDS_MAP.MODEL_TYPE.field) {
@@ -19,16 +18,16 @@ const isModelFiltered = (model: KnowledgeGraphInterface, filters: any): boolean 
 };
 
 /** Return a filtered list of Knowledge Graphs */
-const fetchGraphs = (models: KnowledgeGraphInterface[], filters: any[]): KnowledgeGraphInterface[] => {
-  return models.filter(model => model.type === ModelInterfaceType.biomechanism && !isModelFiltered(model, filters));
+const fetchGraphs = (models: any[], filters: any[]): any[] => {
+  return models.filter(model => /* model.type === ModelInterfaceType.biomechanism && */ !isModelFiltered(model, filters));
 };
 
 /** Return a filtered list of Computational Models */
-const fetchModels = (models: KnowledgeGraphInterface[], filters: any[]): KnowledgeGraphInterface[] => {
-  return models.filter(model => model.type === ModelInterfaceType.computational && !isModelFiltered(model, filters));
+const fetchModels = (models: any[], filters: any[]): any[] => {
+  return models.filter(model => /* model.type === ModelInterfaceType.computational && */ !isModelFiltered(model, filters));
 };
 
-const fetchModelTypesAgg = (models: KnowledgeGraphInterface[], filters: any[]): any => {
+const fetchModelTypesAgg = (models: any[], filters: any[]): any => {
   const result = _(models)
     .groupBy('type')
     .map((modelGroup, type) => {
