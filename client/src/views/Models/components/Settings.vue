@@ -52,7 +52,7 @@
           {{ layout.name }}
         </button>
       </div>
-    </dropdown> 
+    </dropdown>
   </div>
 </template>
 

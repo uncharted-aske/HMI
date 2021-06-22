@@ -12,7 +12,7 @@ export interface SVGRendererOptionsInterface {
 }
 
 export interface GraphLayoutInterface {
-  name: string, 
+  name: string,
   id: string,
 }
 
