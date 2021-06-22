@@ -37,7 +37,10 @@
               slot="right"
               :selected-view-id="selectedViewId"
               :views="views"
+              :layouts="layouts"
+              :selected-layout-id="selectedLayoutId"
               @view-change="onSetView"
+              @layout-change="onSetLayout"
             />
           </settings-bar>
           <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
@@ -56,9 +59,10 @@
               slot="right"
               :selected-view-id="selectedViewId"
               :views="views"
-              :selected-layout-id="selectedLayout"
+              :selected-layout-id="selectedLayoutId"
               :layouts="layouts"
               @view-change="onSetView"
+              @layout-change="onSetLayout"
             />
           </settings-bar>
           <local-graph v-if="isSplitView" :data="subgraph" @node-click="onNodeClick"/>
@@ -164,7 +168,7 @@
     activeTabId: string = 'metadata';
 
     layouts: GraphLayoutInterface[] = LAYOUTS;
-    selectedLayout: string = 'elk';
+    selectedLayoutId: string = 'elk';
 
     drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
@@ -303,6 +307,12 @@
       this.setSelectedModelGraph(index);
     }
 
+    onSetLayout (layoutId: string): void {
+      this.selectedLayoutId = layoutId;
+      // this.setSelectedModelGraph(index);
+    }
+
+selectedLayselectedLayoutId
     async searchCosmos (keyword: string): Promise<void> {
         try {
           const response = await cosmosSearch(filterToParamObj({ cosmosQuery: [keyword] }));

@@ -1,5 +1,6 @@
 <template>
   <div class="settings-container">
+    <!-- Modeling Framework -->
     <button
       class="btn btn-secondary"
       :disabled="!views.length"
@@ -8,11 +9,11 @@
     >
       Modeling Framework
       <template v-if="views.length">:
-        <span class="view-name">{{ selectedViewName }}</span>
+        <span class="setting-name">{{ selectedViewName }}</span>
         <font-awesome-icon :icon="['fas', 'caret-down' ]" />
       </template>
     </button>
-    <dropdown v-if="showDropdownViews" class="dropdown-settings">
+    <dropdown v-if="showDropdownViews" class="dropdown-settings view">
       <div slot="content" class="btn-group btn-group-sm">
         <button
           v-for="view in views" :key="view.id"
@@ -25,8 +26,33 @@
         </button>
       </div>
     </dropdown>
-    <button type="button" class="btn btn-secondary">Layouts</button>
-    <button type="button" class="btn btn-secondary" disabled>Settings</button>
+
+    <!-- Layouts -->
+    <button
+      class="btn btn-secondary"
+      :disabled="!layouts.length"
+      type="button"
+      @click="toggleLayouts"
+    >
+      Layout
+      <template v-if="layouts.length">:
+        <span class="setting-name">{{ selectedLayoutName }}</span>
+        <font-awesome-icon :icon="['fas', 'caret-down' ]" />
+      </template>
+    </button>
+    <dropdown v-if="showDropdownLayouts" class="dropdown-settings layout">
+      <div slot="content" class="btn-group btn-group-sm">
+        <button
+          v-for="layout in layouts" :key="layout.id"
+          class="btn btn-light"
+          type="button"
+          :class="{'active': layout.id === selectedLayoutId}"
+          @click="onLayoutSelection(layout.id)"
+        >
+          {{ layout.name }}
+        </button>
+      </div>
+    </dropdown> 
   </div>
 </template>
 
@@ -52,17 +78,30 @@
     @Prop({ default: '' }) selectedLayoutId: string;
 
     showDropdownViews: boolean = false;
+    showDropdownLayouts: boolean = false;
 
     get selectedViewName (): string {
       return this.views.find(view => view.id === this.selectedViewId)?.name;
+    }
+
+    get selectedLayoutName (): string {
+      return this.layouts.find(layout => layout.id === this.selectedLayoutId)?.name;
     }
 
     toggleViews (): void {
       this.showDropdownViews = !this.showDropdownViews;
     }
 
+    toggleLayouts (): void {
+      this.showDropdownLayouts = !this.showDropdownLayouts;
+    }
+
     onViewSelection (viewId:string):void {
       this.$emit('view-change', viewId);
+    }
+
+    onLayoutSelection (layoutId:string):void {
+      this.$emit('layout-change', layoutId);
     }
 
     runQuery (): void {
@@ -81,7 +120,7 @@
   gap: 5px;
   position: relative;
 
-  .view-name {
+  .setting-name {
     font-weight: bold;
   }
 }
@@ -92,6 +131,13 @@
   height: calc(#{$secondary-bar-width});
   padding: 10px;
   position: absolute;
-  top: calc(#{$secondary-bar-width} - 15px);
+  top: calc(#{$secondary-bar-width} - 10px);
+}
+.layout {
+  right: 0px;
+}
+
+.view {
+  left: 0px;
 }
 </style>
