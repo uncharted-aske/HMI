@@ -1,6 +1,4 @@
 import * as Donu from '@/types/typesDonu';
-import * as Graph from '@/types/typesGraphs';
-import * as GroMEt from '@/types/typesGroMEt';
 import * as Model from '@/types/typesModel';
 
 interface ModelComponentMetadataInterface {
@@ -11,18 +9,10 @@ interface ModelComponentMetadataInterface {
   knowledge: string
 }
 
-/* Define a graph (nodes and edges) per type of a model. */
-type ModelGraph = {
-  file: string,
-  type: 'PetriNetClassic' | 'FunctionNetwork',
-  metadata?: Array<GroMEt.ModelInterface | GroMEt.CodeCollectionInterface | GroMEt.TextualDocumentReferenceSet >,
-  graph: Graph.GraphInterface,
-};
-
 interface ModelInterface {
   id: number,
   name: string,
-  modelGraph?: ModelGraph[],
+  modelGraph?: Model.Graph[],
   metadata?: Model.Metadata,
 }
 

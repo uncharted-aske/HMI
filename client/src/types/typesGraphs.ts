@@ -45,32 +45,32 @@ export interface GraphNodeDataInterface {
 }
 
 export interface GraphNodeInterface {
-id: string,
-concept?: string,
-label: string,
-nodeType?: string,
-nodeSubType?: string,
-dataType?:string,
-data?: GraphNodeDataInterface,
-metadata?: any,
+  id: string,
+  concept?: string,
+  label: string,
+  nodeType?: string,
+  nodeSubType?: string,
+  dataType?:string,
+  data?: GraphNodeDataInterface,
+  metadata?: any,
 }
 
 export interface GraphEdgeInterface {
-id?: string,
-source: string,
-target: string,
-edgeType?: string,
-data?: any
+  id?: string,
+  source: string,
+  target: string,
+  edgeType?: string,
+  data?: any
 }
 
 export interface GraphInterface {
-nodes: GraphNodeInterface[],
-edges: GraphEdgeInterface[],
+  nodes: GraphNodeInterface[],
+  edges: GraphEdgeInterface[],
 }
 
 export interface ModelGraphInterface {
-abstract: GraphInterface,
-detailed: GraphInterface
+  abstract: GraphInterface,
+  detailed: GraphInterface
 }
 
 export interface SubgraphEdgeInterface {
@@ -80,10 +80,10 @@ export interface SubgraphEdgeInterface {
 }
 
 export interface SubgraphNodeInterface {
-id: string,
+  id: string,
 }
 
 export interface SubgraphInterface {
-nodes: SubgraphNodeInterface[],
-edges: SubgraphEdgeInterface[],
+  nodes: SubgraphNodeInterface[],
+  edges: SubgraphEdgeInterface[],
 }
