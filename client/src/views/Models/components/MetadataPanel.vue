@@ -1,6 +1,6 @@
 <template>
   <div v-if="metadata" class="metadata-pane-container">
-    <div class="metadata-item">
+    <!-- <div class="metadata-item">
       <div class="key">Name</div>
       <div>{{metadata.name}}</div>
     </div>
@@ -23,7 +23,7 @@
     <div class="metadata-item">
        <div class="key">Knowledge</div>
       <div><a class="text-link" :href="metadata.knowledge">{{metadata.knowledge}}</a> </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

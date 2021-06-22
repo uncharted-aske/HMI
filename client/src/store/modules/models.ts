@@ -3,7 +3,7 @@ import { GetterTree, MutationTree, ActionTree } from 'vuex';
 
 import { ModelsState, ModelInterface } from '@/types/types';
 
-import { staticFileURLs } from '@/static/mockedDataUrl';
+import { staticFileURLs } from '@/static/mockedDataUrlDemo';
 import { emmaaModelList } from '@/services/EmmaaFetchService';
 import { getUtil } from '@/utils/FetchUtil';
 import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
@@ -37,18 +37,22 @@ const buildInitialModelsList = ({
   return [
     {
       id: 0,
-      name: SIR_PN.name,
+      name: SIR_PN.name, // name should be the same across modeling frameworks
+      metadata: {
+        name: SIR_PN.name,
+        description: '', // We are going to need a high-level description for each model.
+      },  
       modelGraph: [
         {
           file: '',
           type: 'PetriNetClassic',
-          metadata: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['metadata']),
+          metadata: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['metadata']).metadata,
           graph: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['nodes', 'edges']),
         },
         {
           file: '',
           type: 'FunctionNetwork',
-          metadata: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['metadata']),
+          metadata: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['metadata']).metadata,
           graph: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['nodes', 'edges']),
         },
       ],

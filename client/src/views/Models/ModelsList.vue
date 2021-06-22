@@ -77,6 +77,7 @@
     @Mutation clearSelectedModels;
 
     get models (): ModelInterface[] {
+      console.log(this.getModelsList);
       return this.getModelsList;
     }
 
@@ -117,7 +118,7 @@
           id: model.id,
           previewImageSrc,
           title: model.name,
-          subtitle: '',
+          subtitle: model.metadata.description, 
           checked: selectedModelsList.has(model.id),
         } as CardInterface;
       });

@@ -1,5 +1,6 @@
 import * as Donu from '@/types/typesDonu';
 import * as Graph from '@/types/typesGraphs';
+import * as GroMEt from '@/types/typesGroMEt';
 
 interface ModelMetadataInterface {
   name: string,
@@ -29,7 +30,7 @@ export enum ModelInterfaceType {
 type ModelGraph = {
   file: string,
   type: 'PetriNetClassic' | 'FunctionNetwork',
-  metadata?: any,
+  metadata?: Array<GroMEt.ModelInterface | GroMEt.CodeCollectionInterface | GroMEt.TextualDocumentReferenceSet >,
   graph: Graph.GraphInterface,
 };
 
@@ -37,6 +38,7 @@ interface ModelInterface {
   id: number,
   name: string,
   modelGraph?: ModelGraph[],
+  metadata?: ModelMetadataInterface, 
 }
 
 // TODO revise this in the future with typesGraphs.ts and how to implement it.

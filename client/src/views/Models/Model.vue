@@ -9,7 +9,7 @@
       <div slot="content">
         <metadata-panel
           v-if="activeTabId === 'metadata'"
-          :metadata="selectedModel && selectedModel.modelGraph[getSelectedModelGraph].metadata"
+          :metadata="selectedModel && selectedGraphMetadata"
         />
         <!-- <facets-pane v-if="activeTabId === 'facets'" />  -->
       </div>
@@ -88,6 +88,7 @@
   import { RawLocation } from 'vue-router';
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
+  import * as GroMEt from '@/types/typesGroMEt';
   import { GraphInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
@@ -191,6 +192,10 @@
       }
       return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
     }
+
+    get selectedGraphMetadata (): Array<GroMEt.ModelInterface | GroMEt.CodeCollectionInterface | GroMEt.TextualDocumentReferenceSet > {
+      return this.selectedModel?.modelGraph[this.getSelectedModelGraph].metadata;
+    } 
 
     get selectedGraph (): GraphInterface {
       const index = this.selectedViewId === 'ptc' ? 0 : 1;

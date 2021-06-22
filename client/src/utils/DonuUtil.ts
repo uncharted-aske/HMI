@@ -3,7 +3,7 @@ import { ModelInterface, ModelInterfaceType, SimulationVariable } from '@/types/
 import * as Donu from '@/types/typesDonu';
 
 /** Transform a Donu Model to a ModelInterface */
-export function donuToModel (donuModels: Donu.ModelDefinition[]): ModelInterface[] {
+export function donuToModel (donuModels: Donu.ModelDefinition[]): any[] {
   return donuModels.map((model, index) => {
     return {
       metadata: {
@@ -13,7 +13,7 @@ export function donuToModel (donuModels: Donu.ModelDefinition[]): ModelInterface
       },
       graph: null,
       type: ModelInterfaceType.computational,
-    } as ModelInterface;
+    } as any;
   });
 }
 
