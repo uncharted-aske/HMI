@@ -118,7 +118,7 @@
   @Component({ components })
   export default class VariablesPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
-    @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
+    @InjectReactive() resized!: boolean;
 
     @Getter getSimVariables;
     @Getter getVariablesRunsCount;

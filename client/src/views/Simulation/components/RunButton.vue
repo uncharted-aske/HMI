@@ -43,8 +43,8 @@
 
   @Component
   export default class RunButton extends Vue {
-    @PropSync('autoRun', { type: Boolean }) autoRunInput!: boolean; // eslint-disable-line new-cap
-    @PropSync('config', { type: Object }) configInput!: Donu.RequestConfig; // eslint-disable-line new-cap
+    @PropSync('autoRun', { type: Boolean }) autoRunInput!: boolean;
+    @PropSync('config', { type: Object }) configInput!: Donu.RequestConfig;
 
     dropdownOpen: boolean = false;
 

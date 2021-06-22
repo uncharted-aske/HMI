@@ -84,6 +84,7 @@
   import { Action, Getter } from 'vuex-class';
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
+  import svgUtil from '@/utils/SVGUtil';
   import * as HMI from '@/types/types';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -96,10 +97,11 @@
   @Component({ components })
   export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
-    @InjectReactive() resized!: boolean; // eslint-disable-line new-cap
-    @InjectReactive() isResizing!: boolean; // eslint-disable-line new-cap
+    @InjectReactive() resized!: boolean;
+    @InjectReactive() isResizing!: boolean;
 
     @Getter getSimParameters;
+    @Getter getSimParameterArray;
     @Action setSimParameterValue;
 
     private padding: number = 5;
@@ -132,20 +134,6 @@
       }
     }
 
-    /** Get the list of parameters values for each runs. */
-    get runs (): HMI.SimulationRun[] {
-      const runs = [];
-
-      // For now, we create a unique fake run.
-      const fakeRun = this.parameters.reduce((run, parameter) => {
-        run[parameter.name] = parameter.defaultValue;
-        return run;
-      }, {});
-      runs.push(fakeRun);
-
-      return runs;
-    }
-
     getCurrentValue (parameter: HMI.SimulationParameter): number {
       return parameter.values.slice(-1)[0];
     }
@@ -172,10 +160,13 @@
       // List of parameters names
       const params = this.parameters.map(parameter => parameter.name);
 
+      // List of runs
+      const runs = this.getSimParameterArray;
+
       // Select the graph and size it
       this.clearGraph();
       const graph = d3.select('.parameters-graph svg');
-      graph.attr('viewBox', `0 0 ${this.graphWidth()} ${this.graphHeight()}`);
+      svgUtil.createChart(graph, this.graphWidth(), this.graphHeight());
 
       // Dimensions
       const marginX = this.graphWidth() * 0.25;
@@ -184,24 +175,32 @@
       const yMinMax = [marginY, this.graphHeight() - marginY];
 
       // X & Y Scales
-      const xScale = param => d3.scaleLinear(d3.extent(this.runs, d => d[param]), xMinMax);
+      const xScale = param => {
+        const minMax = svgUtil.extendRoundUpToPow10(runs, d => d[param]) as Iterable<d3.NumberValue>;
+        return d3.scaleLinear(minMax, xMinMax);
+      };
       const xScales = new Map(params.map(param => [param, xScale(param)]));
       const yScale = d3.scalePoint(params, yMinMax);
 
       // Runs Line method
       const line = d3.line()
-        .defined(([, value]) => value != null)
         /* @ts-ignore */
         .x(([param, value]) => xScales.get(param)(value))
         /* @ts-ignore */
         .y(([param]) => yScale(param));
 
       // Add the runs
-      graph.append('g').attr('fill', 'none')
+      graph.append('g')
         .selectAll('path')
-          .data(this.runs)
+          .data(runs)
           .join('path')
-            .attr('class', 'run')
+            .attr('class', (d, index) => {
+              // the current run is the last index
+              if (index === runs.length - 1) {
+                return 'current run';
+              }
+              return 'run';
+            })
             /* @ts-ignore */
             .attr('d', d => line(d3.cross(params, [d], (param, d) => [param, d[param]])))
           .append('title')
@@ -211,10 +210,11 @@
       graph.append('g')
         .selectAll('g')
           .data(params)
-          .join('g')
-            .attr('transform', d => `translate(0, ${yScale(d)})`)
-            .each(function (d) { d3.select(this).call(d3.axisBottom(xScales.get(d))); })
-            .call(g => g.append('text').text(d => d));
+          .join('line')
+            .attr('class', 'axis')
+            .attr('transform', d => svgUtil.translate(0, yScale(d)))
+            .attr('x1', xMinMax[0])
+            .attr('x2', xMinMax[1]);
     }
 
     onHideAllParameters (): void {
@@ -258,7 +258,7 @@
 
   .parameters-list {
     list-style: none;
-    padding: var(--padding);
+    padding: 0;
   }
 
   .parameter {
@@ -309,10 +309,20 @@
 </style>
 <style lang="scss">
   /* For SVG you cannot scope the <style> */
-  @import "@/styles/variables";
+
+  .parameters-graph .axis {
+    fill: none;
+    stroke: var(--colors-nodes-other);
+    stroke-width: 1;
+  }
 
   .parameters-graph .run {
-    stroke: $selection-dark;
-    stroke-width: 5;
+    fill: none;
+    stroke: var(--colors-nodes-other);
+    stroke-width: 3;
+  }
+
+  .parameters-graph .run.current {
+    stroke: var(--colors-nodes-default);
   }
 </style>

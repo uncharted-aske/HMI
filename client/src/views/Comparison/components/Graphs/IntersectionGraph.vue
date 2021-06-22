@@ -55,6 +55,7 @@
 
       this.renderer.setCallback('nodeMouseEnter', (evt, node, renderer) => {
         const data = node.datum();
+        /* @ts-ignore */
         showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]);
       });
 

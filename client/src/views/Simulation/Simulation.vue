@@ -21,7 +21,7 @@
           @run="fetchResults"
         />
         <div class="btn-group m-1">
-          <button class="btn btn-primary" title="Save current run" @click="incrParametersMaxCount">
+          <button class="btn btn-primary" title="Save current run" @click="incrNumberOfSavedRuns">
             <font-awesome-icon :icon="['fas', 'bookmark' ]" />
           </button>
           <button class="btn btn-primary" title="Reset all saved runs" @click="onResetSim">
@@ -97,7 +97,7 @@
     expandedId: string = '';
 
     @Action fetchModelResults;
-    @Action incrParametersMaxCount;
+    @Action incrNumberOfSavedRuns;
     @Action initializeSimParameters;
     @Action initializeSimVariables;
     @Action resetSim;

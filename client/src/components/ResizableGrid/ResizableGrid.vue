@@ -81,8 +81,8 @@
     @Prop({ default: () => ({}) }) dimensions: DimensionsInterface;
     @Prop({ default: 10 }) edgeBuffer: number;
 
-    @ProvideReactive() resized: boolean = false; // eslint-disable-line new-cap
-    @ProvideReactive() isResizing: boolean = false; // eslint-disable-line new-cap
+    @ProvideReactive() resized: boolean = false;
+    @ProvideReactive() isResizing: boolean = false;
 
     isDraggable: boolean = false;
     idSet: Set<string>;
