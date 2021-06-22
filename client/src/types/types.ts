@@ -1,5 +1,4 @@
 import * as Donu from '@/types/typesDonu';
-import * as Model from '@/types/typesModel';
 
 interface ModelComponentMetadataInterface {
   name: string,
@@ -7,13 +6,6 @@ interface ModelComponentMetadataInterface {
   expression: string,
   units: string,
   knowledge: string
-}
-
-interface ModelInterface {
-  id: number,
-  name: string,
-  modelGraph?: Model.Graph[],
-  metadata?: Model.Metadata,
 }
 
 interface TabInterface {
@@ -70,7 +62,6 @@ export {
   Counter,
   GraferEventDetail,
   ModelComponentMetadataInterface,
-  ModelInterface,
   SimulationParameter,
   SimulationVariable,
   SimulationRun,

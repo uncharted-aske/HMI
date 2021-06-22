@@ -88,11 +88,12 @@
   import { bgraph } from '@uncharted.software/bgraph';
   import { GraferNodesData, GraferEdgesData, GraferLabelsData } from '@uncharted.software/grafer';
 
-  import { Counter, TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
+  import { Counter, TabInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
   import { CosmosArtifactInterface } from '@/types/typesCosmos';
   import { FILTRES_FIELDS } from '@/types/typesFiltres';
+  import * as KnowledgeGraph from '@/types/typesKnowledgeGraph';
   import eventHub from '@/eventHub';
 
   import {
@@ -260,7 +261,7 @@
       return this.isSplitView ? 'Close Local View' : 'Open Local View';
     }
 
-    get selectedGraph (): ModelInterface {
+    get selectedGraph (): KnowledgeGraph.Graph {
       return this.getModelsList[this.getSelectedGraph];
     }
 

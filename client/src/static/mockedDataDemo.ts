@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import * as HMI from '@/types/types';
+import * as Model from '@/types/typesModel';
 import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 import { getUtil } from '@/utils/FetchUtil';
 
@@ -27,7 +27,7 @@ export const fetchInitialModelData = async (): Promise<any> => {
 export const buildInitialModelsList = ({
   SIR_PN,
   SIR_FN,
-}: any): HMI.ModelInterface[] => {
+}: any): Model.Model[] => {
   return [
     {
       id: 0,

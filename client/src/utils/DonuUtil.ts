@@ -2,9 +2,10 @@
 import * as d3 from 'd3';
 import * as HMI from '@/types/types';
 import * as Donu from '@/types/typesDonu';
+import * as Model from '@/types/typesModel';
 
-/** Transform a Donu Model to a ModelInterface */
-export const donuToModel = (donuModels: Donu.ModelDefinition[]): HMI.ModelInterface[] => {
+/** Transform a Donu Model to a Model */
+export const donuToModel = (donuModels: Donu.ModelDefinition[]): Model.Model[] => {
   return donuModels.map((model, index) => {
     return {
       metadata: {

@@ -12,6 +12,7 @@ type Metadata = {
   id?: string,
   name: string,
   source?: string,
+  type?: string, // Mostly used by DONU
   version?: string,
 };
 
