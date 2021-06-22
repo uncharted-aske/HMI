@@ -1,17 +1,7 @@
 import * as Donu from '@/types/typesDonu';
 import * as Graph from '@/types/typesGraphs';
 import * as GroMEt from '@/types/typesGroMEt';
-
-interface ModelMetadataInterface {
-  name: string,
-  id?: string,
-  description?: string,
-  created?: string,
-  source?: string,
-  type?: string, // Mostly used by DonuType
-  version?: string,
-  knowledge?: string
-}
+import * as Model from '@/types/typesModel';
 
 interface ModelComponentMetadataInterface {
   name: string,
@@ -33,7 +23,7 @@ interface ModelInterface {
   id: number,
   name: string,
   modelGraph?: ModelGraph[],
-  metadata?: ModelMetadataInterface,
+  metadata?: Model.Metadata,
 }
 
 interface TabInterface {
@@ -91,7 +81,6 @@ export {
   GraferEventDetail,
   ModelComponentMetadataInterface,
   ModelInterface,
-  ModelMetadataInterface,
   SimulationParameter,
   SimulationVariable,
   SimulationRun,
