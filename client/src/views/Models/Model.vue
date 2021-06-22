@@ -99,7 +99,7 @@
 
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import * as GroMEt from '@/types/typesGroMEt';
-  import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
+  import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
@@ -134,8 +134,8 @@
   ];
 
   const LAYOUTS: GraphLayoutInterface[] = [
-    { name: 'Dagre', id: 'dagre' },
-    { name: 'Layered', id: 'elk' },
+    { name: 'Dagre', id: GraphLayoutInterfaceType.dagre },
+    { name: 'Layered', id: GraphLayoutInterfaceType.elk },
   ];
 
   const DRILLDOWN_TABS: TabInterface[] = [
