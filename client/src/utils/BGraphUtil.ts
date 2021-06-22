@@ -121,9 +121,6 @@ export const executeBgraphPathQuery = (bgraphPathQuery: any, clause: Filter): an
     case QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP.field: {
       return BGraphQueryUtil.bioPathPreEdgeFilterLoop(bgraphPathQuery, clause);
     }
-    case QUERY_FIELDS_MAP.BIO_PATH_POST.field: {
-      return BGraphQueryUtil.bioPathPost(bgraphPathQuery, clause);
-    }
     case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: {
       return BGraphQueryUtil.bioEdgeTested(bgraphPathQuery, clause);
     }
@@ -150,6 +147,9 @@ export const executeBgraphPathQuery = (bgraphPathQuery: any, clause: Filter): an
     }
     case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: {
       return BGraphQueryUtil.bioNodeOutDegree(bgraphPathQuery, clause);
+    }
+    case QUERY_FIELDS_MAP.BIO_PATH_POST.field: {
+      return BGraphQueryUtil.bioPathPost(bgraphPathQuery, clause);
     }
     default: {
       return bgraphPathQuery;
@@ -209,7 +209,7 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
 
     let hasPathFilters = false;
     for (const clause of clauses) {
-      if (filterTermToPriorityRank[clause.field] === PATH_PRIORITY_RANK) {
+      if (clause.field === QUERY_FIELDS_MAP.BIO_PATH.field) {
         hasPathFilters = true;
         // Set value on PRE- path query clause
         const prePathClause = QUERY_FIELDS_MAP.BIO_PATH_PRE as unknown as Filter;
