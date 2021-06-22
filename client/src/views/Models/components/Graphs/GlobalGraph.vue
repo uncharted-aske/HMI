@@ -86,6 +86,7 @@
     refresh (): void {
       if (!this.data) return;
 
+      //Layout selection
       if (this.layout === GraphLayoutInterfaceType.elk) {
         this.renderer.adapter = new ELKAdapter(Object.assign({}, DEFAULT_RENDERING_OPTIONS, { layout: layered }));
       } else {
@@ -95,6 +96,7 @@
       const nodesHierarchy = hierarchyFn(this.data?.nodes); // Transform the flat nodes structure into a hierarchical one
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
+      console.log(this.data.nodes);
 
       this.renderer.setData(data);
       this.renderer.render();

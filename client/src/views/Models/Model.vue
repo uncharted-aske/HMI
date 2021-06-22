@@ -134,8 +134,8 @@
   ];
 
   const LAYOUTS: GraphLayoutInterface[] = [
-    { name: 'Dagre', id: GraphLayoutInterfaceType.dagre },
     { name: 'Layered', id: GraphLayoutInterfaceType.elk },
+    { name: 'Dagre', id: GraphLayoutInterfaceType.dagre },
   ];
 
   const DRILLDOWN_TABS: TabInterface[] = [
@@ -172,7 +172,7 @@
     activeTabId: string = 'metadata';
 
     layouts: GraphLayoutInterface[] = LAYOUTS;
-    selectedLayoutId: string = 'elk';
+    selectedLayoutId: string = GraphLayoutInterfaceType.elk;
 
     drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
