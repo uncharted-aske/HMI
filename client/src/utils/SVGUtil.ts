@@ -1,3 +1,5 @@
+/* eslint-disable */
+// @ts-nocheck
 import _ from 'lodash';
 import * as d3 from 'd3';
 import { RoundToPow10 } from '@/utils/NumberUtil';
@@ -55,7 +57,7 @@ export const extendRoundUpToPow10 = (range, accessor) => {
 };
 
 // A path generator
-export const pathFn = (xFn, yFn) => d3.line()
+export const pathFn = (xFn?, yFn?) => d3.line()
   .x(d => xFn ? xFn(d.x) : d.x)
   .y(d => yFn ? yFn(d.y) : d.y);
 
@@ -79,7 +81,7 @@ export const hideTooltip = (svgContainer) => {
  * @param {Number} preferredAngle - radians direction the tooltip will point (default -PI/2 = pointing down, tooltip above), can be adjusted if the tooltip doesn't fit
  * @param {Bool} flexPosition - allow the tooltip to adjust it's position based on if it fits within the bbox of it's container element
  */
-export const showTooltip = (svgContainer, text, position, preferredAngle, flexPosition) => {
+export const showTooltip = (svgContainer, text, position, preferredAngle?, flexPosition?) => {
   if (svgContainer === null || svgContainer.node() === null) { return; }
 
   let angle = (_.isNumber(preferredAngle)) ? preferredAngle : -Math.PI / 2; // points down (tooltip above)
@@ -180,7 +182,7 @@ export default {
   translate,
   pathFn,
   hierarchyFn,
-
+  extendRoundUpToPow10,
   hideTooltip,
   showTooltip,
 
