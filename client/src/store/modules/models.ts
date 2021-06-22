@@ -41,7 +41,7 @@ const buildInitialModelsList = ({
       metadata: {
         name: SIR_PN.name,
         description: '', // We are going to need a high-level description for each model.
-      },  
+      },
       modelGraph: [
         {
           file: '',

@@ -16,7 +16,7 @@ export interface ModelInterface {
     metadata_type: string,
     initial_conditions: Record<number, string>[],
     parameters: Record<number, string>[],
-    variables: Record<number, string>[], 
+    variables: Record<number, string>[],
     provenance: Provenance,
 }
 

@@ -195,7 +195,7 @@
 
     get selectedGraphMetadata (): Array<GroMEt.ModelInterface | GroMEt.CodeCollectionInterface | GroMEt.TextualDocumentReferenceSet > {
       return this.selectedModel?.modelGraph[this.getSelectedModelGraph].metadata;
-    } 
+    }
 
     get selectedGraph (): GraphInterface {
       const index = this.selectedViewId === 'ptc' ? 0 : 1;

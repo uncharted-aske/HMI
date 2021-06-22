@@ -38,7 +38,7 @@ interface ModelInterface {
   id: number,
   name: string,
   modelGraph?: ModelGraph[],
-  metadata?: ModelMetadataInterface, 
+  metadata?: ModelMetadataInterface,
 }
 
 // TODO revise this in the future with typesGraphs.ts and how to implement it.
