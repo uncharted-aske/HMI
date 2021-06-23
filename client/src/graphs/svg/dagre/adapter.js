@@ -20,7 +20,7 @@ export default class DagreAdapter {
           node.height = 30;
         }
       }
-      node.data = node;
+      node.data = node.data;
     }, null);
 
     graphData.edges.forEach(e => {

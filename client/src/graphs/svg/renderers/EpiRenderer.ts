@@ -110,6 +110,7 @@ export default class EpiRenderer extends SVGRenderer {
           if ((d as any).nodes) {
             return Colors.NODES.CONTAINER;
           } else {
+            console.log((d as any).data.role);
             return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.fill;
           }
         })
