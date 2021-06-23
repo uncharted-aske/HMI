@@ -140,8 +140,11 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
   },
 };
 
+const namespaced = true;
+
 export {
-  actions,
-  getters,
+  namespaced,
   state,
+  getters,
+  actions,
 };

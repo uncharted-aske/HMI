@@ -80,9 +80,12 @@ const mutations: MutationTree<Filtres> = {
   },
 };
 
+const namespaced = true;
+
 export {
-  actions,
+  namespaced,
+  state,
   getters,
   mutations,
-  state,
+  actions,
 };

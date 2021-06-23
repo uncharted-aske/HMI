@@ -136,9 +136,9 @@
     intersectionGraph: any = intersectionGraph;
     highlightsModels: any = { 1: null, 2: null };
 
-    @Getter getSelectedModelIds;
-    @Getter getModelsList;
-    @Getter getComparisonHighlights;
+    @Getter('models') getSelectedModelIds;
+    @Getter('models') getModelsList;
+    @Getter('models') getComparisonHighlights;
 
     get gridMap (): string[][] {
       return [['1', '3', '2']];

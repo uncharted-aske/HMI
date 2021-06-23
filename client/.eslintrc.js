@@ -74,11 +74,15 @@ module.exports = {
         'new-cap': ['error',
           {
             capIsNewExceptions: [
+              'Action',
               'Component',
+              'Getter',
               'InjectReactive',
+              'Mutation',
               'Prop',
               'PropSync',
               'ProvideReactive',
+              'State',
               'Watch',
             ],
           },

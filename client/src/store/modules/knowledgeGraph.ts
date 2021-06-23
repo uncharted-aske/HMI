@@ -71,7 +71,10 @@ const mutations: MutationTree<KnowledgeGraph.State> = {
   },
 };
 
+const namespaced = true;
+
 export {
+  namespaced,
   state,
   getters,
   mutations,
