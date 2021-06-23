@@ -5,7 +5,9 @@ import {
   faAngleDoubleLeft,
   faAngleDoubleRight,
   faArrowsAltH,
+  faBan,
   faBook,
+  faBookmark,
   faCaretDown,
   faCaretRight,
   faChartLine,
@@ -20,11 +22,14 @@ import {
   faFilter,
   faInfo,
   faLongArrowAltRight,
+  faPause,
+  faPlay,
+  faProjectDiagram,
   faSearch,
+  faSignOutAlt,
   faTimes,
   faTools,
-  faProjectDiagram,
-  faPlay,
+  faUndo,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterFormatter';
@@ -45,7 +50,9 @@ library.add(
   faAngleDoubleLeft,
   faAngleDoubleRight,
   faArrowsAltH,
+  faBan,
   faBook,
+  faBookmark,
   faCaretDown,
   faCaretRight,
   faChartLine,
@@ -60,11 +67,14 @@ library.add(
   faFilter,
   faInfo,
   faLongArrowAltRight,
+  faPause,
+  faPlay,
+  faProjectDiagram,
   faSearch,
+  faSignOutAlt,
   faTimes,
   faTools,
-  faProjectDiagram,
-  faPlay,
+  faUndo,
 );
 // Enable automatic font awesome icon transformations
 dom.watch();

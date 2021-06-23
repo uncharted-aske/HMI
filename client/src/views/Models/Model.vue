@@ -97,9 +97,9 @@
   import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
-  import * as GroMEt from '@/types/typesGroMEt';
   import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
+  import { TabInterface, ViewInterface } from '@/types/types';
+  import * as Model from '@/types/typesModel';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
@@ -164,7 +164,7 @@
   };
 
   @Component({ components })
-  export default class Model extends Vue {
+  export default class ModelView extends Vue {
     views: ViewInterface[] = VIEWS;
     selectedViewId = 'ptc';
 
@@ -199,7 +199,7 @@
     @Mutation setSelectedModels;
     @Mutation setSelectedModelGraph;
 
-    get selectedModel (): ModelInterface {
+    get selectedModel (): Model.Model {
       if (
         !this.getSelectedModelIds?.[0]?.toString() && // Are we missing the selectedModelId, toString to test id 0 as well,
         this.$route.params.model_id && // Does the model id is available from the route parameters,
@@ -211,7 +211,7 @@
       return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
     }
 
-    get selectedGraphMetadata (): Array<GroMEt.ModelInterface | GroMEt.CodeCollectionInterface | GroMEt.TextualDocumentReferenceSet > {
+    get selectedGraphMetadata (): Model.GraphMetadata[] {
       return this.selectedModel?.modelGraph[this.getSelectedModelGraph].metadata;
     }
 

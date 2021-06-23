@@ -1,6 +1,6 @@
 
 type Provenance = {
-    metadata_type: string,
+    metadataType: string,
     method: string,
     timestamp: Date,
 };
@@ -13,8 +13,8 @@ type FileId = {
 
 export interface ModelInterface {
     uid: string,
-    metadata_type: string,
-    initial_conditions: Record<number, string>[],
+    metadataType: string,
+    initialConditions: Record<number, string>[],
     parameters: Record<number, string>[],
     variables: Record<number, string>[],
     provenance: Provenance,
@@ -23,14 +23,14 @@ export interface ModelInterface {
 export interface CodeCollectionInterface {
     uid: string,
     provenance: Provenance,
-    metadata_type: string,
-    global_reference_id: {id: string, type: string},
-    file_ids: FileId[],
+    metadataType: string,
+    globalReferenceId: {id: string, type: string},
+    fileIds: FileId[],
 }
 
 export interface TextualDocumentReferenceSet {
     uid: string,
     provenance: Provenance,
-    metadata_type: string,
+    metadataType: string,
     documents: any,
 }

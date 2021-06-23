@@ -19,6 +19,12 @@
 
   import { Colors } from '@/graphs/svg/encodings';
 
+  const DEFAULT_STYLE = {
+    label: {
+      text: Colors.LABELS.LIGHT,
+    },
+  };
+
   const DEFAULT_CONFIG = {
     margin: {
       top: 15,
@@ -28,31 +34,11 @@
     },
   };
 
-  const DEFAULT_STYLE = {
-    node: {
-      fill: Colors.NODES.DEFAULT,
-      fillOther: Colors.NODES.OTHER,
-      fillAggregate: Colors.NODES.AGGREGATE,
-      stroke: Colors.STROKE,
-      strokeWidth: 1,
-      borderRadius: 5,
-    },
-    edge: {
-      fill: 'none',
-      strokeWidth: 2.5,
-      strokeColor: Colors.NODES.DEFAULT,
-      strokeColorOther: Colors.NODES.OTHER,
-      strokeColorAggregate: Colors.NODES.AGGREGATE,
-    },
-    label: {
-      text: Colors.LABELS.LIGHT,
-    },
-  };
-
 @Component
-  export default class VariablePanel extends Vue {
+  export default class MultiLinePlot extends Vue {
     @Prop({ default: 'Title' }) title: string;
     @Prop({ default: () => [[]] }) data: any;
+    @Prop({ default: () => [] }) styles: any;
 
     width: number;
     height: number;
@@ -143,29 +129,29 @@
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    drawDataset (svg, data, isLast = false): void {
+    drawDataset (svg, data, style): void {
       const l = this.length(this.line(data));
 
       // Draw data line
       svg.append('path')
           .datum(data)
           .attr('fill', 'none')
-          .attr('stroke', DEFAULT_STYLE.edge[isLast ? 'strokeColor' : 'strokeColorOther'])
-          .attr('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
+          .attr('stroke', style.edge.strokeColor)
+          .attr('stroke-width', style.edge.strokeWidth)
           .attr('stroke-linejoin', 'round')
           .attr('stroke-linecap', 'round')
           .attr('stroke-dasharray', `0,${l}`)
           .attr('d', this.line)
         .transition()
-          .duration(isLast ? 500 : 0)
+          .duration(style.edge.transitionDuration)
           .ease(d3.easeLinear)
           .attr('stroke-dasharray', `${l},${l}`);
 
       // Draw data dots
       svg.append('g')
-          .attr('fill', DEFAULT_STYLE.node.fill)
+          .attr('fill', style.node.fill)
           .attr('stroke', 'black')
-          .attr('stroke-width', DEFAULT_STYLE.node.strokeWidth)
+          .attr('stroke-width', style.node.strokeWidth)
         .selectAll('circle')
         .data(data)
         .join('circle')
@@ -175,8 +161,7 @@
     }
 
     refresh (): void {
-      // if (_.isEmpty(this.data)) return;
-      const currentDataHash = JSON.stringify(this.data);
+      const currentDataHash = JSON.stringify(this.data) + JSON.stringify(this.styles);
       if (currentDataHash === this.dataHash) {
         return;
       }
@@ -194,7 +179,7 @@
       svg.append('g')
         .call(this.yAxis);
 
-      this.data.map((dataset, i) => this.drawDataset(svg, dataset, i === this.data.length - 1));
+      this.data.map((dataset, i) => this.drawDataset(svg, dataset, this.styles[i]));
 
       svg.node();
     }

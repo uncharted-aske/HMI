@@ -98,7 +98,6 @@
     showModalDocuments: boolean = false;
 
     @Getter getFilters;
-    @Getter getModelsList;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.fetchCosmos();

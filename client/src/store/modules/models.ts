@@ -1,77 +1,39 @@
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
+import * as Model from '@/types/typesModel';
+import { fetchInitialModelData } from '@/static/mockedDataDemo';
 
-import { ModelsState } from '@/types/types';
-
-import { fetchInitialModelData, buildInitialModelsList } from '@/static/mockedDataDemo';
-import { emmaaModelList } from '@/services/EmmaaFetchService';
-
-const state: ModelsState = {
+const state: Model.State = {
   isInitialized: false,
   selectedModelIds: new Set(),
   modelsList: [],
   selectedModelGraph: 0, // Refers to the position in the array of graphs for each modeling framework
 };
 
-const actions: ActionTree<ModelsState, any> = {
+const actions: ActionTree<Model.State, any> = {
   async setInitialModelsState ({ commit }) {
-    const {
-      SIR_PN,
-      SIR_FN,
-    } = await fetchInitialModelData();
-
-    // Initialize static models
-    const initialModelsList = buildInitialModelsList({
-      SIR_PN,
-      SIR_FN,
-    });
+    const initialModelsList = await fetchInitialModelData();
     commit('setModelsList', initialModelsList);
-
-    // TO REMOVE FROM HERE: Initialize models from emmaa
-    try {
-      const modelList = await emmaaModelList();
-      modelList.map(metadata => commit('addModel', {
-        metadata,
-        // graph: {
-        //   abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-        //   detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-        // },
-        // subgraph: subgraphJSON,
-        type: 'biomechanism',
-      }));
-    } catch (error) {
-      console.warn('EMMAA API is not responding', error); // eslint-disable-line no-console
-    }
-
     commit('setIsInitialized', true);
   },
 };
 
-const getters: GetterTree<ModelsState, any> = {
-  getIsInitialized: state => state.isInitialized,
-  getSelectedModelIds: state => [...state.selectedModelIds],
+const getters: GetterTree<Model.State, any> = {
   getModelsList: state => state.modelsList,
-
-  getCountComputationalModels: (state: ModelsState): number => {
-    return state.modelsList.length;
-  },
-
-  // TO REMOVE FROM HERE
-  getCountGraphsModels: (state: ModelsState): number => {
-    return 16;
-    // return state.modelsList.filter(model => model.type === ModelInterfaceType.biomechanism).length;
-  },
-
+  getSelectedModelIds: state => [...state.selectedModelIds],
   getSelectedModelGraph: state => state.selectedModelGraph,
+  getCountComputationalModels: (state): number => state.modelsList.length,
 };
 
-const mutations: MutationTree<ModelsState> = {
+const mutations: MutationTree<Model.State> = {
   addModel (state, newModel) {
     const modelsListLength = state.modelsList.length;
     state.modelsList.push(Object.assign({ id: modelsListLength }, newModel));
   },
+
   setIsInitialized (state, newIsInitialized) {
     state.isInitialized = newIsInitialized;
   },
+
   setModelsList (state, newModelsList) {
     state.modelsList = newModelsList;
   },
@@ -86,17 +48,13 @@ const mutations: MutationTree<ModelsState> = {
     state.selectedModelIds = new Set(state.selectedModelIds);
   },
 
-  clearSelectedModels (state) {
-    state.selectedModelIds.clear();
-  },
-
   setSelectedModelGraph (state, value: number) {
     if (state.selectedModelGraph === value) value = null;
     state.selectedModelGraph = value;
   },
 };
 
-export const models = {
+export {
   state,
   getters,
   mutations,

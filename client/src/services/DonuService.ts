@@ -1,5 +1,5 @@
-import { ModelInterface } from '@/types/types';
 import * as Donu from '@/types/typesDonu';
+import * as Model from '@/types/typesModel';
 import { donuToModel } from '@/utils/DonuUtil';
 import { postUtil } from '@/utils/FetchUtil';
 
@@ -28,7 +28,7 @@ export const fetchDonuModels = async (): Promise<any[]> => {
 };
 
 /** Fetch the parameters of a model */
-export const getModelParameters = async (model: any): Promise<Donu.ModelParameter[]> => {
+export const getModelParameters = async (model: Model.Model): Promise<Donu.ModelParameter[]> => {
   if (!model) return;
 
   const request: Donu.Request = {
@@ -49,7 +49,7 @@ export const getModelParameters = async (model: any): Promise<Donu.ModelParamete
 };
 
 /** Fetch the state variable of a model */
-export const getModelVariables = async (model: any): Promise<Donu.ModelVariable[]> => {
+export const getModelVariables = async (model: Model.Model): Promise<Donu.ModelVariable[]> => {
   if (!model) return;
 
   const request: Donu.Request = {
@@ -70,7 +70,11 @@ export const getModelVariables = async (model: any): Promise<Donu.ModelVariable[
 };
 
 /** Fetch the result of a model simulation */
-export const getModelResult = async (model: any, parameters: Donu.RequestParameters): Promise<Donu.SimulationResponse> => {
+export const getModelResult = async (
+  model: Model.Model,
+  parameters: Donu.RequestParameters,
+  config: Donu.RequestConfig,
+): Promise<Donu.SimulationResponse> => {
   const request: Donu.Request = {
     command: Donu.RequestCommand.SIMULATE,
     definition: {
@@ -78,9 +82,9 @@ export const getModelResult = async (model: any, parameters: Donu.RequestParamet
       type: model.metadata.type,
     } as Donu.ModelDefinition,
     parameters: parameters,
-    end: 120,
-    start: 0,
-    step: 30,
+    end: config.end,
+    start: config.start,
+    step: config.step,
   };
 
   const response = await callDonu(request);
