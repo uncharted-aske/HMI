@@ -213,8 +213,8 @@
       this.executeFilters();
     }
 
-    async mounted (): Promise<void> {
-      await this.loadData();
+    mounted (): void {
+      this.loadData();
     }
 
     executeFilters (): void {
@@ -240,12 +240,12 @@
       }
     }
 
-    @Watch('selectedModel') async onGetSelectedModelChange (): Promise<void> {
-      await this.loadData();
+    @Watch('selectedModel') onGetSelectedModelChange (): void {
+      this.loadData();
     }
 
-    @Watch('grometType') async onGetGrometTypeChange (): Promise<void> {
-      await this.loadData();
+    @Watch('grometType') onGetGrometTypeChange (): void {
+      this.loadData();
     }
 
     get selectedModel (): ModelInterface {
