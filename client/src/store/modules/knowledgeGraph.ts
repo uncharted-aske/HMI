@@ -65,10 +65,6 @@ const mutations: MutationTree<KnowledgeGraph.State> = {
     if (state.selectedGraph === value) value = null;
     state.selectedGraph = value;
   },
-
-  clearSelectedKnowledgeGraphs (state) {
-    state.selectedGraphIds.clear();
-  },
 };
 
 export {

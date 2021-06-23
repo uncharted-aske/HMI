@@ -48,10 +48,6 @@ const mutations: MutationTree<Model.State> = {
     state.selectedModelIds = new Set(state.selectedModelIds);
   },
 
-  clearSelectedModels (state) {
-    state.selectedModelIds.clear();
-  },
-
   setSelectedModelGraph (state, value: number) {
     if (state.selectedModelGraph === value) value = null;
     state.selectedModelGraph = value;

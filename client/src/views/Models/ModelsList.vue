@@ -75,7 +75,6 @@
     @Getter getModelsList;
     @Getter getSelectedModelIds;
     @Mutation setSelectedModels;
-    @Mutation clearSelectedModels;
 
     get models (): Model.Model[] {
       return this.getModelsList;

@@ -81,7 +81,6 @@
     @Getter getKnowledgeGraphsList;
     @Getter getSelectedGraph;
     @Mutation setSelectedGraph;
-    @Mutation clearSelectedModels;
 
     get graphs (): KnowledgeGraph.Graph[] {
       const graphs = [...this.getKnowledgeGraphsList] as KnowledgeGraph.Graph[];
