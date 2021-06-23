@@ -195,12 +195,12 @@
     showModalDocument: boolean = false;
 
     @Getter getKnowledgeGraphsList;
-    @Getter getSelectedGraph;
+    @Getter getSelectedKnowledgeGraph;
     @Getter getFilters;
     @Getter getFiltres;
     @Action addFiltres;
     @Action setFiltres;
-    @Mutation setSelectedGraph;
+    @Mutation setSelectedKnowledgeGraph;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
@@ -219,7 +219,7 @@
           .find(graph => graph.metadata.id === this.$route.params.model_id);
         // We can set the one in the route has the selected one in the store.
         if (graph) {
-          this.setSelectedGraph(graph.id);
+          this.setSelectedKnowledgeGraph(graph.id);
         }
       }
 
@@ -262,7 +262,7 @@
     }
 
     get selectedGraph (): KnowledgeGraph.Graph {
-      return this.getKnowledgeGraphsList[this.getSelectedGraph];
+      return this.getKnowledgeGraphsList[this.getSelectedKnowledgeGraph];
     }
 
     get selectedGraphId (): string {

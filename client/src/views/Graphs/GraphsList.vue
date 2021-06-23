@@ -14,7 +14,7 @@
       <settings-bar>
         <counters slot="left" :data="countersData"/>
         <button
-          v-if="getSelectedGraph"
+          v-if="getSelectedKnowledgeGraph"
           class="btn btn-primary"
           slot="middle"
           type="button"
@@ -79,8 +79,8 @@
 
     @Getter getFilters;
     @Getter getKnowledgeGraphsList;
-    @Getter getSelectedGraph;
-    @Mutation setSelectedGraph;
+    @Getter getSelectedKnowledgeGraph;
+    @Mutation setSelectedKnowledgeGraph;
 
     get graphs (): KnowledgeGraph.Graph[] {
       const graphs = [...this.getKnowledgeGraphsList] as KnowledgeGraph.Graph[];
@@ -107,20 +107,20 @@
           previewImageSrc: COVID19Screenshot,
           title: graph.metadata.name,
           subtitle: graph.metadata.description,
-          checked: this.getSelectedGraph === graph.id,
+          checked: this.getSelectedKnowledgeGraph === graph.id,
         };
       });
     }
 
     onClickCard (card: CardInterface): void {
-      this.setSelectedGraph(card.id);
+      this.setSelectedKnowledgeGraph(card.id);
     }
 
     onClickView (): void {
       const options: RawLocation = { name: 'graph' };
 
       // As of now we only allow one Knowledgable Graph to be selected at a time.
-      const selectedGraph: KnowledgeGraph.Graph = this.graphs.find(graph => graph.id === this.getSelectedGraph);
+      const selectedGraph: KnowledgeGraph.Graph = this.graphs.find(graph => graph.id === this.getSelectedKnowledgeGraph);
       const modelId = selectedGraph?.metadata?.id;
       if (modelId) {
         options.params = {
