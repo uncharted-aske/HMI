@@ -17,7 +17,7 @@ const build = (root) => {
       depth: depth,
       type: 'normal',
       parent: parent,
-      data: node,
+      data: node.data,
     };
 
     // Build edges
