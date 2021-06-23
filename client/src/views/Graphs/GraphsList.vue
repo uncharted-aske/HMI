@@ -78,13 +78,14 @@
     activeTabId: string = 'facets';
 
     @Getter getFilters;
-    @Getter getModelsList;
+    @Getter getKnowledgeGraphsList;
     @Getter getSelectedGraph;
     @Mutation setSelectedGraph;
     @Mutation clearSelectedModels;
 
     get graphs (): KnowledgeGraph.Graph[] {
-      return modelsService.fetchGraphs(this.getModelsList, this.getFilters);
+      const graphs = [...this.getKnowledgeGraphsList] as KnowledgeGraph.Graph[];
+      return graphs.filter(graph => !modelsService.isFiltered(graph, this.getFilters));
     }
 
     get searchPills (): any {

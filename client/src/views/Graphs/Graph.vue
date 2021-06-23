@@ -194,8 +194,8 @@
     modalDocumentArtifact: any = null;
     showModalDocument: boolean = false;
 
+    @Getter getKnowledgeGraphsList;
     @Getter getSelectedGraph;
-    @Getter getModelsList;
     @Getter getFilters;
     @Getter getFiltres;
     @Action addFiltres;
@@ -212,14 +212,14 @@
       }
     }
 
-    @Watch('getModelsList') async onGetModelsListChanged (): Promise<void> {
-      // If we do not have a selected model, we try to find one from the route.
+    @Watch('getKnowledgeGraphsList') async onGetKnowledgeGraphsListChanged (): Promise<void> {
+      // If we do not have a selected graph, we try to find one from the route.
       if (!this.selectedGraph) {
-        const model = this.getModelsList
-          .find(model => model.metadata.id === this.$route.params.model_id);
+        const graph = this.getKnowledgeGraphsList
+          .find(graph => graph.metadata.id === this.$route.params.model_id);
         // We can set the one in the route has the selected one in the store.
-        if (model) {
-          this.setSelectedGraph(model.id);
+        if (graph) {
+          this.setSelectedGraph(graph.id);
         }
       }
 
@@ -231,7 +231,7 @@
 
     async mounted (): Promise<void> {
       // Load the graph only if we have a selected model,
-      // otherwise wait until the getModelsList as loaded.
+      // otherwise wait until the getKnowledgeGraphsList as loaded.
       if (this.selectedGraph) {
         await this.loadData();
       }
@@ -262,7 +262,7 @@
     }
 
     get selectedGraph (): KnowledgeGraph.Graph {
-      return this.getModelsList[this.getSelectedGraph];
+      return this.getKnowledgeGraphsList[this.getSelectedGraph];
     }
 
     get selectedGraphId (): string {

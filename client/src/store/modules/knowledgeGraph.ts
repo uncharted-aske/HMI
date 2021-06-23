@@ -23,7 +23,7 @@ const actions: ActionTree<KnowledgeGraph.State, any> = {
     if (listMetadata) {
       listMetadata.map(metadata => {
         const graph: KnowledgeGraph.Graph = { metadata };
-        commit('addGraph', graph);
+        commit('addKnowledgeGraph', graph);
       });
       commit('setIsInitialized', true);
     }
