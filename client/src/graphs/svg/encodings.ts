@@ -5,11 +5,10 @@ export abstract class Colors {
 
   static readonly NODES: Record<string, any> = {
     DEFAULT: '#ECEFF4',
-    OTHER: '#647EA9',
     AGGREGATE: Colors.HIGHLIGHT,
+    //Gromet types
     CONTAINER: '#2E3440',
-    MODEL_VARIABLE: '#88C0D0',
-    INITIAL_CONDITION: '#81A1C1',
+    VARIABLE: '#88C0D0',
     OVERLAPPING: Colors.HIGHLIGHT,
   };
 

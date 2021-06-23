@@ -5,7 +5,7 @@ import { SVGRenderer } from 'svg-flowgraph';
 import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
 
 import { calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
-import { Colors } from '@/graphs/svg/encodings';
+import { Colors, NodeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 
 const pathFn = SVGUtil.pathFn().curve(d3.curveBasis);
@@ -107,7 +107,11 @@ export default class EpiRenderer extends SVGRenderer {
         .attr('width', d => (d as any).width)
         .attr('height', d => (d as any).height)
         .style('fill', d => { 
-          return (d as any).nodes ? Colors.NODES.CONTAINER : DEFAULT_STYLE.node.fill;        
+          if ((d as any).nodes) {
+            return Colors.NODES.CONTAINER;
+          } else {
+            return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.fill;
+          }
         })
         .style('stroke', DEFAULT_STYLE.node.stroke)
         .style('stroke-width', d => (d as any).nodes ? 5 : DEFAULT_STYLE.node.strokeWidth);
