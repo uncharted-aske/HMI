@@ -7,7 +7,6 @@ export abstract class Colors {
     DEFAULT: '#ECEFF4',
     OTHER: '#647EA9',
     AGGREGATE: Colors.HIGHLIGHT,
-    ROOT_CONTAINER: '#4C566A',
     CONTAINER: '#2E3440',
     MODEL_VARIABLE: '#88C0D0',
     INITIAL_CONDITION: '#81A1C1',
@@ -26,6 +25,8 @@ export abstract class Colors {
     PARTIAL: '#D08770',
     UNCURATED: '#212529',
   };
+  // Bio graphs
+
 
   static readonly EDGES: Record<string, any> = {
     DEFAULT: '#c2c7d1',
@@ -42,9 +43,11 @@ export abstract class Colors {
 
 export abstract class NodeTypes {
   static readonly NODES: Record<string, any> = {
+    // GroMEt types
     VARIABLE: 'variable',
-    FUNCTION: 'function',
-    CONTAINER: 'container',
+    PARAMETER: 'parameter',
+    // GroMEt types
+
     OVERLAPPING: 'overlapping',
     ABSTRACTOVERLAPPING: 'AP',
     NONOVERLAPPING: 'NOAP',

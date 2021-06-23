@@ -106,7 +106,9 @@ export default class EpiRenderer extends SVGRenderer {
         .attr('rx', DEFAULT_STYLE.node.borderRadius)
         .attr('width', d => (d as any).width)
         .attr('height', d => (d as any).height)
-        .style('fill', d => (d as any).nodes ? '' : DEFAULT_STYLE.node.fill)
+        .style('fill', d => { 
+          return (d as any).nodes ? Colors.NODES.CONTAINER : DEFAULT_STYLE.node.fill;        
+        })
         .style('stroke', DEFAULT_STYLE.node.stroke)
         .style('stroke-width', d => (d as any).nodes ? 5 : DEFAULT_STYLE.node.strokeWidth);
 
