@@ -69,7 +69,6 @@
               @layout-change="onSetLayout"
             />
           </settings-bar>
-          <local-graph v-if="isSplitView" :data="subgraph" @node-click="onNodeClick"/>
         </div>
       </resizable-grid>
     </div>
@@ -114,7 +113,6 @@
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import GlobalGraph from './components/Graphs/GlobalGraph.vue';
-  import LocalGraph from './components/Graphs/LocalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import MetadataPane from './components/DrilldownPanel/MetadataPane.vue';
@@ -153,7 +151,6 @@
     MetadataPanel,
     FacetsPane,
     GlobalGraph,
-    LocalGraph,
     ResizableGrid,
     DrilldownPanel,
     MetadataPane,

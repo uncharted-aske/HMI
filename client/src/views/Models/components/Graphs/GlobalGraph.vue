@@ -98,6 +98,7 @@
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
 
+      console.log(data.nodes);
       this.renderer.setData(data);
       this.renderer.render();
     }
