@@ -126,8 +126,7 @@ export default class EpiRenderer extends SVGRenderer {
 
       // Special case for node parameters
       selection.selectAll('text')
-        .filter(d => (d as any).data.role?.includes(NodeTypes.NODES.PARAMETER)).attr('y',-5)
-    
+        .filter(d => (d as any).data.role?.includes(NodeTypes.NODES.PARAMETER)).attr('y', -5);
     });
   }
 
