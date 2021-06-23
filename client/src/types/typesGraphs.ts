@@ -68,11 +68,6 @@ export interface GraphInterface {
   edges: GraphEdgeInterface[],
 }
 
-export interface ModelGraphInterface {
-  abstract: GraphInterface,
-  detailed: GraphInterface
-}
-
 export interface SubgraphEdgeInterface {
   id?: string,
   source: string,

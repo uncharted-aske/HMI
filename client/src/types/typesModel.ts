@@ -1,5 +1,5 @@
 /**
- * Define Types used for Computional Models
+ * Define Types used for Computational Models
  */
 
 import * as Graph from '@/types/typesGraphs';
