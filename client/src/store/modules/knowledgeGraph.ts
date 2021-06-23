@@ -10,7 +10,7 @@ const state: KnowledgeGraph.State = {
 };
 
 const actions: ActionTree<KnowledgeGraph.State, any> = {
-  async setInitialState ({ commit }) {
+  async setInitialKnowledgeGraphState ({ commit }) {
     let listMetadata: KnowledgeGraph.Metadata[];
 
     try {
@@ -31,14 +31,14 @@ const actions: ActionTree<KnowledgeGraph.State, any> = {
 };
 
 const getters: GetterTree<KnowledgeGraph.State, any> = {
-  getGraphsList: state => state.graphsList,
-  getSelectedGraph: state => state.selectedGraph,
-  getSelectedGraphIds: state => state.selectedGraphIds,
-  getCountGraphs: (state): number => state.graphsList.length,
+  getKnowledgeGraphsList: state => state.graphsList,
+  getSelectedKnowledgeGraph: state => state.selectedGraph,
+  getSelectedKnowledgeGraphIds: state => state.selectedGraphIds,
+  getCountKnowledgeGraphs: (state): number => state.graphsList.length,
 };
 
 const mutations: MutationTree<KnowledgeGraph.State> = {
-  addGraph (state, graph: KnowledgeGraph.Graph) {
+  addKnowledgeGraph (state, graph: KnowledgeGraph.Graph) {
     const listLength = state.graphsList.length.toString();
     state.graphsList.push(Object.assign({ id: listLength }, graph));
   },
@@ -47,11 +47,11 @@ const mutations: MutationTree<KnowledgeGraph.State> = {
     state.isInitialized = isInitialized;
   },
 
-  setGraphsList (state, graphsList: KnowledgeGraph.Graph[]) {
+  setKnowledgeGraphsList (state, graphsList: KnowledgeGraph.Graph[]) {
     state.graphsList = graphsList;
   },
 
-  setSelectedGraphs (state, selectedGraphId: string) {
+  setSelectedKnowledgeGraphs (state, selectedGraphId: string) {
     if (state.selectedGraphIds.has(selectedGraphId)) {
       state.selectedGraphIds.delete(selectedGraphId);
     } else {
@@ -61,20 +61,17 @@ const mutations: MutationTree<KnowledgeGraph.State> = {
     state.selectedGraphIds = new Set(state.selectedGraphIds);
   },
 
-  setSelectedGraph (state, value: string) {
+  setSelectedKnowledgeGraph (state, value: string) {
     if (state.selectedGraph === value) value = null;
     state.selectedGraph = value;
   },
 
-  clearSelectedGraphs (state) {
+  clearSelectedKnowledgeGraphs (state) {
     state.selectedGraphIds.clear();
   },
 };
 
-const namespaced = true;
-
 export {
-  namespaced,
   state,
   getters,
   mutations,

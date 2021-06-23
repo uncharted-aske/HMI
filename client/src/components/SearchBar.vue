@@ -29,8 +29,8 @@
 
     private lex: Lex = null;
 
-    @Getter('filtres') getFilters;
-    @Action('filtres') setFilters;
+    @Getter getFilters;
+    @Action setFilters;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       setPills({ lex: this.lex, pills: this.pills, filters: this.getFilters });

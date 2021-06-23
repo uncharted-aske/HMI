@@ -52,10 +52,7 @@ const actions: ActionTree<QueryState, any> = {
   },
 };
 
-const namespaced = true;
-
 export {
-  namespaced,
   state,
   getters,
   actions,

@@ -20,7 +20,7 @@ const store = new Vuex.Store({
 });
 
 // Initialize state
-store.dispatch('models/setInitialModelsState');
-store.dispatch('knowledgeGraph/setInitialState');
+store.dispatch('setInitialModelsState');
+store.dispatch('setInitialKnowledgeGraphState');
 
 export { store };

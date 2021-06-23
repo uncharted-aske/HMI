@@ -66,10 +66,7 @@ const mutations: MutationTree<Model.State> = {
   },
 };
 
-const namespaced = true;
-
 export {
-  namespaced,
   state,
   getters,
   mutations,
