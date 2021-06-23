@@ -77,8 +77,8 @@ const injectELKOptions = (renderGraph, options) => {
     if (!node.nodes || node.nodes.length === 0) {
       node.width = node.width || options.nodeWidth;
       node.height = node.height || options.nodeHeight;
-      
-      //Special case for parameters
+
+      // Special case for parameters
       if (node.data.role?.includes('parameter')) {
         node.width = 30;
         node.height = 30;

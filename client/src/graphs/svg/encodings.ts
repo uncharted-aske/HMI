@@ -6,7 +6,7 @@ export abstract class Colors {
   static readonly NODES: Record<string, any> = {
     DEFAULT: '#ECEFF4',
     AGGREGATE: Colors.HIGHLIGHT,
-    //Gromet types
+    // Gromet types
     CONTAINER: '#2E3440',
     VARIABLE: '#88C0D0',
     OVERLAPPING: Colors.HIGHLIGHT,
@@ -25,7 +25,6 @@ export abstract class Colors {
     UNCURATED: '#212529',
   };
   // Bio graphs
-
 
   static readonly EDGES: Record<string, any> = {
     DEFAULT: '#c2c7d1',

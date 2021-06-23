@@ -106,7 +106,7 @@ export default class EpiRenderer extends SVGRenderer {
         .attr('rx', DEFAULT_STYLE.node.borderRadius)
         .attr('width', d => (d as any).width)
         .attr('height', d => (d as any).height)
-        .style('fill', d => { 
+        .style('fill', d => {
           if ((d as any).nodes) {
             return Colors.NODES.CONTAINER;
           } else {

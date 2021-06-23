@@ -86,7 +86,7 @@
     refresh (): void {
       if (!this.data) return;
 
-      //Layout selection
+      // Layout selection
       if (this.layout === GraphLayoutInterfaceType.elk) {
         this.renderer.adapter = new ELKAdapter(Object.assign({}, DEFAULT_RENDERING_OPTIONS, { layout: layered }));
       } else {
