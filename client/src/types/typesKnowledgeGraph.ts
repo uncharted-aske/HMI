@@ -21,9 +21,9 @@ type Graph = {
 
 type State = {
   isInitialized: boolean,
-  modelsList: Graph[],
-  selectedModelGraph?: number,
-  selectedModelIds: Set<string>,
+  graphsList: Graph[],
+  selectedGraph?: string,
+  selectedGraphIds: Set<string>,
 };
 
 export {

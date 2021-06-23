@@ -1,9 +1,6 @@
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
-
 import * as Model from '@/types/typesModel';
-
 import { fetchInitialModelData } from '@/static/mockedDataDemo';
-import { emmaaModelList } from '@/services/EmmaaFetchService';
 
 const state: Model.State = {
   isInitialized: false,
@@ -14,33 +11,16 @@ const state: Model.State = {
 
 const actions: ActionTree<Model.State, any> = {
   async setInitialModelsState ({ commit }) {
-    // Initialize static models
     const initialModelsList = await fetchInitialModelData();
     commit('setModelsList', initialModelsList);
-
-    // TO REMOVE FROM HERE: Initialize models from emmaa
-    try {
-      const modelList = await emmaaModelList();
-      modelList.map(metadata => commit('addModel', {
-        metadata,
-        // graph: {
-        //   abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-        //   detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-        // },
-        // subgraph: subgraphJSON,
-      }));
-    } catch (error) {
-      console.warn('EMMAA API is not responding', error); // eslint-disable-line no-console
-    }
-
     commit('setIsInitialized', true);
   },
 };
 
 const getters: GetterTree<Model.State, any> = {
-  getIsInitialized: state => state.isInitialized,
-  getSelectedModelIds: state => [...state.selectedModelIds],
   getModelsList: state => state.modelsList,
+  getSelectedModelIds: state => [...state.selectedModelIds],
+  getSelectedModelGraph: state => state.selectedModelGraph,
 
   getCountComputationalModels: (state: Model.State): number => {
     return state.modelsList.length;
@@ -50,8 +30,6 @@ const getters: GetterTree<Model.State, any> = {
   getCountGraphsModels: (state: Model.State): number => {
     return state.modelsList.length;
   },
-
-  getSelectedModelGraph: state => state.selectedModelGraph,
 };
 
 const mutations: MutationTree<Model.State> = {
@@ -59,9 +37,11 @@ const mutations: MutationTree<Model.State> = {
     const modelsListLength = state.modelsList.length;
     state.modelsList.push(Object.assign({ id: modelsListLength }, newModel));
   },
+
   setIsInitialized (state, newIsInitialized) {
     state.isInitialized = newIsInitialized;
   },
+
   setModelsList (state, newModelsList) {
     state.modelsList = newModelsList;
   },
