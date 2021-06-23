@@ -1,4 +1,3 @@
-import * as HMI from '@/types/types';
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
 import { donuToModel } from '@/utils/DonuUtil';

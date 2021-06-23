@@ -2,7 +2,7 @@ import { GetterTree, MutationTree, ActionTree } from 'vuex';
 
 import * as Model from '@/types/typesModel';
 
-import { fetchInitialModelData, buildInitialModelsList } from '@/static/mockedDataDemo';
+import { fetchInitialModelData } from '@/static/mockedDataDemo';
 import { emmaaModelList } from '@/services/EmmaaFetchService';
 
 const state: Model.State = {
@@ -14,16 +14,8 @@ const state: Model.State = {
 
 const actions: ActionTree<Model.State, any> = {
   async setInitialModelsState ({ commit }) {
-    const {
-      SIR_PN,
-      SIR_FN,
-    } = await fetchInitialModelData();
-
     // Initialize static models
-    const initialModelsList = buildInitialModelsList({
-      SIR_PN,
-      SIR_FN,
-    });
+    const initialModelsList = await fetchInitialModelData();
     commit('setModelsList', initialModelsList);
 
     // TO REMOVE FROM HERE: Initialize models from emmaa
@@ -36,7 +28,6 @@ const actions: ActionTree<Model.State, any> = {
         //   detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
         // },
         // subgraph: subgraphJSON,
-        type: 'biomechanism',
       }));
     } catch (error) {
       console.warn('EMMAA API is not responding', error); // eslint-disable-line no-console
