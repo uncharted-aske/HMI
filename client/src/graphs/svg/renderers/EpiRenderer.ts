@@ -110,7 +110,6 @@ export default class EpiRenderer extends SVGRenderer {
           if ((d as any).nodes) {
             return Colors.NODES.CONTAINER;
           } else {
-            console.log((d as any).data.role);
             return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.fill;
           }
         })
@@ -124,6 +123,11 @@ export default class EpiRenderer extends SVGRenderer {
         .style('font-weight', d => (d as any).nodes ? '800' : '500')
         .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
         .text(d => (d as any).data.label);
+
+      // Special case for node parameters
+      selection.selectAll('text')
+        .filter(d => (d as any).data.role?.includes(NodeTypes.NODES.PARAMETER)).attr('y',-5)
+    
     });
   }
 
