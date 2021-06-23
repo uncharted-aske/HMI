@@ -1,6 +1,6 @@
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
 import * as KnowledgeGraph from '@/types/typesKnowledgeGraph';
-import { emmaaModelList } from '@/services/EmmaaFetchService';
+import { emmaaGraphList } from '@/services/EmmaaFetchService';
 
 const state: KnowledgeGraph.State = {
   isInitialized: false,
@@ -11,23 +11,20 @@ const state: KnowledgeGraph.State = {
 
 const actions: ActionTree<KnowledgeGraph.State, any> = {
   async setInitialState ({ commit }) {
-    let list: KnowledgeGraph.Graph[];
+    let listMetadata: KnowledgeGraph.Metadata[];
 
     try {
-      list = await emmaaModelList();
+      listMetadata = await emmaaGraphList();
     } catch (error) {
-      console.warn('EMMAA API is not responding', error); // eslint-disable-line no-console
+      // eslint-disable-next-line no-console
+      console.warn('EMMAA API is not responding', error);
     }
 
-    if (list) {
-      list.map(metadata => commit('addGraph', {
-        metadata,
-        // graph: {
-        //   abstract: _.pick(nestedSIRCAG, ['nodes', 'edges']),
-        //   detailed: _.pick(nestedSIRGrFN, ['nodes', 'edges']),
-        // },
-        // subgraph: subgraphJSON,
-      }));
+    if (listMetadata) {
+      listMetadata.map(metadata => {
+        const graph: KnowledgeGraph.Graph = { metadata };
+        commit('addGraph', graph);
+      });
       commit('setIsInitialized', true);
     }
   },

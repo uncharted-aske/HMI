@@ -1,5 +1,5 @@
 import { getUtilMem } from '@/utils/FetchUtil';
-
+import * as KnowledgeGraph from '@/types/typesKnowledgeGraph';
 import {
   EmmaaModelInfoInterface,
   EmmaaEvidenceInterface,
@@ -18,7 +18,7 @@ export const emmaaModelInfo = (paramObj: {modelName: string}): Promise<EmmaaMode
 
 const EMMAA_MODEL_LIST = 'https://emmaa.indra.bio/metadata/models';
 
-export const emmaaModelList = async (): Promise<any> => {
+export const emmaaGraphList = async (): Promise<KnowledgeGraph.Metadata[]> => {
   const modelList = await getUtilMem(EMMAA_MODEL_LIST, {});
 
   return await Promise.all(modelList.models.map(async (modelName) => {
