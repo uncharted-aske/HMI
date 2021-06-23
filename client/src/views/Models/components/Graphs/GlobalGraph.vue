@@ -47,7 +47,7 @@
        this.renderer = new EpiRenderer({
         el: this.$refs.graph,
         adapter: new ELKAdapter(Object.assign({}, DEFAULT_RENDERING_OPTIONS, { layout: layered })),
-        renderMode: 'delta',
+        renderMode: 'basic',
         useEdgeControl: false,
         useZoom: true,
         useMinimap: false,

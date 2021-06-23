@@ -96,7 +96,7 @@ export default class EpiRenderer extends SVGRenderer {
       .attr('color', 'SourceGraphic');
   }
 
-  renderNodeAdded (nodeSelection: d3.Selection<any, any, any, any>): void {
+  renderNode (nodeSelection: d3.Selection<any, any, any, any>): void {
     nodeSelection.each(function () {
       const selection = d3.select(this);
 
@@ -122,35 +122,11 @@ export default class EpiRenderer extends SVGRenderer {
         .style('fill', d => calcLabelColor(d))
         .style('font-weight', d => (d as any).nodes ? '800' : '500')
         .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
-        .text(d => (d as any).label);
+        .text(d => (d as any).data.label);
     });
   }
 
-  renderNodeUpdated (nodeSelection: d3.Selection<any, any, any, any>): void {
-    nodeSelection.each(function () {
-      const selection = d3.select(this);
-
-      selection.select('rect')
-        .transition()
-        .duration(1000)
-        .attr('width', d => (d as any).width)
-        .attr('height', d => (d as any).height);
-    });
-  }
-
-  renderNodeRemoved (nodeSelection: d3.Selection<any, any, any, any>): void {
-    nodeSelection.each(function () {
-      d3.select(this)
-        .transition()
-        .on('end', function () {
-          d3.select(this.parentNode).remove();
-        })
-        .duration(1500)
-        .style('opacity', 0.2);
-    });
-  }
-
-  renderEdgeAdded (edgeSelection:d3.Selection<any, any, any, any>):void {
+  renderEdge (edgeSelection:d3.Selection<any, any, any, any>):void {
     edgeSelection.append('path')
       .classed('edge-path', true)
       .attr('d', d => pathFn(d.points))
@@ -167,25 +143,5 @@ export default class EpiRenderer extends SVGRenderer {
         const target = d.target.replace(/\s/g, '');
         return `url(#start-${source}-${target}`;
       });
-  }
-
-  renderEdgeUpdated (edgeSelection: d3.Selection<any, any, any, any>): void {
-    edgeSelection
-      .selectAll('.edge-path')
-      .attr('d', d => {
-        return pathFn((d as any).points);
-      });
-  }
-
-  renderEdgeRemoved (edgeSelection: d3.Selection<any, any, any, any>): void {
-    edgeSelection.each(function () {
-      d3.select(this)
-        .transition()
-        .on('end', function () {
-          d3.select(this).remove();
-        })
-        .duration(1500)
-        .style('opacity', 0.2);
-    });
   }
 }
