@@ -1,8 +1,9 @@
+import * as _ from 'lodash';
 import * as d3 from 'd3';
 
 import { SVGRenderer } from 'svg-flowgraph';
 
-import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
+import { SVGRendererOptionsInterface, SubgraphInterface } from '@/types/typesGraphs';
 
 import { calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors } from '@/graphs/svg/encodings';
@@ -181,5 +182,34 @@ export default class EpiRenderer extends SVGRenderer {
         .duration(1500)
         .style('opacity', 0.2);
     });
+  }
+
+  hideHighlight (): void {
+    const chart = (this as any).chart;
+
+    chart.selectAll('.node-ui').style('opacity', 1);
+    chart.selectAll('.edge').style('opacity', 1);
+  }
+
+  showHighlight (subgraph: SubgraphInterface): void {
+    const chart = (this as any).chart;
+    // FIXME: not very efficient
+    const nodes = subgraph.nodes;
+    const edges = subgraph.edges;
+    const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => !nodes.map(node => node).includes(d.id));
+    nonNeighborNodes.style('opacity', 0.1);
+
+    const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => {
+      return edge.source === d.source && edge.target === d.target;
+    }));
+    nonNeighborEdges.style('opacity', 0.1);
+
+    const neighborNodes = chart.selectAll('.node-ui').filter(d => nodes.map(node => node).includes(d.id));
+    neighborNodes.style('opacity', 1);
+
+    const neighborEdges = chart.selectAll('.edge').filter(d => _.some(edges, edge => {
+      return edge.source === d.source && edge.target === d.target;
+    }));
+    neighborEdges.style('opacity', 1);
   }
 }

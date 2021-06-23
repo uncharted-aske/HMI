@@ -19,6 +19,8 @@ const state: ModelsState = {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const fetchInitialModelData = async () => {
   const staticFileURLs = [
+    `${window.location.origin}/gromet/SimpleSIR_gromet_FunctionNetwork_graph_representation.json`,
+    `${window.location.origin}/gromet/SimpleSIR_metadata_gromet_PetriNetClassic_Graph_Representation.json`,
     `${window.location.origin}/uncharted_chime.json`,
     `${window.location.origin}/nested-CHIME-SIR-CAG.json`,
     `${window.location.origin}/nested-CHIME-SIR-GrFN.json`,
@@ -39,6 +41,8 @@ const fetchInitialModelData = async () => {
   ];
 
   const [
+    SimpleSIRGrometGrFN,
+    SimpleSIRGrometPNC,
     CHIME,
     nestedCHIMECAG,
     nestedCHIMEGrFN,
@@ -61,6 +65,8 @@ const fetchInitialModelData = async () => {
   );
 
   return {
+    SimpleSIRGrometGrFN,
+    SimpleSIRGrometPNC,
     CHIME,
     nestedCHIMECAG,
     nestedCHIMEGrFN,
@@ -82,6 +88,8 @@ const fetchInitialModelData = async () => {
 };
 
 const buildInitialModelsList = ({
+  SimpleSIRGrometGrFN,
+  SimpleSIRGrometPNC,
   SIR,
   nestedSIRCAG,
   nestedSIRGrFN,
@@ -123,6 +131,17 @@ const buildInitialModelsList = ({
       },
       type: ModelInterfaceType.computational,
     },
+    {
+      id: 3,
+      metadata: {
+        name: 'SimpleSIRGromet',
+      },
+      graph: {
+        abstract: _.pick(SimpleSIRGrometPNC, ['nodes', 'edges']),
+        detailed: _.pick(SimpleSIRGrometGrFN, ['nodes', 'edges']),
+      },
+      type: ModelInterfaceType.computational,
+    },
   ];
 };
 
@@ -158,6 +177,8 @@ const buildInitialComparisonHighlights = ({
 const actions: ActionTree<ModelsState, any> = {
   async setInitialModelsState ({ commit }) {
     const {
+      SimpleSIRGrometGrFN,
+      SimpleSIRGrometPNC,
       CHIME,
       nestedCHIMECAG,
       nestedCHIMEGrFN,
@@ -181,6 +202,8 @@ const actions: ActionTree<ModelsState, any> = {
 
     // Initialize static models
     const initialModelsList = buildInitialModelsList({
+      SimpleSIRGrometGrFN,
+      SimpleSIRGrometPNC,
       SIR,
       nestedSIRCAG,
       nestedSIRGrFN,

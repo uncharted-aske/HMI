@@ -1,0 +1,147 @@
+{
+    "nodes": [
+        {
+            "id": "0",
+            "concept": "Relation",
+            "role": [],
+            "label": "sir",
+            "nodeType": "Box",
+            "dataType": "Relation",
+            "parent": null,
+            "nodeSubType": [
+                "Relation"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::2",
+            "concept": "Junction",
+            "role": [
+                "variable"
+            ],
+            "label": "S",
+            "nodeType": "Junction",
+            "dataType": "Integer",
+            "parent": "0",
+            "nodeSubType": [
+                "State"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::5",
+            "concept": "Junction",
+            "role": [
+                "variable"
+            ],
+            "label": "I",
+            "nodeType": "Junction",
+            "dataType": "Integer",
+            "parent": "0",
+            "nodeSubType": [
+                "State"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::11",
+            "concept": "Junction",
+            "role": [
+                "variable"
+            ],
+            "label": "R",
+            "nodeType": "Junction",
+            "dataType": "Integer",
+            "parent": "0",
+            "nodeSubType": [
+                "State"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::3",
+            "concept": "Junction",
+            "role": [
+                "variable",
+                "parameter"
+            ],
+            "label": "beta",
+            "nodeType": "Junction",
+            "dataType": "Real",
+            "parent": "0",
+            "nodeSubType": [
+                "Rate"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::9",
+            "concept": "Junction",
+            "role": [
+                "variable",
+                "parameter"
+            ],
+            "label": "gamma",
+            "nodeType": "Junction",
+            "dataType": "Real",
+            "parent": "0",
+            "nodeSubType": [
+                "Rate"
+            ],
+            "metadata": null
+        }
+    ],
+    "edges": [
+        {
+            "source": "0::2",
+            "target": "0::3"
+        },
+        {
+            "source": "0::3",
+            "target": "0::5"
+        },
+        {
+            "source": "0::3",
+            "target": "0::5"
+        },
+        {
+            "source": "0::5",
+            "target": "0::3"
+        },
+        {
+            "source": "0::5",
+            "target": "0::9"
+        },
+        {
+            "source": "0::9",
+            "target": "0::11"
+        }
+    ],
+    "metadata": [
+        {
+            "metadata_type": "ModelInterface",
+            "uid": "simple_sir_PNC_model_interface",
+            "provenance": {
+                "metadata_type": "Provenance",
+                "method": "Manual_claytonm@az",
+                "timestamp": "2021-06-23T09:38:34:691751_MST-0700"
+            },
+            "variables": [
+                "J:S",
+                "J:I",
+                "J:R",
+                "J:beta",
+                "J:gamma"
+            ],
+            "parameters": [
+                "J:beta",
+                "J:gamma"
+            ],
+            "initial_conditions": [
+                "J:S",
+                "J:I",
+                "J:R"
+            ]
+        }
+    ]
+}

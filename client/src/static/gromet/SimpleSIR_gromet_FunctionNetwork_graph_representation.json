@@ -1,0 +1,806 @@
+{
+    "nodes": [
+        {
+            "id": "0",
+            "concept": "Function",
+            "role": [],
+            "label": "sir",
+            "nodeType": "Box",
+            "dataType": "Function",
+            "parent": null,
+            "nodeSubType": [
+                "Function"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::1",
+            "concept": "Port",
+            "role": [],
+            "label": "S",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::2",
+            "concept": "Port",
+            "role": [],
+            "label": "I",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::3",
+            "concept": "Port",
+            "role": [],
+            "label": "R",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::4",
+            "concept": "Port",
+            "role": [],
+            "label": "beta",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::5",
+            "concept": "Port",
+            "role": [],
+            "label": "gamma",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::6",
+            "concept": "Port",
+            "role": [],
+            "label": "dt",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::7",
+            "concept": "Port",
+            "role": [],
+            "label": "S",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0",
+            "nodeSubType": [
+                "T:PortOutput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::8",
+            "concept": "Port",
+            "role": [],
+            "label": "I",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0",
+            "nodeSubType": [
+                "T:PortOutput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::9",
+            "concept": "Port",
+            "role": [],
+            "label": "R",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0",
+            "nodeSubType": [
+                "T:PortOutput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12",
+            "concept": "Expression",
+            "role": [],
+            "label": "B:infected_exp",
+            "nodeType": "Box",
+            "dataType": "Expression",
+            "parent": "0",
+            "nodeSubType": [
+                "Expression"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::11",
+            "concept": "Port",
+            "role": [],
+            "label": "S",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::12",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::17",
+            "concept": "Port",
+            "role": [],
+            "label": "I",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::12",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::25",
+            "concept": "Port",
+            "role": [],
+            "label": "R",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::12",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::30",
+            "concept": "Port",
+            "role": [],
+            "label": "beta",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::12",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::34",
+            "concept": "Port",
+            "role": [],
+            "label": "dt",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::12",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::38",
+            "concept": "Port",
+            "role": [],
+            "label": "infected",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::12",
+            "nodeSubType": [
+                "T:PortOutput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::53",
+            "concept": "RefOp",
+            "role": [],
+            "label": "*",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::12",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::54",
+            "concept": "RefOp",
+            "role": [],
+            "label": "/",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::12",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::55",
+            "concept": "RefOp",
+            "role": [],
+            "label": "*",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::12",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::56",
+            "concept": "RefOp",
+            "role": [],
+            "label": "*",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::12",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::57::58",
+            "concept": "Literal",
+            "role": [],
+            "label": "-1",
+            "nodeType": "Literal",
+            "dataType": "Int",
+            "parent": "0::12",
+            "nodeSubType": [
+                "Literal"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::12::59",
+            "concept": "RefOp",
+            "role": [],
+            "label": "+",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::12",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::20",
+            "concept": "Expression",
+            "role": [],
+            "label": "B:recovered_exp",
+            "nodeType": "Box",
+            "dataType": "Expression",
+            "parent": "0",
+            "nodeSubType": [
+                "Expression"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::20::19",
+            "concept": "Port",
+            "role": [],
+            "label": "I",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::20",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::20::32",
+            "concept": "Port",
+            "role": [],
+            "label": "gamma",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::20",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::20::36",
+            "concept": "Port",
+            "role": [],
+            "label": "dt",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::20",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::20::43",
+            "concept": "Port",
+            "role": [],
+            "label": "recovered",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::20",
+            "nodeSubType": [
+                "T:PortOutput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::20::60",
+            "concept": "RefOp",
+            "role": [],
+            "label": "*",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::20",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::20::61",
+            "concept": "RefOp",
+            "role": [],
+            "label": "*",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::20",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::15",
+            "concept": "Expression",
+            "role": [],
+            "label": "B:S_update_exp",
+            "nodeType": "Box",
+            "dataType": "Expression",
+            "parent": "0",
+            "nodeSubType": [
+                "Expression"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::15::14",
+            "concept": "Port",
+            "role": [],
+            "label": "S",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::15",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::15::39",
+            "concept": "Port",
+            "role": [],
+            "label": "infected",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::15",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::15::48",
+            "concept": "Port",
+            "role": [],
+            "label": "S",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::15",
+            "nodeSubType": [
+                "T:PortOutput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::15::62",
+            "concept": "RefOp",
+            "role": [],
+            "label": "-",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::15",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::23",
+            "concept": "Expression",
+            "role": [],
+            "label": "B:I_update_exp",
+            "nodeType": "Box",
+            "dataType": "Expression",
+            "parent": "0",
+            "nodeSubType": [
+                "Expression"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::23::22",
+            "concept": "Port",
+            "role": [],
+            "label": "I",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::23",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::23::41",
+            "concept": "Port",
+            "role": [],
+            "label": "infected",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::23",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::23::44",
+            "concept": "Port",
+            "role": [],
+            "label": "recovered",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::23",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::23::50",
+            "concept": "Port",
+            "role": [],
+            "label": "I",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::23",
+            "nodeSubType": [
+                "T:PortOutput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::23::63",
+            "concept": "RefOp",
+            "role": [],
+            "label": "-",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::23",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::23::64",
+            "concept": "RefOp",
+            "role": [],
+            "label": "+",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::23",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::28",
+            "concept": "Expression",
+            "role": [],
+            "label": "B:R_update_exp",
+            "nodeType": "Box",
+            "dataType": "Expression",
+            "parent": "0",
+            "nodeSubType": [
+                "Expression"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::28::27",
+            "concept": "Port",
+            "role": [],
+            "label": "R",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::28",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::28::46",
+            "concept": "Port",
+            "role": [],
+            "label": "recovered",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::28",
+            "nodeSubType": [
+                "T:PortInput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::28::52",
+            "concept": "Port",
+            "role": [],
+            "label": "R",
+            "nodeType": "Port",
+            "dataType": "T:Float",
+            "parent": "0::28",
+            "nodeSubType": [
+                "T:PortOutput"
+            ],
+            "metadata": null
+        },
+        {
+            "id": "0::28::65",
+            "concept": "RefOp",
+            "role": [],
+            "label": "+",
+            "nodeType": "Expr",
+            "dataType": "RefOp",
+            "parent": "0::28",
+            "nodeSubType": [
+                "Expr"
+            ],
+            "metadata": null
+        }
+    ],
+    "edges": [
+        {
+            "source": "0::1",
+            "target": "0::12::11"
+        },
+        {
+            "source": "0::1",
+            "target": "0::15::14"
+        },
+        {
+            "source": "0::2",
+            "target": "0::12::17"
+        },
+        {
+            "source": "0::2",
+            "target": "0::20::19"
+        },
+        {
+            "source": "0::2",
+            "target": "0::23::22"
+        },
+        {
+            "source": "0::3",
+            "target": "0::12::25"
+        },
+        {
+            "source": "0::3",
+            "target": "0::28::27"
+        },
+        {
+            "source": "0::4",
+            "target": "0::12::30"
+        },
+        {
+            "source": "0::5",
+            "target": "0::20::32"
+        },
+        {
+            "source": "0::6",
+            "target": "0::12::34"
+        },
+        {
+            "source": "0::6",
+            "target": "0::20::36"
+        },
+        {
+            "source": "0::12::38",
+            "target": "0::15::39"
+        },
+        {
+            "source": "0::12::38",
+            "target": "0::23::41"
+        },
+        {
+            "source": "0::20::43",
+            "target": "0::23::44"
+        },
+        {
+            "source": "0::20::43",
+            "target": "0::28::46"
+        },
+        {
+            "source": "0::15::48",
+            "target": "0::7"
+        },
+        {
+            "source": "0::23::50",
+            "target": "0::8"
+        },
+        {
+            "source": "0::28::52",
+            "target": "0::9"
+        },
+        {
+            "source": "0::12::30",
+            "target": "0::12::56"
+        },
+        {
+            "source": "0::12::11",
+            "target": "0::12::56"
+        },
+        {
+            "source": "0::12::17",
+            "target": "0::12::56"
+        },
+        {
+            "source": "0::12::56",
+            "target": "0::12::55"
+        },
+        {
+            "source": "0::12::57::58",
+            "target": "0::12::55"
+        },
+        {
+            "source": "0::12::55",
+            "target": "0::12::54"
+        },
+        {
+            "source": "0::12::11",
+            "target": "0::12::59"
+        },
+        {
+            "source": "0::12::17",
+            "target": "0::12::59"
+        },
+        {
+            "source": "0::12::25",
+            "target": "0::12::59"
+        },
+        {
+            "source": "0::12::59",
+            "target": "0::12::54"
+        },
+        {
+            "source": "0::12::54",
+            "target": "0::12::53"
+        },
+        {
+            "source": "0::12::34",
+            "target": "0::12::53"
+        },
+        {
+            "source": "0::12::53",
+            "target": "0::12::38"
+        },
+        {
+            "source": "0::20::32",
+            "target": "0::20::61"
+        },
+        {
+            "source": "0::20::19",
+            "target": "0::20::61"
+        },
+        {
+            "source": "0::20::61",
+            "target": "0::20::60"
+        },
+        {
+            "source": "0::20::36",
+            "target": "0::20::60"
+        },
+        {
+            "source": "0::20::60",
+            "target": "0::20::43"
+        },
+        {
+            "source": "0::15::14",
+            "target": "0::15::62"
+        },
+        {
+            "source": "0::15::39",
+            "target": "0::15::62"
+        },
+        {
+            "source": "0::15::62",
+            "target": "0::15::48"
+        },
+        {
+            "source": "0::23::22",
+            "target": "0::23::64"
+        },
+        {
+            "source": "0::23::41",
+            "target": "0::23::64"
+        },
+        {
+            "source": "0::23::64",
+            "target": "0::23::63"
+        },
+        {
+            "source": "0::23::44",
+            "target": "0::23::63"
+        },
+        {
+            "source": "0::23::63",
+            "target": "0::23::50"
+        },
+        {
+            "source": "0::28::27",
+            "target": "0::28::65"
+        },
+        {
+            "source": "0::28::46",
+            "target": "0::28::65"
+        },
+        {
+            "source": "0::28::65",
+            "target": "0::28::52"
+        }
+    ],
+    "metadata": null
+}

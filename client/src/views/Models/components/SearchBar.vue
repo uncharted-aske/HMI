@@ -26,10 +26,6 @@
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       setPills({ lex: this.lex, pills: this.pills, filters: this.getFilters });
-      // HACK FOR DEMO IN FEB.12TH
-      if (!filtersUtil.isEmpty(this.getFilters)) {
-        this.$emit('run-query');
-      }
     }
 
     mounted (): void {

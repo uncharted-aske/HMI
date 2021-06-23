@@ -127,8 +127,8 @@
           id: model.id,
           type: model.type,
           previewImageSrc,
-          title: model.metadata.name,
-          subtitle: model.metadata.description,
+          title: model.metadata?.name ?? 'No Title',
+          subtitle: model.metadata?.description ?? 'No Subtitle',
           checked: selectedModelsList.has(model.id),
         } as CardInterface;
       });

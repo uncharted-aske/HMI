@@ -1,9 +1,10 @@
 import { Filter } from '@/types/typesLex';
 import { BIO_EDGE_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
+import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 
-// PATH QUERIES
+// BIO PATH QUERIES
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function bioPathPre (bgraphPathQuery: any, clause: Filter): any {
+export function bioPathPre (bgraphPathQuery, clause: Filter): any {
   return bgraphPathQuery.filter(document => {
     if (document._type === 'node') {
       const node = document;
@@ -148,3 +149,132 @@ export function bioNodeOutDegree (bgraphPathQuery, clause: Filter): any {
     return false;
   });
 }
+
+// EPI PATH QUERIES
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function epiPathPre (bgraphPathQuery, clause: Filter): any {
+  return bgraphPathQuery.filter(document => {
+    if (document._type === 'node') {
+      const node = document;
+      return clause.values[0] === node.label;
+    }
+    // Document type is an edge
+    return false;
+  })
+    .start()
+    .unique();
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
+export function epiPathPreNodeFilterLoop (bgraphPathQuery, _clause: Filter): any {
+  return bgraphPathQuery.in(); // TODO: Why are edge directions backward??
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
+export function epiPathPreEdgeFilterLoop (bgraphPathQuery, _clause: Filter): any {
+  return bgraphPathQuery.in(); // TODO: Why are edge directions backward??
+}
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function epiPathPost (bgraphPathQuery, clause: Filter): any {
+  return bgraphPathQuery.suspend(document => {
+    if (document._type === 'node') {
+      const node = document;
+      return clause.values[1] === node.label;
+    }
+    // Document type is an edge
+    return false;
+  })
+    .repeat(15) // TODO: Implement cycle detection in bgraph to remove bio path length limit
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .filter(_ => false)
+    .unsuspend();
+}
+
+// Add filter terms here to change the order in which they are processed in bgraph
+export const EDGE_PRIORITY_RANK = 2;
+export const NODE_PRIORITY_RANK = 4;
+export const PATH_PRIORITY_RANK = 7;
+export const filterTermToPriorityRank = {
+  // BIO Edge Terms
+  [QUERY_FIELDS_MAP.BIO_EDGE_PRE.field]: 1,
+  [QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field]: EDGE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field]: EDGE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_EDGE_DOI.field]: EDGE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_EDGE_POST.field]: 3,
+  // BIO Node Terms
+  [QUERY_FIELDS_MAP.BIO_NODE_PRE.field]: 4,
+  [QUERY_FIELDS_MAP.BIO_NODE_NAME.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_GROUP.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_NODE_POST.field]: 6,
+  // BIO Path Terms
+  [QUERY_FIELDS_MAP.BIO_PATH_PRE.field]: 0,
+  [QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP.field]: 1,
+  [QUERY_FIELDS_MAP.BIO_PATH_PRE_NODE_FILTER_LOOP.field]: 3,
+  [QUERY_FIELDS_MAP.BIO_PATH.field]: PATH_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.BIO_PATH_POST.field]: 8,
+  // EPI Path Terms
+  [QUERY_FIELDS_MAP.EPI_PATH_PRE.field]: 0,
+  [QUERY_FIELDS_MAP.EPI_PATH_PRE_EDGE_FILTER_LOOP.field]: 1,
+  [QUERY_FIELDS_MAP.EPI_PATH_PRE_NODE_FILTER_LOOP.field]: 3,
+  [QUERY_FIELDS_MAP.PATH_QUERY.field]: PATH_PRIORITY_RANK, // TODO: Normalize naming to EPI_
+  [QUERY_FIELDS_MAP.EPI_PATH_POST.field]: 8,
+};
+
+// Assume that bgraph instance passed in has already been initialized
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const executeBgraphEdges = (bgraphEdgeQuery, clause: Filter): any => {
+  switch (clause.field) {
+    // EDGE CLAUSES
+    case QUERY_FIELDS_MAP.BIO_EDGE_PRE.field: return bgraphEdgeQuery;
+    case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: return bioEdgeTested(bgraphEdgeQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field: return bioEdgeType(bgraphEdgeQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_EDGE_DOI.field: return bioEdgeDOI(bgraphEdgeQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_EDGE_POST.field: return bgraphEdgeQuery.as('edgeOnly').out().as('target').back('edgeOnly').in().as('source').merge('edgeOnly', 'source', 'target');
+    default: return bgraphEdgeQuery;
+  }
+};
+
+// Assume that bgraph instance passed in has already been initialized
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const executeBgraphPathQuery = (bgraphPathQuery, clause: Filter): any => {
+  switch (clause.field) {
+    // BIO PATH CLAUSES
+    case QUERY_FIELDS_MAP.BIO_PATH_PRE.field: return bioPathPre(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_PATH_PRE_NODE_FILTER_LOOP.field: return bioPathPreNodeFilterLoop(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP.field: return bioPathPreEdgeFilterLoop(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: return bioEdgeTested(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field: return bioEdgeType(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_EDGE_DOI.field: return bioEdgeDOI(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: return bioNodeName(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_GROUP.field: return bioNodeGroup(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: return bioNodeGrounded(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field: return bioNodeGroundedOnto(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: return bioNodeInDegree(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: return bioNodeOutDegree(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_PATH_POST.field: return bioPathPost(bgraphPathQuery, clause);
+    // EPI PATH CLAUSES
+    case QUERY_FIELDS_MAP.EPI_PATH_PRE.field: return epiPathPre(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.EPI_PATH_PRE_NODE_FILTER_LOOP.field: return epiPathPreNodeFilterLoop(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.EPI_PATH_PRE_EDGE_FILTER_LOOP.field: return epiPathPreEdgeFilterLoop(bgraphPathQuery, clause);
+    case QUERY_FIELDS_MAP.EPI_PATH_POST.field: return epiPathPost(bgraphPathQuery, clause);
+    default: return bgraphPathQuery;
+  }
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const executeBgraphNodes = (bgraphNodeQuery: any, clause: Filter): any => {
+  switch (clause.field) {
+    // NODE CLAUSES
+    case QUERY_FIELDS_MAP.BIO_NODE_PRE.field: return bgraphNodeQuery;
+    case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: return bioNodeName(bgraphNodeQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_GROUP.field: return bioNodeGroup(bgraphNodeQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: return bioNodeGrounded(bgraphNodeQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field: return bioNodeGroundedOnto(bgraphNodeQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: return bioNodeInDegree(bgraphNodeQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: return bioNodeOutDegree(bgraphNodeQuery, clause);
+    case QUERY_FIELDS_MAP.BIO_NODE_POST.field: return bgraphNodeQuery;
+    default: return bgraphNodeQuery;
+  }
+};

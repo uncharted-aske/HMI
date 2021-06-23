@@ -16,52 +16,31 @@
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
       <div class="search-row">
-        <search-bar :placeholder="`Search for model components...`" @run-query="onRunQuery"/>
+        <search-bar :placeholder="`Search for model components...`"/>
         <button class="btn btn-primary m-1" @click="onOpenSimView">
           <font-awesome-icon :icon="['fas', 'chart-line' ]" />
           <span> Open Simulation View </span>
         </button>
       </div>
-      <resizable-grid :map="gridMap" :dimensions="gridDimensions">
-        <div slot="1" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              :title="selectedModel && selectedModel.metadata.name"
-              :data="[
-                { name: 'Nodes', value: nodeCount },
-                { name: 'Edges', value: edgeCount },
-              ]"
-            />
-            <settings
-              slot="right"
-              :selected-view-id="selectedViewId"
-              :views="views"
-              @view-change="onSetView"
-            />
-          </settings-bar>
-          <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
-        </div>
-        <div slot="2" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              :data="[
-                { name: 'Nodes', value: subgraphNodeCount },
-                { name: 'Edges', value: subgraphEdgeCount },
-              ]"
-              :title="`Subgraph`"
-            />
-            <settings
-              slot="right"
-              :selected-view-id="selectedViewId"
-              :views="views"
-              @view-change="onSetView"
-            />
-          </settings-bar>
-          <local-graph v-if="isSplitView" :data="subgraph" @node-click="onNodeClick"/>
-        </div>
-      </resizable-grid>
+      <div class="h-100 w-100 d-flex flex-column">
+        <settings-bar>
+          <counters
+            slot="left"
+            :title="selectedModel && selectedModel.metadata.name"
+            :data="[
+              { name: 'Nodes', value: nodeCount },
+              { name: 'Edges', value: edgeCount },
+            ]"
+          />
+          <settings
+            slot="right"
+            :selected-view-id="selectedViewId"
+            :views="views"
+            @view-change="onSetView"
+          />
+        </settings-bar>
+        <global-graph v-if="selectedModel" :data="selectedGraph" :highlight="querygraph" @node-click="onNodeClick"/>
+      </div>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :active-tab-id="drilldownActiveTabId" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
       <metadata-pane v-if="drilldownActiveTabId === 'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
@@ -86,7 +65,13 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
+  import { Watch } from 'vue-property-decorator';
+  import { bgraph } from '@uncharted.software/bgraph';
 
+  import {
+    loadBGraphData,
+    filterToBgraph,
+  } from '@/utils/BGraphUtil';
   import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
@@ -170,195 +155,6 @@
     },
   };
 
-  const paths = [{
-                   nodes: [{
-                     id: '3ca29049-d9c6-459e-be33-5912e8a1433b',
-                   }, {
-                     id: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
-                   }],
-                   edges: [{
-                     source: '3ca29049-d9c6-459e-be33-5912e8a1433b',
-                     target: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
-                   }],
-                 },
-                 {
-                   nodes: [{
-                             id: '3ca29049-d9c6-459e-be33-5912e8a1433b',
-                           },
-                           {
-                             id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                           }, {
-                             id: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
-                           },
-                   ],
-                   edges: [{
-                             source: '3ca29049-d9c6-459e-be33-5912e8a1433b',
-                             target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                           },
-                           {
-                             source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                             target: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
-                           },
-                   ],
-                 },
-                 {
-                   nodes: [{
-                             id: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
-                           },
-                           {
-                             id: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
-                           },
-                           {
-                             id: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
-                           },
-                           {
-                             id: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
-                           },
-                           {
-                             id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                           },
-                           {
-                             id: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
-                           },
-                   ],
-                   edges: [{
-                             source: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
-                             target: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
-                           },
-                           {
-                             source: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
-                             target: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
-                           },
-                           {
-                             source: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
-                             target: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
-                           },
-                           {
-                             source: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
-                             target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                           },
-                           {
-                             source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                             target: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
-                           },
-                   ],
-                 },
-                 {
-                   nodes: [{
-                             id: '3ca29049-d9c6-459e-be33-5912e8a1433b',
-                           },
-                           {
-                             id: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
-                           },
-                           {
-                             id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                           },
-                           {
-                             id: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
-                           },
-                           {
-                             id: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
-                           },
-                           {
-                             id: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
-                           },
-                           {
-                             id: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
-                           },
-                           {
-                             id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                           },
-                           {
-                             id: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
-                           },
-                   ],
-                   edges: [
-                     {
-                       source: '3ca29049-d9c6-459e-be33-5912e8a1433b',
-                       target: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
-                     },
-
-                     {
-                       source: '3ca29049-d9c6-459e-be33-5912e8a1433b',
-                       target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                     }, {
-                       source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                       target: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
-                     }, {
-                       source: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
-                       target: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
-                     }, {
-                       source: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
-                       target: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
-                     }, {
-                       source: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
-                       target: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
-                     }, {
-                       source: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
-                       target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                     }, {
-                       source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                       target: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
-                     },
-                   ],
-                 },
-                 {
-                   nodes: [{
-                     id: '4f8f229a-aab4-4db4-844b-64f68920dfad',
-                   }, {
-                     id: '9d85aa4e-2a80-42a9-a8fb-33d10932f2ac',
-                   }, {
-                     id: '4a3659ff-9c44-4352-9d3e-f592b2597b5a',
-                   }, {
-                     id: '26f0ec12-51a6-42e5-a5fd-afdad6d21f4e',
-                   }, {
-                     id: 'a9840a0e-8a1a-4eda-a9ca-7746f23d3677',
-                   }, {
-                     id: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
-                   }, {
-                     id: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
-                   }, {
-                     id: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
-                   }, {
-                     id: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
-                   }, {
-                     id: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                   }, {
-                     id: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
-                   }],
-                   edges: [{
-                     source: '4f8f229a-aab4-4db4-844b-64f68920dfad',
-                     target: '9d85aa4e-2a80-42a9-a8fb-33d10932f2ac',
-                   }, {
-                     source: '9d85aa4e-2a80-42a9-a8fb-33d10932f2ac',
-                     target: '4a3659ff-9c44-4352-9d3e-f592b2597b5a',
-                   }, {
-                     source: '4a3659ff-9c44-4352-9d3e-f592b2597b5a',
-                     target: '26f0ec12-51a6-42e5-a5fd-afdad6d21f4e',
-                   }, {
-                     source: '26f0ec12-51a6-42e5-a5fd-afdad6d21f4e',
-                     target: 'a9840a0e-8a1a-4eda-a9ca-7746f23d3677',
-                   }, {
-                     source: 'a9840a0e-8a1a-4eda-a9ca-7746f23d3677',
-                     target: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
-                   }, {
-                     source: '4aa6aa7d-31bc-4c43-9462-087640c2bc3f',
-                     target: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
-                   }, {
-                     source: 'aa5a9672-d3f7-4c4a-95e2-d0a1a77197d0',
-                     target: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
-                   }, {
-                     source: '475fca7c-194c-4abb-b19b-0aa28a0bb5d3',
-                     target: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
-                   }, {
-                     source: 'b33a5e7a-35f3-4ec0-a9f4-b4b57e4bd524',
-                     target: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                   }, {
-                     source: 'a414982f-51fb-4d41-abf8-b736e9fc6ac1',
-                     target: '9d2259db-62cc-444f-a4d4-03f5769ba39b',
-                   }],
-                 },
-  ];
   const components = {
     SearchBar,
     SettingsBar,
@@ -380,6 +176,9 @@
 
   @Component({ components })
   export default class Model extends Vue {
+    // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
+    bgraphInstance: any;
+
     views: ViewInterface[] = VIEWS;
     selectedViewId = 'causal';
 
@@ -396,19 +195,58 @@
     drilldownRelatedParameters: any = null;
     drilldownParameters: any = null;
 
-    isSplitView = false;
     subgraph: GraphInterface = null;
+    querygraph: any = null;
     showModalParameters: boolean = false;
     showModalMetadata: boolean = false;
     modalDataParameters: any = null;
     modalDataMetadata: any = null;
     highlights: SubgraphInterface = null;
-    pathsCounter: number = 0;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Getter getParameters;
+    @Getter getFilters;
     @Mutation setSelectedModels;
+
+    @Watch('getFilters') onGetFiltersChanged (): void {
+      this.executeFilters();
+    }
+
+    async mounted (): Promise<void> {
+      await this.loadData();
+    }
+
+    executeFilters (): void {
+      if (this.bgraphInstance && this.getFilters?.clauses.length > 0) {
+        const querygraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+        this.querygraph = {
+          nodes: querygraph.filter(d => d._type === 'node').map(n => n.id),
+          edges: querygraph.filter(d => d._type === 'edge').map(e => ({ source: e.source, target: e.target })),
+        };
+      } else {
+        this.querygraph = null;
+      }
+    }
+
+    async loadData (): Promise<void> {
+      if (this.selectedModel && this.grometType) {
+        const [bgNodes, bgEdges] = await loadBGraphData(
+          `${process.env.S3_BGRAPH_EPI_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/nodes.jsonl`,
+          `${process.env.S3_BGRAPH_EPI_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/edges.jsonl`,
+        );
+        this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
+        this.executeFilters();
+      }
+    }
+
+    @Watch('selectedModel') async onGetSelectedModelChange (): Promise<void> {
+      await this.loadData();
+    }
+
+    @Watch('grometType') async onGetGrometTypeChange (): Promise<void> {
+      await this.loadData();
+    }
 
     get selectedModel (): ModelInterface {
       if (
@@ -424,6 +262,11 @@
 
     get selectedGraph (): GraphInterface {
       return this.selectedViewId === 'causal' ? this.selectedModel?.graph?.abstract : this.selectedModel?.graph?.detailed;
+    }
+
+    get grometType (): string {
+      // TODO: Reverse these
+      return this.selectedViewId === 'causal' ? 'PNC' : 'GrFN';
     }
 
     get nodeCount (): number {
@@ -442,33 +285,6 @@
       return this.subgraph?.edges.length;
     }
 
-    get gridMap (): string[][] {
-      return this.isSplitView ? [['1', '3', '2']] : [['1']];
-    }
-
-    get gridDimensions (): any {
-      if (this.isSplitView) {
-        return {
-          // Keep the cell between 25% and 75% of container
-          /* Future features to be developed.
-          1: {
-            widthMax: 0.75,
-            widthMin: 0.25,
-          },
-          2: {
-            widthMax: 0.75,
-            widthMin: 0.25,
-          },
-          */
-          // Middle element to visually resize the columns
-          3: {
-            width: '10px',
-            widthFixed: true,
-          },
-        };
-      }
-    }
-
     onOpenSimView (): void {
       const options: RawLocation = { name: 'simulation' };
 
@@ -481,18 +297,6 @@
       }
 
       this.$router.push(options);
-    }
-
-    onSplitView (): void {
-      this.isSplitView = !this.isSplitView;
-      if (!this.highlights) return;
-
-      // Get path from highlights
-      const path = this.highlights;
-      const edges = path.edges;
-      const nodes = path.nodes.map(node => this.selectedGraph.nodes.find(n => n.id === node.id));
-
-      this.subgraph = { nodes, edges };
     }
 
     onTabClick (tabId: string): void {
@@ -572,11 +376,6 @@
     onOpenModalMetadata ():void {
       this.modalDataMetadata = bibjson;
       this.showModalMetadata = true;
-    }
-
-    onRunQuery (): void {
-      this.highlights = paths[this.pathsCounter];
-      this.pathsCounter++;
     }
   }
 </script>

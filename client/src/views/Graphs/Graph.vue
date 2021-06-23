@@ -307,8 +307,8 @@
 
     async loadData (): Promise<void> {
       const [bgNodes, bgEdges] = await loadBGraphData(
-        `${process.env.S3_BGRAPH_MODELS}/${this.selectedGraphId}/nodes.jsonl`,
-        `${process.env.S3_BGRAPH_MODELS}/${this.selectedGraphId}/edges.jsonl`,
+        `${process.env.S3_BGRAPH_BIO_MODELS}/${this.selectedGraphId}/nodes.jsonl`,
+        `${process.env.S3_BGRAPH_BIO_MODELS}/${this.selectedGraphId}/edges.jsonl`,
       );
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
 

@@ -10,7 +10,7 @@
 
   import { expandCollapse, highlight } from 'svg-flowgraph';
 
-  import { GraphInterface } from '@/types/typesGraphs';
+  import { GraphInterface, SubgraphInterface } from '@/types/typesGraphs';
 
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import Adapter from '@/graphs/svg/elk/adapter';
@@ -28,6 +28,7 @@
   @Component
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
+    @Prop({ default: null }) highlight: SubgraphInterface;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
@@ -35,6 +36,15 @@
     @Watch('data')
     dataChanged (): void {
       this.refresh();
+    }
+
+    @Watch('highlight')
+    highlightChanged (): void {
+      if (this.highlight) {
+        this.renderer.showHighlight(this.highlight);
+      } else {
+        this.renderer.hideHighlight();
+      }
     }
 
     mounted (): void {
