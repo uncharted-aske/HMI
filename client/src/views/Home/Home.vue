@@ -54,8 +54,8 @@
   export default class Home extends Vue {
     cosmos: CosmosSearchInterface = null;
 
-    @Getter getCountGraphsModels;
     @Getter getCountComputationalModels;
+    @Getter getCountKnowledgeGraphs;
 
     mounted (): void {
       this.fetchCosmos();
@@ -70,7 +70,7 @@
     }
 
     get nbGraphsModels (): string {
-      return displayNb(this.getCountGraphsModels);
+      return displayNb(this.getCountKnowledgeGraphs);
     }
 
     get nbComputationalModels (): string {

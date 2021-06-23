@@ -21,15 +21,7 @@ const getters: GetterTree<Model.State, any> = {
   getModelsList: state => state.modelsList,
   getSelectedModelIds: state => [...state.selectedModelIds],
   getSelectedModelGraph: state => state.selectedModelGraph,
-
-  getCountComputationalModels: (state: Model.State): number => {
-    return state.modelsList.length;
-  },
-
-  // TO REMOVE FROM HERE
-  getCountGraphsModels: (state: Model.State): number => {
-    return state.modelsList.length;
-  },
+  getCountComputationalModels: (state): number => state.modelsList.length,
 };
 
 const mutations: MutationTree<Model.State> = {
