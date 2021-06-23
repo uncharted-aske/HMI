@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 import * as filtres from './modules/filtres';
 import * as knowledgeGraph from './modules/knowledgeGraph';
-import * as models from './modules/models';
+import * as model from './modules/model';
 import * as query from './modules/query';
 import * as simulation from './modules/simulation';
 
@@ -13,7 +13,7 @@ const store = new Vuex.Store({
   modules: {
     filtres,
     knowledgeGraph,
-    models,
+    model,
     query,
     simulation,
   },
