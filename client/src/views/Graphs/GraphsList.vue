@@ -55,7 +55,7 @@
   import COVID19Screenshot from '@/assets/img/COVID19.png';
 
   // Services
-  import * as modelsService from '@/services/ModelsService';
+  // import * as modelsService from '@/services/ModelsService';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -82,8 +82,9 @@
     @Mutation setSelectedKnowledgeGraph;
 
     get graphs (): KnowledgeGraph.Graph[] {
-      const graphs = [...this.getKnowledgeGraphsList] as KnowledgeGraph.Graph[];
-      return graphs.filter(graph => !modelsService.isFiltered(graph, this.getFilters));
+      return this.getKnowledgeGraphsList as KnowledgeGraph.Graph[];
+      // const graphs = [...this.getKnowledgeGraphsList] as KnowledgeGraph.Graph[];
+      // return graphs.filter(graph => !modelsService.isFiltered(graph, this.getFilters));
     }
 
     get searchPills (): any {
