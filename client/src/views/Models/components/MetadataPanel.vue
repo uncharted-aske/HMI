@@ -38,18 +38,19 @@
 
   @Component
   export default class MetadataPanel extends Vue {
-    @Prop({ default: null }) metadata: Model.Metadata;
+    @Prop({ default: null }) modelMetadata: Model.Metadata;
+    @Prop({ default: null }) graphMetadata: Model.GraphMetadata;
   }
 </script>
 
 <style lang="scss" scoped>
-.metadata-item {
-  padding: 20px;
-  text-align: left;
-  border-bottom: 1px solid rgba(207, 216, 220, .5);
-  .key {
-    font-weight: bold;
-    padding-top: 5px;
+  .metadata-item {
+    padding: 20px;
+    text-align: left;
+    border-bottom: 1px solid rgba(207, 216, 220, .5);
+    .key {
+      font-weight: bold;
+      padding-top: 5px;
+    }
   }
-}
 </style>
