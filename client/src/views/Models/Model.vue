@@ -37,10 +37,18 @@
               slot="right"
               :selected-view-id="selectedViewId"
               :views="views"
+              :layouts="layouts"
+              :selected-layout-id="selectedLayoutId"
               @view-change="onSetView"
+              @layout-change="onSetLayout"
             />
           </settings-bar>
-          <global-graph v-if="selectedModel" :data="selectedGraph" @node-click="onNodeClick"/>
+          <global-graph
+            v-if="selectedGraph"
+            :data="selectedGraph"
+            :layout="selectedLayoutId"
+            @node-click="onNodeClick"
+          />
         </div>
         <div slot="2" class="h-100 w-100 d-flex flex-column">
           <settings-bar>
@@ -56,10 +64,12 @@
               slot="right"
               :selected-view-id="selectedViewId"
               :views="views"
+              :selected-layout-id="selectedLayoutId"
+              :layouts="layouts"
               @view-change="onSetView"
+              @layout-change="onSetLayout"
             />
           </settings-bar>
-          <local-graph v-if="isSplitView" :data="subgraph" @node-click="onNodeClick"/>
         </div>
       </resizable-grid>
     </div>
@@ -87,9 +97,9 @@
   import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
+  import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
   import { TabInterface, ViewInterface } from '@/types/types';
   import * as Model from '@/types/typesModel';
-  import { GraphInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
@@ -104,7 +114,6 @@
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import GlobalGraph from './components/Graphs/GlobalGraph.vue';
-  import LocalGraph from './components/Graphs/LocalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import MetadataPane from './components/DrilldownPanel/MetadataPane.vue';
@@ -123,6 +132,11 @@
     { name: 'Functional Network', id: 'fn' },
   ];
 
+  const LAYOUTS: GraphLayoutInterface[] = [
+    { name: 'Layered', id: GraphLayoutInterfaceType.elk },
+    { name: 'Dagre', id: GraphLayoutInterfaceType.dagre },
+  ];
+
   const DRILLDOWN_TABS: TabInterface[] = [
     { name: 'Metadata', icon: '', id: 'metadata' },
     { name: 'Parameters', icon: '', id: 'parameters' },
@@ -138,7 +152,6 @@
     MetadataPanel,
     FacetsPane,
     GlobalGraph,
-    LocalGraph,
     ResizableGrid,
     DrilldownPanel,
     MetadataPane,
@@ -155,6 +168,9 @@
 
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
+
+    layouts: GraphLayoutInterface[] = LAYOUTS;
+    selectedLayoutId: string = GraphLayoutInterfaceType.elk;
 
     drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
@@ -291,6 +307,10 @@
       this.selectedViewId = viewId;
       const index = this.selectedViewId === 'ptc' ? 0 : 1;
       this.setSelectedModelGraph(index);
+    }
+
+    onSetLayout (layoutId: string): void {
+      this.selectedLayoutId = layoutId;
     }
 
     async searchCosmos (keyword: string): Promise<void> {

@@ -20,7 +20,6 @@
           type="button"
           @click="onClickView"
         >View</button>
-        <settings slot="right"/>
       </settings-bar>
       <card-container
         class="graphs-cards"

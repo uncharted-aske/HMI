@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import ELK from 'elkjs/lib/elk.bundled';
+import { layered } from '@/graphs/svg/elk/layouts';
 
 import { makeEdgeMaps, traverse, changeKey } from '@/graphs/svg/util.js';
 
@@ -17,7 +18,7 @@ const build = (root) => {
       depth: depth,
       type: 'normal',
       parent: parent,
-      data: node,
+      data: node.data,
     };
 
     // Build edges
@@ -59,7 +60,7 @@ const injectELKOptions = (renderGraph, options) => {
   const edgeMaps = makeEdgeMaps(renderGraph);
   const outgoingMap = new Map();
   const incomingMap = new Map();
-  const layout = options.layout;
+  const layout = layered || options.layout;
 
   // Set up nodes end edges
   traverse(renderGraph, (node) => {
@@ -77,6 +78,12 @@ const injectELKOptions = (renderGraph, options) => {
     if (!node.nodes || node.nodes.length === 0) {
       node.width = node.width || options.nodeWidth;
       node.height = node.height || options.nodeHeight;
+
+      // Special case for parameters
+      if (node.data.role?.includes('parameter')) {
+        node.width = options.parameterNodeSize || 30;
+        node.height = options.parameterNodeSize || 30;
+      }
     } else {
       delete node.width;
       delete node.height;
