@@ -8,7 +8,7 @@ enum RequestCommand {
   // GET_MODEL_SCHEMATIC = 'get-model-schematic',
   // GET_MODEL_SOURCE = 'get-model-source',
   LIST_MODELS = 'list-models',
-  SIMULATE = 'simulate',
+  SIMULATE = 'simulate-gsl',
   // UPLOAD_MODEL = 'upload-model',
 }
 
