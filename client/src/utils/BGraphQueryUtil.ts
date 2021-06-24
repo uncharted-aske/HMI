@@ -182,7 +182,7 @@ export function epiPathPost (bgraphPathQuery, clause: Filter): any {
     // Document type is an edge
     return false;
   })
-    .repeat(15) // TODO: Implement cycle detection in bgraph to remove bio path length limit
+    .repeat(15) // TODO: Implement cycle detection in bgraph to remove epi path length limit
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .filter(_ => false)
     .unsuspend();
