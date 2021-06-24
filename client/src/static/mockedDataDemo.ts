@@ -1,7 +1,7 @@
-import _ from 'lodash';
 import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 
 import * as Model from '@/types/typesModel';
+import * as Graphs from '@/types/typesGraphs';
 import { getUtil } from '@/utils/FetchUtil';
 
 export const staticFileURLs = [
@@ -11,6 +11,8 @@ export const staticFileURLs = [
 
 // eslint-disable-next-line
 export const buildInitialModelsList = ({ SIR_PN, SIR_FN }: any): Model.Model[] => {
+  const PN = GroMEt2Graph.parseGromet(SIR_PN);
+  const FN = GroMEt2Graph.parseGromet(SIR_FN);
   return [
     {
       id: 0,
@@ -23,14 +25,20 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN }: any): Model.Model[] =
         {
           file: '',
           type: 'PetriNetClassic',
-          metadata: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['metadata']).metadata,
-          graph: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['nodes', 'edges']),
+          metadata: PN.metadata,
+          graph: {
+            edges: PN.edges as Graphs.GraphEdgeInterface[],
+            nodes: PN.nodes as unknown as Graphs.GraphNodeInterface[],
+          },
         },
         {
           file: '',
           type: 'FunctionNetwork',
-          metadata: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['metadata']).metadata,
-          graph: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['nodes', 'edges']),
+          metadata: FN.metadata,
+          graph: {
+            edges: FN.edges as Graphs.GraphEdgeInterface[],
+            nodes: FN.nodes as unknown as Graphs.GraphNodeInterface[],
+          },
         },
       ],
     },

@@ -1,6 +1,6 @@
 <template>
-  <div v-if="metadata" class="metadata-pane-container">
-    <div v-for="(item, key) in metadata" :key="key">
+  <div v-if="graphMetadata" class="metadata-pane-container">
+    <div v-for="(item, key) in graphMetadata" :key="key">
       {{item}}
     </div>
     <!-- <div class="metadata-item">

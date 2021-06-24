@@ -9,7 +9,7 @@
       <div slot="content">
         <metadata-panel
           v-if="activeTabId === 'metadata'"
-          :metadata="selectedGraphMetadata"
+          :graph-metadata="selectedGraphMetadata"
         />
         <!-- <facets-pane v-if="activeTabId === 'facets'" />  -->
       </div>
