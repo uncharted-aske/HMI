@@ -6,6 +6,7 @@ export default class DagreAdapter {
   constructor (options) {
     this.nodeWidth = options.nodeWidth;
     this.nodeHeight = options.nodeHeight;
+    this.parameterNodeSize = options.parameterNodeSize;
   }
 
   makeRenderingGraph (graphData) {
@@ -16,8 +17,8 @@ export default class DagreAdapter {
 
         // Special case for parameters
         if (node.data.role?.includes('parameter')) {
-          node.width = 30;
-          node.height = 30;
+          node.width = this.parameterNodeSize || 30;
+          node.height = this.parameterNodeSize || 30;
         }
       }
     }, null);

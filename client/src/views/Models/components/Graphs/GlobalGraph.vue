@@ -15,7 +15,6 @@
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
-  import { layered } from '@/graphs/svg/elk/layouts';
   import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
   import { calculateNodeNeighborhood, constructRootNode } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
@@ -23,6 +22,7 @@
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
     nodeHeight: 40,
+    parameterNodeSize: 30,
   };
 
   @Component
@@ -46,7 +46,7 @@
     mounted (): void {
        this.renderer = new EpiRenderer({
         el: this.$refs.graph,
-        adapter: new ELKAdapter(Object.assign({}, DEFAULT_RENDERING_OPTIONS, { layout: layered })),
+        adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
         renderMode: 'basic',
         useEdgeControl: false,
         useZoom: true,
@@ -89,7 +89,7 @@
 
       // Layout selection
       if (this.layout === GraphLayoutInterfaceType.elk) {
-        this.renderer.adapter = new ELKAdapter(Object.assign({}, DEFAULT_RENDERING_OPTIONS, { layout: layered }));
+        this.renderer.adapter = new ELKAdapter(DEFAULT_RENDERING_OPTIONS);
       } else {
         this.renderer.adapter = new DagreAdapter(DEFAULT_RENDERING_OPTIONS);
       }

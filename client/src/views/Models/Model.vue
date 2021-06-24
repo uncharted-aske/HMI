@@ -44,6 +44,7 @@
             />
           </settings-bar>
           <global-graph
+            v-if="selectedGraph"
             :data="selectedGraph"
             :layout="selectedLayoutId"
             @node-click="onNodeClick"
