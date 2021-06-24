@@ -166,11 +166,11 @@ const epiPathPre = (bgraphPathQuery, clause: Filter): any => {
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
 const epiPathPreNodeFilterLoop = (bgraphPathQuery, _clause: Filter): any => {
-  return bgraphPathQuery.in(); // TODO: Why are edge directions backward??
+  return bgraphPathQuery.out();
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
 const epiPathPreEdgeFilterLoop = (bgraphPathQuery, _clause: Filter): any => {
-  return bgraphPathQuery.in(); // TODO: Why are edge directions backward??
+  return bgraphPathQuery.out();
 };
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const epiPathPost = (bgraphPathQuery, clause: Filter): any => {
