@@ -30,7 +30,7 @@
 
     mounted (): void {
       /* add pills here */
-      this.pills = [new PathQueryPill(QUERY_FIELDS_MAP.PATH_QUERY)];
+      this.pills = [new PathQueryPill(QUERY_FIELDS_MAP.EPI_PATH)];
 
       this.lex = initializeLex({
         pills: this.pills,

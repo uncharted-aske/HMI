@@ -92,7 +92,7 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
         clauses.push(postPathClause);
         clauses.push(QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP as unknown as Filter);
         clauses.push(QUERY_FIELDS_MAP.BIO_PATH_PRE_NODE_FILTER_LOOP as unknown as Filter);
-      } else if (clause.field === QUERY_FIELDS_MAP.PATH_QUERY.field) {
+      } else if (clause.field === QUERY_FIELDS_MAP.EPI_PATH.field) {
         hasPathFilters = true;
 
         // Set value on PRE- path query clause

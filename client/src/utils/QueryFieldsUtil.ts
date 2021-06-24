@@ -174,7 +174,7 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'integer',
   },
-  PATH_QUERY: {
+  EPI_PATH: {
     ..._field('epiPathQuery', 'Path Query'),
     ..._searchable('Path Query', false),
     baseType: 'string',
