@@ -52,7 +52,7 @@ const actions: ActionTree<QueryState, any> = {
   },
 };
 
-export const query = {
+export {
   state,
   getters,
   actions,

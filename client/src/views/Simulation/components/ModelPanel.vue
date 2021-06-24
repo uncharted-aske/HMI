@@ -45,7 +45,8 @@
   import { Getter } from 'vuex-class';
   import { capitalize } from 'lodash';
   import * as HMI from '@/types/types';
-  import { GraphInterface } from '@/types/typesGraphs';
+  import * as Model from '@/types/typesModel';
+  import * as Graph from '@/types/typesGraphs';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
@@ -65,7 +66,7 @@
   @Component({ components })
   export default class ModelPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
-    @Prop({ default: null }) model: HMI.ModelInterface;
+    @Prop({ default: null }) model: Model.Model;
 
     @Getter getSimParameters;
     @Getter getSimVariables;
@@ -77,10 +78,8 @@
       { name: capitalize(VIEWS.FUNCTIONAL), id: VIEWS.FUNCTIONAL },
     ];
 
-    get graph (): GraphInterface {
-      return this.selectedView === VIEWS.CAUSAL
-        ? this.model?.graph?.abstract
-        : this.model?.graph?.detailed;
+    get graph (): Graph.GraphInterface {
+      return this.model?.modelGraph?.[0]?.graph;
     }
 
     get modelName (): string {

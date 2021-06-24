@@ -31,12 +31,11 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
-
-  import { ModelMetadataInterface } from '@/types/types';
+  import * as Model from '@/types/typesModel';
 
   @Component
   export default class MetadataPanel extends Vue {
-    @Prop({ default: null }) metadata: ModelMetadataInterface;
+    @Prop({ default: null }) metadata: Model.Metadata;
   }
 </script>
 

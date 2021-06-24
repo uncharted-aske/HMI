@@ -1,6 +1,9 @@
 <template>
   <div v-if="metadata" class="metadata-pane-container">
-    <div class="metadata-item">
+    <div v-for="(item, key) in metadata" :key="key">
+      {{item}}
+    </div>
+    <!-- <div class="metadata-item">
       <div class="key">Name</div>
       <div>{{metadata.name}}</div>
     </div>
@@ -23,7 +26,7 @@
     <div class="metadata-item">
        <div class="key">Knowledge</div>
       <div><a class="text-link" :href="metadata.knowledge">{{metadata.knowledge}}</a> </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -31,12 +34,11 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
-
-  import { ModelMetadataInterface } from '@/types/types';
+  import * as Model from '@/types/typesModel';
 
   @Component
   export default class MetadataPanel extends Vue {
-    @Prop({ default: null }) metadata: ModelMetadataInterface;
+    @Prop({ default: null }) metadata: Model.Metadata;
   }
 </script>
 

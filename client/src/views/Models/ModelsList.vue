@@ -1,12 +1,5 @@
 <template>
   <div class="view-container">
-    <!-- <left-side-panel
-      class="left-side-panel"
-      :activeTabId="activeTabId"
-      :tabs="tabs"
-    >
-      <facets-pane slot="content" />
-    </left-side-panel> -->
     <main>
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for Models...`"/>
@@ -39,7 +32,8 @@
   import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import { CardInterface, Counter, ModelInterface, TabInterface } from '@/types/types';
+  import { CardInterface, Counter, TabInterface } from '@/types/types';
+  import * as Model from '@/types/typesModel';
 
   import SearchBar from '@/components/SearchBar.vue';
   import Counters from '@/components/Counters.vue';
@@ -57,9 +51,6 @@
   import CHIMEScreenshot from '@/assets/img/CHIME.png';
   import SIRScreenshot from '@/assets/img/SIR.png';
   import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
-
-  // Services
-  import * as modelsService from '@/services/ModelsService';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -84,10 +75,9 @@
     @Getter getModelsList;
     @Getter getSelectedModelIds;
     @Mutation setSelectedModels;
-    @Mutation clearSelectedModels;
 
-    get models (): ModelInterface[] {
-      return modelsService.fetchModels(this.getModelsList, this.getFilters);
+    get models (): Model.Model[] {
+      return this.getModelsList;
     }
 
     get searchPills (): any {
@@ -125,9 +115,8 @@
 
         return {
           id: model.id,
-          type: model.type,
           previewImageSrc,
-          title: model.metadata.name,
+          title: model.name,
           subtitle: model.metadata.description,
           checked: selectedModelsList.has(model.id),
         } as CardInterface;
@@ -145,7 +134,7 @@
       } else {
         options.name = 'model';
 
-        const selectedModel: ModelInterface = this.models.find(model => model.id === this.getSelectedModelIds[0]);
+        const selectedModel: Model.Model = this.models.find(model => model.id === this.getSelectedModelIds[0]);
         if (selectedModel) {
           options.params = {
             model_id: selectedModel.id.toString(),
@@ -158,10 +147,6 @@
 </script>
 
 <style lang="scss" scoped>
-// .left-side-panel {
-//   flex-shrink: 0;
-// }
-
 main {
   display: flex;
   flex-direction: column;

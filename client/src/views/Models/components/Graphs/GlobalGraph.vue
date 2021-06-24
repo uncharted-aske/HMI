@@ -13,7 +13,8 @@
   import { GraphInterface } from '@/types/typesGraphs';
 
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
-  import Adapter from '@/graphs/svg/elk/adapter';
+  import DagreAdapter from '@/graphs/svg/dagre/adapter';
+  // import ELKAdapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
   import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
   import { calculateNodeNeighborhood, constructRootNode } from '@/graphs/svg/util.js';
@@ -40,7 +41,7 @@
     mounted (): void {
        this.renderer = new EpiRenderer({
         el: this.$refs.graph,
-        adapter: new Adapter(DEFAULT_RENDERING_OPTIONS),
+        adapter: new DagreAdapter(DEFAULT_RENDERING_OPTIONS),
         renderMode: 'delta',
         useEdgeControl: false,
         useZoom: true,

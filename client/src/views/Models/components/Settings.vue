@@ -6,7 +6,7 @@
       type="button"
       @click="toggleViews"
     >
-      Views
+      Modeling Framework
       <template v-if="views.length">:
         <span class="view-name">{{ selectedViewName }}</span>
         <font-awesome-icon :icon="['fas', 'caret-down' ]" />

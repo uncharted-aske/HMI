@@ -1,5 +1,5 @@
-import { ModelInterface } from '@/types/types';
 import * as Donu from '@/types/typesDonu';
+import * as Model from '@/types/typesModel';
 import { donuToModel } from '@/utils/DonuUtil';
 import { postUtil } from '@/utils/FetchUtil';
 
@@ -13,7 +13,7 @@ const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
 };
 
 /** Fetch a complete list of available models from Donu API */
-export const fetchDonuModels = async (): Promise<ModelInterface[]> => {
+export const fetchDonuModels = async (): Promise<any[]> => {
   const request: Donu.Request = {
     command: Donu.RequestCommand.LIST_MODELS,
   };
@@ -28,7 +28,7 @@ export const fetchDonuModels = async (): Promise<ModelInterface[]> => {
 };
 
 /** Fetch the parameters of a model */
-export const getModelParameters = async (model: ModelInterface): Promise<Donu.ModelParameter[]> => {
+export const getModelParameters = async (model: Model.Model): Promise<Donu.ModelParameter[]> => {
   if (!model) return;
 
   const request: Donu.Request = {
@@ -49,7 +49,7 @@ export const getModelParameters = async (model: ModelInterface): Promise<Donu.Mo
 };
 
 /** Fetch the state variable of a model */
-export const getModelVariables = async (model: ModelInterface): Promise<Donu.ModelVariable[]> => {
+export const getModelVariables = async (model: Model.Model): Promise<Donu.ModelVariable[]> => {
   if (!model) return;
 
   const request: Donu.Request = {
@@ -71,7 +71,7 @@ export const getModelVariables = async (model: ModelInterface): Promise<Donu.Mod
 
 /** Fetch the result of a model simulation */
 export const getModelResult = async (
-  model: ModelInterface,
+  model: Model.Model,
   parameters: Donu.RequestParameters,
   config: Donu.RequestConfig,
 ): Promise<Donu.SimulationResponse> => {
