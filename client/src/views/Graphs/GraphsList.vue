@@ -14,13 +14,12 @@
       <settings-bar>
         <counters slot="left" :data="countersData"/>
         <button
-          v-if="getSelectedGraph"
+          v-if="getSelectedKnowledgeGraph"
           class="btn btn-primary"
           slot="middle"
           type="button"
           @click="onClickView"
         >View</button>
-        <settings slot="right"/>
       </settings-bar>
       <card-container
         class="graphs-cards"
@@ -37,7 +36,8 @@
   import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import { CardInterface, Counter, ModelInterface, TabInterface } from '@/types/types';
+  import { CardInterface, Counter, TabInterface } from '@/types/types';
+  import * as KnowledgeGraph from '@/types/typesKnowledgeGraph';
 
   import SearchBar from '@/components/SearchBar.vue';
   import Counters from '@/components/Counters.vue';
@@ -55,7 +55,7 @@
   import COVID19Screenshot from '@/assets/img/COVID19.png';
 
   // Services
-  import * as modelsService from '@/services/ModelsService';
+  // import * as modelsService from '@/services/ModelsService';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -77,13 +77,14 @@
     activeTabId: string = 'facets';
 
     @Getter getFilters;
-    @Getter getModelsList;
-    @Getter getSelectedGraph;
-    @Mutation setSelectedGraph;
-    @Mutation clearSelectedModels;
+    @Getter getKnowledgeGraphsList;
+    @Getter getSelectedKnowledgeGraph;
+    @Mutation setSelectedKnowledgeGraph;
 
-    get graphs (): ModelInterface[] {
-      return modelsService.fetchGraphs(this.getModelsList, this.getFilters);
+    get graphs (): KnowledgeGraph.Graph[] {
+      return this.getKnowledgeGraphsList as KnowledgeGraph.Graph[];
+      // const graphs = [...this.getKnowledgeGraphsList] as KnowledgeGraph.Graph[];
+      // return graphs.filter(graph => !modelsService.isFiltered(graph, this.getFilters));
     }
 
     get searchPills (): any {
@@ -102,24 +103,24 @@
       return this.graphs.map(graph => {
         return {
           id: graph.id,
-          type: graph.type,
+          type: graph.metadata.type,
           previewImageSrc: COVID19Screenshot,
           title: graph.metadata.name,
           subtitle: graph.metadata.description,
-          checked: this.getSelectedGraph === graph.id,
+          checked: this.getSelectedKnowledgeGraph === graph.id,
         };
       });
     }
 
     onClickCard (card: CardInterface): void {
-      this.setSelectedGraph(card.id);
+      this.setSelectedKnowledgeGraph(card.id);
     }
 
     onClickView (): void {
       const options: RawLocation = { name: 'graph' };
 
       // As of now we only allow one Knowledgable Graph to be selected at a time.
-      const selectedGraph: ModelInterface = this.graphs.find(graph => graph.id === this.getSelectedGraph);
+      const selectedGraph: KnowledgeGraph.Graph = this.graphs.find(graph => graph.id === this.getSelectedKnowledgeGraph);
       const modelId = selectedGraph?.metadata?.id;
       if (modelId) {
         options.params = {

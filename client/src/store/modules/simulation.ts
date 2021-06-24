@@ -1,6 +1,7 @@
 import { GetterTree, ActionTree } from 'vuex';
 import * as HMI from '@/types/types';
 import * as Donu from '@/types/typesDonu';
+import * as Model from '@/types/typesModel';
 import { getModelParameters, getModelResult, getModelVariables } from '@/services/DonuService';
 import { aggregateModelResults, donuSimulateToVariable } from '@/utils/DonuUtil';
 
@@ -112,7 +113,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     state.variablesAggregate = donuSimulateToVariable([aggregateModelResults(modelResults, aggregator)]);
   },
 
-  async initializeSimParameters ({ state }, model: HMI.ModelInterface): Promise<void> {
+  async initializeSimParameters ({ state }, model: Model.Model): Promise<void> {
     const donuParameters = await getModelParameters(model) ?? [];
     state.parameters = donuParameters.map(donuParameter => ({
       ...donuParameter,
@@ -122,7 +123,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     state.numberOfSavedRuns = 1;
   },
 
-  async initializeSimVariables ({ state }, model: HMI.ModelInterface): Promise<void> {
+  async initializeSimVariables ({ state }, model: Model.Model): Promise<void> {
     const donuVariables = await getModelVariables(model) ?? [];
     state.variables = donuVariables.map(donuVariable => ({
       ...donuVariable,
@@ -140,7 +141,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
 };
 
 export {
-  actions,
-  getters,
   state,
+  getters,
+  actions,
 };

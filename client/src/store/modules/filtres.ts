@@ -81,8 +81,8 @@ const mutations: MutationTree<Filtres> = {
 };
 
 export {
-  actions,
+  state,
   getters,
   mutations,
-  state,
+  actions,
 };

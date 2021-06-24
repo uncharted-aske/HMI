@@ -9,9 +9,9 @@
       <div slot="content">
         <metadata-panel
           v-if="activeTabId === 'metadata'"
-          :metadata="selectedModel && selectedModel.metadata"
+          :metadata="selectedGraphMetadata"
         />
-        <facets-pane v-if="activeTabId === 'facets'" />
+        <!-- <facets-pane v-if="activeTabId === 'facets'" />  -->
       </div>
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
@@ -22,25 +22,57 @@
           <span> Open Simulation View </span>
         </button>
       </div>
-      <div class="h-100 w-100 d-flex flex-column">
-        <settings-bar>
-          <counters
-            slot="left"
-            :title="selectedModel && selectedModel.metadata.name"
-            :data="[
-              { name: 'Nodes', value: nodeCount },
-              { name: 'Edges', value: edgeCount },
-            ]"
+      <resizable-grid :map="gridMap" :dimensions="gridDimensions">
+        <div slot="1" class="h-100 w-100 d-flex flex-column">
+          <settings-bar>
+            <counters
+              slot="left"
+              :title="selectedModel && selectedModel.name"
+              :data="[
+                { name: 'Nodes', value: nodeCount },
+                { name: 'Edges', value: edgeCount },
+              ]"
+            />
+            <settings
+              slot="right"
+              :selected-view-id="selectedViewId"
+              :views="views"
+              :layouts="layouts"
+              :selected-layout-id="selectedLayoutId"
+              @view-change="onSetView"
+              @layout-change="onSetLayout"
+            />
+          </settings-bar>
+          <global-graph
+            v-if="selectedGraph"
+            :data="selectedGraph"
+            :highlight="querygraph"
+            :layout="selectedLayoutId"
+            @node-click="onNodeClick"
           />
-          <settings
-            slot="right"
-            :selected-view-id="selectedViewId"
-            :views="views"
-            @view-change="onSetView"
-          />
-        </settings-bar>
-        <global-graph v-if="selectedModel" :data="selectedGraph" :highlight="querygraph" @node-click="onNodeClick"/>
-      </div>
+        </div>
+        <div slot="2" class="h-100 w-100 d-flex flex-column">
+          <settings-bar>
+            <counters
+              slot="left"
+              :data="[
+                { name: 'Nodes', value: subgraphNodeCount },
+                { name: 'Edges', value: subgraphEdgeCount },
+              ]"
+              :title="`Subgraph`"
+            />
+            <settings
+              slot="right"
+              :selected-view-id="selectedViewId"
+              :views="views"
+              :selected-layout-id="selectedLayoutId"
+              :layouts="layouts"
+              @view-change="onSetView"
+              @layout-change="onSetLayout"
+            />
+          </settings-bar>
+        </div>
+      </resizable-grid>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :active-tab-id="drilldownActiveTabId" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
       <metadata-pane v-if="drilldownActiveTabId === 'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
@@ -72,8 +104,9 @@
     loadBGraphData,
     filterToBgraph,
   } from '@/utils/BGraphUtil';
-  import { TabInterface, ViewInterface, ModelInterface } from '@/types/types';
-  import { GraphInterface, GraphNodeInterface, SubgraphInterface } from '@/types/typesGraphs';
+  import { TabInterface, ViewInterface } from '@/types/types';
+  import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
+  import * as Model from '@/types/typesModel';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
@@ -88,7 +121,6 @@
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import GlobalGraph from './components/Graphs/GlobalGraph.vue';
-  import LocalGraph from './components/Graphs/LocalGraph.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import MetadataPane from './components/DrilldownPanel/MetadataPane.vue';
@@ -103,8 +135,13 @@
   ];
 
   const VIEWS: ViewInterface[] = [
-    { name: 'Causal', id: 'causal' },
-    { name: 'Functional', id: 'functional' },
+    { name: 'Petri Net Classic', id: 'ptc' },
+    { name: 'Functional Network', id: 'fn' },
+  ];
+
+  const LAYOUTS: GraphLayoutInterface[] = [
+    { name: 'Layered', id: GraphLayoutInterfaceType.elk },
+    { name: 'Dagre', id: GraphLayoutInterfaceType.dagre },
   ];
 
   const DRILLDOWN_TABS: TabInterface[] = [
@@ -112,48 +149,6 @@
     { name: 'Parameters', icon: '', id: 'parameters' },
     { name: 'Knowledge', icon: '', id: 'knowledge' },
   ];
-
-  /**
-  Temporary hack for workshop
-  **/
-  const bakedData = {
-    success: {
-      v: 1,
-      next_page: '',
-      scrollId: '',
-      hits: 1,
-      data: [{
-        pubname: 'Chaos, Solitons & Fractals',
-        publisher: 'Elsevier',
-        _gddid: '5ef5fd21a58f1dfd520aec60',
-        title: 'CHIME: COVID-19 Hospital Impact for Epidemics - Online Documentation',
-        doi: '',
-        coverDate: '2021-01-19T21:08',
-        URL: 'https://drive.google.com/file/d/122LEBSEMF9x-3r3tWbF6YQ9xeV4I_9Eh/view?usp=sharing',
-        authors: [{ name: 'Jason Lubken' },
-                  { name: 'Marieke Jackson' },
-                  { name: 'Michael Chow' }],
-        highlight: ['carriers, our analysis estimates the value of the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'estimates the value of the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> (R0 ) as', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> (R0 ) as of May 11, 2020 was found to be', '0) 0  181 182 183 184 185 186 187  188 189  190 191  3.2. <em class="hl">Basic</em> <em class="hl">Reproduction</em> <em class="hl">Number</em>', '0) 0  181 182 183 184 185 186 187  188 189  190 191  3.2. <em class="hl">Basic</em> <em class="hl">Reproduction</em> <em class="hl">Number</em> for Proposed', '<em class="hl">Basic</em> <em class="hl">Reproduction</em> <em class="hl">Number</em> for Proposed Model Using the next generation', '= −σ1 k γ + φD −σ2 k 0 φU + δU   The associated <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>,', '+ δU   The associated <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>, denoted', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>, denoted by R0 is then given by, R0 = ρ (FV', 'represents the robustness of the model forecasting. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'model forecasting. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 4.234', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 4.234 as of May 08, which lies in prior', 'peak around June 11 with about 26.449K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'about 26.449K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is estimated', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is estimated about 5.3467 as of May 11, which', 'about 5.3467 as of May 11, which is in between the observed <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> for', 'in between the observed <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> for COVID-19,', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> for COVID-19, estimated about 2-7 for COVID-19', 'peak around June 15 with about 9.504K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'about 9.504K cases. The <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 5.218', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is 5.218 as of May 11, which lies between', 'of COVID-19 dynamics. According to our calculation, the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'to our calculation, the <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is around', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> is around 4.649 as of May 09, which lies', 'control the disease burden of COVID-19. Otherwise, this <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em>', 'COVID-19. Otherwise, this <em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> could increase', '<em class="hl">basic</em> <em class="hl">reproduction</em> <em class="hl">number</em> could increase upto 5.7 within 20 days and'],
-      }],
-    },
-  };
-
-  const bibjson = {
-    bibjson: {
-      title: 'CHIME: COVID-19 Hospital Impact for Epidemics - Online Documentation',
-      author: [
-        { name: 'Jason Lubken' },
-        { name: 'Marieke Jackson' },
-        { name: 'Michael Chow' },
-      ],
-      type: 'web_documentation',
-      link: [{ url: 'https://code-for-philly.gitbook.io/chime/' }],
-      year: '2021-01-19T21:08',
-      file: 'CHIME-online-manual-T2021-01-19.pdf',
-      file_url: 'https://drive.google.com/file/d/122LEBSEMF9x-3r3tWbF6YQ9xeV4I_9Eh/view?usp=sharing',
-      identifier: [{ type: 'aske_id', id: '8467496e-3dfb-4efd-9061-433fef1b92de' }],
-    },
-  };
 
   const components = {
     SearchBar,
@@ -164,7 +159,6 @@
     MetadataPanel,
     FacetsPane,
     GlobalGraph,
-    LocalGraph,
     ResizableGrid,
     DrilldownPanel,
     MetadataPane,
@@ -175,15 +169,18 @@
   };
 
   @Component({ components })
-  export default class Model extends Vue {
+  export default class ModelView extends Vue {
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any;
 
     views: ViewInterface[] = VIEWS;
-    selectedViewId = 'causal';
+    selectedViewId = 'ptc';
 
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
+
+    layouts: GraphLayoutInterface[] = LAYOUTS;
+    selectedLayoutId: string = GraphLayoutInterfaceType.elk;
 
     drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
@@ -195,6 +192,7 @@
     drilldownRelatedParameters: any = null;
     drilldownParameters: any = null;
 
+    isSplitView = false;
     subgraph: GraphInterface = null;
     querygraph: any = null;
     showModalParameters: boolean = false;
@@ -207,7 +205,9 @@
     @Getter getModelsList;
     @Getter getParameters;
     @Getter getFilters;
+    @Getter getSelectedModelGraph;
     @Mutation setSelectedModels;
+    @Mutation setSelectedModelGraph;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.executeFilters();
@@ -248,7 +248,7 @@
       this.loadData();
     }
 
-    get selectedModel (): ModelInterface {
+    get selectedModel (): Model.Model {
       if (
         !this.getSelectedModelIds?.[0]?.toString() && // Are we missing the selectedModelId, toString to test id 0 as well,
         this.$route.params.model_id && // Does the model id is available from the route parameters,
@@ -260,8 +260,13 @@
       return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
     }
 
+    get selectedGraphMetadata (): Model.GraphMetadata[] {
+      return this.selectedModel?.modelGraph[this.getSelectedModelGraph].metadata;
+    }
+
     get selectedGraph (): GraphInterface {
-      return this.selectedViewId === 'causal' ? this.selectedModel?.graph?.abstract : this.selectedModel?.graph?.detailed;
+      const index = this.selectedViewId === 'ptc' ? 0 : 1;
+      return this.selectedModel?.modelGraph[index].graph;
     }
 
     get grometType (): string {
@@ -316,6 +321,12 @@
 
     onSetView (viewId: string): void {
       this.selectedViewId = viewId;
+      const index = this.selectedViewId === 'ptc' ? 0 : 1;
+      this.setSelectedModelGraph(index);
+    }
+
+    onSetLayout (layoutId: string): void {
+      this.selectedLayoutId = layoutId;
     }
 
     async searchCosmos (keyword: string): Promise<void> {
@@ -332,14 +343,6 @@
       this.drilldownRelatedParameters = response.data;
     }
 
-    formatParametersData (): any {
-      const parametersArray = [];
-      Object.keys(this.getParameters).forEach(key => {
-        parametersArray.push(this.getParameters[key]);
-      });
-      this.drilldownParameters = parametersArray;
-    }
-
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
       this.drilldownActiveTabId = 'metadata';
@@ -348,17 +351,17 @@
       this.drilldownPaneSubtitle = node.nodeType;
       this.drilldownMetadata = null;
 
-      const nodeMetadata = node.metadata;
-      if (nodeMetadata) {
-        const nodeKnowledge = { knowledge: bakedData.success.data }; // To show some text snippets
-        this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
+      // const nodeMetadata = node.metadata;
+      // if (nodeMetadata) {
+      //   const nodeKnowledge = { knowledge: bakedData.success.data }; // To show some text snippets
+      //   this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
 
-        // This probably will need to be refactored since we don't want to do all the queries at the same time, just on demand given the active tab
-        const textDefinition = nodeMetadata.attributes[0].text_definition;
-        this.formatParametersData();
-        this.getRelatedParameters(textDefinition);
-        this.searchCosmos(textDefinition);
-      }
+      //   // This probably will need to be refactored since we don't want to do all the queries at the same time, just on demand given the active tab
+      //   const textDefinition = nodeMetadata.attributes[0].text_definition;
+      //   this.formatParametersData();
+      //   this.getRelatedParameters(textDefinition);
+      //   this.searchCosmos(textDefinition);
+      // }
     }
 
      async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
@@ -373,8 +376,35 @@
     }
 
     onOpenModalMetadata ():void {
-      this.modalDataMetadata = bibjson;
+      // this.modalDataMetadata = bibjson;
       this.showModalMetadata = true;
+    }
+
+        get gridMap (): string[][] {
+      return this.isSplitView ? [['1', '3', '2']] : [['1']];
+    }
+
+    get gridDimensions (): any {
+      if (this.isSplitView) {
+        return {
+          // Keep the cell between 25% and 75% of container
+          /* Future features to be developed.
+          1: {
+            widthMax: 0.75,
+            widthMin: 0.25,
+          },
+          2: {
+            widthMax: 0.75,
+            widthMin: 0.25,
+          },
+          */
+          // Middle element to visually resize the columns
+          3: {
+            width: '10px',
+            widthFixed: true,
+          },
+        };
+      }
     }
   }
 </script>

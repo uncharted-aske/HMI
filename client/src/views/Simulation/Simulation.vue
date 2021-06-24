@@ -65,7 +65,7 @@
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
-  import * as HMI from '@/types/types';
+  import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
   import * as RGrid from '@/types/typesResizableGrid';
   import * as Donu from '@/types/typesDonu';
@@ -131,7 +131,7 @@
       return JSON.stringify(watchObject);
     }
 
-    get selectedModel (): HMI.ModelInterface {
+    get selectedModel (): Model.Model {
       if (
         !this.getSelectedModelIds?.[0]?.toString() && // Are we missing the selectedModelId, toString to test id 0 as well,
         this.$route.params.model_id && // Does the model id is available from the route parameters,

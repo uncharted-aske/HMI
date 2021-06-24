@@ -88,11 +88,12 @@
   import { bgraph } from '@uncharted.software/bgraph';
   import { GraferNodesData, GraferEdgesData, GraferLabelsData } from '@uncharted.software/grafer';
 
-  import { Counter, TabInterface, ModelInterface, GraferEventDetail } from '@/types/types';
+  import { Counter, TabInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
   import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
   import { CosmosArtifactInterface } from '@/types/typesCosmos';
   import { FILTRES_FIELDS } from '@/types/typesFiltres';
+  import * as KnowledgeGraph from '@/types/typesKnowledgeGraph';
   import eventHub from '@/eventHub';
 
   import {
@@ -193,13 +194,13 @@
     modalDocumentArtifact: any = null;
     showModalDocument: boolean = false;
 
-    @Getter getSelectedGraph;
-    @Getter getModelsList;
+    @Getter getKnowledgeGraphsList;
+    @Getter getSelectedKnowledgeGraph;
     @Getter getFilters;
     @Getter getFiltres;
     @Action addFiltres;
     @Action setFiltres;
-    @Mutation setSelectedGraph;
+    @Mutation setSelectedKnowledgeGraph;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       if (this.bgraphInstance) {
@@ -211,14 +212,14 @@
       }
     }
 
-    @Watch('getModelsList') async onGetModelsListChanged (): Promise<void> {
-      // If we do not have a selected model, we try to find one from the route.
+    @Watch('getKnowledgeGraphsList') async onGetKnowledgeGraphsListChanged (): Promise<void> {
+      // If we do not have a selected graph, we try to find one from the route.
       if (!this.selectedGraph) {
-        const model = this.getModelsList
-          .find(model => model.metadata.id === this.$route.params.model_id);
+        const graph = this.getKnowledgeGraphsList
+          .find(graph => graph.metadata.id === this.$route.params.model_id);
         // We can set the one in the route has the selected one in the store.
-        if (model) {
-          this.setSelectedGraph(model.id);
+        if (graph) {
+          this.setSelectedKnowledgeGraph(graph.id);
         }
       }
 
@@ -230,7 +231,7 @@
 
     async mounted (): Promise<void> {
       // Load the graph only if we have a selected model,
-      // otherwise wait until the getModelsList as loaded.
+      // otherwise wait until the getKnowledgeGraphsList as loaded.
       if (this.selectedGraph) {
         await this.loadData();
       }
@@ -260,8 +261,8 @@
       return this.isSplitView ? 'Close Local View' : 'Open Local View';
     }
 
-    get selectedGraph (): ModelInterface {
-      return this.getModelsList[this.getSelectedGraph];
+    get selectedGraph (): KnowledgeGraph.Graph {
+      return this.getKnowledgeGraphsList[this.getSelectedKnowledgeGraph];
     }
 
     get selectedGraphId (): string {

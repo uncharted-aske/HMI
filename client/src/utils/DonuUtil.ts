@@ -1,10 +1,11 @@
 /** Utilities to manipulate Donu Types */
 import * as d3 from 'd3';
-import { ModelInterface, ModelInterfaceType, SimulationVariable } from '@/types/types';
+import * as HMI from '@/types/types';
 import * as Donu from '@/types/typesDonu';
+import * as Model from '@/types/typesModel';
 
-/** Transform a Donu Model to a ModelInterface */
-export const donuToModel = (donuModels: Donu.ModelDefinition[]): ModelInterface[] => {
+/** Transform a Donu Model to a Model */
+export const donuToModel = (donuModels: Donu.ModelDefinition[]): Model.Model[] => {
   return donuModels.map((model, index) => {
     return {
       metadata: {
@@ -13,8 +14,7 @@ export const donuToModel = (donuModels: Donu.ModelDefinition[]): ModelInterface[
         type: model.type,
       },
       graph: null,
-      type: ModelInterfaceType.computational,
-    } as ModelInterface;
+    } as any;
   });
 };
 
@@ -54,7 +54,7 @@ export const aggregateModelResults = (
   };
 };
 
-export const donuSimulateToVariable = (responseArr: Donu.SimulationResponse[]): SimulationVariable[] => {
+export const donuSimulateToVariable = (responseArr: Donu.SimulationResponse[]): HMI.SimulationVariable[] => {
   const output = {};
   for (const response of responseArr) {
     for (const key in response.values) {

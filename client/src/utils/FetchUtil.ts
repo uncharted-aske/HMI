@@ -3,7 +3,7 @@ import s3Client from '@/services/S3Service';
 
 const memoizedStore = new Map();
 
-export const getUtil = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
+export const getUtil = async (urlStr: string, paramObj?: Record<string, any>): Promise<any> => {
   const init: RequestInit = {
     method: 'GET',
     mode: 'cors',

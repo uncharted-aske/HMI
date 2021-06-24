@@ -23,7 +23,7 @@
   flex-shrink: 0;
   gap: 5px;
   justify-content: space-between;
-  min-height: calc(#{$secondary-bar-width} - 15px);
+  min-height: $secondary-bar-width;
   padding: 5px;
 }
 </style>

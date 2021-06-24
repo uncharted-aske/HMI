@@ -1,23 +1,26 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import * as simulation from './modules/simulation';
 import * as filtres from './modules/filtres';
-import { models } from './modules/models';
-import { query } from './modules/query';
+import * as knowledgeGraph from './modules/knowledgeGraph';
+import * as model from './modules/model';
+import * as query from './modules/query';
+import * as simulation from './modules/simulation';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
-    simulation,
     filtres,
-    models,
+    knowledgeGraph,
+    model,
     query,
+    simulation,
   },
 });
 
 // Initialize state
 store.dispatch('setInitialModelsState');
+store.dispatch('setInitialKnowledgeGraphState');
 
 export { store };

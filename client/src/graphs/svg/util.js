@@ -162,7 +162,11 @@ export const calcNodeColor = (node) => {
 };
 
 export const calcLabelColor = (node) => {
-  return node.nodes ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
+  if (node.nodes) {
+    return Colors.LABELS.LIGHT;
+  } else {
+    return node.data.role?.includes(NodeTypes.NODES.PARAMETER) ? Colors.LABELS.LIGHT : Colors.LABELS.DARK;
+  }
 };
 
 /**

@@ -134,52 +134,41 @@
     drilldownMetadata: ModelComponentMetadataInterface = null;
     reference: string = ''
     intersectionGraph: any = intersectionGraph;
-    highlightsModels: any = { 1: null, 2: null };
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
-    @Getter getComparisonHighlights;
 
     get gridMap (): string[][] {
       return [['1', '3', '2']];
     }
 
-  get selectedModels (): any[] {
-    const modelsList = this.getModelsList;
-    const selectedIds = new Set(this.getSelectedModelIds);
-    return modelsList.filter(model => selectedIds.has(model.id));
-  }
+    get selectedModels (): any[] {
+      const modelsList = this.getModelsList;
+      const selectedIds = new Set(this.getSelectedModelIds);
+      return modelsList.filter(model => selectedIds.has(model.id));
+    }
 
-  get nodeCountIntersectionGraph (): number {
-      return this.intersectionGraph.nodes.length;
-  }
+    get nodeCountIntersectionGraph (): number {
+        return this.intersectionGraph.nodes.length;
+    }
 
-  get edgeCountIntersectionGraph (): number {
-      return this.intersectionGraph.edges.length;
-  }
+    get edgeCountIntersectionGraph (): number {
+        return this.intersectionGraph.edges.length;
+    }
 
-  onCloseDrilldownPanel ():void {
-    this.isOpenDrilldown = false;
-    this.drilldownPaneTitle = '';
-    this.drilldownMetadata = null;
-  }
+    onCloseDrilldownPanel ():void {
+      this.isOpenDrilldown = false;
+      this.drilldownPaneTitle = '';
+      this.drilldownMetadata = null;
+    }
 
-  onSetView (viewId: string): void {
-    this.selectedViewId = viewId;
-  }
+    onSetView (viewId: string): void {
+      this.selectedViewId = viewId;
+    }
 
-  onNodeClick (node: GraphNodeInterface): void {
-    const nodeId = node.id;
-    const highlightsModels = {};
-    this.selectedModels.forEach(model => {
-      highlightsModels[model.id] = this.getComparisonHighlights[nodeId][model.id];
-    });
-    this.highlightsModels = highlightsModels;
-  }
-
-  onNodeHover (node: GraphNodeInterface):void {
-    this.reference = node['linked-to'][0]['node-id'];
-  }
+    onNodeHover (node: GraphNodeInterface):void {
+      this.reference = node['linked-to'][0]['node-id'];
+    }
   }
 </script>
 
