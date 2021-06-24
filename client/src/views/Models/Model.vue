@@ -9,9 +9,8 @@
       <div slot="content">
         <metadata-panel
           v-if="activeTabId === 'metadata'"
-          :graph-metadata="selectedGraphMetadata"
+          :metadata="selectedGraphMetadata"
         />
-        <!-- <facets-pane v-if="activeTabId === 'facets'" />  -->
       </div>
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
@@ -123,7 +122,7 @@
   import ModalDocMetadata from './components/Modals/ModalDocMetadata.vue';
 
   const TABS: TabInterface[] = [
-    { name: 'Facets', icon: 'filter', id: 'facets' },
+    // { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 

@@ -1,32 +1,10 @@
 <template>
-  <div v-if="graphMetadata" class="metadata-pane-container">
-    <div v-for="(item, key) in graphMetadata" :key="key">
-      {{item}}
+  <div class="container">
+    <div v-for="(datum, index) in metadata" :key="index">
+      <template v-if="isTypeModel(datum)">Model - {{ datum.metadata_type }}</template>
+      <template v-else-if="isTypeCode(datum)">Code - {{ datum.metadata_type }}</template>
+      <template v-else-if="isTypeDocuments(datum)">Documents - {{ datum.metadata_type }}</template>
     </div>
-    <!-- <div class="metadata-item">
-      <div class="key">Name</div>
-      <div>{{metadata.name}}</div>
-    </div>
-    <div class="metadata-item">
-       <div class="key">Description</div>
-      <div>{{metadata.description}}</div>
-    </div>
-    <div class="metadata-item">
-       <div class="key">Created</div>
-      <div>{{metadata.created}}</div>
-    </div>
-    <div class="metadata-item">
-       <div class="key">Source</div>
-      <div>{{metadata.source}}</div>
-    </div>
-    <div class="metadata-item">
-       <div class="key">Version</div>
-      <div>{{metadata.version}}</div>
-    </div>
-    <div class="metadata-item">
-       <div class="key">Knowledge</div>
-      <div><a class="text-link" :href="metadata.knowledge">{{metadata.knowledge}}</a> </div>
-    </div> -->
   </div>
 </template>
 
@@ -35,15 +13,34 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
   import * as Model from '@/types/typesModel';
+  import * as GroMET from '@/types/typesGroMEt';
 
   @Component
   export default class MetadataPanel extends Vue {
-    @Prop({ default: null }) modelMetadata: Model.Metadata;
-    @Prop({ default: null }) graphMetadata: Model.GraphMetadata;
+    @Prop({ default: null }) metadata: Model.GraphMetadata;
+
+    isTypeModel (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadateType.ModelInterface;
+    }
+
+    isTypeCode (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadateType.CodeCollectionReference;
+    }
+
+    isTypeDocuments (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadateType.TextualDocumentReferenceSet;
+    }
   }
 </script>
 
 <style lang="scss" scoped>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+  }
+
   .metadata-item {
     padding: 20px;
     text-align: left;

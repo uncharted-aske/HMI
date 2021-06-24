@@ -14,14 +14,20 @@ type FileId = {
   uid: string,
 }
 
-interface Metadata {
-  metadataType: string,
+export enum MetadateType {
+  ModelInterface = 'ModelInterface',
+  CodeCollectionReference = 'CodeCollectionReference',
+  TextualDocumentReferenceSet = 'TextualDocumentReferenceSet',
+}
+
+export interface Metadata {
+  metadata_type: MetadateType, // eslint-disable-line
   provenance: Provenance,
   uid: string,
 }
 
 export interface ModelInterface extends Metadata {
-  initialConditions: Record<number, string>[],
+  initial_conditions: Record<number, string>[], // eslint-disable-line
   parameters: Record<number, string>[],
   variables: Record<number, string>[],
 }
