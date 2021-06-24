@@ -52,7 +52,6 @@ export abstract class NodeTypes {
     ABSTRACTOVERLAPPING: 'AP',
     NONOVERLAPPING: 'NOAP',
   }
-
 }
 
 export abstract class EdgeTypes {

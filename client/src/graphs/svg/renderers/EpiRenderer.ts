@@ -100,33 +100,33 @@ export default class EpiRenderer extends SVGRenderer {
     nodeSelection.each(function () {
       const selection = d3.select(this);
       // if (!(selection.datum() as any).parent.parent) return;
-        selection.append('rect')
-          .attr('x', 0)
-          .attr('y', 0)
-          .attr('rx', DEFAULT_STYLE.node.borderRadius)
-          .attr('width', d => (d as any).width)
-          .attr('height', d => (d as any).height)
-          .style('fill', d => {
-            if ((d as any).nodes) {
-              return Colors.NODES.CONTAINER;
-            } else {
-              return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.fill;
-            }
-          })
-          .style('stroke', DEFAULT_STYLE.node.stroke)
-          .style('stroke-width', d => (d as any).nodes ? 5 : DEFAULT_STYLE.node.strokeWidth);
+      selection.append('rect')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('rx', DEFAULT_STYLE.node.borderRadius)
+        .attr('width', d => (d as any).width)
+        .attr('height', d => (d as any).height)
+        .style('fill', d => {
+          if ((d as any).nodes) {
+            return Colors.NODES.CONTAINER;
+          } else {
+            return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.fill;
+          }
+        })
+        .style('stroke', DEFAULT_STYLE.node.stroke)
+        .style('stroke-width', d => (d as any).nodes ? 5 : DEFAULT_STYLE.node.strokeWidth);
 
-        selection.append('text')
-          .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
-          .attr('y', d => (d as any).nodes ? -5 : 25)
-          .style('fill', d => calcLabelColor(d))
-          .style('font-weight', d => (d as any).nodes ? '800' : '500')
-          .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
-          .text(d => (d as any).data.label);
+      selection.append('text')
+        .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
+        .attr('y', d => (d as any).nodes ? -5 : 25)
+        .style('fill', d => calcLabelColor(d))
+        .style('font-weight', d => (d as any).nodes ? '800' : '500')
+        .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+        .text(d => (d as any).data.label);
 
-        // Special case for node parameters
-        selection.selectAll('text')
-          .filter(d => (d as any).data.role?.includes(NodeTypes.NODES.PARAMETER)).attr('y', -5);
+      // Special case for node parameters
+      selection.selectAll('text')
+        .filter(d => (d as any).data.role?.includes(NodeTypes.NODES.PARAMETER)).attr('y', -5);
     });
   }
 

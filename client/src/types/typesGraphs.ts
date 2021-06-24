@@ -11,14 +11,14 @@ export interface SVGRendererOptionsInterface {
   addons?: any
 }
 
-export interface GraphLayoutInterface {
-  name: string,
-  id: GraphLayoutInterfaceType,
-}
-
 export enum GraphLayoutInterfaceType {
   dagre = 'dagre',
   elk = 'elk',
+}
+
+export interface GraphLayoutInterface {
+  name: string,
+  id: GraphLayoutInterfaceType,
 }
 
 export interface GraphNodeDataInterface {
