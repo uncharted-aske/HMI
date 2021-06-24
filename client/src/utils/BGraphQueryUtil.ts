@@ -4,7 +4,7 @@ import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 
 // BIO PATH QUERIES
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioPathPre (bgraphPathQuery, clause: Filter): any {
+const bioPathPre = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.filter(document => {
     if (document._type === 'node') {
       const node = document;
@@ -15,17 +15,17 @@ function bioPathPre (bgraphPathQuery, clause: Filter): any {
   })
     .start()
     .unique();
-}
+};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
-function bioPathPreNodeFilterLoop (bgraphPathQuery, _clause: Filter): any {
+const bioPathPreNodeFilterLoop = (bgraphPathQuery, _clause: Filter): any => {
   return bgraphPathQuery.out();
-}
+};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
-function bioPathPreEdgeFilterLoop (bgraphPathQuery, _clause: Filter): any {
+const bioPathPreEdgeFilterLoop = (bgraphPathQuery, _clause: Filter): any => {
   return bgraphPathQuery.out();
-}
+};
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioPathPost (bgraphPathQuery, clause: Filter): any {
+const bioPathPost = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.suspend(document => {
     if (document._type === 'node') {
       const node = document;
@@ -38,11 +38,11 @@ function bioPathPost (bgraphPathQuery, clause: Filter): any {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .filter(_ => false)
     .unsuspend();
-}
+};
 
 // EDGE QUERIES
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioEdgeTested (bgraphPathQuery, clause: Filter): any {
+const bioEdgeTested = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.filter(document => {
     if (document._type === 'edge') {
       const edge = document;
@@ -51,9 +51,9 @@ function bioEdgeTested (bgraphPathQuery, clause: Filter): any {
     // Document is not an edge
     return false;
   });
-}
+};
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioEdgeType (bgraphPathQuery, clause: Filter): any {
+const bioEdgeType = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.filter(document => {
     if (document._type === 'edge') {
       const edge = document;
@@ -62,9 +62,9 @@ function bioEdgeType (bgraphPathQuery, clause: Filter): any {
     // Document is not an edge
     return false;
   });
-}
+};
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioEdgeDOI (bgraphPathQuery, clause: Filter): any {
+const bioEdgeDOI = (bgraphPathQuery, clause: Filter): any => {
   let dois = clause.values as string[];
   dois = dois.map(doi => doi.toLowerCase());
   return bgraphPathQuery.filter(document => {
@@ -77,11 +77,11 @@ function bioEdgeDOI (bgraphPathQuery, clause: Filter): any {
     // Document is not an edge
     return false;
   });
-}
+};
 
 // NODE QUERIES
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioNodeName (bgraphPathQuery, clause: Filter): any {
+const bioNodeName = (bgraphPathQuery, clause: Filter): any => {
   let names = clause.values as string[];
   // Filter matching case insensitive names
   names = names.map(name => name.toLowerCase());
@@ -93,9 +93,9 @@ function bioNodeName (bgraphPathQuery, clause: Filter): any {
     // Document is not a node
     return false;
   });
-}
+};
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioNodeGroup (bgraphPathQuery, clause: Filter): any {
+const bioNodeGroup = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.filter(document => {
     if (document._type === 'node') {
       const node = document;
@@ -104,9 +104,9 @@ function bioNodeGroup (bgraphPathQuery, clause: Filter): any {
     // Document type is an edge
     return false;
   });
-}
+};
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioNodeGrounded (bgraphPathQuery, clause: Filter): any {
+const bioNodeGrounded = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.filter(document => {
     if (document._type === 'node') {
       const node = document;
@@ -115,9 +115,9 @@ function bioNodeGrounded (bgraphPathQuery, clause: Filter): any {
     // Document type is an edge
     return false;
   });
-}
+};
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioNodeGroundedOnto (bgraphPathQuery, clause: Filter): any {
+const bioNodeGroundedOnto = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.filter(document => {
     if (document._type === 'node') {
       const node = document;
@@ -126,9 +126,9 @@ function bioNodeGroundedOnto (bgraphPathQuery, clause: Filter): any {
     // Document type is an edge
     return false;
   });
-}
+};
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioNodeInDegree (bgraphPathQuery, clause: Filter): any {
+const bioNodeInDegree = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.filter(document => {
     if (document._type === 'node') {
       const node = document;
@@ -137,9 +137,9 @@ function bioNodeInDegree (bgraphPathQuery, clause: Filter): any {
     // Document type is an edge
     return false;
   });
-}
+};
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function bioNodeOutDegree (bgraphPathQuery, clause: Filter): any {
+const bioNodeOutDegree = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.filter(document => {
     if (document._type === 'node') {
       const node = document;
@@ -148,11 +148,11 @@ function bioNodeOutDegree (bgraphPathQuery, clause: Filter): any {
     // Document type is an edge
     return false;
   });
-}
+};
 
 // EPI PATH QUERIES
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function epiPathPre (bgraphPathQuery, clause: Filter): any {
+const epiPathPre = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.filter(document => {
     if (document._type === 'node') {
       const node = document;
@@ -163,17 +163,17 @@ function epiPathPre (bgraphPathQuery, clause: Filter): any {
   })
     .start()
     .unique();
-}
+};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
-function epiPathPreNodeFilterLoop (bgraphPathQuery, _clause: Filter): any {
+const epiPathPreNodeFilterLoop = (bgraphPathQuery, _clause: Filter): any => {
   return bgraphPathQuery.in(); // TODO: Why are edge directions backward??
-}
+};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
-function epiPathPreEdgeFilterLoop (bgraphPathQuery, _clause: Filter): any {
+const epiPathPreEdgeFilterLoop = (bgraphPathQuery, _clause: Filter): any => {
   return bgraphPathQuery.in(); // TODO: Why are edge directions backward??
-}
+};
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function epiPathPost (bgraphPathQuery, clause: Filter): any {
+const epiPathPost = (bgraphPathQuery, clause: Filter): any => {
   return bgraphPathQuery.suspend(document => {
     if (document._type === 'node') {
       const node = document;
@@ -186,7 +186,7 @@ function epiPathPost (bgraphPathQuery, clause: Filter): any {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .filter(_ => false)
     .unsuspend();
-}
+};
 
 // Add filter terms here to change the order in which they are processed in bgraph
 export const EDGE_PRIORITY_RANK = 2;
