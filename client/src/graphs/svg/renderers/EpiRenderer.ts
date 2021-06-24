@@ -99,7 +99,6 @@ export default class EpiRenderer extends SVGRenderer {
   renderNode (nodeSelection: d3.Selection<any, any, any, any>): void {
     nodeSelection.each(function () {
       const selection = d3.select(this);
-      // if (!(selection.datum() as any).parent.parent) return;
       selection.append('rect')
         .attr('x', 0)
         .attr('y', 0)
