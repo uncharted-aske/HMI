@@ -34,6 +34,7 @@
         </button>
       </aside>
     </settings-bar>
+    <model-selector/>
     <global-graph v-if="model" :data="graph"/>
   </section>
 </template>
@@ -50,11 +51,13 @@
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
+  import ModelSelector from '@/views/Simulation/components/ModelSelector.vue';
 
   const components = {
     Counters,
     GlobalGraph,
     SettingsBar,
+    ModelSelector,
   };
 
   // List of available graphs in a model
