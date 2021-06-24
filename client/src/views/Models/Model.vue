@@ -265,7 +265,6 @@
     }
 
     get grometType (): string {
-      // TODO: Reverse these
       return this.selectedViewId === 'causal' ? 'PNC' : 'GrFN';
     }
 
