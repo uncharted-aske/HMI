@@ -232,8 +232,8 @@
     async loadData (): Promise<void> {
       if (this.selectedModel && this.grometType) {
         const [bgNodes, bgEdges] = await loadBGraphData(
-          `${process.env.S3_BGRAPH_EPI_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/nodes.jsonl`,
-          `${process.env.S3_BGRAPH_EPI_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/edges.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/nodes.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/edges.jsonl`,
         );
         this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
         this.executeFilters();
