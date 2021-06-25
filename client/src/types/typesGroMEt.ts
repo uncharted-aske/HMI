@@ -34,8 +34,3 @@ export interface TextualDocumentReferenceSet {
     metadataType: string,
     documents: any,
 }
-
-export enum GrometTypesEnum {
-  PetriNetClassic = 'PetriNetClassic',
-  FunctionNetwork = 'FunctionNetwork',
-}

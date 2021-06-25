@@ -85,7 +85,6 @@
   import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
   import * as Model from '@/types/typesModel';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
-  import { GrometTypesEnum } from '@/types/typesGroMEt';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
 
@@ -246,7 +245,7 @@
     }
 
     get grometType (): string {
-      return this.selectedViewId === 'ptc' ? GrometTypesEnum.PetriNetClassic : GrometTypesEnum.FunctionNetwork;
+      return this.selectedViewId === 'ptc' ? Model.GraphTypes.PetriNetClassic : Model.GraphTypes.FunctionNetwork;
     }
 
     get nodeCount (): number {
