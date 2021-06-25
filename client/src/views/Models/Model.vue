@@ -6,12 +6,11 @@
       :tabs="tabs"
       @tab-click="onTabClick"
     >
-      <div slot="content">
-        <metadata-panel
-          v-if="activeTabId === 'metadata'"
-          :metadata="selectedGraphMetadata"
-        />
-      </div>
+      <metadata-panel
+        slot="content"
+        v-if="activeTabId === 'metadata'"
+        :metadata="selectedGraphMetadata"
+      />
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
       <div class="search-row">

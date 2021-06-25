@@ -3,9 +3,9 @@
  */
 
 type Provenance = {
-  metadataType: string,
+  metadata_type: string, // eslint-disable-line
   method: string,
-  timestamp: Date,
+  timestamp: string,
 };
 
 type FileId = {
