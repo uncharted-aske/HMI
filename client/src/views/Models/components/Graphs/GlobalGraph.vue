@@ -40,17 +40,22 @@
     }
 
     @Watch('highlight')
+    onHighlightChange (): void {
+      this.highlightChanged();
+    }
+
+    @Watch('layout')
+    async layoutChanged (): Promise<void> {
+      await this.refresh();
+      this.highlightChanged();
+    }
+
     highlightChanged (): void {
       if (this.highlight) {
         this.renderer.showHighlight(this.highlight);
       } else {
         this.renderer.hideHighlight();
       }
-    }
-
-    @Watch('layout')
-    layoutChanged (): void {
-      this.refresh();
     }
 
     mounted (): void {
@@ -94,7 +99,7 @@
       this.refresh();
     }
 
-    refresh (): void {
+    refresh (): Promise<void> {
       if (!this.data) return;
 
       // Layout selection
@@ -109,7 +114,7 @@
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
 
       this.renderer.setData(data);
-      this.renderer.render();
+      return this.renderer.render();
     }
   }
 </script>

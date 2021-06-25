@@ -22,57 +22,34 @@
           <span> Open Simulation View </span>
         </button>
       </div>
-      <resizable-grid :map="gridMap" :dimensions="gridDimensions">
-        <div slot="1" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              :title="selectedModel && selectedModel.name"
-              :data="[
-                { name: 'Nodes', value: nodeCount },
-                { name: 'Edges', value: edgeCount },
-              ]"
-            />
-            <settings
-              slot="right"
-              :selected-view-id="selectedViewId"
-              :views="views"
-              :layouts="layouts"
-              :selected-layout-id="selectedLayoutId"
-              @view-change="onSetView"
-              @layout-change="onSetLayout"
-            />
-          </settings-bar>
-          <global-graph
-            v-if="selectedGraph"
-            :data="selectedGraph"
-            :highlight="querygraph"
-            :layout="selectedLayoutId"
-            @node-click="onNodeClick"
+      <div class="d-flex flex-column h-100 w-100">
+        <settings-bar>
+          <counters
+            slot="left"
+            :title="selectedModel && selectedModel.name"
+            :data="[
+              { name: 'Nodes', value: nodeCount },
+              { name: 'Edges', value: edgeCount },
+            ]"
           />
-        </div>
-        <div slot="2" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              :data="[
-                { name: 'Nodes', value: subgraphNodeCount },
-                { name: 'Edges', value: subgraphEdgeCount },
-              ]"
-              :title="`Subgraph`"
-            />
-            <settings
-              slot="right"
-              :selected-view-id="selectedViewId"
-              :views="views"
-              :selected-layout-id="selectedLayoutId"
-              :layouts="layouts"
-              @view-change="onSetView"
-              @layout-change="onSetLayout"
-            />
-          </settings-bar>
-        </div>
-      </resizable-grid>
+          <settings
+            slot="right"
+            :selected-view-id="selectedViewId"
+            :views="views"
+            :layouts="layouts"
+            :selected-layout-id="selectedLayoutId"
+            @view-change="onSetView"
+            @layout-change="onSetLayout"
+          />
+        </settings-bar>
+        <global-graph
+          v-if="selectedGraph"
+          :data="selectedGraph"
+          :highlight="subgraph"
+          :layout="selectedLayoutId"
+          @node-click="onNodeClick"
+        />
+      </div>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :active-tab-id="drilldownActiveTabId" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
       <metadata-pane v-if="drilldownActiveTabId === 'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
@@ -108,6 +85,7 @@
   import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
   import * as Model from '@/types/typesModel';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
+  import { GrometTypesEnum } from '@/types/typesGroMEt';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
 
@@ -193,13 +171,11 @@
     drilldownParameters: any = null;
 
     isSplitView = false;
-    subgraph: GraphInterface = null;
-    querygraph: any = null;
+    subgraph: SubgraphInterface = null;
     showModalParameters: boolean = false;
     showModalMetadata: boolean = false;
     modalDataParameters: any = null;
     modalDataMetadata: any = null;
-    highlights: SubgraphInterface = null;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
@@ -219,13 +195,13 @@
 
     executeFilters (): void {
       if (this.bgraphInstance && this.getFilters?.clauses.length > 0) {
-        const querygraph = filterToBgraph(this.bgraphInstance, this.getFilters);
-        this.querygraph = {
-          nodes: querygraph.filter(d => d._type === 'node').map(n => n.id),
-          edges: querygraph.filter(d => d._type === 'edge').map(e => ({ source: e.source, target: e.target })),
+        const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+        this.subgraph = {
+          nodes: subgraph.filter(d => d._type === 'node').map(n => n.id),
+          edges: subgraph.filter(d => d._type === 'edge').map(e => ({ source: e.source, target: e.target })),
         };
       } else {
-        this.querygraph = null;
+        this.subgraph = null;
       }
     }
 
@@ -270,7 +246,7 @@
     }
 
     get grometType (): string {
-      return this.selectedViewId === 'causal' ? 'PNC' : 'GrFN';
+      return this.selectedViewId === 'ptc' ? GrometTypesEnum.PetriNetClassic : GrometTypesEnum.FunctionNetwork;
     }
 
     get nodeCount (): number {
@@ -378,33 +354,6 @@
     onOpenModalMetadata ():void {
       // this.modalDataMetadata = bibjson;
       this.showModalMetadata = true;
-    }
-
-        get gridMap (): string[][] {
-      return this.isSplitView ? [['1', '3', '2']] : [['1']];
-    }
-
-    get gridDimensions (): any {
-      if (this.isSplitView) {
-        return {
-          // Keep the cell between 25% and 75% of container
-          /* Future features to be developed.
-          1: {
-            widthMax: 0.75,
-            widthMin: 0.25,
-          },
-          2: {
-            widthMax: 0.75,
-            widthMin: 0.25,
-          },
-          */
-          // Middle element to visually resize the columns
-          3: {
-            width: '10px',
-            widthFixed: true,
-          },
-        };
-      }
     }
   }
 </script>
