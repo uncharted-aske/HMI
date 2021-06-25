@@ -1,6 +1,6 @@
 html {
-  /* Colors for graphs
-   * See /graphs/svg/encodings.ts
+  /** 
+   * Colors for graphs
    */
   --colors-nodes-default: #ECEFF4;
   --colors-nodes-other: #647EA9;

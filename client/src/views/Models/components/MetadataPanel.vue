@@ -3,15 +3,20 @@
     <div v-for="(datum, index) in metadata" :key="index">
 
       <div v-if="isTypeModel(datum)" class="Model" >
-        Model - {{ datum.metadata_type }}
+        <h6>Model</h6>
+        <ul>
+          <li>Variables: {{ datum.variables.join(', ') }}</li>
+          <li>Parameters: {{ datum.parameters.join(', ') }}</li>
+          <li>Initial Conditions: {{ datum.initial_conditions.join(', ') }}</li>
+        </ul>
       </div>
 
       <div v-else-if="isTypeCode(datum)" class="Code">
-        Code - {{ datum.metadata_type }}
+        <h6>Code</h6>
       </div>
 
       <div v-else-if="isTypeDocuments(datum)" class="Documents">
-        Documents - {{ datum.metadata_type }}
+        <h6>Documents</h6>
       </div>
 
       <aside class="provenance">
@@ -20,7 +25,6 @@
           {{ provenanceDate(datum.provenance.timestamp) }}
         </time>
       </aside>
-
     </div>
   </div>
 </template>

@@ -30,7 +30,7 @@ export const nicePrintableDate = (datetime: string | Date): string => {
   const regISOExtended = /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}):\d{2,6}_(\w{3})([\\+-]\d{4})/gi;
   const isoExtended = regISOExtended.exec(datetime.toString());
   if (isoExtended) {
-    // to ISO 8601 long format => 2021-06-25T17:15:31+00:00
+    // to ISO 8601 long format => YYYY-MM-DDTHH:mm:ss±zzzz
     const isoLong = new Date(isoExtended[1] + isoExtended[3]);
     if (!isNaN(isoLong.getTime())) { // Check it's not an `Invalid Date`
       options.timeZone = isoExtended[2];
