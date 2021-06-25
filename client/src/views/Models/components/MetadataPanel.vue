@@ -3,26 +3,46 @@
     <div v-for="(datum, index) in metadata" :key="index">
 
       <div v-if="isTypeModel(datum)" class="Model" >
-        <h6 :title="datum.uid">Model</h6>
+        <h5 :title="datum.uid">Model</h5>
         <ul>
-          <li>Variables: {{ datum.variables.join(', ') }}</li>
-          <li>Parameters: {{ datum.parameters.join(', ') }}</li>
-          <li>Initial Conditions: {{ datum.initial_conditions.join(', ') }}</li>
+          <li>
+            <h6>Variables</h6>
+            {{ datum.variables.join(', ') }}
+          </li>
+          <li>
+            <h6>Parameters</h6>
+            {{ datum.parameters.join(', ') }}
+          </li>
+          <li>
+            <h6>Initial Conditions</h6>
+            {{ datum.initial_conditions.join(', ') }}
+          </li>
         </ul>
       </div>
 
       <div v-else-if="isTypeCode(datum)" class="Code">
-        <h6 :title="datum.uid">Code</h6>
+        <h5 :title="datum.uid">Code</h5>
         <ul>
-          <li>Reference: {{ datum.global_reference_id.type }} {{ datum.global_reference_id.id }}</li>
+          <li>
+            <h6>Reference</h6>
+            {{ datum.global_reference_id.type }} {{ datum.global_reference_id.id }}
+          </li>
           <li v-for="(file, index) in datum.file_ids" :key="index" :title="file.uid">
-            File {{ index }}: {{ file.name }}: {{ file.path }}
+            <h6>File {{ index }}</h6>
+            {{ file.name }}: {{ file.path }}
           </li>
         </ul>
       </div>
 
       <div v-else-if="isTypeDocuments(datum)" class="Documents">
-        <h6>Documents</h6>
+        <h5 :title="datum.uid">Documents</h5>
+        <details v-for="(doc, index) in datum.documents" :key="index">
+          <summary :title="doc.uid">{{ doc.bibjson.title }}</summary>
+          <h6>Source <a :href="doc.bibjson.website.url">{{ doc.bibjson.type }}</a></h6>
+          <h6>File <a :href="doc.bibjson.file_url">{{ doc.bibjson.file }}</a></h6>
+          <h6>Author(s): {{ doc.bibjson.author.map(a => a.name).join(', ') }}</h6>
+          <h6>Reference: {{ doc.global_reference_id.type }} {{ doc.global_reference_id.id }}</h6>
+        </details>
       </div>
 
       <aside class="provenance">
@@ -92,5 +112,15 @@
     time::before {
       content: ' — ';
     }
+  }
+
+  h6 {
+    margin: 0;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 </style>
