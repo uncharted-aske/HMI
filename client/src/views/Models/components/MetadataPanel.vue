@@ -3,7 +3,7 @@
     <div v-for="(datum, index) in metadata" :key="index">
 
       <div v-if="isTypeModel(datum)" class="Model" >
-        <h6>Model</h6>
+        <h6 :title="datum.uid">Model</h6>
         <ul>
           <li>Variables: {{ datum.variables.join(', ') }}</li>
           <li>Parameters: {{ datum.parameters.join(', ') }}</li>
@@ -12,7 +12,13 @@
       </div>
 
       <div v-else-if="isTypeCode(datum)" class="Code">
-        <h6>Code</h6>
+        <h6 :title="datum.uid">Code</h6>
+        <ul>
+          <li>Reference: {{ datum.global_reference_id.type }} {{ datum.global_reference_id.id }}</li>
+          <li v-for="(file, index) in datum.file_ids" :key="index" :title="file.uid">
+            File {{ index }}: {{ file.name }}: {{ file.path }}
+          </li>
+        </ul>
       </div>
 
       <div v-else-if="isTypeDocuments(datum)" class="Documents">
