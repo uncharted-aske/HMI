@@ -11,7 +11,14 @@ import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 import { isEmpty } from './FiltersUtil';
 import { buildHighlightClusterLayer, buildHighlightNodeLayer } from './GraferUtil';
 import * as FiltresUtil from '@/utils/FiltresUtil';
-import * as BGraphQueryUtil from '@/utils/BGraphQueryUtil';
+import {
+  filterTermToPriorityRank,
+  executeBgraphEdges,
+  executeBgraphPathQuery,
+  executeBgraphNodes,
+  NODE_PRIORITY_RANK,
+  EDGE_PRIORITY_RANK,
+} from '@/utils/BGraphQueryUtil';
 
 const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
   let value, key;
@@ -53,144 +60,6 @@ export const loadBGraphData = (nodesPath: string, edgesPath: string): Promise<an
   return Promise.all(output);
 };
 
-// Add filter terms here to change the order in which they are processed in bgraph
-const EDGE_PRIORITY_RANK = 2;
-const NODE_PRIORITY_RANK = 4;
-const PATH_PRIORITY_RANK = 7;
-const filterTermToPriorityRank = {
-  // Edge Terms
-  [QUERY_FIELDS_MAP.BIO_EDGE_PRE.field]: 1,
-  [QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field]: EDGE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field]: EDGE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_EDGE_DOI.field]: EDGE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_EDGE_POST.field]: 3,
-  // Node Terms
-  [QUERY_FIELDS_MAP.BIO_NODE_PRE.field]: 4,
-  [QUERY_FIELDS_MAP.BIO_NODE_NAME.field]: NODE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_NODE_GROUP.field]: NODE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field]: NODE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field]: NODE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field]: NODE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field]: NODE_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_NODE_POST.field]: 6,
-  // Path Terms
-  [QUERY_FIELDS_MAP.BIO_PATH_PRE.field]: 0,
-  [QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP.field]: 1,
-  [QUERY_FIELDS_MAP.BIO_PATH_PRE_NODE_FILTER_LOOP.field]: 3,
-  [QUERY_FIELDS_MAP.BIO_PATH.field]: PATH_PRIORITY_RANK,
-  [QUERY_FIELDS_MAP.BIO_PATH_POST.field]: 8,
-};
-
-// Assume that bgraph instance passed in has already been initialized
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const executeBgraphEdges = (bgraphEdgeQuery: any, clause: Filter): any => {
-  switch (clause.field) {
-    // EDGE CLAUSES
-    case QUERY_FIELDS_MAP.BIO_EDGE_PRE.field: {
-      return bgraphEdgeQuery;
-    }
-    case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: {
-      return BGraphQueryUtil.bioEdgeTested(bgraphEdgeQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field: {
-      return BGraphQueryUtil.bioEdgeType(bgraphEdgeQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_EDGE_DOI.field: {
-      return BGraphQueryUtil.bioEdgeDOI(bgraphEdgeQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_EDGE_POST.field: {
-      return bgraphEdgeQuery.as('edgeOnly').out().as('target').back('edgeOnly').in().as('source').merge('edgeOnly', 'source', 'target');
-    }
-    default: {
-      return bgraphEdgeQuery;
-    }
-  }
-};
-
-// Assume that bgraph instance passed in has already been initialized
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const executeBgraphPathQuery = (bgraphPathQuery: any, clause: Filter): any => {
-  switch (clause.field) {
-    // EDGE CLAUSES
-    case QUERY_FIELDS_MAP.BIO_PATH_PRE.field: {
-      return BGraphQueryUtil.bioPathPre(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_PATH_PRE_NODE_FILTER_LOOP.field: {
-      return BGraphQueryUtil.bioPathPreNodeFilterLoop(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP.field: {
-      return BGraphQueryUtil.bioPathPreEdgeFilterLoop(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_EDGE_TESTED.field: {
-      return BGraphQueryUtil.bioEdgeTested(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_EDGE_TYPE.field: {
-      return BGraphQueryUtil.bioEdgeType(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_EDGE_DOI.field: {
-      return BGraphQueryUtil.bioEdgeDOI(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
-      return BGraphQueryUtil.bioNodeName(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_GROUP.field: {
-      return BGraphQueryUtil.bioNodeGroup(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: {
-      return BGraphQueryUtil.bioNodeGrounded(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field: {
-      return BGraphQueryUtil.bioNodeGroundedOnto(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: {
-      return BGraphQueryUtil.bioNodeInDegree(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: {
-      return BGraphQueryUtil.bioNodeOutDegree(bgraphPathQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_PATH_POST.field: {
-      return BGraphQueryUtil.bioPathPost(bgraphPathQuery, clause);
-    }
-    default: {
-      return bgraphPathQuery;
-    }
-  }
-};
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const executeBgraphNodes = (bgraphNodeQuery: any, clause: Filter): any => {
-  switch (clause.field) {
-    // NODE CLAUSES
-    case QUERY_FIELDS_MAP.BIO_NODE_PRE.field: {
-      return bgraphNodeQuery;
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_NAME.field: {
-      return BGraphQueryUtil.bioNodeName(bgraphNodeQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_GROUP.field: {
-      return BGraphQueryUtil.bioNodeGroup(bgraphNodeQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED.field: {
-      return BGraphQueryUtil.bioNodeGrounded(bgraphNodeQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_GROUNDED_ONTO.field: {
-      return BGraphQueryUtil.bioNodeGroundedOnto(bgraphNodeQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: {
-      return BGraphQueryUtil.bioNodeInDegree(bgraphNodeQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: {
-      return BGraphQueryUtil.bioNodeOutDegree(bgraphNodeQuery, clause);
-    }
-    case QUERY_FIELDS_MAP.BIO_NODE_POST.field: {
-      return bgraphNodeQuery;
-    }
-    default: {
-      return bgraphNodeQuery;
-    }
-  }
-};
-
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const filterToBgraph = (bgraph: any, filters: Filters): any => {
   if (bgraph && !isEmpty(filters)) {
@@ -211,16 +80,32 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
     for (const clause of clauses) {
       if (clause.field === QUERY_FIELDS_MAP.BIO_PATH.field) {
         hasPathFilters = true;
+
         // Set value on PRE- path query clause
         const prePathClause = QUERY_FIELDS_MAP.BIO_PATH_PRE as unknown as Filter;
         prePathClause.values = clause.values[0]; // Set "from" value
         clauses.push(prePathClause);
+
         // Set value on -POST path query clause
         const postPathClause = QUERY_FIELDS_MAP.BIO_PATH_POST as unknown as Filter;
         postPathClause.values = clause.values[0]; // Set "to" value
         clauses.push(postPathClause);
         clauses.push(QUERY_FIELDS_MAP.BIO_PATH_PRE_EDGE_FILTER_LOOP as unknown as Filter);
         clauses.push(QUERY_FIELDS_MAP.BIO_PATH_PRE_NODE_FILTER_LOOP as unknown as Filter);
+      } else if (clause.field === QUERY_FIELDS_MAP.EPI_PATH.field) {
+        hasPathFilters = true;
+
+        // Set value on PRE- path query clause
+        const prePathClause = QUERY_FIELDS_MAP.EPI_PATH_PRE as unknown as Filter;
+        prePathClause.values = clause.values[0]; // Set "from" value
+        clauses.push(prePathClause);
+
+        // Set value on -POST path query clause
+        const postPathClause = QUERY_FIELDS_MAP.EPI_PATH_POST as unknown as Filter;
+        postPathClause.values = clause.values[0]; // Set "to" value
+        clauses.push(postPathClause);
+        clauses.push(QUERY_FIELDS_MAP.EPI_PATH_PRE_EDGE_FILTER_LOOP as unknown as Filter);
+        clauses.push(QUERY_FIELDS_MAP.EPI_PATH_PRE_NODE_FILTER_LOOP as unknown as Filter);
       }
     }
 

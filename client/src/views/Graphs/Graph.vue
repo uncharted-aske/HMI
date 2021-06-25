@@ -308,8 +308,8 @@
 
     async loadData (): Promise<void> {
       const [bgNodes, bgEdges] = await loadBGraphData(
-        `${process.env.S3_BGRAPH_MODELS}/${this.selectedGraphId}/nodes.jsonl`,
-        `${process.env.S3_BGRAPH_MODELS}/${this.selectedGraphId}/edges.jsonl`,
+        `${process.env.S3_BGRAPH_KNOWLEDGE_GRAPHS}/${this.selectedGraphId}/nodes.jsonl`,
+        `${process.env.S3_BGRAPH_KNOWLEDGE_GRAPHS}/${this.selectedGraphId}/edges.jsonl`,
       );
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
 
@@ -344,11 +344,11 @@
         graferInterEdgesData,
         graferClustersLabelsData,
       ] = await Promise.all([
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedGraphId}/points.jsonl`).then(data => loadJSONLFile(data)),
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedGraphId}/nodes.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_NODE_OPTIONS)),
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedGraphId}/intra_edges.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_EDGE_OPTIONS)),
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedGraphId}/inter_edges.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_EDGE_OPTIONS)),
-        getS3Util(`${process.env.S3_GRAFER_MODELS}/${this.selectedGraphId}/groups.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_LABEL_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_KNOWLEDGE_GRAPHS}/${this.selectedGraphId}/points.jsonl`).then(data => loadJSONLFile(data)),
+        getS3Util(`${process.env.S3_GRAFER_KNOWLEDGE_GRAPHS}/${this.selectedGraphId}/nodes.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_NODE_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_KNOWLEDGE_GRAPHS}/${this.selectedGraphId}/intra_edges.jsonl`).then(data => loadJSONLFile(data, BIO_NODE_LAYERS_EDGE_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_KNOWLEDGE_GRAPHS}/${this.selectedGraphId}/inter_edges.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_EDGE_OPTIONS)),
+        getS3Util(`${process.env.S3_GRAFER_KNOWLEDGE_GRAPHS}/${this.selectedGraphId}/groups.jsonl`).then(data => loadJSONLFile(data, BIO_CLUSTER_LAYERS_LABEL_OPTIONS)),
       ]);
 
       return {

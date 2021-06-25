@@ -22,13 +22,13 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN }: any): Model.Model[] =
       modelGraph: [
         {
           file: '',
-          type: 'PetriNetClassic',
+          type: Model.GraphTypes.PetriNetClassic,
           metadata: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['metadata']).metadata,
           graph: _.pick(GroMEt2Graph.parseGromet(SIR_PN), ['nodes', 'edges']),
         },
         {
           file: '',
-          type: 'FunctionNetwork',
+          type: Model.GraphTypes.FunctionNetwork,
           metadata: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['metadata']).metadata,
           graph: _.pick(GroMEt2Graph.parseGromet(SIR_FN), ['nodes', 'edges']),
         },
