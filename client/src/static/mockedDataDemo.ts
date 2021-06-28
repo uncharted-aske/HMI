@@ -24,7 +24,7 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN }: any): Model.Model[] =
       modelGraph: [
         {
           file: '',
-          type: 'PetriNetClassic',
+          type: Model.GraphTypes.PetriNetClassic,
           metadata: PN.metadata,
           graph: {
             edges: PN.edges as Graphs.GraphEdgeInterface[],
@@ -33,7 +33,7 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN }: any): Model.Model[] =
         },
         {
           file: '',
-          type: 'FunctionNetwork',
+          type: Model.GraphTypes.FunctionNetwork,
           metadata: FN.metadata,
           graph: {
             edges: FN.edges as Graphs.GraphEdgeInterface[],

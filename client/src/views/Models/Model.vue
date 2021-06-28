@@ -14,62 +14,40 @@
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
       <div class="search-row">
-        <search-bar :placeholder="`Search for model components...`" @run-query="onRunQuery"/>
+        <search-bar :placeholder="`Search for model components...`"/>
         <button class="btn btn-primary m-1" @click="onOpenSimView">
           <font-awesome-icon :icon="['fas', 'chart-line' ]" />
           <span> Open Simulation View </span>
         </button>
       </div>
-      <resizable-grid :map="gridMap" :dimensions="gridDimensions">
-        <div slot="1" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              :title="selectedModel && selectedModel.name"
-              :data="[
-                { name: 'Nodes', value: nodeCount },
-                { name: 'Edges', value: edgeCount },
-              ]"
-            />
-            <settings
-              slot="right"
-              :selected-view-id="selectedViewId"
-              :views="views"
-              :layouts="layouts"
-              :selected-layout-id="selectedLayoutId"
-              @view-change="onSetView"
-              @layout-change="onSetLayout"
-            />
-          </settings-bar>
-          <global-graph
-            v-if="selectedGraph"
-            :data="selectedGraph"
-            :layout="selectedLayoutId"
-            @node-click="onNodeClick"
+      <div class="d-flex flex-column h-100 w-100">
+        <settings-bar>
+          <counters
+            slot="left"
+            :title="selectedModel && selectedModel.name"
+            :data="[
+              { name: 'Nodes', value: nodeCount },
+              { name: 'Edges', value: edgeCount },
+            ]"
           />
-        </div>
-        <div slot="2" class="h-100 w-100 d-flex flex-column">
-          <settings-bar>
-            <counters
-              slot="left"
-              :data="[
-                { name: 'Nodes', value: subgraphNodeCount },
-                { name: 'Edges', value: subgraphEdgeCount },
-              ]"
-              :title="`Subgraph`"
-            />
-            <settings
-              slot="right"
-              :selected-view-id="selectedViewId"
-              :views="views"
-              :selected-layout-id="selectedLayoutId"
-              :layouts="layouts"
-              @view-change="onSetView"
-              @layout-change="onSetLayout"
-            />
-          </settings-bar>
-        </div>
-      </resizable-grid>
+          <settings
+            slot="right"
+            :selected-view-id="selectedViewId"
+            :views="views"
+            :layouts="layouts"
+            :selected-layout-id="selectedLayoutId"
+            @view-change="onSetView"
+            @layout-change="onSetLayout"
+          />
+        </settings-bar>
+        <global-graph
+          v-if="selectedGraph"
+          :data="selectedGraph"
+          :highlight="subgraph"
+          :layout="selectedLayoutId"
+          @node-click="onNodeClick"
+        />
+      </div>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :active-tab-id="drilldownActiveTabId" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
       <metadata-pane v-if="drilldownActiveTabId === 'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
@@ -94,9 +72,15 @@
   import Vue from 'vue';
   import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
+  import { Watch } from 'vue-property-decorator';
+  import { bgraph } from '@uncharted.software/bgraph';
 
-  import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
+  import {
+    loadBGraphData,
+    filterToBgraph,
+  } from '@/utils/BGraphUtil';
   import { TabInterface, ViewInterface } from '@/types/types';
+  import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
   import * as Model from '@/types/typesModel';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
@@ -161,6 +145,9 @@
 
   @Component({ components })
   export default class ModelView extends Vue {
+    // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
+    bgraphInstance: any;
+
     views: ViewInterface[] = VIEWS;
     selectedViewId = 'ptc';
 
@@ -181,19 +168,58 @@
     drilldownParameters: any = null;
 
     isSplitView = false;
-    subgraph: GraphInterface = null;
+    subgraph: SubgraphInterface = null;
     showModalParameters: boolean = false;
     showModalMetadata: boolean = false;
     modalDataParameters: any = null;
     modalDataMetadata: any = null;
-    highlights: SubgraphInterface = null;
-    pathsCounter: number = 0;
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
+    @Getter getParameters;
+    @Getter getFilters;
     @Getter getSelectedModelGraph;
     @Mutation setSelectedModels;
     @Mutation setSelectedModelGraph;
+
+    @Watch('getFilters') onGetFiltersChanged (): void {
+      this.executeFilters();
+    }
+
+    mounted (): void {
+      this.loadData();
+    }
+
+    executeFilters (): void {
+      if (this.bgraphInstance && this.getFilters?.clauses.length > 0) {
+        const subgraph = filterToBgraph(this.bgraphInstance, this.getFilters);
+        this.subgraph = {
+          nodes: subgraph.filter(d => d._type === 'node').map(n => n.id),
+          edges: subgraph.filter(d => d._type === 'edge').map(e => ({ source: e.source, target: e.target })),
+        };
+      } else {
+        this.subgraph = null;
+      }
+    }
+
+    async loadData (): Promise<void> {
+      if (this.selectedModel && this.grometType) {
+        const [bgNodes, bgEdges] = await loadBGraphData(
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/nodes.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/edges.jsonl`,
+        );
+        this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
+        this.executeFilters();
+      }
+    }
+
+    @Watch('selectedModel') onGetSelectedModelChange (): void {
+      this.loadData();
+    }
+
+    @Watch('grometType') onGetGrometTypeChange (): void {
+      this.loadData();
+    }
 
     get selectedModel (): Model.Model {
       if (
@@ -216,6 +242,10 @@
       return this.selectedModel?.modelGraph[index].graph;
     }
 
+    get grometType (): string {
+      return this.selectedViewId === 'ptc' ? Model.GraphTypes.PetriNetClassic : Model.GraphTypes.FunctionNetwork;
+    }
+
     get nodeCount (): number {
       return this.selectedGraph?.nodes.filter(n => n?.nodeType !== NodeTypes.NODES.CONTAINER).length;
     }
@@ -232,33 +262,6 @@
       return this.subgraph?.edges.length;
     }
 
-    get gridMap (): string[][] {
-      return this.isSplitView ? [['1', '3', '2']] : [['1']];
-    }
-
-    get gridDimensions (): any {
-      if (this.isSplitView) {
-        return {
-          // Keep the cell between 25% and 75% of container
-          /* Future features to be developed.
-          1: {
-            widthMax: 0.75,
-            widthMin: 0.25,
-          },
-          2: {
-            widthMax: 0.75,
-            widthMin: 0.25,
-          },
-          */
-          // Middle element to visually resize the columns
-          3: {
-            width: '10px',
-            widthFixed: true,
-          },
-        };
-      }
-    }
-
     onOpenSimView (): void {
       const options: RawLocation = { name: 'simulation' };
 
@@ -271,18 +274,6 @@
       }
 
       this.$router.push(options);
-    }
-
-    onSplitView (): void {
-      this.isSplitView = !this.isSplitView;
-      if (!this.highlights) return;
-
-      // Get path from highlights
-      const path = this.highlights;
-      const edges = path.edges;
-      const nodes = path.nodes.map(node => this.selectedGraph.nodes.find(n => n.id === node.id));
-
-      this.subgraph = { nodes, edges };
     }
 
     onTabClick (tabId: string): void {
@@ -360,11 +351,6 @@
     onOpenModalMetadata ():void {
       // this.modalDataMetadata = bibjson;
       this.showModalMetadata = true;
-    }
-
-    onRunQuery (): void {
-      // this.highlights = paths[this.pathsCounter];
-      // this.pathsCounter++;
     }
   }
 </script>

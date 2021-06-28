@@ -10,7 +10,7 @@
 
   import { expandCollapse, highlight } from 'svg-flowgraph';
 
-  import { GraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
+  import { GraphInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
 
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
@@ -28,6 +28,7 @@
   @Component
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
+    @Prop({ default: null }) highlight: SubgraphInterface;
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -38,9 +39,23 @@
       this.refresh();
     }
 
+    @Watch('highlight')
+    onHighlightChange (): void {
+      this.highlightChanged();
+    }
+
     @Watch('layout')
-    layoutChanged (): void {
-      this.refresh();
+    async layoutChanged (): Promise<void> {
+      await this.refresh();
+      this.highlightChanged();
+    }
+
+    highlightChanged (): void {
+      if (this.highlight) {
+        this.renderer.showHighlight(this.highlight);
+      } else {
+        this.renderer.hideHighlight();
+      }
     }
 
     mounted (): void {
@@ -84,7 +99,7 @@
       this.refresh();
     }
 
-    refresh (): void {
+    refresh (): Promise<void> {
       if (!this.data) return;
 
       // Layout selection
@@ -99,7 +114,7 @@
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
 
       this.renderer.setData(data);
-      this.renderer.render();
+      return this.renderer.render();
     }
   }
 </script>

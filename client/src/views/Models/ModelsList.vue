@@ -115,8 +115,8 @@
         return {
           id: model.id,
           previewImageSrc,
-          title: model.name,
-          subtitle: model.metadata.description,
+          title: model.name ?? 'No Title',
+          subtitle: model.metadata?.description ?? 'No Subtitle',
           checked: selectedModelsList.has(model.id),
         } as CardInterface;
       });

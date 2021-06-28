@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 
 import { SVGRenderer } from 'svg-flowgraph';
 
-import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
+import { SVGRendererOptionsInterface, SubgraphInterface } from '@/types/typesGraphs';
 
 import { calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors, NodeTypes } from '@/graphs/svg/encodings';
@@ -146,5 +146,45 @@ export default class EpiRenderer extends SVGRenderer {
         const target = d.target.replace(/\s/g, '');
         return `url(#start-${source}-${target}`;
       });
+  }
+
+  renderEdgeUpdated (edgeSelection: d3.Selection<any, any, any, any>): void {
+    edgeSelection
+      .selectAll('.edge-path')
+      .attr('d', d => {
+        return pathFn((d as any).points);
+      });
+  }
+
+  renderEdgeRemoved (edgeSelection: d3.Selection<any, any, any, any>): void {
+    edgeSelection.each(function () {
+      d3.select(this)
+        .transition()
+        .on('end', function () {
+          d3.select(this).remove();
+        })
+        .duration(1500)
+        .style('opacity', 0.2);
+    });
+  }
+
+  hideHighlight (): void {
+    const chart = (this as any).chart;
+    chart.selectAll('.node-ui,.edge').style('opacity', 1);
+  }
+
+  showHighlight (subgraph: SubgraphInterface): void {
+    const chart = (this as any).chart;
+    const nodes = subgraph.nodes;
+    const edges = subgraph.edges;
+    chart.selectAll('.edge').each(function (d) {
+      const isNeighbour = edges.some(edge =>
+        edge.source === d.source && edge.target === d.target);
+      d3.select(this).style('opacity', isNeighbour ? '1' : '0.1');
+    });
+    chart.selectAll('.node-ui').each(function (d) {
+      const isNeighbour = nodes.map(node => node).includes(d.id);
+      d3.select(this).style('opacity', isNeighbour ? '1' : '0.1');
+    });
   }
 }

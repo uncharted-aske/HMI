@@ -156,6 +156,36 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'integer',
   },
+  EPI_PATH_PRE: {
+    ..._field('epiPathPre', 'Path Pre'),
+    ..._searchable('Path Pre', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  EPI_PATH_PRE_EDGE_FILTER_LOOP: {
+    ..._field('epiPathPreEdgeFilters', 'Path Pre Edge Filters'),
+    ..._searchable('Path Pre', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  EPI_PATH_PRE_NODE_FILTER_LOOP: {
+    ..._field('epiPathPreNodeFilters', 'Path Pre Node Filters'),
+    ..._searchable('Path Pre', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
+  EPI_PATH: {
+    ..._field('epiPathQuery', 'Path Query'),
+    ..._searchable('Path Query', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
+  EPI_PATH_POST: {
+    ..._field('epiPathPost', 'Path Post'),
+    ..._searchable('Path Post', false),
+    baseType: 'integer',
+    lexType: 'integer',
+  },
   // COSMOS
   COSMOS_QUERY: {
     ..._field('cosmosQuery', 'Keyword'),
@@ -194,13 +224,6 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     ..._field('histogram', 'Histogram'),
     ..._searchable('Histogram', false),
     baseType: 'integer',
-    lexType: 'string',
-  },
-  // Mocked-up fields
-  PATH_QUERY: {
-    ..._field('pathQuery', 'Path Query'),
-    ..._searchable('Path Query', false),
-    baseType: 'string',
     lexType: 'string',
   },
 };
