@@ -1,49 +1,45 @@
 <template>
-  <div class="metadata-panel container">
-    <div v-for="(datum, index) in metadata" :key="index">
+  <div class="metadata-panel">
+    <details v-for="(datum, index) in metadata" :key="index">
 
-      <div v-if="isTypeModel(datum)" class="Model" >
-        <h5 :title="datum.uid">Model</h5>
+      <template v-if="isTypeModel(datum)">
+        <summary :title="datum.uid">Model</summary>
+        <h6>Variables</h6>
+        <p>{{ datum.variables.join(', ') }}</p>
+        <h6>Parameters</h6>
+        <p>{{ datum.parameters.join(', ') }}</p>
+        <h6>Initial Conditions</h6>
+        <p>{{ datum.initial_conditions.join(', ') }}</p>
+      </template>
+
+      <template v-else-if="isTypeCode(datum)">
+        <summary :title="datum.uid">Code</summary>
+        <h6>Reference</h6>
+        <p>{{ datum.global_reference_id.type }} {{ datum.global_reference_id.id }}</p>
+        <h6>Files</h6>
         <ul>
-          <li>
-            <h6>Variables</h6>
-            {{ datum.variables.join(', ') }}
-          </li>
-          <li>
-            <h6>Parameters</h6>
-            {{ datum.parameters.join(', ') }}
-          </li>
-          <li>
-            <h6>Initial Conditions</h6>
-            {{ datum.initial_conditions.join(', ') }}
-          </li>
+          <li
+            v-for="(file, index) in datum.file_ids"
+            :key="index"
+            :title="file.uid"
+          >{{ file.name }} ({{ file.path }})</li>
         </ul>
-      </div>
+      </template>
 
-      <div v-else-if="isTypeCode(datum)" class="Code">
-        <h5 :title="datum.uid">Code</h5>
-        <ul>
-          <li>
-            <h6>Reference</h6>
-            {{ datum.global_reference_id.type }} {{ datum.global_reference_id.id }}
-          </li>
-          <li v-for="(file, index) in datum.file_ids" :key="index" :title="file.uid">
-            <h6>File {{ index }}</h6>
-            {{ file.name }}: {{ file.path }}
-          </li>
-        </ul>
-      </div>
-
-      <div v-else-if="isTypeDocuments(datum)" class="Documents">
-        <h5 :title="datum.uid">Documents</h5>
+      <template v-else-if="isTypeDocuments(datum)">
+        <summary :title="datum.uid">Documents</summary>
         <details v-for="(doc, index) in datum.documents" :key="index">
           <summary :title="doc.uid">{{ doc.bibjson.title }}</summary>
-          <h6>Source <a :href="doc.bibjson.website.url">{{ doc.bibjson.type }}</a></h6>
-          <h6>File <a :href="doc.bibjson.file_url">{{ doc.bibjson.file }}</a></h6>
-          <h6>Author(s): {{ doc.bibjson.author.map(a => a.name).join(', ') }}</h6>
-          <h6>Reference: {{ doc.global_reference_id.type }} {{ doc.global_reference_id.id }}</h6>
+          <h6>Source</h6>
+          <p><a :href="doc.bibjson.website.url">{{ doc.bibjson.type }}</a></p>
+          <h6>File</h6>
+          <p><a :href="doc.bibjson.file_url">{{ doc.bibjson.file }}</a></p>
+          <h6>Author(s)</h6>
+          <p>{{ doc.bibjson.author.map(a => a.name).join(', ') }}</p>
+          <h6>Reference</h6>
+          <p>{{ doc.global_reference_id.type }} {{ doc.global_reference_id.id }}</p>
         </details>
-      </div>
+      </template>
 
       <aside class="provenance">
         {{ datum.provenance.method }}
@@ -51,7 +47,7 @@
           {{ provenanceDate(datum.provenance.timestamp) }}
         </time>
       </aside>
-    </div>
+    </details>
   </div>
 </template>
 
@@ -86,41 +82,69 @@
 </script>
 
 <style lang="scss" scoped>
-  .container {
+  .metadata-panel {
     display: flex;
     flex-direction: column;
-    gap: 3em;
-    padding: 1em;
+    gap: 1em;
+    padding: 1em 0;
   }
 
-  .metadata-item {
-    padding: 20px;
-    text-align: left;
-    border-bottom: 1px solid rgba(207, 216, 220, .5);
-    .key {
-      font-weight: bold;
-      padding-top: 5px;
+  .metadata-panel > details {
+    & > *:not(summary, .provenance) {
+      padding-left: .5em;
+      padding-right: .5em;
     }
+
+    & > summary {
+      background-color: var(--drilldown-header);
+      font-weight: bold;
+    }
+  }
+
+  details {
+    border: var(--border);
+    border-radius: .2em;
+  }
+
+  details > summary {
+    padding: .5em;
+  }
+
+  details[open] > summary {
+    border-bottom: var(--border);
+    margin-bottom: .5em;
+  }
+
+  details details {
+    padding: .5em;
+    margin: .5em;
   }
 
   .provenance {
-    font-size: .9em;
+    font-size: .8em;
     font-style: italic;
-    padding: .5em;
+    padding: .5rem;
     text-align: right;
 
-    time::before {
-      content: ' — ';
-    }
+    time { display: block; }
   }
 
   h6 {
     margin: 0;
+    text-decoration: underline;
+  }
+
+  h6:not(:first-of-type) {
+    margin-top: 1em;
   }
 
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+
+  p {
+    margin: 0;
   }
 </style>
