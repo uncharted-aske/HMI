@@ -10,14 +10,13 @@
   import { GraphInterface } from '@/types/typesGraphs';
 
   import BioLocalRenderer from '@/graphs/svg/renderers/BioLocalRenderer';
-  import Adapter from '@/graphs/svg/elk/adapter';
+  import ELKAdapter from '@/graphs/svg/elk/adapter';
   import { layered } from '@/graphs/svg/elk/layouts';
   import { calculateNodeNeighborhood, calculateEdgeNeighborhood } from '@/graphs/svg/util';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
     nodeHeight: 40,
-    layout: layered,
   };
 
   @Component
@@ -35,7 +34,7 @@
     mounted (): void {
       this.renderer = new BioLocalRenderer({
         el: this.$refs.graph,
-        adapter: new Adapter(DEFAULT_RENDERING_OPTIONS),
+        adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
         renderMode: 'basic',
         useEdgeControl: true,
         edgeControlOffset: 0.5,
