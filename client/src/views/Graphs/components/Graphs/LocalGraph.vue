@@ -11,7 +11,6 @@
 
   import BioLocalRenderer from '@/graphs/svg/renderers/BioLocalRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
-  import { layered } from '@/graphs/svg/elk/layouts';
   import { calculateNodeNeighborhood, calculateEdgeNeighborhood } from '@/graphs/svg/util';
 
   const DEFAULT_RENDERING_OPTIONS = {
