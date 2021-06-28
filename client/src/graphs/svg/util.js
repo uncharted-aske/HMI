@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import { Colors, NodeTypes, EdgeTypes } from '@/graphs/svg/encodings.ts';
+import { GraphLayoutInterfaceType } from '@/types/typesGraphs.ts';
+
 
 /**
  * Recursively traverse a graph that looks like
@@ -211,13 +213,19 @@ export const calcEdgeControlBackground = (edge) => {
   * Collapse top-level boxes by default for scalability. 
   * Criteria: parent nodes and node depth = 1
 */
-export function collapseDefault (root, renderer) {
-  if (root.nodes && root.depth === 1) {
-    renderer.collapse(root.id);
+export const collapseDefault = (layoutType, root, renderer) => {
+  const depthLevel = layoutType === GraphLayoutInterfaceType.elk ? 2 : 1;
+  if (root.nodes && root.depth === depthLevel) {
+    if (!root.collapse) {
+      renderer.collapse(root.id);
+    }
   }
+
   if (root.nodes) {
+    console.log(root.nodes);
     for (let i = 0; i < root.nodes.length; i++) {
-      collapseDefault(root.nodes[i]);
+      console.log(i);
+      collapseDefault(layoutType, root.nodes[i], renderer);
     }
   }
 }

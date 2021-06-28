@@ -16,7 +16,7 @@
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
   import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
-  import { calculateNodeNeighborhood, constructRootNode } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood, constructRootNode, collapseDefault } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
@@ -80,6 +80,7 @@
         } else {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
+          this.$emit('node-click', node.datum());
         }
       });
 
@@ -99,7 +100,7 @@
       this.refresh();
     }
 
-    refresh (): Promise<void> {
+    async refresh (): Promise<void> {
       if (!this.data) return;
 
       // Layout selection
@@ -112,25 +113,12 @@
       const nodesHierarchy = hierarchyFn(this.data?.nodes); // Transform the flat nodes structure into a hierarchical one
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
-
+      console.log(data);
       this.renderer.setData(data);
+      // this.renderer.render();
 
-      const _renderer = this.renderer;
-      this.renderer.render().then(() => {
-        //Collapse top-level boxes by default for scalability. Criteria: 1) boxes nodes; 2) depth === 1
-        function collapseDefault (root) {
-          if (root.nodes && root.depth === 1) {
-            _renderer.collapse(root.id);
-          }
-          if (root.nodes) {
-            for (let i = 0; i < root.nodes.length; i++) {
-              collapseDefault(root.nodes[i]);
-            }
-          }
-        }
-
-        collapseDefault(data);
-      });
+      await this.renderer.render();
+      collapseDefault(this.layout, this.renderer.layout, this.renderer);
     }
   }
 </script>
