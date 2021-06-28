@@ -17,13 +17,13 @@
         <h6>Reference</h6>
         <p>{{ datum.global_reference_id.type }} {{ datum.global_reference_id.id }}</p>
         <h6>Files</h6>
-        <ul>
+        <ol>
           <li
             v-for="(file, index) in datum.file_ids"
             :key="index"
             :title="file.uid"
           >{{ file.name }} ({{ file.path }})</li>
-        </ul>
+        </ol>
       </template>
 
       <template v-else-if="isTypeDocuments(datum)">
@@ -138,8 +138,9 @@
     margin-top: 1em;
   }
 
-  ul {
-    list-style: none;
+  ol {
+    list-style-position: inside;
+    list-style-type: lower-roman;
     margin: 0;
     padding: 0;
   }
