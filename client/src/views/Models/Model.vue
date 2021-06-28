@@ -323,7 +323,7 @@
       this.drilldownActiveTabId = 'metadata';
 
       this.drilldownPaneTitle = node.label;
-      this.drilldownPaneSubtitle = node.nodeType;
+      this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownMetadata = node.metadata;
 
       // const nodeMetadata = node.metadata;
