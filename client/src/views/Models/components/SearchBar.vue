@@ -26,15 +26,11 @@
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       setPills({ lex: this.lex, pills: this.pills, filters: this.getFilters });
-      // HACK FOR DEMO IN FEB.12TH
-      if (!filtersUtil.isEmpty(this.getFilters)) {
-        this.$emit('run-query');
-      }
     }
 
     mounted (): void {
       /* add pills here */
-      this.pills = [new PathQueryPill(QUERY_FIELDS_MAP.PATH_QUERY)];
+      this.pills = [new PathQueryPill(QUERY_FIELDS_MAP.EPI_PATH)];
 
       this.lex = initializeLex({
         pills: this.pills,
