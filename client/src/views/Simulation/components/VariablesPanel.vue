@@ -10,7 +10,7 @@
         <small class="mr-3 run-counter" v-if="getVariablesRunsCount">
           {{`${getVariablesRunsCount} run${getVariablesRunsCount > 1 ? 's' : ''}`}}
         </small>
-        <div class="btn-group">
+        <div>
           <button type="button" disabled class="btn btn-secondary btn-settings">Settings</button>
           <button type="button" class="btn btn-secondary py-0 btn-settings" @click="$emit('expand')">
             <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
