@@ -324,7 +324,7 @@
 
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = node.nodeType;
-      this.drilldownMetadata = node.metadata; 
+      this.drilldownMetadata = node.metadata;
 
       // const nodeMetadata = node.metadata;
       // if (nodeMetadata) {
