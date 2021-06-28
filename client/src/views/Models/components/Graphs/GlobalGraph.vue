@@ -99,7 +99,23 @@
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
 
       this.renderer.setData(data);
-      this.renderer.render();
+
+      const _renderer = this.renderer;
+      this.renderer.render().then(() => {
+        //Collapse top-level boxes by default for scalability. Criteria: 1) boxes nodes; 2) depth === 1
+        function collapseDefault (root) {
+          if (root.nodes && root.depth === 1) {
+            _renderer.collapse(root.id);
+          }
+          if (root.nodes) {
+            for (let i = 0; i < root.nodes.length; i++) {
+              collapseDefault(root.nodes[i]);
+            }
+          }
+        }
+
+        collapseDefault(data);
+      });
     }
   }
 </script>

@@ -205,3 +205,19 @@ export const calcEdgeControlBackground = (edge) => {
   }
   return Colors.CURATION.UNCURATED;
 };
+
+
+/**
+  * Collapse top-level boxes by default for scalability. 
+  * Criteria: parent nodes and node depth = 1
+*/
+export function collapseDefault (root, renderer) {
+  if (root.nodes && root.depth === 1) {
+    renderer.collapse(root.id);
+  }
+  if (root.nodes) {
+    for (let i = 0; i < root.nodes.length; i++) {
+      collapseDefault(root.nodes[i]);
+    }
+  }
+}
