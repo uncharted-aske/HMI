@@ -188,6 +188,7 @@
 
     mounted (): void {
       this.loadData();
+      this.selectedViewId = VIEWS[this.getSelectedModelGraph].id;
     }
 
     executeFilters (): void {
@@ -337,9 +338,8 @@
       // }
     }
 
-     async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
-      const response = await cosmosArtifactSrc(id);
-      return response;
+    async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
+      return await cosmosArtifactSrc(id);
     }
 
     async onOpenModalParameters (id: string):Promise<void> {

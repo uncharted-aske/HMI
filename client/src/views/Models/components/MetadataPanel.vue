@@ -1,6 +1,6 @@
 <template>
   <div class="metadata-panel">
-    <details v-for="(datum, index) in metadata" :key="index">
+    <details v-for="(datum, index) in metadata" :key="index" open>
 
       <template v-if="isTypeModel(datum)">
         <summary :title="datum.uid">Model</summary>
@@ -129,6 +129,7 @@
   }
 
   details > span {
+    display: block;
     font-weight: bold;
     margin: 0;
 
