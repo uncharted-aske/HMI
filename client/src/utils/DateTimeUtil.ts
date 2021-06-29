@@ -4,7 +4,7 @@
  * @param date {string | Date}
  * @returns {Date}
  */
-export const nicePrintableDate = (datetime: string | Date): string => {
+export const formatFullDateTime = (datetime: string | Date): string => {
   if (!datetime) {
     // eslint-disable-next-line no-console
     console.warn('niceDate', 'No date provided.');

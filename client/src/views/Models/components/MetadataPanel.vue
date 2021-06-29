@@ -4,19 +4,19 @@
 
       <template v-if="isTypeModel(datum)">
         <summary :title="datum.uid">Model</summary>
-        <h6>Variables</h6>
-        <p>{{ datum.variables.join(', ') }}</p>
-        <h6>Parameters</h6>
-        <p>{{ datum.parameters.join(', ') }}</p>
-        <h6>Initial Conditions</h6>
-        <p>{{ datum.initial_conditions.join(', ') }}</p>
+        <span>Variables</span>
+        <p>{{ datum.variables | ArrayToList }}</p>
+        <span>Parameters</span>
+        <p>{{ datum.parameters | ArrayToList }}</p>
+        <span>Initial Conditions</span>
+        <p>{{ datum.initial_conditions | ArrayToList }}</p>
       </template>
 
       <template v-else-if="isTypeCode(datum)">
         <summary :title="datum.uid">Code</summary>
-        <h6>Reference</h6>
+        <span>Reference</span>
         <p>{{ datum.global_reference_id.type }} {{ datum.global_reference_id.id }}</p>
-        <h6>Files</h6>
+        <span>Files</span>
         <ol>
           <li
             v-for="(file, index) in datum.file_ids"
@@ -29,15 +29,14 @@
       <template v-else-if="isTypeDocuments(datum)">
         <summary :title="datum.uid">Documents</summary>
         <details v-for="(doc, index) in datum.documents" :key="index">
-          <summary :title="doc.uid">{{ doc.bibjson.title }}</summary>
-          <h6>Source</h6>
-          <p><a :href="doc.bibjson.website.url">{{ doc.bibjson.type }}</a></p>
-          <h6>File</h6>
+          <summary :title="doc.uid">
+            <a :href="doc.bibjson.website.url">{{ doc.bibjson.title }}</a>
+            {{ doc.global_reference_id.type }} {{ doc.global_reference_id.id }}
+          </summary>
+          <span>File</span>
           <p><a :href="doc.bibjson.file_url">{{ doc.bibjson.file }}</a></p>
-          <h6>Author(s)</h6>
-          <p>{{ doc.bibjson.author.map(a => a.name).join(', ') }}</p>
-          <h6>Reference</h6>
-          <p>{{ doc.global_reference_id.type }} {{ doc.global_reference_id.id }}</p>
+          <span>Author(s)</span>
+          <p>{{ doc.bibjson.author.map(a => a.name) | ArrayToList }}</p>
         </details>
       </template>
 
@@ -57,7 +56,7 @@
   import { Prop } from 'vue-property-decorator';
   import * as Model from '@/types/typesModel';
   import * as GroMET from '@/types/typesGroMEt';
-  import { nicePrintableDate } from '@/utils/DateTimeUtil';
+  import { formatFullDateTime } from '@/utils/DateTimeUtil';
 
   @Component
   export default class MetadataPanel extends Vue {
@@ -76,7 +75,7 @@
     }
 
     provenanceDate (timestamp: string): string {
-      return nicePrintableDate(timestamp);
+      return formatFullDateTime(timestamp);
     }
   }
 </script>
@@ -129,13 +128,13 @@
     time { display: block; }
   }
 
-  h6 {
+  details > span {
+    font-weight: bold;
     margin: 0;
-    text-decoration: underline;
-  }
 
-  h6:not(:first-of-type) {
-    margin-top: 1em;
+    &:not(:first-of-type) {
+      margin-top: 1em;
+    }
   }
 
   ol {
