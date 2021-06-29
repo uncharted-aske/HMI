@@ -216,15 +216,13 @@ export const calcEdgeControlBackground = (edge) => {
 export const collapseDefault = (layoutType, root, renderer) => {
   const depthLevel = layoutType === GraphLayoutInterfaceType.elk ? 2 : 1;
   if (root.nodes && root.depth === depthLevel) {
-    if (!root.collapse) {
+    if (!root.collapsed) {
       renderer.collapse(root.id);
     }
   }
 
   if (root.nodes) {
-    console.log(root.nodes);
-    for (let i = 0; i < root.nodes.length; i++) {
-      console.log(i);
+    for (let i = 0; i < root.nodes?.length; i++) {
       collapseDefault(layoutType, root.nodes[i], renderer);
     }
   }
