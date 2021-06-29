@@ -20,6 +20,7 @@
 
 .settings-bar-container {
   display: flex;
+  align-items: center;
   flex-shrink: 0;
   gap: 5px;
   justify-content: space-between;
