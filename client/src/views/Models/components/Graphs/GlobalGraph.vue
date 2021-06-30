@@ -72,6 +72,7 @@
       this.renderer.setCallback('nodeClick', (evt, node) => {
         if (node.datum().nodes) {
           const id = node.datum().id;
+          console.log(id);
           if (node.datum().collapsed === true) {
             this.renderer.expand(id);
           } else {
@@ -116,8 +117,10 @@
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
       this.renderer.setData(data);
 
-      await this.renderer.render();
-      collapseDefault(this.layout, this.renderer.layout, this.renderer);
+      this.renderer.render().then(()=> {
+        collapseDefault(this.layout, this.renderer.layout, this.renderer);
+        console.log(this.renderer.layout);
+      });
     }
   }
 </script>

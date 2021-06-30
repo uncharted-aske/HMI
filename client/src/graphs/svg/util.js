@@ -25,7 +25,7 @@ export const traverse = (root, callBackFn, depth = 0) => {
   callBackFn(root, depth);
   if (root.nodes) {
     const d = depth + 1;
-    for (let i = 0; i < root.nodes.length; i++) {
+    for (let i = 0; i < root.nodes?.length; i++) {
       traverse(root.nodes[i], callBackFn, d);
     }
   }
@@ -214,16 +214,36 @@ export const calcEdgeControlBackground = (edge) => {
   * Criteria: parent nodes and node depth = 1
 */
 export const collapseDefault = (layoutType, root, renderer) => {
-  const depthLevel = layoutType === GraphLayoutInterfaceType.elk ? 2 : 1;
-  if (root.nodes && root.depth === depthLevel) {
-    if (!root.collapsed) {
-      renderer.collapse(root.id);
+  const collapsedIds = [];
+  traverse(root, (node) => {
+    const depthLevel = layoutType === GraphLayoutInterfaceType.elk ? 2 : 1;
+    if (node.depth === depthLevel && node.nodes) {
+      collapsedIds.push({id: node.id, label: node.label});
     }
+  });
+
+  if (collapsedIds.length > 0) {
+    collapsedIds.forEach(id => {
+      renderer.collapse(id);
+      
+    })
   }
 
-  if (root.nodes) {
-    for (let i = 0; i < root.nodes?.length; i++) {
-      collapseDefault(layoutType, root.nodes[i], renderer);
-    }
-  }
+
+
+  // const depthLevel = layoutType === GraphLayoutInterfaceType.elk ? 2 : 1;
+  // if (root.nodes && root.depth === depthLevel) {
+  //   if (!root.collapsed) {
+  //     console.log(root.label);
+  //     renderer.collapse(root.id);
+  //     console.log(root.nodes);
+  //   }
+  // }
+
+  // // if (root.nodes) {
+  //   for (let i = 0; i < root.nodes?.length; i++) {
+  //     console.log(root.nodes[i].label);
+  //     collapseDefault(layoutType, root.nodes[i], renderer);
+  //   }
+  //}
 }
