@@ -6,13 +6,11 @@
       :tabs="tabs"
       @tab-click="onTabClick"
     >
-      <div slot="content">
-        <metadata-panel
-          v-if="activeTabId === 'metadata'"
-          :metadata="selectedGraphMetadata"
-        />
-        <!-- <facets-pane v-if="activeTabId === 'facets'" />  -->
-      </div>
+      <metadata-panel
+        slot="content"
+        v-if="activeTabId === 'metadata'"
+        :metadata="selectedGraphMetadata"
+      />
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
       <div class="search-row">
@@ -107,7 +105,7 @@
   import ModalDocMetadata from './components/Modals/ModalDocMetadata.vue';
 
   const TABS: TabInterface[] = [
-    { name: 'Facets', icon: 'filter', id: 'facets' },
+    // { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
@@ -190,6 +188,7 @@
 
     mounted (): void {
       this.loadData();
+      this.selectedViewId = VIEWS[this.getSelectedModelGraph].id;
     }
 
     executeFilters (): void {
@@ -340,9 +339,8 @@
       // }
     }
 
-     async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
-      const response = await cosmosArtifactSrc(id);
-      return response;
+    async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
+      return await cosmosArtifactSrc(id);
     }
 
     async onOpenModalParameters (id: string):Promise<void> {

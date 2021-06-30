@@ -1,7 +1,20 @@
 html {
-  /* Colors for graphs
-   * See /graphs/svg/encodings.ts
+  /**
+   * Colors for graphs
    */
   --colors-nodes-default: #ECEFF4;
   --colors-nodes-other: #647EA9;
+
+  /**
+   * Text
+   */
+   --text-color-light: #eceff4;
+   --text-color-dark: #3b4252;
+   --text-color-highlight: #d08770;
+
+  /**
+   * UI
+   */
+  --border: 1px solid lightgray;
+  --drilldown-header: #d8dee9; /* Nord 4 */
 }
