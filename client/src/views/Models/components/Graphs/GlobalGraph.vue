@@ -4,6 +4,8 @@
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
+
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
@@ -103,6 +105,7 @@
 
     async refresh (): Promise<void> {
       if (!this.data) return;
+      let data = _.cloneDeep(this.data);
 
       // Layout selection
       if (this.layout === GraphLayoutInterfaceType.elk) {
@@ -112,14 +115,12 @@
       }
 
       // Transform the flat nodes structure into a hierarchical one
-      const nodesHierarchy = hierarchyFn(this.data?.nodes); 
+      const nodesHierarchy = hierarchyFn(data.nodes); 
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
-      const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
+      data = { nodes: [nodesHierarchy], edges: data.edges };
 
-      console.log(this.data);
       this.renderer.setData(data);
       await this.renderer.render();
-      console.log(this.renderer.layout);
 
 
       //Collapse top-level boxes by default
