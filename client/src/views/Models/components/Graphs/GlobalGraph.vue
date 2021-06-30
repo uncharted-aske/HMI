@@ -8,7 +8,7 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import { expandCollapse, highlight } from 'svg-flowgraph';
+  import {expandCollapse, highlight } from 'svg-flowgraph';
 
   import { GraphInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
 
@@ -16,7 +16,7 @@
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
   import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
-  import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse, traverse } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
@@ -111,18 +111,36 @@
         this.renderer.adapter = new DagreAdapter(DEFAULT_RENDERING_OPTIONS);
       }
 
-      const nodesHierarchy = hierarchyFn(this.data?.nodes); // Transform the flat nodes structure into a hierarchical one
+      // Transform the flat nodes structure into a hierarchical one
+      const nodesHierarchy = hierarchyFn(this.data?.nodes); 
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
+
+      console.log(this.data);
       this.renderer.setData(data);
       await this.renderer.render();
+      console.log(this.renderer.layout);
+
 
       //Collapse top-level boxes by default
+      // HACK: The collapse/expand functions are asynchronous and trying to execute them all at once 
+      // seems to create problems with the tracker. 
       const collapsedIds = calcNodesToCollapse(this.layout, this.renderer.layout);
       if (collapsedIds.length > 0) {
-        collapsedIds.forEach(node => {
-          this.renderer.collapse(node.id);
-        })
+        function collapseNodeTimeOut(nextID, renderer) {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              renderer.collapse(nextID);
+              resolve();
+            }, 500);
+          });
+        }
+
+        collapsedIds.reduce((accumulatorPromise, nextID) => {
+          return accumulatorPromise.then(() => {
+            return collapseNodeTimeOut(nextID, this.renderer);
+          });
+        }, Promise.resolve());
       }
     }
   }

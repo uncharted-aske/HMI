@@ -218,7 +218,7 @@ export const calcNodesToCollapse = (layoutType, root) => {
   traverse(root, (node) => {
     const depthLevel = layoutType === GraphLayoutInterfaceType.elk ? 2 : 1;
     if (node.depth === depthLevel && node.nodes) {
-      collapsedIds.push({id: node.id, label: node.label});
+      collapsedIds.push(node.id);
     }
   });
   return collapsedIds;
