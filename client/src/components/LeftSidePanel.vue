@@ -65,55 +65,60 @@
 <style lang="scss" scoped>
 @import "@/styles/variables";
 
-.left-side-panel-container {
-  background-color: #ffffff;
-  box-sizing: border-box;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  display: flex;
-  flex-direction: column;
-  height: $content-full-height;
-  padding: 5px;
-  position: relative; // for .navigation-control
-  width: 25vw;
-  will-change: width;
-  z-index: map-get($z-index-order, side-panel);
-
-  &.closed {
-    padding: 0px;
-    width: 0px;
-
-    .tab-panel, .panel-content {
-      display: none;
-    }
-  }
-}
-
-.navigation-control {
-  width: 20px;
-  height: 75px;
-  position: absolute;
-  right: -1vw;
-  bottom: 50vh;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  .btn {
-    height: 100%;
+  .left-side-panel-container {
     background-color: #ffffff;
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    height: $content-full-height;
     padding: 5px;
-    box-shadow: 0 -1px 0 #e5e5e5, 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
-    &:hover {
-      background-color: $muted-highlight;
+    position: relative; // for .navigation-control
+    width: 25vw;
+    will-change: width;
+    z-index: map-get($z-index-order, side-panel);
+
+    &.closed {
+      padding: 0px;
+      width: 0px;
+
+      .tab-panel, .panel-content {
+        display: none;
+      }
     }
   }
 
-}
+  .navigation-control {
+    width: 20px;
+    height: 75px;
+    position: absolute;
+    right: -1vw;
+    bottom: 50vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .btn {
+      height: 100%;
+      background-color: #ffffff;
+      padding: 5px;
+      box-shadow: 0 -1px 0 #e5e5e5, 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
+      &:hover {
+        background-color: $muted-highlight;
+      }
+    }
 
-.nav-link.active {
-  cursor: default;
-  border-bottom: 3px solid $selection;
-}
-.nav-link:not(.active) {
-  cursor: pointer;
-}
+  }
+
+  .nav-link.active {
+    cursor: default;
+    border-bottom: 3px solid $selection;
+  }
+  .nav-link:not(.active) {
+    cursor: pointer;
+  }
+
+  .panel-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 </style>
