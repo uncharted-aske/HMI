@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { Colors, NodeTypes, EdgeTypes } from '@/graphs/svg/encodings.ts';
 import { GraphLayoutInterfaceType } from '@/types/typesGraphs.ts';
 
-
 /**
  * Recursively traverse a graph that looks like
  * {
@@ -208,9 +207,8 @@ export const calcEdgeControlBackground = (edge) => {
   return Colors.CURATION.UNCURATED;
 };
 
-
 /**
-  * Collapse top-level boxes by default for scalability. 
+  * Collapse top-level boxes by default for scalability.
   * Criteria: parent nodes and node depth = 1 (dagre) 2 (elk)
 */
 export const calcNodesToCollapse = (layoutType, root) => {
@@ -222,4 +220,4 @@ export const calcNodesToCollapse = (layoutType, root) => {
     }
   });
   return collapsedIds;
-}
+};

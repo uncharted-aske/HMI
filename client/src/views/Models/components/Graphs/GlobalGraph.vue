@@ -10,7 +10,7 @@
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import {expandCollapse, highlight } from 'svg-flowgraph';
+  import { expandCollapse, highlight } from 'svg-flowgraph';
 
   import { GraphInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
 
@@ -18,7 +18,7 @@
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
   import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
-  import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse, traverse } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
@@ -91,13 +91,13 @@
         if (!node.datum().nodes) {
           const data = node.datum();
           /* @ts-ignore */
-          // showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
+          showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
         }
       });
 
       this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
         if (node.datum().nodes) return;
-        // hideTooltip(renderer.chart);
+        hideTooltip(renderer.chart);
     });
 
       this.refresh();
@@ -115,27 +115,26 @@
       }
 
       // Transform the flat nodes structure into a hierarchical one
-      const nodesHierarchy = hierarchyFn(data.nodes); 
+      const nodesHierarchy = hierarchyFn(data.nodes);
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
       data = { nodes: [nodesHierarchy], edges: data.edges };
 
       this.renderer.setData(data);
       await this.renderer.render();
 
-
-      //Collapse top-level boxes by default
-      // HACK: The collapse/expand functions are asynchronous and trying to execute them all at once 
-      // seems to create problems with the tracker. 
+      // Collapse top-level boxes by default
+      // HACK: The collapse/expand functions are asynchronous and trying to execute them all at once
+      // seems to create problems with the tracker.
       const collapsedIds = calcNodesToCollapse(this.layout, this.renderer.layout);
       if (collapsedIds.length > 0) {
-        function collapseNodeTimeOut(nextID, renderer) {
-          return new Promise((resolve, reject) => {
+        const collapseNodeTimeOut = (nextID, renderer) => {
+          return new Promise((resolve) => {
             setTimeout(() => {
               renderer.collapse(nextID);
               resolve();
             }, 500);
           });
-        }
+        };
 
         collapsedIds.reduce((accumulatorPromise, nextID) => {
           return accumulatorPromise.then(() => {
