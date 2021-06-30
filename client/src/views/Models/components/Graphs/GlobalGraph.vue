@@ -72,7 +72,6 @@
       this.renderer.setCallback('nodeClick', (evt, node) => {
         if (node.datum().nodes) {
           const id = node.datum().id;
-          console.log(id);
           if (node.datum().collapsed === true) {
             this.renderer.expand(id);
           } else {
@@ -90,13 +89,13 @@
         if (!node.datum().nodes) {
           const data = node.datum();
           /* @ts-ignore */
-          showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
+          // showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
         }
       });
 
       this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
         if (node.datum().nodes) return;
-        hideTooltip(renderer.chart);
+        // hideTooltip(renderer.chart);
     });
 
       this.refresh();
@@ -115,6 +114,7 @@
       const nodesHierarchy = hierarchyFn(this.data?.nodes); // Transform the flat nodes structure into a hierarchical one
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
+      this.renderer.setData(data);
       await this.renderer.render();
 
       //Collapse top-level boxes by default
