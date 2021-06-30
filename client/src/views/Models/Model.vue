@@ -318,7 +318,6 @@
     }
 
     onNodeClick (node: GraphNodeInterface): void {
-      console.log(node);
       this.isOpenDrilldown = true;
       this.drilldownActiveTabId = 'metadata';
 
