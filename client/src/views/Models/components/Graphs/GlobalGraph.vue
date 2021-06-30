@@ -16,7 +16,7 @@
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
   import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
-  import { calculateNodeNeighborhood, constructRootNode, collapseDefault } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
@@ -115,12 +115,15 @@
       const nodesHierarchy = hierarchyFn(this.data?.nodes); // Transform the flat nodes structure into a hierarchical one
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
       const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
-      this.renderer.setData(data);
+      await this.renderer.render();
 
-      this.renderer.render().then(()=> {
-        collapseDefault(this.layout, this.renderer.layout, this.renderer);
-        console.log(this.renderer.layout);
-      });
+      //Collapse top-level boxes by default
+      const collapsedIds = calcNodesToCollapse(this.layout, this.renderer.layout);
+      if (collapsedIds.length > 0) {
+        collapsedIds.forEach(node => {
+          this.renderer.collapse(node.id);
+        })
+      }
     }
   }
 </script>
