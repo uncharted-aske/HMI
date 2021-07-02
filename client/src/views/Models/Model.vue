@@ -50,7 +50,7 @@
       </div>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :active-tab-id="drilldownActiveTabId" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
-      <metadata-pane v-if="drilldownActiveTabId === 'metadata'" slot="content" :metadata="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
+      <metadata-pane v-if="drilldownActiveTabId === 'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
       <parameters-pane v-if="drilldownActiveTabId === 'parameters'" slot="content" :data="drilldownParameters" :related="drilldownRelatedParameters" @open-modal="onOpenModalParameters"/>
       <knowledge-pane v-if="drilldownActiveTabId === 'knowledge'" slot="content" :data="drilldownKnowledge"/>
     </drilldown-panel>
@@ -324,18 +324,6 @@
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownMetadata = node.metadata;
-
-      // const nodeMetadata = node.metadata;
-      // if (nodeMetadata) {
-      //   const nodeKnowledge = { knowledge: bakedData.success.data }; // To show some text snippets
-      //   this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
-
-      //   // This probably will need to be refactored since we don't want to do all the queries at the same time, just on demand given the active tab
-      //   const textDefinition = nodeMetadata.attributes[0].text_definition;
-      //   this.formatParametersData();
-      //   this.getRelatedParameters(textDefinition);
-      //   this.searchCosmos(textDefinition);
-      // }
     }
 
     async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
