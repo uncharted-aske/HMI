@@ -163,6 +163,9 @@
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any;
 
+    // Store the graph data counts, as the bGraph instance is not reactive to changes.
+    graphCount: { edges: number, nodes: number } = { edges: null, nodes: null };
+
     // Initialize as undefined to prevent Vue from observing changes within these large datasets
     // Grafer data is stored in Bio view data as they are required for mapping bgraph queries to grafer layers
     graferNodesData: GraferNodesData = undefined;
@@ -239,8 +242,8 @@
 
     get countersData (): Counter[] {
       const counters: Counter[] = [
-        { name: 'Nodes', value: 44104 },
-        { name: 'Edges', value: 448723 },
+        { name: 'Nodes', value: this.graphCount.nodes },
+        { name: 'Edges', value: this.graphCount.edges },
       ];
 
       if (this.subgraph) {
@@ -312,6 +315,13 @@
         `${process.env.S3_BGRAPH_KNOWLEDGE_GRAPHS}/${this.selectedGraphId}/edges.jsonl`,
       );
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
+
+      // Set the graph count
+      this.graphCount = { edges: 0, nodes: 0 };
+      bgNodes.forEach(bgNode => {
+        if (bgNode._type === 'edge') ++this.graphCount.edges;
+        else if (bgNode._type === 'node') ++this.graphCount.nodes;
+      });
 
       const graferLayerData = await this.loadGraferData();
       // TODO: This takes up a lot of memory and will likely scale poorly
