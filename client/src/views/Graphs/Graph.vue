@@ -317,10 +317,11 @@
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
 
       // Set the graph count
-      this.graphCount = {
-        edges: this.bgraphInstance.v({ _type: 'edge' }).run().length,
-        nodes: this.bgraphInstance.v({ _type: 'node' }).run().length,
-      };
+      this.graphCount = { edges: 0, nodes: 0 };
+      bgNodes.forEach(bgNode => {
+        if (bgNode._type === 'edge') ++this.graphCount.edges;
+        else if (bgNode._type === 'node') ++this.graphCount.nodes;
+      });
 
       const graferLayerData = await this.loadGraferData();
       // TODO: This takes up a lot of memory and will likely scale poorly
