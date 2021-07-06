@@ -61,16 +61,7 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN }: any): Model.
             edges: SEIR_PN_PARSED.edges as Graphs.GraphEdgeInterface[],
             nodes: SEIR_PN_PARSED.nodes as unknown as Graphs.GraphNodeInterface[],
           },
-        },
-        // {
-        //   file: '',
-        //   type: Model.GraphTypes.FunctionNetwork,
-        //   metadata: FN.metadata,
-        //   graph: {
-        //     edges: FN.edges as Graphs.GraphEdgeInterface[],
-        //     nodes: FN.nodes as unknown as Graphs.GraphNodeInterface[],
-        //   },
-        // },
+        }
       ],
     },
   ];
