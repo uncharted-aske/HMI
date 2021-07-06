@@ -312,17 +312,17 @@
 
   .parameters-graph .axis {
     fill: none;
-    stroke: var(--colors-nodes-other);
+    stroke: var(--colours-nodes-other);
     stroke-width: 1;
   }
 
   .parameters-graph .run {
     fill: none;
-    stroke: var(--colors-nodes-other);
+    stroke: var(--colours-nodes-other);
     stroke-width: 3;
   }
 
   .parameters-graph .run.current {
-    stroke: var(--colors-nodes-default);
+    stroke: var(--colours-nodes-default);
   }
 </style>

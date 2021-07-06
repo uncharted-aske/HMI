@@ -1,7 +1,7 @@
-html {
-  /* Colors for graphs
+:root {
+  /* Colours for graphs
    * See /graphs/svg/encodings.ts
    */
-  --colors-nodes-default: #ECEFF4;
-  --colors-nodes-other: #647EA9;
+  --colours-nodes-default: #ECEFF4;
+  --colours-nodes-other: #647EA9;
 }
