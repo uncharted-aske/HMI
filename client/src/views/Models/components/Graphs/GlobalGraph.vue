@@ -101,11 +101,10 @@
         hideTooltip(renderer.chart);
       });
 
-      this.renderer.setCallback('backgroundClick', () => { 
+      this.renderer.setCallback('backgroundClick', () => {
         this.selectedNode = '';
         this.renderer.clearSelections();
       });
-
 
       this.refresh();
     }
