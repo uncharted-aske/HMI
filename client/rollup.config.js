@@ -152,9 +152,11 @@ function pluginsForType (type, env) {
       }),
       json(),
       image(),
+      // Copy files and folders, with glob support.
       copy({
         targets: [
           { src: 'src/static/*', dest: type === types.DEV ? 'dev' : 'dist' },
+          { src: 'src/styles/*.css', dest: type === types.DEV ? 'dev/styles' : 'dist/styles' },
         ],
       }),
     ],
