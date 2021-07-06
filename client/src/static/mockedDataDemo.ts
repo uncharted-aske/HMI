@@ -61,7 +61,7 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN }: any): Model.
             edges: SEIR_PN_PARSED.edges as Graphs.GraphEdgeInterface[],
             nodes: SEIR_PN_PARSED.nodes as unknown as Graphs.GraphNodeInterface[],
           },
-        }
+        },
       ],
     },
   ];
