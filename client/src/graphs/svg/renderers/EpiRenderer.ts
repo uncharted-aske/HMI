@@ -187,4 +187,17 @@ export default class EpiRenderer extends SVGRenderer {
       d3.select(this).style('opacity', isNeighbour ? '1' : '0.1');
     });
   }
+
+  selectNode(node: any): void {
+    node.select('rect')
+      .style('stroke', Colors.HIGHLIGHT)
+      .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
+  }
+
+  clearSelections() {
+    const chart = (this as any).chart;
+    chart.selectAll('rect') 
+      .style('stroke', DEFAULT_STYLE.node.stroke)
+      .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+  }
 }

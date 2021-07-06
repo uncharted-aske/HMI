@@ -33,6 +33,7 @@
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
+    selectedNode = '';
 
     @Watch('data')
     dataChanged (): void {
@@ -70,8 +71,9 @@
       });
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
+        const id = node.datum().id;
+        this.selectedNode = id;
         if (node.datum().nodes) {
-          const id = node.datum().id;
           if (node.datum().collapsed === true) {
             this.renderer.expand(id);
           } else {
@@ -80,7 +82,8 @@
         } else {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
-
+          this.renderer.clearSelections();
+          this.renderer.selectNode(node);
           this.$emit('node-click', node.datum().data);
         }
       });
@@ -96,7 +99,13 @@
       this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
         if (node.datum().nodes) return;
         hideTooltip(renderer.chart);
-    });
+      });
+
+      this.renderer.setCallback('backgroundClick', () => { 
+        this.selectedNode = '';
+        this.renderer.clearSelections();
+      });
+
 
       this.refresh();
     }
