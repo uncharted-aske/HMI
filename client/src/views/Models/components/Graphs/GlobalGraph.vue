@@ -28,7 +28,7 @@
   @Component
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
-    @Prop({ default: null }) highlight: SubgraphInterface;
+    @Prop({ default: null }) subgraph: SubgraphInterface;
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -40,22 +40,22 @@
       this.refresh();
     }
 
-    @Watch('highlight')
-    onHighlightChange (): void {
-      this.highlightChanged();
+    @Watch('subgraph')
+    onSubgraphChange (): void {
+      this.subgraphChanged();
     }
 
     @Watch('layout')
     async layoutChanged (): Promise<void> {
       await this.refresh();
-      this.highlightChanged();
+      this.subgraphChanged();
     }
 
-    highlightChanged (): void {
-      if (this.highlight) {
-        this.renderer.showHighlight(this.highlight);
+    subgraphChanged (): void {
+      if (this.subgraph) {
+        this.renderer.showSubgraph(this.subgraph);
       } else {
-        this.renderer.hideHighlight();
+        this.renderer.hideSubgraph();
       }
     }
 

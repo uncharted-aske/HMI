@@ -43,7 +43,7 @@
         <global-graph
           v-if="selectedGraph"
           :data="selectedGraph"
-          :highlight="subgraph"
+          :subgraph="subgraph"
           :layout="selectedLayoutId"
           @node-click="onNodeClick"
         />

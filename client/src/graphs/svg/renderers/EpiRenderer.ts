@@ -168,12 +168,12 @@ export default class EpiRenderer extends SVGRenderer {
     });
   }
 
-  hideHighlight (): void {
+  hideSubgraph (): void {
     const chart = (this as any).chart;
     chart.selectAll('.node-ui,.edge').style('opacity', 1);
   }
 
-  showHighlight (subgraph: SubgraphInterface): void {
+  showSubgraph (subgraph: SubgraphInterface): void {
     const chart = (this as any).chart;
     const nodes = subgraph.nodes;
     const edges = subgraph.edges;
