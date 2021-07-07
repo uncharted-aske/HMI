@@ -43,9 +43,10 @@
         <global-graph
           v-if="selectedGraph"
           :data="selectedGraph"
-          :highlight="subgraph"
+          :subgraph="subgraph"
           :layout="selectedLayoutId"
           @node-click="onNodeClick"
+          @background-click="onBackgroundClick"
         />
       </div>
     </div>
@@ -336,6 +337,10 @@
       //   this.getRelatedParameters(textDefinition);
       //   this.searchCosmos(textDefinition);
       // }
+    }
+
+    onBackgroundClick ():void {
+      this.isOpenDrilldown = false;
     }
 
     async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
