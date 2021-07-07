@@ -82,6 +82,7 @@
         } else {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
+          
           this.renderer.clearSelections();
           this.renderer.selectNode(node);
           this.$emit('node-click', node.datum().data);
@@ -104,6 +105,7 @@
       this.renderer.setCallback('backgroundClick', () => {
         this.selectedNode = '';
         this.renderer.clearSelections();
+        this.$emit('background-click');
       });
 
       this.refresh();
