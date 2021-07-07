@@ -53,10 +53,7 @@
   export default class MetadataPane extends Vue {
     @Prop({ default: null }) data: any[];
 
-    /** Clean the metadata to match our expected format.
-     * TODO: This is a temporary solution and should be replaced with
-     * a proper formatter when DONU is fully implemented.
-     */
+    /** Clean the metadata to match our expected format. */
     get metadata () : GroMET.CodeSpanReference[] {
       if (!this.data) return [];
       const cleanMetadata = this.data.map(datum => {
