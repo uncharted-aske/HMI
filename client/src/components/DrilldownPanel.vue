@@ -96,6 +96,8 @@
 
 .panel-body {
   margin-top: 5px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .nav-link.active {
