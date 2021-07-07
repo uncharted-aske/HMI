@@ -19,15 +19,13 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
-.collapsible-container {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
+<style scoped>
+  .collapsible-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
 </style>

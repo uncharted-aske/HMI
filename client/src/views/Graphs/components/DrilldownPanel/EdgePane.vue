@@ -76,19 +76,18 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
+<style scoped>
+  ul {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
 
- ul{
-   list-style-type: none;
-   margin-left: 0;
-   padding-left: 0;
-    li {
-      padding: 4px 8px;
-      border: var(--border);
-      cursor: pointer;
-    }
- }
+  li {
+    border: var(--border);
+    cursor: pointer;
+    padding: 4px 8px;
+  }
 
   .emphasis {
     font-weight: bold;

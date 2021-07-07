@@ -111,34 +111,35 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
+<style scoped>
+  .metadata-item {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    text-align: left;
+    margin-top: 5px;
+    padding: 5px;
+  }
 
-.metadata-item {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
-  text-align: left;
-  margin-top: 5px;
-  padding: 5px;
-  .key {
+  .metadata-item .key {
     font-weight: bold;
     padding-top: 5px;
   }
-}
 
-.snippet-container {
-  height: 100%;
-  overflow: auto;
-  border: var(--border);
-  padding: 4px 8px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  cursor: pointer;
+  .snippet-container {
+    height: 100%;
+    overflow: auto;
+    border: var(--border);
+    padding: 4px 8px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+  }
+
   .snippet-highlights {
     font-size: 14px;
-    em {
-      font-weight: bold;
-    }
   }
-}
+
+  .snippet-highlights em {
+    font-weight: bold;
+  }
 </style>

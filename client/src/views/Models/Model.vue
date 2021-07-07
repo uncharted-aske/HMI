@@ -355,9 +355,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   .left-side-panel {
     flex-shrink: 0;
   }

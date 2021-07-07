@@ -95,16 +95,14 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
-.intersection-graph-container {
-  flex: 1;
-  background-color: var(--bg-graphs);
-  ::v-deep > svg {
-    width: 100%;
-    height: 100%;
+<style scoped>
+  .intersection-graph-container {
+    background-color: var(--bg-graphs);
+    flex: 1;
   }
-}
 
+  .intersection-graph-container::v-deep > svg {
+    height: 100%;
+    width: 100%;
+  }
 </style>

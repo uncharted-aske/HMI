@@ -7,8 +7,17 @@
 .navbar.navbar {
   background-color:var(--bg-primary);
 }
-.navbar.navbar .navbar-brand, .nav-link {
+.navbar.navbar .navbar-brand,
+.navbar.navbar .nav-link {
   color: var(--text-color-light);
+}
+
+.nav-link {
+  color: inherit;
+}
+
+.nav-link:hover {
+  color: var(--selection);
 }
 
 /* Navigation tabs */

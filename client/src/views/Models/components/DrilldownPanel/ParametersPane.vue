@@ -37,7 +37,7 @@
     @Prop({ default: null }) data: any;
     @Prop({ default: null }) related: any;
 
-     get isEmptyData (): boolean {
+    get isEmptyData (): boolean {
       return _.isEmpty(this.data);
     }
 
@@ -51,18 +51,16 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
+<style scoped>
+  .parameters-pane-container {
+    padding: 5px;
+  }
 
-.parameters-pane-container {
-  padding: 5px;
   .parameter-title {
     font-weight: bold;
   }
-}
 
-.related-params {
-  overflow: hidden scroll;
-}
-
+  .related-params {
+    overflow: hidden scroll;
+  }
 </style>

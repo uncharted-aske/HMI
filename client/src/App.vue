@@ -23,7 +23,6 @@
 
 <style lang="scss">
 @import '~bootstrap/dist/css/bootstrap.min';
-@import "styles/aske";
 
 #app {
   background-color: var(--bg-body);
