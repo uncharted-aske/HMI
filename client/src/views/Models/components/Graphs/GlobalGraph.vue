@@ -33,7 +33,6 @@
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
-    selectedNode = '';
 
     @Watch('data')
     dataChanged (): void {
@@ -71,9 +70,8 @@
       });
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
-        const id = node.datum().id;
-        this.selectedNode = id;
         if (node.datum().nodes) {
+          const id = node.datum().id;
           if (node.datum().collapsed === true) {
             this.renderer.expand(id);
           } else {
@@ -103,7 +101,6 @@
       });
 
       this.renderer.setCallback('backgroundClick', () => {
-        this.selectedNode = '';
         this.renderer.clearSelections();
         this.$emit('background-click');
       });
