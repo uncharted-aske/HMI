@@ -123,7 +123,7 @@
   font-weight: bold;
 }
 
-.dropdown-settings {
+.dropdown-settings.dropdown-settings {
   align-items: center;
   display: flex;
   height: var(--secondary-bar-width);
