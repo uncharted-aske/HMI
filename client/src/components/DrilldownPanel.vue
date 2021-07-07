@@ -101,7 +101,7 @@
 
 .nav-link.active {
   cursor: default;
-  border-bottom: 3px solid $selection;
+  border-bottom: 3px solid var(--selection);
 }
 .nav-link:not(.active) {
   cursor: pointer;

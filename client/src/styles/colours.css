@@ -12,6 +12,8 @@
   --selection-dark: var(--nord10);
   --selection-highlight: #006AEB;
   --selection-highlight-dark: var(--nord9);
+  --muted: #B6C3CE;
+  --muted-highlight: #86B3D0;
 
   /**
    * Text
@@ -30,7 +32,4 @@
    * Others
    */
   --curation-correct: #7ca25c;
-
-  --muted: #B6C3CE;
-  --muted-highlight: #86B3D0;
 }

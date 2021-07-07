@@ -230,8 +230,8 @@
   }
 
   .view-container::v-deep .btn-primary.blue {
-    background: $muted-highlight;
-    border-color: $muted-highlight;
+    background: var(--muted-highlight);
+    border-color: var(--muted-highlight);
   }
 
   .search-col {

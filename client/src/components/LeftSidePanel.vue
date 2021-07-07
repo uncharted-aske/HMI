@@ -103,7 +103,7 @@
       padding: 5px;
       box-shadow: 0 -1px 0 #e5e5e5, 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
       &:hover {
-        background-color: $muted-highlight;
+        background-color: var(--muted-highlight);
       }
     }
 
@@ -111,7 +111,7 @@
 
   .nav-link.active {
     cursor: default;
-    border-bottom: 3px solid $selection;
+    border-bottom: 3px solid var(--selection);
   }
   .nav-link:not(.active) {
     cursor: pointer;

@@ -156,7 +156,7 @@
     }
 
     &.highlight {
-      border-color: $selection;
+      border-color: var(--selection);
     }
   }
 </style>
