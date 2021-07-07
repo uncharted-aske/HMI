@@ -4,4 +4,14 @@
    */
   --colours-nodes-default: #ECEFF4;
   --colours-nodes-other: #647EA9;
+
+  --curation-correct: #7ca25c;
+
+  --muted: #B6C3CE;
+  --muted-highlight: #86B3D0;
+
+  --selection: var(--nord13);
+  --selection-dark: var(--nord10);
+  --selection-highlight: #006AEB;
+  --selection-highlight-dark: var(--nord9);
 }

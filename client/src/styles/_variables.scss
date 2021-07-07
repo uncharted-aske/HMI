@@ -1,28 +1,27 @@
 // Colors (based on https://material.io/design/color/the-color-system.html#tools-for-picking-colors)
-@import "nord";
 
 $bg-graphs: #252a33;
 
-$bg-primary: $nord0;
-$bg-secondary: $nord1;
-$bg-tertiary: $nord2;
-$bg-body: $nord3;
+$bg-primary: var(--nord0);
+$bg-secondary: var(--nord1);
+$bg-tertiary: var(--nord2);
+$bg-body: var(--nord3);
 
 $border: lightgray;
 
-$drilldown-header: $nord4;
+$drilldown-header: var(--nord4);
 
-$text-color-light: $nord6;
-$text-color-dark: $nord1;
-$text-color-highlight: $nord12;
+$text-color-light: var(--nord6);
+$text-color-dark: var(--nord1);
+$text-color-highlight: var(--nord12);
 $text-background-color-hovered: rgba(38,50,56, 0.5);
-$icon-color: $nord4;
-$icon-color-dark: $nord1;
+$icon-color: var(--nord4);
+$icon-color-dark: var(--nord1);
 
-$selection: $nord13;
-$selection-dark: $nord10;
+$selection: var(--nord13);
+$selection-dark: var(--nord10);
 $selection-highlight: #006AEB;
-$selection-highlight-dark: $nord9;
+$selection-highlight-dark: var(--nord9);
 
 $muted: #B6C3CE;
 $muted-highlight: #86B3D0;

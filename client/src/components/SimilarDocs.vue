@@ -154,7 +154,7 @@
 }
 
 .artifact {
-  background-color: $nord4;
+  background-color: var(--nord4);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

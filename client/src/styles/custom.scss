@@ -25,7 +25,7 @@ body {
 }
 .search-bar-container {
   flex: 1;
-  background-color: $nord3;
+  background-color: var(--nord3);
   margin: 5px;
 }
 
