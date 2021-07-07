@@ -71,22 +71,20 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import '@/styles/variables';
-
+<style scoped>
   * {
     margin: 0;
   }
 
   .preview-img {
-    width: 100%;
+    background-color: #EAEBEC;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom: 10px;
     height: 0;
     padding-top: 56%;
-    margin-bottom: 10px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: #EAEBEC;
+    width: 100%;
   }
 
   .title {
@@ -95,68 +93,66 @@
   }
 
   .subtitle {
+    background-color: var(--bg-body);
+    color: var(--text-color-light);
     flex: 1;
     font-size: 12px;
-    color: var(--text-color-light);
-    background-color: var(--bg-body);
     font-weight: normal;
+    margin-top: 10px;
     min-height: 0;
     overflow-x: hidden;
     overflow-y: scroll;
-    margin-top: 10px;
   }
 
   .icon {
-    color: $icon-color;
+    color: var(--icon-color);
   }
 
   .card {
-    min-width: 233px;
-    width: 350px;
-    padding: 8px;
     max-height: 40vh;
     min-height: 300px;
+    min-width: 233px;
+    padding: 8px;
+    width: 350px;
 
     background-color: var(--bg-body);
     border: transparent solid 2px;
-    color: var(--text-color-light);
-    position: relative;
     border-radius: 3px;
-    transition: all 0.15s;
-    transform: none;
+    color: var(--text-color-light);
     display: flex;
     flex-direction: column;
+    position: relative;
+    transform: none;
+    transition: all 0.15s;
+  }
+  /*
+    Animating the opacity on a pseudo element drop-shadow
+    is more performant than animating the colour of a box-shadow
+    property directly.
+  */
+  .card::after {
+    border-radius: 3px;
+    bottom: 0;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    content: '';
+    left: 0;
+    opacity: .66;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    transition: all 0.15s;
+    top: 0;
+  }
 
-    /*
-      Animating the opacity on a pseudo element drop-shadow
-      is more performant than animating the colour of a box-shadow
-      property directly.
-    */
-    &::after {
-      content: '';
-      position: absolute;
-      opacity: .66;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-      transition: all 0.15s;
-      border-radius: 3px;
-      pointer-events: none;
-    }
+  .card:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+  }
+  .card:hover::after {
+    opacity: 1;
+  }
 
-    &:hover {
-      cursor: pointer;
-      transform: translateY(-2px);
-
-      &::after {
-        opacity: 1;
-      }
-    }
-
-    &.highlight {
-      border-color: var(--selection);
-    }
+  .card.highlight {
+    border-color: var(--selection);
   }
 </style>

@@ -108,10 +108,8 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
-// Needed for the Loader component.
+<style scoped>
+/* Needed for the Loader component. */
 .similar-documents.loading {
   min-height: 6rem;
   position: relative;
@@ -126,11 +124,11 @@
   --list-height: 15em;
   --list-gap: 1.25em;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr; // 3 documents per row
-  height: var(--list-height); // Display one row at the time
+  grid-template-columns: 1fr 1fr 1fr; /* 3 documents per row */
+  height: var(--list-height); /* Display one row at the time */
   list-style: none;
   margin: 0;
-  overflow-y: auto; // Scrollbar for more that 3 documents lists
+  overflow-y: auto; /* Scrollbar for more that 3 documents lists */
   padding: 0;
 }
 
@@ -158,7 +156,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  border: $icon-color solid 1px;
+  border: 1px solid var(--icon-color);
   border-radius: 10px;
   height: var(--artifact-height);
   justify-self: center;

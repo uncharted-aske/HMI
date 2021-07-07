@@ -34,10 +34,8 @@
   /**
    * UI
    */
+  --icon-color: var(--nord4);
+  --icon-color-dark: var(--nord1);
   --drilldown-header: var(--nord4);
-
-  /**
-   * Others
-   */
   --curation-correct: #7ca25c;
 }

@@ -20,27 +20,24 @@
 
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
+<style scoped>
 .close-button {
-  z-index: 10;
-  font-size: 16px;
-  width: 26px;
-  height: 26px;
-  display: flex;
   align-items: center;
-  justify-content: center;
   border-radius: 3px;
-  color: $icon-color;
+  color: var(--icon-color);
   cursor: pointer;
-
-  &:hover {
-    background-color: rgba(38, 50, 56, 0.1);
-  }
-
+  display: flex;
+  font-size: 16px;
+  height: 26px;
+  justify-content: center;
   position: absolute;
-  top: 12px;
   right: 12px;
+  top: 12px;
+  width: 26px;
+  z-index: 10;
+}
+
+.close-button:hover {
+  background-color: rgba(38, 50, 56, 0.1);
 }
 </style>

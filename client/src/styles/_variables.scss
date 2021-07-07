@@ -1,16 +1,9 @@
-$drilldown-header: var(--nord4);
-
-$icon-color: var(--nord4);
-$icon-color-dark: var(--nord1);
-
 // Main navbar height
 $navbar-outer-height: 56px;
 // 100% height - navbar
 $content-full-height: calc(100vh - #{$navbar-outer-height});
 // Secondary bars width
 $secondary-bar-width: 50px;
-
-$curation-correct: #7ca25c;
 
 $z-index-order: (
   resizable-grid: 0,

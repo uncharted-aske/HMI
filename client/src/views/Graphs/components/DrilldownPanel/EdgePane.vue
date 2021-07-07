@@ -95,6 +95,6 @@
   }
 
   .fa-check-circle {
-    color: $curation-correct;
+    color: var(--curation-correct);
   }
 </style>
