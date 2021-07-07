@@ -1,144 +1,110 @@
 <template>
-  <collapsible-container :isEmpty="isEmptyMetadata">
-    <collapsible-item slot="item">
-      <div slot="title">Type</div>
-      <div slot="content">
-        <div class="metadata-item">
-            {{getType}}
-        </div>
-      </div>
-    </collapsible-item>
-
-    <collapsible-item slot="item">
-      <div slot="title">Provenance</div>
-      <div slot="content">
-        <div class="metadata-item">
-          <div v-for="(value, key) in getProvenance" :key="key">
-            <div class="key">{{key | capitalize-first-letter-formatter}}</div>
-            <div v-if="key !== 'sources'">{{value}}</div>
-            <div v-else>
-              <div v-for="(source, key) in value[0]" :key="key">
-                  {{source}}
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </collapsible-item>
-
-    <collapsible-item slot="item">
-      <div slot="title">Attributes</div>
-      <div slot="content">
-        <div class="metadata-item">
-          <div v-for="(item, index) in getAttributes" :key="index">
-            <div v-for="(value, key) in item" :key="key">
-            <div class="key">{{key | capitalize-first-letter-formatter}}</div>
-              {{value}}
-            </div>
-          </div>
-        </div>
-      </div>
-    </collapsible-item>
-
-    <collapsible-item slot="item" class="flex-grow-1">
-      <div slot="title">Text Snippets</div>
-      <div slot="content" class="h-100 position-absolute">
-        <div v-for="(item, index) in getKnowledge" :key="index" class="snippet-container" @click="showMoreHandler(item.doi)">
-          <div class="snippet-title">
-            <a target="_blank" :href="item.URL">{{item.title}}</a>
-          </div>
-          <span v-for="(snippet, index) in item.highlight" :key="index" v-html="snippet" class="snippet-highlights"/>
-        </div>
-      </div>
-    </collapsible-item>
-
-    <div slot="empty" class="alert alert-info" role="alert">
+  <div class="metadata-list">
+    <div v-if="isEmptyMetadata" class="alert alert-info">
       No metadata at the moment
     </div>
-  </collapsible-container>
+
+    <details
+      class="metadata" open
+      v-else
+      v-for="(datum, index) in metadata" :key="index"
+    >
+      <template v-if="isTypeCodeSpanReference(datum)">
+        <summary :title="datum.uid">Code Reference</summary>
+        <div class="metadata-content">
+          <h6>Type</h6>
+          <p>{{ datum.code_type | capitalize-formatter }}</p>
+          <h6>File</h6>
+          <p>
+            <a :href="datum.file_id">{{ datum.file_id }}</a><br>
+            {{ sourceFilePosition(datum) }}
+          </p>
+        </div>
+      </template>
+
+      <aside class="metadata-provenance">
+        {{ datum.provenance.method }}
+        <time :datetime="datum.provenance.timestamp">
+          {{ provenanceDate(datum.provenance.timestamp) }}
+        </time>
+      </aside>
+    </details>
+  </div>
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
-  import Component from 'vue-class-component';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
-  import CollapsibleContainer from '@/components/Collapsible/CollapsibleContainer.vue';
-  import CollapsibleItem from '@/components/Collapsible/CollapsibleItem.vue';
-  import { CosmosTextSnippet } from '@/types/typesCosmos';
+  import * as GroMET from '@/types/typesGroMEt';
+  import { formatFullDateTime } from '@/utils/DateTimeUtil';
 
-  const components = {
-    CollapsibleContainer,
-    CollapsibleItem,
+  const defaultCodeSpanReference: any = {
+    code_type: GroMET.CodeType.Identifier,
+    file_id: null,
+    line_begin: null,
+    line_end: null,
+    col_begin: null,
+    col_end: null,
   };
 
-  @Component({ components })
+  @Component
   export default class MetadataPane extends Vue {
-    @Prop({ default: null }) data: any;
+    @Prop({ default: null }) data: any[];
 
-    showModal: boolean = false;
-    dataLoading = false;
+    /** Clean the metadata to match our expected format.
+     * TODO: This is a temporary solution and should be replaced with
+     * a proper formatter when DONU is fully implemented.
+     */
+    get metadata () : GroMET.CodeSpanReference[] {
+      if (!this.data) return [];
+      const cleanMetadata = this.data.map(datum => {
+        return { ...defaultCodeSpanReference, ...datum };
+      });
+      return cleanMetadata;
+    }
 
     get isEmptyMetadata (): boolean {
-      return _.isEmpty(this.data);
+      return this.metadata.length === 0;
     }
 
-    get getType (): string {
-      return !_.isEmpty(this.data) && this.data.type;
+    isTypeCodeSpanReference (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadateType.CodeSpanReference;
     }
 
-    get getProvenance (): any {
-      return !_.isEmpty(this.data) && this.data.provenance;
-    }
-
-    get getAttributes (): any {
-      return !_.isEmpty(this.data) && this.data.attributes;
-    }
-
-    get getTextDefinition (): string {
-      return (!_.isEmpty(this.data) && !_.isEmpty(this.data.attributes[0].text_definition)) && this.data.attributes[0].text_definition;
-    }
-
-    get getKnowledge (): CosmosTextSnippet[] {
-      return !_.isEmpty(this.data) && this.data.knowledge && this.data.knowledge.map(d => _.pick(d, ['doi', 'title', 'URL', 'highlight', 'doi']));
+    provenanceDate (timestamp: string): string {
+      return formatFullDateTime(timestamp);
     }
 
     showMoreHandler (doi: string): void {
       this.$emit('open-modal', doi);
     }
-  }
-</script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
+    sourceFilePosition (datum: GroMET.CodeSpanReference): string {
+      let lines: string, columns: string;
 
-.metadata-item {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
-  text-align: left;
-  margin-top: 5px;
-  padding: 5px;
-  .key {
-    font-weight: bold;
-    padding-top: 5px;
-  }
-}
+      if (datum.line_begin) {
+        lines = `Line #${datum.line_begin}`;
+      }
 
-.snippet-container {
-  height: 100%;
-  overflow: auto;
-  border: 1px solid $border;
-  padding: 4px 8px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  cursor: pointer;
-  .snippet-highlights {
-    font-size: 14px;
-    em {
-      font-weight: bold;
+      if (datum.line_end) {
+        lines = lines
+          ? `Lines #${datum.line_begin}-${datum.line_end}`
+          : `Line #${datum.line_end}`;
+      }
+
+      if (datum.col_begin) {
+        columns = `Column #${datum.col_begin}`;
+      }
+
+      if (datum.col_end) {
+        columns = columns
+          ? `Columns #${datum.col_begin}-${datum.col_end}`
+          : `Column #${datum.col_end}`;
+      }
+
+      return `${lines} ${columns}`.trim();
     }
   }
-}
-</style>
+</script>
