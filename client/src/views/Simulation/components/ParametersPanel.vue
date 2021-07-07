@@ -241,7 +241,7 @@
   }
 
   .parameters {
-    background-color: $bg-graphs;
+    background-color: var(--bg-graphs);
     flex-grow: 1;
     position: relative;
   }

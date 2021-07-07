@@ -121,16 +121,15 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
+<style scoped>
 .global-graph-container {
+  background-color: var(--bg-graphs);
   flex: 1;
-  background-color: $bg-graphs;
-  ::v-deep > svg {
-    width: 100%;
-    height: 100%;
-  }
+}
+
+.global-graph-container::v-deep > svg {
+  height: 100%;
+  width: 100%;
 }
 
 </style>

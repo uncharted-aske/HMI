@@ -174,7 +174,7 @@
 
   .scatterplot-chart-container {
     flex: 1;
-    background-color: $bg-graphs;
+    background-color: var(--bg-graphs);
   }
 
   .variable .btn-group {

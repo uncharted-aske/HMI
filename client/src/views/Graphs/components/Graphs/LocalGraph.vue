@@ -102,7 +102,7 @@
 
 .local-graph-container {
   flex: 1;
-  background-color: $bg-graphs;
+  background-color: var(--bg-graphs);
 
   ::v-deep > svg {
     width: 100%;
