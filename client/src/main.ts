@@ -36,6 +36,7 @@ import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterForma
 import UnderscoreRemoverFormatter from './filters/UnderscoreRemoverFormatter';
 import RemoveBracesFormatter from './filters/RemoveBracesFormatter';
 import PrecisionFormatter from './filters/PrecisionFormatter';
+import ArrayToList from './filters/ArrayToListFormatter';
 
 import App from './App.vue';
 import Router from './router';
@@ -86,6 +87,7 @@ Vue.filter('CapitalizeFirstLetterFormatter', CapitalizeFirstLetterFormatter);
 Vue.filter('UnderscoreRemoverFormatter', UnderscoreRemoverFormatter);
 Vue.filter('RemoveBracesFormatter', RemoveBracesFormatter);
 Vue.filter('PrecisionFormatter', PrecisionFormatter);
+Vue.filter('ArrayToList', ArrayToList);
 
 async function main (): Promise<void> {
   const app = new Vue({

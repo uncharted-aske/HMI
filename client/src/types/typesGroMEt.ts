@@ -1,36 +1,42 @@
+/**
+ * Define Types used for GroMET
+ */
 
 type Provenance = {
-    metadataType: string,
-    method: string,
-    timestamp: Date,
+  metadata_type: string, // eslint-disable-line
+  method: string,
+  timestamp: string,
 };
 
 type FileId = {
-    name: string,
-    path: string,
-    uid: string,
+  name: string,
+  path: string,
+  uid: string,
 }
 
-export interface ModelInterface {
-    uid: string,
-    metadataType: string,
-    initialConditions: Record<number, string>[],
-    parameters: Record<number, string>[],
-    variables: Record<number, string>[],
-    provenance: Provenance,
+export enum MetadateType {
+  ModelInterface = 'ModelInterface',
+  CodeCollectionReference = 'CodeCollectionReference',
+  TextualDocumentReferenceSet = 'TextualDocumentReferenceSet',
 }
 
-export interface CodeCollectionInterface {
-    uid: string,
-    provenance: Provenance,
-    metadataType: string,
-    globalReferenceId: {id: string, type: string},
-    fileIds: FileId[],
+export interface Metadata {
+  metadata_type: MetadateType, // eslint-disable-line
+  provenance: Provenance,
+  uid: string,
 }
 
-export interface TextualDocumentReferenceSet {
-    uid: string,
-    provenance: Provenance,
-    metadataType: string,
-    documents: any,
+export interface ModelInterface extends Metadata {
+  initial_conditions: Record<number, string>[], // eslint-disable-line
+  parameters: Record<number, string>[],
+  variables: Record<number, string>[],
+}
+
+export interface CodeCollectionInterface extends Metadata {
+  fileIds: FileId[],
+  globalReferenceId: {id: string, type: string},
+}
+
+export interface TextualDocumentReferenceSet extends Metadata {
+  documents: any,
 }

@@ -1,17 +1,36 @@
 :root {
-  /* Colours for graphs
-   * See /graphs/svg/encodings.ts
+  /**
+   * Colors for graphs
    */
   --colours-nodes-default: #ECEFF4;
   --colours-nodes-other: #647EA9;
 
-  --curation-correct: #7ca25c;
-
-  --muted: #B6C3CE;
-  --muted-highlight: #86B3D0;
-
+  /**
+   * Selection
+   */
   --selection: var(--nord13);
   --selection-dark: var(--nord10);
   --selection-highlight: #006AEB;
   --selection-highlight-dark: var(--nord9);
+
+  /**
+   * Text
+   */
+   --text-color-light: var(--nord6);
+   --text-color-dark: var(--nord1);
+   --text-color-highlight: var(--nord12);
+
+  /**
+   * UI
+   */
+  --border: 1px solid lightgray;
+  --drilldown-header: var(--nord4);
+
+  /**
+   * Others
+   */
+  --curation-correct: #7ca25c;
+
+  --muted: #B6C3CE;
+  --muted-highlight: #86B3D0;
 }
