@@ -4,6 +4,8 @@
 </template>
 
 <script lang="ts">
+  import _ from 'lodash';
+
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop, Watch } from 'vue-property-decorator';
@@ -16,7 +18,7 @@
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
   import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
-  import { calculateNodeNeighborhood, constructRootNode } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse } from '@/graphs/svg/util.js';
   import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
@@ -108,8 +110,9 @@
       this.refresh();
     }
 
-    refresh (): Promise<void> {
+    async refresh (): Promise<void> {
       if (!this.data) return;
+      let data = _.cloneDeep(this.data);
 
       // Layout selection
       if (this.layout === GraphLayoutInterfaceType.elk) {
@@ -118,12 +121,21 @@
         this.renderer.adapter = new DagreAdapter(DEFAULT_RENDERING_OPTIONS);
       }
 
-      const nodesHierarchy = hierarchyFn(this.data?.nodes); // Transform the flat nodes structure into a hierarchical one
+      // Transform the flat nodes structure into a hierarchical one
+      const nodesHierarchy = hierarchyFn(data.nodes);
       constructRootNode(nodesHierarchy); // Parse the data to a format that the graph renderer understands
-      const data = { nodes: [nodesHierarchy], edges: this.data?.edges };
+      data = { nodes: [nodesHierarchy], edges: data.edges };
 
       this.renderer.setData(data);
-      return this.renderer.render();
+      await this.renderer.render();
+
+      // Collapse top-level boxes by default
+      // HACK: The collapse/expand functions are asynchronous and trying to execute them all at once
+      // seems to create problems with the tracker.
+      const collapsedIds = calcNodesToCollapse(this.layout, this.renderer.layout);
+      if (collapsedIds.length > 0) {
+        collapsedIds.forEach((nextId, i) => setTimeout(() => this.renderer.collapse(nextId), i * 500));
+      }
     }
   }
 </script>

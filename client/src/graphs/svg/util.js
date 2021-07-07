@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { Colors, NodeTypes, EdgeTypes } from '@/graphs/svg/encodings.ts';
+import { GraphLayoutInterfaceType } from '@/types/typesGraphs.ts';
 
 /**
  * Recursively traverse a graph that looks like
@@ -22,10 +23,7 @@ import { Colors, NodeTypes, EdgeTypes } from '@/graphs/svg/encodings.ts';
 export const traverse = (root, callBackFn, depth = 0) => {
   callBackFn(root, depth);
   if (root.nodes) {
-    const d = depth + 1;
-    for (let i = 0; i < root.nodes.length; i++) {
-      traverse(root.nodes[i], callBackFn, d);
-    }
+    root.nodes?.forEach(node => traverse(node, callBackFn, depth + 1));
   }
 };
 
@@ -204,4 +202,19 @@ export const calcEdgeControlBackground = (edge) => {
     return Colors.CURATION.PARTIAL;
   }
   return Colors.CURATION.UNCURATED;
+};
+
+/**
+  * Collapse top-level boxes by default for scalability.
+  * Criteria: parent nodes and node depth = 1 (dagre) 2 (elk)
+*/
+export const calcNodesToCollapse = (layoutType, root) => {
+  const collapsedIds = [];
+  traverse(root, (node) => {
+    const depthLevel = layoutType === GraphLayoutInterfaceType.elk ? 2 : 1;
+    if (node.depth === depthLevel && node.nodes) {
+      collapsedIds.push(node.id);
+    }
+  });
+  return collapsedIds;
 };
