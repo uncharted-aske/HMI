@@ -134,20 +134,7 @@
       // seems to create problems with the tracker.
       const collapsedIds = calcNodesToCollapse(this.layout, this.renderer.layout);
       if (collapsedIds.length > 0) {
-        const collapseNodeTimeOut = (nextID, renderer) => {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              renderer.collapse(nextID);
-              resolve();
-            }, 500);
-          });
-        };
-
-        collapsedIds.reduce((accumulatorPromise, nextID) => {
-          return accumulatorPromise.then(() => {
-            return collapseNodeTimeOut(nextID, this.renderer);
-          });
-        }, Promise.resolve());
+        collapsedIds.forEach((nextId, i) => setTimeout(() => this.renderer.collapse(nextId), i * 500));
       }
     }
   }
