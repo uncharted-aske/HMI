@@ -24,9 +24,7 @@ export const traverse = (root, callBackFn, depth = 0) => {
   callBackFn(root, depth);
   if (root.nodes) {
     const d = depth + 1;
-    for (let i = 0; i < root.nodes?.length; i++) {
-      traverse(root.nodes[i], callBackFn, d);
-    }
+    root.nodes?.forEach(node => traverse(node, callBackFn, depth + 1));
   }
 };
 

@@ -16,7 +16,7 @@ export default class DagreAdapter {
         node.height = this.nodeHeight;
 
         // Special case for parameters
-        if (node.data && node.data.role?.includes('parameter')) {
+        if (node?.data.role?.includes('parameter')) {
           node.width = this.parameterNodeSize || 30;
           node.height = this.parameterNodeSize || 30;
         }
