@@ -23,7 +23,6 @@ import { GraphLayoutInterfaceType } from '@/types/typesGraphs.ts';
 export const traverse = (root, callBackFn, depth = 0) => {
   callBackFn(root, depth);
   if (root.nodes) {
-    const d = depth + 1;
     root.nodes?.forEach(node => traverse(node, callBackFn, depth + 1));
   }
 };
