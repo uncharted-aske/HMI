@@ -325,18 +325,6 @@
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownMetadata = node.metadata;
-
-      // const nodeMetadata = node.metadata;
-      // if (nodeMetadata) {
-      //   const nodeKnowledge = { knowledge: bakedData.success.data }; // To show some text snippets
-      //   this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
-
-      //   // This probably will need to be refactored since we don't want to do all the queries at the same time, just on demand given the active tab
-      //   const textDefinition = nodeMetadata.attributes[0].text_definition;
-      //   this.formatParametersData();
-      //   this.getRelatedParameters(textDefinition);
-      //   this.searchCosmos(textDefinition);
-      // }
     }
 
     onBackgroundClick ():void {

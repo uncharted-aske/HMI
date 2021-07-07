@@ -35,6 +35,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import CapitalizeFirstLetterFormatter from './filters/CapitalizeFirstLetterFormatter';
 import UnderscoreRemoverFormatter from './filters/UnderscoreRemoverFormatter';
 import RemoveBracesFormatter from './filters/RemoveBracesFormatter';
+import CapitalizeFormatter from './filters/CapitalizeFormatter';
 import PrecisionFormatter from './filters/PrecisionFormatter';
 import ArrayToList from './filters/ArrayToListFormatter';
 
@@ -86,6 +87,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.filter('CapitalizeFirstLetterFormatter', CapitalizeFirstLetterFormatter);
 Vue.filter('UnderscoreRemoverFormatter', UnderscoreRemoverFormatter);
 Vue.filter('RemoveBracesFormatter', RemoveBracesFormatter);
+Vue.filter('CapitalizeFormatter', CapitalizeFormatter);
 Vue.filter('PrecisionFormatter', PrecisionFormatter);
 Vue.filter('ArrayToList', ArrayToList);
 
