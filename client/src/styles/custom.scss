@@ -7,7 +7,7 @@ body {
 }
 
 .view-container {
-  background-color: $bg-body;
+  background-color: var(--bg-body);
   display: flex;
   height: 100%;
   overflow: hidden;
@@ -20,7 +20,7 @@ body {
 
 .search-row {
   display: flex;
-  background-color: $bg-secondary;
+  background-color: var(--bg-secondary);
 
 }
 .search-bar-container {

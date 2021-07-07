@@ -1,5 +1,13 @@
 :root {
   /**
+   * Background
+   */
+  --bg-primary: var(--nord0);
+  --bg-secondary: var(--nord1);
+  --bg-tertiary: var(--nord2);
+  --bg-body: var(--nord3);
+
+  /**
    * Colors for graphs
    */
   --bg-graphs: #252a33;

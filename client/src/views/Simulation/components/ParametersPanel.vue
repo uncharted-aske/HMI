@@ -227,9 +227,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   .simulation-parameters-panel {
     color: white;
     display: flex;
@@ -283,7 +281,7 @@
   }
 
   .parameter input {
-    background-color: $bg-body;
+    background-color: var(--bg-body);
     border: none;
     border-radius: 3px;
     color: inherit;
@@ -296,18 +294,18 @@
 
   .parameter .btn-group {
     grid-area: action;
+  }
 
-    button {
-      padding-bottom: 0;
-      padding-top: 0;
-    }
+  .parameter .btn-group button {
+    padding-bottom: 0;
+    padding-top: 0;
   }
 
   .parameter.hidden {
     opacity: 0.5;
   }
 </style>
-<style lang="scss">
+<style>
   /* For SVG you cannot scope the <style> */
 
   .parameters-graph .axis {

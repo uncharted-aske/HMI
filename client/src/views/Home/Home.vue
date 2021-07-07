@@ -83,13 +83,11 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   main {
     --gap: 2rem;
     align-content: center;
-    color: $text-color-light;
+    color: var(--text-color-light);
     display: flex;
     flex-direction: column;
     gap: var(--gap);
@@ -113,50 +111,50 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap);
+  }
 
-    p:first-of-type {
-      flex-shrink: 0;
-      min-height: 3rem;
-    }
+  nav section p:first-of-type {
+    flex-shrink: 0;
+    min-height: 3rem;
   }
 
   .nav-view {
     --radius: 3px;
-    background-color: $bg-primary;
+    background-color: var(--bg-primary);
     color: inherit;
     display: block;
     flex-grow: 1;
     border-radius: var(--radius);
     text-decoration: none;
     will-change: transform;
+  }
 
-    &:hover {
-      cursor: pointer;
-      transform: translateY(-2px);
-    }
+  .nav-view:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+  }
 
-    & > * {
-      padding: var(--gap);
-    }
+  .nav-view > * {
+    padding: var(--gap);
+  }
 
-    p:last-of-type {
-      margin-bottom: 0;
-    }
+  .nav-view p:last-of-type {
+    margin-bottom: 0;
+  }
 
-    strong {
-      display: block;
-      font-size: 4rem;
-      line-height: 1;
-      margin-top: .25em;
-    }
+  .nav-view strong {
+    display: block;
+    font-size: 4rem;
+    line-height: 1;
+    margin-top: .25em;
+  }
 
-    h2 {
-      background-color: $bg-secondary;
-      border-radius: var(--radius) var(--radius) 0 0;
-      font-size: 1.5em;
-      font-weight: normal;
-      line-height: 1;
-      margin: 0;
-    }
+  .nav-view h2 {
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius) var(--radius) 0 0;
+    font-size: 1.5em;
+    font-weight: normal;
+    line-height: 1;
+    margin: 0;
   }
 </style>
