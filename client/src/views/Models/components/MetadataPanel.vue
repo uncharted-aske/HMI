@@ -80,7 +80,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .metadata-panel {
     display: flex;
     flex-direction: column;
@@ -88,16 +88,14 @@
     padding: 1em 0;
   }
 
-  .metadata-panel > details {
-    & > *:not(summary, .provenance) {
-      padding-left: .5em;
-      padding-right: .5em;
-    }
+  .metadata-panel > details > *:not(summary, .provenance) {
+    padding-left: .5em;
+    padding-right: .5em;
+  }
 
-    & > summary {
-      background-color: var(--drilldown-header);
-      font-weight: bold;
-    }
+  .metadata-panel > details > summary {
+    background-color: var(--drilldown-header);
+    font-weight: bold;
   }
 
   details {
@@ -124,18 +122,18 @@
     font-style: italic;
     padding: .5rem;
     text-align: right;
-
-    time { display: block; }
   }
+
+  .provenance time { display: block; }
 
   details > span {
     display: block;
     font-weight: bold;
     margin: 0;
+  }
 
-    &:not(:first-of-type) {
-      margin-top: 1em;
-    }
+  details > span:not(:first-of-type) {
+    margin-top: 1em;
   }
 
   ol {

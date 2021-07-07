@@ -67,14 +67,15 @@
   }
 </script>
 
-<style lang="scss" scoped>
-.image {
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.related-docs {
-  display: flex;
-  justify-content: space-between;
-}
+<style scoped>
+  .image {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .related-docs {
+    display: flex;
+    justify-content: space-between;
+  }
 </style>

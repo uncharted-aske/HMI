@@ -101,7 +101,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .image {
   background-size: contain;
   background-repeat: no-repeat;

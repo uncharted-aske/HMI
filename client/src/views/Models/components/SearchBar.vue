@@ -50,13 +50,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/overrides";
-
-</style>
-
 <style lang="scss">
 // Note: Scoped imports not attached to rendered elements
 @import "~@uncharted.software/lex/dist/lex.scss";
-
 </style>
