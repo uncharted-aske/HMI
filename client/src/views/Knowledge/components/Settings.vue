@@ -30,33 +30,32 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
+<style scoped>
 .settings-container {
-  position: relative;
-  display: flex;
   align-items: center;
+  display: flex;
   height: 100%;
   padding: 2px 5px;
-  .btn {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    .view-name {
-      font-weight: bold;
-      margin: 5px;
-    }
-  }
+  position: relative;
+}
+.settings-container .btn {
+  align-items: center;
+  display: flex;
+  height: 100%;
+}
+
+.settings-container .btn .view-name {
+  font-weight: bold;
+  margin: 5px;
 }
 
 .dropdown-settings {
-  display: flex;
   align-items: center;
-  position: absolute;
-  top: calc(#{$secondary-bar-width} - 15px);
-  height: calc(#{$secondary-bar-width});
+  display: flex;
+  height: var(--secondary-bar-width);
   padding: 10px;
+  position: absolute;
+  top: calc(var(--secondary-bar-width) - 15px);
 }
 
 </style>

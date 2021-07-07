@@ -1,3 +1,19 @@
 :root {
   --border: 1px solid lightgray;
+
+  /**
+   * z-index
+   */
+  --z-index--resizable-grid: 0;
+  --z-index--hierarchy-slider: 500;
+  --z-index--dropdown: 500;
+  --z-index--side-panel: 600;
+  --z-index--modal:1200;
+
+  /**
+   * Dimensions
+   */
+  --navbar-outer-height: 56px; /* Main navbar height */
+  --content-full-height: calc(100vh - var(--navbar-outer-height));
+  --secondary-bar-width: 50px; /* Secondary bar width */
 }

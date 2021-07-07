@@ -1,4 +1,3 @@
-@import "variables";
 
 html,
 body {
@@ -14,7 +13,7 @@ body {
   position: relative;
 
   .hasNavBar & {
-    height: $content-full-height;
+    height: var(--content-full-height);
   }
 }
 

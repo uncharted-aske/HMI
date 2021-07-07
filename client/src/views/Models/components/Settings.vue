@@ -110,29 +110,28 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
+<style scoped>
 .settings-container {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
   position: relative;
+}
 
-  .setting-name {
-    font-weight: bold;
-  }
+.settings-container .setting-name {
+  font-weight: bold;
 }
 
 .dropdown-settings {
   align-items: center;
   display: flex;
-  height: calc(#{$secondary-bar-width});
+  height: var(--secondary-bar-width);
   padding: 10px;
   position: absolute;
-  top: calc(#{$secondary-bar-width} - 10px);
+  top: calc(var(--secondary-bar-width) - 10px);
 }
+
 .layout {
   right: 0px;
 }

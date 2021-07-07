@@ -34,6 +34,6 @@
 }
 
 #app.hasNavBar {
-  padding-top: $navbar-outer-height;
+  padding-top: var(--navbar-outer-height);
 }
 </style>
