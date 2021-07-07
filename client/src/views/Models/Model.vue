@@ -339,7 +339,7 @@
       // }
     }
 
-    onBackgroundClick():void {
+    onBackgroundClick ():void {
       this.isOpenDrilldown = false;
     }
 
