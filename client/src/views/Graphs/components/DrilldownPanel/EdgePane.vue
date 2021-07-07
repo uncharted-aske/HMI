@@ -85,7 +85,7 @@
    padding-left: 0;
     li {
       padding: 4px 8px;
-      border: 1px solid $border;
+      border: var(--border);
       cursor: pointer;
     }
  }

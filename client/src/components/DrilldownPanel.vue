@@ -88,7 +88,7 @@
 
   .panel-header {
     text-align: left;
-    border-bottom: 1px solid $border;
+    border-bottom: var(--border);
     padding: 5px;
     .nav-tabs {
       cursor: pointer;
