@@ -30,7 +30,7 @@
   @Component
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
-    @Prop({ default: null }) highlight: SubgraphInterface;
+    @Prop({ default: null }) subgraph: SubgraphInterface;
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -41,22 +41,22 @@
       this.refresh();
     }
 
-    @Watch('highlight')
-    onHighlightChange (): void {
-      this.highlightChanged();
+    @Watch('subgraph')
+    onSubgraphChange (): void {
+      this.subgraphChanged();
     }
 
     @Watch('layout')
     async layoutChanged (): Promise<void> {
       await this.refresh();
-      this.highlightChanged();
+      this.subgraphChanged();
     }
 
-    highlightChanged (): void {
-      if (this.highlight) {
-        this.renderer.showHighlight(this.highlight);
+    subgraphChanged (): void {
+      if (this.subgraph) {
+        this.renderer.showSubgraph(this.subgraph);
       } else {
-        this.renderer.hideHighlight();
+        this.renderer.hideSubgraph();
       }
     }
 
@@ -83,6 +83,8 @@
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
 
+          this.renderer.clearSelections();
+          this.renderer.selectNode(node);
           this.$emit('node-click', node.datum().data);
         }
       });
@@ -98,7 +100,12 @@
       this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
         if (node.datum().nodes) return;
         hideTooltip(renderer.chart);
-    });
+      });
+
+      this.renderer.setCallback('backgroundClick', () => {
+        this.renderer.clearSelections();
+        this.$emit('background-click');
+      });
 
       this.refresh();
     }

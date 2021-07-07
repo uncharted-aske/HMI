@@ -43,9 +43,10 @@
         <global-graph
           v-if="selectedGraph"
           :data="selectedGraph"
-          :highlight="subgraph"
+          :subgraph="subgraph"
           :layout="selectedLayoutId"
           @node-click="onNodeClick"
+          @background-click="onBackgroundClick"
         />
       </div>
     </div>
@@ -324,6 +325,10 @@
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownMetadata = node.metadata;
+    }
+
+    onBackgroundClick ():void {
+      this.isOpenDrilldown = false;
     }
 
     async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
