@@ -169,9 +169,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   .scatterplot-chart-container {
     flex: 1;
     background-color: var(--bg-graphs);
@@ -191,7 +189,7 @@
   }
 
   .run-counter {
-    color: $text-color-light;
+    color: var(--text-color-light);
   }
 
   .chart {

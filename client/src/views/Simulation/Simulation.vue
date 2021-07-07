@@ -205,15 +205,13 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   .view-container {
     flex-direction: column;
     flex-grow: 1;
   }
 
-  // Uniform sizing of the panels
+  /* Uniform sizing of the panels */
   .simulation-panel {
     display: flex;
     flex-direction: column;
@@ -221,7 +219,7 @@
     width: 100%;
   }
 
-  // Uniform styling for the button in the settings-bars
+  /* Uniform styling for the button in the settings-bars */
   .view-container::v-deep .settings-bar-container button {
     height: 2em;
     line-height: 0;
@@ -244,6 +242,6 @@
   }
 
   .form-check-label {
-    color: $text-color-light;
+    color: var(--text-color-light);
   }
 </style>

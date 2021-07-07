@@ -4,7 +4,7 @@
 .navbar {
   background-color:var(--bg-primary);
   .navbar-brand, .nav-link {
-    color: $text-color-light;
+    color: var(--text-color-light);
   }
   //Navigation tabs
   .nav-item.underlined {
@@ -13,20 +13,20 @@
 }
 
 .btn-primary, .btn-primary:focus, .btn-primary:active, .btn-primary.active {
-  color: $text-color-dark;
+  color: var(--text-color-dark);
   background-color: var(--nord4);
   border-color: var(--nord4);
   box-shadow: none;
 }
 
 .btn-primary:hover {
-  color: $text-color-dark;
+  color: var(--text-color-dark);
   background-color: var(--nord5);
   border-color: var(--nord4);
 }
 
 .btn-primary:disabled {
-  color: $text-color-dark;
+  color: var(--text-color-dark);
   background-color: var(--nord4);
   border-color: var(--nord4);
   opacity: 0.3;
