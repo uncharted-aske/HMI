@@ -19,7 +19,7 @@
       </details>
 
       <details v-if="data.in_degree" class="metadata" open>
-        <summary>Incoming: {{ data.in_degree }}</summary>
+        <summary>Incoming ({{ data.in_degree }})</summary>
         <div class="metadata-content">
           <ul>
             <li v-for="(targetId, index) in incoming" :key="index">
@@ -33,7 +33,7 @@
       </details>
 
       <details v-if="data.out_degree" class="metadata" open>
-        <summary>Outgoing: {{ data.out_degree }}</summary>
+        <summary>Outgoing ({{ data.out_degree }})</summary>
         <div class="metadata-content">
           <ul>
             <li v-for="(sourceId, index) in outgoing" :key="index">
@@ -55,8 +55,6 @@
   import Component from 'vue-class-component';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import CollapsibleContainer from '@/components/Collapsible/CollapsibleContainer.vue';
-  import CollapsibleItem from '@/components/Collapsible/CollapsibleItem.vue';
   import LoadingAlert from '@/components/widgets/LoadingAlert.vue';
   import { emmaaEntityInfo } from '@/services/EmmaaFetchService';
 
@@ -64,8 +62,6 @@
   import { GraphNodeDataInterface } from '@/types/typesGraphs';
 
   const components = {
-    CollapsibleContainer,
-    CollapsibleItem,
     LoadingAlert,
   };
 

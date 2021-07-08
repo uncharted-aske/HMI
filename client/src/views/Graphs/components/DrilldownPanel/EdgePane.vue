@@ -1,53 +1,72 @@
 <template>
   <div class="edge-pane-container">
-     <div class="border-bottom">
-        <h5>
-          {{data.sourceLabel}} <font-awesome-icon :icon="['fas', 'long-arrow-alt-right' ]" /> {{data.targetLabel}}
-          <font-awesome-icon v-if="data.curated === 1" :icon="['fas', 'check-circle' ]" />
-        </h5>
-      <h6>Type: <span class="emphasis">{{data.statement_type}}</span> | Belief score: <span class="emphasis">{{data.belief | precision-formatter}}</span></h6>
+    <header>
+      <h5>
+        {{ data.sourceLabel }}
+        <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />
+        {{ data.targetLabel }}
+        <font-awesome-icon v-if="data.curated === 1" :icon="['fas', 'check-circle']" />
+      </h5>
+      Type: {{ data.statement_type }}<br>
+      Belief score: {{ data.belief | precision-formatter }}
+    </header>
 
-    </div>
+    <div class="metadata-list">
+      <loading-alert v-if="isLoading" />
 
-    <collapsible-container class="mt-3" :isEmpty="isEmptyMetadata">
-      <collapsible-item class="flex-grow-1" slot="item" v-if="externalData.evidence" expanded="true">
-        <div slot="title">Evidence ({{externalData.evidence.length}})</div>
-        <div slot="content" class="h-100 position-absolute">
-          <ul class="pl-4 h-100 overflow-auto">
-            <li v-for="(evidence, index) in externalData.evidence" :key="index" @click="onClickEvidence(evidence)">{{evidence.text}}</li>
-          </ul>
+      <details v-if="hasEdgeEvidences" class="metadata" open>
+        <summary>Evidence ({{ edgeEvidences.length }})</summary>
+        <div class="metadata-content">
+          <figure
+            v-for="(edgeEvidence, index) in edgeEvidences"
+            :key="index"
+            @click="onClickEvidence(edgeEvidence.evidence)"
+          >
+            {{ excerpt(edgeEvidence.evidence) }}
+            <figcaption>
+              {{ caption(edgeEvidence.artifact) }}
+               <font-awesome-icon class="icon" :icon="['fas', 'book']" />
+            </figcaption>
+          </figure>
         </div>
-      </collapsible-item>
-
-      <div slot="empty" class="alert alert-info" role="alert">
-        No metadata at the moment
-      </div>
-    </collapsible-container>
+      </details>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
-  import Component from 'vue-class-component';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
   import { Prop, Watch } from 'vue-property-decorator';
-  import CollapsibleContainer from '@/components/Collapsible/CollapsibleContainer.vue';
-  import CollapsibleItem from '@/components/Collapsible/CollapsibleItem.vue';
+
+  import LoadingAlert from '@/components/widgets/LoadingAlert.vue';
+
+  import { getAuthorList } from '@/utils/CosmosDataUtil';
+  import { truncateString } from '@/utils/StringUtil';
+
+  import { cosmosArtifactsMem } from '@/services/CosmosFetchService';
   import { emmaaEvidence } from '@/services/EmmaaFetchService';
 
-  import { EmmaaEvidenceEvidenceInterface } from '@/types/typesEmmaa';
+  import * as COSMOS from '@/types/typesCosmos';
+  import * as EMMAA from '@/types/typesEmmaa';
+  import * as GRAPHS from '@/types/typesGraphs';
 
   const components = {
-    CollapsibleContainer,
-    CollapsibleItem,
+    LoadingAlert,
   };
+
+  /** Local type to handle EMMAA Evidence and COSMOS artifact. */
+  type EdgeEvidence = {
+    artifact: COSMOS.CosmosArtifactInterface,
+    evidence: EMMAA.EmmaaEvidenceEvidenceInterface,
+  }
 
   @Component({ components })
   export default class EdgePane extends Vue {
-    @Prop({ default: null }) data: any;
+    @Prop({ default: null }) data: GRAPHS.GraphNodeDataInterface;
     @Prop({ default: null }) model: string;
-    externalData: any = {};
+    isLoading = false;
+    edgeEvidences: EdgeEvidence[] = [];
 
     @Watch('data') onDataChange (): void {
       this.fetchExternalData();
@@ -57,40 +76,73 @@
       this.fetchExternalData();
     }
 
+    get hasEdgeEvidences (): boolean {
+      return this.edgeEvidences.length > 0;
+    }
+
     async fetchExternalData (): Promise<void> {
-      this.externalData = await emmaaEvidence({
+      this.isLoading = true;
+      this.edgeEvidences = [];
+
+      const resultEmmaaEvidence = await emmaaEvidence({
         stmt_hash: this.data.statement_id,
         source: 'model_statement',
         model: this.model,
         format: 'json',
       });
+
+      if (resultEmmaaEvidence.evidence) {
+        this.edgeEvidences = await Promise.all(resultEmmaaEvidence.evidence.map(async (evidence) => {
+          const args = { doi: evidence.text_refs.DOI };
+          const artifact = await cosmosArtifactsMem(args);
+          return { artifact, evidence };
+        })) as EdgeEvidence[];
+      }
+
+      this.isLoading = false;
     }
 
-    get isEmptyMetadata (): boolean {
-      return _.isEmpty(this.data);
+    caption (artifact: COSMOS.CosmosArtifactInterface): string {
+      if (artifact.bibjson) {
+        const title = truncateString(artifact.bibjson.title, 50);
+        const authorList = truncateString(getAuthorList(artifact.bibjson), 50);
+        const timestamp = artifact.bibjson?.year?.toString();
+        return [title, authorList, timestamp].filter(Boolean).join(' - ');
+      }
     }
 
-    onClickEvidence (evidence: EmmaaEvidenceEvidenceInterface): void {
+    excerpt (evidence: EMMAA.EmmaaEvidenceEvidenceInterface): string {
+      return truncateString(evidence.text, 500);
+    }
+
+    onClickEvidence (evidence: EMMAA.EmmaaEvidenceEvidenceInterface): void {
       this.$emit('evidence-click', evidence.text_refs.DOI);
     }
   }
 </script>
 
 <style scoped>
-  ul {
-    list-style-type: none;
-    margin-left: 0;
-    padding-left: 0;
-  }
-
-  li {
+  figure {
     border: var(--border);
     cursor: pointer;
-    padding: 4px 8px;
+    font-size: .9em;
+    margin: .5em 0;
+    padding: .5rem;
   }
 
-  .emphasis {
-    font-weight: bold;
+  figure:hover {
+    border-color: var(--selection);
+  }
+
+  figcaption {
+    color: var(--text-color-panel-muted);
+    font-style: italic;
+    margin-top: .5em;
+    text-align: right;
+  }
+
+  .icon {
+    margin-left: .5em;
   }
 
   .fa-check-circle {
