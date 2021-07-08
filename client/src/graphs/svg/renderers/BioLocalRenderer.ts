@@ -164,4 +164,17 @@ export default class BioLocalRenderer extends SVGRenderer {
     const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.source && edge.target === d.target));
     nonNeighborEdges.style('opacity', 0.1);
   }
+
+  selectNode (node: d3.Selection<any, any, any, any>): void {
+    node.select('rect')
+      .style('stroke', Colors.HIGHLIGHT)
+      .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
+  }
+
+  clearSelections ():void {
+    const chart = (this as any).chart;
+    chart.selectAll('rect')
+      .style('stroke', DEFAULT_STYLE.node.stroke)
+      .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+  }
 }

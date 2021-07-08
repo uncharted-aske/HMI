@@ -48,6 +48,9 @@
         // Show neighborhood
         const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
         this.renderer.showNeighborhood(neighborhood);
+
+        this.renderer.clearSelections();
+        this.renderer.selectNode(node);
         this.$emit('node-click', node.datum());
       });
 
@@ -67,6 +70,7 @@
       });
 
       this.renderer.setCallback('backgroundDblClick', () => {
+        this.renderer.clearSelections();
         this.renderer.hideNeighbourhood();
         this.$emit('background-dbl-click');
       });
