@@ -59,7 +59,7 @@
     @Prop({ required: false }) private artifact: CosmosArtifactInterface;
 
     get authorList (): string {
-      return getAuthorList(this.artifact ?? this.data?.raw);
+      return getAuthorList(this.bibjson);
     }
 
     get bibjson (): CosmosSearchBibjsonInterface {

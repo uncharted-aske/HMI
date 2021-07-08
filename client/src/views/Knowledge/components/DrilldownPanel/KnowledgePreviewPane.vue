@@ -96,7 +96,7 @@
     }
 
     get authorList (): string {
-      return getAuthorList(this.data.raw);
+      return getAuthorList(this.data.raw.bibjson);
     }
 
     showMoreHandler (e: Event): void {

@@ -197,7 +197,7 @@
         {
           id: index,
           title: item.bibjson.title,
-          subtitle: `${item.bibjson.year} ?? 'Unknown Year'} - ${getAuthorList(item)}`,
+          subtitle: `${item.bibjson.year} ?? 'Unknown Year'} - ${getAuthorList(item.bibjson)}`,
           type: item.bibjson.type,
           previewImageSrc: item.children[0].bytes,
           raw: item,
