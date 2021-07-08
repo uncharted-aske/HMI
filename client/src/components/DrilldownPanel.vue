@@ -72,16 +72,14 @@
 
 <style scoped>
 .drilldown-panel-container {
-  min-width: 25vw;
-  height: 100%;
+  background-color: #ffffff;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  top: 0;
-  right: 0;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  box-sizing: border-box;
+  height: var(--content-full-height);
   padding: 5px;
+  width: 25vw;
   z-index: var(--z-index--side-panel);
 }
 
