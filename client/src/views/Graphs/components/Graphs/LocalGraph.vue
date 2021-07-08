@@ -75,19 +75,6 @@
         this.$emit('background-dbl-click');
       });
 
-    //   this.renderer.setCallback('nodeMouseEnter', (node) => {
-    //     const nodeData = node.datum();
-    //     const nodeCoords = [nodeData.x + (nodeData.width * 0.5), nodeData.y + (nodeData.height * 0.5)]; // TO FIX: It seems there is an issue with coordinates for deeply nested nodes.
-
-    //     const tooltipText = 'Name: ' + nodeData.label + ' ' + 'Type: ' + nodeData.nodeType;
-
-    //     showTooltip(this.renderer.chart, tooltipText, nodeCoords);
-    //   });
-
-    //   this.renderer.setCallback('nodeMouseLeave', () => {
-    //     hideTooltip(this.renderer.chart);
-    //   });
-
       this.refresh();
     }
 

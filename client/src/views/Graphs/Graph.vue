@@ -110,6 +110,9 @@
 
   import { cosmosArtifactsMem } from '@/services/CosmosFetchService';
 
+  import { calculateNodeNeighborhood } from '@/graphs/svg/util';
+
+
   import Counters from '@/components/Counters.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
@@ -179,6 +182,9 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
+    // Stores selected node id
+    selectedNode: string = ''
+
     isOpenDrilldown: boolean = false;
     drilldownActivePaneId: string = '';
     drilldownPaneTitle = '';
@@ -189,6 +195,7 @@
     subgraph: GraphInterface = null;
     subgraphLoading: boolean = false;
     mainGraphLoading: boolean = true;
+    nodeNeighborhoodSubgraph: GraphInterface = null;
 
     showMessageTooLarge: boolean = false;
     showMessageEmpty: boolean = false;
@@ -447,11 +454,12 @@
       this.drilldownMetadata = null;
     }
 
-  // onSetView (viewId: string): void {
-  //   this.selectedViewId = viewId;
-  // }
-
     onNodeClick (node: GraphNodeInterface): void {
+      // Compute node neighborhood to highlight in global view
+      const nodeNeighborhood = calculateNodeNeighborhood(this.subgraph, node);
+      this.nodeNeighborhoodSubgraph = {nodes: nodeNeighborhood.nodes.map(n =>  ({id: n})), edges: nodeNeighborhood.edges};
+      console.log(this.nodeNeighborhoodSubgraph);
+
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'node';
 

@@ -57,7 +57,7 @@ export interface GraphNodeDataInterface {
 export interface GraphNodeInterface {
   id: string,
   concept?: string,
-  label: string,
+  label?: string,
   nodeType?: string,
   nodeSubType?: string,
   dataType?:string,
