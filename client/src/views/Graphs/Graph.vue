@@ -48,10 +48,10 @@
             </div>
           </settings-bar>
           <loader :loading="subgraphLoading" />
-          <local-graph v-if="subgraph" 
-                      :data="subgraph"  
-                      @node-click="onNodeClick" 
-                      @edge-click="onEdgeClick" 
+          <local-graph v-if="subgraph"
+                      :data="subgraph"
+                      @node-click="onNodeClick"
+                      @edge-click="onEdgeClick"
                       @background-click ="onBackgroundClick"
                       @loaded="subgraphLoading = false"/>
           <div v-if="showMessageTooLarge" class="alert alert-info mr-2" role="alert">
@@ -477,7 +477,7 @@
       this.drilldownMetadata = node.data;
     }
 
-    onBackgroundClick(): void {
+    onBackgroundClick (): void {
       this.neighborhoodSubgraphIds = [];
       this.onCloseDrilldownPanel();
     }
