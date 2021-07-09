@@ -72,6 +72,7 @@
 
     <modal-document
       v-if="showModalDocument"
+      link-to-knowledge-space="true"
       :artifact="modalDocumentArtifact"
       @close="showModalDocument = false"
     />
