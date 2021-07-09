@@ -192,7 +192,6 @@
 
     neighborhoodSubgraphIds: string[] = [];
 
-
     showMessageTooLarge: boolean = false;
     showMessageEmpty: boolean = false;
 
@@ -240,7 +239,6 @@
         const subgraph = this.bgraphInstance.v().filter(d => this.neighborhoodSubgraphIds.includes(d._id)).run().map(element => element.vertex);
         // this.renderSubgraphAsGraferLayers(subgraph);
       }
-   
     }
 
     async mounted (): Promise<void> {
@@ -460,12 +458,12 @@
 
     onNodeClick (node: GraphNodeInterface): void {
       // Compute node neighborhood to highlight in global view
-      const outgoingEdges = this.bgraphInstance.v({id: node.id}).out().run();
+      const outgoingEdges = this.bgraphInstance.v({ id: node.id }).out().run();
       const outgoingNodes = outgoingEdges.map(edge => edge.vertex.target_id);
-      const incomingEdges = this.bgraphInstance.v({id: node.id}).in().run();
+      const incomingEdges = this.bgraphInstance.v({ id: node.id }).in().run();
       const incomingNodes = incomingEdges.map(edge => edge.vertex.source_id);
 
-      const neighborEdgesIds = _.merge(outgoingEdges.map(e => e.vertex.id), incomingEdges.map(e => e.vertex.id))
+      const neighborEdgesIds = _.merge(outgoingEdges.map(e => e.vertex.id), incomingEdges.map(e => e.vertex.id));
       const neighborNodeIds = _.merge(outgoingNodes, incomingNodes);
       this.neighborhoodSubgraphIds = _.merge(neighborNodeIds, neighborEdgesIds);
 
