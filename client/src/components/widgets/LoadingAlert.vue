@@ -1,6 +1,6 @@
 <template>
   <span class="alert alert-info">
-    <font-awesome-icon class="icon" :icon="['fas', 'spinner']" />
+    <font-awesome-icon class="spinner" :icon="['fas', 'spinner']" />
     Loading more information
   </span>
 </template>
@@ -11,7 +11,7 @@
 </script>
 
 <style scoped>
-  .icon {
+  .spinner {
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-name: spin;
