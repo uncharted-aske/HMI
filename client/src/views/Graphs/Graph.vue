@@ -240,10 +240,9 @@
     }
 
     @Watch('neighborhoodSubgraphIds') onNeighborhoodSubgraphIdsChanged (): void {
-      if (this.neighborhoodSubgraphIds) {
-        const subgraph = this.bgraphInstance.v().filter(d => this.neighborhoodSubgraphIds.includes(d._id)).run().map(element => element.vertex);
-        // this.renderSubgraphAsGraferLayers(subgraph);
-      }
+      const subgraph = this.bgraphInstance.v().filter(d => this.neighborhoodSubgraphIds.includes(d._id)).run().map(element => element.vertex);
+      console.log(subgraph);
+      // this.renderSubgraphAsGraferLayers(subgraph);
     }
 
     async mounted (): Promise<void> {
