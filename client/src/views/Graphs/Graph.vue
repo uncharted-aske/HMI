@@ -110,9 +110,6 @@
 
   import { cosmosArtifactsMem } from '@/services/CosmosFetchService';
 
-  import { calculateNodeNeighborhood } from '@/graphs/svg/util';
-
-
   import Counters from '@/components/Counters.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
@@ -182,9 +179,6 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
-    // Stores selected node id
-    selectedNode: string = ''
-
     isOpenDrilldown: boolean = false;
     drilldownActivePaneId: string = '';
     drilldownPaneTitle = '';
@@ -195,7 +189,9 @@
     subgraph: GraphInterface = null;
     subgraphLoading: boolean = false;
     mainGraphLoading: boolean = true;
-    nodeNeighborhoodSubgraph: GraphInterface = null;
+
+    neighborhoodSubgraphIds: string[] = [];
+
 
     showMessageTooLarge: boolean = false;
     showMessageEmpty: boolean = false;
@@ -237,6 +233,14 @@
       if (this.selectedGraph) {
         await this.loadData();
       }
+    }
+
+    @Watch('neighborhoodSubgraphIds') onNeighborhoodSubgraphIdsChanged (): void {
+      if (this.neighborhoodSubgraphIds) {
+        const subgraph = this.bgraphInstance.v().filter(d => this.neighborhoodSubgraphIds.includes(d._id)).run().map(element => element.vertex);
+        // this.renderSubgraphAsGraferLayers(subgraph);
+      }
+   
     }
 
     async mounted (): Promise<void> {
@@ -456,9 +460,14 @@
 
     onNodeClick (node: GraphNodeInterface): void {
       // Compute node neighborhood to highlight in global view
-      const nodeNeighborhood = calculateNodeNeighborhood(this.subgraph, node);
-      this.nodeNeighborhoodSubgraph = {nodes: nodeNeighborhood.nodes.map(n =>  ({id: n})), edges: nodeNeighborhood.edges};
-      console.log(this.nodeNeighborhoodSubgraph);
+      const outgoingEdges = this.bgraphInstance.v({id: node.id}).out().run();
+      const outgoingNodes = outgoingEdges.map(edge => edge.vertex.target_id);
+      const incomingEdges = this.bgraphInstance.v({id: node.id}).in().run();
+      const incomingNodes = incomingEdges.map(edge => edge.vertex.source_id);
+
+      const neighborEdgesIds = _.merge(outgoingEdges.map(e => e.vertex.id), incomingEdges.map(e => e.vertex.id))
+      const neighborNodeIds = _.merge(outgoingNodes, incomingNodes);
+      this.neighborhoodSubgraphIds = _.merge(neighborNodeIds, neighborEdgesIds);
 
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'node';
