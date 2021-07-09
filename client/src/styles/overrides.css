@@ -84,17 +84,17 @@ div#lex-assistant-box.lex-assistant-box ul li.selectable.active {
   --facet-terms-tick-color: var(--selection-hihghlight);
 }
 
-.search-bar-container.search-bar-container {
+.search-bar-container {
   height: var(--secondary-bar-width);
 }
 
-.search-bar-container.search-bar-container::v-deep .lex-box {
+.search-bar-container .lex-box {
   border-color: var(--selection);
   box-shadow: none;
   display: flex;
   height: var(--secondary-bar-width);
 }
 
-.search-bar-container.search-bar-container::v-deep .lex-box:not(.active) {
+.search-bar-container .lex-box:not(.active) {
   border: none;
 }
