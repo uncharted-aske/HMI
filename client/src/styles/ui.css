@@ -1,5 +1,9 @@
 :root {
+  /**
+   * Borders
+   */
   --border: 1px solid lightgray;
+  --border-light: 1px solid #f6f6f6;
 
   /**
    * z-index

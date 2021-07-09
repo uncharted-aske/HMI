@@ -123,7 +123,7 @@
 
 <style scoped>
   figure {
-    border: var(--border);
+    border: var(--border-light);
     cursor: pointer;
     font-size: .9em;
     margin: .5em 0;
@@ -131,7 +131,7 @@
   }
 
   figure:hover {
-    border-color: var(--selection);
+    border-color: var(--selection-dark);
   }
 
   figcaption {

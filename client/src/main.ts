@@ -45,6 +45,7 @@ library.add(
   FA.faProjectDiagram,
   FA.faSearch,
   FA.faSignOutAlt,
+  FA.faSpinner,
   FA.faTimes,
   FA.faTools,
   FA.faUndo,

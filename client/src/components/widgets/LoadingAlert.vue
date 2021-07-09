@@ -1,5 +1,6 @@
 <template>
   <span class="alert alert-info">
+    <font-awesome-icon class="icon" :icon="['fas', 'spinner']" />
     Loading more information
   </span>
 </template>
@@ -10,28 +11,19 @@
 </script>
 
 <style scoped>
-  span::after {
-    animation: ellipsis-dot 1s infinite .3s;
-    animation-fill-mode: fowards;
-    content: "...";
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: bottom;
-    width: 1.25em;
+  .icon {
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-name: spin;
+    animation-timing-function: linear;
   }
 
-  @keyframes ellipsis-dot {
-    25% {
-      content: "";
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
     }
-    50% {
-      content: ".";
-    }
-    75% {
-      content: "..";
-    }
-    100% {
-      content: "...";
+    to {
+      transform: rotate(360deg);
     }
   }
 </style>
