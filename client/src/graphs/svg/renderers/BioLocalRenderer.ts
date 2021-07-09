@@ -147,22 +147,24 @@ export default class BioLocalRenderer extends SVGRenderer {
       });
   }
 
-  hideNeighbourhood (): void {
+  hideSubgraph (): void {
     const chart = (this as any).chart;
-    chart.selectAll('.node-ui').style('opacity', 1);
-    chart.selectAll('.edge').style('opacity', 1);
+    chart.selectAll('.node-ui,.edge').style('opacity', 1);
   }
 
-  showNeighborhood (subgraph: SubgraphInterface): void {
+  showSubgraph (subgraph: SubgraphInterface): void {
     const chart = (this as any).chart;
-    // FIXME: not very efficient
     const nodes = subgraph.nodes;
     const edges = subgraph.edges;
-    const nonNeighborNodes = chart.selectAll('.node-ui').filter(d => !nodes.map(node => node).includes(d.id));
-    nonNeighborNodes.style('opacity', 0.1);
-
-    const nonNeighborEdges = chart.selectAll('.edge').filter(d => !_.some(edges, edge => edge.source === d.source && edge.target === d.target));
-    nonNeighborEdges.style('opacity', 0.1);
+    chart.selectAll('.edge').each(function (d) {
+      const isNeighbour = edges.some(edge =>
+        edge.source === d.source && edge.target === d.target);
+      d3.select(this).style('opacity', isNeighbour ? '1' : '0.1');
+    });
+    chart.selectAll('.node-ui').each(function (d) {
+      const isNeighbour = nodes.map(node => node).includes(d.id);
+      d3.select(this).style('opacity', isNeighbour ? '1' : '0.1');
+    });
   }
 
   selectNode (node: d3.Selection<any, any, any, any>): void {

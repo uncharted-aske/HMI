@@ -44,10 +44,10 @@
 
       this.renderer.setCallback('nodeClick', (e: PointerEvent, node) => {
         // Clear previous highlights
-        this.renderer.hideNeighbourhood();
+        this.renderer.hideSubgraph();
         // Show neighborhood
         const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
-        this.renderer.showNeighborhood(neighborhood);
+        this.renderer.showSubgraph(neighborhood);
 
         this.renderer.clearSelections();
         this.renderer.selectNode(node);
@@ -56,10 +56,10 @@
 
       this.renderer.setCallback('edgeClick', (e: PointerEvent, edge) => {
         // Clear previous highlights
-        this.renderer.hideNeighbourhood();
+        this.renderer.hideSubgraph();
         // Show neighborhood
         const neighborhood = calculateEdgeNeighborhood(edge.datum());
-        this.renderer.showNeighborhood(neighborhood);
+        this.renderer.showSubgraph(neighborhood);
         // Hack: get labels for source and target
         const sourceNode = this.renderer.layout.data.nodes.find(node => node.id === edge.datum().source);
         const targetNode = this.renderer.layout.data.nodes.find(node => node.id === edge.datum().target);
@@ -71,7 +71,7 @@
 
       this.renderer.setCallback('backgroundClick', () => {
         this.renderer.clearSelections();
-        this.renderer.hideNeighbourhood();
+        this.renderer.hideSubgraph();
         this.$emit('background-click');
       });
 
