@@ -69,10 +69,10 @@
         this.$emit('edge-click', edge.datum());
       });
 
-      this.renderer.setCallback('backgroundDblClick', () => {
+      this.renderer.setCallback('backgroundClick', () => {
         this.renderer.clearSelections();
         this.renderer.hideNeighbourhood();
-        this.$emit('background-dbl-click');
+        this.$emit('background-click');
       });
 
       this.refresh();

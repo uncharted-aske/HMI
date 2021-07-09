@@ -48,7 +48,12 @@
             </div>
           </settings-bar>
           <loader :loading="subgraphLoading" />
-          <local-graph v-if="subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
+          <local-graph v-if="subgraph" 
+                      :data="subgraph"  
+                      @node-click="onNodeClick" 
+                      @edge-click="onEdgeClick" 
+                      @background-click ="onBackgroundClick"
+                      @loaded="subgraphLoading = false"/>
           <div v-if="showMessageTooLarge" class="alert alert-info mr-2" role="alert">
             Results are too large. Keep adding filters to reduce the size.
           </div>
@@ -471,6 +476,11 @@
       this.drilldownActivePaneId = 'node';
 
       this.drilldownMetadata = node.data;
+    }
+
+    onBackgroundClick(): void {
+      this.neighborhoodSubgraphIds = [];
+      this.onCloseDrilldownPanel();
     }
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {
