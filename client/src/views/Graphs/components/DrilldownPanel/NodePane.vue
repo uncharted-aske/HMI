@@ -75,10 +75,9 @@
     isLoading = false;
     displayAllIncoming = false;
     displayAllOutgoing = false;
+    incomingNodes: string[] = [];
+    outgoingNodes: string[] = [];
     emmaaInfo: EmmaaEntityInfoInterface = emptyEmmaaInfo;
-    // incomingNodes and outgoingNodes MUST NOT be initialised to disable reactivity
-    incomingNodes: any[];
-    outgoingNodes: any[];
 
     @Watch('data') onDataChange (): void {
       this.fetchExternalData();
@@ -93,8 +92,20 @@
     getNeighbours (): void {
       eventHub.$emit('get-bgraph', bgraph => {
         if (bgraph) {
-          this.outgoingNodes = bgraph.v({ id: this.data.id }).out().out().unique().run();
-          this.incomingNodes = bgraph.v({ id: this.data.id }).in().in().unique().run();
+          this.outgoingNodes = bgraph
+            .v({ id: this.data.id })
+            .out()
+            .out()
+            .unique()
+            .run()
+            .map(node => `${node.vertex.name} → ${this.data.label}`);
+          this.incomingNodes = bgraph
+            .v({ id: this.data.id })
+            .in()
+            .in()
+            .unique()
+            .run()
+            .map(node => `${this.data.label} → ${node.vertex.name}`);
         }
       });
     }
@@ -111,17 +122,15 @@
     }
 
     get incoming (): string[] {
-      const incomingMap = this.incomingNodes.map(node => `${node.vertex.name} → ${this.data.label}`);
       return this.displayAllIncoming
-        ? incomingMap
-        : incomingMap.slice(0, 5);
+        ? this.incomingNodes
+        : this.incomingNodes.slice(0, 5);
     }
 
     get outgoing (): string[] {
-      const outgoingMap = this.outgoingNodes.map(node => `${this.data.label} → ${node.vertex.name}`);
       return this.displayAllOutgoing
-        ? outgoingMap
-        : outgoingMap.slice(0, 5);
+        ? this.outgoingNodes
+        : this.outgoingNodes.slice(0, 5);
     }
 
     viewAllIncoming (): void {
