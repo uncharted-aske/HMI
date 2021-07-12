@@ -49,6 +49,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
+  import { Getter } from 'vuex-class';
   import { Prop, Watch } from 'vue-property-decorator';
 
   import LoadingAlert from '@/components/widgets/LoadingAlert.vue';
@@ -57,6 +58,7 @@
 
   import { EmmaaEntityInfoInterface } from '@/types/typesEmmaa';
   import { GraphNodeDataInterface } from '@/types/typesGraphs';
+  import { filterToBgraph } from '@/utils/BGraphUtil';
 
   const components = {
     LoadingAlert,
@@ -79,6 +81,8 @@
     outgoingNodes: string[] = [];
     emmaaInfo: EmmaaEntityInfoInterface = emptyEmmaaInfo;
 
+    @Getter getFilters;
+
     @Watch('data') onDataChange (): void {
       this.fetchExternalData();
       this.getNeighbours();
@@ -92,12 +96,14 @@
     getNeighbours (): void {
       eventHub.$emit('get-bgraph', bgraph => {
         if (bgraph) {
+          const subgraph = new Set(filterToBgraph(bgraph, this.getFilters).map(node => node.id));
           this.outgoingNodes = bgraph
             .v({ id: this.data.id })
             .out()
             .out()
             .unique()
             .run()
+            .filter(node => !subgraph.has(node.vertex.id))
             .map(node => `${node.vertex.name} → ${this.data.label}`);
           this.incomingNodes = bgraph
             .v({ id: this.data.id })
@@ -105,6 +111,7 @@
             .in()
             .unique()
             .run()
+            .filter(node => !subgraph.has(node.vertex.id))
             .map(node => `${this.data.label} → ${node.vertex.name}`);
         }
       });
