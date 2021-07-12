@@ -154,7 +154,7 @@
       const target = relationshipSplitted.reverse()[0];
       const relationshipToAdd = { source, target };
 
-      this.$emit('relationship-to-add', relationshipToAdd);
+      this.$emit('add-to-subgraph', relationshipToAdd);
     }
   }
 </script>

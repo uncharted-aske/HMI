@@ -64,7 +64,7 @@
         slot="content"
         :model="selectedGraphId"
         :data="drilldownMetadata"
-        @relationship-to-add="onRelationshipToAdd"
+        @add-to-subgraph="onAddToSubgraph"
       />
       <edge-pane
         v-if="drilldownActivePaneId === 'edge'"
@@ -478,13 +478,27 @@
       this.showModalDocument = true;
     }
 
-    onRelationshipToAdd (relationship: GraphEdgeInterface): void {
-      // Add the new node to the subgraph
-      const subgraph = _.clone(this.subgraph);
-      subgraph.nodes.push({ id: relationship.source, label: relationship.source });
-      subgraph.nodes.push({ id: relationship.target, label: relationship.target });
-      subgraph.edges.push(relationship);
-      Vue.set(this, 'subgraph', subgraph);
+    onAddToSubgraph (edge: GraphEdgeInterface): void {
+      let subgraph = _.clone(this.subgraph);
+      const nodes = subgraph.nodes.map(node => node.label);
+      const edges = subgraph.edges.map(edge => edge.source + '///' + edge.target);
+
+      //If the edge doesn't exist already in the subgraph
+      if (edges.indexOf(edge.source + '///' + edge.target) === -1) {
+        //Check if the source and target nodes already exist in the subgraph
+        if (subgraph.nodes.indexOf(edge.source) === - 1) {
+          subgraph.nodes.push({ id: edge.source, label: edge.source });
+        }
+        if (subgraph.nodes.indexOf(edge.target) === - 1) {
+          subgraph.nodes.push({ id: edge.target, label: edge.target });
+        }
+        subgraph.edges.push(edge);
+        Vue.set(this, 'subgraph', subgraph);
+      } else {
+        console.log('Relationship already exists in the subgraph');
+      }
+
+
     }
   }
 </script>
