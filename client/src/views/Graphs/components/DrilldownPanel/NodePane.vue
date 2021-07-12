@@ -21,7 +21,7 @@
       <details v-if="data.in_degree" class="metadata" open>
         <summary>Incoming ({{ data.in_degree }})</summary>
         <div class="metadata-content">
-          <div class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in incoming" :key="index">
+          <div class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in incoming" :key="index" @click="neighborhoodSelection(rowLabel)">
             {{rowLabel}}
           </div>
           <button type="button" class="btn btn-sm btn-light" @click="viewAllIncoming">
@@ -33,7 +33,7 @@
       <details v-if="data.out_degree" class="metadata" open>
         <summary>Outgoing ({{ data.out_degree }})</summary>
         <div class="metadata-content">
-          <div class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in outgoing" :key="index">
+          <div class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in outgoing" :key="index" @click="neighborhoodSelection(rowLabel)">
             {{rowLabel}}
           </div>
           <button type="button" class="btn btn-sm btn-light" @click="viewAllOutgoing">
@@ -130,6 +130,15 @@
 
     viewAllOutgoing (): void {
       this.displayAllOutgoing = !this.displayAllOutgoing;
+    }
+
+    neighborhoodSelection(relationship: string): void {
+      const relationshipSplitted = relationship.split(' ');
+      const source = relationshipSplitted[0];
+      const target = relationshipSplitted.reverse()[0];
+      let relationshipToAdd = {source, target};
+      
+      this.$emit('relationship-to-add', relationshipToAdd);
     }
   }
 </script>

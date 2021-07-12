@@ -64,6 +64,7 @@
         slot="content"
         :model="selectedGraphId"
         :data="drilldownMetadata"
+        @relationship-to-add="onRelationshipToAdd"
       />
       <edge-pane
         v-if="drilldownActivePaneId === 'edge'"
@@ -475,6 +476,16 @@
       const artifact: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
       this.modalDocumentArtifact = artifact;
       this.showModalDocument = true;
+    }
+
+    onRelationshipToAdd (relationship: GraphEdgeInterface): void {
+      //Add the new node to the subgraph
+      let subgraph = _.clone(this.subgraph);
+      subgraph.nodes.push({id: relationship.source, label: relationship.source});
+      subgraph.nodes.push({id: relationship.target, label: relationship.target});
+      subgraph.edges.push(relationship);
+      Vue.set(this, 'subgraph', subgraph);
+
     }
   }
 </script>
