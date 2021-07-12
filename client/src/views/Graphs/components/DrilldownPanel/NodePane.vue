@@ -93,8 +93,8 @@
     getNeighbours (): void {
       eventHub.$emit('get-bgraph', bgraph => {
         if (bgraph) {
-          this.outgoingNodes = bgraph.v({ id: this.data.id }).out().out().run();
-          this.incomingNodes = bgraph.v({ id: this.data.id }).in().in().run();
+          this.outgoingNodes = bgraph.v({ id: this.data.id }).out().out().unique().run();
+          this.incomingNodes = bgraph.v({ id: this.data.id }).in().in().unique().run();
         }
       });
     }
