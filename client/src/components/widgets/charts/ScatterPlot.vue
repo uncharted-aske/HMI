@@ -113,16 +113,16 @@
 
 </script>
 
-<style lang="scss" scoped>
-.scatterplot-chart-container {
-  position: relative;
-  display: flex;
-  padding: 5px;
-  box-sizing: border-box;
-  cursor: pointer;
-}
+<style scoped>
+  .scatterplot-chart-container {
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    padding: 5px;
+    position: relative;
+  }
 
-.chart {
-  height: auto;
-}
+  .chart {
+    height: auto;
+  }
 </style>

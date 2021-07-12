@@ -42,19 +42,17 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-.knowledge-pane-container {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
- .documents-container {
-    overflow: hidden scroll;
+<style scoped>
+  .knowledge-pane-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
   }
 
+  .documents-container {
+    overflow: hidden scroll;
+  }
 </style>

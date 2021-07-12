@@ -473,9 +473,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   .content {
     display: flex;
     flex-direction: column;

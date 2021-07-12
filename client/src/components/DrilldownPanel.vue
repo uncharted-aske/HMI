@@ -70,11 +70,8 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
+<style scoped>
 .drilldown-panel-container {
-  min-width: 25vw;
   height: 100%;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   top: 0;
@@ -84,27 +81,28 @@
   background-color: #ffffff;
   box-sizing: border-box;
   padding: 5px;
-  z-index: map-get($z-index-order, side-panel);
+  width: 25vw;
+  z-index: var(--z-index--side-panel);
+}
 
-  .panel-header {
-    text-align: left;
-    border-bottom: 1px solid $border;
-    padding: 5px;
-    .nav-tabs {
-      cursor: pointer;
-    }
-  }
-  .panel-body {
-    margin-top: 5px;
-  }
+.panel-header {
+  text-align: left;
+  border-bottom: var(--border);
+  padding: 5px;
+}
+.panel-header .nav-tabs {
+  cursor: pointer;
+}
+
+.panel-body {
+  margin-top: 5px;
 }
 
 .nav-link.active {
   cursor: default;
-  border-bottom: 3px solid $selection;
+  border-bottom: 3px solid var(--selection);
 }
 .nav-link:not(.active) {
   cursor: pointer;
 }
-
 </style>

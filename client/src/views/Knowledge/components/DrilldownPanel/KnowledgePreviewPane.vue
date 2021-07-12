@@ -106,16 +106,14 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
+<style scoped>
 .knowledge-preview-pane-container {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  position: absolute;
-  height: 100%;
-  width: 100%;
   overflow: hidden;
+  position: absolute;
+  width: 100%;
 }
 
 .preview-container {
@@ -123,17 +121,16 @@
 }
 
 .artifact-img {
-    width: 45%;
-    height: 0;
-    padding-top: 45%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: #EAEBEC;
-    float: left;
-    border: $icon-color solid 1px;
-    border-radius: 10px;
-    margin: 2.5%;
+  background-color: #EAEBEC;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1px solid var(--icon-color);
+  border-radius: 10px;
+  float: left;
+  height: 0;
+  margin: 2.5%;
+  padding-top: 45%;
+  width: 45%;
 }
-
 </style>

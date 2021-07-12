@@ -92,8 +92,8 @@
   }
 </script>
 
-<style lang="scss" scoped>
-.node-pane-container {
-  padding: 5px;
-}
+<style scoped>
+  .node-pane-container {
+    padding: 5px;
+  }
 </style>

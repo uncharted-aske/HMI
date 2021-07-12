@@ -126,17 +126,15 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
+<style scoped>
+  .container {
+    height: 90vh;
+    background: white;
+  }
 
-.container {
-  height: 90vh;
-  background: white;
-}
-
-.image {
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
+  .image {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 </style>

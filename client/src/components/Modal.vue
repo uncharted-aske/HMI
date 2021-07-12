@@ -48,63 +48,62 @@
 
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
+<style scoped>
+  .modal-mask {
+    align-items: center;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    transition: opacity .3s ease;
+    width: 100%;
+    z-index: var(--z-index--modal);
+  }
 
-.modal-mask {
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: map-get($z-index-order, modal);
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, .5);
-  transition: opacity .3s ease;
-}
+  .modal-container {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    position: relative;
+    transition: all .3s ease;
+  }
 
-.modal-container {
-  position: relative;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
-}
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 1rem 0;
+  }
 
-.modal-header, .modal-body, .modal-footer {
-  padding: 1rem 0;
-}
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+  }
 
-.modal-body {
-  display: flex;
-  flex-direction: column;
-}
+  /*
+  * The following styles are auto-applied to elements with
+  * transition="modal" when their visibility is toggled
+  * by Vue.js.
+  *
+  * You can easily play with the modal transition by editing
+  * these styles.
+  */
 
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
+  .modal-enter {
+    opacity: 0;
+  }
 
-.modal-enter {
-  opacity: 0;
-}
+  .modal-leave-active {
+    opacity: 0;
+  }
 
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}
-
+  .modal-enter .modal-container,
+  .modal-leave-active .modal-container {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
 </style>
