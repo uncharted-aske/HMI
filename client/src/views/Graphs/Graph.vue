@@ -237,6 +237,8 @@
     }
 
     async mounted (): Promise<void> {
+      eventHub.$on('get-bgraph', cb => cb(this.bgraphInstance));
+
       // Load the graph only if we have a selected model,
       // otherwise wait until the getKnowledgeGraphsList as loaded.
       if (this.selectedGraph) {

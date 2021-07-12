@@ -1,5 +1,5 @@
 <template>
-  <div class="collapsible-item">
+  <div :class="`collapsible-item ${expandedState && grow ? 'flex-grow-1' : ''}`">
     <div class="item-container">
       <div
         class="item-title"
@@ -40,6 +40,7 @@
   @Component
   export default class CollapsibleItem extends Vue {
     @Prop({ default: false }) expanded: boolean;
+    @Prop({ default: false }) grow: boolean;
     expandedState: boolean = false;
 
     @Watch('expanded') onExpandedChange (): void {

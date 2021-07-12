@@ -21,11 +21,9 @@
       <details v-if="data.in_degree" class="metadata" open>
         <summary>Incoming ({{ data.in_degree }})</summary>
         <div class="metadata-content">
-          <ul>
-            <li v-for="(targetId, index) in incoming" :key="index">
-              {{ targetId }}
-            </li>
-          </ul>
+          <div class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in incoming" :key="index">
+            {{rowLabel}}
+          </div>
           <button type="button" class="btn btn-sm btn-light" @click="viewAllIncoming">
             View {{ displayAllIncoming ? 'less' : `all ${data.in_degree}` }}
           </button>
@@ -35,11 +33,9 @@
       <details v-if="data.out_degree" class="metadata" open>
         <summary>Outgoing ({{ data.out_degree }})</summary>
         <div class="metadata-content">
-          <ul>
-            <li v-for="(sourceId, index) in outgoing" :key="index">
-              {{ sourceId }}
-            </li>
-          </ul>
+          <div class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in outgoing" :key="index">
+            {{rowLabel}}
+          </div>
           <button type="button" class="btn btn-sm btn-light" @click="viewAllOutgoing">
             View {{ displayAllOutgoing ? 'less' : `all ${data.out_degree}` }}
           </button>
@@ -57,6 +53,7 @@
 
   import LoadingAlert from '@/components/widgets/LoadingAlert.vue';
   import { emmaaEntityInfo } from '@/services/EmmaaFetchService';
+  import eventHub from '@/eventHub';
 
   import { EmmaaEntityInfoInterface } from '@/types/typesEmmaa';
   import { GraphNodeDataInterface } from '@/types/typesGraphs';
@@ -79,13 +76,27 @@
     displayAllIncoming = false;
     displayAllOutgoing = false;
     emmaaInfo: EmmaaEntityInfoInterface = emptyEmmaaInfo;
+    // incomingNodes and outgoingNodes MUST NOT be initialised to disable reactivity
+    incomingNodes: any[];
+    outgoingNodes: any[];
 
     @Watch('data') onDataChange (): void {
       this.fetchExternalData();
+      this.getNeighbours();
     }
 
     mounted (): void {
       this.fetchExternalData();
+      this.getNeighbours();
+    }
+
+    getNeighbours (): void {
+      eventHub.$emit('get-bgraph', bgraph => {
+        if (bgraph) {
+          this.outgoingNodes = bgraph.v({ id: this.data.id }).out().out().run();
+          this.incomingNodes = bgraph.v({ id: this.data.id }).in().in().run();
+        }
+      });
     }
 
     async fetchExternalData (): Promise<void> {
@@ -99,16 +110,18 @@
       this.isLoading = false;
     }
 
-    get incoming (): number[] {
+    get incoming (): string[] {
+      const incomingMap = this.incomingNodes.map(node => `${node.vertex.name} → ${this.data.label}`);
       return this.displayAllIncoming
-        ? this.data.edge_ids_target
-        : this.data.edge_ids_target.slice(0, 5);
+        ? incomingMap
+        : incomingMap.slice(0, 5);
     }
 
-    get outgoing (): number[] {
+    get outgoing (): string[] {
+      const outgoingMap = this.outgoingNodes.map(node => `${this.data.label} → ${node.vertex.name}`);
       return this.displayAllOutgoing
-        ? this.data.edge_ids_source
-        : this.data.edge_ids_source.slice(0, 5);
+        ? outgoingMap
+        : outgoingMap.slice(0, 5);
     }
 
     viewAllIncoming (): void {
