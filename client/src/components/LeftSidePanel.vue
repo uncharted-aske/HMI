@@ -65,8 +65,8 @@
 <style scoped>
   .left-side-panel-container {
     background-color: #ffffff;
-    box-sizing: border-box;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     height: var(--content-full-height);
