@@ -88,13 +88,13 @@ div#lex-assistant-box.lex-assistant-box ul li.selectable.active {
   height: var(--secondary-bar-width);
 }
 
-.search-bar-container .lex-box {
+.search-bar-container.search-bar-container .lex-box {
   border-color: var(--selection);
   box-shadow: none;
   display: flex;
   height: var(--secondary-bar-width);
 }
 
-.search-bar-container .lex-box:not(.active) {
+.search-bar-container.search-bar-container .lex-box:not(.active) {
   border: none;
 }
