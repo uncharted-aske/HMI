@@ -36,6 +36,7 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
   import Modal from '@/components/Modal.vue';
+  import { getAuthorList } from '@/utils/CosmosDataUtil';
 
   const components = {
     Modal,
@@ -46,7 +47,7 @@
     @Prop({ default: null }) data: any;
 
     get authorList (): string {
-      return this.data.bibjson.author.map(a => a.name).join();
+      return getAuthorList(this.data?.bibjson);
     }
 
     close (): void {
