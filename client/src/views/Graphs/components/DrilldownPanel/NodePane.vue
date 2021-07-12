@@ -132,12 +132,12 @@
       this.displayAllOutgoing = !this.displayAllOutgoing;
     }
 
-    neighborhoodSelection(relationship: string): void {
+    neighborhoodSelection (relationship: string): void {
       const relationshipSplitted = relationship.split(' ');
       const source = relationshipSplitted[0];
       const target = relationshipSplitted.reverse()[0];
-      let relationshipToAdd = {source, target};
-      
+      const relationshipToAdd = { source, target };
+
       this.$emit('relationship-to-add', relationshipToAdd);
     }
   }
