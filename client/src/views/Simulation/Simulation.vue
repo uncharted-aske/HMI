@@ -101,9 +101,10 @@
     @Action initializeSimParameters;
     @Action initializeSimVariables;
     @Action resetSim;
+    @Getter getModelsList;
+    @Getter getSelectedModelGraph
     @Getter getSelectedModelIds;
     @Getter getSimParameterArray;
-    @Getter getModelsList;
     @Mutation setSelectedModels;
 
     @Watch('triggerFetchResults') onTriggerFetchResults (): void {
@@ -189,8 +190,8 @@
 
     initializeSim (): void {
       if (this.selectedModel) {
-        this.initializeSimParameters(this.selectedModel);
-        this.initializeSimVariables(this.selectedModel);
+        this.initializeSimParameters(this.selectedModel, this.getSelectedModelGraph);
+        this.initializeSimVariables(this.selectedModel, this.getSelectedModelGraph);
       }
     }
 
@@ -199,6 +200,7 @@
         this.fetchModelResults({
           model: this.selectedModel,
           config: this.runConfig,
+          selectedModelGraph: this.getSelectedModelGraph,
         });
       }
     }

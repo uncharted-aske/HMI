@@ -56,8 +56,8 @@
           :key="index"
           :class="{ hidden: parameter.hidden }"
         >
-          <h4 :title="parameter.metadata.Description">{{ parameter.name }}</h4>
-          <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.name, e)" />
+          <h4 :title="parameter.metadata.Description">{{ parameter.metadata.name }}</h4>
+          <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.metadata.name, e)" />
           <aside class="btn-group">
             <button type="button" class="btn btn-secondary btn-sm">
               <font-awesome-icon :icon="['fas', 'tools']" />
@@ -158,7 +158,7 @@
 
     drawGraph (): void {
       // List of parameters names
-      const params = this.parameters.map(parameter => parameter.name);
+      const params = this.parameters.map(parameter => parameter.metadata.name);
 
       // List of runs
       const runs = this.getSimParameterArray;

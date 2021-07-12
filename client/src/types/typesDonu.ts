@@ -1,3 +1,5 @@
+/* eslint camelcase: 0 */
+
 /** Donu API types
  * https://galoisinc.github.io/ASKE-E/donu.html
  */
@@ -8,33 +10,41 @@ enum RequestCommand {
   // GET_MODEL_SCHEMATIC = 'get-model-schematic',
   // GET_MODEL_SOURCE = 'get-model-source',
   LIST_MODELS = 'list-models',
-  SIMULATE = 'simulate-gsl',
+  SIMULATE = 'simulate',
   // UPLOAD_MODEL = 'upload-model',
 }
 
 enum Type {
+  // CORE = 'core',
+  // DIFF_EQS = 'diff-eqs',
   EASEL = 'easel',
-  // DIFF_EQ = 'diff-eq',
-  // GROMET = 'gromet',
+  GROMET_PNC = 'gromet-pnc',
+  // GROMET_PRT = 'gromet-prt',
 }
 
 type Metadata = {
-  Description: string,
+  description?: string,
+  group?: string,
+  name: string,
+  type: string,
 }
 
 type ModelVariable = {
   metadata: Metadata,
-  name: string,
+  uid: string,
+  value_type: string,
 }
 
 type ModelParameter = {
-  defaultValue: number,
+  default: number,
   metadata: Metadata,
-  name: string,
+  uid: string,
+  value_type: string,
 }
 
 type DataSource = {
-  file: string;
+  file?: string;
+  model?: string;
 }
 
 type ModelDefinition = {
@@ -42,7 +52,7 @@ type ModelDefinition = {
   name?: string,
   parameters?: ModelParameter[],
   source: DataSource,
-  stateVars?: ModelVariable[],
+  measures?: ModelVariable[],
   type: Type;
 }
 

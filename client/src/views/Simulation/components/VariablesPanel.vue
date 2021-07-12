@@ -31,7 +31,7 @@
           v-else
           v-for="(plot, index) in simVariables"
           :key="index"
-          :title="plot.name"
+          :title="plot.metadata.name"
           :data="plot.values"
           :styles="plot.styles"
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
@@ -44,7 +44,7 @@
               class="btn btn-secondary btn-sm"
               :title="(plot.hidden ? 'Show' : 'Hide' + ' parameter')"
               type="button"
-              @click="setSimVariableVisibility(plot.name)"
+              @click="setSimVariableVisibility(plot.metadata.name)"
             >
               <font-awesome-icon :icon="['fas', (plot.hidden ? 'eye' : 'eye-slash')]" />
             </button>
@@ -147,7 +147,7 @@
         });
       }
 
-      return _.orderBy(simVariables, ['name'], ['asc']);
+      return _.orderBy(simVariables, ['metadata.name'], ['asc']);
     }
 
     get countersTitle (): string {

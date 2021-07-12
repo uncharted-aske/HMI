@@ -6,15 +6,16 @@ import * as Model from '@/types/typesModel';
 
 /** Transform a Donu Model to a Model */
 export const donuToModel = (donuModels: Donu.ModelDefinition[]): Model.Model[] => {
+  // TODO: This is just a mockup. Once the demo is over and we
+  //       fetch the real data from DONU, this should be replaced.
   return donuModels.map((model, index) => {
     return {
+      id: index,
       metadata: {
         name: model.name ?? 'Donu ' + index,
-        source: model.source.file,
-        type: model.type,
       },
-      graph: null,
-    } as any;
+      modelGraph: null,
+    } as Model.Model;
   });
 };
 
@@ -56,14 +57,15 @@ export const aggregateModelResults = (
 
 export const donuSimulateToVariable = (responseArr: Donu.SimulationResponse[]): HMI.SimulationVariable[] => {
   const output = {};
-  for (const response of responseArr) {
+
+  responseArr.forEach(response => {
     for (const key in response.values) {
       const keyOutput: any = (output[key] = output[key] || {});
       keyOutput.name = key;
       keyOutput.hidden = false;
       (keyOutput.values = keyOutput.values || []).push(response.values[key].map((y, i) => ({ x: response.times[i], y })));
     }
-  }
+  });
 
   return Object.values(output);
 };

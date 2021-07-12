@@ -1,7 +1,8 @@
 import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 
-import * as Model from '@/types/typesModel';
+import * as Donu from '@/types/typesDonu';
 import * as Graphs from '@/types/typesGraphs';
+import * as Model from '@/types/typesModel';
 import { getUtil } from '@/utils/FetchUtil';
 
 export const staticFileURLs = [
@@ -31,7 +32,8 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
       },
       modelGraph: [
         {
-          file: '',
+          donuType: Donu.Type.GROMET_PNC,
+          model: 'sir.gromet',
           type: Model.GraphTypes.PetriNetClassic,
           metadata: SIR_PN.metadata,
           graph: {
@@ -40,7 +42,8 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
           },
         },
         {
-          file: '',
+          donuType: Donu.Type.EASEL,
+          model: 'sir.easel',
           type: Model.GraphTypes.FunctionNetwork,
           metadata: SIR_FN.metadata,
           graph: {
@@ -59,7 +62,8 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
       },
       modelGraph: [
         {
-          file: '',
+          donuType: Donu.Type.GROMET_PNC,
+          model: 'seir.json',
           type: Model.GraphTypes.PetriNetClassic,
           metadata: SEIR_PN.metadata,
           graph: {
@@ -78,7 +82,8 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
       },
       modelGraph: [
         {
-          file: '',
+          donuType: Donu.Type.GROMET_PNC,
+          model: 'seird.json',
           type: Model.GraphTypes.PetriNetClassic,
           metadata: SEIRD_PN.metadata,
           graph: {
@@ -97,9 +102,10 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
       },
       modelGraph: [
         {
-          file: '',
+          donuType: Donu.Type.GROMET_PNC,
+          model: 'sird.json',
           type: Model.GraphTypes.PetriNetClassic,
-          metadata: SEIRD_PN.metadata,
+          metadata: SIRD_PN.metadata,
           graph: {
             edges: SIRD_PN_PARSED.edges as Graphs.GraphEdgeInterface[],
             nodes: SIRD_PN_PARSED.nodes as unknown as Graphs.GraphNodeInterface[],

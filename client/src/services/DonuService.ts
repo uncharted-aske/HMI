@@ -28,14 +28,14 @@ export const fetchDonuModels = async (): Promise<any[]> => {
 };
 
 /** Fetch the parameters of a model */
-export const getModelParameters = async (model: Model.Model): Promise<Donu.ModelParameter[]> => {
+export const getModelParameters = async (model: Model.Model, selectedModelGraph: number = 0): Promise<Donu.ModelParameter[]> => {
   if (!model) return;
-
+  const modelGraph = model.modelGraph[selectedModelGraph];
   const request: Donu.Request = {
     command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
     definition: {
-      source: { file: model.metadata.source },
-      type: model.metadata.type as Donu.Type,
+      source: { model: modelGraph.model },
+      type: modelGraph.donuType as Donu.Type,
     } as Donu.ModelDefinition,
   };
 
@@ -49,21 +49,21 @@ export const getModelParameters = async (model: Model.Model): Promise<Donu.Model
 };
 
 /** Fetch the state variable of a model */
-export const getModelVariables = async (model: Model.Model): Promise<Donu.ModelVariable[]> => {
+export const getModelVariables = async (model: Model.Model, selectedModelGraph: number = 0): Promise<Donu.ModelVariable[]> => {
   if (!model) return;
-
+  const modelGraph = model.modelGraph[selectedModelGraph];
   const request: Donu.Request = {
     command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
     definition: {
-      source: { file: model.metadata.source },
-      type: model.metadata.type as Donu.Type,
+      source: { model: modelGraph.model },
+      type: modelGraph.donuType as Donu.Type,
     } as Donu.ModelDefinition,
   };
 
   const response = await callDonu(request);
   if (response.status === Donu.ResponseStatus.success) {
     const result = response?.result as Donu.ModelDefinition;
-    return result?.stateVars ?? null;
+    return result?.measures ?? null;
   } else {
     console.error('[DONU Service] — getModelVariables', response); // eslint-disable-line no-console
   }
@@ -74,12 +74,14 @@ export const getModelResult = async (
   model: Model.Model,
   parameters: Donu.RequestParameters,
   config: Donu.RequestConfig,
+  selectedModelGraph: number = 0,
 ): Promise<Donu.SimulationResponse> => {
+  const modelGraph = model.modelGraph[selectedModelGraph];
   const request: Donu.Request = {
     command: Donu.RequestCommand.SIMULATE,
     definition: {
-      source: { file: model.metadata.source },
-      type: model.metadata.type,
+      source: { model: modelGraph.model },
+      type: modelGraph.donuType as Donu.Type,
     } as Donu.ModelDefinition,
     parameters: parameters,
     end: config.end,

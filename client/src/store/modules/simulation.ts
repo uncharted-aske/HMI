@@ -37,7 +37,7 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
     const output = new Array(RunsCount);
     for (let i = 0; i < RunsCount; i++) {
       output[i] = state.parameters.reduce((obj, parameter) => {
-        obj[parameter.name] = parameter.values[i];
+        obj[parameter.metadata.name] = parameter.values[i];
         return obj;
       }, {});
     }
@@ -73,7 +73,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     }
 
     state.parameters = state.parameters.map(parameter => {
-      if (parameter.name === args.name) {
+      if (parameter.metadata.name === args.name) {
         parameter.values[parameter.values.length - 1] = args.value;
       }
       return parameter;
@@ -97,34 +97,35 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
 
   setSimVariableVisibility ({ state }, args: string): void {
     state.variables = state.variables.map(variable => {
-      if (variable.name === args) {
+      if (variable.metadata.name === args) {
         variable.hidden = !variable.hidden;
       }
       return variable;
     });
   },
 
-  async fetchModelResults ({ state, getters, dispatch }, { model, config, aggregator }): Promise<void> {
+  async fetchModelResults ({ state, getters, dispatch }, { model, config, aggregator, selectedModelGraph }): Promise<void> {
     const modelResults: Donu.SimulationResponse[] = await Promise.all(
-      getters.getSimParameterArray.map(simParamArr => getModelResult(model, simParamArr, config)),
+      getters.getSimParameterArray.map(simParamArr => getModelResult(model, simParamArr, config, selectedModelGraph)),
     );
+    console.log(modelResults);
     dispatch('setSimVariables', donuSimulateToVariable(modelResults as Donu.SimulationResponse[]));
 
     state.variablesAggregate = donuSimulateToVariable([aggregateModelResults(modelResults, aggregator)]);
   },
 
-  async initializeSimParameters ({ state }, model: Model.Model): Promise<void> {
-    const donuParameters = await getModelParameters(model) ?? [];
+  async initializeSimParameters ({ state }, model: Model.Model, selectedModelGraph: number = 0): Promise<void> {
+    const donuParameters = await getModelParameters(model, selectedModelGraph) ?? [];
     state.parameters = donuParameters.map(donuParameter => ({
       ...donuParameter,
       hidden: false,
-      values: [donuParameter.defaultValue],
+      values: [donuParameter.default],
     }));
     state.numberOfSavedRuns = 1;
   },
 
-  async initializeSimVariables ({ state }, model: Model.Model): Promise<void> {
-    const donuVariables = await getModelVariables(model) ?? [];
+  async initializeSimVariables ({ state }, model: Model.Model, selectedModelGraph: number = 0): Promise<void> {
+    const donuVariables = await getModelVariables(model, selectedModelGraph) ?? [];
     state.variables = donuVariables.map(donuVariable => ({
       ...donuVariable,
       hidden: false,
