@@ -26,6 +26,16 @@
       </div>
       <similar-docs :doi="doi" class="m-3"/>
     </div>
+    <button
+      v-if="linkToKnowledgeSpace"
+      slot="footer"
+      type="button"
+      class="btn btn-link"
+      @click="openKnowledgeView()"
+    >
+      Explore all in the Knowledge space
+      <font-awesome-icon class="icon" :icon="['fas', 'search']"/>
+    </button>
   </modal>
 </template>
 
@@ -57,6 +67,7 @@
   export default class ModalDocument extends Vue {
     @Prop({ required: false }) private data: CardInterface;
     @Prop({ required: false }) private artifact: CosmosArtifactInterface;
+    @Prop({ default: false }) linkToKnowledgeSpace: boolean;
 
     get authorList (): string {
       return getAuthorList(this.bibjson);
@@ -122,6 +133,12 @@
 
     onClickStop (e: MouseEvent): void {
       e.stopPropagation();
+    }
+
+    openKnowledgeView () : void {
+      const name = 'docsCards';
+      const args = this.doi ? { name, query: { doi: this.doi } } : { name };
+      this.$router.push(args);
     }
   }
 </script>
