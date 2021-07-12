@@ -133,15 +133,11 @@
   }
 </script>
 
-<style lang="scss" scoped>
-// .left-side-panel {
-//   flex-shrink: 0;
-// }
-
-main {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-}
+<style scoped>
+  main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
 </style>

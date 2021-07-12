@@ -187,15 +187,13 @@
 
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 700;
-  padding-bottom: 5px;
-  padding-left: 15px;
-}
+<style scoped>
+  .header {
+    align-items: center;
+    display: flex;
+    font-weight: 700;
+    justify-content: space-between;
+    padding-bottom: 5px;
+    padding-left: 15px;
+  }
 </style>

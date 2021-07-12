@@ -23,17 +23,16 @@
 
 <style lang="scss">
 @import '~bootstrap/dist/css/bootstrap.min';
-@import "styles/aske";
 
 #app {
+  background-color: var(--bg-body);
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: $bg-body;
   height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
 
-  &.hasNavBar {
-    padding-top: $navbar-outer-height;
-  }
+#app.hasNavBar {
+  padding-top: var(--navbar-outer-height);
 }
 </style>

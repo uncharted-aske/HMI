@@ -70,7 +70,7 @@
     @Prop({ default: false }) linkToKnowledgeSpace: boolean;
 
     get authorList (): string {
-      return getAuthorList(this.artifact ?? this.data?.raw);
+      return getAuthorList(this.bibjson);
     }
 
     get bibjson (): CosmosSearchBibjsonInterface {
@@ -143,17 +143,15 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
+<style scoped>
+  .container {
+    height: 90vh;
+    background: white;
+  }
 
-.container {
-  height: 90vh;
-  background: white;
-}
-
-.image {
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
+  .image {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 </style>

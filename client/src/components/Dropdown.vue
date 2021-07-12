@@ -24,19 +24,16 @@
 
 </script>
 
-<style lang="scss">
-@import "@/styles/variables";
-
-.dropdown-container {
-  position: relative;
-  display: block;
-  background: #ffffff;
-  box-sizing: border-box;
-  opacity: 1;
-  z-index: map-get($z-index-order, dropdown);
-  border-radius: 4px;
-  box-shadow: 0 -1px 0 #e5e5e5, 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
-  overflow: hidden;
-}
-
+<style scoped>
+  .dropdown-container {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 -1px 0 #e5e5e5, 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
+    box-sizing: border-box;
+    display: block;
+    opacity: 1;
+    overflow: hidden;
+    position: relative;
+    z-index: var(--z-index--dropdown);
+  }
 </style>

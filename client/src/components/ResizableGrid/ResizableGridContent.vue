@@ -53,12 +53,9 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
-$border-select-margin: 5px;
-
+<style scoped>
 .panel-content {
+  --border-select-margin: 5px;
   display: flex;
   position: absolute;
 }
@@ -77,13 +74,13 @@ $border-select-margin: 5px;
 .panel-content-border-right {
   cursor: col-resize;
   height: 100%;
-  width: $border-select-margin;
+  width: var(--border-select-margin);
 }
 
 .panel-content-border-top,
 .panel-content-border-bottom {
   cursor: row-resize;
-  height: $border-select-margin;
+  height: var(--border-select-margin);
   width: 100%;
 }
 </style>

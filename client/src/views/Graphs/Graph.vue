@@ -59,11 +59,15 @@
       </resizable-grid>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown">
-      <node-pane v-if="drilldownActivePaneId === 'node'" slot="content"
+      <node-pane
+        v-if="drilldownActivePaneId === 'node'"
+        slot="content"
         :model="selectedGraphId"
         :data="drilldownMetadata"
       />
-      <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content"
+      <edge-pane
+        v-if="drilldownActivePaneId === 'edge'"
+        slot="content"
         :model="selectedGraphId"
         :data="drilldownMetadata"
         @evidence-click="onEvidenceClick"
@@ -466,7 +470,7 @@
       this.drilldownMetadata = edge.data;
     }
 
-    async onEvidenceClick (doi:string): Promise<void> {
+    async onEvidenceClick (doi: string): Promise<void> {
       const artifact: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
       this.modalDocumentArtifact = artifact;
       this.showModalDocument = true;
@@ -474,9 +478,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   .content {
     display: flex;
     flex-direction: column;

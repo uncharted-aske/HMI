@@ -42,14 +42,14 @@
   display: block;
   font-weight: bold;
   margin: 0;
+}
 
-  &:not(:first-of-type) {
-    margin-top: 1em;
-  }
+.metadata h6:not(:first-of-type) {
+  margin-top: 1em;
+}
 
-  & + p {
-    margin: 0;
-  }
+.metadata h6 + p {
+  margin: 0;
 }
 
 .metadata ol {
@@ -70,6 +70,6 @@
   font-style: italic;
   padding: .5rem;
   text-align: right;
-
-  time { display: block; }
 }
+
+.metadata-provenance time { display: block; }
