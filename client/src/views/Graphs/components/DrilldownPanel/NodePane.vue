@@ -49,6 +49,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
+  import { Getter } from 'vuex-class';
   import { Prop, Watch } from 'vue-property-decorator';
 
   import LoadingAlert from '@/components/widgets/LoadingAlert.vue';
@@ -57,6 +58,7 @@
 
   import { EmmaaEntityInfoInterface } from '@/types/typesEmmaa';
   import { GraphNodeDataInterface } from '@/types/typesGraphs';
+  import { filterToBgraph } from '@/utils/BGraphUtil';
 
   const components = {
     LoadingAlert,
@@ -75,10 +77,11 @@
     isLoading = false;
     displayAllIncoming = false;
     displayAllOutgoing = false;
+    incomingNodes: string[] = [];
+    outgoingNodes: string[] = [];
     emmaaInfo: EmmaaEntityInfoInterface = emptyEmmaaInfo;
-    // incomingNodes and outgoingNodes MUST NOT be initialised to disable reactivity
-    incomingNodes: any[];
-    outgoingNodes: any[];
+
+    @Getter getFilters;
 
     @Watch('data') onDataChange (): void {
       this.fetchExternalData();
@@ -93,8 +96,23 @@
     getNeighbours (): void {
       eventHub.$emit('get-bgraph', bgraph => {
         if (bgraph) {
-          this.outgoingNodes = bgraph.v({ id: this.data.id }).out().out().unique().run();
-          this.incomingNodes = bgraph.v({ id: this.data.id }).in().in().unique().run();
+          const subgraph = new Set(filterToBgraph(bgraph, this.getFilters).map(node => node.id));
+          this.outgoingNodes = bgraph
+            .v({ id: this.data.id })
+            .out()
+            .out()
+            .unique()
+            .run()
+            .filter(node => !subgraph.has(node.vertex.id))
+            .map(node => `${node.vertex.name} → ${this.data.label}`);
+          this.incomingNodes = bgraph
+            .v({ id: this.data.id })
+            .in()
+            .in()
+            .unique()
+            .run()
+            .filter(node => !subgraph.has(node.vertex.id))
+            .map(node => `${this.data.label} → ${node.vertex.name}`);
         }
       });
     }
@@ -111,17 +129,15 @@
     }
 
     get incoming (): string[] {
-      const incomingMap = this.incomingNodes.map(node => `${node.vertex.name} → ${this.data.label}`);
       return this.displayAllIncoming
-        ? incomingMap
-        : incomingMap.slice(0, 5);
+        ? this.incomingNodes
+        : this.incomingNodes.slice(0, 5);
     }
 
     get outgoing (): string[] {
-      const outgoingMap = this.outgoingNodes.map(node => `${this.data.label} → ${node.vertex.name}`);
       return this.displayAllOutgoing
-        ? outgoingMap
-        : outgoingMap.slice(0, 5);
+        ? this.outgoingNodes
+        : this.outgoingNodes.slice(0, 5);
     }
 
     viewAllIncoming (): void {
