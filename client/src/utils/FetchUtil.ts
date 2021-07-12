@@ -66,12 +66,19 @@ export const postUtilMem = async (urlStr: string, paramObj: Record<string, any>)
 // are using a workaround by fetching a blob until the following issue is fixed:
 // https://github.com/dekkai-data/data-source/issues/1
 export const getS3Util = (s3PathUrl: string): Promise<DataSource> => {
-  const getSignedBGraphNodesUrl = s3Client.getSignedUrl('getObject', {
-    Bucket: process.env.S3_BUCKET,
-    Key: s3PathUrl,
-  });
+  let signedBGraphNodesUrl;
+  if (process.env.NODE_ENV === 'development') {
+    // In development connect directly with S3
+    signedBGraphNodesUrl = s3Client.getSignedUrl('getObject', {
+      Bucket: process.env.S3_BUCKET,
+      Key: s3PathUrl,
+    });
+  } else {
+    // In production connect to S3 through proxy API to avoid exposing secrets
+    signedBGraphNodesUrl = `/services/s3/${s3PathUrl}`;
+  }
 
-  return fetch(getSignedBGraphNodesUrl)
+  return fetch(signedBGraphNodesUrl)
     .then(rawData => rawData.blob())
     .then(bgNodesBlob => DataFile.fromLocalSource(bgNodesBlob));
 };

@@ -1,8 +1,12 @@
-version: '3.7'
+version: '3.8'
 
 services:
   client:
     image: docker.uncharted.software/uncharted-aske/hmi/client
+    build: 
+      context: ./client
+    env_file:
+      - ./client/.env.nginx
     deploy:
       update_config:
         parallelism: 1
@@ -20,4 +24,9 @@ services:
         max-size: "200k"
         max-file: "2"
     ports:
-      - "8080:80"
+      - "80:80"
+    networks: 
+      - client
+
+networks: 
+  client:
