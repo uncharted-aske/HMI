@@ -44,6 +44,7 @@
   @Component({ components })
   export default class ModalDocMetadata extends Vue {
     @Prop({ default: null }) data: any;
+
     get authorList (): string {
       return this.data.bibjson.author.map(a => a.name).join();
     }
@@ -53,7 +54,10 @@
     }
 
     openKnowledgeView () : void {
-      this.$router.push({ name: 'docsCards' });
+      const name = 'docsCards';
+      const doi = this.data?.bibjson?.identifier[0]?.id;
+      const args = doi ? { name, query: { doi } } : { name };
+      this.$router.push(args);
     }
   }
 </script>

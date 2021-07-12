@@ -136,7 +136,9 @@
     }
 
     openKnowledgeView () : void {
-      this.$router.push({ name: 'docsCards' });
+      const name = 'docsCards';
+      const args = this.doi ? { name, query: { doi: this.doi } } : { name };
+      this.$router.push(args);
     }
   }
 </script>
