@@ -479,30 +479,28 @@
     }
 
     onAddToSubgraph (edge: GraphEdgeInterface): void {
-      let subgraph = _.clone(this.subgraph);
+      const subgraph = _.clone(this.subgraph);
       const nodes = subgraph.nodes.map(node => node.label);
       const edges = subgraph.edges.map(edge => edge.source + '///' + edge.target);
 
-      const source = this.bgraphInstance.v({name: edge.source}).run()[0].vertex;
-      const target = this.bgraphInstance.v({name: edge.target}).run()[0].vertex;
+      const source = this.bgraphInstance.v({ name: edge.source }).run()[0].vertex;
+      const target = this.bgraphInstance.v({ name: edge.target }).run()[0].vertex;
 
-      //If the edge doesn't exist already in the subgraph
+      // If the edge doesn't exist already in the subgraph
       if (edges.indexOf(edge.source + '///' + edge.target) === -1) {
-        const edge = this.bgraphInstance.v({source_id: source.id, target_id: target.id}).run();
-         //Check if the source and target nodes already exist in the subgraph
-        if (nodes.indexOf(edge.source) === - 1) {
-          subgraph.nodes.push({id: source.id, label: source.name });
+        const edge = this.bgraphInstance.v({ source_id: source.id, target_id: target.id }).run();
+         // Check if the source and target nodes already exist in the subgraph
+        if (nodes.indexOf(edge.source) === -1) {
+          subgraph.nodes.push({ id: source.id, label: source.name });
         }
-        if (nodes.indexOf(edge.target) === - 1) {
-          subgraph.nodes.push({id: target.id, label: target.name });
+        if (nodes.indexOf(edge.target) === -1) {
+          subgraph.nodes.push({ id: target.id, label: target.name });
         }
-        subgraph.edges.push({source: source.id, target: target.id});
+        subgraph.edges.push({ source: source.id, target: target.id });
         Vue.set(this, 'subgraph', subgraph);
       } else {
         console.log('Relationship already exists in the subgraph');
       }
-
-
     }
   }
 </script>
