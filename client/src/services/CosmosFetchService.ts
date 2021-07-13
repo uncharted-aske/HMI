@@ -38,8 +38,10 @@ const COSMOS_ARTIFACT_URL = 'https://xdd.wisc.edu/sets/xdd-covid-19/cosmos/api/d
 // eslint-disable-next-line camelcase
 export const cosmosArtifactsMem = async (paramObj: {doi: string, image_type?: string}): Promise<CosmosArtifactInterface> => {
   const artifactList = await getUtilMem(COSMOS_ARTIFACT_URL, { api_key: COSMOS_API_KEY, ...paramObj });
-  artifactList.objects.map(async (artifact, index) =>
-    Object.assign(artifactList.objects[index], artifact.children[0]));
+  if (artifactList.objects) {
+    artifactList.objects.map(async (artifact, index) =>
+      Object.assign(artifactList.objects[index], artifact.children[0]));
+  }
   return artifactList;
 };
 
