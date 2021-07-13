@@ -483,20 +483,32 @@
       const nodes = subgraph.nodes.map(node => node.label);
       const edges = subgraph.edges.map(edge => edge.source + '///' + edge.target);
 
-      const source = this.bgraphInstance.v({ name: edge.source }).run()[0].vertex;
-      const target = this.bgraphInstance.v({ name: edge.target }).run()[0].vertex;
+      const bgraphSource = this.bgraphInstance.v({ name: edge.source }).run()[0].vertex;
+      const bgraphTarget = this.bgraphInstance.v({ name: edge.target }).run()[0].vertex;
 
       // If the edge doesn't exist already in the subgraph
-      if (edges.indexOf(edge.source + '///' + edge.target) === -1) {
-        const edge = this.bgraphInstance.v({ source_id: source.id, target_id: target.id }).run();
+      if (edges.indexOf(bgraphSource.id + '///' + bgraphTarget.id) === -1) {
+        const bgraphEdge = this.bgraphInstance.v({ source_id: bgraphSource.id, target_id: bgraphTarget.id }).run()[0].vertex;
          // Check if the source and target nodes already exist in the subgraph
         if (nodes.indexOf(edge.source) === -1) {
-          subgraph.nodes.push({ id: source.id, label: source.name });
+          const addedNode = _.clone(bgraphSource);
+          addedNode.id = addedNode._id;
+          addedNode.label = addedNode.name;
+          subgraph.nodes.push(addedNode);
         }
         if (nodes.indexOf(edge.target) === -1) {
-          subgraph.nodes.push({ id: target.id, label: target.name });
+          const addedNode = _.clone(bgraphTarget);
+          addedNode.id = addedNode._id;
+          addedNode.label = addedNode.name;
+          subgraph.nodes.push(addedNode);
         }
-        subgraph.edges.push({ source: source.id, target: target.id });
+
+        const addedEdge = _.clone(bgraphEdge);
+        addedEdge.source = addedEdge.source_id;
+        addedEdge.target = addedEdge.target_id;
+        console.log(addedEdge);
+        subgraph.edges.push(addedEdge);
+
         Vue.set(this, 'subgraph', subgraph);
       } else {
         console.log('Relationship already exists in the subgraph');
