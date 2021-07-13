@@ -9,9 +9,9 @@
         <li class="nav-item" :class="{ underlined: isCurrentView('graphs', 'graph') }">
           <a class="nav-link" href="#/graphs">Graphs</a>
         </li>
-        <li class="nav-item" :class="{ underlined: isCurrentView('models', 'model', 'comparison', 'simulation') }">
+        <!-- <li class="nav-item" :class="{ underlined: isCurrentView('models', 'model', 'comparison', 'simulation') }">
           <a class="nav-link" href="#/models">Models</a>
-        </li>
+        </li> -->
       </ul>
     </div>
   </nav>
