@@ -19,7 +19,7 @@
       </details>
 
       <details v-if="data.in_degree" class="metadata" open>
-        <summary>Incoming ({{ data.in_degree }})</summary>
+        <summary>{{ `Incoming ${incoming.length} / ${data.in_degree}` }}</summary>
         <div class="metadata-content">
           <div role="button" class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in incoming" :key="index" @click="neighborhoodSelection(rowLabel)">
             {{rowLabel}}
@@ -31,7 +31,7 @@
       </details>
 
       <details v-if="data.out_degree" class="metadata" open>
-        <summary>Outgoing ({{ data.out_degree }})</summary>
+        <summary>{{ `Outgoing ${outgoing.length} / ${data.out_degree}` }}</summary>
         <div class="metadata-content">
           <div role="button" class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in outgoing" :key="index" @click="neighborhoodSelection(rowLabel)">
             {{rowLabel}}
@@ -104,7 +104,7 @@
             .unique()
             .run()
             .filter(node => !subgraph.has(node.vertex.id))
-            .map(node => `${node.vertex.name} → ${this.data.label}`);
+            .map(node => `${this.data.label} → ${node.vertex.name}`);
           this.incomingNodes = bgraph
             .v({ id: this.data.id })
             .in()
@@ -112,7 +112,7 @@
             .unique()
             .run()
             .filter(node => !subgraph.has(node.vertex.id))
-            .map(node => `${this.data.label} → ${node.vertex.name}`);
+            .map(node => `${node.vertex.name} → ${this.data.label}`);
         }
       });
     }
