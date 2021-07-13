@@ -39,14 +39,15 @@
   }
 </script>
 
-<style lang="scss" scoped>
-.metadata-item {
-  padding: 20px;
-  text-align: left;
-  border-bottom: 1px solid rgba(207, 216, 220, .5);
-  .key {
+<style scoped>
+  .metadata-item {
+    border-bottom: 1px solid rgba(207, 216, 220, .5);
+    padding: 20px;
+    text-align: left;
+  }
+
+  .metadata-item .key {
     font-weight: bold;
     padding-top: 5px;
   }
-}
 </style>

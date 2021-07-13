@@ -52,17 +52,17 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-.entities-pane-container {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-.entities-container {
-  overflow: hidden scroll;
-}
+<style scoped>
+  .entities-pane-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .entities-container {
+    overflow: hidden scroll;
+  }
 </style>

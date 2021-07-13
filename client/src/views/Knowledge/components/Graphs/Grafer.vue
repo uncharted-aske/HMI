@@ -152,26 +152,24 @@
 
 </script>
 
-<style lang="scss" scoped>
-  @import '@/styles/variables';
-
+<style scoped>
   .grafer-container {
+    height: 100%;
     position: relative;
     width: 100%;
-    height: 100%;
   }
 
   .grafer-canvas {
-    width: 100%;
     height: 100%;
+    width: 100%;
   }
 
   .loading {
-    position: absolute;
-    user-select: none;
-    color: #d8dee9;
-    top: 50%;
+    color: var(--nord4);
     left: 50%;
+    position: absolute;
+    top: 50%;
     transform: translate(-50%, -50%);
+    user-select: none;
   }
 </style>

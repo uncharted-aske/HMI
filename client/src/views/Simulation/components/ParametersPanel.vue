@@ -227,9 +227,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   .simulation-parameters-panel {
     color: white;
     display: flex;
@@ -241,7 +239,7 @@
   }
 
   .parameters {
-    background-color: $bg-graphs;
+    background-color: var(--bg-graphs);
     flex-grow: 1;
     position: relative;
   }
@@ -283,7 +281,7 @@
   }
 
   .parameter input {
-    background-color: $bg-body;
+    background-color: var(--bg-body);
     border: none;
     border-radius: 3px;
     color: inherit;
@@ -296,33 +294,33 @@
 
   .parameter .btn-group {
     grid-area: action;
+  }
 
-    button {
-      padding-bottom: 0;
-      padding-top: 0;
-    }
+  .parameter .btn-group button {
+    padding-bottom: 0;
+    padding-top: 0;
   }
 
   .parameter.hidden {
     opacity: 0.5;
   }
 </style>
-<style lang="scss">
+<style>
   /* For SVG you cannot scope the <style> */
 
   .parameters-graph .axis {
     fill: none;
-    stroke: var(--colors-nodes-other);
+    stroke: var(--colours-nodes-other);
     stroke-width: 1;
   }
 
   .parameters-graph .run {
     fill: none;
-    stroke: var(--colors-nodes-other);
+    stroke: var(--colours-nodes-other);
     stroke-width: 3;
   }
 
   .parameters-graph .run.current {
-    stroke: var(--colors-nodes-default);
+    stroke: var(--colours-nodes-default);
   }
 </style>
