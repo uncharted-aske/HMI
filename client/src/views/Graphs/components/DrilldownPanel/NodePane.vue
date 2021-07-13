@@ -19,7 +19,7 @@
       </details>
 
       <details v-if="data.in_degree" class="metadata" open>
-        <summary>Incoming ({{ data.in_degree }})</summary>
+        <summary>{{ `Incoming ${incoming.length} / ${data.in_degree}` }}</summary>
         <div class="metadata-content">
           <div role="button" class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in incoming" :key="index">
             {{rowLabel}}
@@ -31,7 +31,7 @@
       </details>
 
       <details v-if="data.out_degree" class="metadata" open>
-        <summary>Outgoing ({{ data.out_degree }})</summary>
+        <summary>{{ `Outgoing ${outgoing.length} / ${data.out_degree}` }}</summary>
         <div class="metadata-content">
           <div role="button" class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in outgoing" :key="index">
             {{rowLabel}}
