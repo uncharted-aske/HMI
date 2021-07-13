@@ -177,7 +177,6 @@
 
     @Getter getSelectedModelIds;
     @Getter getModelsList;
-    @Getter getParameters;
     @Getter getFilters;
     @Getter getSelectedModelGraph;
     @Mutation setSelectedModels;

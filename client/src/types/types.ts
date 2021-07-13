@@ -48,8 +48,12 @@ interface SimulationParameter extends Donu.ModelParameter {
   values?: number[],
 }
 
+// List of runs, containing a list of coordinates.
+type SimulationVariableValues = Array<{x: number, y: number}>;
+
 interface SimulationVariable extends Donu.ModelVariable {
-  values: {x: number, y: number}[][], // List of runs, containing a list of coordinates.
+  aggregate: SimulationVariableValues,
+  values: SimulationVariableValues[],
   hidden: boolean,
 }
 
@@ -63,8 +67,9 @@ export {
   GraferEventDetail,
   ModelComponentMetadataInterface,
   SimulationParameter,
-  SimulationVariable,
   SimulationRun,
+  SimulationVariable,
+  SimulationVariableValues,
   TabInterface,
   ViewInterface,
 };

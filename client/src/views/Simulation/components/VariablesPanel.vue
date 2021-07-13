@@ -127,7 +127,6 @@
 
     @Getter getSimVariables;
     @Getter getVariablesRunsCount;
-    @Getter getSimVariablesAggregate;
     @Action setSimVariableVisibility;
 
     get simVariables (): HMI.SimulationVariable[] {
@@ -137,15 +136,12 @@
         for (let i = 0; i < simVariable.values.length; i++) {
           simVariable.styles.push(mergeStyle(i !== simVariable.values.length - 1 && OTHER_STYLE));
         }
-      });
 
-      if (this.getVariablesRunsCount > 1) {
-        this.getSimVariablesAggregate.map((simVariableAggregate, i) => {
-          const simVariable = simVariables[i];
-          simVariable.values = [...simVariable.values, ...simVariableAggregate.values];
+        if (simVariable.aggregate) {
+          simVariable.values.push(simVariable.aggregate);
           simVariable.styles.push(mergeStyle(AGGREGATE_STYLE));
-        });
-      }
+        }
+      });
 
       return _.orderBy(simVariables, ['metadata.name'], ['asc']);
     }
