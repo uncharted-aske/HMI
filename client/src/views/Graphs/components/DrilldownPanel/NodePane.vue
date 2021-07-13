@@ -104,7 +104,7 @@
             .unique()
             .run()
             .filter(node => !subgraph.has(node.vertex.id))
-            .map(node => `${node.vertex.name} → ${this.data.label}`);
+            .map(node => `${this.data.label} → ${node.vertex.name}`);
           this.incomingNodes = bgraph
             .v({ id: this.data.id })
             .in()
@@ -112,7 +112,7 @@
             .unique()
             .run()
             .filter(node => !subgraph.has(node.vertex.id))
-            .map(node => `${this.data.label} → ${node.vertex.name}`);
+            .map(node => `${node.vertex.name} → ${this.data.label}`);
         }
       });
     }
