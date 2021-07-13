@@ -53,8 +53,8 @@ type SimulationVariableValues = Array<{x: number, y: number}>;
 
 interface SimulationVariable extends Donu.ModelVariable {
   aggregate: SimulationVariableValues,
-  values: SimulationVariableValues[],
   hidden: boolean,
+  values: SimulationVariableValues[],
 }
 
 type SimulationRun = {

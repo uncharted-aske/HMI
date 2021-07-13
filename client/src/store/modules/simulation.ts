@@ -136,6 +136,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     const donuVariables = await getModelVariables(model, selectedModelGraph) ?? [];
     const variables = donuVariables.map(donuVariable => ({
       ...donuVariable,
+      aggregate: null,
       hidden: false,
       values: [],
     }));
@@ -172,6 +173,7 @@ const mutations: MutationTree<SimulationState> = {
   resetVariablesValues (state): void {
     state.variables.forEach(variable => {
       variable.values = [];
+      variable.aggregate = null;
     });
   },
 
