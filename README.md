@@ -14,7 +14,7 @@ Please duplicate the `./client/.env` file into `./client/.env.local` for local d
 
 ## Docker Compose
 The client's docker image requires configuration via environment files. The environment files that are required
-are `./client/.env.nginx` and `./client/.env.dist`. See Confluence for default configuration parameters.
+are `./client/.env.nginx` and `./client/.env.dist`. Contact Uncharted Software for default configuration parameters.
 
 Start docker compose:
 ```shell script
@@ -24,7 +24,7 @@ docker-compose up --build
 Navigate to http://localhost/#/.
 
 ## Deployment
-See Confluence for deployment instructions.
+Contact Uncharted Software for deployment instructions.
 
 ## Development
 
