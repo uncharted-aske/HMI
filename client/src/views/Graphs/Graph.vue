@@ -64,6 +64,7 @@
         slot="content"
         :model="selectedGraphId"
         :data="drilldownMetadata"
+        @add-to-subgraph="onAddToSubgraph"
       />
       <edge-pane
         v-if="drilldownActivePaneId === 'edge'"
@@ -476,6 +477,40 @@
       const artifact: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
       this.modalDocumentArtifact = artifact;
       this.showModalDocument = true;
+    }
+
+    onAddToSubgraph (edge: GraphEdgeInterface): void {
+      const subgraph = _.clone(this.subgraph);
+      const nodes = subgraph.nodes.map(node => node.label);
+      const edges = subgraph.edges.map(edge => edge.source + '///' + edge.target);
+
+      const bgraphSource = this.bgraphInstance.v({ name: edge.source }).run()[0].vertex;
+      const bgraphTarget = this.bgraphInstance.v({ name: edge.target }).run()[0].vertex;
+
+      // If the edge doesn't exist already in the subgraph
+      if (edges.indexOf(bgraphSource.id + '///' + bgraphTarget.id) === -1) {
+        const bgraphEdge = this.bgraphInstance.v({ source_id: bgraphSource.id, target_id: bgraphTarget.id }).run()[0].vertex;
+         // Check if the source and target nodes already exist in the subgraph
+        if (nodes.indexOf(edge.source) === -1) {
+          const addedNode = _.clone(bgraphSource);
+          addedNode.id = addedNode._id;
+          addedNode.label = addedNode.name;
+          subgraph.nodes.push(addedNode);
+        }
+        if (nodes.indexOf(edge.target) === -1) {
+          const addedNode = _.clone(bgraphTarget);
+          addedNode.id = addedNode._id;
+          addedNode.label = addedNode.name;
+          subgraph.nodes.push(addedNode);
+        }
+
+        const addedEdge = _.clone(bgraphEdge);
+        addedEdge.source = addedEdge.source_id;
+        addedEdge.target = addedEdge.target_id;
+        subgraph.edges.push(addedEdge);
+
+        Vue.set(this, 'subgraph', subgraph);
+      }
     }
   }
 </script>
