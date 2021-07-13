@@ -149,9 +149,9 @@
     }
 
     neighborhoodSelection (relationship: string): void {
-      const relationshipSplitted = relationship.split(' ');
-      const source = relationshipSplitted[0];
-      const target = relationshipSplitted.reverse()[0];
+      const relationshipSplitted = relationship.split('\u2192');
+      const source = relationshipSplitted[0].trimEnd();
+      const target = relationshipSplitted.reverse()[0].trimStart();
       const relationshipToAdd = { source, target };
 
       this.$emit('add-to-subgraph', relationshipToAdd);
