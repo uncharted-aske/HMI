@@ -483,16 +483,20 @@
       const nodes = subgraph.nodes.map(node => node.label);
       const edges = subgraph.edges.map(edge => edge.source + '///' + edge.target);
 
+      const source = this.bgraphInstance.v({name: edge.source}).run()[0].vertex;
+      const target = this.bgraphInstance.v({name: edge.target}).run()[0].vertex;
+
       //If the edge doesn't exist already in the subgraph
       if (edges.indexOf(edge.source + '///' + edge.target) === -1) {
-        //Check if the source and target nodes already exist in the subgraph
-        if (subgraph.nodes.indexOf(edge.source) === - 1) {
-          subgraph.nodes.push({ id: edge.source, label: edge.source });
+        const edge = this.bgraphInstance.v({source_id: source.id, target_id: target.id}).run();
+         //Check if the source and target nodes already exist in the subgraph
+        if (nodes.indexOf(edge.source) === - 1) {
+          subgraph.nodes.push({id: source.id, label: source.name });
         }
-        if (subgraph.nodes.indexOf(edge.target) === - 1) {
-          subgraph.nodes.push({ id: edge.target, label: edge.target });
+        if (nodes.indexOf(edge.target) === - 1) {
+          subgraph.nodes.push({id: target.id, label: target.name });
         }
-        subgraph.edges.push(edge);
+        subgraph.edges.push({source: source.id, target: target.id});
         Vue.set(this, 'subgraph', subgraph);
       } else {
         console.log('Relationship already exists in the subgraph');
