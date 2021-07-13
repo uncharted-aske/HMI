@@ -12,7 +12,10 @@ if (options.dev) {
   dotenvOptions.path = process.cwd() + '/.env.dist';
 }
 const dotenvConfig = dotenv.config(dotenvOptions);
-if (dotenvConfig.error) {
+if (dotenvConfig.error && dotenvConfig.error.code === 'ENOENT') {
+  // eslint-disable-next-line no-console
+  console.warn('WARNING: No environment file found. Default environment variables will be used.');
+} else if (dotenvConfig.error) {
   throw dotenvConfig.error;
 }
 
@@ -31,6 +34,7 @@ const DEFAULT_ENV_VARS = {
 // defineGlobalVarsFromDotEnvConfig produces an object that is compatible with esbuild.BuildOptions.define
 //  and converts each dot environment `[KEY]` to a `process.env.[KEY]`
 function defineGlobalVarsFromDotEnvConfig (dotenvConfig) {
+  if (!dotenvConfig.parsed) return {};
   let result = {};
   Object.keys(dotenvConfig.parsed).map(key => {
     result[`process.env.${key}`] = JSON.stringify(dotenvConfig.parsed[key]);
