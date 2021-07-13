@@ -1,99 +1,177 @@
 <template>
   <div class="node-pane-container">
-     <div class="border-bottom">
-        <h5>{{data.label}}
-        </h5>
-      <h6>Type: <span class="emphasis">{{data.type}}</span></h6>
-    </div>
+    <header>
+      <h5>{{data.label}}</h5>
+      Type: {{ data.type }}<br>
+      Link: <a v-if="emmaaInfo.url" :href="emmaaInfo.url">
+        {{ data.db_ids[0].namespace }}
+      </a>
+    </header>
 
-  <collapsible-container :isEmpty="isEmptyMetadata">
-    <collapsible-item slot="item" expanded="true" v-for="(values, dataObjectKey) in dataObject" :key="dataObjectKey">
-      <div slot="title">{{dataObjectKey}}</div>
-      <div slot="content" v-if="dataObjectKey === 'URL'">
-        <a :href="values">{{dbRef.namespace}}</a>
-      </div>
-      <div slot="content" v-else>
-        {{values}}
-      </div>
-    </collapsible-item>
+    <div class="metadata-list">
+      <loading-alert v-if="isLoading" />
 
-    <div slot="empty" class="alert alert-info" role="alert">
-      No metadata at the moment
+      <details v-if="emmaaInfo.definition" class="metadata" open>
+        <summary>Definition</summary>
+        <div class="metadata-content">
+          <p>{{ emmaaInfo.definition }}</p>
+        </div>
+      </details>
+
+      <details v-if="data.in_degree" class="metadata" open>
+        <summary>{{ `Incoming ${incoming.length} / ${data.in_degree}` }}</summary>
+        <div class="metadata-content">
+          <div role="button" class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in incoming" :key="index" @click="neighborhoodSelection(rowLabel)">
+            {{rowLabel}}
+          </div>
+          <button type="button" class="btn btn-sm btn-light" @click="viewAllIncoming">
+            View {{ displayAllIncoming ? 'less' : `all ${data.in_degree}` }}
+          </button>
+        </div>
+      </details>
+
+      <details v-if="data.out_degree" class="metadata" open>
+        <summary>{{ `Outgoing ${outgoing.length} / ${data.out_degree}` }}</summary>
+        <div class="metadata-content">
+          <div role="button" class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in outgoing" :key="index" @click="neighborhoodSelection(rowLabel)">
+            {{rowLabel}}
+          </div>
+          <button type="button" class="btn btn-sm btn-light" @click="viewAllOutgoing">
+            View {{ displayAllOutgoing ? 'less' : `all ${data.out_degree}` }}
+          </button>
+        </div>
+      </details>
+
     </div>
-  </collapsible-container>
-</div>
+  </div>
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
-  import Component from 'vue-class-component';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { Getter } from 'vuex-class';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import CollapsibleContainer from '@/components/Collapsible/CollapsibleContainer.vue';
-  import CollapsibleItem from '@/components/Collapsible/CollapsibleItem.vue';
-
+  import LoadingAlert from '@/components/widgets/LoadingAlert.vue';
   import { emmaaEntityInfo } from '@/services/EmmaaFetchService';
+  import eventHub from '@/eventHub';
 
   import { EmmaaEntityInfoInterface } from '@/types/typesEmmaa';
   import { GraphNodeDataInterface } from '@/types/typesGraphs';
+  import { filterToBgraph } from '@/utils/BGraphUtil';
 
   const components = {
-    CollapsibleContainer,
-    CollapsibleItem,
+    LoadingAlert,
   };
+
+  const emptyEmmaaInfo = {
+    definition: null,
+    name: null,
+    url: null,
+  } as EmmaaEntityInfoInterface;
 
   @Component({ components })
   export default class NodePane extends Vue {
     @Prop({ default: null }) data: GraphNodeDataInterface;
-    @Prop({ default: null }) model: any;
-    externalData: EmmaaEntityInfoInterface;
-    dataObject: Record<any, any> = {};
+    @Prop({ default: null }) model: string;
+    isLoading = false;
+    displayAllIncoming = false;
+    displayAllOutgoing = false;
+    incomingNodes: string[] = [];
+    outgoingNodes: string[] = [];
+    emmaaInfo: EmmaaEntityInfoInterface = emptyEmmaaInfo;
+
+    @Getter getFilters;
 
     @Watch('data') onDataChange (): void {
-      this.dataObject = this.computeDataObject();
       this.fetchExternalData();
+      this.getNeighbours();
     }
 
     mounted (): void {
-      this.dataObject = this.computeDataObject();
       this.fetchExternalData();
+      this.getNeighbours();
     }
 
-    get dbRef (): { namespace: string, id: string } {
-      return this.data.db_ids[0];
+    getNeighbours (): void {
+      eventHub.$emit('get-bgraph', bgraph => {
+        if (bgraph) {
+          const subgraph = new Set(filterToBgraph(bgraph, this.getFilters).map(node => node.id));
+          this.outgoingNodes = bgraph
+            .v({ id: this.data.id })
+            .out()
+            .out()
+            .unique()
+            .run()
+            .filter(node => !subgraph.has(node.vertex.id))
+            .map(node => `${this.data.label} → ${node.vertex.name}`);
+          this.incomingNodes = bgraph
+            .v({ id: this.data.id })
+            .in()
+            .in()
+            .unique()
+            .run()
+            .filter(node => !subgraph.has(node.vertex.id))
+            .map(node => `${node.vertex.name} → ${this.data.label}`);
+        }
+      });
     }
 
     async fetchExternalData (): Promise<void> {
-      const response = await emmaaEntityInfo({
+      this.isLoading = true;
+      this.emmaaInfo = emptyEmmaaInfo;
+      this.emmaaInfo = await emmaaEntityInfo({
         modelName: this.model,
-        ...this.dbRef,
+        namespace: this.data.db_ids[0].namespace,
+        id: this.data.db_ids[0].id,
       });
-      this.externalData = response;
-      this.dataObject = this.computeDataObject();
+      this.isLoading = false;
     }
 
-    computeDataObject (): Record<any, void> {
-      const { data, externalData } = this;
-      const output: Record<any, any> = {};
-      if (externalData) {
-        output.Definition = externalData.definition;
-        output.URL = externalData.url;
-      }
-      output.Incoming = data.in_degree;
-      output.Outgoing = data.out_degree;
-      return output;
+    get incoming (): string[] {
+      return this.displayAllIncoming
+        ? this.incomingNodes
+        : this.incomingNodes.slice(0, 5);
     }
 
-    get isEmptyMetadata (): boolean {
-      return _.isEmpty(this.data);
+    get outgoing (): string[] {
+      return this.displayAllOutgoing
+        ? this.outgoingNodes
+        : this.outgoingNodes.slice(0, 5);
+    }
+
+    viewAllIncoming (): void {
+      this.displayAllIncoming = !this.displayAllIncoming;
+    }
+
+    viewAllOutgoing (): void {
+      this.displayAllOutgoing = !this.displayAllOutgoing;
+    }
+
+    neighborhoodSelection (relationship: string): void {
+      const relationshipSplitted = relationship.split('\u2192');
+      const source = relationshipSplitted[0].trimEnd();
+      const target = relationshipSplitted.reverse()[0].trimStart();
+      const relationshipToAdd = { source, target };
+
+      this.$emit('add-to-subgraph', relationshipToAdd);
     }
   }
 </script>
 
-<style lang="scss" scoped>
-.node-pane-container {
-  padding: 5px;
-}
+<style scoped>
+  header {
+    padding: .5em;
+  }
+
+  header a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .metadata button {
+    display: block;
+    margin: .5em auto;
+  }
 </style>

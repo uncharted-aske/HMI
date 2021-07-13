@@ -1,5 +1,5 @@
 <template>
-  <div class="collapsible-item">
+  <div :class="`collapsible-item ${expandedState && grow ? 'flex-grow-1' : ''}`">
     <div class="item-container">
       <div
         class="item-title"
@@ -40,6 +40,7 @@
   @Component
   export default class CollapsibleItem extends Vue {
     @Prop({ default: false }) expanded: boolean;
+    @Prop({ default: false }) grow: boolean;
     expandedState: boolean = false;
 
     @Watch('expanded') onExpandedChange (): void {
@@ -61,32 +62,32 @@
 
 </script>
 
-<style lang="scss">
-@import "@/styles/variables";
+<style scoped>
 .collapsible-item {
   margin: 2px 0;
   display: flex;
   flex-direction: column;
   position: relative;
-
-  &.active {
-    flex: 1;
-  }
-
-  .item-container {
-    padding: 2px 0;
-    .item-title {
-      display: flex;
-      align-items: baseline;
-      padding: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      background-color: $drilldown-header;
-      div {
-        padding: 5px;
-      }
-    }
-  }
 }
 
+.collapsible-item.active {
+  flex: 1;
+}
+
+.item-container {
+  padding: 2px 0;
+}
+
+.item-container .item-title {
+  display: flex;
+  align-items: baseline;
+  padding: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: var(--drilldown-header);
+}
+
+.item-container .item-title div {
+    padding: 5px;
+}
 </style>

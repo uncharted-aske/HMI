@@ -110,34 +110,33 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
+<style scoped>
+  .settings-container {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    position: relative;
+  }
 
-.settings-container {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  position: relative;
-
-  .setting-name {
+  .settings-container .setting-name {
     font-weight: bold;
   }
-}
 
-.dropdown-settings {
-  align-items: center;
-  display: flex;
-  height: calc(#{$secondary-bar-width});
-  padding: 10px;
-  position: absolute;
-  top: calc(#{$secondary-bar-width} - 10px);
-}
-.layout {
-  right: 0px;
-}
+  .dropdown-container.dropdown-settings {
+    align-items: center;
+    display: flex;
+    height: var(--secondary-bar-width);
+    padding: 10px;
+    position: absolute;
+    top: calc(var(--secondary-bar-width) - 10px);
+  }
 
-.view {
-  left: 0px;
-}
+  .layout {
+    right: 0px;
+  }
+
+  .view {
+    left: 0px;
+  }
 </style>

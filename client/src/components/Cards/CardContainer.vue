@@ -41,32 +41,33 @@
   }
 </script>
 
-<style lang="scss">
-@import "@/styles/variables";
-
+<style scoped>
 .card-container {
-  flex: 1;
+  background-color: var(--bg-primary);
   display: flex;
+  flex: 1;
   flex-direction: column;
-  // Use 22px instead of 32px to account for cards' 10px horizontal margin
-  padding: 16px 22px 16px 22px;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: $bg-primary;
 
-  .section-header {
-    // Match cards' 10px horizontal margin
-    margin-left: 10px;
-    font-weight: normal;
-    color: $text-color-light;
-  }
+  /* Use 22px instead of 32px to account for cards' 10px horizontal margin */
+  padding: 16px 22px 16px 22px;
+}
 
-  .card-list {
-    display: flex;
-    flex-wrap: wrap;
-    .card {
-      margin: 0 10px 20px 10px;
-    }
-  }
+.section-header {
+  color: var(--text-color-light);
+  font-weight: normal;
+
+  /* Match cards' 10px horizontal margin */
+  margin-left: 10px;
+}
+
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-list .card {
+  margin: 0 10px 20px 10px;
 }
 </style>

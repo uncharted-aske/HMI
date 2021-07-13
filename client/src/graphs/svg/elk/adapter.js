@@ -18,7 +18,7 @@ const build = (root) => {
       depth: depth,
       type: 'normal',
       parent: parent,
-      data: node.data,
+      data: node.data || node,
     };
 
     // Build edges
@@ -80,7 +80,7 @@ const injectELKOptions = (renderGraph, options) => {
       node.height = node.height || options.nodeHeight;
 
       // Special case for parameters
-      if (node.data.role?.includes('parameter')) {
+      if (node.data && node.data.role?.includes('parameter')) {
         node.width = options.parameterNodeSize || 30;
         node.height = options.parameterNodeSize || 30;
       }

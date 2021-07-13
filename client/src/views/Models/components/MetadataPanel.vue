@@ -1,32 +1,61 @@
 <template>
-  <div v-if="metadata" class="metadata-pane-container">
-    <div v-for="(item, key) in metadata" :key="key">
-      {{item}}
-    </div>
-    <!-- <div class="metadata-item">
-      <div class="key">Name</div>
-      <div>{{metadata.name}}</div>
-    </div>
-    <div class="metadata-item">
-       <div class="key">Description</div>
-      <div>{{metadata.description}}</div>
-    </div>
-    <div class="metadata-item">
-       <div class="key">Created</div>
-      <div>{{metadata.created}}</div>
-    </div>
-    <div class="metadata-item">
-       <div class="key">Source</div>
-      <div>{{metadata.source}}</div>
-    </div>
-    <div class="metadata-item">
-       <div class="key">Version</div>
-      <div>{{metadata.version}}</div>
-    </div>
-    <div class="metadata-item">
-       <div class="key">Knowledge</div>
-      <div><a class="text-link" :href="metadata.knowledge">{{metadata.knowledge}}</a> </div>
-    </div> -->
+  <div class="metadata-panel metadata-list">
+    <details
+      class="metadata" open
+      v-for="(datum, index) in metadata" :key="index"
+    >
+
+      <template v-if="isTypeModel(datum)">
+        <summary :title="datum.uid">Model</summary>
+        <div class="metadata-content">
+          <h6>Variables</h6>
+          <p>{{ datum.variables | ArrayToList }}</p>
+          <h6>Parameters</h6>
+          <p>{{ datum.parameters | ArrayToList }}</p>
+          <h6>Initial Conditions</h6>
+          <p>{{ datum.initial_conditions | ArrayToList }}</p>
+        </div>
+      </template>
+
+      <template v-else-if="isTypeCode(datum)">
+        <summary :title="datum.uid">Code</summary>
+        <div class="metadata-content">
+          <h6>Reference</h6>
+          <p>{{ datum.global_reference_id.type }} {{ datum.global_reference_id.id }}</p>
+          <h6>Files</h6>
+          <ol>
+            <li
+              v-for="(file, index) in datum.file_ids"
+              :key="index"
+              :title="file.uid"
+            >{{ file.name }} ({{ file.path }})</li>
+          </ol>
+        </div>
+      </template>
+
+      <template v-else-if="isTypeDocuments(datum)">
+        <summary :title="datum.uid">Documents</summary>
+        <div class="metadata-content">
+          <details v-for="(doc, index) in datum.documents" :key="index">
+            <summary :title="doc.uid">
+              <a :href="doc.bibjson.website.url">{{ doc.bibjson.title }}</a>
+              {{ doc.global_reference_id.type }} {{ doc.global_reference_id.id }}
+            </summary>
+            <h6>File</h6>
+            <p><a :href="doc.bibjson.file_url">{{ doc.bibjson.file }}</a></p>
+            <h6>Author(s)</h6>
+            <p>{{ doc.bibjson.author.map(a => a.name) | ArrayToList }}</p>
+          </details>
+        </div>
+      </template>
+
+      <aside class="metadata-provenance">
+        {{ datum.provenance.method }}
+        <time :datetime="datum.provenance.timestamp">
+          {{ provenanceDate(datum.provenance.timestamp) }}
+        </time>
+      </aside>
+    </details>
   </div>
 </template>
 
@@ -35,21 +64,27 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
   import * as Model from '@/types/typesModel';
+  import * as GroMET from '@/types/typesGroMEt';
+  import { formatFullDateTime } from '@/utils/DateTimeUtil';
 
   @Component
   export default class MetadataPanel extends Vue {
-    @Prop({ default: null }) metadata: Model.Metadata;
+    @Prop({ default: null }) metadata: Model.GraphMetadata;
+
+    isTypeModel (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadateType.ModelInterface;
+    }
+
+    isTypeCode (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadateType.CodeCollectionReference;
+    }
+
+    isTypeDocuments (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadateType.TextualDocumentReferenceSet;
+    }
+
+    provenanceDate (timestamp: string): string {
+      return formatFullDateTime(timestamp);
+    }
   }
 </script>
-
-<style lang="scss" scoped>
-.metadata-item {
-  padding: 20px;
-  text-align: left;
-  border-bottom: 1px solid rgba(207, 216, 220, .5);
-  .key {
-    font-weight: bold;
-    padding-top: 5px;
-  }
-}
-</style>

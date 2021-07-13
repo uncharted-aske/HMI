@@ -1,0 +1,75 @@
+/** Metadata using <details> */
+
+/* Display the metadata in in a vertical list */
+.metadata-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 1em 0;
+}
+
+.metadata,
+.metadata details {
+  border: var(--border);
+  border-radius: .2em;
+}
+
+.metadata-content {
+  hyphens: auto;
+  overflow-wrap: break-word;
+  padding-left: .5em;
+  padding-right: .5em;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.metadata summary {
+  padding: .5em;
+}
+
+.metadata > summary {
+  background-color: var(--drilldown-header);
+  font-weight: bold;
+}
+
+.metadata[open] > summary,
+.metadata details[open] > summary {
+  border-bottom: var(--border);
+  margin-bottom: .5em;
+}
+
+.metadata h6 {
+  display: block;
+  font-weight: bold;
+  margin: 0;
+}
+
+.metadata h6:not(:first-of-type) {
+  margin-top: 1em;
+}
+
+.metadata h6 + p {
+  margin: 0;
+}
+
+.metadata ol {
+  list-style-position: inside;
+  list-style-type: lower-roman;
+  margin: 0;
+  padding: 0;
+}
+
+/* If a details is within a metadata. */
+.metadata details {
+  padding: .5em;
+  margin: .5em;
+}
+
+.metadata-provenance {
+  font-size: .8em;
+  font-style: italic;
+  padding: .5rem;
+  text-align: right;
+}
+
+.metadata-provenance time { display: block; }

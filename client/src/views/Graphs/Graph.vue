@@ -59,11 +59,16 @@
       </resizable-grid>
     </div>
     <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown">
-      <node-pane v-if="drilldownActivePaneId === 'node'" slot="content"
+      <node-pane
+        v-if="drilldownActivePaneId === 'node'"
+        slot="content"
         :model="selectedGraphId"
         :data="drilldownMetadata"
+        @add-to-subgraph="onAddToSubgraph"
       />
-      <edge-pane v-if="drilldownActivePaneId === 'edge'" slot="content"
+      <edge-pane
+        v-if="drilldownActivePaneId === 'edge'"
+        slot="content"
         :model="selectedGraphId"
         :data="drilldownMetadata"
         @evidence-click="onEvidenceClick"
@@ -72,6 +77,7 @@
 
     <modal-document
       v-if="showModalDocument"
+      link-to-knowledge-space="true"
       :artifact="modalDocumentArtifact"
       @close="showModalDocument = false"
     />
@@ -163,6 +169,9 @@
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any;
 
+    // Store the graph data counts, as the bGraph instance is not reactive to changes.
+    graphCount: { edges: number, nodes: number } = { edges: null, nodes: null };
+
     // Initialize as undefined to prevent Vue from observing changes within these large datasets
     // Grafer data is stored in Bio view data as they are required for mapping bgraph queries to grafer layers
     graferNodesData: GraferNodesData = undefined;
@@ -230,6 +239,8 @@
     }
 
     async mounted (): Promise<void> {
+      eventHub.$on('get-bgraph', cb => cb(this.bgraphInstance));
+
       // Load the graph only if we have a selected model,
       // otherwise wait until the getKnowledgeGraphsList as loaded.
       if (this.selectedGraph) {
@@ -239,8 +250,8 @@
 
     get countersData (): Counter[] {
       const counters: Counter[] = [
-        { name: 'Nodes', value: 44104 },
-        { name: 'Edges', value: 448723 },
+        { name: 'Nodes', value: this.graphCount.nodes },
+        { name: 'Edges', value: this.graphCount.edges },
       ];
 
       if (this.subgraph) {
@@ -312,6 +323,13 @@
         `${process.env.S3_BGRAPH_KNOWLEDGE_GRAPHS}/${this.selectedGraphId}/edges.jsonl`,
       );
       this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
+
+      // Set the graph count
+      this.graphCount = { edges: 0, nodes: 0 };
+      bgNodes.forEach(bgNode => {
+        if (bgNode._type === 'edge') ++this.graphCount.edges;
+        else if (bgNode._type === 'node') ++this.graphCount.nodes;
+      });
 
       const graferLayerData = await this.loadGraferData();
       // TODO: This takes up a lot of memory and will likely scale poorly
@@ -455,17 +473,49 @@
       this.drilldownMetadata = edge.data;
     }
 
-    async onEvidenceClick (doi:string): Promise<void> {
+    async onEvidenceClick (doi: string): Promise<void> {
       const artifact: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
       this.modalDocumentArtifact = artifact;
       this.showModalDocument = true;
     }
+
+    onAddToSubgraph (edge: GraphEdgeInterface): void {
+      const subgraph = _.clone(this.subgraph);
+      const nodes = subgraph.nodes.map(node => node.label);
+      const edges = subgraph.edges.map(edge => edge.source + '///' + edge.target);
+
+      const bgraphSource = this.bgraphInstance.v({ name: edge.source }).run()[0].vertex;
+      const bgraphTarget = this.bgraphInstance.v({ name: edge.target }).run()[0].vertex;
+
+      // If the edge doesn't exist already in the subgraph
+      if (edges.indexOf(bgraphSource.id + '///' + bgraphTarget.id) === -1) {
+        const bgraphEdge = this.bgraphInstance.v({ source_id: bgraphSource.id, target_id: bgraphTarget.id }).run()[0].vertex;
+         // Check if the source and target nodes already exist in the subgraph
+        if (nodes.indexOf(edge.source) === -1) {
+          const addedNode = _.clone(bgraphSource);
+          addedNode.id = addedNode._id;
+          addedNode.label = addedNode.name;
+          subgraph.nodes.push(addedNode);
+        }
+        if (nodes.indexOf(edge.target) === -1) {
+          const addedNode = _.clone(bgraphTarget);
+          addedNode.id = addedNode._id;
+          addedNode.label = addedNode.name;
+          subgraph.nodes.push(addedNode);
+        }
+
+        const addedEdge = _.clone(bgraphEdge);
+        addedEdge.source = addedEdge.source_id;
+        addedEdge.target = addedEdge.target_id;
+        subgraph.edges.push(addedEdge);
+
+        Vue.set(this, 'subgraph', subgraph);
+      }
+    }
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   .content {
     display: flex;
     flex-direction: column;

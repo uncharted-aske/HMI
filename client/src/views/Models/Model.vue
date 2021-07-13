@@ -6,13 +6,11 @@
       :tabs="tabs"
       @tab-click="onTabClick"
     >
-      <div slot="content">
-        <metadata-panel
-          v-if="activeTabId === 'metadata'"
-          :metadata="selectedGraphMetadata"
-        />
-        <!-- <facets-pane v-if="activeTabId === 'facets'" />  -->
-      </div>
+      <metadata-panel
+        slot="content"
+        v-if="activeTabId === 'metadata'"
+        :metadata="selectedGraphMetadata"
+      />
     </left-side-panel>
     <div class="d-flex flex-column flex-grow-1 position-relative">
       <div class="search-row">
@@ -45,9 +43,10 @@
         <global-graph
           v-if="selectedGraph"
           :data="selectedGraph"
-          :highlight="subgraph"
+          :subgraph="subgraph"
           :layout="selectedLayoutId"
           @node-click="onNodeClick"
+          @background-click="onBackgroundClick"
         />
       </div>
     </div>
@@ -107,7 +106,7 @@
   import ModalDocMetadata from './components/Modals/ModalDocMetadata.vue';
 
   const TABS: TabInterface[] = [
-    { name: 'Facets', icon: 'filter', id: 'facets' },
+    // { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
@@ -190,6 +189,7 @@
 
     mounted (): void {
       this.loadData();
+      this.selectedViewId = VIEWS[this.getSelectedModelGraph].id;
     }
 
     executeFilters (): void {
@@ -323,25 +323,16 @@
       this.drilldownActiveTabId = 'metadata';
 
       this.drilldownPaneTitle = node.label;
-      this.drilldownPaneSubtitle = node.nodeType;
-      this.drilldownMetadata = null;
-
-      // const nodeMetadata = node.metadata;
-      // if (nodeMetadata) {
-      //   const nodeKnowledge = { knowledge: bakedData.success.data }; // To show some text snippets
-      //   this.drilldownMetadata = Object.assign({}, nodeKnowledge, nodeMetadata);
-
-      //   // This probably will need to be refactored since we don't want to do all the queries at the same time, just on demand given the active tab
-      //   const textDefinition = nodeMetadata.attributes[0].text_definition;
-      //   this.formatParametersData();
-      //   this.getRelatedParameters(textDefinition);
-      //   this.searchCosmos(textDefinition);
-      // }
+      this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
+      this.drilldownMetadata = node.metadata;
     }
 
-     async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
-      const response = await cosmosArtifactSrc(id);
-      return response;
+    onBackgroundClick ():void {
+      this.isOpenDrilldown = false;
+    }
+
+    async getSingleArtifact (id: string):Promise<CosmosSearchInterface> {
+      return await cosmosArtifactSrc(id);
     }
 
     async onOpenModalParameters (id: string):Promise<void> {
@@ -357,9 +348,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   .left-side-panel {
     flex-shrink: 0;
   }

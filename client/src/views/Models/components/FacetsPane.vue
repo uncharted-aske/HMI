@@ -11,6 +11,3 @@
   export default class FacetsPane extends Vue {
   }
 </script>
-
-<style lang="scss" scoped>
-</style>

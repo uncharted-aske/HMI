@@ -15,15 +15,14 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
-.settings-bar-container {
-  display: flex;
-  flex-shrink: 0;
-  gap: 5px;
-  justify-content: space-between;
-  min-height: $secondary-bar-width;
-  padding: 5px;
-}
+<style scoped>
+  .settings-bar-container {
+    align-items: center;
+    display: flex;
+    flex-shrink: 0;
+    gap: 5px;
+    justify-content: space-between;
+    min-height: var(--secondary-bar-width);
+    padding: 5px;
+  }
 </style>

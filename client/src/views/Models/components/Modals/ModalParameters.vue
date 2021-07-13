@@ -65,7 +65,7 @@
   export default class ModalKnowledgeParameters extends Vue {
     @Prop({ default: null }) data: any;
     get authorList (): string {
-      return getAuthorList(this.data.objects[0].bibjson.author);
+      return getAuthorList(this.data.objects[0].bibjson);
     }
 
     get doi (): string {
@@ -101,7 +101,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .image {
   background-size: contain;
   background-repeat: no-repeat;

@@ -6,11 +6,16 @@
         :title="countersTitle"
         :data="countersData"
       />
-      <div slot="right">
-        <button type="button" disabled class="btn btn-secondary btn-settings">Settings</button>
-        <button type="button" class="btn btn-secondary py-0 btn-settings" @click="$emit('expand')">
-          <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
-        </button>
+      <div class="d-flex align-items-center" slot="right">
+        <small class="mr-3 run-counter" v-if="getVariablesRunsCount">
+          {{`${getVariablesRunsCount} run${getVariablesRunsCount > 1 ? 's' : ''}`}}
+        </small>
+        <div>
+          <button type="button" disabled class="btn btn-secondary btn-settings">Settings</button>
+          <button type="button" class="btn btn-secondary py-0 btn-settings" @click="$emit('expand')">
+            <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
+          </button>
+        </div>
       </div>
     </settings-bar>
 
@@ -164,12 +169,10 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/styles/variables";
-
+<style scoped>
   .scatterplot-chart-container {
     flex: 1;
-    background-color: $bg-graphs;
+    background-color: var(--bg-graphs);
   }
 
   .variable .btn-group {
@@ -183,6 +186,10 @@
   .btn-settings {
     height: 25px;
     line-height: 0;
+  }
+
+  .run-counter {
+    color: var(--text-color-light);
   }
 
   .chart {

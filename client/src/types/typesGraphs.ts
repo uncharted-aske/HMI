@@ -63,6 +63,8 @@ export interface GraphNodeInterface {
   dataType?:string,
   data?: GraphNodeDataInterface,
   metadata?: any,
+  parent?: string,
+  role?: string[],
 }
 
 export interface GraphEdgeInterface {

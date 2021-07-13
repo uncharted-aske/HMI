@@ -37,25 +37,23 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
-
+<style scoped>
 .counters-container {
   align-items: center;
-  color: $text-color-light;
+  color: var(--text-color-light);
   display: flex;
   flex-wrap: wrap;
   height: 100%;
   padding: 0 5px;
+}
 
-  > * {
-    margin-right: 5px;
-  }
+.counters-container * {
+  margin-right: 5px;
+}
 
-  > *:not(:first-child)::before {
-    content: "|";
-    margin: 0 5px;
-  }
+.counters-container *:not(:first-child)::before {
+  content: "|";
+  margin: 0 5px;
 }
 
 .title {
@@ -63,6 +61,6 @@
 }
 
 .highlighted {
-  color: $text-color-highlight;
+  color: var(--text-color-highlight);
 }
 </style>

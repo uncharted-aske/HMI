@@ -2,14 +2,12 @@
 const path = require('path');
 const pkg = require('./package.json');
 const typescript = require('rollup-plugin-typescript2');
-const sourceMaps = require('rollup-plugin-sourcemaps');
 const vue = require('rollup-plugin-vue');
 const commonjs = require('@rollup/plugin-commonjs');
 const resolve = require('@rollup/plugin-node-resolve').nodeResolve;
 const json = require('@rollup/plugin-json');
 const image = require('@rollup/plugin-image');
 const globby = require('globby');
-const server = require('live-server');
 const copy = require('rollup-plugin-copy');
 const alias = require('@rollup/plugin-alias');
 
@@ -36,28 +34,6 @@ const outputDirs = {
   [types.DIST]: path.resolve(__dirname, 'dist'),
   [types.DEV]: path.resolve(__dirname, 'build'),
 };
-
-function liveServer (options = {}) {
-  const defaultParams = {
-    file: 'index.html',
-    host: '0.0.0.0',
-    logLevel: 2,
-    open: false,
-    port: 8080,
-    root: '.',
-    wait: 200,
-  };
-
-  const params = Object.assign({}, defaultParams, options);
-
-  server.start(params);
-  return {
-    name: 'liveServer',
-    generateBundle () {
-      console.log(`live-server running on ${params.port}`);
-    },
-  };
-}
 
 function inputForType (type) {
   if (type === types.TEST) {
@@ -155,9 +131,11 @@ function pluginsForType (type, env) {
       }),
       json(),
       image(),
+      // Copy files and folders, with glob support.
       copy({
         targets: [
           { src: 'src/static/*', dest: type === types.DEV ? 'dev' : 'dist' },
+          { src: 'src/styles/*.css', dest: type === types.DEV ? 'dev/styles' : 'dist/styles' },
         ],
       }),
     ],
@@ -192,8 +170,8 @@ function chunksForType (type) {
   return undefined;
 }
 
-function generateClientConfig (type, env, startDevServer = false) {
-  const config = Object.assign(
+function generateClientConfig (type, env) {
+  return Object.assign(
     {
       treeshake: true,
       watch: {
@@ -205,50 +183,26 @@ function generateClientConfig (type, env, startDevServer = false) {
     pluginsForType(type, env),
     chunksForType(type),
   );
-
-  if (startDevServer) {
-    config.plugins.push(sourceMaps());
-    config.plugins.push(liveServer({
-      port: 8090,
-      host: '0.0.0.0',
-      root: path.resolve(__dirname, 'src/static'),
-      file: 'index.html',
-      open: false,
-      wait: 500,
-      // proxy: [['/api', 'http://127.0.0.1:8080']], // not needed for now, used to proxy to the server API
-      watch: [path.resolve(__dirname, 'build/js')],
-      mount: [
-        ['/js', path.resolve(__dirname, 'build/js')],
-        ['/web_modules', path.resolve(__dirname, 'build/web_modules')],
-      ],
-    }));
-  }
-
-  return config;
 }
 
 module.exports = function generator (args) {
   const config = [];
 
-  let env;
+  let env = environments.DEV;
   if (process.env.NODE_ENV === environments.PROD) {
     env = environments.PROD;
-  } else {
-    env = environments.DEV;
   }
 
-  let type;
+  let type = types.BUILD;
   if (args['config-dist']) {
     type = types.DIST;
   } else if (args['config-test']) {
     type = types.TEST;
   } else if (args['config-dev']) {
     type = types.DEV;
-  } else {
-    type = types.BUILD;
   }
 
-  config.push(generateClientConfig(type, env, args['config-dev-server']));
+  config.push(generateClientConfig(type, env));
 
   return config;
 };

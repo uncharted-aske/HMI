@@ -1,0 +1,100 @@
+/**
+ * Override styles from imported libraries.
+ *
+ * We double the selector to increase its specificity.
+ */
+
+.navbar.navbar {
+  background-color:var(--bg-primary);
+}
+.navbar.navbar .navbar-brand,
+.navbar.navbar .nav-link {
+  color: var(--text-color-light);
+}
+
+.nav-link {
+  color: inherit;
+}
+
+.nav-link:hover {
+  color: var(--selection);
+}
+
+/* Navigation tabs */
+.navbar.navbar .nav-item.underlined {
+  border-bottom: 2px solid var(--selection);
+}
+
+.btn-primary.btn-primary,
+.btn-primary.btn-primary:focus,
+.btn-primary.btn-primary:active,
+.btn-primary.btn-primary.active {
+  background-color: var(--nord4);
+  border-color: var(--nord4);
+  box-shadow: none;
+  color: var(--text-color-dark);
+}
+
+.btn-primary.btn-primary:hover {
+  background-color: var(--nord5);
+  border-color: var(--nord4);
+  color: var(--text-color-dark);
+}
+
+.btn-primary.btn-primary:disabled {
+  background-color: var(--nord4);
+  border-color: var(--nord4);
+  color: var(--text-color-dark);
+  opacity: 0.3;
+}
+
+.btn-secondary.btn-secondary {
+  background-color: var(--nord1);
+}
+
+.btn-secondary.btn-secondary:hover {
+  background-color: var(--nord2);
+}
+
+.btn-secondary.btn-secondary:disabled {
+  background-color: var(--nord1);
+  opacity: 0.5;
+}
+
+div#lex-assistant-box.lex-assistant-box {
+  margin-top: 7px;
+}
+div#lex-assistant-box.lex-assistant-box ul li.selectable.active {
+  background-color: var(--selection);
+}
+
+.facet-terms-container.facet-terms-container {
+  --facet-terms-bar-0-selected: var(--selection);
+  --facet-terms-bar-0-selected-contrast: var(--selection);
+  --facet-terms-bar-0-selected-contrast-hover: var(--selection-hihghlight);
+  --facet-terms-bar-0-muted: var(--muted);
+  --facet-terms-bar-0-muted-contrast-hover: var(--muted-hihghlight);
+
+  --facet-terms-bar-1-selected: var(--selection);
+  --facet-terms-bar-1-selected-contrast: var(--selection);
+  --facet-terms-bar-1-selected-contrast-hover: var(--selection-hihghlight);
+  --facet-terms-bar-1-muted: var(--muted);
+  --facet-terms-bar-1-muted-contrast-hover: var(--muted-hihghlight);
+
+  --facet-terms-tick-color: var(--selection-hihghlight);
+}
+
+.search-bar-container {
+  height: var(--secondary-bar-width);
+}
+
+.search-bar-container.search-bar-container .lex-box {
+  border-color: var(--selection);
+  box-shadow: none;
+  display: flex;
+  height: var(--secondary-bar-width);
+}
+
+.search-bar-container.search-bar-container .lex-box:not(.active) {
+  border: none;
+}

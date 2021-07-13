@@ -62,58 +62,63 @@
   }
 </script>
 
-<style lang="scss" scoped>
-@import "@/styles/variables";
+<style scoped>
+  .left-side-panel-container {
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: var(--content-full-height);
+    padding: 5px;
+    position: relative; /* for .navigation-control */
+    width: 25vw;
+    will-change: width;
+    z-index: var(--z-index--side-panel);
+  }
 
-.left-side-panel-container {
-  background-color: #ffffff;
-  box-sizing: border-box;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  display: flex;
-  flex-direction: column;
-  height: $content-full-height;
-  padding: 5px;
-  position: relative; // for .navigation-control
-  width: 25vw;
-  will-change: width;
-  z-index: map-get($z-index-order, side-panel);
-
-  &.closed {
+  .left-side-panel-container.closed {
     padding: 0px;
     width: 0px;
-
-    .tab-panel, .panel-content {
-      display: none;
-    }
   }
-}
 
-.navigation-control {
-  width: 20px;
-  height: 75px;
-  position: absolute;
-  right: -1vw;
-  bottom: 50vh;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  .btn {
-    height: 100%;
-    background-color: #ffffff;
-    padding: 5px;
+  .left-side-panel-container.closed .tab-panel,
+  .left-side-panel-container.closed .panel-content {
+    display: none;
+  }
+
+  .navigation-control {
+    align-items: center;
+    bottom: 50vh;
+    display: flex;
+    flex-direction: row;
+    height: 75px;
+    position: absolute;
+    right: -1vw;
+    width: 20px;
+  }
+
+  .navigation-control .btn {
+    background-color: white;
     box-shadow: 0 -1px 0 #e5e5e5, 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
-    &:hover {
-      background-color: $muted-highlight;
-    }
+    height: 100%;
+    padding: 5px;
   }
 
-}
+  .navigation-control .btn:hover {
+    background-color: var(--muted-highlight);
+  }
 
-.nav-link.active {
-  cursor: default;
-  border-bottom: 3px solid $selection;
-}
-.nav-link:not(.active) {
-  cursor: pointer;
-}
+  .nav-link.active {
+    border-bottom: 3px solid var(--selection);
+    cursor: default;
+  }
+  .nav-link:not(.active) {
+    cursor: pointer;
+  }
+
+  .panel-content {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 </style>

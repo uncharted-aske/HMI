@@ -197,7 +197,7 @@
         {
           id: index,
           title: item.bibjson.title,
-          subtitle: `${item.bibjson.year} ?? 'Unknown Year'} - ${getAuthorList(item)}`,
+          subtitle: `${item.bibjson.year} ?? 'Unknown Year'} - ${getAuthorList(item.bibjson)}`,
           type: item.bibjson.type,
           previewImageSrc: item.children[0].bytes,
           raw: item,
@@ -238,11 +238,11 @@
   }
 </script>
 
-<style lang="scss" scoped>
-main {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-}
+<style scoped>
+  main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
 </style>
