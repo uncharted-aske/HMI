@@ -506,12 +506,9 @@
         const addedEdge = _.clone(bgraphEdge);
         addedEdge.source = addedEdge.source_id;
         addedEdge.target = addedEdge.target_id;
-        console.log(addedEdge);
         subgraph.edges.push(addedEdge);
 
         Vue.set(this, 'subgraph', subgraph);
-      } else {
-        console.log('Relationship already exists in the subgraph');
       }
     }
   }
