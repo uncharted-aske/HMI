@@ -66,8 +66,6 @@
   import VitiligoScreenshot from '@/assets/img/vitiligo.png';
   import PlaceholderScreenshot from '@/assets/img/placeholder_image.png';
 
-
-
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
   ];
@@ -129,7 +127,6 @@
         MelanomaScreenshot,
         VitiligoScreenshot,
       ];
-
 
       return this.graphs.map(graph => {
         return {
