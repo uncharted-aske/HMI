@@ -52,9 +52,6 @@
   import SEIRDScreenshot from '@/assets/img/SEIRD.png';
   import SIRDScreenshot from '@/assets/img/SIRD.png';
 
-  import CHIMEScreenshot from '@/assets/img/CHIME.png';
-  import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
-
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
   ];

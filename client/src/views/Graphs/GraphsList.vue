@@ -63,7 +63,6 @@
   import ProstateAdenocarcinomaScreenshot from '@/assets/img/prostate_adenocarcinoma.png';
   import RasMachineScreenshot from '@/assets/img/ras_machine.png';
 
-
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
   ];
@@ -111,7 +110,7 @@
         COVID19Screenshot,
         BreastCancerScreenshot,
         LungCancerScreenshot,
-        MelanomaScreenshot, 
+        MelanomaScreenshot,
         MultipleSclerosisScreenshot,
         NeurofibromatosisScreenshot,
         PainMachineScreenshot,
