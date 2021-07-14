@@ -12,6 +12,7 @@
           class="btn btn-secondary"
           title="Show all parameters"
           type="button"
+          :disabled="noDisplayedParameters"
           @click="onShowAllParameters"
         >
           <font-awesome-icon :icon="['fas', 'eye']" />
@@ -20,6 +21,7 @@
           class="btn btn-secondary"
           title="Hide all parameters"
           type="button"
+          :disabled="noDisplayedParameters"
           @click="onHideAllParameters"
         >
           <font-awesome-icon :icon="['fas', 'eye-slash']" />
@@ -49,18 +51,26 @@
     </settings-bar>
     <div class="parameters">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
-      <ul class="parameters-list">
+      <div v-if="noDisplayedParameters" class="alert alert-info m-3">
+        Explore the model visualization to select parameters.
+      </div>
+      <ul v-else class="parameters-list">
         <li
           class="parameter"
-          v-for="(parameter, index) of parameters"
+          v-for="(parameter, index) of displayedParameters"
           :key="index"
           :class="{ hidden: parameter.hidden }"
         >
           <h4 :title="parameter.metadata.Description">{{ parameter.metadata.name }}</h4>
           <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.metadata.name, e)" />
           <aside class="btn-group">
-            <button type="button" class="btn btn-secondary btn-sm">
-              <font-awesome-icon :icon="['fas', 'tools']" />
+            <button
+              class="btn btn-secondary btn-sm"
+              title="Remove parameter from editable panel"
+              type="button"
+              @click="parameter.edited = false"
+            >
+              <font-awesome-icon :icon="['fas', 'ban']" />
             </button>
             <button
               class="btn btn-secondary btn-sm"
@@ -68,7 +78,10 @@
               type="button"
               @click="parameter.hidden = !parameter.hidden"
             >
-              <font-awesome-icon :icon="['fas', (parameter.hidden ? 'eye' : 'eye-slash')]" />
+              <font-awesome-icon
+                class="fa-w-20"
+                :icon="['fas', (parameter.hidden ? 'eye' : 'eye-slash')]"
+              />
             </button>
           </aside>
         </li>
@@ -110,7 +123,7 @@
     // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
     @Watch('expanded') onExpanded (): void { this.drawGraph(); }
-    @Watch('parameters') onParametersChanged (): void { this.drawGraph(); }
+    @Watch('displayedParameters') onDisplayedParametersChanged (): void { this.drawGraph(); }
     mounted (): void { this.drawGraph(); }
 
     // Condition when to clear the Graph
@@ -121,16 +134,24 @@
       return _.orderBy(this.getSimParameters, ['name'], ['asc']);
     }
 
+    get displayedParameters (): HMI.SimulationParameter[] {
+      return this.parameters.filter(parameter => parameter.edited);
+    }
+
+    get noDisplayedParameters (): boolean {
+      return this.displayedParameters.length === 0;
+    }
+
     get countersTitle (): string {
-      return this.parameters.length + ' Parameters';
+      const count = this.displayedParameters.length;
+      return `${count > 0 ? count : '—'} Parameter${count > 1 ? 's' : ''}`;
     }
 
     get countersData (): HMI.Counter[] {
-      const count = this.parameters.filter(parameter => parameter.hidden).length ?? 0;
-      if (count === this.parameters.length) {
-        return [{ name: 'All hidden' }];
-      } else if (count > 0) {
-        return [{ name: 'Hidden', value: count }];
+      const displayed = this.displayedParameters.length;
+      const total = this.parameters.length;
+      if (displayed < total) {
+        return [{ name: 'total', value: total }];
       }
     }
 
@@ -139,7 +160,7 @@
     }
 
     graphHeight (): number {
-      return this.parameters.length * this.parameterHeight;
+      return this.displayedParameters.length * this.parameterHeight;
     }
 
     graphWidth (): number {
@@ -158,7 +179,7 @@
 
     drawGraph (): void {
       // List of parameters names
-      const params = this.parameters.map(parameter => parameter.metadata.name);
+      const params = this.displayedParameters.map(parameter => parameter.metadata.name);
 
       // List of runs
       const runs = this.getSimParameterArray;
@@ -218,11 +239,11 @@
     }
 
     onHideAllParameters (): void {
-      this.parameters.forEach(parameter => { parameter.hidden = true; });
+      this.displayedParameters.forEach(parameter => { parameter.hidden = true; });
     }
 
     onShowAllParameters (): void {
-      this.parameters.forEach(parameter => { parameter.hidden = false; });
+      this.displayedParameters.forEach(parameter => { parameter.hidden = false; });
     }
   }
 </script>
