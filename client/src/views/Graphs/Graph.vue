@@ -48,7 +48,12 @@
             </div>
           </settings-bar>
           <loader :loading="subgraphLoading" />
-          <local-graph v-if="subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
+          <local-graph v-if="subgraph"
+                      :data="subgraph"
+                      @node-click="onNodeClick"
+                      @edge-click="onEdgeClick"
+                      @background-click ="onBackgroundClick"
+                      @loaded="subgraphLoading = false"/>
           <div v-if="showMessageTooLarge" class="alert alert-info mr-2" role="alert">
             Results are too large. Keep adding filters to reduce the size.
           </div>
@@ -103,6 +108,7 @@
   import eventHub from '@/eventHub';
 
   import {
+    deepCopy, // TODO: Deep copy should be moved into it's own general utility file
     loadBGraphData,
     filterToBgraph,
     formatBGraphOutputToLocalGraph,
@@ -196,6 +202,8 @@
     subgraphLoading: boolean = false;
     mainGraphLoading: boolean = true;
 
+    neighborhoodSubgraphIds: string[] = [];
+
     showMessageTooLarge: boolean = false;
     showMessageEmpty: boolean = false;
 
@@ -235,6 +243,18 @@
       // Once we have a selected model available we can load the graph.
       if (this.selectedGraph) {
         await this.loadData();
+      }
+    }
+
+    @Watch('neighborhoodSubgraphIds') onNeighborhoodSubgraphIdsChanged (): void {
+      let neighborhoodSubgraph = this.bgraphInstance.v().filter(d => this.neighborhoodSubgraphIds.includes(d._id)).run().map(element => element.vertex);
+      neighborhoodSubgraph = deepCopy(neighborhoodSubgraph, ['_in', '_out']);
+      if (_.isEmpty(neighborhoodSubgraph)) {
+        // No neighborhood selected. Render original filter layer.
+        this.onGetFiltersChanged();
+      } else {
+        // Neighborhood selected. Render selected neighborhood.
+        this.renderSubgraphAsGraferLayers(neighborhoodSubgraph);
       }
     }
 
@@ -455,15 +475,26 @@
       this.drilldownMetadata = null;
     }
 
-  // onSetView (viewId: string): void {
-  //   this.selectedViewId = viewId;
-  // }
-
     onNodeClick (node: GraphNodeInterface): void {
+      // Compute node neighborhood to highlight in global view
+      const outgoingEdges = this.bgraphInstance.v({ id: node.id }).out().run();
+      const outgoingNodes = outgoingEdges.map(edge => edge.vertex.target_id);
+      const incomingEdges = this.bgraphInstance.v({ id: node.id }).in().run();
+      const incomingNodes = incomingEdges.map(edge => edge.vertex.source_id);
+
+      const neighborEdgesIds = _.merge(outgoingEdges.map(e => e.vertex.id), incomingEdges.map(e => e.vertex.id));
+      const neighborNodeIds = _.merge(outgoingNodes, incomingNodes);
+      this.neighborhoodSubgraphIds = _.merge(neighborNodeIds, neighborEdgesIds);
+
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'node';
 
       this.drilldownMetadata = node.data;
+    }
+
+    onBackgroundClick (): void {
+      this.neighborhoodSubgraphIds = [];
+      this.onCloseDrilldownPanel();
     }
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {

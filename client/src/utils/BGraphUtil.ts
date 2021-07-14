@@ -20,7 +20,8 @@ import {
   EDGE_PRIORITY_RANK,
 } from '@/utils/BGraphQueryUtil';
 
-const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const deepCopy = (inObject: any, keyBlackList?: Array<any>): any => {
   let value, key;
 
   if (typeof inObject !== 'object' || inObject === null) {
