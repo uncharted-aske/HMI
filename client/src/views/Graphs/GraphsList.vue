@@ -52,6 +52,7 @@
   import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
+  import LeukemiaScreenshot from '@/assets/img/leukemia.png';
   import COVID19Screenshot from '@/assets/img/covid_19.png';
   import BreastCancerScreenshot from '@/assets/img/breast_cancer.png';
   import LungCancerScreenshot from '@/assets/img/lung_adenocarcinoma.png';
@@ -62,6 +63,10 @@
   import PancreaticAdenocarcinomaScreenshot from '@/assets/img/pancreatic_adenocarcinoma.png';
   import ProstateAdenocarcinomaScreenshot from '@/assets/img/prostate_adenocarcinoma.png';
   import RasMachineScreenshot from '@/assets/img/ras_machine.png';
+  import VitiligoScreenshot from '@/assets/img/vitiligo.png';
+  import PlaceholderScreenshot from '@/assets/img/placeholder_image.png';
+
+
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -107,17 +112,24 @@
 
     get graphsCards (): CardInterface[] {
       const screenshots = [
-        COVID19Screenshot,
+        LeukemiaScreenshot,
         BreastCancerScreenshot,
+        COVID19Screenshot,
+        PlaceholderScreenshot,
+        PlaceholderScreenshot,
         LungCancerScreenshot,
-        MelanomaScreenshot,
+        PlaceholderScreenshot,
         MultipleSclerosisScreenshot,
         NeurofibromatosisScreenshot,
-        PainMachineScreenshot,
         PancreaticAdenocarcinomaScreenshot,
+        PainMachineScreenshot,
         ProstateAdenocarcinomaScreenshot,
         RasMachineScreenshot,
+        PlaceholderScreenshot,
+        MelanomaScreenshot,
+        VitiligoScreenshot,
       ];
+
 
       return this.graphs.map(graph => {
         return {
