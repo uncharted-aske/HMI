@@ -19,13 +19,11 @@
       </details>
 
       <details v-if="data.in_degree" class="metadata" open>
-        <summary>Incoming ({{ data.in_degree }})</summary>
+        <summary>{{ `Incoming ${incoming.length} / ${data.in_degree}` }}</summary>
         <div class="metadata-content">
-          <ul>
-            <li v-for="(targetId, index) in incoming" :key="index">
-              {{ targetId }}
-            </li>
-          </ul>
+          <div role="button" class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in incoming" :key="index" @click="neighborhoodSelection(rowLabel)">
+            {{rowLabel}}
+          </div>
           <button type="button" class="btn btn-sm btn-light" @click="viewAllIncoming">
             View {{ displayAllIncoming ? 'less' : `all ${data.in_degree}` }}
           </button>
@@ -33,13 +31,11 @@
       </details>
 
       <details v-if="data.out_degree" class="metadata" open>
-        <summary>Outgoing ({{ data.out_degree }})</summary>
+        <summary>{{ `Outgoing ${outgoing.length} / ${data.out_degree}` }}</summary>
         <div class="metadata-content">
-          <ul>
-            <li v-for="(sourceId, index) in outgoing" :key="index">
-              {{ sourceId }}
-            </li>
-          </ul>
+          <div role="button" class="mb-1 p-2 rounded-lg border" v-for="(rowLabel, index) in outgoing" :key="index" @click="neighborhoodSelection(rowLabel)">
+            {{rowLabel}}
+          </div>
           <button type="button" class="btn btn-sm btn-light" @click="viewAllOutgoing">
             View {{ displayAllOutgoing ? 'less' : `all ${data.out_degree}` }}
           </button>
@@ -53,13 +49,16 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
+  import { Getter } from 'vuex-class';
   import { Prop, Watch } from 'vue-property-decorator';
 
   import LoadingAlert from '@/components/widgets/LoadingAlert.vue';
   import { emmaaEntityInfo } from '@/services/EmmaaFetchService';
+  import eventHub from '@/eventHub';
 
   import { EmmaaEntityInfoInterface } from '@/types/typesEmmaa';
   import { GraphNodeDataInterface } from '@/types/typesGraphs';
+  import { filterToBgraph } from '@/utils/BGraphUtil';
 
   const components = {
     LoadingAlert,
@@ -78,14 +77,44 @@
     isLoading = false;
     displayAllIncoming = false;
     displayAllOutgoing = false;
+    incomingNodes: string[] = [];
+    outgoingNodes: string[] = [];
     emmaaInfo: EmmaaEntityInfoInterface = emptyEmmaaInfo;
+
+    @Getter getFilters;
 
     @Watch('data') onDataChange (): void {
       this.fetchExternalData();
+      this.getNeighbours();
     }
 
     mounted (): void {
       this.fetchExternalData();
+      this.getNeighbours();
+    }
+
+    getNeighbours (): void {
+      eventHub.$emit('get-bgraph', bgraph => {
+        if (bgraph) {
+          const subgraph = new Set(filterToBgraph(bgraph, this.getFilters).map(node => node.id));
+          this.outgoingNodes = bgraph
+            .v({ id: this.data.id })
+            .out()
+            .out()
+            .unique()
+            .run()
+            .filter(node => !subgraph.has(node.vertex.id))
+            .map(node => `${this.data.label} → ${node.vertex.name}`);
+          this.incomingNodes = bgraph
+            .v({ id: this.data.id })
+            .in()
+            .in()
+            .unique()
+            .run()
+            .filter(node => !subgraph.has(node.vertex.id))
+            .map(node => `${node.vertex.name} → ${this.data.label}`);
+        }
+      });
     }
 
     async fetchExternalData (): Promise<void> {
@@ -99,16 +128,16 @@
       this.isLoading = false;
     }
 
-    get incoming (): number[] {
+    get incoming (): string[] {
       return this.displayAllIncoming
-        ? this.data.edge_ids_target
-        : this.data.edge_ids_target.slice(0, 5);
+        ? this.incomingNodes
+        : this.incomingNodes.slice(0, 5);
     }
 
-    get outgoing (): number[] {
+    get outgoing (): string[] {
       return this.displayAllOutgoing
-        ? this.data.edge_ids_source
-        : this.data.edge_ids_source.slice(0, 5);
+        ? this.outgoingNodes
+        : this.outgoingNodes.slice(0, 5);
     }
 
     viewAllIncoming (): void {
@@ -117,6 +146,15 @@
 
     viewAllOutgoing (): void {
       this.displayAllOutgoing = !this.displayAllOutgoing;
+    }
+
+    neighborhoodSelection (relationship: string): void {
+      const relationshipSplitted = relationship.split('\u2192');
+      const source = relationshipSplitted[0].trimEnd();
+      const target = relationshipSplitted.reverse()[0].trimStart();
+      const relationshipToAdd = { source, target };
+
+      this.$emit('add-to-subgraph', relationshipToAdd);
     }
   }
 </script>

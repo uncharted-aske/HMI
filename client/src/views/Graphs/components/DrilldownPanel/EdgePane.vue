@@ -112,7 +112,9 @@
     }
 
     excerpt (evidence: EMMAA.EmmaaEvidenceEvidenceInterface): string {
-      return truncateString(evidence.text, 500);
+      if (evidence) {
+        return truncateString(evidence.text, 500);
+      }
     }
 
     onClickEvidence (evidence: EMMAA.EmmaaEvidenceEvidenceInterface): void {
