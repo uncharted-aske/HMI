@@ -108,6 +108,7 @@
   import eventHub from '@/eventHub';
 
   import {
+    deepCopy, // TODO: Deep copy should be moved into it's own general utility file
     loadBGraphData,
     filterToBgraph,
     formatBGraphOutputToLocalGraph,
@@ -246,9 +247,15 @@
     }
 
     @Watch('neighborhoodSubgraphIds') onNeighborhoodSubgraphIdsChanged (): void {
-      const subgraph = this.bgraphInstance.v().filter(d => this.neighborhoodSubgraphIds.includes(d._id)).run().map(element => element.vertex);
-      console.log(subgraph);
-      // this.renderSubgraphAsGraferLayers(subgraph);
+      let neighborhoodSubgraph = this.bgraphInstance.v().filter(d => this.neighborhoodSubgraphIds.includes(d._id)).run().map(element => element.vertex);
+      neighborhoodSubgraph = deepCopy(neighborhoodSubgraph, ['_in', '_out']);
+      if (_.isEmpty(neighborhoodSubgraph)) {
+        // No neighborhood selected. Render original filter layer.
+        this.onGetFiltersChanged();
+      } else {
+        // Neighborhood selected. Render selected neighborhood.
+        this.renderSubgraphAsGraferLayers(neighborhoodSubgraph);
+      }
     }
 
     async mounted (): Promise<void> {
