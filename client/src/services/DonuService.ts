@@ -21,7 +21,10 @@ export const fetchDonuModels = async (): Promise<any[]> => {
   const response = await callDonu(request);
   if (response.status === Donu.ResponseStatus.success) {
     const models = response?.result as Donu.ModelDefinition[] ?? null;
-    return donuToModel(models);
+    const grometOnlyModels = models.filter(model => {
+      return [Donu.Type.GROMET_PNC, Donu.Type.GROMET_PRT].includes(model.type);
+    });
+    return donuToModel(grometOnlyModels);
   } else {
     console.error('[DONU Service] — fetchDonuModels', response); // eslint-disable-line no-console
   }
