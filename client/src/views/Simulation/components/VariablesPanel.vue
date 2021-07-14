@@ -23,7 +23,7 @@
       <div class="position-absolute h-100 w-100 overflow-auto">
         <div
           v-if="!getVariablesRunsCount"
-          class="alert alert-info" role="alert"
+          class="alert alert-info m-3" role="alert"
         >
           Click `Run` to get variables output.
         </div>
@@ -148,7 +148,7 @@
 
     get countersTitle (): string {
       const count = this.getSimVariables.length;
-      return (count > 0 ? count : '—') + ' Variables';
+      return `${count > 0 ? count : '—'} Variable${count > 1 ? 's' : ''}`;
     }
 
     get countersData (): HMI.Counter[] {
