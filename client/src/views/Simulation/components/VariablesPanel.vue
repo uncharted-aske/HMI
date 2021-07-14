@@ -31,7 +31,7 @@
           v-else
           v-for="(plot, index) in simVariables"
           :key="index"
-          :title="plot.name"
+          :title="plot.metadata.name"
           :data="plot.values"
           :styles="plot.styles"
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
@@ -44,7 +44,7 @@
               class="btn btn-secondary btn-sm"
               :title="(plot.hidden ? 'Show' : 'Hide' + ' parameter')"
               type="button"
-              @click="setSimVariableVisibility(plot.name)"
+              @click="setSimVariableVisibility(plot.metadata.name)"
             >
               <font-awesome-icon :icon="['fas', (plot.hidden ? 'eye' : 'eye-slash')]" />
             </button>
@@ -127,7 +127,6 @@
 
     @Getter getSimVariables;
     @Getter getVariablesRunsCount;
-    @Getter getSimVariablesAggregate;
     @Action setSimVariableVisibility;
 
     get simVariables (): HMI.SimulationVariable[] {
@@ -137,17 +136,14 @@
         for (let i = 0; i < simVariable.values.length; i++) {
           simVariable.styles.push(mergeStyle(i !== simVariable.values.length - 1 && OTHER_STYLE));
         }
+
+        if (simVariable.aggregate) {
+          simVariable.values.push(simVariable.aggregate);
+          simVariable.styles.push(mergeStyle(AGGREGATE_STYLE));
+        }
       });
 
-      if (this.getVariablesRunsCount > 1) {
-        this.getSimVariablesAggregate.map((simVariableAggregate, i) => {
-          const simVariable = simVariables[i];
-          simVariable.values = [...simVariable.values, ...simVariableAggregate.values];
-          simVariable.styles.push(mergeStyle(AGGREGATE_STYLE));
-        });
-      }
-
-      return _.orderBy(simVariables, ['name'], ['asc']);
+      return _.orderBy(simVariables, ['metadata.name'], ['asc']);
     }
 
     get countersTitle (): string {

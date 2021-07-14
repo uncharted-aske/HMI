@@ -1,16 +1,16 @@
 <template>
   <div class="d-flex model-selector">
     <div class="flex-grow-1">
-      <div class="button-group" v-for="(parameter) of getSimParameters" @click="clickHandler(parameter)" :key="parameter.name">
+      <div class="button-group" v-for="(parameter, index) of getSimParameters" @click="clickHandler(parameter)" :key="index">
         <input type="checkbox" class="mx-2" :checked="!parameter.hidden" />
-        <label>{{parameter.name}}</label>
+        <label>{{ parameter.metadata.name }}</label>
       </div>
     </div>
 
     <div class="flex-grow-1">
-      <div v-for="(variable) of getSimVariables" @click="clickHandler(variable)" :key="variable.name">
+      <div v-for="(variable, index) of getSimVariables" @click="clickHandler(variable)" :key="index">
         <input type="checkbox" class="mx-2" :checked="!variable.hidden" />
-        <label>{{variable.name}}</label>
+        <label>{{ variable.metadata.name }}</label>
       </div>
     </div>
   </div>
