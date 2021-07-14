@@ -125,7 +125,6 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     const donuParameters = await getModelParameters(model, selectedModelGraph) ?? [];
     const parameters = donuParameters.map(donuParameter => ({
       ...donuParameter,
-      edited: false,
       hidden: false,
       values: [donuParameter.default],
     }));
