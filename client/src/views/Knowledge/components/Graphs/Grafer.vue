@@ -23,7 +23,6 @@
     convertDataToGraferV4,
     GroupCentroid,
     GroupHullEdge,
-    KnowledgeNodeData,
     LayoutInfo,
   } from './convertDataToGraferV4';
 
@@ -33,6 +32,11 @@
   const components = {
     Loader,
   };
+
+  enum ColorRegistryType {
+    mapped = 'mapped',
+    indexed = 'indexed',
+  }
 
   @Component({ components })
   export default class Grafer extends Vue {
@@ -76,11 +80,15 @@
         positionScale: 50000,
       };
 
-      this.loadGraph(info).then(data => {
-        this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data);
-        this.forwardEvents(this.controller);
-        this.loading = false;
-      });
+      this.loadGraph(info);
+      // this.loadGraph(info).then(data => {
+        // this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data as unknown as GraferControllerData);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        // window.controller = this.controller;
+        // this.forwardEvents(this.controller);
+        // this.loading = false;
+      // });
     }
 
     // temporary demo functions
@@ -204,7 +212,7 @@
         }
     }
 
-    loadLevelLayers (nodes: KnowledgeNodeData[], shapes: GroupHullEdge[]): IterableIterator<any> {
+    loadLevelLayers (nodes: any[], shapes: GroupHullEdge[]): IterableIterator<any> {
         const levelMap = new Map();
 
         for (const node of nodes) {
@@ -320,10 +328,12 @@
         if (colorMap.size) {
             this.computeColors(colors, colorMap, colorLevels, centroidMap, info.level);
         }
-
+        (window as any).x = colors;
+        console.log('-------');
+        console.log({ points, colors, layers });
         const controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, { points, colors, layers }, {
             viewport: {
-                colorRegistryType: 'indexed',
+                colorRegistryType: ColorRegistryType.indexed,
                 colorRegistryCapacity: colors.length,
             },
         });
@@ -339,6 +349,8 @@
                 }
             }
         }
+
+        this.loading = false;
 
         // /* const debug = */ new DebugMenu(controller.viewport);
         // debug.registerUX(dolly);

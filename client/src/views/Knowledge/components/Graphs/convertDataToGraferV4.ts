@@ -1,7 +1,4 @@
-import { DataFile } from '@dekkai/data-source/build/lib/file/DataFile';
 import { DataSource } from '@dekkai/data-source';
-import { LocalFileSource } from '@dekkai/data-source/build/lib/file/types';
-import { PointData, BasicNodeData } from '@uncharted.software/grafer';
 import { parseJSONL } from '@/utils/FileLoaderUtil';
 import alphaShape from 'alpha-shape';
 
@@ -50,13 +47,13 @@ export interface GroupHullEdge {
     level: number;
 }
 
-export interface KnowledgeNodeData extends BasicNodeData {
-    level: number;
-}
+// export interface KnowledgeNodeData extends BasicNodeData {
+//     level: number;
+// }
 
 export interface GraferData {
-    points: PointData[];
-    nodes: KnowledgeNodeData[];
+    points;
+    nodes: any[];
     shapes: GroupHullEdge[];
     colors: GroupColor[];
     centroids: GroupCentroid[];
@@ -70,7 +67,7 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
 
   // load the points
   console.log('Loading points...');
-  const points: Map<string, PointData> = new Map();
+  const points: Map<string, any> = new Map();
   lineNumber = 0;
   await parseJSONL(info.nodeLayoutFile as unknown as DataSource, json => {
     if (lineNumber++) {
@@ -91,9 +88,6 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
   const groups = new Map();
   lineNumber = 0;
   await parseJSONL(info.groupsFile as unknown as DataSource, json => {
-    if (lineNumber === 87) {
-      console.log(json);
-    }
     if (lineNumber++) {
       const level = json.level;
       while (level >= groupLevels.length) {
@@ -188,9 +182,11 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
   for (const colors of groupColors.values()) {
     colors.inherited = Array.from(colors.inherited);
   }
+  console.log(nodeColors);
+  console.log(groupColors);
 
-  console.log('Loading nodes...');
-  const nodes: KnowledgeNodeData[] = [];
+  console.log('Loading  nodes...');
+  const nodes: any[] = [];
   const nodeMap = new Map();
   lineNumber = 0;
   await parseJSONL(info.nodesFile as unknown as DataSource, json => {
