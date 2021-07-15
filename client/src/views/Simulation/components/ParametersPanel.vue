@@ -7,37 +7,30 @@
     }"
   >
     <settings-bar>
-      <div class="btn-group" slot="left" aria-label="Show/Hide Parameters">
-        <button
-          class="btn btn-secondary"
-          title="Show all parameters"
-          type="button"
-          @click="onShowAllParameters"
-        >
-          <font-awesome-icon :icon="['fas', 'eye']" />
-        </button>
-        <button
-          class="btn btn-secondary"
-          title="Hide all parameters"
-          type="button"
-          @click="onHideAllParameters"
-        >
-          <font-awesome-icon :icon="['fas', 'eye-slash']" />
-        </button>
-      </div>
       <counters
-        slot="middle"
+        slot="left"
         :title="countersTitle"
         :data="countersData"
       />
-      <div slot="right">
-        <button
-          class="btn btn-secondary"
-          disabled
-          type="button"
-          @click="$emit('settings')">
-          Settings
-        </button>
+      <aside slot="right">
+        <div class="btn-group" title="Show/Hide Parameters">
+          <button
+            class="btn btn-secondary"
+            title="Show all parameters"
+            type="button"
+            @click="onShowAllParameters"
+          >
+            <font-awesome-icon :icon="['fas', 'eye']" />
+          </button>
+          <button
+            class="btn btn-secondary"
+            title="Hide all parameters"
+            type="button"
+            @click="onHideAllParameters"
+          >
+            <font-awesome-icon :icon="['fas', 'eye-slash']" />
+          </button>
+        </div>
         <button
           class="btn btn-secondary"
           title="Expand Parameters Panel"
@@ -45,7 +38,7 @@
           @click="$emit('expand')">
           <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
         </button>
-      </div>
+      </aside>
     </settings-bar>
     <div class="parameters">
       <figure class="parameters-graph" ref="figure"><svg /></figure>

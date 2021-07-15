@@ -3,28 +3,6 @@
     <settings-bar>
       <counters slot="left" :title="modelName" :data="countersData" />
       <aside slot="right">
-        <div class="dropdown">
-          <button
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            @click="settingsOpen = !settingsOpen">
-            Settings
-          </button>
-          <div class="dropdown-menu dropdown-menu-right" :class="{ 'show': settingsOpen }">
-            <h6 class="dropdown-header">Model view</h6>
-            <div v-for="(view, index) in views" :key="index" class="custom-control custom-radio">
-              <input
-                class="custom-control-input"
-                name="model-view"
-                type="radio"
-                v-model="selectedView"
-                :id="('model-view-'+index)"
-                :value="view.id"
-              >
-              <label class="custom-control-label" :for="('model-view-'+index)">{{ view.name }}</label>
-            </div>
-          </div>
-        </div>
         <button
           class="btn btn-secondary"
           title="Expand Model Panel"
@@ -44,7 +22,6 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
   import { Getter } from 'vuex-class';
-  import { capitalize } from 'lodash';
   import * as HMI from '@/types/types';
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
@@ -60,12 +37,6 @@
     ModelSelector,
   };
 
-  // List of available graphs in a model
-  enum VIEWS {
-    CAUSAL = 'causal',
-    FUNCTIONAL = 'functional',
-  }
-
   @Component({ components })
   export default class ModelPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
@@ -74,12 +45,7 @@
     @Getter getSimParameters;
     @Getter getSimVariables;
 
-    selectedView: string = VIEWS.CAUSAL;
     settingsOpen: boolean = false;
-    views: HMI.ViewInterface[] = [
-      { name: capitalize(VIEWS.CAUSAL), id: VIEWS.CAUSAL },
-      { name: capitalize(VIEWS.FUNCTIONAL), id: VIEWS.FUNCTIONAL },
-    ];
 
     get graph (): Graph.GraphInterface {
       return this.model?.modelGraph?.[0]?.graph;
