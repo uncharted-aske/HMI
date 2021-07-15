@@ -118,7 +118,7 @@
 
     get parameters (): HMI.SimulationParameter[] {
       // Order by ASC order
-      return _.orderBy(this.getSimParameters, ['name'], ['asc']);
+      return _.orderBy(this.getSimParameters, ['metadata.name'], ['asc']);
     }
 
     get countersTitle (): string {
@@ -157,8 +157,8 @@
     }
 
     drawGraph (): void {
-      // List of parameters names
-      const params = this.parameters.map(parameter => parameter.metadata.name);
+      // List of parameters uid
+      const params = this.parameters.map(parameter => parameter.uid);
 
       // List of runs
       const runs = this.getSimParameterArray;
