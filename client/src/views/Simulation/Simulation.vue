@@ -1,39 +1,55 @@
 <template>
   <div class="view-container">
-    <div class="search-row">
-      <div class="search-col flex-column">
-        <search-bar />
-      </div>
-      <div class="search-col mx-3 justify-content-between">
-        <button class="btn btn-primary blue m-1">
-          Simulate
-        </button>
-        <button class="btn btn-primary m-1">
-          <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
-          <span>Provenance Graph </span>
-        </button>
-      </div>
-      <div class="search-col justify-content-end">
+    <header>
+      <button
+        class="btn btn-primary"
+        :class="{ 'active': displaySearch }"
+        @click="displaySearch = !displaySearch"
+      >
+        <font-awesome-icon :icon="['fas', 'search' ]" />
+        <span>Search</span>
+      </button>
+
+      <button class="btn btn-primary">
+        <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
+        <span>Provenance Graph</span>
+      </button>
+
+      <div class="runs-controls">
         <run-button
-          class="m-1"
           :auto-run.sync="autoRun"
           :config.sync="runConfig"
           @run="fetchResults"
         />
-        <div class="btn-group m-1">
-          <button class="btn btn-primary" title="Save current run" @click="incrNumberOfSavedRuns">
+
+        <div class="btn-group">
+          <button
+            class="btn btn-primary"
+            title="Save current run"
+            @click="incrNumberOfSavedRuns"
+          >
             <font-awesome-icon :icon="['fas', 'bookmark' ]" />
           </button>
-          <button class="btn btn-primary" title="Reset all saved runs" @click="onResetSim">
+          <button
+            class="btn btn-primary"
+            title="Reset all saved runs"
+            @click="onResetSim"
+          >
             <font-awesome-icon :icon="['fas', 'undo' ]" />
           </button>
         </div>
-        <button class="btn btn-primary m-1" @click="onCloseSimView">
-          <font-awesome-icon :icon="['fas', 'sign-out-alt' ]" />
-          <span> Close Simulation </span>
-        </button>
       </div>
-    </div>
+
+      <button class="btn btn-primary" @click="onCloseSimView">
+        <font-awesome-icon :icon="['fas', 'sign-out-alt' ]" />
+        <span> Close Simulation </span>
+      </button>
+    </header>
+
+    <aside class="search-bar" :class="{ 'active': displaySearch }">
+      <search-bar />
+    </aside>
+
     <resizable-grid :map="gridMap" :dimensions="gridDimensions">
       <model-panel
         class="simulation-panel"
@@ -92,9 +108,10 @@
   @Component({ components })
   export default class Simulation extends Vue {
     autoRun: boolean = false;
+    displaySearch: boolean = false;
+    expandedId: string = '';
     runConfig: Donu.RequestConfig = { end: 120, start: 0, step: 30 };
     subgraph: Graph.GraphInterface = null;
-    expandedId: string = '';
 
     @Action fetchModelResults;
     @Action incrNumberOfSavedRuns;
@@ -213,6 +230,35 @@
     flex-grow: 1;
   }
 
+  header {
+    align-items: center;
+    background-color: var(--bg-secondary);
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    justify-content: space-between;
+    padding: 10px 5px;
+  }
+
+  .search-bar {
+    background-color: var(--bg-secondary);
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none; /* Avoid potential clicks to happen */
+    transition: max-height 250ms ease-in-out;
+    will-change: max-height;
+  }
+
+  .search-bar.active {
+    max-height: 10rem; /* Random number bigger than actual height for the transition. */
+    pointer-events: auto;
+  }
+
+  .search-bar.settings-bar-container {
+    margin-top: 0; /* To have an uniform spacing between the header and the search bar */
+    margin-bottom: 10px; /* To match the header vertical spacing */
+  }
+
   /* Uniform sizing of the panels */
   .simulation-panel {
     display: flex;
@@ -234,16 +280,7 @@
     border-color: var(--muted-highlight);
   }
 
-  .search-col {
-    display: flex;
-    flex: 1;
-  }
-
   .left-side-panel {
     flex-shrink: 0;
-  }
-
-  .form-check-label {
-    color: var(--text-color-light);
   }
 </style>
