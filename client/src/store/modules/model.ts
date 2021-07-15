@@ -17,7 +17,7 @@ const actions: ActionTree<Model.State, any> = {
     // filter out non-gromets
     const modelList = initialModelsList.map(model => {
       model.modelGraph = model.modelGraph.filter(graph => {
-        return [Donu.Type.GROMET_PNC, Donu.Type.GROMET_PRT].includes(graph.donuType);
+        return [Donu.Type.GROMET_PNC/*, Donu.Type.GROMET_FN */].includes(graph.donuType);
       });
       if (model.modelGraph.length > 0) return model;
     });

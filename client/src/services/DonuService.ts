@@ -22,7 +22,7 @@ export const fetchDonuModels = async (): Promise<any[]> => {
   if (response.status === Donu.ResponseStatus.success) {
     const models = response?.result as Donu.ModelDefinition[] ?? null;
     const grometOnlyModels = models.filter(model => {
-      return [Donu.Type.GROMET_PNC, Donu.Type.GROMET_PRT].includes(model.type);
+      return [Donu.Type.GROMET_PNC/*, Donu.Type.GROMET_FN */].includes(model.type);
     });
     return donuToModel(grometOnlyModels);
   } else {
