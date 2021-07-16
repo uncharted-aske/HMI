@@ -71,7 +71,7 @@
           :class="{ hidden: parameter.hidden }"
         >
           <h4 :title="parameter.metadata.Description">{{ parameter.metadata.name }}</h4>
-          <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.metadata.name, e)" />
+          <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.uid, e)" />
           <aside class="btn-group">
             <button
               class="btn btn-secondary btn-sm"
@@ -140,7 +140,7 @@
 
     get parameters (): HMI.SimulationParameter[] {
       // Order by ASC order
-      return _.orderBy(this.getSimParameters, ['name'], ['asc']);
+      return _.orderBy(this.getSimParameters, ['metadata.name'], ['asc']);
     }
 
     get displayedParameters (): HMI.SimulationParameter[] {
@@ -177,9 +177,9 @@
       return figure?.getBoundingClientRect().width ?? 0;
     }
 
-    onParameterChange (name: string, event: Event): void {
+    onParameterChange (uid: string, event: Event): void {
       const value = Number((event.target as HTMLInputElement).value);
-      this.setSimParameterValue({ name, value });
+      this.setSimParameterValue({ uid, value });
     }
 
     clearGraph (): void {
