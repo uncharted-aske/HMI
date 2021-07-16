@@ -76,7 +76,7 @@
         this.artifactList = response.objects.filter(artifact =>
           artifact.bytes && (numArtifactDisplayed < ARTIFACT_DISPLAY_LIMIT) && ++numArtifactDisplayed) ?? [];
         } else {
-          this.emptyArtifactListMessage =  (response as any).error;
+          this.emptyArtifactListMessage = (response as any).error;
         }
     }
 
