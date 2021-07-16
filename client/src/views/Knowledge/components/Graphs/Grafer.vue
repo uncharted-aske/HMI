@@ -7,19 +7,13 @@
 
 <script lang="ts">
   import {
-    GraferNodesData,
-    GraferLabelsData,
     GraferController,
     GraferNodesType,
-    GraferControllerData,
-    GraferPointsData,
     graph,
     GraferLayerData,
   } from '@uncharted.software/grafer';
   import { Component, Prop } from 'vue-property-decorator';
   import Vue from 'vue';
-  import { loadJSONLFile } from '@/utils/FileLoaderUtil';
-  import { CLUSTER_GRAPH_COLORS } from '@/utils/GraferUtil';
   import chroma from 'chroma-js';
   import {
     convertDataToGraferV4,
@@ -76,7 +70,6 @@
         getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodeLayout.jsonl'),
         getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/groups.jsonl'),
       ]);
-      // wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/
 
       const info: LayoutInfo = {
         nodes: 'No file selected.',
@@ -97,27 +90,7 @@
       };
 
       this.loadGraph(info);
-      // this.loadGraph(info).then(data => {
-        // this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, data as unknown as GraferControllerData);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        // window.controller = this.controller;
-        // this.forwardEvents(this.controller);
-        // this.loading = false;
-      // });
     }
-
-    // temporary demo functions
-    // async loadGraph (): Promise<GraferControllerData> {
-    //   const points = {
-    //     data: await loadJSONLFile(`/grafer/${this.model}/points.jsonl`),
-    //   };
-
-    //   const colors = CLUSTER_GRAPH_COLORS;
-    //   const layers = await this.loadModelLayers(points);
-
-    //   return { points, colors, layers };
-    // }
 
     forwardEvents (controller: GraferController): void {
       /*
@@ -136,7 +109,6 @@
         if (event.description === 'grafer_click') {
           args[0] = Object.assign(args[0], this.graferNodesData.get(args[0].id));
           args[0].extras.bibjson.identifier[0].id = args[0].extras.bibjson.journal;
-          console.log(args);
         }
         this.$emit(event.description, ...args);
       };
@@ -157,22 +129,24 @@
                     pixelSizing,
                     nearDepth: 0.26,
                     farDepth: 0.5,
+                    fade: 0.50,
                 },
             },
             labels: {
                 type: 'PointLabel',
                 data,
                 mappings: {
-                    background: (): boolean => true,
+                    background: (): boolean => false,
                     fontSize: (): number => 12,
                     padding: (): [number, number] => [8, 5],
                 },
                 options: {
                     visibilityThreshold,
                     labelPlacement: graph.labels.PointLabelPlacement.CENTER,
-                    renderBackground: true,
+                    renderBackground: false,
                     nearDepth: 0.0,
                     farDepth: 0.25,
+                    // fade: 0.0,
                 },
             },
         };
@@ -189,11 +163,18 @@
         const centroidMap = new Map();
         for (const centroid of data) {
             const nodes = centroid.top ? centroidLayersTop[centroid.level].nodes : centroidLayers[centroid.level].nodes;
+            // let nodes;
+            // if (centroid.top) {
+            //   nodes = centroidLayersTop[centroid.level].nodes;
+            // } else {
+            //   continue;
+            // }
             nodes.data.push(centroid);
             centroidMap.set(centroid.id, centroid);
         }
 
         layers.push(...centroidLayersTop, ...centroidLayers);
+        // layers.push(...centroidLayersTop);
 
         return centroidMap;
     }
@@ -207,7 +188,7 @@
             const info = level.top[i];
             const color = chroma.hsl(topStep * i, 1, 0.5).hex();
             const centroid = centroidMap.get(info.id);
-            colors[centroid.color] = color;
+            colors[centroid.color] = '#ffffff';
             colors[info.primary] = color;
             for (const childID of info.inherited) {
                 colors[childID] = color;
@@ -218,7 +199,7 @@
             const info = level.low[i];
             const color = chroma.hsl(lowStep * (i + 1), 1, 0.5).hex();
             const centroid = centroidMap.get(info.id);
-            colors[centroid.color] = color;
+            colors[centroid.color] = '#ffffff';
             colors[info.primary] = color;
             for (const childID of info.inherited) {
                 colors[childID] = color;
@@ -245,6 +226,7 @@
                         data: [],
                         options: {
                             pixelSizing: true,
+                            fade: 0.20,
                         },
                     },
                     edges: {
@@ -252,8 +234,16 @@
                         options: {
                             alpha: 0.55,
                             nearDepth: 0.9,
+                            fade: 0.20,
                         },
                     },
+                    // labels: {
+                    //   alpha: 1,
+                    //   desaturate: 0,
+                    //   fade: 0,
+                    //   visibilityThreshold: 8,
+                    //   labelPlacement: graph.labels.PointLabelPlacement.TOP,
+                    // },
                 });
             }
 
@@ -276,6 +266,7 @@
                         options: {
                             alpha: 0.55,
                             nearDepth: 0.9,
+                            fade: 0.20,
                         },
                     },
                 });
@@ -353,9 +344,6 @@
         if (colorMap.size) {
             this.computeColors(colors, colorMap, colorLevels, centroidMap, info.level);
         }
-        (window as any).x = colors;
-        console.log('-------');
-        console.log({ points, colors, layers });
         this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, { points, colors, layers }, {
             viewport: {
                 colorRegistryType: ColorRegistryType.indexed,
@@ -377,12 +365,6 @@
 
         this.forwardEvents(this.controller);
         this.loading = false;
-
-        // /* const debug = */ new DebugMenu(controller.viewport);
-        // debug.registerUX(dolly);
-        // debug.registerUX(truck);
-        // debug.registerUX(rotation);
-        // debug.registerUX(pan);
     }
   }
 
