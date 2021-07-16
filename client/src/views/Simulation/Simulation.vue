@@ -7,12 +7,12 @@
         @click="displaySearch = !displaySearch"
       >
         <font-awesome-icon :icon="['fas', 'search' ]" />
-        <span>Search</span>
+        Search
       </button>
 
       <button class="btn btn-primary">
         <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
-        <span>Provenance Graph</span>
+        Provenance Graph
       </button>
 
       <div class="runs-controls">
@@ -40,9 +40,12 @@
         </div>
       </div>
 
-      <button class="btn btn-primary" @click="onCloseSimView">
+      <button
+        class="btn-sim btn btn-primary"
+        @click="onCloseSimView"
+      >
         <font-awesome-icon :icon="['fas', 'sign-out-alt' ]" />
-        <span> Close Simulation </span>
+        Close Simulation
       </button>
     </header>
 
@@ -240,6 +243,10 @@
     padding: 10px 5px;
   }
 
+  header .btn-sim {
+    width: 10.5em; /* Same as the close button on the simulation view */
+  }
+
   .search-bar {
     background-color: var(--bg-secondary);
     max-height: 0;
@@ -254,7 +261,7 @@
     pointer-events: auto;
   }
 
-  .search-bar.settings-bar-container {
+  .search-bar .search-bar-container {
     margin-top: 0; /* To have an uniform spacing between the header and the search bar */
     margin-bottom: 10px; /* To match the header vertical spacing */
   }
