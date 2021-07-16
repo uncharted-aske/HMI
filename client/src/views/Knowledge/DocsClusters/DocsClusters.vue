@@ -5,11 +5,11 @@
         <div class="search-row">
           <search-bar :placeholder="`Search for documents including a specific keyword (e.g. IL-6)...`" />
         </div>
-        <settings-bar>
+        <!-- <settings-bar>
           <div slot="right">
             <settings />
           </div>
-        </settings-bar>
+        </settings-bar> -->
         <grafer class="grafer" layer="epi" @grafer_click="onGraferClick" />
       </div>
     </main>
