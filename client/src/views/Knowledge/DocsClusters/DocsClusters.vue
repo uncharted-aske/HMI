@@ -5,6 +5,7 @@
         <div class="search-row">
           <search-bar :placeholder="`Search for documents including a specific keyword (e.g. IL-6)...`" />
         </div>
+        <counters :data="{ name: 'Documents', value: 176000 }"/>
         <!-- <settings-bar>
           <div slot="right">
             <settings />
