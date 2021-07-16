@@ -19,7 +19,6 @@
   import ELKAdapter from '@/graphs/svg/elk/adapter';
   import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
   import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse } from '@/graphs/svg/util.js';
-  import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -72,6 +71,8 @@
       });
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
+        this.renderer.hideSubgraph();
+
         if (node.datum().nodes) {
           const id = node.datum().id;
           if (node.datum().collapsed === true) {
@@ -81,7 +82,7 @@
           }
         } else {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
-          this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
+          this.renderer.showSubgraph(neighborhood);
 
           this.renderer.clearSelections();
           this.renderer.selectNode(node);
@@ -103,6 +104,7 @@
       });
 
       this.renderer.setCallback('backgroundClick', () => {
+        this.renderer.hideSubgraph();
         this.renderer.clearSelections();
         this.$emit('background-click');
       });

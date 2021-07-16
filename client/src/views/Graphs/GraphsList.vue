@@ -52,10 +52,19 @@
   import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
-  import COVID19Screenshot from '@/assets/img/COVID19.png';
-
-  // Services
-  // import * as modelsService from '@/services/ModelsService';
+  import LeukemiaScreenshot from '@/assets/img/leukemia.png';
+  import COVID19Screenshot from '@/assets/img/covid_19.png';
+  import BreastCancerScreenshot from '@/assets/img/breast_cancer.png';
+  import LungCancerScreenshot from '@/assets/img/lung_adenocarcinoma.png';
+  import MelanomaScreenshot from '@/assets/img/melanoma.png';
+  import MultipleSclerosisScreenshot from '@/assets/img/multiple_sclerosis.png';
+  import NeurofibromatosisScreenshot from '@/assets/img/neurofibromatosis.png';
+  import PainMachineScreenshot from '@/assets/img/pain_machine.png';
+  import PancreaticAdenocarcinomaScreenshot from '@/assets/img/pancreatic_adenocarcinoma.png';
+  import ProstateAdenocarcinomaScreenshot from '@/assets/img/prostate_adenocarcinoma.png';
+  import RasMachineScreenshot from '@/assets/img/ras_machine.png';
+  import VitiligoScreenshot from '@/assets/img/vitiligo.png';
+  import PlaceholderScreenshot from '@/assets/img/placeholder_image.png';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -100,11 +109,30 @@
     }
 
     get graphsCards (): CardInterface[] {
+      const screenshots = [
+        LeukemiaScreenshot,
+        BreastCancerScreenshot,
+        COVID19Screenshot,
+        PlaceholderScreenshot,
+        PlaceholderScreenshot,
+        LungCancerScreenshot,
+        PlaceholderScreenshot,
+        MultipleSclerosisScreenshot,
+        NeurofibromatosisScreenshot,
+        PancreaticAdenocarcinomaScreenshot,
+        PainMachineScreenshot,
+        ProstateAdenocarcinomaScreenshot,
+        RasMachineScreenshot,
+        PlaceholderScreenshot,
+        MelanomaScreenshot,
+        VitiligoScreenshot,
+      ];
+
       return this.graphs.map(graph => {
         return {
           id: graph.id,
           type: graph.metadata.type,
-          previewImageSrc: COVID19Screenshot,
+          previewImageSrc: screenshots[graph.id],
           title: graph.metadata.name,
           subtitle: graph.metadata.description,
           checked: this.getSelectedKnowledgeGraph === graph.id,

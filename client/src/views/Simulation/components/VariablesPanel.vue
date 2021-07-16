@@ -7,15 +7,10 @@
         :data="countersData"
       />
       <div class="d-flex align-items-center" slot="right">
-        <small class="mr-3 run-counter" v-if="getVariablesRunsCount">
-          {{`${getVariablesRunsCount} run${getVariablesRunsCount > 1 ? 's' : ''}`}}
-        </small>
-        <div>
-          <button type="button" disabled class="btn btn-secondary btn-settings">Settings</button>
-          <button type="button" class="btn btn-secondary py-0 btn-settings" @click="$emit('expand')">
-            <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
-          </button>
-        </div>
+        <span class="run-counter" v-if="getVariablesRunsCount">{{ runCounter }}</span>
+        <button type="button" class="btn btn-secondary py-0 btn-settings" @click="$emit('expand')">
+          <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
+        </button>
       </div>
     </settings-bar>
 
@@ -162,6 +157,11 @@
         }
       } else return [];
     }
+
+    get runCounter (): string {
+      const count = this.getVariablesRunsCount;
+      return `${count} run${count > 1 ? 's' : ''}`;
+    }
   }
 </script>
 
@@ -186,6 +186,8 @@
 
   .run-counter {
     color: var(--text-color-light);
+    font-size: .8em;
+    margin-right: 1rem;
   }
 
   .chart {
