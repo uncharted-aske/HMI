@@ -49,7 +49,7 @@
     dropdownOpen: boolean = false;
 
     get displayText (): string {
-      return this.autoRunInput ? 'Auto-Run' : 'Run';
+      return this.autoRunInput ? 'Auto' : 'Run ';
     }
 
     /* On auto-run, remove the auto-run feature, otherwise, run the simulation. */
@@ -64,6 +64,10 @@
 </script>
 
 <style scoped>
+  button:first-of-type {
+    width: 5em;
+  }
+
   .dropdown-menu {
     padding: 1em;
   }
@@ -75,6 +79,7 @@
   /* Make the caret bigger */
   .dropdown-toggle {
     font-size: 1.5em;
+    padding: 0 .5625rem; /* Bootstap thingy */
   }
 
   /* Reverse the caret when open */

@@ -42,7 +42,7 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
           },
         },
         {
-          donuType: Donu.Type.EASEL,
+          donuType: Donu.Type.GROMET_PRT,
           model: 'sir.easel',
           type: Model.GraphTypes.FunctionNetwork,
           metadata: SIR_FN.metadata,

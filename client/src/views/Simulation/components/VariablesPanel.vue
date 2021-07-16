@@ -7,15 +7,10 @@
         :data="countersData"
       />
       <div class="d-flex align-items-center" slot="right">
-        <small class="mr-3 run-counter" v-if="getVariablesRunsCount">
-          {{`${getVariablesRunsCount} run${getVariablesRunsCount > 1 ? 's' : ''}`}}
-        </small>
-        <div>
-          <button type="button" disabled class="btn btn-secondary btn-settings">Settings</button>
-          <button type="button" class="btn btn-secondary py-0 btn-settings" @click="$emit('expand')">
-            <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
-          </button>
-        </div>
+        <span class="run-counter" v-if="getVariablesRunsCount">{{ runCounter }}</span>
+        <button type="button" class="btn btn-secondary py-0 btn-settings" @click="$emit('expand')">
+          <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
+        </button>
       </div>
     </settings-bar>
 
@@ -23,7 +18,7 @@
       <div class="position-absolute h-100 w-100 overflow-auto">
         <div
           v-if="!getVariablesRunsCount"
-          class="alert alert-info" role="alert"
+          class="alert alert-info m-3" role="alert"
         >
           Click `Run` to get variables output.
         </div>
@@ -148,7 +143,7 @@
 
     get countersTitle (): string {
       const count = this.getSimVariables.length;
-      return (count > 0 ? count : '—') + ' Variables';
+      return `${count > 0 ? count : '—'} Variable${count > 1 ? 's' : ''}`;
     }
 
     get countersData (): HMI.Counter[] {
@@ -161,6 +156,11 @@
           return [{ name: 'Hidden', value: hidden }];
         }
       } else return [];
+    }
+
+    get runCounter (): string {
+      const count = this.getVariablesRunsCount;
+      return `${count} run${count > 1 ? 's' : ''}`;
     }
   }
 </script>
@@ -186,6 +186,8 @@
 
   .run-counter {
     color: var(--text-color-light);
+    font-size: .8em;
+    margin-right: 1rem;
   }
 
   .chart {
