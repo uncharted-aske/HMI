@@ -160,6 +160,7 @@ export const buildHighlightClusterLayer = (name: string, edges: GraferEdgesData,
       type: 'ClusterBundle',
       data: edges,
       options: {
+        // @ts-ignore
         alpha: Math.min(0.99, Math.max(0.2, 1 - ((1 / 4100) * edges.length))),
         nearDepth: 0.1,
         farDepth: 0.4,
