@@ -69,7 +69,8 @@
     }
 
     async getArtifactList (): Promise<void> {
-        const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi: this.data.raw.bibjson.identifier[0].id });
+        const doiIdx = this.data.raw.bibjson.identifier.findIndex(d => d.type === 'doi');
+        const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi: this.data.raw.bibjson.identifier[doiIdx].id });
         if (!(response as any).error) {
         this.artifactTotal = response.objects.length;
         let numArtifactDisplayed = 0;
