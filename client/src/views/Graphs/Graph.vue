@@ -353,13 +353,29 @@
 
       const graferLayerData = await this.loadGraferData();
       // TODO: This takes up a lot of memory and will likely scale poorly
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.graferNodesData = new Map();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       graferLayerData.graferNodesData.forEach(v => this.graferNodesData.set(v.id, v));
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.graferIntraEdgesData = new Map();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       graferLayerData.graferIntraEdgesData.forEach(v => this.graferIntraEdgesData.set(v.id, v));
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.graferInterEdgesData = new Map();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       graferLayerData.graferInterEdgesData.forEach(v => this.graferInterEdgesData.set(v.id, v));
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.graferClustersLabelsData = new Map();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       graferLayerData.graferClustersLabelsData.forEach(v => this.graferClustersLabelsData.set(v.id, v));
 
       this.$nextTick(() => {
@@ -390,10 +406,20 @@
       ]);
 
       return {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         graferPointsData,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         graferNodesData,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         graferIntraEdgesData,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         graferInterEdgesData,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         graferClustersLabelsData,
       };
     }
@@ -438,6 +464,8 @@
             this.grafersFullGraphContextIsBackgrounded = false;
           }
         } else {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData, this.graferClustersLabelsData);
           eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
           if (!this.grafersFullGraphContextIsBackgrounded) {
