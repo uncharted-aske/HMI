@@ -242,9 +242,15 @@ export const formatBGraphOutputToGraferLayers = (
   const graferClusterDataResults = [];
   graferClusterIds.forEach(clusterId => graferClusterDataResults.push(graferClustersLabelsData.get(clusterId)));
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const highlightClusterLayer = buildHighlightClusterLayer('Highlights - Clusters', graferInterEdgesDataResults, graferClusterDataResults);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const highlightNodeLayer = buildHighlightNodeLayer('Highlights - Nodes', graferNodesDataResults, graferIntraEdgesDataResults);
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return [highlightClusterLayer, highlightNodeLayer];
 };
 
