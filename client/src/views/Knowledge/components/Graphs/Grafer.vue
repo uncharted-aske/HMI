@@ -65,10 +65,14 @@
         // getS3Util('research/KB/dist/kaggle/v4.0_citation/nodeAtts.jsonl'),
         // getS3Util('research/KB/dist/kaggle/v4.0_citation/nodeLayout.jsonl'),
         // getS3Util('research/KB/dist/kaggle/v4.0_citation/groups.jsonl'),
-        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodes.jsonl'),
-        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodeAtts.jsonl'),
-        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodeLayout.jsonl'),
-        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/groups.jsonl'),
+        // getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodes.jsonl'),
+        // getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodeAtts.jsonl'),
+        // getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodeLayout.jsonl'),
+        // getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/groups.jsonl'),
+        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/nodes.jsonl'),
+        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/nodeAtts.jsonl'),
+        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/nodeLayout.jsonl'),
+        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/groups.jsonl'),
       ]);
 
       const info: LayoutInfo = {
@@ -109,6 +113,7 @@
         if (event.description === 'grafer_click') {
           args[0] = Object.assign(args[0], this.graferNodesData.get(args[0].id));
           args[0].extras.bibjson.identifier[0].id = args[0].extras.bibjson.journal;
+          console.log(this.graferNodesData.get(args[0].id));
         }
         this.$emit(event.description, ...args);
       };
@@ -123,7 +128,7 @@
                 type: nodeType,
                 data,
                 mappings: {
-                    radius: (): number => 100,
+                    radius: (): number => 50,
                 },
                 options: {
                     pixelSizing,
@@ -219,6 +224,10 @@
 
         for (const node of nodes) {
             if (!levelMap.has(node.level)) {
+                let fade = 1 - 0.10 - 0.25 * node.level;
+                if (node.level === -1) {
+                  fade = 0.2;
+                }
                 levelMap.set(node.level, {
                     name: `Level_${node.level === -1 ? 'noise' : node.level}`,
                     nodes: {
@@ -226,7 +235,7 @@
                         data: [],
                         options: {
                             pixelSizing: true,
-                            fade: 0.20,
+                            fade,
                         },
                     },
                     edges: {
@@ -234,7 +243,7 @@
                         options: {
                             alpha: 0.55,
                             nearDepth: 0.9,
-                            fade: 0.20,
+                            fade,
                         },
                     },
                     // labels: {
