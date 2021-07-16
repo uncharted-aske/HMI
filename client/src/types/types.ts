@@ -44,7 +44,8 @@ type Counter = {
 };
 
 interface SimulationParameter extends Donu.ModelParameter {
-  hidden?: boolean,
+  edited?: boolean, // the parameter is edited or not
+  hidden?: boolean, // the parameter is visible or not
   values?: number[],
 }
 
