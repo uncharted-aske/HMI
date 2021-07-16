@@ -42,6 +42,7 @@ library.add(
   FA.faLongArrowAltRight,
   FA.faPause,
   FA.faPlay,
+  FA.faPlus,
   FA.faProjectDiagram,
   FA.faSearch,
   FA.faSignOutAlt,

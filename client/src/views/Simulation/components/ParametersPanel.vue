@@ -31,6 +31,24 @@
             <font-awesome-icon :icon="['fas', 'eye-slash']" />
           </button>
         </div>
+        <div class="btn-group" title="Add/Remove Parameters">
+          <button
+            class="btn btn-secondary"
+            title="Add all parameters"
+            type="button"
+            @click="onAddAllParameters"
+          >
+            <font-awesome-icon :icon="['fas', 'plus']" />
+          </button>
+          <button
+            class="btn btn-secondary"
+            title="Remove all parameters"
+            type="button"
+            @click="onRemoveAllParameters"
+          >
+            <font-awesome-icon :icon="['fas', 'ban']" />
+          </button>
+        </div>
         <button
           class="btn btn-secondary"
           title="Expand Parameters Panel"
@@ -57,14 +75,6 @@
           <aside class="btn-group">
             <button
               class="btn btn-secondary btn-sm"
-              title="Remove parameter from editable panel"
-              type="button"
-              @click="parameter.edited = false"
-            >
-              <font-awesome-icon :icon="['fas', 'ban']" />
-            </button>
-            <button
-              class="btn btn-secondary btn-sm"
               title="(parameter.hidden ? 'Show' : 'Hide' + ' parameter')"
               type="button"
               @click="parameter.hidden = !parameter.hidden"
@@ -73,6 +83,14 @@
                 class="fa-w-20"
                 :icon="['fas', (parameter.hidden ? 'eye' : 'eye-slash')]"
               />
+            </button>
+            <button
+              class="btn btn-secondary btn-sm"
+              title="Remove parameter from editable panel"
+              type="button"
+              @click="parameter.edited = false"
+            >
+              <font-awesome-icon :icon="['fas', 'ban']" />
             </button>
           </aside>
         </li>
@@ -235,6 +253,14 @@
 
     onShowAllParameters (): void {
       this.displayedParameters.forEach(parameter => { parameter.hidden = false; });
+    }
+
+    onAddAllParameters (): void {
+      this.parameters.forEach(parameter => { parameter.edited = true; });
+    }
+
+    onRemoveAllParameters (): void {
+      this.parameters.forEach(parameter => { parameter.edited = false; });
     }
   }
 </script>
