@@ -34,7 +34,7 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
     const output = new Array(RunsCount);
     for (let i = 0; i < RunsCount; i++) {
       output[i] = state.parameters.reduce((obj, parameter) => {
-        obj[parameter.metadata.name] = parameter.values[i];
+        obj[parameter.uid] = parameter.values[i];
         return obj;
       }, {});
     }
@@ -56,7 +56,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     commit('setNumberOfSavedRuns', args.count ?? currentNumberOfRuns(state));
   },
 
-  setSimParameterValue ({ state, commit }, args: { name: string, value: number }): void {
+  setSimParameterValue ({ state, commit }, args: { uid: string, value: number }): void {
     let parameters = [] as HMI.SimulationParameter[];
 
     if (currentNumberOfRuns(state) < state.numberOfSavedRuns) {
@@ -67,7 +67,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
       });
     } else {
       parameters = state.parameters.map(parameter => {
-        if (parameter.metadata.name === args.name) {
+        if (parameter.uid === args.uid) {
           parameter.values[parameter.values.length - 1] = args.value;
         }
         return parameter;
@@ -125,6 +125,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     const donuParameters = await getModelParameters(model, selectedModelGraph) ?? [];
     const parameters = donuParameters.map(donuParameter => ({
       ...donuParameter,
+      edited: false,
       hidden: false,
       values: [donuParameter.default],
     }));

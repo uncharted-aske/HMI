@@ -1,14 +1,22 @@
 <template>
   <div class="d-flex model-selector">
     <div class="flex-grow-1">
-      <div class="button-group" v-for="(parameter, index) of getSimParameters" @click="clickHandler(parameter)" :key="index">
-        <input type="checkbox" class="mx-2" :checked="!parameter.hidden" />
+      <div
+        v-for="(parameter, index) of getSimParameters"
+        :key="index"
+        @click="parameter.edited = !parameter.edited"
+      >
+        <input type="checkbox" class="mx-2" :checked="parameter.edited" />
         <label>{{ parameter.metadata.name }}</label>
       </div>
     </div>
 
     <div class="flex-grow-1">
-      <div v-for="(variable, index) of getSimVariables" @click="clickHandler(variable)" :key="index">
+      <div
+        v-for="(variable, index) of getSimVariables"
+        :key="index"
+        @click="variable.hidden = !variable.hidden"
+      >
         <input type="checkbox" class="mx-2" :checked="!variable.hidden" />
         <label>{{ variable.metadata.name }}</label>
       </div>
@@ -20,16 +28,11 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Getter } from 'vuex-class';
-  import * as HMI from '@/types/types';
 
   @Component
   export default class ModelSelector extends Vue {
     @Getter getSimParameters;
     @Getter getSimVariables;
-
-    clickHandler (parameter: HMI.SimulationParameter | HMI.SimulationVariable): void {
-      parameter.hidden = !parameter.hidden;
-    }
   }
 </script>
 
@@ -38,7 +41,7 @@
     color: white;
   }
 
-  .button-group {
+  .model-selector label {
     cursor: pointer;
   }
 </style>
