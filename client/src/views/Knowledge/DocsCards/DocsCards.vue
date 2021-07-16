@@ -66,7 +66,7 @@
 
   const DRILLDOWN_TABS: TabInterface[] = [
     { name: 'Preview', icon: '', id: 'preview' },
-    { name: 'Models', icon: '', id: 'models' },
+    { name: 'Graphs', icon: '', id: 'models' },
     { name: 'Entities', icon: '', id: 'entities' },
   ];
 
