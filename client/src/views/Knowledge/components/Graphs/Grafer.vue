@@ -7,6 +7,8 @@
 
 <script lang="ts">
   import {
+    GraferNodesData,
+    GraferLabelsData,
     GraferController,
     GraferNodesType,
     GraferControllerData,
@@ -26,8 +28,9 @@
     LayoutInfo,
   } from './convertDataToGraferV4';
 
-  import Loader from '@/components/widgets/Loader.vue';
   import { getS3Util } from '@/utils/FetchUtil';
+
+  import Loader from '@/components/widgets/Loader.vue';
 
   const components = {
     Loader,
@@ -49,6 +52,10 @@
     @Prop({ default: null })
     private layer: string;
 
+    // Initialize as undefined to prevent Vue from observing changes within these large datasets
+    // Grafer data is stored as they are required for mapping bgraph queries to grafer layers
+    graferNodesData: any = undefined;
+
     public async mounted (): Promise<void> {
       const [
         nodesFile,
@@ -56,11 +63,20 @@
         nodeLayoutFile,
         groupsFile,
       ] = await Promise.all([
-        getS3Util('research/KB/dist/kaggle/v4.0_citation/nodes.jsonl'),
-        getS3Util('research/KB/dist/kaggle/v4.0_citation/nodeAtts.jsonl'),
-        getS3Util('research/KB/dist/kaggle/v4.0_citation/nodeLayout.jsonl'),
-        getS3Util('research/KB/dist/kaggle/v4.0_citation/groups.jsonl'),
+        // getS3Util('research/KB/dist/kaggle/v4.0_citations_small/nodes.jsonl'),
+        // getS3Util('research/KB/dist/kaggle/v4.0_citations_small/nodeAtts.jsonl'),
+        // getS3Util('research/KB/dist/kaggle/v4.0_citations_small/nodeLayout.jsonl'),
+        // getS3Util('research/KB/dist/kaggle/v4.0_citations_small/groups.jsonl'),
+        // getS3Util('research/KB/dist/kaggle/v4.0_citation/nodes.jsonl'),
+        // getS3Util('research/KB/dist/kaggle/v4.0_citation/nodeAtts.jsonl'),
+        // getS3Util('research/KB/dist/kaggle/v4.0_citation/nodeLayout.jsonl'),
+        // getS3Util('research/KB/dist/kaggle/v4.0_citation/groups.jsonl'),
+        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodes.jsonl'),
+        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodeAtts.jsonl'),
+        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodeLayout.jsonl'),
+        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/groups.jsonl'),
       ]);
+      // wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/
 
       const info: LayoutInfo = {
         nodes: 'No file selected.',
@@ -71,13 +87,13 @@
         nodeLayoutFile: nodeLayoutFile as unknown as File,
         groups: 'No file selected.',
         groupsFile: groupsFile as unknown as File,
-        alpha: 18,
-        level: 0,
-        levelCount: 5,
-        maxLabelLength: 25,
-        topGroupThreshold: 500,
-        pointRadius: 20,
-        positionScale: 50000,
+        alpha: 18.00,
+        level: 1.00,
+        levelCount: 4.00,
+        maxLabelLength: 25.00,
+        topGroupThreshold: 500.00,
+        pointRadius: 20.00,
+        positionScale: 50000.00,
       };
 
       this.loadGraph(info);
@@ -117,6 +133,11 @@
        * id {string} - The ID of the graph object that triggered the event as defined in the data
        */
       const forwardEvent = (event: symbol, ...args: any[]) => {
+        if (event.description === 'grafer_click') {
+          args[0] = Object.assign(args[0], this.graferNodesData.get(args[0].id));
+          args[0].extras.bibjson.identifier[0].id = args[0].extras.bibjson.journal;
+          console.log(args);
+        }
         this.$emit(event.description, ...args);
       };
       controller.on(GraferController.omniEvent, forwardEvent);
@@ -273,6 +294,10 @@
 
         const data = await convertDataToGraferV4(info);
 
+        // TODO: This takes up a lot of memory and will likely scale poorly
+        this.graferNodesData = new Map();
+        data.nodes.forEach(n => this.graferNodesData.set(n.id, n));
+
         const layers = [];
 
         const colors = [];
@@ -331,7 +356,7 @@
         (window as any).x = colors;
         console.log('-------');
         console.log({ points, colors, layers });
-        const controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, { points, colors, layers }, {
+        this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, { points, colors, layers }, {
             viewport: {
                 colorRegistryType: ColorRegistryType.indexed,
                 colorRegistryCapacity: colors.length,
@@ -339,7 +364,7 @@
         });
 
         // disable all centroid layers of levels other than the selected one
-        const graphLayers = controller.viewport.graph.layers;
+        const graphLayers = this.controller.viewport.graph.layers;
         for (const layer of graphLayers) {
             const components = layer.name.split('_');
             if (components[0] === 'Centroids') {
@@ -350,6 +375,7 @@
             }
         }
 
+        this.forwardEvents(this.controller);
         this.loading = false;
 
         // /* const debug = */ new DebugMenu(controller.viewport);

@@ -109,10 +109,12 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
   console.log('Loading node attributes...');
   const noiseNodes = [];
   const nodeLevelMap = new Map();
+  const nodeAttsMap = new Map();
   lineNumber = 0;
   await parseJSONL(info.nodeAttsFile as unknown as DataSource, json => {
     if (lineNumber++) {
       const groupIDs = json.group_ids;
+      nodeAttsMap.set(json.node_id, json);
       if (groupIDs) {
         for (const groupID of groupIDs) {
           const group = groups.get(groupID);
@@ -191,14 +193,16 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
   lineNumber = 0;
   await parseJSONL(info.nodesFile as unknown as DataSource, json => {
     if (lineNumber++) {
+      const nodeAtts = nodeAttsMap.get(json.id);
       nodes.push({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         id: json.id,
         point: json.id,
         color: nodeColors.get(json.id),
-        // label: json.name.substr(0, 25),
+        label: json.name.substr(0, 25),
         level: nodeLevelMap.get(json.id),
+        extras: nodeAtts.extras,
       });
       nodeMap.set(json.id, json);
     }
