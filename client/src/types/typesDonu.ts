@@ -15,11 +15,11 @@ enum RequestCommand {
 }
 
 enum Type {
-  // CORE = 'core',
-  // DIFF_EQS = 'diff-eqs',
+  CORE = 'core',
+  DIFF_EQS = 'diff-eqs',
   EASEL = 'easel',
   GROMET_PNC = 'gromet-pnc',
-  // GROMET_PRT = 'gromet-prt',
+  GROMET_PRT = 'gromet-prt',
 }
 
 type Metadata = {
