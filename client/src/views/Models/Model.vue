@@ -425,6 +425,7 @@
   .search-bar.active {
     max-height: 10rem; /* Random number bigger than actual height for the transition. */
     pointer-events: auto;
+    overflow: visible;
   }
 
   .search-bar .search-bar-container {
