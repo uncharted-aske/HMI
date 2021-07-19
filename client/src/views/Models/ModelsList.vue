@@ -51,6 +51,7 @@
   import SEIRScreenshot from '@/assets/img/SEIR.png';
   import SEIRDScreenshot from '@/assets/img/SEIRD.png';
   import SIRDScreenshot from '@/assets/img/SIRD.png';
+  import SpatialSIRDScreenshot from '@/assets/img/SpatialSIRD.png';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -103,6 +104,7 @@
         SEIRScreenshot,
         SEIRDScreenshot,
         SIRDScreenshot,
+        SpatialSIRDScreenshot,
       ];
       return this.models.map(model => {
         return {
