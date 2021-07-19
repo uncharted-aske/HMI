@@ -11,7 +11,6 @@ export const staticFileURLs = [
   `${window.location.origin}/gromets/SEIR_gromet_PetriNetClassic_metadata.json`,
   `${window.location.origin}/gromets/SEIRD_gromet_PetriNetClassic_metadata.json`,
   `${window.location.origin}/gromets/SIRD_gromet_PetriNetClassic_metadata.json`,
-  `${window.location.origin}/gromets/SIR_AlgebraicJulia.json`,
 ];
 
 // eslint-disable-next-line
@@ -42,7 +41,7 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
           },
         },
         {
-          donuType: Donu.Type.GROMET_PRT,
+          donuType: Donu.Type.GROMET_PNC, // TODO: to replace with GrFN type once donu puts those in
           model: 'sir.easel',
           type: Model.GraphTypes.FunctionNetwork,
           metadata: SIR_FN.metadata,
