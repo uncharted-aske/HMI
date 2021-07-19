@@ -30,6 +30,7 @@
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
     @Prop({ default: null }) subgraph: SubgraphInterface;
+    @Prop({ default: null }) highlighted: SubgraphInterface;
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -38,6 +39,7 @@
     @Watch('data')
     dataChanged (): void {
       this.refresh();
+      this.renderer.highlightSubgraph(this.highlighted);
     }
 
     @Watch('subgraph')
@@ -49,6 +51,12 @@
     async layoutChanged (): Promise<void> {
       await this.refresh();
       this.subgraphChanged();
+      this.renderer.highlightSubgraph(this.highlighted);
+    }
+
+    @Watch('highlighted')
+    async highlightedChanged (): Promise<void> {
+      this.renderer.highlightSubgraph(this.highlighted);
     }
 
     subgraphChanged (): void {
@@ -75,17 +83,14 @@
       });
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
-        if (this.subgraph) {
-          this.renderer.showSubgraph(this.subgraph);
-          return;
-        }
-
         this.renderer.hideSubgraph();
 
         if (node.datum().nodes) {
           const id = node.datum().id;
           if (node.datum().collapsed === true) {
             this.renderer.expand(id);
+            // Wait for renderer.expand to finish async updates before calling highlightSubgraph
+            setTimeout(() => this.renderer.highlightSubgraph(this.highlighted), 500);
           } else {
             this.renderer.collapse(id);
           }
@@ -113,11 +118,9 @@
       });
 
       this.renderer.setCallback('backgroundClick', () => {
-        if (!this.subgraph) {
-          this.renderer.hideSubgraph();
-          this.renderer.clearSelections();
-          this.$emit('background-click');
-        }
+        this.renderer.hideSubgraph();
+        this.renderer.clearSelections();
+        this.$emit('background-click');
       });
 
       this.refresh();

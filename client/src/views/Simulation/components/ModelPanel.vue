@@ -12,7 +12,7 @@
         </button>
       </aside>
     </settings-bar>
-    <global-graph v-if="model" :data="graph" :subgraph="highlighted" @node-dblclick="onNodeClick"/>
+    <global-graph v-if="model" :data="graph" :highlighted="highlighted" @node-dblclick="onNodeClick"/>
   </section>
 </template>
 
@@ -65,7 +65,7 @@
       ];
       return {
         nodes: this.graph.nodes.filter(node => highlightedLabels.includes(node.label)),
-        edges: this.graph.edges,
+        edges: [],
       };
     }
 

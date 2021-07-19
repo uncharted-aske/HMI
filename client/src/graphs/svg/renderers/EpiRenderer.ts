@@ -185,7 +185,7 @@ export default class EpiRenderer extends SVGRenderer {
       d3.select(this).style('opacity', isNeighbour ? '1' : '0.1');
     });
     chart.selectAll('.node-ui').each(function (d) {
-      const isNeighbour = nodes.map(node => node.id).includes(d.id);
+      const isNeighbour = nodes.map(node => node).includes(d.id);
       d3.select(this).style('opacity', isNeighbour ? '1' : '0.1');
     });
   }
@@ -194,6 +194,16 @@ export default class EpiRenderer extends SVGRenderer {
     node.select('rect')
       .style('stroke', Colors.HIGHLIGHT)
       .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
+  }
+
+  highlightSubgraph (subgraph: SubgraphInterface): void {
+    const chart = (this as any).chart;
+    const nodes = subgraph.nodes;
+
+    chart.selectAll('.node-ui').each(function (d) {
+      const isHighlighted = nodes.map(node => node.id).includes(d.id);
+      d3.select(this).select('rect').style('fill', isHighlighted ? Colors.NODES.VARIABLE : EpiRenderer.calcNodeColor(d));
+    });
   }
 
   clearSelections ():void {
