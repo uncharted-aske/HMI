@@ -11,7 +11,6 @@ export const staticFileURLs = [
   `${window.location.origin}/gromets/SEIR_gromet_PetriNetClassic_metadata.json`,
   `${window.location.origin}/gromets/SEIRD_gromet_PetriNetClassic_metadata.json`,
   `${window.location.origin}/gromets/SIRD_gromet_PetriNetClassic_metadata.json`,
-  `${window.location.origin}/gromets/SIR_AlgebraicJulia.json`,
 ];
 
 // eslint-disable-next-line
