@@ -41,7 +41,7 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
           },
         },
         {
-          donuType: Donu.Type.GROMET_PRT,
+          donuType: Donu.Type.GROMET_PNC, // to replace with GrFN type once donu puts those in
           model: 'sir.easel',
           type: Model.GraphTypes.FunctionNetwork,
           metadata: SIR_FN.metadata,
