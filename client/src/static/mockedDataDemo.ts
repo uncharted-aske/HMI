@@ -11,15 +11,18 @@ export const staticFileURLs = [
   `${window.location.origin}/gromets/SEIR_gromet_PetriNetClassic_metadata.json`,
   `${window.location.origin}/gromets/SEIRD_gromet_PetriNetClassic_metadata.json`,
   `${window.location.origin}/gromets/SIRD_gromet_PetriNetClassic_metadata.json`,
+  `${window.location.origin}/gromets/3_city_seird.json`,
+
 ];
 
 // eslint-disable-next-line
-export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN }: any): Model.Model[] => {
+export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN, CITY_SEIRD_PN }: any): Model.Model[] => {
   const SIR_PN_PARSED = GroMEt2Graph.parseGromet(SIR_PN);
   const SIR_FN_PARSED = GroMEt2Graph.parseGromet(SIR_FN);
   const SEIR_PN_PARSED = GroMEt2Graph.parseGromet(SEIR_PN);
   const SEIRD_PN_PARSED = GroMEt2Graph.parseGromet(SEIRD_PN);
   const SIRD_PN_PARSED = GroMEt2Graph.parseGromet(SIRD_PN);
+  const CITY_SEIRD_PN_PARSED = GroMEt2Graph.parseGromet(CITY_SEIRD_PN);
 
   return [
     {
@@ -112,12 +115,32 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
         },
       ],
     },
+    {
+      id: 4,
+      name: CITY_SEIRD_PN.name, // name should be the same across modeling frameworks
+      metadata: {
+        name: CITY_SEIRD_PN.name,
+        description: '', // We are going to need a high-level description for each model.
+      },
+      modelGraph: [
+        {
+          donuType: Donu.Type.GROMET_PNC,
+          model: 'sird.json',
+          type: Model.GraphTypes.PetriNetClassic,
+          metadata: CITY_SEIRD_PN.metadata,
+          graph: {
+            edges: CITY_SEIRD_PN_PARSED.edges as Graphs.GraphEdgeInterface[],
+            nodes: CITY_SEIRD_PN_PARSED.nodes as unknown as Graphs.GraphNodeInterface[],
+          },
+        },
+      ],
+    },
   ];
 };
 
 export const fetchInitialModelData = async (): Promise<Model.Model[]> => {
-  const [SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN] = await Promise.all(
+  const [SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN, CITY_SEIRD_PN] = await Promise.all(
     staticFileURLs.map(url => getUtil(url)),
   );
-  return buildInitialModelsList({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN });
+  return buildInitialModelsList({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN, CITY_SEIRD_PN });
 };
