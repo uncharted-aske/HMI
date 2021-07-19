@@ -118,9 +118,11 @@
       });
 
       this.renderer.setCallback('backgroundClick', () => {
-        this.renderer.hideSubgraph();
-        this.renderer.clearSelections();
-        this.$emit('background-click');
+        if (!this.highlighted) {
+          this.renderer.hideSubgraph();
+          this.renderer.clearSelections();
+          this.$emit('background-click');
+        }
       });
 
       this.refresh();
