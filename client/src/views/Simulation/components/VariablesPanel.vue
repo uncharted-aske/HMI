@@ -93,10 +93,10 @@
 
   const OTHER_STYLE = {
     node: {
-      fill: `#647EA9`,
+      fill: '#647EA9',
     },
     edge: {
-      strokeColor: `#647EA9`,
+      strokeColor: '#647EA9',
       transitionDuration: 0,
     },
   };
