@@ -248,9 +248,10 @@
 
     async loadData (): Promise<void> {
       if (this.selectedModel && this.graphType) {
+        const minioShorthand = this.graphType === Model.GraphTypes.PetriNetClassic ? 'pnc' : 'fn';
         const [bgNodes, bgEdges] = await loadBGraphData(
-          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.graphType}/nodes.jsonl`,
-          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.graphType}/edges.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${minioShorthand}/nodes.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${minioShorthand}/edges.jsonl`,
         );
         this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
         this.executeFilters();
