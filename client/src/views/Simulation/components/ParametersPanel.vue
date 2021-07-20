@@ -61,7 +61,7 @@
     <div class="parameters">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
       <div v-if="noDisplayedParameters" class="alert alert-info m-3">
-        Explore the model visualization to select parameters.
+        Use the model visualization on the left to add/remove parameters.
       </div>
       <ul v-else class="parameters-list">
         <li
