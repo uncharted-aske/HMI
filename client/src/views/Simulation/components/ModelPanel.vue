@@ -46,6 +46,7 @@
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
       const selectedName = selected.label;
+      console.log(this.getSimParameters);
       this.getSimParameters.forEach(parameter => {
         if (parameter.metadata.name === selectedName) {
           parameter.edited = !parameter.edited;
@@ -58,7 +59,7 @@
       });
     }
 
-    get editedNodes (): any {
+    get editedNodes (): Graph.SubgraphNodeInterface[] {
       const highlightedLabels = [
         ...this.getSimParameters.filter(parameter => parameter.edited).map(parameter => parameter.metadata.name),
         ...this.getSimVariables.filter(variable => variable.edited).map(variable => variable.metadata.name),
