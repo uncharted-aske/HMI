@@ -46,7 +46,6 @@
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
       const selectedName = selected.label;
-      console.log(this.getSimParameters);
       this.getSimParameters.forEach(parameter => {
         if (parameter.metadata.name === selectedName) {
           parameter.edited = !parameter.edited;
