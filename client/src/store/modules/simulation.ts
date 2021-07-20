@@ -20,6 +20,18 @@ const currentNumberOfRuns = (state: SimulationState): number => {
   return state.parameters?.[0]?.values.length ?? 0;
 };
 
+const getParameter = (state: SimulationState, selector: string): HMI.SimulationParameter => {
+  return state.parameters.find(parameter => {
+    return [parameter.uid, parameter.metadata.name].includes(selector);
+  });
+};
+
+const getVariable = (state: SimulationState, selector: string): HMI.SimulationVariable => {
+  return state.variables.find(variable => {
+    return [variable.uid, variable.metadata.name].includes(selector);
+  });
+};
+
 const getters: GetterTree<any, HMI.SimulationParameter[]> = {
   getSimParameters (state: SimulationState): HMI.SimulationParameter[] {
     return state.parameters;
@@ -131,10 +143,43 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
   hideAllVariables ({ commit }): void { commit('setAllVariablesVisibility', false); },
   showAllVariables ({ commit }): void { commit('setAllVariablesVisibility', true); },
 
-  hideParameter ({ commit }, uid: string): void { commit('setParameterVisibility', { uid, visibility: false }); },
-  showParameter ({ commit }, uid: string): void { commit('setParameterVisibility', { uid, visibility: true }); },
-  hideVariable ({ commit }, uid: string): void { commit('setVariableVisibility', { uid, visibility: false }); },
-  showVariable ({ commit }, uid: string): void { commit('setVariableVisibility', { uid, visibility: true }); },
+  hideParameter ({ commit }, selector: string): void {
+    const parameter = getParameter(state, selector);
+    if (!parameter) return;
+    const args = { uid: parameter.uid, visibility: false };
+    commit('setParameterVisibility', args);
+  },
+  showParameter ({ commit }, selector: string): void {
+    const parameter = getParameter(state, selector);
+    if (!parameter) return;
+    const args = { uid: parameter.uid, visibility: true };
+    commit('setParameterVisibility', args);
+  },
+  toggleParameter ({ state, commit }, selector: string): void {
+    const parameter = getParameter(state, selector);
+    if (!parameter) return;
+    const args = { uid: parameter.uid, visibility: !parameter.edited };
+    commit('setParameterVisibility', args);
+  },
+
+  hideVariable ({ commit }, selector: string): void {
+    const variable = getVariable(state, selector);
+    if (!variable) return;
+    const args = { uid: variable.uid, visibility: false };
+    commit('setVariableVisibility', args);
+  },
+  showVariable ({ commit }, selector: string): void {
+    const variable = getVariable(state, selector);
+    if (!variable) return;
+    const args = { uid: variable.uid, visibility: true };
+    commit('setVariableVisibility', args);
+  },
+  toggleVariable ({ state, commit }, selector: string): void {
+    const variable = getVariable(state, selector);
+    if (!variable) return;
+    const args = { uid: variable.uid, visibility: !variable.edited };
+    commit('setVariableVisibility', args);
+  },
 
   resetSim ({ commit }): void {
     commit('setNumberOfSavedRuns', 0);

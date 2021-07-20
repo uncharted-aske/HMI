@@ -20,7 +20,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
-  import { Getter } from 'vuex-class';
+  import { Action, Getter } from 'vuex-class';
   import * as HMI from '@/types/types';
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
@@ -41,21 +41,14 @@
 
     @Getter getSimParameters;
     @Getter getSimVariables;
+    @Action toggleParameter;
+    @Action toggleVariable;
 
     settingsOpen: boolean = false;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      const selectedName = selected.label;
-      this.getSimParameters.forEach(parameter => {
-        if (parameter.metadata.name === selectedName) {
-          parameter.edited = !parameter.edited;
-        }
-      });
-      this.getSimVariables.forEach(variable => {
-        if (variable.metadata.name === selectedName) {
-          variable.edited = !variable.edited;
-        }
-      });
+      this.toggleParameter(selected.label);
+      this.toggleVariable(selected.label);
     }
 
     get editedNodes (): Graph.SubgraphNodeInterface[] {
