@@ -24,12 +24,12 @@
         </div>
         <multi-line-plot
           v-else
-          v-for="(plot, index) in simVariables"
+          v-for="(plot, index) in displayedVariables"
           :key="index"
           :title="plot.metadata.name"
           :data="plot.values"
           :styles="plot.styles"
-          :class="`pt-3 pr-3 variable ${plot.edited ? 'hidden' : ''}`"
+          :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
         >
           <aside class="btn-group">
             <button type="button" class="btn btn-secondary btn-sm">
@@ -37,7 +37,7 @@
             </button>
             <button
               class="btn btn-secondary btn-sm"
-              :title="(plot.edited ? 'Show' : 'Hide' + ' parameter')"
+              :title="(plot.hidden ? 'Show' : 'Hide' + ' parameter')"
               type="button"
               @click="setSimVariableVisibility(plot.metadata.name)"
             >
