@@ -105,16 +105,16 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     // For each run of the model, fetch the results...
     for (const param of getters.getSimParameterArray) {
       const response = await getModelResult(model, param, config, selectedModelGraph);
-
       // The reponse.values is a list of variables results with the variable uid as key.
       // Each index of the result list correspond to the response.times list.
-      for (const uid in response.values) {
-        const args = {
-          uid: uid,
-          values: response.values[uid].map((value, index) => ({ x: response.times[index], y: value })),
-        };
-        commit('updateVariableValues', args);
-      }
+        for (const uid in response[0].values) {
+          const args = {
+            uid: uid,
+            values: response[0].values[uid].map((value, index) => ({ x: response[0].times[index], y: value })),
+          };
+          commit('updateVariableValues', args);
+        }
+
     }
 
     // ...and aggregate them
