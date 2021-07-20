@@ -63,7 +63,7 @@
         ...this.getSimParameters.filter(parameter => parameter.edited).map(parameter => parameter.metadata.name),
         ...this.getSimVariables.filter(variable => variable.edited).map(variable => variable.metadata.name),
       ];
-      return this.graph.nodes.filter(node => highlightedLabels.includes(node.label)).map(node=> ({id: node.id})); 
+      return this.graph.nodes.filter(node => highlightedLabels.includes(node.label)).map(node => ({ id: node.id }));
     }
 
     get graph (): Graph.GraphInterface {
