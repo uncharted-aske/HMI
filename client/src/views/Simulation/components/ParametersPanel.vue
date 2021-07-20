@@ -125,6 +125,7 @@
     @Getter getSimParameters;
     @Getter getSimParameterArray;
     @Action setSimParameterValue;
+    @Getter getSimVariables;
 
     private padding: number = 5;
     private parameterHeight: number = 100;
@@ -257,10 +258,12 @@
 
     onAddAllParameters (): void {
       this.parameters.forEach(parameter => { parameter.edited = true; });
+      this.getSimVariables.forEach(variable => { variable.edited = true; });
     }
 
     onRemoveAllParameters (): void {
       this.parameters.forEach(parameter => { parameter.edited = false; });
+      this.getSimVariables.forEach(variable => { variable.edited = false; });
     }
   }
 </script>
