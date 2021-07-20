@@ -7,6 +7,7 @@ export abstract class Colors {
     DEFAULT: '#ECEFF4',
     AGGREGATE: Colors.HIGHLIGHT,
     OVERLAPPING: Colors.HIGHLIGHT,
+    EDITED: '#D08770',
 
     // Gromet
     CONTAINER: '#2E3440',

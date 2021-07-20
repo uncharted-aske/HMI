@@ -12,7 +12,7 @@
         </button>
       </aside>
     </settings-bar>
-    <global-graph v-if="model" :data="graph" :highlighted="highlighted" @node-dblclick="onNodeClick"/>
+    <global-graph v-if="model" :data="graph" :highlighted-nodes="editedNodes" @node-dblclick="onNodeClick"/>
   </section>
 </template>
 
@@ -20,7 +20,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
-  import { Getter } from 'vuex-class';
+  import { Action, Getter } from 'vuex-class';
   import * as HMI from '@/types/types';
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
@@ -41,32 +41,22 @@
 
     @Getter getSimParameters;
     @Getter getSimVariables;
+    @Action toggleParameter;
+    @Action toggleVariable;
 
     settingsOpen: boolean = false;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      const selectedName = selected.label;
-      this.getSimParameters.forEach(parameter => {
-        if (parameter.metadata.name === selectedName) {
-          parameter.hidden = !parameter.hidden;
-        }
-      });
-      this.getSimVariables.forEach(variable => {
-        if (variable.metadata.name === selectedName) {
-          variable.hidden = !variable.hidden;
-        }
-      });
+      this.toggleParameter(selected.label);
+      this.toggleVariable(selected.label);
     }
 
-    get highlighted (): Graph.GraphInterface {
+    get editedNodes (): Graph.SubgraphNodeInterface[] {
       const highlightedLabels = [
-        ...this.getSimParameters.filter(parameter => !parameter.hidden).map(parameter => parameter.metadata.name),
-        ...this.getSimVariables.filter(variable => !variable.hidden).map(variable => variable.metadata.name),
+        ...this.getSimParameters.filter(parameter => parameter.edited).map(parameter => parameter.metadata.name),
+        ...this.getSimVariables.filter(variable => variable.edited).map(variable => variable.metadata.name),
       ];
-      return {
-        nodes: this.graph.nodes.filter(node => highlightedLabels.includes(node.label)),
-        edges: [],
-      };
+      return this.graph.nodes.filter(node => highlightedLabels.includes(node.label)).map(node => ({ id: node.id }));
     }
 
     get graph (): Graph.GraphInterface {
