@@ -12,7 +12,7 @@
         </button>
       </aside>
     </settings-bar>
-    <global-graph v-if="model" :data="graph" :highlighted="highlighted" @node-dblclick="onNodeClick"/>
+    <global-graph v-if="model" :data="graph" :highlighted-nodes="editedNodes" @node-dblclick="onNodeClick"/>
   </section>
 </template>
 
@@ -48,25 +48,22 @@
       const selectedName = selected.label;
       this.getSimParameters.forEach(parameter => {
         if (parameter.metadata.name === selectedName) {
-          parameter.hidden = !parameter.hidden;
+          parameter.edited = !parameter.edited;
         }
       });
       this.getSimVariables.forEach(variable => {
         if (variable.metadata.name === selectedName) {
-          variable.hidden = !variable.hidden;
+          variable.edited = !variable.edited;
         }
       });
     }
 
-    get highlighted (): Graph.GraphInterface {
+    get editedNodes (): any {
       const highlightedLabels = [
-        ...this.getSimParameters.filter(parameter => !parameter.hidden).map(parameter => parameter.metadata.name),
-        ...this.getSimVariables.filter(variable => !variable.hidden).map(variable => variable.metadata.name),
+        ...this.getSimParameters.filter(parameter => parameter.edited).map(parameter => parameter.metadata.name),
+        ...this.getSimVariables.filter(variable => variable.edited).map(variable => variable.metadata.name),
       ];
-      return {
-        nodes: this.graph.nodes.filter(node => highlightedLabels.includes(node.label)),
-        edges: [],
-      };
+      return this.graph.nodes.filter(node => highlightedLabels.includes(node.label)).map(node=> ({id: node.id})); 
     }
 
     get graph (): Graph.GraphInterface {

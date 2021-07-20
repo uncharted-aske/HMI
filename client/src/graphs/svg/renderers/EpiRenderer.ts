@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 
 import { SVGRenderer } from 'svg-flowgraph';
 
-import { SVGRendererOptionsInterface, SubgraphInterface } from '@/types/typesGraphs';
+import { SVGRendererOptionsInterface, SubgraphInterface, SubgraphNodeInterface } from '@/types/typesGraphs';
 
 import { calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors, NodeTypes } from '@/graphs/svg/encodings';
@@ -196,15 +196,13 @@ export default class EpiRenderer extends SVGRenderer {
       .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
   }
 
-  highlightSubgraph (subgraph: SubgraphInterface): void {
+  highlightNodes (nodesList: SubgraphNodeInterface[]): void {
     const chart = (this as any).chart;
-    const nodes = subgraph.nodes;
-
     chart.selectAll('.node-ui').each(function (d) {
-      const isHighlighted = nodes.map(node => node.id).includes(d.id);
+      const isHighlighted = nodesList.map(node => node.id).includes(d.id);
       d3.select(this).select('rect')
-        .style('stroke', isHighlighted ? Colors.HIGHLIGHT : Colors.STROKE)
-        .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + (isHighlighted ? 3 : 0));
+        .style('fill', isHighlighted ? Colors.NODES.EDITED : EpiRenderer.calcNodeColor(d))
+        // .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + (isHighlighted ? 3 : 0));
     });
   }
 

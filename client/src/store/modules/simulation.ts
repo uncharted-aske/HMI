@@ -138,6 +138,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     const variables = donuVariables.map(donuVariable => ({
       ...donuVariable,
       aggregate: null,
+      edited: false,
       hidden: false,
       values: [],
     }));

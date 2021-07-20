@@ -12,12 +12,12 @@
 
   import { expandCollapse, highlight } from 'svg-flowgraph';
 
-  import { GraphInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
+  import { GraphInterface, SubgraphInterface, SubgraphNodeInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
 
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
-  import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
+  import { /** showTooltip, hideTooltip*/ hierarchyFn } from '@/utils/SVGUtil.js'; //TODO: Put tooltips back when we fix the positioning issue
   import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse } from '@/graphs/svg/util.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
@@ -30,7 +30,7 @@
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
     @Prop({ default: null }) subgraph: SubgraphInterface;
-    @Prop({ default: null }) highlighted: SubgraphInterface;
+    @Prop({ default: ()=> [] }) highlightedNodes: SubgraphNodeInterface[];
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -39,7 +39,6 @@
     @Watch('data')
     dataChanged (): void {
       this.refresh();
-      this.renderer.highlightSubgraph(this.highlighted);
     }
 
     @Watch('subgraph')
@@ -51,12 +50,11 @@
     async layoutChanged (): Promise<void> {
       await this.refresh();
       this.subgraphChanged();
-      this.renderer.highlightSubgraph(this.highlighted);
     }
 
-    @Watch('highlighted')
-    async highlightedChanged (): Promise<void> {
-      this.renderer.highlightSubgraph(this.highlighted);
+    @Watch('highlightedNodes')
+    async highlightedNodesChanged (): Promise<void> {
+      this.renderer.highlightNodes(this.highlightedNodes);
     }
 
     subgraphChanged (): void {
@@ -89,8 +87,6 @@
           const id = node.datum().id;
           if (node.datum().collapsed === true) {
             this.renderer.expand(id);
-            // Wait for renderer.expand to finish async updates before calling highlightSubgraph
-            setTimeout(() => this.renderer.highlightSubgraph(this.highlighted), 500);
           } else {
             this.renderer.collapse(id);
           }
@@ -108,21 +104,19 @@
         if (!node.datum().nodes) {
           const data = node.datum();
           /* @ts-ignore */
-          showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
+          // showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
         }
       });
 
       this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
         if (node.datum().nodes) return;
-        hideTooltip(renderer.chart);
+        // hideTooltip(renderer.chart);
       });
 
       this.renderer.setCallback('backgroundClick', () => {
-        if (!this.highlighted) {
           this.renderer.hideSubgraph();
           this.renderer.clearSelections();
           this.$emit('background-click');
-        }
       });
 
       this.refresh();
