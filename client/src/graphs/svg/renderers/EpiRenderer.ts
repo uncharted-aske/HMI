@@ -202,7 +202,6 @@ export default class EpiRenderer extends SVGRenderer {
       const isHighlighted = nodesList.map(node => node.id).includes(d.id);
       d3.select(this).select('rect')
         .style('fill', isHighlighted ? Colors.NODES.EDITED : EpiRenderer.calcNodeColor(d));
-      // .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + (isHighlighted ? 3 : 0));
     });
   }
 
