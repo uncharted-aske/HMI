@@ -31,44 +31,52 @@ export const fetchDonuModels = async (): Promise<any[]> => {
 };
 
 /** Fetch the parameters of a model */
-export const getModelParameters = async (model: Model.Model, selectedModelGraph: number = 0): Promise<Donu.ModelParameter[]> => {
+export const getModelParameters = async (model: Model.Model, selectedModelGraphType: Model.GraphTypes): Promise<Donu.ModelParameter[]> => {
   if (!model) return;
-  const modelGraph = model.modelGraph[selectedModelGraph];
-  const request: Donu.Request = {
-    command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
-    definition: {
-      source: { model: modelGraph.model },
-      type: modelGraph.donuType as Donu.Type,
-    } as Donu.ModelDefinition,
-  };
+  const modelGraph = model.modelGraph.find(graph => graph.type === selectedModelGraphType);
+  if (modelGraph) {
+    const request: Donu.Request = {
+      command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
+      definition: {
+        source: { model: modelGraph.model },
+        type: modelGraph.donuType as Donu.Type,
+      } as Donu.ModelDefinition,
+    };
 
-  const response = await callDonu(request);
-  if (response.status === Donu.ResponseStatus.success) {
-    const result = response?.result as Donu.ModelDefinition;
-    return result?.parameters ?? null;
+    const response = await callDonu(request);
+    if (response.status === Donu.ResponseStatus.success) {
+      const result = response?.result as Donu.ModelDefinition;
+      return result?.parameters ?? null;
+    } else {
+      console.error('[DONU Service] — getModelParameters', response); // eslint-disable-line no-console
+    }
   } else {
-    console.error('[DONU Service] — getModelParameters', response); // eslint-disable-line no-console
+    console.error('[DONU Service] — getModelParameters', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
   }
 };
 
 /** Fetch the state variable of a model */
-export const getModelVariables = async (model: Model.Model, selectedModelGraph: number = 0): Promise<Donu.ModelVariable[]> => {
+export const getModelVariables = async (model: Model.Model, selectedModelGraphType: Model.GraphTypes): Promise<Donu.ModelVariable[]> => {
   if (!model) return;
-  const modelGraph = model.modelGraph[selectedModelGraph];
-  const request: Donu.Request = {
-    command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
-    definition: {
-      source: { model: modelGraph.model },
-      type: modelGraph.donuType as Donu.Type,
-    } as Donu.ModelDefinition,
-  };
+  const modelGraph = model.modelGraph.find(graph => graph.type === selectedModelGraphType);
+  if (modelGraph) {
+    const request: Donu.Request = {
+      command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
+      definition: {
+        source: { model: modelGraph.model },
+        type: modelGraph.donuType as Donu.Type,
+      } as Donu.ModelDefinition,
+    };
 
-  const response = await callDonu(request);
-  if (response.status === Donu.ResponseStatus.success) {
-    const result = response?.result as Donu.ModelDefinition;
-    return result?.measures ?? null;
+    const response = await callDonu(request);
+    if (response.status === Donu.ResponseStatus.success) {
+      const result = response?.result as Donu.ModelDefinition;
+      return result?.measures ?? null;
+    } else {
+      console.error('[DONU Service] — getModelVariables', response); // eslint-disable-line no-console
+    }
   } else {
-    console.error('[DONU Service] — getModelVariables', response); // eslint-disable-line no-console
+    console.error('[DONU Service] — getModelParameters', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
   }
 };
 
@@ -77,25 +85,29 @@ export const getModelResult = async (
   model: Model.Model,
   parameters: Donu.RequestParameters,
   config: Donu.RequestConfig,
-  selectedModelGraph: number = 0,
+  selectedModelGraphType: Model.GraphTypes,
 ): Promise<Donu.SimulationResponse> => {
-  const modelGraph = model.modelGraph[selectedModelGraph];
-  const request: Donu.Request = {
-    command: Donu.RequestCommand.SIMULATE,
-    definition: {
-      source: { model: modelGraph.model },
-      type: modelGraph.donuType as Donu.Type,
-    } as Donu.ModelDefinition,
-    parameters: parameters,
-    end: config.end,
-    start: config.start,
-    step: config.step,
-  };
+  const modelGraph = model.modelGraph.find(graph => graph.type === selectedModelGraphType);
+  if (modelGraph) {
+    const request: Donu.Request = {
+      command: Donu.RequestCommand.SIMULATE,
+      definition: {
+        source: { model: modelGraph.model },
+        type: modelGraph.donuType as Donu.Type,
+      } as Donu.ModelDefinition,
+      parameters: parameters,
+      end: config.end,
+      start: config.start,
+      step: config.step,
+    };
 
-  const response = await callDonu(request);
-  if (response.status === Donu.ResponseStatus.success) {
-    return response?.result as Donu.SimulationResponse ?? null;
+    const response = await callDonu(request);
+    if (response.status === Donu.ResponseStatus.success) {
+      return response?.result as Donu.SimulationResponse ?? null;
+    } else {
+      console.error('[DONU Service] — getModelResult', response); // eslint-disable-line no-console
+    }
   } else {
-    console.error('[DONU Service] — getModelResult', response); // eslint-disable-line no-console
+    console.error('[DONU Service] — getModelResult', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
   }
 };

@@ -93,12 +93,12 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     commit('setNumberOfSavedRuns', state.numberOfSavedRuns + 1);
   },
 
-  async fetchModelResults ({ getters, commit }, { model, config, aggregator, selectedModelGraph }): Promise<void> {
+  async fetchModelResults ({ getters, commit }, { model, config, aggregator, selectedModelGraphType }): Promise<void> {
     commit('resetVariablesValues');
 
     // For each run of the model, fetch the results...
     for (const param of getters.getSimParameterArray) {
-      const response = await getModelResult(model, param, config, selectedModelGraph);
+      const response = await getModelResult(model, param, config, selectedModelGraphType);
       // The reponse.values is a list of variables results with the variable uid as key.
       // Each index of the result list correspond to the response.times list.
       for (const uid in response[0].values) {
@@ -114,8 +114,8 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     commit('setVariablesAggregate', aggregator);
   },
 
-  async initializeSimParameters ({ commit }, model: Model.Model, selectedModelGraph: number = 0): Promise<void> {
-    const donuParameters = await getModelParameters(model, selectedModelGraph) ?? [];
+  async initializeParameters ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
+    const donuParameters = await getModelParameters(args.model, args.selectedModelGraphType) ?? [];
     const parameters = donuParameters.map(donuParameter => ({
       ...donuParameter,
       edited: false,
@@ -126,8 +126,8 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     commit('setNumberOfSavedRuns', 1);
   },
 
-  async initializeSimVariables ({ commit }, model: Model.Model, selectedModelGraph: number = 0): Promise<void> {
-    const donuVariables = await getModelVariables(model, selectedModelGraph) ?? [];
+  async initializeVariables ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
+    const donuVariables = await getModelVariables(args.model, args.selectedModelGraphType) ?? [];
     const variables = donuVariables.map(donuVariable => ({
       ...donuVariable,
       aggregate: null,
@@ -189,8 +189,8 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
 
   resetSim ({ commit }): void {
     commit('setNumberOfSavedRuns', 0);
-    commit('setParameters', []);
-    commit('setVariables', []);
+    commit('setSimParameters', []);
+    commit('setSimVariables', []);
     commit('setVariablesAggregate');
   },
 };

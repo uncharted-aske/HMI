@@ -47,12 +47,12 @@
         />
         <settings
           slot="right"
-          :selected-view-id="selectedViewId"
-          :views="views"
           :layouts="layouts"
           :selected-layout-id="selectedLayoutId"
-          @view-change="onSetView"
+          :selected-view-id="graphType"
+          :views="graphTypesAvailable"
           @layout-change="onSetLayout"
+          @view-change="onSetView"
         />
       </settings-bar>
 
@@ -153,7 +153,7 @@
     id: Model.GraphTypes;
   }
 
-  const VIEWS: ModelViewInterface[] = [
+  const GRAPHTYPE_VIEWS: ModelViewInterface[] = [
     { name: 'Petri Net Classic', id: Model.GraphTypes.PetriNetClassic },
     { name: 'Functional Network', id: Model.GraphTypes.FunctionNetwork },
   ];
@@ -192,8 +192,7 @@
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any;
 
-    views: ViewInterface[] = VIEWS;
-    selectedViewId = Model.GraphTypes.PetriNetClassic;
+    graphType: Model.GraphTypes = null;
 
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
@@ -222,9 +221,9 @@
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Getter getFilters;
-    @Getter getSelectedModelGraph;
+    @Getter getSelectedModelGraphType;
     @Mutation setSelectedModels;
-    @Mutation setSelectedModelGraph;
+    @Mutation setSelectedModelGraphType;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.executeFilters();
@@ -232,7 +231,7 @@
 
     mounted (): void {
       this.loadData();
-      this.selectedViewId = VIEWS[this.getSelectedModelGraph].id;
+      this.graphType = this.getSelectedModelGraphType;
     }
 
     executeFilters (): void {
@@ -278,19 +277,29 @@
       return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
     }
 
+    get selectedModelGraph (): Model.Graph {
+      return this.selectedModel?.modelGraph.find(graph => graph.type === this.graphType) ?? null;
+    }
+
     get selectedGraphMetadata (): Model.GraphMetadata[] {
-      return this.selectedModel?.modelGraph[this.getSelectedModelGraph].metadata;
+      return this.selectedModelGraph?.metadata ?? null;
     }
 
     get selectedGraph (): GraphInterface {
-      const index = this.selectedViewId === Model.GraphTypes.PetriNetClassic ? 0 : 1;
-      return this.selectedModel?.modelGraph[index].graph;
+      return this.selectedModelGraph?.graph ?? null;
     }
 
-    get graphType (): string {
-      return this.selectedViewId === Model.GraphTypes.PetriNetClassic
-        ? Model.GraphTypes.PetriNetClassic
-        : Model.GraphTypes.FunctionNetwork;
+    get graphTypesAvailable (): ModelViewInterface[] {
+      if (!this.selectedModel) return [];
+
+      // Get the list of all the graph types available in the selected model
+      const graphTypesAvailable = this.selectedModel?.modelGraph.map(graph => graph.type);
+      if (graphTypesAvailable.length === 0) return [];
+
+      // Filter the constant and only display the available ones
+      return GRAPHTYPE_VIEWS.filter(view => {
+        return graphTypesAvailable.includes(view.id);
+      });
     }
 
     get nodeCount (): number {
@@ -340,9 +349,8 @@
     }
 
     onSetView (viewId: Model.GraphTypes): void {
-      this.selectedViewId = viewId;
-      const index = this.selectedViewId === Model.GraphTypes.PetriNetClassic ? 0 : 1;
-      this.setSelectedModelGraph(index);
+      this.graphType = viewId;
+      this.setSelectedModelGraphType(this.graphType);
     }
 
     onSetLayout (layoutId: string): void {

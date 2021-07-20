@@ -118,11 +118,11 @@
 
     @Action fetchModelResults;
     @Action incrNumberOfSavedRuns;
-    @Action initializeSimParameters;
-    @Action initializeSimVariables;
+    @Action initializeParameters;
+    @Action initializeVariables;
     @Action resetSim;
     @Getter getModelsList;
-    @Getter getSelectedModelGraph
+    @Getter getSelectedModelGraphType
     @Getter getSelectedModelIds;
     @Getter getSimParameterArray;
     @Mutation setSelectedModels;
@@ -209,9 +209,13 @@
     }
 
     initializeSim (): void {
-      if (this.selectedModel) {
-        this.initializeSimParameters(this.selectedModel, this.getSelectedModelGraph);
-        this.initializeSimVariables(this.selectedModel, this.getSelectedModelGraph);
+      if (this.selectedModel && this.getSelectedModelGraphType) {
+        const args = {
+          model: this.selectedModel,
+          selectedModelGraphType: this.getSelectedModelGraphType,
+        };
+        this.initializeParameters(args);
+        this.initializeVariables(args);
       }
     }
 
@@ -220,7 +224,7 @@
         this.fetchModelResults({
           model: this.selectedModel,
           config: this.runConfig,
-          selectedModelGraph: this.getSelectedModelGraph,
+          selectedModelGraphType: this.getSelectedModelGraphType,
         });
       }
     }
