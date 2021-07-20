@@ -13,7 +13,7 @@
         :data="countersData"
       />
       <aside slot="right">
-        <div class="btn-group" title="Show/Hide Parameters">
+        <!-- <div class="btn-group" title="Show/Hide Parameters">
           <button
             class="btn btn-secondary"
             title="Show all parameters"
@@ -30,20 +30,22 @@
           >
             <font-awesome-icon :icon="['fas', 'eye-slash']" />
           </button>
-        </div>
-        <div class="btn-group" title="Add/Remove Parameters">
+        </div> -->
+        <div class="btn-group" title="Add/Remove All Parameters & Variables">
           <button
             class="btn btn-secondary"
-            title="Add all parameters"
+            title="Add all Parameters & Variables"
             type="button"
+            :disabled="allParametersAreDisplayed"
             @click="onAddAllParameters"
           >
             <font-awesome-icon :icon="['fas', 'plus']" />
           </button>
           <button
             class="btn btn-secondary"
-            title="Remove all parameters"
+            title="Remove all Parameters & Variables"
             type="button"
+            :disabled="noDisplayedParameters"
             @click="onRemoveAllParameters"
           >
             <font-awesome-icon :icon="['fas', 'ban']" />
@@ -73,7 +75,7 @@
           <h4 :title="parameter.metadata.Description">{{ parameter.metadata.name }}</h4>
           <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.uid, e)" />
           <aside class="btn-group">
-            <button
+            <!-- <button
               class="btn btn-secondary btn-sm"
               title="(parameter.hidden ? 'Show' : 'Hide' + ' parameter')"
               type="button"
@@ -83,12 +85,12 @@
                 class="fa-w-20"
                 :icon="['fas', (parameter.hidden ? 'eye' : 'eye-slash')]"
               />
-            </button>
+            </button> -->
             <button
               class="btn btn-secondary btn-sm"
               title="Remove parameter from editable panel"
               type="button"
-              @click="parameter.edited = false"
+              @click="hideParameter(parameter.uid)"
             >
               <font-awesome-icon :icon="['fas', 'ban']" />
             </button>
@@ -125,7 +127,11 @@
     @Getter getSimParameters;
     @Getter getSimParameterArray;
     @Action setSimParameterValue;
-    @Getter getSimVariables;
+    @Action hideParameter;
+    @Action hideAllParameters;
+    @Action showAllParameters;
+    @Action hideAllVariables;
+    @Action showAllVariables;
 
     private padding: number = 5;
     private parameterHeight: number = 100;
@@ -140,8 +146,9 @@
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
     get parameters (): HMI.SimulationParameter[] {
+      const parameters = _.cloneDeep(this.getSimParameters);
       // Order by ASC order
-      return _.orderBy(this.getSimParameters, ['metadata.name'], ['asc']);
+      return _.orderBy(parameters, ['metadata.name'], ['asc']);
     }
 
     get displayedParameters (): HMI.SimulationParameter[] {
@@ -150,6 +157,10 @@
 
     get noDisplayedParameters (): boolean {
       return this.displayedParameters.length === 0;
+    }
+
+    get allParametersAreDisplayed (): boolean {
+      return this.displayedParameters.length === this.parameters.length;
     }
 
     get countersTitle (): string {
@@ -257,13 +268,13 @@
     }
 
     onAddAllParameters (): void {
-      this.parameters.forEach(parameter => { parameter.edited = true; });
-      this.getSimVariables.forEach(variable => { variable.edited = true; });
+      this.showAllParameters();
+      this.showAllVariables();
     }
 
     onRemoveAllParameters (): void {
-      this.parameters.forEach(parameter => { parameter.edited = false; });
-      this.getSimVariables.forEach(variable => { variable.edited = false; });
+      this.hideAllParameters();
+      this.hideAllVariables();
     }
   }
 </script>
@@ -273,10 +284,6 @@
     color: white;
     display: flex;
     flex-direction: column;
-  }
-
-  .settings-bar-container {
-    flex-shrink: 0;
   }
 
   .parameters {

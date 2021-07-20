@@ -6,12 +6,36 @@
         :title="countersTitle"
         :data="countersData"
       />
-      <div class="d-flex align-items-center" slot="right">
+      <aside slot="right">
         <span class="run-counter" v-if="getVariablesRunsCount">{{ runCounter }}</span>
-        <button type="button" class="btn btn-secondary py-0 btn-settings" @click="$emit('expand')">
+        <div class="btn-group" title="Add/Remove Variables">
+          <button
+            class="btn btn-secondary"
+            title="Add all Variables"
+            type="button"
+            :disabled="allVariablesAreDisplayed"
+            @click="showAllVariables"
+          >
+            <font-awesome-icon :icon="['fas', 'plus']" />
+          </button>
+          <button
+            class="btn btn-secondary"
+            title="Remove all Vsariables"
+            type="button"
+            :disabled="noDisplayedVariables"
+            @click="hideAllVariables"
+          >
+            <font-awesome-icon :icon="['fas', 'ban']" />
+          </button>
+        </div>
+        <button
+          class="btn btn-secondary"
+          title="Expand Parameters Panel"
+          type="button"
+          @click="$emit('expand')">
           <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
         </button>
-      </div>
+      </aside>
     </settings-bar>
 
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
@@ -21,6 +45,9 @@
           class="alert alert-info m-3" role="alert"
         >
           Click Run to get variables output.
+        </div>
+        <div v-else-if="noDisplayedVariables" class="alert alert-info m-3">
+          Use the model visualization on the left to add/remove variables.
         </div>
         <multi-line-plot
           v-else
@@ -32,16 +59,13 @@
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
         >
           <aside class="btn-group">
-            <button type="button" class="btn btn-secondary btn-sm">
-              <font-awesome-icon :icon="['fas', 'tools']" />
-            </button>
             <button
               class="btn btn-secondary btn-sm"
-              :title="(plot.hidden ? 'Show' : 'Hide' + ' parameter')"
+              title="Remove Variable"
               type="button"
-              @click="setSimVariableVisibility(plot.metadata.name)"
+              @click="hideVariable(plot.uid)"
             >
-              <font-awesome-icon :icon="['fas', (plot.hiden ? 'eye' : 'eye-slash')]" />
+              <font-awesome-icon :icon="['fas', 'ban']" />
             </button>
           </aside>
         </multi-line-plot>
@@ -122,27 +146,37 @@
 
     @Getter getSimVariables;
     @Getter getVariablesRunsCount;
-    @Action setSimVariableVisibility;
+    @Action hideVariable;
+    @Action hideAllVariables;
+    @Action showAllVariables;
 
-    get simVariables (): HMI.SimulationVariable[] {
-      const simVariables = _.cloneDeep(this.getSimVariables);
-      simVariables.map(simVariable => {
-        simVariable.styles = simVariable.styles || [];
-        for (let i = 0; i < simVariable.values.length; i++) {
-          simVariable.styles.push(mergeStyle(i !== simVariable.values.length - 1 && OTHER_STYLE));
+    get variables (): HMI.SimulationVariable[] {
+      const variables = _.cloneDeep(this.getSimVariables);
+      variables.map(variable => {
+        variable.styles = variable.styles || [];
+        for (let i = 0; i < variable.values.length; i++) {
+          variable.styles.push(mergeStyle(i !== variable.values.length - 1 && OTHER_STYLE));
         }
 
-        if (simVariable.aggregate) {
-          simVariable.values.push(simVariable.aggregate);
-          simVariable.styles.push(mergeStyle(AGGREGATE_STYLE));
+        if (variable.aggregate) {
+          variable.values.push(variable.aggregate);
+          variable.styles.push(mergeStyle(AGGREGATE_STYLE));
         }
       });
 
-      return _.orderBy(simVariables, ['metadata.name'], ['asc']);
+      return _.orderBy(variables, ['metadata.name'], ['asc']);
     }
 
     get displayedVariables (): HMI.SimulationVariable[] {
-      return this.simVariables.filter(variable => variable.edited);
+      return this.variables.filter(variable => variable.edited);
+    }
+
+    get noDisplayedVariables (): boolean {
+      return this.displayedVariables.length === 0;
+    }
+
+    get allVariablesAreDisplayed (): boolean {
+      return this.displayedVariables.length === this.variables.length;
     }
 
     get countersTitle (): string {
@@ -152,7 +186,7 @@
 
     get countersData (): HMI.Counter[] {
       const displayed = this.displayedVariables.length;
-      const total = this.simVariables.length;
+      const total = this.variables.length;
       if (displayed < total) {
         return [{ name: 'total', value: total }];
       }
