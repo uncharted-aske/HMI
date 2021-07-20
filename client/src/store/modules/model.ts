@@ -1,6 +1,7 @@
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
+import * as DonuUtils from '@/utils/DonuUtil';
 import { fetchInitialModelData } from '@/static/mockedDataDemo';
 
 const state: Model.State = {
@@ -16,9 +17,7 @@ const actions: ActionTree<Model.State, any> = {
 
     // filter out non-gromets
     const modelList = initialModelsList.map(model => {
-      model.modelGraph = model.modelGraph.filter(graph => {
-        return [Donu.Type.GROMET_PNC/*, Donu.Type.GROMET_FN */].includes(graph.donuType);
-      });
+      model.modelGraph = model.modelGraph.filter(DonuUtils.isGraphAGroMET);
       if (model.modelGraph.length > 0) return model;
     });
 

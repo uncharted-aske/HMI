@@ -110,9 +110,13 @@
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
-  const VIEWS: ViewInterface[] = [
-    { name: 'Petri Net Classic', id: 'ptc' },
-    { name: 'Functional Network', id: 'fn' },
+  interface ModelViewInterface extends ViewInterface {
+    id: Model.GraphTypes;
+  }
+
+  const VIEWS: ModelViewInterface[] = [
+    { name: 'Petri Net Classic', id: Model.GraphTypes.PetriNetClassic },
+    { name: 'Functional Network', id: Model.GraphTypes.FunctionNetwork },
   ];
 
   const LAYOUTS: GraphLayoutInterface[] = [
@@ -150,7 +154,7 @@
     bgraphInstance: any;
 
     views: ViewInterface[] = VIEWS;
-    selectedViewId = 'ptc';
+    selectedViewId = Model.GraphTypes.PetriNetClassic;
 
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
@@ -204,10 +208,10 @@
     }
 
     async loadData (): Promise<void> {
-      if (this.selectedModel && this.grometType) {
+      if (this.selectedModel && this.graphType) {
         const [bgNodes, bgEdges] = await loadBGraphData(
-          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/nodes.jsonl`,
-          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/edges.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.graphType}/nodes.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.graphType}/edges.jsonl`,
         );
         this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
         this.executeFilters();
@@ -218,7 +222,7 @@
       this.loadData();
     }
 
-    @Watch('grometType') onGetGrometTypeChange (): void {
+    @Watch('graphType') onGetGrometTypeChange (): void {
       this.loadData();
     }
 
@@ -239,12 +243,14 @@
     }
 
     get selectedGraph (): GraphInterface {
-      const index = this.selectedViewId === 'ptc' ? 0 : 1;
+      const index = this.selectedViewId === Model.GraphTypes.PetriNetClassic ? 0 : 1;
       return this.selectedModel?.modelGraph[index].graph;
     }
 
-    get grometType (): string {
-      return this.selectedViewId === 'ptc' ? Model.GraphTypes.PetriNetClassic : Model.GraphTypes.FunctionNetwork;
+    get graphType (): string {
+      return this.selectedViewId === Model.GraphTypes.PetriNetClassic
+        ? Model.GraphTypes.PetriNetClassic
+        : Model.GraphTypes.FunctionNetwork;
     }
 
     get nodeCount (): number {
@@ -293,9 +299,9 @@
       this.drilldownMetadata = null;
     }
 
-    onSetView (viewId: string): void {
+    onSetView (viewId: Model.GraphTypes): void {
       this.selectedViewId = viewId;
-      const index = this.selectedViewId === 'ptc' ? 0 : 1;
+      const index = this.selectedViewId === Model.GraphTypes.PetriNetClassic ? 0 : 1;
       this.setSelectedModelGraph(index);
     }
 
@@ -304,12 +310,12 @@
     }
 
     async searchCosmos (keyword: string): Promise<void> {
-        try {
-          const response = await cosmosSearch(filterToParamObj({ cosmosQuery: [keyword] }));
-          this.drilldownKnowledge = response;
-        } catch (e) {
-          throw Error(e);
-        }
+      try {
+        const response = await cosmosSearch(filterToParamObj({ cosmosQuery: [keyword] }));
+        this.drilldownKnowledge = response;
+      } catch (e) {
+        throw Error(e);
+      }
     }
 
     async getRelatedParameters (keyword: string): Promise<void> {
@@ -320,7 +326,6 @@
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
       this.drilldownActiveTabId = 'metadata';
-
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownMetadata = node.metadata;
