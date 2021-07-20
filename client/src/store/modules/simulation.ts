@@ -222,7 +222,7 @@ const mutations: MutationTree<SimulationState> = {
   setVariablesAggregate (state, aggregator: Function = d3.mean): void { /* eslint-disable-line @typescript-eslint/ban-types */
     state.variables.forEach(variable => {
       // No saved runs, no need to aggregate
-      if (state.numberOfSavedRuns < 2) {
+      if (state.numberOfSavedRuns < 3) {
         variable.aggregate = null;
         return;
       }
