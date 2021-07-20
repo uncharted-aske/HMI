@@ -41,7 +41,7 @@
               type="button"
               @click="setSimVariableVisibility(plot.metadata.name)"
             >
-              <font-awesome-icon :icon="['fas', (plot.hideen ? 'eye' : 'eye-slash')]" />
+              <font-awesome-icon :icon="['fas', (plot.hiden ? 'eye' : 'eye-slash')]" />
             </button>
           </aside>
         </multi-line-plot>
