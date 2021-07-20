@@ -139,8 +139,9 @@
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
     get parameters (): HMI.SimulationParameter[] {
+      const parameters = _.cloneDeep(this.getSimParameters);
       // Order by ASC order
-      return _.orderBy(this.getSimParameters, ['metadata.name'], ['asc']);
+      return _.orderBy(parameters, ['metadata.name'], ['asc']);
     }
 
     get displayedParameters (): HMI.SimulationParameter[] {
@@ -270,10 +271,6 @@
     color: white;
     display: flex;
     flex-direction: column;
-  }
-
-  .settings-bar-container {
-    flex-shrink: 0;
   }
 
   .parameters {
