@@ -31,6 +31,14 @@ export default class EpiRenderer extends SVGRenderer {
     super(options);
   }
 
+  static calcNodeColor (d: d3.Selection<any, any, any, any>): string {
+    if ((d as any).nodes) {
+      return Colors.NODES.CONTAINER;
+    } else {
+      return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.fill;
+    }
+  }
+
   buildDefs (): void {
     const svg = d3.select((this as any).svgEl);
     const edges = flatten((this as any).layout).edges;
@@ -105,13 +113,7 @@ export default class EpiRenderer extends SVGRenderer {
         .attr('rx', DEFAULT_STYLE.node.borderRadius)
         .attr('width', d => (d as any).width)
         .attr('height', d => (d as any).height)
-        .style('fill', d => {
-          if ((d as any).nodes) {
-            return Colors.NODES.CONTAINER;
-          } else {
-            return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.fill;
-          }
-        })
+        .style('fill', EpiRenderer.calcNodeColor)
         .style('stroke', DEFAULT_STYLE.node.stroke)
         .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
 
@@ -192,6 +194,18 @@ export default class EpiRenderer extends SVGRenderer {
     node.select('rect')
       .style('stroke', Colors.HIGHLIGHT)
       .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
+  }
+
+  highlightSubgraph (subgraph: SubgraphInterface): void {
+    const chart = (this as any).chart;
+    const nodes = subgraph.nodes;
+
+    chart.selectAll('.node-ui').each(function (d) {
+      const isHighlighted = nodes.map(node => node.id).includes(d.id);
+      d3.select(this).select('rect')
+        .style('stroke', isHighlighted ? Colors.HIGHLIGHT : Colors.STROKE)
+        .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + (isHighlighted ? 3 : 0));
+    });
   }
 
   clearSelections ():void {

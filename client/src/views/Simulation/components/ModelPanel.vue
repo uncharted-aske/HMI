@@ -12,8 +12,7 @@
         </button>
       </aside>
     </settings-bar>
-    <model-selector/>
-    <global-graph v-if="model" :data="graph"/>
+    <global-graph v-if="model" :data="graph" :highlighted="highlighted" @node-dblclick="onNodeClick"/>
   </section>
 </template>
 
@@ -28,13 +27,11 @@
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
-  import ModelSelector from '@/views/Simulation/components/ModelSelector.vue';
 
   const components = {
     Counters,
     GlobalGraph,
     SettingsBar,
-    ModelSelector,
   };
 
   @Component({ components })
@@ -46,6 +43,31 @@
     @Getter getSimVariables;
 
     settingsOpen: boolean = false;
+
+    onNodeClick (selected: Graph.GraphNodeInterface): void {
+      const selectedName = selected.label;
+      this.getSimParameters.forEach(parameter => {
+        if (parameter.metadata.name === selectedName) {
+          parameter.hidden = !parameter.hidden;
+        }
+      });
+      this.getSimVariables.forEach(variable => {
+        if (variable.metadata.name === selectedName) {
+          variable.hidden = !variable.hidden;
+        }
+      });
+    }
+
+    get highlighted (): Graph.GraphInterface {
+      const highlightedLabels = [
+        ...this.getSimParameters.filter(parameter => !parameter.hidden).map(parameter => parameter.metadata.name),
+        ...this.getSimVariables.filter(variable => !variable.hidden).map(variable => variable.metadata.name),
+      ];
+      return {
+        nodes: this.graph.nodes.filter(node => highlightedLabels.includes(node.label)),
+        edges: [],
+      };
+    }
 
     get graph (): Graph.GraphInterface {
       return this.model?.modelGraph?.[0]?.graph;

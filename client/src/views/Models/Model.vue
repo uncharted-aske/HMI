@@ -12,59 +12,98 @@
         :metadata="selectedGraphMetadata"
       />
     </left-side-panel>
-    <div class="d-flex flex-column flex-grow-1 position-relative">
-      <div class="search-row">
-        <search-bar :placeholder="`Search for model components...`"/>
-        <button class="btn btn-primary m-1" @click="onOpenSimView">
-          <font-awesome-icon :icon="['fas', 'chart-line' ]" />
-          <span> Open Simulation View </span>
+
+    <section>
+      <header>
+        <button
+          class="btn btn-primary"
+          :class="{ 'active': displaySearch }"
+          @click="displaySearch = !displaySearch"
+        >
+          <font-awesome-icon :icon="['fas', 'search' ]" />
+          Search
         </button>
-      </div>
-      <div class="d-flex flex-column h-100 w-100">
-        <settings-bar>
-          <counters
-            slot="left"
-            :title="selectedModel && selectedModel.name"
-            :data="[
-              { name: 'Nodes', value: nodeCount },
-              { name: 'Edges', value: edgeCount },
-            ]"
-          />
-          <settings
-            slot="right"
-            :selected-view-id="selectedViewId"
-            :views="views"
-            :layouts="layouts"
-            :selected-layout-id="selectedLayoutId"
-            @view-change="onSetView"
-            @layout-change="onSetLayout"
-          />
-        </settings-bar>
-        <global-graph
-          v-if="selectedGraph"
-          :data="selectedGraph"
-          :subgraph="subgraph"
-          :layout="selectedLayoutId"
-          @node-click="onNodeClick"
-          @background-click="onBackgroundClick"
+        <button
+          class="btn-sim btn btn-primary"
+          @click="onOpenSimView"
+        >
+          <font-awesome-icon :icon="['fas', 'chart-line' ]" />
+          Open Simulation
+        </button>
+      </header>
+
+      <aside class="search-bar" :class="{ 'active': displaySearch }">
+        <search-bar :placeholder="`Search for model components...`"/>
+      </aside>
+
+      <settings-bar>
+        <counters
+          slot="left"
+          :title="selectedModel && selectedModel.name"
+          :data="[
+            { name: 'Nodes', value: nodeCount },
+            { name: 'Edges', value: edgeCount },
+          ]"
         />
-      </div>
-    </div>
-    <drilldown-panel @close-pane="onCloseDrilldownPanel" :tabs="drilldownTabs" :active-tab-id="drilldownActiveTabId" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" @tab-click="onDrilldownTabClick">
-      <metadata-pane v-if="drilldownActiveTabId === 'metadata'" slot="content" :data="drilldownMetadata" @open-modal="onOpenModalMetadata"/>
-      <parameters-pane v-if="drilldownActiveTabId === 'parameters'" slot="content" :data="drilldownParameters" :related="drilldownRelatedParameters" @open-modal="onOpenModalParameters"/>
-      <knowledge-pane v-if="drilldownActiveTabId === 'knowledge'" slot="content" :data="drilldownKnowledge"/>
+        <settings
+          slot="right"
+          :selected-view-id="selectedViewId"
+          :views="views"
+          :layouts="layouts"
+          :selected-layout-id="selectedLayoutId"
+          @view-change="onSetView"
+          @layout-change="onSetLayout"
+        />
+      </settings-bar>
+
+      <global-graph
+        v-if="selectedGraph"
+        :data="selectedGraph"
+        :subgraph="subgraph"
+        :layout="selectedLayoutId"
+        @node-click="onNodeClick"
+        @background-click="onBackgroundClick"
+      />
+    </section>
+
+    <drilldown-panel
+      :active-tab-id="drilldownActiveTabId"
+      :is-open="isOpenDrilldown"
+      :pane-subtitle="drilldownPaneSubtitle"
+      :pane-title="drilldownPaneTitle"
+      :tabs="drilldownTabs"
+      @close-pane="onCloseDrilldownPanel"
+      @tab-click="onDrilldownTabClick"
+    >
+      <metadata-pane
+        v-if="drilldownActiveTabId === 'metadata'"
+        slot="content"
+        :data="drilldownMetadata"
+        @open-modal="onOpenModalMetadata"
+      />
+      <parameters-pane
+        v-if="drilldownActiveTabId === 'parameters'"
+        slot="content" :data="drilldownParameters"
+        :related="drilldownRelatedParameters"
+        @open-modal="onOpenModalParameters"
+      />
+      <knowledge-pane
+        v-if="drilldownActiveTabId === 'knowledge'"
+        slot="content"
+        :data="drilldownKnowledge"
+      />
     </drilldown-panel>
+
     <modal-parameters
       v-if="showModalParameters"
       :data="modalDataParameters"
       @close="showModalParameters = false"
-     />
-     <modal-doc-metadata
+    />
+    <modal-doc-metadata
       v-if="showModalMetadata"
       :data="modalDataMetadata"
       @close="showModalMetadata = false"
-     />
+    />
   </div>
 </template>
 
@@ -172,6 +211,7 @@
     drilldownRelatedParameters: any = null;
     drilldownParameters: any = null;
 
+    displaySearch: boolean = false;
     isSplitView = false;
     subgraph: SubgraphInterface = null;
     showModalParameters: boolean = false;
@@ -355,5 +395,46 @@
 <style scoped>
   .left-side-panel {
     flex-shrink: 0;
+  }
+
+  .view-container section {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    position: relative;
+  }
+
+  header {
+    align-items: center;
+    background-color: var(--bg-secondary);
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    justify-content: space-between;
+    padding: 10px 5px;
+  }
+
+  header .btn-sim {
+    width: 10.5em; /* Same as the close button on the simulation view */
+  }
+
+  .search-bar {
+    background-color: var(--bg-secondary);
+    flex-shrink: 0;
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none; /* Avoid potential clicks to happen */
+    transition: max-height 250ms ease-in-out;
+    will-change: max-height;
+  }
+
+  .search-bar.active {
+    max-height: 10rem; /* Random number bigger than actual height for the transition. */
+    pointer-events: auto;
+  }
+
+  .search-bar .search-bar-container {
+    margin-top: 0; /* To have an uniform spacing between the header and the search bar */
+    margin-bottom: 10px; /* To match the header vertical spacing */
   }
 </style>
