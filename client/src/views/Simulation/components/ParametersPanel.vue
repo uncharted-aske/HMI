@@ -187,8 +187,8 @@
     }
 
     drawGraph (): void {
-      // List of parameters names
-      const params = this.displayedParameters.map(parameter => parameter.metadata.name);
+      // List of parameters by uid
+      const params = this.displayedParameters.map(parameter => parameter.uid);
 
       // List of runs
       const runs = this.getSimParameterArray;
