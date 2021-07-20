@@ -415,6 +415,7 @@
 
   .search-bar {
     background-color: var(--bg-secondary);
+    flex-shrink: 0;
     max-height: 0;
     overflow: hidden;
     pointer-events: none; /* Avoid potential clicks to happen */
@@ -425,7 +426,6 @@
   .search-bar.active {
     max-height: 10rem; /* Random number bigger than actual height for the transition. */
     pointer-events: auto;
-    overflow: visible;
   }
 
   .search-bar .search-bar-container {
