@@ -81,24 +81,6 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     commit('setNumberOfSavedRuns', state.numberOfSavedRuns + 1);
   },
 
-  setSimVariablesVisibility ({ state, commit }, args: boolean): void {
-    const variables = state.variables.map(variable => {
-      variable.hidden = Boolean(args);
-      return variable;
-    });
-    commit('setSimVariables', variables);
-  },
-
-  setSimVariableVisibility ({ state, commit }, args: string): void {
-    const variables = state.variables.map(variable => {
-      if (variable.metadata.name === args) {
-        variable.hidden = !variable.hidden;
-      }
-      return variable;
-    });
-    commit('setSimVariables', variables);
-  },
-
   async fetchModelResults ({ getters, commit }, { model, config, aggregator, selectedModelGraph }): Promise<void> {
     commit('resetVariablesValues');
 
@@ -143,6 +125,16 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     }));
     commit('setSimVariables', variables);
   },
+
+  hideAllParameters ({ commit }): void { commit('setAllParametersVisibility', false); },
+  showAllParameters ({ commit }): void { commit('setAllParametersVisibility', true); },
+  hideAllVariables ({ commit }): void { commit('setAllVariablesVisibility', false); },
+  showAllVariables ({ commit }): void { commit('setAllVariablesVisibility', true); },
+
+  hideParameter ({ commit }, uid: string): void { commit('setParameterVisibility', { uid, visibility: false }); },
+  showParameter ({ commit }, uid: string): void { commit('setParameterVisibility', { uid, visibility: true }); },
+  hideVariable ({ commit }, uid: string): void { commit('setVariableVisibility', { uid, visibility: false }); },
+  showVariable ({ commit }, uid: string): void { commit('setVariableVisibility', { uid, visibility: true }); },
 
   resetSim ({ commit }): void {
     commit('setNumberOfSavedRuns', 0);
@@ -217,6 +209,24 @@ const mutations: MutationTree<SimulationState> = {
       // We only assign now the variable.aggregate to avoid Vue reactivity.
       variable.aggregate = aggregate;
     });
+  },
+
+  setParameterVisibility (state, args: { uid: string, visibility: boolean }): void {
+    const parameter = state.parameters.find(parameter => parameter.uid === args.uid);
+    parameter.edited = args.visibility;
+  },
+
+  setAllParametersVisibility (state, visibility: boolean): void {
+    state.parameters.forEach(parameter => { parameter.edited = visibility; });
+  },
+
+  setVariableVisibility (state, args: { uid: string, visibility: boolean }): void {
+    const variable = state.variables.find(variable => variable.uid === args.uid);
+    variable.edited = args.visibility;
+  },
+
+  setAllVariablesVisibility (state, visibility: boolean): void {
+    state.variables.forEach(variable => { variable.edited = visibility; });
   },
 };
 

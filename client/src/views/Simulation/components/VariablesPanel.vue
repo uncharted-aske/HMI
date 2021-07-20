@@ -11,17 +11,19 @@
         <div class="btn-group" title="Add/Remove Variables">
           <button
             class="btn btn-secondary"
-            title="Add all variables"
+            title="Add all Variables"
             type="button"
-            @click="onAddAllVariables"
+            :disabled="allVariablesAreDisplayed"
+            @click="showAllVariables"
           >
             <font-awesome-icon :icon="['fas', 'plus']" />
           </button>
           <button
             class="btn btn-secondary"
-            title="Remove all variables"
+            title="Remove all Vsariables"
             type="button"
-            @click="onRemoveAllVariables"
+            :disabled="noDisplayedVariables"
+            @click="hideAllVariables"
           >
             <font-awesome-icon :icon="['fas', 'ban']" />
           </button>
@@ -44,6 +46,9 @@
         >
           Click Run to get variables output.
         </div>
+        <div v-else-if="noDisplayedVariables" class="alert alert-info m-3">
+          Use the model visualization on the left to add/remove variables.
+        </div>
         <multi-line-plot
           v-else
           v-for="(plot, index) in displayedVariables"
@@ -54,16 +59,13 @@
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
         >
           <aside class="btn-group">
-            <button type="button" class="btn btn-secondary btn-sm">
-              <font-awesome-icon :icon="['fas', 'tools']" />
-            </button>
             <button
               class="btn btn-secondary btn-sm"
-              :title="(plot.hidden ? 'Show' : 'Hide' + ' parameter')"
+              title="Remove Variable"
               type="button"
-              @click="setSimVariableVisibility(plot.metadata.name)"
+              @click="hideVariable(plot.uid)"
             >
-              <font-awesome-icon :icon="['fas', (plot.hiden ? 'eye' : 'eye-slash')]" />
+              <font-awesome-icon :icon="['fas', 'ban']" />
             </button>
           </aside>
         </multi-line-plot>
@@ -144,7 +146,9 @@
 
     @Getter getSimVariables;
     @Getter getVariablesRunsCount;
-    @Action setSimVariableVisibility;
+    @Action hideVariable;
+    @Action hideAllVariables;
+    @Action showAllVariables;
 
     get variables (): HMI.SimulationVariable[] {
       const variables = _.cloneDeep(this.getSimVariables);
@@ -167,6 +171,14 @@
       return this.variables.filter(variable => variable.edited);
     }
 
+    get noDisplayedVariables (): boolean {
+      return this.displayedVariables.length === 0;
+    }
+
+    get allVariablesAreDisplayed (): boolean {
+      return this.displayedVariables.length === this.variables.length;
+    }
+
     get countersTitle (): string {
       const count = this.displayedVariables.length;
       return `${count > 0 ? count : '—'} Variable${count > 1 ? 's' : ''}`;
@@ -183,14 +195,6 @@
     get runCounter (): string {
       const count = this.getVariablesRunsCount;
       return `${count} run${count > 1 ? 's' : ''}`;
-    }
-
-    onAddAllVariables (): void {
-      this.variables.forEach(variable => { variable.edited = true; });
-    }
-
-    onRemoveAllVariables (): void {
-      this.variables.forEach(variable => { variable.edited = false; });
     }
   }
 </script>
