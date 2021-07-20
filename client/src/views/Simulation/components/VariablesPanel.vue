@@ -20,7 +20,7 @@
           v-if="!getVariablesRunsCount"
           class="alert alert-info m-3" role="alert"
         >
-          Click `Run` to get variables output.
+          Click Run to get variables output.
         </div>
         <multi-line-plot
           v-else
@@ -29,7 +29,7 @@
           :title="plot.metadata.name"
           :data="plot.values"
           :styles="plot.styles"
-          :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
+          :class="`pt-3 pr-3 variable ${plot.edited ? 'hidden' : ''}`"
         >
           <aside class="btn-group">
             <button type="button" class="btn btn-secondary btn-sm">
@@ -37,11 +37,11 @@
             </button>
             <button
               class="btn btn-secondary btn-sm"
-              :title="(plot.hidden ? 'Show' : 'Hide' + ' parameter')"
+              :title="(plot.edited ? 'Show' : 'Hide' + ' parameter')"
               type="button"
               @click="setSimVariableVisibility(plot.metadata.name)"
             >
-              <font-awesome-icon :icon="['fas', (plot.hidden ? 'eye' : 'eye-slash')]" />
+              <font-awesome-icon :icon="['fas', (plot.edited ? 'eye' : 'eye-slash')]" />
             </button>
           </aside>
         </multi-line-plot>
@@ -141,21 +141,21 @@
       return _.orderBy(simVariables, ['metadata.name'], ['asc']);
     }
 
+    get displayedVariables (): HMI.SimulationVariable[] {
+      return this.simVariables.filter(variable => variable.edited);
+    }
+
     get countersTitle (): string {
-      const count = this.getSimVariables.length;
+      const count = this.displayedVariables.length;
       return `${count > 0 ? count : '—'} Variable${count > 1 ? 's' : ''}`;
     }
 
     get countersData (): HMI.Counter[] {
-      const count = this.getSimVariables.length;
-      if (count > 0) {
-        const hidden = this.getSimVariables.filter(variable => variable.hidden).length ?? 0;
-        if (hidden === count) {
-          return [{ name: 'All hidden' }];
-        } else if (hidden > 0) {
-          return [{ name: 'Hidden', value: hidden }];
-        }
-      } else return [];
+      const displayed = this.displayedVariables.length;
+      const total = this.simVariables.length;
+      if (displayed < total) {
+        return [{ name: 'total', value: total }];
+      }
     }
 
     get runCounter (): string {
