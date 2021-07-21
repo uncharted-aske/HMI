@@ -109,6 +109,7 @@
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
   import svgUtil from '@/utils/SVGUtil';
+  import { shorterNb } from '@/utils/NumberUtil';
   import * as HMI from '@/types/types';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -262,9 +263,20 @@
               .attr('class', d => d + ' axis')
               .attr('transform', d => svgUtil.translate(0, yScale(d)));
 
-            g.append('line').attr('x1', xMinMax[0]).attr('x2', xMinMax[1]); // the axis
-            g.append('text').attr('x', xMinMax[0]).text(d => xScales.get(d).min); // min label
-            g.append('text').attr('x', xMinMax[1]).text(d => xScales.get(d).max); // max label
+            // the axis
+            g.append('line')
+              .attr('x1', xMinMax[0])
+              .attr('x2', xMinMax[1]);
+
+            // min label
+            g.append('text')
+              .attr('x', xMinMax[0])
+              .text(d => shorterNb(xScales.get(d).min));
+
+            // max label
+            g.append('text')
+              .attr('x', xMinMax[1])
+              .text(d => shorterNb(xScales.get(d).max));
 
             return g;
           });
