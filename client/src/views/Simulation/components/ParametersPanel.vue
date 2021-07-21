@@ -109,6 +109,7 @@
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
   import svgUtil from '@/utils/SVGUtil';
+  import { shorterNb } from '@/utils/NumberUtil';
   import * as HMI from '@/types/types';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -219,7 +220,11 @@
       // X & Y Scales
       const xScale = param => {
         const minMax = svgUtil.extendRoundUpToPow10(runs, d => d[param]) as Iterable<d3.NumberValue>;
-        return d3.scaleLinear(minMax, xMinMax);
+        return {
+          min: minMax[0],
+          max: minMax[1],
+          scale: d3.scaleLinear(minMax, xMinMax),
+        };
       };
       const xScales = new Map(params.map(param => [param, xScale(param)]));
       const yScale = d3.scalePoint(params, yMinMax);
@@ -227,7 +232,7 @@
       // Runs Line method
       const line = d3.line()
         /* @ts-ignore */
-        .x(([param, value]) => xScales.get(param)(value))
+        .x(([param, value]) => xScales.get(param).scale(value))
         /* @ts-ignore */
         .y(([param]) => yScale(param));
 
@@ -250,13 +255,31 @@
 
       // Add the axis
       graph.append('g')
-        .selectAll('g')
+          .selectAll('g')
           .data(params)
-          .join('line')
-            .attr('class', 'axis')
-            .attr('transform', d => svgUtil.translate(0, yScale(d)))
-            .attr('x1', xMinMax[0])
-            .attr('x2', xMinMax[1]);
+          .join(enter => {
+            // Group for the parameter translated vertically
+            const g = enter.append('g')
+              .attr('class', d => d + ' axis')
+              .attr('transform', d => svgUtil.translate(0, yScale(d)));
+
+            // the axis
+            g.append('line')
+              .attr('x1', xMinMax[0])
+              .attr('x2', xMinMax[1]);
+
+            // min label
+            g.append('text')
+              .attr('x', xMinMax[0])
+              .text(d => shorterNb(xScales.get(d).min));
+
+            // max label
+            g.append('text')
+              .attr('x', xMinMax[1])
+              .text(d => shorterNb(xScales.get(d).max));
+
+            return g;
+          });
     }
 
     onHideAllParameters (): void {
@@ -356,11 +379,18 @@
 <style>
   /* For SVG you cannot scope the <style> */
 
-  .parameters-graph .axis {
+  .parameters-graph .axis line {
     fill: none;
     stroke: var(--colours-nodes-other);
     stroke-width: 1;
   }
+
+  .parameters-graph .axis text {
+    font-size: 10px;
+    stroke: var(--text-color-light);
+  }
+  .parameters-graph .axis text:first-of-type { translate: -1em .3em; }
+  .parameters-graph .axis text:last-of-type { translate: .5em .3em; }
 
   .parameters-graph .run {
     fill: none;
