@@ -7,7 +7,7 @@
 
 <script lang="ts">
   import _ from 'lodash';
-  import { GraferController, GraferControllerData, GraferLayerData } from '@uncharted.software/grafer';
+  import { GraferController, GraferControllerData, GraferLayerData, GraferPointsData } from '@uncharted.software/grafer';
   import { Component } from 'vue-property-decorator';
   import Vue from 'vue';
   import { BIO_CLUSTERS_LAYERS_CONFIG, BIO_GRAPH_COLORS, BIO_NODES_LAYERS_CONFIG } from '@/utils/GraferUtil';
@@ -66,7 +66,6 @@
 
       const colors = BIO_GRAPH_COLORS;
       const layers = this.loadModelLayers(layerData);
-      // @ts-ignore
       return { points, colors, layers };
     }
 

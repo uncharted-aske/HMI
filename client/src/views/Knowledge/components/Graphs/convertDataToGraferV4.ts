@@ -195,8 +195,6 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
     if (lineNumber++) {
       const nodeAtts = nodeAttsMap.get(json.id);
       nodes.push({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         id: json.id,
         point: json.id,
         color: nodeColors.get(json.id),

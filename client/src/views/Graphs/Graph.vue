@@ -97,11 +97,9 @@
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
-  import { GraferNodesData, GraferEdgesData, GraferLabelsData } from '@uncharted.software/grafer';
 
   import { Counter, TabInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
-  import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
   import { CosmosArtifactInterface } from '@/types/typesCosmos';
   import { FILTRES_FIELDS } from '@/types/typesFiltres';
   import * as KnowledgeGraph from '@/types/typesKnowledgeGraph';
@@ -180,10 +178,10 @@
 
     // Initialize as undefined to prevent Vue from observing changes within these large datasets
     // Grafer data is stored in Bio view data as they are required for mapping bgraph queries to grafer layers
-    graferNodesData: GraferNodesData = undefined;
-    graferIntraEdgesData: GraferEdgesData = undefined;
-    graferInterEdgesData: GraferEdgesData = undefined;
-    graferClustersLabelsData: GraferLabelsData = undefined;
+    graferNodesData: Map<any, unknown> = undefined;
+    graferIntraEdgesData: Map<any, unknown> = undefined;
+    graferInterEdgesData: Map<any, unknown> = undefined;
+    graferClustersLabelsData: Map<any, unknown> = undefined;
 
     // Set true when the full graph layers are rendered as background context (ie. faded)
     grafersFullGraphContextIsBackgrounded: boolean = false;
@@ -353,29 +351,13 @@
 
       const graferLayerData = await this.loadGraferData();
       // TODO: This takes up a lot of memory and will likely scale poorly
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       this.graferNodesData = new Map();
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       graferLayerData.graferNodesData.forEach(v => this.graferNodesData.set(v.id, v));
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       this.graferIntraEdgesData = new Map();
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       graferLayerData.graferIntraEdgesData.forEach(v => this.graferIntraEdgesData.set(v.id, v));
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       this.graferInterEdgesData = new Map();
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       graferLayerData.graferInterEdgesData.forEach(v => this.graferInterEdgesData.set(v.id, v));
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       this.graferClustersLabelsData = new Map();
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       graferLayerData.graferClustersLabelsData.forEach(v => this.graferClustersLabelsData.set(v.id, v));
 
       this.$nextTick(() => {
@@ -390,7 +372,8 @@
       this.addFiltres(newFiltres);
     }
 
-    async loadGraferData (): Promise<BioGraferLayerDataPayloadInterface> {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async loadGraferData () {
       const [
         graferPointsData,
         graferNodesData,
@@ -406,20 +389,10 @@
       ]);
 
       return {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         graferPointsData,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         graferNodesData,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         graferIntraEdgesData,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         graferInterEdgesData,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         graferClustersLabelsData,
       };
     }
@@ -464,8 +437,6 @@
             this.grafersFullGraphContextIsBackgrounded = false;
           }
         } else {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           const graferQueryLayers = formatBGraphOutputToGraferLayers(subgraph, this.graferNodesData, this.graferIntraEdgesData, this.graferInterEdgesData, this.graferClustersLabelsData);
           eventHub.$emit('update-layers', graferQueryLayers, graferQueryLayerNames);
           if (!this.grafersFullGraphContextIsBackgrounded) {
