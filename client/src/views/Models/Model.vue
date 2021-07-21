@@ -49,10 +49,10 @@
           slot="right"
           :layouts="layouts"
           :selected-layout-id="selectedLayoutId"
-          :selected-view-id="graphType"
+          :selected-view-id="getSelectedModelGraphType"
           :views="graphTypesAvailable"
           @layout-change="onSetLayout"
-          @view-change="onSetView"
+          @view-change="setSelectedModelGraphType"
         />
       </settings-bar>
 
@@ -192,8 +192,6 @@
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any;
 
-    graphType: Model.GraphTypes = null;
-
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
@@ -231,7 +229,6 @@
 
     mounted (): void {
       this.loadData();
-      this.graphType = this.getSelectedModelGraphType;
     }
 
     executeFilters (): void {
@@ -247,10 +244,10 @@
     }
 
     async loadData (): Promise<void> {
-      if (this.selectedModel && this.graphType) {
+      if (this.selectedModel && this.getSelectedModelGraphType) {
         const [bgNodes, bgEdges] = await loadBGraphData(
-          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.graphType}/nodes.jsonl`,
-          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.graphType}/edges.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.getSelectedModelGraphType}/nodes.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.getSelectedModelGraphType}/edges.jsonl`,
         );
         this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
         this.executeFilters();
@@ -261,7 +258,7 @@
       this.loadData();
     }
 
-    @Watch('graphType') onGetGrometTypeChange (): void {
+    @Watch('getSelectedModelGraphType') onGetGrometTypeChange (): void {
       this.loadData();
     }
 
@@ -278,7 +275,7 @@
     }
 
     get selectedModelGraph (): Model.Graph {
-      return this.selectedModel?.modelGraph.find(graph => graph.type === this.graphType) ?? null;
+      return this.selectedModel?.modelGraph.find(graph => graph.type === this.getSelectedModelGraphType) ?? null;
     }
 
     get selectedGraphMetadata (): Model.GraphMetadata[] {
@@ -346,11 +343,6 @@
       this.drilldownPaneTitle = '';
       this.drilldownPaneSubtitle = '';
       this.drilldownMetadata = null;
-    }
-
-    onSetView (viewId: Model.GraphTypes): void {
-      this.graphType = viewId;
-      this.setSelectedModelGraphType(this.graphType);
     }
 
     onSetLayout (layoutId: string): void {
