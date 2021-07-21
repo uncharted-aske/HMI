@@ -8,7 +8,7 @@ enum RequestCommand {
   // CONVERT_MODEL = 'convert-model',
   DESCRIBE_MODEL_INTERFACE = 'describe-model-interface',
   // GET_MODEL_SCHEMATIC = 'get-model-schematic',
-  // GET_MODEL_SOURCE = 'get-model-source',
+  GET_MODEL_SOURCE = 'get-model-source',
   LIST_MODELS = 'list-models',
   SIMULATE = 'simulate',
   // UPLOAD_MODEL = 'upload-model',
@@ -19,6 +19,7 @@ enum Type {
   DIFF_EQS = 'diff-eqs',
   EASEL = 'easel',
   GROMET_PNC = 'gromet-pnc',
+  GROMET_FN = 'gromet-fnet',
   GROMET_PRT = 'gromet-prt',
 }
 
@@ -56,6 +57,9 @@ type ModelDefinition = {
   type: Type;
 }
 
+// TO-DO: Export GroMEt type from research/gromet/tools/types/GroMEt
+type ModelGraph = any;
+
 type SimulationResponse = {
   times: number[],
   values: {
@@ -91,6 +95,7 @@ enum ResponseStatus {
 }
 
 type ResponseResult =
+  ModelGraph |
   ModelDefinition |
   ModelDefinition[] |
   SimulationResponse
@@ -114,6 +119,7 @@ export {
   RequestParameters,
   Response,
   ResponseStatus,
+  ModelGraph,
   SimulationResponse,
   Type,
 };
