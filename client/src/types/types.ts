@@ -30,7 +30,7 @@ interface CardInterface {
   checked?: boolean;
 }
 
-interface GraferEventDetail {
+interface GraferEventDetail extends Record<string, any> {
   layer: string;
   type: string;
   id: string;

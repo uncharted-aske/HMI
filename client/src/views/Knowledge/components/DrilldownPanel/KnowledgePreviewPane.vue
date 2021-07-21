@@ -69,16 +69,20 @@
     }
 
     async getArtifactList (): Promise<void> {
-        const doiIdx = this.data.raw.bibjson.identifier.findIndex(d => d.type === 'doi');
-        const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi: this.data.raw.bibjson.identifier[doiIdx].id });
-        if (!(response as any).error) {
+      const doi = this.data.raw.bibjson.identifier.find(d => d.type === 'doi');
+      if (!doi) {
+        this.emptyArtifactListMessage = 'DOI not found.';
+        return;
+      }
+      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
+      if (!response.error) {
         this.artifactTotal = response.objects.length;
         let numArtifactDisplayed = 0;
         this.artifactList = response.objects.filter(artifact =>
           artifact.bytes && (numArtifactDisplayed < ARTIFACT_DISPLAY_LIMIT) && ++numArtifactDisplayed) ?? [];
-        } else {
-          this.emptyArtifactListMessage = (response as any).error;
-        }
+      } else {
+        this.emptyArtifactListMessage = response.error;
+      }
     }
 
     imageStyle (imgBytes: string): any {

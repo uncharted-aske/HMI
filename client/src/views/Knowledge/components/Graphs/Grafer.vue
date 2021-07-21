@@ -57,18 +57,6 @@
         nodeLayoutFile,
         groupsFile,
       ] = await Promise.all([
-        // getS3Util('research/KB/dist/kaggle/v4.0_citations_small/nodes.jsonl'),
-        // getS3Util('research/KB/dist/kaggle/v4.0_citations_small/nodeAtts.jsonl'),
-        // getS3Util('research/KB/dist/kaggle/v4.0_citations_small/nodeLayout.jsonl'),
-        // getS3Util('research/KB/dist/kaggle/v4.0_citations_small/groups.jsonl'),
-        // getS3Util('research/KB/dist/kaggle/v4.0_citation/nodes.jsonl'),
-        // getS3Util('research/KB/dist/kaggle/v4.0_citation/nodeAtts.jsonl'),
-        // getS3Util('research/KB/dist/kaggle/v4.0_citation/nodeLayout.jsonl'),
-        // getS3Util('research/KB/dist/kaggle/v4.0_citation/groups.jsonl'),
-        // getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodes.jsonl'),
-        // getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodeAtts.jsonl'),
-        // getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/nodeLayout.jsonl'),
-        // getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_top2vec/groups.jsonl'),
         getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/nodes.jsonl'),
         getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/nodeAtts.jsonl'),
         getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/nodeLayout.jsonl'),
@@ -113,7 +101,6 @@
         if (event.description === 'grafer_click') {
           args[0] = Object.assign(args[0], this.graferNodesData.get(args[0].id));
           args[0].extras.bibjson.identifier[0].id = args[0].extras.bibjson.journal;
-          console.log(this.graferNodesData.get(args[0].id));
         }
         this.$emit(event.description, ...args);
       };

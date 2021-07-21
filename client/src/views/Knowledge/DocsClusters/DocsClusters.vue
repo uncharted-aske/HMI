@@ -33,7 +33,7 @@
   import Grafer from '../components/Graphs/Grafer.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import KnowledgePreviewPane from '../components/DrilldownPanel/KnowledgePreviewPane.vue';
-  import { CardInterface, TabInterface } from '@/types/types';
+  import { CardInterface, GraferEventDetail, TabInterface } from '@/types/types';
 
   const components = {
     SearchBar,
@@ -54,7 +54,6 @@
     drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown: boolean = false;
     drilldownActiveTabId: string = '';
-    // drilldownData: CardInterface | Record<any, never> = {};
     selectedData: any = {};
 
     onCloseDrilldownPanel (): void {
@@ -67,23 +66,20 @@
 
     closeDrilldown (): void {
       this.isOpenDrilldown = false;
-      // this.drilldownData = null;
       this.drilldownActiveTabId = null;
     }
 
     get drilldownData (): CardInterface {
-      console.log('new data');
       return {
         id: 0,
-        // previewImageSrc?: string,
         title: this.selectedData.bibjson.title,
         subtitle: this.selectedData.bibjson.journal,
         raw: this.selectedData,
       };
     }
 
-    onGraferClick (x: any): void {
-      this.selectedData = x.extras;
+    onGraferClick (detail: GraferEventDetail): void {
+      this.selectedData = detail.extras;
       this.isOpenDrilldown = true;
       this.drilldownActiveTabId = 'preview';
     }
