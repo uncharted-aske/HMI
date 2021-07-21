@@ -74,7 +74,7 @@
         this.emptyArtifactListMessage = 'DOI not found.';
         return;
       }
-      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi });
+      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi: doi.id });
       if (!response.error) {
         this.artifactTotal = response.objects.length;
         let numArtifactDisplayed = 0;

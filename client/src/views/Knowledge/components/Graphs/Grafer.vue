@@ -12,19 +12,19 @@
     graph,
     GraferLayerData,
   } from '@uncharted.software/grafer';
-  import { Component, Prop } from 'vue-property-decorator';
+  import { Component } from 'vue-property-decorator';
   import Vue from 'vue';
   import chroma from 'chroma-js';
   import {
-    convertDataToGraferV4,
+    GraferData,
     GroupCentroid,
+    GroupColor,
     GroupHullEdge,
     LayoutInfo,
   } from './convertDataToGraferV4';
 
-  import { getS3Util } from '@/utils/FetchUtil';
-
   import Loader from '@/components/widgets/Loader.vue';
+  import eventHub from '@/eventHub';
 
   const components = {
     Loader,
@@ -35,53 +35,22 @@
     indexed = 'indexed',
   }
 
+  interface ColorLevel {
+    top: GroupColor[],
+    low: GroupColor[],
+  }
+
   @Component({ components })
   export default class Grafer extends Vue {
     private loading: boolean = true;
     private controller: GraferController;
 
-    @Prop({ default: 'wisconsin-knowledge' })
-    private model: string;
-
-    @Prop({ default: null })
-    private layer: string;
-
     // Initialize as undefined to prevent Vue from observing changes within these large datasets
     // Grafer data is stored as they are required for mapping bgraph queries to grafer layers
     graferNodesData: any = undefined;
 
-    public async mounted (): Promise<void> {
-      const [
-        nodesFile,
-        nodeAttsFile,
-        nodeLayoutFile,
-        groupsFile,
-      ] = await Promise.all([
-        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/nodes.jsonl'),
-        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/nodeAtts.jsonl'),
-        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/nodeLayout.jsonl'),
-        getS3Util('research/KB/dist/wisconsin/xdd-covid-19-8Dec-doc2vec/v4.0_nonTop2Vec/groups.jsonl'),
-      ]);
-
-      const info: LayoutInfo = {
-        nodes: 'No file selected.',
-        nodesFile: nodesFile as unknown as File,
-        nodeAtts: 'No file selected.',
-        nodeAttsFile: nodeAttsFile as unknown as File,
-        nodeLayout: 'No file selected.',
-        nodeLayoutFile: nodeLayoutFile as unknown as File,
-        groups: 'No file selected.',
-        groupsFile: groupsFile as unknown as File,
-        alpha: 18.00,
-        level: 1.00,
-        levelCount: 4.00,
-        maxLabelLength: 25.00,
-        topGroupThreshold: 500.00,
-        pointRadius: 20.00,
-        positionScale: 50000.00,
-      };
-
-      this.loadGraph(info);
+    mounted (): void {
+        eventHub.$on('load-grafer-data', this.loadGraph);
     }
 
     forwardEvents (controller: GraferController): void {
@@ -98,10 +67,6 @@
        * id {string} - The ID of the graph object that triggered the event as defined in the data
        */
       const forwardEvent = (event: symbol, ...args: any[]) => {
-        if (event.description === 'grafer_click') {
-          args[0] = Object.assign(args[0], this.graferNodesData.get(args[0].id));
-          args[0].extras.bibjson.identifier[0].id = args[0].extras.bibjson.journal;
-        }
         this.$emit(event.description, ...args);
       };
       controller.on(GraferController.omniEvent, forwardEvent);
@@ -138,13 +103,12 @@
                     renderBackground: false,
                     nearDepth: 0.0,
                     farDepth: 0.25,
-                    // fade: 0.0,
                 },
             },
         };
     }
 
-    makeCentroidLayers (layers: GraferLayerData[], data: GroupCentroid[], levels: number = 4): Map<number, any> {
+    makeCentroidLayers (layers: GraferLayerData[], data: GroupCentroid[], levels: number = 4): Map<string, GroupCentroid> {
         const centroidLayersTop = [];
         const centroidLayers = [];
         for (let i = 0; i < levels; ++i) {
@@ -152,26 +116,23 @@
             centroidLayers.push(this.getBasicLayer(`Centroids_${i}`, 'Ring', 0.1));
         }
 
-        const centroidMap = new Map();
+        const centroidMap: Map<string, GroupCentroid> = new Map();
         for (const centroid of data) {
             const nodes = centroid.top ? centroidLayersTop[centroid.level].nodes : centroidLayers[centroid.level].nodes;
-            // let nodes;
-            // if (centroid.top) {
-            //   nodes = centroidLayersTop[centroid.level].nodes;
-            // } else {
-            //   continue;
-            // }
             nodes.data.push(centroid);
             centroidMap.set(centroid.id, centroid);
         }
-
         layers.push(...centroidLayersTop, ...centroidLayers);
-        // layers.push(...centroidLayersTop);
 
         return centroidMap;
     }
 
-    computeColors (colors, colorMap, colorLevels, centroidMap, levelNumber = 0): void {
+    computeColors (
+      colors: string[],
+      colorLevels: Map<number, ColorLevel>,
+      centroidMap: Map<string, GroupCentroid>,
+      levelNumber = 0,
+    ): void {
         const level = colorLevels.get(levelNumber);
         const topStep = Math.floor(360 / level.top.length);
         const lowStep = Math.floor(topStep / Math.ceil(level.low.length / level.top.length + 1));
@@ -233,13 +194,6 @@
                             fade,
                         },
                     },
-                    // labels: {
-                    //   alpha: 1,
-                    //   desaturate: 0,
-                    //   fade: 0,
-                    //   visibilityThreshold: 8,
-                    //   labelPlacement: graph.labels.PointLabelPlacement.TOP,
-                    // },
                 });
             }
 
@@ -274,22 +228,11 @@
         return levelMap.values();
     }
 
-    async loadGraph (info: LayoutInfo): Promise<void> {
-        if (!info.nodesFile || !info.nodeAttsFile || !info.nodeLayoutFile || !info.groupsFile) {
-            return;
-        }
-
-        const data = await convertDataToGraferV4(info);
-
-        // TODO: This takes up a lot of memory and will likely scale poorly
-        this.graferNodesData = new Map();
-        data.nodes.forEach(n => this.graferNodesData.set(n.id, n));
-
+    async loadGraph (data: GraferData, info: LayoutInfo): Promise<void> {
         const layers = [];
 
         const colors = [];
-        const colorMap = new Map();
-        const colorLevels = new Map();
+        const colorLevels: Map<number, ColorLevel> = new Map();
 
         for (const color of data.colors) {
             if (colors.length <= color.primary) {
@@ -297,7 +240,6 @@
                     colors.push(null);
                 }
             }
-            colorMap.set(color.id, color);
             let colorLevel = colorLevels.get(color.level);
             if (!colorLevel) {
                 colorLevel = {
@@ -317,28 +259,11 @@
             data: data.points,
         };
 
-        // const nodeLayer = {
-        //     name: 'Nodes',
-        //     nodes: {
-        //         type: 'Circle',
-        //         data: data.nodes,
-        //         options: {
-        //             pixelSizing: true,
-        //         },
-        //     },
-        //     edges: {
-        //         data: data.shapes,
-        //         options: {
-        //             alpha: 0.55,
-        //             nearDepth: 0.9,
-        //         },
-        //     },
-        // };
         layers.push(...this.loadLevelLayers(data.nodes, data.shapes));
 
         const centroidMap = this.makeCentroidLayers(layers, data.centroids, info.levelCount);
-        if (colorMap.size) {
-            this.computeColors(colors, colorMap, colorLevels, centroidMap, info.level);
+        if (data.colors.length) {
+            this.computeColors(colors, colorLevels, centroidMap, info.level);
         }
         this.controller = new GraferController(this.$refs.canvas as HTMLCanvasElement, { points, colors, layers }, {
             viewport: {
@@ -350,13 +275,13 @@
         // disable all centroid layers of levels other than the selected one
         const graphLayers = this.controller.viewport.graph.layers;
         for (const layer of graphLayers) {
-            const components = layer.name.split('_');
-            if (components[0] === 'Centroids') {
-                const level = parseInt(components[components.length - 1]);
-                if (level !== info.level) {
-                    layer.enabled = false;
-                }
+          const components = layer.name.split('_');
+          if (components[0] === 'Centroids') {
+            const level = parseInt(components[components.length - 1]);
+            if (level !== info.level) {
+              layer.enabled = false;
             }
+          }
         }
 
         this.forwardEvents(this.controller);

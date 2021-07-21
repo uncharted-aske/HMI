@@ -3,14 +3,10 @@ import { parseJSONL } from '@/utils/FileLoaderUtil';
 import alphaShape from 'alpha-shape';
 
 export interface LayoutInfo {
-    nodes: string;
-    nodesFile: File;
-    nodeAtts: string;
-    nodeAttsFile: File;
-    nodeLayout: string;
-    nodeLayoutFile: File;
-    groups: string;
-    groupsFile: File;
+    nodesFile: DataSource;
+    nodeAttsFile: DataSource;
+    nodeLayoutFile: DataSource;
+    groupsFile: DataSource;
     alpha: number;
     level: number;
     levelCount: number;
@@ -47,10 +43,6 @@ export interface GroupHullEdge {
     level: number;
 }
 
-// export interface KnowledgeNodeData extends BasicNodeData {
-//     level: number;
-// }
-
 export interface GraferData {
     points;
     nodes: any[];
@@ -66,10 +58,11 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
   let colorIndex = 0;
 
   // load the points
+  // eslint-disable-next-line no-console
   console.log('Loading points...');
   const points: Map<string, any> = new Map();
   lineNumber = 0;
-  await parseJSONL(info.nodeLayoutFile as unknown as DataSource, json => {
+  await parseJSONL(info.nodeLayoutFile, json => {
     if (lineNumber++) {
       points.set(json.node_id, {
         id: json.node_id,
@@ -82,12 +75,13 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
   });
 
   // load the groups per levels
+  // eslint-disable-next-line no-console
   console.log('Loading groups...');
   const groupLevels = [];
   const centroids: Map<string, GroupCentroid> = new Map();
   const groups = new Map();
   lineNumber = 0;
-  await parseJSONL(info.groupsFile as unknown as DataSource, json => {
+  await parseJSONL(info.groupsFile, json => {
     if (lineNumber++) {
       const level = json.level;
       while (level >= groupLevels.length) {
@@ -106,12 +100,13 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
     }
   });
 
+  // eslint-disable-next-line no-console
   console.log('Loading node attributes...');
   const noiseNodes = [];
   const nodeLevelMap = new Map();
   const nodeAttsMap = new Map();
   lineNumber = 0;
-  await parseJSONL(info.nodeAttsFile as unknown as DataSource, json => {
+  await parseJSONL(info.nodeAttsFile, json => {
     if (lineNumber++) {
       const groupIDs = json.group_ids;
       nodeAttsMap.set(json.node_id, json);
@@ -131,8 +126,10 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
     }
   });
 
+  // eslint-disable-next-line no-console
   console.log(`Sorting group levels: ${groupLevels.length}`);
   for (let i = 0, n = groupLevels.length; i < n; ++i) {
+    // eslint-disable-next-line no-console
     console.log(`Level ${i}: ${groupLevels[i].length}`);
     groupLevels[i].sort((a, b) => b.computedChildren.length - a.computedChildren.length);
     const l = [];
@@ -145,10 +142,10 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
         group.top = false;
       }
     }
-    console.log(l);
   }
 
   // compute color indices
+  // eslint-disable-next-line no-console
   console.log('Computing color indices...');
   const nodeColors: Map<string, number> = new Map(); // holds the color index of each node
   const groupColors: Map<string, GroupColor> = new Map(); // holds an array of colors belonging to each cluster
@@ -184,14 +181,13 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
   for (const colors of groupColors.values()) {
     colors.inherited = Array.from(colors.inherited);
   }
-  console.log(nodeColors);
-  console.log(groupColors);
 
+  // eslint-disable-next-line no-console
   console.log('Loading  nodes...');
   const nodes: any[] = [];
   const nodeMap = new Map();
   lineNumber = 0;
-  await parseJSONL(info.nodesFile as unknown as DataSource, json => {
+  await parseJSONL(info.nodesFile, json => {
     if (lineNumber++) {
       const nodeAtts = nodeAttsMap.get(json.id);
       nodes.push({
@@ -206,6 +202,7 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
     }
   });
 
+  // eslint-disable-next-line no-console
   console.log('Computing labels...');
   for (const group of groups.values()) {
     const node = nodeMap.get(group.node_id_centroid);
@@ -214,12 +211,14 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
   }
 
   // compute alpha shapes
+  // eslint-disable-next-line no-console
   console.log('Computing alpha shapes...');
   const shapes: GroupHullEdge[] = [];
   // HACK: Only compute the specified level. Once this is a backend pipeline all levels should be computed.
   for (let i = 0, n = groupLevels.length; i < n; ++i) {
-    // const i = info.level;
+    // eslint-disable-next-line no-console
     console.log(`Level ${i}...`);
+    // eslint-disable-next-line no-console
     console.log('0%');
     for (let ii = 0, nn = groupLevels[i].length; ii < nn; ++ii) {
       const group = groupLevels[i][ii];
@@ -258,12 +257,13 @@ export async function convertDataToGraferV4 (info: LayoutInfo): Promise<GraferDa
           });
         }
       }
+      // eslint-disable-next-line no-console
       console.log(`${Math.floor(((ii + 1) / nn) * 100)}%`);
     }
   }
-  console.log(shapes);
 
-  console.log(`TOTAL COLORS: ${colorIndex}`);
+  // eslint-disable-next-line no-console
+  console.log(`CLUSTERING COMPLETE - TOTAL COLORS: ${colorIndex}`);
 
   return {
     points: [...points.values()],
