@@ -97,11 +97,9 @@
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
-  import { GraferNodesData, GraferEdgesData, GraferLabelsData } from '@uncharted.software/grafer';
 
   import { Counter, TabInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
-  import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
   import { CosmosArtifactInterface } from '@/types/typesCosmos';
   import { FILTRES_FIELDS } from '@/types/typesFiltres';
   import * as KnowledgeGraph from '@/types/typesKnowledgeGraph';
@@ -180,10 +178,10 @@
 
     // Initialize as undefined to prevent Vue from observing changes within these large datasets
     // Grafer data is stored in Bio view data as they are required for mapping bgraph queries to grafer layers
-    graferNodesData: GraferNodesData = undefined;
-    graferIntraEdgesData: GraferEdgesData = undefined;
-    graferInterEdgesData: GraferEdgesData = undefined;
-    graferClustersLabelsData: GraferLabelsData = undefined;
+    graferNodesData: Map<any, unknown> = undefined;
+    graferIntraEdgesData: Map<any, unknown> = undefined;
+    graferInterEdgesData: Map<any, unknown> = undefined;
+    graferClustersLabelsData: Map<any, unknown> = undefined;
 
     // Set true when the full graph layers are rendered as background context (ie. faded)
     grafersFullGraphContextIsBackgrounded: boolean = false;
@@ -374,7 +372,8 @@
       this.addFiltres(newFiltres);
     }
 
-    async loadGraferData (): Promise<BioGraferLayerDataPayloadInterface> {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async loadGraferData () {
       const [
         graferPointsData,
         graferNodesData,

@@ -1,9 +1,9 @@
 import { DataSource, DataFile } from '@dekkai/data-source';
 
-const SIZE_OF_2MB = 2 * 1024 * 1024;
+const SIZE_OF_16MB = 16 * 1024 * 1024;
 
-async function parseJSONL (file: DataSource, cb: (obj: any) => void): Promise<void> {
-  const chunkSizeInBytes = SIZE_OF_2MB;
+export async function parseJSONL (file: DataSource, cb: (obj: any) => void): Promise<void> {
+  const chunkSizeInBytes = SIZE_OF_16MB;
   const byteLength = await file.byteLength;
   const decoder = new TextDecoder();
   const lineBreak = '\n'.charCodeAt(0);

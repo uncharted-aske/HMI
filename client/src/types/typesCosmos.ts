@@ -65,6 +65,7 @@ export interface CosmosArtifactInterface {
   total: number,
   /** Cosmos API version */
   v: string,
+  error?: any,
 }
 
 export interface CosmosTextSnippet {

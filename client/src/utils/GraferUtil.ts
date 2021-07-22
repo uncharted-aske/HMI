@@ -1,5 +1,5 @@
 import { COLORS } from '@/utils/colorsUtil';
-import { GraferNodesData, GraferEdgesData, GraferLabelsData, graph } from '@uncharted.software/grafer';
+import { GraferLayerData, graph } from '@uncharted.software/grafer';
 
 // TODO: Create a standard set of Grafer layer config options for common use
 //       cases and reuse them for similar graphs
@@ -136,8 +136,7 @@ export const CLUSTER_GRAPH_COLORS = [
   COLORS.AURORA_5_PURPLE, // Used for nodes to signify cluster relationship with other nodes
 ];
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
-export const buildHighlightClusterLayer = (name: string, edges: GraferEdgesData, clusters: GraferLabelsData) => {
+export const buildHighlightClusterLayer = (name: string, edges: unknown[], clusters: unknown[]): GraferLayerData => {
   return {
     name,
     labels: {
@@ -168,8 +167,7 @@ export const buildHighlightClusterLayer = (name: string, edges: GraferEdgesData,
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
-export const buildHighlightNodeLayer = (name: string, nodes: GraferNodesData, edges: GraferEdgesData) => {
+export const buildHighlightNodeLayer = (name: string, nodes: unknown[], edges: unknown[]): GraferLayerData => {
   return {
     name,
     nodes: {

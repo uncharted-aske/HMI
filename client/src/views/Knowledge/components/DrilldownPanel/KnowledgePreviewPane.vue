@@ -21,6 +21,7 @@
     <div class="mt-3 preview-container hide-scrollbar">
       <div>
         <h6>{{artifactHeader}}</h6>
+        <div v-if="emptyArtifactListMessage"> {{emptyArtifactListMessage}} </div>
         <div v-for="(artifact) in artifactList" :key="artifact.id"
           class="shadow artifact-img"
           :style="imageStyle(artifact.bytes)"
@@ -56,6 +57,7 @@
 
     artifactTotal: number = 0;
     artifactList: CosmosArtifactObjectInterface[] = [];
+    emptyArtifactListMessage: string = '';
 
     created (): void {
       this.getArtifactList();
@@ -67,11 +69,20 @@
     }
 
     async getArtifactList (): Promise<void> {
-      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi: this.data.raw.bibjson.identifier[0].id });
-      this.artifactTotal = response.objects.length;
-      let numArtifactDisplayed = 0;
-      this.artifactList = response.objects.filter(artifact =>
-        artifact.bytes && (numArtifactDisplayed < ARTIFACT_DISPLAY_LIMIT) && ++numArtifactDisplayed) ?? [];
+      const doi = this.data.raw.bibjson.identifier.find(d => d.type === 'doi');
+      if (!doi) {
+        this.emptyArtifactListMessage = 'DOI not found.';
+        return;
+      }
+      const response: CosmosArtifactInterface = await cosmosArtifactsMem({ doi: doi.id });
+      if (!response.error) {
+        this.artifactTotal = response.objects.length;
+        let numArtifactDisplayed = 0;
+        this.artifactList = response.objects.filter(artifact =>
+          artifact.bytes && (numArtifactDisplayed < ARTIFACT_DISPLAY_LIMIT) && ++numArtifactDisplayed) ?? [];
+      } else {
+        this.emptyArtifactListMessage = response.error;
+      }
     }
 
     imageStyle (imgBytes: string): any {
