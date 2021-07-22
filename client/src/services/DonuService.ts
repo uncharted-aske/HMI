@@ -13,7 +13,7 @@ const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
   }
 };
 
-export const getDonuModelSource = async (model: string, type: Donu.Type): Promise<Donu.ModelGraph> => {
+const getDonuModelSource = async (model: string, type: Donu.Type): Promise<Donu.ModelGraph> => {
   const request: Donu.Request = {
     command: Donu.RequestCommand.GET_MODEL_SOURCE,
     definition: {
@@ -28,13 +28,9 @@ export const getDonuModelSource = async (model: string, type: Donu.Type): Promis
     const modelSource = response.result.source;
     return JSON.parse(modelSource);
   } else {
+    // eslint-disable-next-line no-console
     console.error('[DONU Service] — fetchDonuModelSource', response);
   }
-};
-
-const populateDonuModelWithGrometSource = async (model: Donu.ModelDefinition): Promise<void> => {
-  const gromet = await getDonuModelSource(model.source.model, model.type);
-  (model as any).gromet = gromet;
 };
 
 /** Fetch a complete list of available models from Donu API */
@@ -46,15 +42,18 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
   const response = await callDonu(request);
   if (response.status === Donu.ResponseStatus.success) {
     // 1. Get models
-    let models = response?.result as any ?? null;
+    let models = response?.result ?? null;
     // 2. Filter models to PNC and FN type
     models = models.filter(model => {
       return [Donu.Type.GROMET_PNC, Donu.Type.GROMET_FN].includes(model.type);
     });
     // 3. Populate models with model source
-    await Promise.all(models.map(model => populateDonuModelWithGrometSource(model)));
+    await Promise.all(models.map(async model => {
+      const gromet = await getDonuModelSource(model.source.model, model.type);
+      model.gromet = gromet;
+    }));
     // 4. Transform Gromet to graph for rendering
-    models.forEach(async model => {
+    models.forEach(model => {
       model.graph = GroMEt2Graph.parseGromet(model.gromet);
     });
     // TODO: 5. Transform Gromet to bgraph for querying

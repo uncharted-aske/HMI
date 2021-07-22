@@ -13,8 +13,6 @@ type Metadata = {
   id?: string,
   name: string,
   version?: string,
-  model?: string,
-  type?: string,
 };
 
 type GraphMetadata = GroMEt.ModelInterface | GroMEt.CodeCollectionInterface | GroMEt.TextualDocumentReferenceSet;
