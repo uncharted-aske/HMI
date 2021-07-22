@@ -333,8 +333,8 @@
   .parameter {
     display: grid;
     grid-template-areas:
-      ". . action"
-      "name . ."
+      ". . ."
+      "name . action"
       "value . ."
     ;
     grid-template-columns: min-content auto min-content;
