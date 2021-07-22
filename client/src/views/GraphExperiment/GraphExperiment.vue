@@ -129,6 +129,7 @@
           } else {
             this.renderer.collapse(id);
           }
+          this.renderer.render();
         }
       });
 

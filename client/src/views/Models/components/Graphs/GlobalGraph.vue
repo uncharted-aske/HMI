@@ -90,6 +90,7 @@
           } else {
             this.renderer.collapse(id);
           }
+          this.renderer.render();
         } else {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.showSubgraph(neighborhood);
@@ -146,7 +147,8 @@
       // seems to create problems with the tracker.
       const collapsedIds = calcNodesToCollapse(this.layout, this.renderer.layout);
       if (collapsedIds.length > 0) {
-        collapsedIds.forEach((nextId, i) => setTimeout(() => this.renderer.collapse(nextId), i * 500));
+        collapsedIds.forEach(nextId => this.renderer.collapse(nextId));
+        this.renderer.render();
       }
     }
   }
