@@ -1,7 +1,6 @@
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
+import { fetchDonuModels } from '@/services/DonuService';
 import * as Model from '@/types/typesModel';
-import * as DonuUtils from '@/utils/DonuUtil';
-import { fetchInitialModelData } from '@/static/mockedDataDemo';
 
 const state: Model.State = {
   isInitialized: false,
@@ -12,15 +11,7 @@ const state: Model.State = {
 
 const actions: ActionTree<Model.State, any> = {
   async setInitialModelsState ({ commit }) {
-    const initialModelsList = await fetchInitialModelData();
-
-    // filter out non-gromets
-    const modelList = initialModelsList.map(model => {
-      model.modelGraph = model.modelGraph.filter(DonuUtils.isGraphAGroMET);
-      if (model.modelGraph.length > 0) return model;
-    });
-
-    commit('setModelsList', modelList);
+    commit('setModelsList', await fetchDonuModels());
     commit('setIsInitialized', true);
   },
 };
