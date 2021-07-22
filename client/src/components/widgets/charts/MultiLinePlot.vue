@@ -67,7 +67,7 @@
 
     get line (): any {
       return pathFn(this.xScale, this.yScale)
-        .curve(d3.curveCatmullRom);
+        .curve(d3.curveLinear);
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
