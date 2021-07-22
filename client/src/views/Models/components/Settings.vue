@@ -3,14 +3,14 @@
     <!-- Modeling Framework -->
     <button
       class="btn btn-secondary"
-      :disabled="!views.length"
+      :disabled="(views.length < 2)"
       type="button"
       @click="toggleViews"
     >
       Modeling Framework
       <template v-if="views.length">:
         <span class="setting-name">{{ selectedViewName }}</span>
-        <font-awesome-icon :icon="['fas', 'caret-down' ]" />
+        <font-awesome-icon v-if="(views.length > 1)" :icon="['fas', 'caret-down' ]" />
       </template>
     </button>
     <dropdown v-if="showDropdownViews" class="dropdown-settings view">

@@ -41,7 +41,7 @@ type Model = {
 type State = {
   isInitialized: boolean,
   modelsList: Model[],
-  selectedModelGraph?: number,
+  selectedModelGraphType?: GraphTypes,
   selectedModelIds: Set<string>,
 };
 

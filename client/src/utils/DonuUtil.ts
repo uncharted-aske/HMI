@@ -16,3 +16,8 @@ export const donuToModel = (donuModels: Donu.ModelDefinition[]): Model.Model[] =
     } as Model.Model;
   });
 };
+
+/** Is the Graph a GroMET */
+export const isGraphAGroMET = (graph: Model.Graph): boolean => {
+  return [Donu.Type.GROMET_PNC/* , Donu.Type.GROMET_PRT */].includes(graph.donuType);
+};

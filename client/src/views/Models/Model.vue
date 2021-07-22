@@ -47,12 +47,12 @@
         />
         <settings
           slot="right"
-          :selected-view-id="selectedViewId"
-          :views="views"
           :layouts="layouts"
           :selected-layout-id="selectedLayoutId"
-          @view-change="onSetView"
+          :selected-view-id="getSelectedModelGraphType"
+          :views="graphTypesAvailable"
           @layout-change="onSetLayout"
+          @view-change="setSelectedModelGraphType"
         />
       </settings-bar>
 
@@ -149,9 +149,13 @@
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
-  const VIEWS: ViewInterface[] = [
-    { name: 'Petri Net Classic', id: 'ptc' },
-    { name: 'Functional Network', id: 'fn' },
+  interface ModelViewInterface extends ViewInterface {
+    id: Model.GraphTypes;
+  }
+
+  const GRAPHTYPE_VIEWS: ModelViewInterface[] = [
+    { name: 'Petri Net Classic', id: Model.GraphTypes.PetriNetClassic },
+    { name: 'Functional Network', id: Model.GraphTypes.FunctionNetwork },
   ];
 
   const LAYOUTS: GraphLayoutInterface[] = [
@@ -188,9 +192,6 @@
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any;
 
-    views: ViewInterface[] = VIEWS;
-    selectedViewId = 'ptc';
-
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
@@ -218,9 +219,9 @@
     @Getter getSelectedModelIds;
     @Getter getModelsList;
     @Getter getFilters;
-    @Getter getSelectedModelGraph;
+    @Getter getSelectedModelGraphType;
     @Mutation setSelectedModels;
-    @Mutation setSelectedModelGraph;
+    @Mutation setSelectedModelGraphType;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.executeFilters();
@@ -228,7 +229,6 @@
 
     mounted (): void {
       this.loadData();
-      this.selectedViewId = VIEWS[this.getSelectedModelGraph].id;
     }
 
     executeFilters (): void {
@@ -244,10 +244,10 @@
     }
 
     async loadData (): Promise<void> {
-      if (this.selectedModel && this.grometType) {
+      if (this.selectedModel && this.getSelectedModelGraphType) {
         const [bgNodes, bgEdges] = await loadBGraphData(
-          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/nodes.jsonl`,
-          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.grometType}/edges.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.getSelectedModelGraphType}/nodes.jsonl`,
+          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.getSelectedModelGraphType}/edges.jsonl`,
         );
         this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
         this.executeFilters();
@@ -258,7 +258,7 @@
       this.loadData();
     }
 
-    @Watch('grometType') onGetGrometTypeChange (): void {
+    @Watch('getSelectedModelGraphType') onGetGrometTypeChange (): void {
       this.loadData();
     }
 
@@ -274,17 +274,29 @@
       return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
     }
 
+    get selectedModelGraph (): Model.Graph {
+      return this.selectedModel?.modelGraph.find(graph => graph.type === this.getSelectedModelGraphType) ?? null;
+    }
+
     get selectedGraphMetadata (): Model.GraphMetadata[] {
-      return this.selectedModel?.modelGraph[this.getSelectedModelGraph].metadata;
+      return this.selectedModelGraph?.metadata ?? null;
     }
 
     get selectedGraph (): GraphInterface {
-      const index = this.selectedViewId === 'ptc' ? 0 : 1;
-      return this.selectedModel?.modelGraph[index].graph;
+      return this.selectedModelGraph?.graph ?? null;
     }
 
-    get grometType (): string {
-      return this.selectedViewId === 'ptc' ? Model.GraphTypes.PetriNetClassic : Model.GraphTypes.FunctionNetwork;
+    get graphTypesAvailable (): ModelViewInterface[] {
+      if (!this.selectedModel) return [];
+
+      // Get the list of all the graph types available in the selected model
+      const graphTypesAvailable = this.selectedModel?.modelGraph.map(graph => graph.type);
+      if (graphTypesAvailable.length === 0) return [];
+
+      // Filter the constant and only display the available ones
+      return GRAPHTYPE_VIEWS.filter(view => {
+        return graphTypesAvailable.includes(view.id);
+      });
     }
 
     get nodeCount (): number {
@@ -333,23 +345,17 @@
       this.drilldownMetadata = null;
     }
 
-    onSetView (viewId: string): void {
-      this.selectedViewId = viewId;
-      const index = this.selectedViewId === 'ptc' ? 0 : 1;
-      this.setSelectedModelGraph(index);
-    }
-
     onSetLayout (layoutId: string): void {
       this.selectedLayoutId = layoutId;
     }
 
     async searchCosmos (keyword: string): Promise<void> {
-        try {
-          const response = await cosmosSearch(filterToParamObj({ cosmosQuery: [keyword] }));
-          this.drilldownKnowledge = response;
-        } catch (e) {
-          throw Error(e);
-        }
+      try {
+        const response = await cosmosSearch(filterToParamObj({ cosmosQuery: [keyword] }));
+        this.drilldownKnowledge = response;
+      } catch (e) {
+        throw Error(e);
+      }
     }
 
     async getRelatedParameters (keyword: string): Promise<void> {
@@ -360,7 +366,6 @@
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
       this.drilldownActiveTabId = 'metadata';
-
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownMetadata = node.metadata;
@@ -415,6 +420,7 @@
 
   .search-bar {
     background-color: var(--bg-secondary);
+    flex-shrink: 0;
     max-height: 0;
     overflow: hidden;
     pointer-events: none; /* Avoid potential clicks to happen */
@@ -425,7 +431,6 @@
   .search-bar.active {
     max-height: 10rem; /* Random number bigger than actual height for the transition. */
     pointer-events: auto;
-    overflow: visible;
   }
 
   .search-bar .search-bar-container {
