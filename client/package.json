@@ -44,7 +44,7 @@
     "preact": "8.x",
     "research": "git+https://github.com/uncharted-aske/research.git",
     "sigma": "1.2.1",
-    "svg-flowgraph": "^0.2.0",
+    "svg-flowgraph": "^0.4.0",
     "tiny-emitter": "^2.1.0",
     "tweakpane": "^1.5.8",
     "vue": "^2.6.12",
