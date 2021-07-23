@@ -12,17 +12,19 @@ A `.env` file containing environment variables necessary for the application's o
 
 Please duplicate the `./client/.env` file into `./client/.env.local` for local development. `.env.local` has been added to the `.gitignore` to avoid unintentional upload of the environment variables.
 
-## Local Docker Swarm Deployment
-Build docker images:
+## Docker Compose
+The client's docker image requires configuration via environment files. The environment files that are required
+are `./client/.env.nginx` and `./client/.env.dist`. Contact Uncharted Software for default configuration parameters.
+
+Start docker compose:
 ```shell script
-docker build -t docker.uncharted.software/uncharted-aske/hmi/client -f Dockerfile.client .
+docker-compose up --build
 ```
 
-Start docker swarm and deploy stack:
-```shell script
-docker swarm init
-docker stack deploy -c docker-compose.yml aske-hmi
-```
+Navigate to http://localhost/#/.
+
+## Deployment
+Contact Uncharted Software for deployment instructions.
 
 ## Development
 

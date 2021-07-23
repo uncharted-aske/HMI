@@ -5,18 +5,11 @@ const typescript = require('rollup-plugin-typescript2');
 const vue = require('rollup-plugin-vue');
 const commonjs = require('@rollup/plugin-commonjs');
 const resolve = require('@rollup/plugin-node-resolve').nodeResolve;
-const replace = require('@rollup/plugin-replace');
 const json = require('@rollup/plugin-json');
 const image = require('@rollup/plugin-image');
 const globby = require('globby');
 const copy = require('rollup-plugin-copy');
 const alias = require('@rollup/plugin-alias');
-const dotenv = require('dotenv');
-
-const dotenvResult = dotenv.config();
-if (dotenvResult.error) {
-  throw dotenvResult.error;
-}
 
 const extensions = [
   '.js', '.jsx', '.ts', '.tsx',
@@ -89,23 +82,9 @@ function outputForType (type) {
 }
 
 function pluginsForType (type, env) {
-  function replaceObject () {
-    const output = {
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL),
-    };
-
-    Object.keys(dotenvResult.parsed).map(key => {
-      output[`process.env.${key}`] = JSON.stringify(dotenvResult.parsed[key]);
-    });
-
-    return output;
-  }
-
   if (type === types.DIST) {
     return {
       plugins: [
-        replace(replaceObject()),
         resolve({
           extensions,
           jsnext: true,

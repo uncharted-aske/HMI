@@ -1,0 +1,28 @@
+server {
+  listen 80;
+  server_name client;
+  location / {
+    # Directory where static files are stored
+    root /usr/share/nginx/html;
+    try_files $uri /index.html;
+  }
+
+  location ~ /services/cosmos/(.*) {
+    # Copy passed in params and add API key
+    set $pretoken "";
+    set $posttoken "?";
+    if ($is_args) {
+        set $pretoken "?";
+        set $posttoken "&";
+    }
+    set $args "${pretoken}${args}${posttoken}api_key=${NGINX_COSMOS_API_KEY}";
+
+    proxy_pass ${NGINX_COSMOS_API_URL}/$1$args;
+    resolver 8.8.8.8;
+  }
+
+  location ~ /services/s3/(.*) {
+    proxy_pass ${NGINX_S3_URL}/aske/$1;
+    resolver 8.8.8.8;
+  }
+}

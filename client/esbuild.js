@@ -8,19 +8,38 @@ const options = yargs(process.argv).argv;
 const dotenvOptions = {};
 if (options.dev) {
   dotenvOptions.path = process.cwd() + '/.env.local';
+} else if (options.dist) {
+  dotenvOptions.path = process.cwd() + '/.env.dist';
 }
 const dotenvConfig = dotenv.config(dotenvOptions);
-if (dotenvConfig.error) {
+if (dotenvConfig.error && dotenvConfig.error.code === 'ENOENT') {
+  // eslint-disable-next-line no-console
+  console.warn('WARNING: No environment file found. Default environment variables will be used.');
+} else if (dotenvConfig.error) {
   throw dotenvConfig.error;
 }
+
+const DEFAULT_ENV_VARS = {
+  'process.env.COSMOS_API_KEY': undefined,
+  'process.env.S3_ACCESS_KEY_ID': undefined,
+  'process.env.S3_SECRET_ACCESS_KEY': undefined,
+  'process.env.S3_ENDPOINT': undefined,
+  'process.env.S3_BUCKET': undefined,
+  'process.env.DONU_ENDPOINT': undefined,
+  'process.env.S3_GRAFER_KNOWLEDGE_GRAPHS': undefined,
+  'process.env.S3_BGRAPH_KNOWLEDGE_GRAPHS': undefined,
+  'process.env.S3_BGRAPH_MODELS': undefined,
+};
 
 // defineGlobalVarsFromDotEnvConfig produces an object that is compatible with esbuild.BuildOptions.define
 //  and converts each dot environment `[KEY]` to a `process.env.[KEY]`
 function defineGlobalVarsFromDotEnvConfig (dotenvConfig) {
-  const result = {};
+  if (!dotenvConfig.parsed) return {};
+  let result = {};
   Object.keys(dotenvConfig.parsed).map(key => {
     result[`process.env.${key}`] = JSON.stringify(dotenvConfig.parsed[key]);
   });
+  result = Object.assign(DEFAULT_ENV_VARS, result);
   return result;
 }
 
