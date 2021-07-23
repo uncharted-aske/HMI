@@ -1,18 +1,17 @@
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
+import { fetchDonuModels } from '@/services/DonuService';
 import * as Model from '@/types/typesModel';
-import { fetchInitialModelData } from '@/static/mockedDataDemo';
 
 const state: Model.State = {
   isInitialized: false,
   selectedModelIds: new Set(),
   modelsList: [],
-  selectedModelGraph: 0, // Refers to the position in the array of graphs for each modeling framework
+  selectedModelGraphType: Model.GraphTypes.PetriNetClassic, // Petri Net Classic as default
 };
 
 const actions: ActionTree<Model.State, any> = {
   async setInitialModelsState ({ commit }) {
-    const initialModelsList = await fetchInitialModelData();
-    commit('setModelsList', initialModelsList);
+    commit('setModelsList', await fetchDonuModels());
     commit('setIsInitialized', true);
   },
 };
@@ -20,7 +19,7 @@ const actions: ActionTree<Model.State, any> = {
 const getters: GetterTree<Model.State, any> = {
   getModelsList: state => state.modelsList,
   getSelectedModelIds: state => [...state.selectedModelIds],
-  getSelectedModelGraph: state => state.selectedModelGraph,
+  getSelectedModelGraphType: state => state.selectedModelGraphType,
   getCountComputationalModels: (state): number => state.modelsList.length,
 };
 
@@ -48,9 +47,9 @@ const mutations: MutationTree<Model.State> = {
     state.selectedModelIds = new Set(state.selectedModelIds);
   },
 
-  setSelectedModelGraph (state, value: number) {
-    if (state.selectedModelGraph === value) value = null;
-    state.selectedModelGraph = value;
+  setSelectedModelGraphType (state, value: Model.GraphTypes) {
+    if (state.selectedModelGraphType === value) value = null;
+    state.selectedModelGraphType = value;
   },
 };
 

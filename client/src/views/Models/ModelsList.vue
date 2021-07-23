@@ -47,9 +47,11 @@
   import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
-  import CHIMEScreenshot from '@/assets/img/CHIME.png';
   import SIRScreenshot from '@/assets/img/SIR.png';
-  import DoubleEpiScreenshot from '@/assets/img/DoubleEpi.png';
+  import SEIRScreenshot from '@/assets/img/SEIR.png';
+  import SEIRDScreenshot from '@/assets/img/SEIRD.png';
+  import SIRDScreenshot from '@/assets/img/SIRD.png';
+  import SpatialSIRDScreenshot from '@/assets/img/SpatialSIRD.png';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -97,24 +99,17 @@
 
     get modelsCards (): CardInterface[] {
       const selectedModelsList = new Set(this.getSelectedModelIds);
+       const screenshots = [
+        SIRScreenshot,
+        SEIRScreenshot,
+        SEIRDScreenshot,
+        SIRDScreenshot,
+        SpatialSIRDScreenshot,
+      ];
       return this.models.map(model => {
-        // Screenshot as placeholder for UX image
-        let previewImageSrc = null;
-        switch (model.id) {
-          case 0:
-            previewImageSrc = SIRScreenshot;
-            break;
-          case 1:
-            previewImageSrc = CHIMEScreenshot;
-            break;
-          case 2:
-            previewImageSrc = DoubleEpiScreenshot;
-            break;
-        }
-
         return {
           id: model.id,
-          previewImageSrc,
+          previewImageSrc: screenshots[model.id],
           title: model.name ?? 'No Title',
           subtitle: model.metadata?.description ?? 'No Subtitle',
           checked: selectedModelsList.has(model.id),

@@ -43,7 +43,7 @@ export const axis = (range, rangeMin, rangeMax) => {
  * but round up to the nearest power of 10.
  * i.e.  [-12, -4, 0.04] -> [-100, 1]
  */
-export const extendRoundUpToPow10 = (range, accessor) => {
+export const extendRoundUpToPow10 = (range, accessor): [number, number] => {
   let [min, max] = d3.extent(range, accessor);
   min = RoundToPow10(min);
   max = RoundToPow10(max);

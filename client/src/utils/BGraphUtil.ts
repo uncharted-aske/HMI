@@ -20,7 +20,8 @@ import {
   EDGE_PRIORITY_RANK,
 } from '@/utils/BGraphQueryUtil';
 
-const deepCopy = (inObject, keyBlackList?: Array<any>): any => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const deepCopy = (inObject: any, keyBlackList?: Array<any>): any => {
   let value, key;
 
   if (typeof inObject !== 'object' || inObject === null) {
@@ -211,10 +212,10 @@ export function getSubgraphFromFiltres (bgraph: any, filtres: Filtres): any {
 // TODO: Specify queryResults type once bgraph has result types
 export const formatBGraphOutputToGraferLayers = (
   queryResults: any[],
-  graferNodesData: Map<number, any>, // TODO: Change any type to Nodes Data Object in Grafer
-  graferIntraEdgesData: Map<number, any>,
-  graferInterEdgesData: Map<number, any>,
-  graferClustersLabelsData: Map<number, any>,
+  graferNodesData: Map<number, unknown>,
+  graferIntraEdgesData: Map<number, unknown>,
+  graferInterEdgesData: Map<number, unknown>,
+  graferClustersLabelsData: Map<number, unknown>,
 ): GraferLayerData[] => {
   // Deep copy results to avoid mutating passed in data
   const queryResultsDeepCopy = deepCopy(queryResults);

@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 
 import { SVGRenderer } from 'svg-flowgraph';
 
-import { SVGRendererOptionsInterface, SubgraphInterface } from '@/types/typesGraphs';
+import { SVGRendererOptionsInterface, SubgraphInterface, SubgraphNodeInterface } from '@/types/typesGraphs';
 
 import { calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors, NodeTypes } from '@/graphs/svg/encodings';
@@ -29,6 +29,14 @@ const DEFAULT_STYLE = {
 export default class EpiRenderer extends SVGRenderer {
   constructor (options:SVGRendererOptionsInterface) {
     super(options);
+  }
+
+  static calcNodeColor (d: d3.Selection<any, any, any, any>): string {
+    if ((d as any).nodes) {
+      return Colors.NODES.CONTAINER;
+    } else {
+      return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.fill;
+    }
   }
 
   buildDefs (): void {
@@ -105,15 +113,9 @@ export default class EpiRenderer extends SVGRenderer {
         .attr('rx', DEFAULT_STYLE.node.borderRadius)
         .attr('width', d => (d as any).width)
         .attr('height', d => (d as any).height)
-        .style('fill', d => {
-          if ((d as any).nodes) {
-            return Colors.NODES.CONTAINER;
-          } else {
-            return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.fill;
-          }
-        })
+        .style('fill', EpiRenderer.calcNodeColor)
         .style('stroke', DEFAULT_STYLE.node.stroke)
-        .style('stroke-width', d => (d as any).nodes ? 5 : DEFAULT_STYLE.node.strokeWidth);
+        .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
 
       selection.append('text')
         .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
@@ -192,6 +194,15 @@ export default class EpiRenderer extends SVGRenderer {
     node.select('rect')
       .style('stroke', Colors.HIGHLIGHT)
       .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
+  }
+
+  highlightNodes (nodesList: SubgraphNodeInterface[]): void {
+    const chart = (this as any).chart;
+    chart.selectAll('.node-ui').each(function (d) {
+      const isHighlighted = nodesList.map(node => node.id).includes(d.id);
+      d3.select(this).select('rect')
+        .style('fill', isHighlighted ? Colors.NODES.EDITED : EpiRenderer.calcNodeColor(d));
+    });
   }
 
   clearSelections ():void {

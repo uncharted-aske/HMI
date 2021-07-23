@@ -12,14 +12,13 @@
 
   import { expandCollapse, highlight } from 'svg-flowgraph';
 
-  import { GraphInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
+  import { GraphInterface, SubgraphInterface, SubgraphNodeInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
 
   import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
-  import { showTooltip, hideTooltip, hierarchyFn } from '@/utils/SVGUtil.js';
+  import { /** showTooltip, hideTooltip */ hierarchyFn } from '@/utils/SVGUtil.js'; // TODO: Put tooltips back when we fix the positioning issue
   import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse } from '@/graphs/svg/util.js';
-  import { Colors } from '@/graphs/svg/encodings';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
@@ -31,6 +30,7 @@
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
     @Prop({ default: null }) subgraph: SubgraphInterface;
+    @Prop({ default: () => [] }) highlightedNodes: SubgraphNodeInterface[];
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -52,6 +52,11 @@
       this.subgraphChanged();
     }
 
+    @Watch('highlightedNodes')
+    async highlightedNodesChanged (): Promise<void> {
+      this.renderer.highlightNodes(this.highlightedNodes);
+    }
+
     subgraphChanged (): void {
       if (this.subgraph) {
         this.renderer.showSubgraph(this.subgraph);
@@ -71,7 +76,13 @@
         addons: [expandCollapse, highlight],
       });
 
+      this.renderer.setCallback('nodeDblClick', (evt, node) => {
+          this.$emit('node-dblclick', node.datum().data);
+      });
+
       this.renderer.setCallback('nodeClick', (evt, node) => {
+        this.renderer.hideSubgraph();
+
         if (node.datum().nodes) {
           const id = node.datum().id;
           if (node.datum().collapsed === true) {
@@ -79,9 +90,10 @@
           } else {
             this.renderer.collapse(id);
           }
+          this.renderer.render();
         } else {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
-          this.renderer.highlight(neighborhood, { color: Colors.HIGHLIGHT, duration: 5000 });
+          this.renderer.showSubgraph(neighborhood);
 
           this.renderer.clearSelections();
           this.renderer.selectNode(node);
@@ -89,22 +101,23 @@
         }
       });
 
-      this.renderer.setCallback('nodeMouseEnter', (evt, node, renderer) => {
-        if (!node.datum().nodes) {
-          const data = node.datum();
-          /* @ts-ignore */
-          showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
-        }
-      });
+      // this.renderer.setCallback('nodeMouseEnter', (evt, node, /**renderer*/) => {
+      //   if (!node.datum().nodes) {
+      //     const data = node.datum();
+      //     /* @ts-ignore */
+      //     // showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
+      //   }
+      // });
 
-      this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
-        if (node.datum().nodes) return;
-        hideTooltip(renderer.chart);
-      });
+      // this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
+      //   if (node.datum().nodes) return;
+      //   // hideTooltip(renderer.chart);
+      // });
 
       this.renderer.setCallback('backgroundClick', () => {
-        this.renderer.clearSelections();
-        this.$emit('background-click');
+          this.renderer.hideSubgraph();
+          this.renderer.clearSelections();
+          this.$emit('background-click');
       });
 
       this.refresh();
@@ -134,7 +147,8 @@
       // seems to create problems with the tracker.
       const collapsedIds = calcNodesToCollapse(this.layout, this.renderer.layout);
       if (collapsedIds.length > 0) {
-        collapsedIds.forEach((nextId, i) => setTimeout(() => this.renderer.collapse(nextId), i * 500));
+        collapsedIds.forEach(nextId => this.renderer.collapse(nextId));
+        this.renderer.render();
       }
     }
   }

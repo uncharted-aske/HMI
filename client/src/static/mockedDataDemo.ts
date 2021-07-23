@@ -1,7 +1,8 @@
 import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 
-import * as Model from '@/types/typesModel';
+import * as Donu from '@/types/typesDonu';
 import * as Graphs from '@/types/typesGraphs';
+import * as Model from '@/types/typesModel';
 import { getUtil } from '@/utils/FetchUtil';
 
 export const staticFileURLs = [
@@ -10,16 +11,18 @@ export const staticFileURLs = [
   `${window.location.origin}/gromets/SEIR_gromet_PetriNetClassic_metadata.json`,
   `${window.location.origin}/gromets/SEIRD_gromet_PetriNetClassic_metadata.json`,
   `${window.location.origin}/gromets/SIRD_gromet_PetriNetClassic_metadata.json`,
-  `${window.location.origin}/gromets/SIR_AlgebraicJulia.json`,
+  `${window.location.origin}/gromets/3_city_seird.json`,
+
 ];
 
 // eslint-disable-next-line
-export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN }: any): Model.Model[] => {
+export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN, CITY_SEIRD_PN }: any): Model.Model[] => {
   const SIR_PN_PARSED = GroMEt2Graph.parseGromet(SIR_PN);
   const SIR_FN_PARSED = GroMEt2Graph.parseGromet(SIR_FN);
   const SEIR_PN_PARSED = GroMEt2Graph.parseGromet(SEIR_PN);
   const SEIRD_PN_PARSED = GroMEt2Graph.parseGromet(SEIRD_PN);
   const SIRD_PN_PARSED = GroMEt2Graph.parseGromet(SIRD_PN);
+  const CITY_SEIRD_PN_PARSED = GroMEt2Graph.parseGromet(CITY_SEIRD_PN);
 
   return [
     {
@@ -31,7 +34,8 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
       },
       modelGraph: [
         {
-          file: '',
+          donuType: Donu.Type.GROMET_PNC,
+          model: 'sir.gromet',
           type: Model.GraphTypes.PetriNetClassic,
           metadata: SIR_PN.metadata,
           graph: {
@@ -40,7 +44,8 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
           },
         },
         {
-          file: '',
+          donuType: Donu.Type.GROMET_PNC, // TODO: to replace with GrFN type once donu puts those in
+          model: 'sir.easel',
           type: Model.GraphTypes.FunctionNetwork,
           metadata: SIR_FN.metadata,
           graph: {
@@ -59,7 +64,8 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
       },
       modelGraph: [
         {
-          file: '',
+          donuType: Donu.Type.GROMET_PNC,
+          model: 'seir.json',
           type: Model.GraphTypes.PetriNetClassic,
           metadata: SEIR_PN.metadata,
           graph: {
@@ -78,7 +84,8 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
       },
       modelGraph: [
         {
-          file: '',
+          donuType: Donu.Type.GROMET_PNC,
+          model: 'seird.json',
           type: Model.GraphTypes.PetriNetClassic,
           metadata: SEIRD_PN.metadata,
           graph: {
@@ -97,12 +104,33 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
       },
       modelGraph: [
         {
-          file: '',
+          donuType: Donu.Type.GROMET_PNC,
+          model: 'sird.json',
           type: Model.GraphTypes.PetriNetClassic,
-          metadata: SEIRD_PN.metadata,
+          metadata: SIRD_PN.metadata,
           graph: {
             edges: SIRD_PN_PARSED.edges as Graphs.GraphEdgeInterface[],
             nodes: SIRD_PN_PARSED.nodes as unknown as Graphs.GraphNodeInterface[],
+          },
+        },
+      ],
+    },
+    {
+      id: 4,
+      name: CITY_SEIRD_PN.name, // name should be the same across modeling frameworks
+      metadata: {
+        name: CITY_SEIRD_PN.name,
+        description: '', // We are going to need a high-level description for each model.
+      },
+      modelGraph: [
+        {
+          donuType: Donu.Type.GROMET_PNC,
+          model: 'sird.json',
+          type: Model.GraphTypes.PetriNetClassic,
+          metadata: CITY_SEIRD_PN.metadata,
+          graph: {
+            edges: CITY_SEIRD_PN_PARSED.edges as Graphs.GraphEdgeInterface[],
+            nodes: CITY_SEIRD_PN_PARSED.nodes as unknown as Graphs.GraphNodeInterface[],
           },
         },
       ],
@@ -111,8 +139,8 @@ export const buildInitialModelsList = ({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD
 };
 
 export const fetchInitialModelData = async (): Promise<Model.Model[]> => {
-  const [SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN] = await Promise.all(
+  const [SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN, CITY_SEIRD_PN] = await Promise.all(
     staticFileURLs.map(url => getUtil(url)),
   );
-  return buildInitialModelsList({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN });
+  return buildInitialModelsList({ SIR_PN, SIR_FN, SEIR_PN, SEIRD_PN, SIRD_PN, CITY_SEIRD_PN });
 };

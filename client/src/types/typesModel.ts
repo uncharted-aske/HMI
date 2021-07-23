@@ -2,6 +2,7 @@
  * Define Types used for Computational Models
  */
 
+import * as Donu from '@/types/typesDonu';
 import * as Graph from '@/types/typesGraphs';
 import * as GroMEt from '@/types/typesGroMEt';
 
@@ -11,8 +12,6 @@ type Metadata = {
   knowledge?: string
   id?: string,
   name: string,
-  source?: string,
-  type?: string, // Mostly used by DONU
   version?: string,
 };
 
@@ -25,10 +24,11 @@ enum GraphTypes {
 
 /* Define a graph (nodes and edges) per type of a model. */
 type Graph = {
-  file: string,
-  type: GraphTypes,
-  metadata?: Array<GraphMetadata>,
+  donuType: Donu.Type,
   graph: Graph.GraphInterface,
+  model: string,
+  metadata?: Array<GraphMetadata>,
+  type: GraphTypes,
 };
 
 type Model = {
@@ -41,7 +41,7 @@ type Model = {
 type State = {
   isInitialized: boolean,
   modelsList: Model[],
-  selectedModelGraph?: number,
+  selectedModelGraphType?: GraphTypes,
   selectedModelIds: Set<string>,
 };
 

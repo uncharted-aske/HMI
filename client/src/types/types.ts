@@ -30,7 +30,7 @@ interface CardInterface {
   checked?: boolean;
 }
 
-interface GraferEventDetail {
+interface GraferEventDetail extends Record<string, any> {
   layer: string;
   type: string;
   id: string;
@@ -44,13 +44,19 @@ type Counter = {
 };
 
 interface SimulationParameter extends Donu.ModelParameter {
-  hidden?: boolean,
+  edited?: boolean, // the parameter is edited or not
+  hidden?: boolean, // the parameter is visible or not
   values?: number[],
 }
 
+// List of runs, containing a list of coordinates.
+type SimulationVariableValues = Array<{x: number, y: number}>;
+
 interface SimulationVariable extends Donu.ModelVariable {
-  values: {x: number, y: number}[][], // List of runs, containing a list of coordinates.
+  edited?: boolean,
+  aggregate: SimulationVariableValues,
   hidden: boolean,
+  values: SimulationVariableValues[],
 }
 
 type SimulationRun = {
@@ -63,8 +69,9 @@ export {
   GraferEventDetail,
   ModelComponentMetadataInterface,
   SimulationParameter,
-  SimulationVariable,
   SimulationRun,
+  SimulationVariable,
+  SimulationVariableValues,
   TabInterface,
   ViewInterface,
 };

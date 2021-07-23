@@ -3,28 +3,6 @@
     <settings-bar>
       <counters slot="left" :title="modelName" :data="countersData" />
       <aside slot="right">
-        <div class="dropdown">
-          <button
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            @click="settingsOpen = !settingsOpen">
-            Settings
-          </button>
-          <div class="dropdown-menu dropdown-menu-right" :class="{ 'show': settingsOpen }">
-            <h6 class="dropdown-header">Model view</h6>
-            <div v-for="(view, index) in views" :key="index" class="custom-control custom-radio">
-              <input
-                class="custom-control-input"
-                name="model-view"
-                type="radio"
-                v-model="selectedView"
-                :id="('model-view-'+index)"
-                :value="view.id"
-              >
-              <label class="custom-control-label" :for="('model-view-'+index)">{{ view.name }}</label>
-            </div>
-          </div>
-        </div>
         <button
           class="btn btn-secondary"
           title="Expand Model Panel"
@@ -34,8 +12,7 @@
         </button>
       </aside>
     </settings-bar>
-    <model-selector/>
-    <global-graph v-if="model" :data="graph"/>
+    <global-graph v-if="model" :data="graph" :highlighted-nodes="editedNodes" @node-dblclick="onNodeClick"/>
   </section>
 </template>
 
@@ -43,28 +20,19 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
-  import { Getter } from 'vuex-class';
-  import { capitalize } from 'lodash';
+  import { Action, Getter } from 'vuex-class';
   import * as HMI from '@/types/types';
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
-  import ModelSelector from '@/views/Simulation/components/ModelSelector.vue';
 
   const components = {
     Counters,
     GlobalGraph,
     SettingsBar,
-    ModelSelector,
   };
-
-  // List of available graphs in a model
-  enum VIEWS {
-    CAUSAL = 'causal',
-    FUNCTIONAL = 'functional',
-  }
 
   @Component({ components })
   export default class ModelPanel extends Vue {
@@ -73,13 +41,23 @@
 
     @Getter getSimParameters;
     @Getter getSimVariables;
+    @Action toggleParameter;
+    @Action toggleVariable;
 
-    selectedView: string = VIEWS.CAUSAL;
     settingsOpen: boolean = false;
-    views: HMI.ViewInterface[] = [
-      { name: capitalize(VIEWS.CAUSAL), id: VIEWS.CAUSAL },
-      { name: capitalize(VIEWS.FUNCTIONAL), id: VIEWS.FUNCTIONAL },
-    ];
+
+    onNodeClick (selected: Graph.GraphNodeInterface): void {
+      this.toggleParameter(selected.label);
+      this.toggleVariable(selected.label);
+    }
+
+    get editedNodes (): Graph.SubgraphNodeInterface[] {
+      const highlightedLabels = [
+        ...this.getSimParameters.filter(parameter => parameter.edited).map(parameter => parameter.metadata.name),
+        ...this.getSimVariables.filter(variable => variable.edited).map(variable => variable.metadata.name),
+      ];
+      return this.graph.nodes.filter(node => highlightedLabels.includes(node.label)).map(node => ({ id: node.id }));
+    }
 
     get graph (): Graph.GraphInterface {
       return this.model?.modelGraph?.[0]?.graph;

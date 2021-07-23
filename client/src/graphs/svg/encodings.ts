@@ -1,12 +1,13 @@
 export abstract class Colors {
   static readonly SUBGRAPH: string = '#FFA500';
-  static readonly HIGHLIGHT: string = '#D08770';
+  static readonly HIGHLIGHT: string = '#EBCB8B';
   static readonly STROKE: string = '#81A1C1';
 
   static readonly NODES: Record<string, any> = {
     DEFAULT: '#ECEFF4',
     AGGREGATE: Colors.HIGHLIGHT,
     OVERLAPPING: Colors.HIGHLIGHT,
+    EDITED: '#D08770',
 
     // Gromet
     CONTAINER: '#2E3440',

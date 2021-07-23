@@ -48,7 +48,12 @@
             </div>
           </settings-bar>
           <loader :loading="subgraphLoading" />
-          <local-graph v-if="subgraph" :data="subgraph"  @node-click="onNodeClick" @edge-click="onEdgeClick" @loaded="subgraphLoading = false"/>
+          <local-graph v-if="subgraph"
+                      :data="subgraph"
+                      @node-click="onNodeClick"
+                      @edge-click="onEdgeClick"
+                      @background-click ="onBackgroundClick"
+                      @loaded="subgraphLoading = false"/>
           <div v-if="showMessageTooLarge" class="alert alert-info mr-2" role="alert">
             Results are too large. Keep adding filters to reduce the size.
           </div>
@@ -92,17 +97,16 @@
   import { Watch } from 'vue-property-decorator';
 
   import { bgraph } from '@uncharted.software/bgraph';
-  import { GraferNodesData, GraferEdgesData, GraferLabelsData } from '@uncharted.software/grafer';
 
   import { Counter, TabInterface, GraferEventDetail } from '@/types/types';
   import { GraphInterface, GraphNodeInterface, GraphEdgeInterface } from '@/types/typesGraphs';
-  import { BioGraferLayerDataPayloadInterface } from '@/types/typesGrafer';
   import { CosmosArtifactInterface } from '@/types/typesCosmos';
   import { FILTRES_FIELDS } from '@/types/typesFiltres';
   import * as KnowledgeGraph from '@/types/typesKnowledgeGraph';
   import eventHub from '@/eventHub';
 
   import {
+    deepCopy, // TODO: Deep copy should be moved into it's own general utility file
     loadBGraphData,
     filterToBgraph,
     formatBGraphOutputToLocalGraph,
@@ -174,10 +178,10 @@
 
     // Initialize as undefined to prevent Vue from observing changes within these large datasets
     // Grafer data is stored in Bio view data as they are required for mapping bgraph queries to grafer layers
-    graferNodesData: GraferNodesData = undefined;
-    graferIntraEdgesData: GraferEdgesData = undefined;
-    graferInterEdgesData: GraferEdgesData = undefined;
-    graferClustersLabelsData: GraferLabelsData = undefined;
+    graferNodesData: Map<any, unknown> = undefined;
+    graferIntraEdgesData: Map<any, unknown> = undefined;
+    graferInterEdgesData: Map<any, unknown> = undefined;
+    graferClustersLabelsData: Map<any, unknown> = undefined;
 
     // Set true when the full graph layers are rendered as background context (ie. faded)
     grafersFullGraphContextIsBackgrounded: boolean = false;
@@ -195,6 +199,8 @@
     subgraph: GraphInterface = null;
     subgraphLoading: boolean = false;
     mainGraphLoading: boolean = true;
+
+    neighborhoodSubgraphIds: string[] = [];
 
     showMessageTooLarge: boolean = false;
     showMessageEmpty: boolean = false;
@@ -235,6 +241,18 @@
       // Once we have a selected model available we can load the graph.
       if (this.selectedGraph) {
         await this.loadData();
+      }
+    }
+
+    @Watch('neighborhoodSubgraphIds') onNeighborhoodSubgraphIdsChanged (): void {
+      let neighborhoodSubgraph = this.bgraphInstance.v().filter(d => this.neighborhoodSubgraphIds.includes(d._id)).run().map(element => element.vertex);
+      neighborhoodSubgraph = deepCopy(neighborhoodSubgraph, ['_in', '_out']);
+      if (_.isEmpty(neighborhoodSubgraph)) {
+        // No neighborhood selected. Render original filter layer.
+        this.onGetFiltersChanged();
+      } else {
+        // Neighborhood selected. Render selected neighborhood.
+        this.renderSubgraphAsGraferLayers(neighborhoodSubgraph);
       }
     }
 
@@ -354,7 +372,8 @@
       this.addFiltres(newFiltres);
     }
 
-    async loadGraferData (): Promise<BioGraferLayerDataPayloadInterface> {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async loadGraferData () {
       const [
         graferPointsData,
         graferNodesData,
@@ -455,15 +474,26 @@
       this.drilldownMetadata = null;
     }
 
-  // onSetView (viewId: string): void {
-  //   this.selectedViewId = viewId;
-  // }
-
     onNodeClick (node: GraphNodeInterface): void {
+      // Compute node neighborhood to highlight in global view
+      const outgoingEdges = this.bgraphInstance.v({ id: node.id }).out().run();
+      const outgoingNodes = outgoingEdges.map(edge => edge.vertex.target_id);
+      const incomingEdges = this.bgraphInstance.v({ id: node.id }).in().run();
+      const incomingNodes = incomingEdges.map(edge => edge.vertex.source_id);
+
+      const neighborEdgesIds = _.merge(outgoingEdges.map(e => e.vertex.id), incomingEdges.map(e => e.vertex.id));
+      const neighborNodeIds = _.merge(outgoingNodes, incomingNodes);
+      this.neighborhoodSubgraphIds = _.merge(neighborNodeIds, neighborEdgesIds);
+
       this.isOpenDrilldown = true;
       this.drilldownActivePaneId = 'node';
 
       this.drilldownMetadata = node.data;
+    }
+
+    onBackgroundClick (): void {
+      this.neighborhoodSubgraphIds = [];
+      this.onCloseDrilldownPanel();
     }
 
     async onEdgeClick (edge: GraphEdgeInterface): Promise<void> {

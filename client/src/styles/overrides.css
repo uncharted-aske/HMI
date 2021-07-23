@@ -27,8 +27,10 @@
 
 .btn-primary.btn-primary,
 .btn-primary.btn-primary:focus,
+.btn-primary.btn-primary.active,
 .btn-primary.btn-primary:active,
-.btn-primary.btn-primary.active {
+.btn-primary.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary.btn-primary:not(:disabled):not(.disabled):active {
   background-color: var(--nord4);
   border-color: var(--nord4);
   box-shadow: none;

@@ -7,37 +7,50 @@
     }"
   >
     <settings-bar>
-      <div class="btn-group" slot="left" aria-label="Show/Hide Parameters">
-        <button
-          class="btn btn-secondary"
-          title="Show all parameters"
-          type="button"
-          @click="onShowAllParameters"
-        >
-          <font-awesome-icon :icon="['fas', 'eye']" />
-        </button>
-        <button
-          class="btn btn-secondary"
-          title="Hide all parameters"
-          type="button"
-          @click="onHideAllParameters"
-        >
-          <font-awesome-icon :icon="['fas', 'eye-slash']" />
-        </button>
-      </div>
       <counters
-        slot="middle"
+        slot="left"
         :title="countersTitle"
         :data="countersData"
       />
-      <div slot="right">
-        <button
-          class="btn btn-secondary"
-          disabled
-          type="button"
-          @click="$emit('settings')">
-          Settings
-        </button>
+      <aside slot="right">
+        <!-- <div class="btn-group" title="Show/Hide Parameters">
+          <button
+            class="btn btn-secondary"
+            title="Show all parameters"
+            type="button"
+            @click="onShowAllParameters"
+          >
+            <font-awesome-icon :icon="['fas', 'eye']" />
+          </button>
+          <button
+            class="btn btn-secondary"
+            title="Hide all parameters"
+            type="button"
+            @click="onHideAllParameters"
+          >
+            <font-awesome-icon :icon="['fas', 'eye-slash']" />
+          </button>
+        </div> -->
+        <div class="btn-group" title="Add/Remove All Parameters & Variables">
+          <button
+            class="btn btn-secondary"
+            title="Add all Parameters & Variables"
+            type="button"
+            :disabled="allParametersAreDisplayed"
+            @click="onAddAllParameters"
+          >
+            <font-awesome-icon :icon="['fas', 'plus']" />
+          </button>
+          <button
+            class="btn btn-secondary"
+            title="Remove all Parameters & Variables"
+            type="button"
+            :disabled="noDisplayedParameters"
+            @click="onRemoveAllParameters"
+          >
+            <font-awesome-icon :icon="['fas', 'ban']" />
+          </button>
+        </div>
         <button
           class="btn btn-secondary"
           title="Expand Parameters Panel"
@@ -45,30 +58,41 @@
           @click="$emit('expand')">
           <font-awesome-icon :icon="['fas', (expanded ? 'compress-alt' : 'expand-alt')]" />
         </button>
-      </div>
+      </aside>
     </settings-bar>
     <div class="parameters">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
-      <ul class="parameters-list">
+      <div v-if="noDisplayedParameters" class="alert alert-info m-3">
+        Use the model visualization on the left to add/remove parameters.
+      </div>
+      <ul v-else class="parameters-list">
         <li
           class="parameter"
-          v-for="(parameter, index) of parameters"
+          v-for="(parameter, index) of displayedParameters"
           :key="index"
           :class="{ hidden: parameter.hidden }"
         >
-          <h4 :title="parameter.metadata.Description">{{ parameter.name }}</h4>
-          <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.name, e)" />
+          <h4 :title="parameter.metadata.Description">{{ parameter.metadata.name }}</h4>
+          <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.uid, e)" />
           <aside class="btn-group">
-            <button type="button" class="btn btn-secondary btn-sm">
-              <font-awesome-icon :icon="['fas', 'tools']" />
-            </button>
-            <button
+            <!-- <button
               class="btn btn-secondary btn-sm"
               title="(parameter.hidden ? 'Show' : 'Hide' + ' parameter')"
               type="button"
               @click="parameter.hidden = !parameter.hidden"
             >
-              <font-awesome-icon :icon="['fas', (parameter.hidden ? 'eye' : 'eye-slash')]" />
+              <font-awesome-icon
+                class="fa-w-20"
+                :icon="['fas', (parameter.hidden ? 'eye' : 'eye-slash')]"
+              />
+            </button> -->
+            <button
+              class="btn btn-secondary btn-sm"
+              title="Remove parameter from editable panel"
+              type="button"
+              @click="hideParameter(parameter.uid)"
+            >
+              <font-awesome-icon :icon="['fas', 'ban']" />
             </button>
           </aside>
         </li>
@@ -85,6 +109,7 @@
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
   import svgUtil from '@/utils/SVGUtil';
+  import { shorterNb } from '@/utils/NumberUtil';
   import * as HMI from '@/types/types';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -103,6 +128,11 @@
     @Getter getSimParameters;
     @Getter getSimParameterArray;
     @Action setSimParameterValue;
+    @Action hideParameter;
+    @Action hideAllParameters;
+    @Action showAllParameters;
+    @Action hideAllVariables;
+    @Action showAllVariables;
 
     private padding: number = 5;
     private parameterHeight: number = 100;
@@ -110,27 +140,40 @@
     // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
     @Watch('expanded') onExpanded (): void { this.drawGraph(); }
-    @Watch('parameters') onParametersChanged (): void { this.drawGraph(); }
+    @Watch('displayedParameters') onDisplayedParametersChanged (): void { this.drawGraph(); }
     mounted (): void { this.drawGraph(); }
 
     // Condition when to clear the Graph
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
     get parameters (): HMI.SimulationParameter[] {
+      const parameters = _.cloneDeep(this.getSimParameters);
       // Order by ASC order
-      return _.orderBy(this.getSimParameters, ['name'], ['asc']);
+      return _.orderBy(parameters, ['metadata.name'], ['asc']);
+    }
+
+    get displayedParameters (): HMI.SimulationParameter[] {
+      return this.parameters.filter(parameter => parameter.edited);
+    }
+
+    get noDisplayedParameters (): boolean {
+      return this.displayedParameters.length === 0;
+    }
+
+    get allParametersAreDisplayed (): boolean {
+      return this.displayedParameters.length === this.parameters.length;
     }
 
     get countersTitle (): string {
-      return this.parameters.length + ' Parameters';
+      const count = this.displayedParameters.length;
+      return `${count > 0 ? count : '—'} Parameter${count > 1 ? 's' : ''}`;
     }
 
     get countersData (): HMI.Counter[] {
-      const count = this.parameters.filter(parameter => parameter.hidden).length ?? 0;
-      if (count === this.parameters.length) {
-        return [{ name: 'All hidden' }];
-      } else if (count > 0) {
-        return [{ name: 'Hidden', value: count }];
+      const displayed = this.displayedParameters.length;
+      const total = this.parameters.length;
+      if (displayed < total) {
+        return [{ name: 'total', value: total }];
       }
     }
 
@@ -139,7 +182,7 @@
     }
 
     graphHeight (): number {
-      return this.parameters.length * this.parameterHeight;
+      return this.displayedParameters.length * this.parameterHeight;
     }
 
     graphWidth (): number {
@@ -147,9 +190,9 @@
       return figure?.getBoundingClientRect().width ?? 0;
     }
 
-    onParameterChange (name: string, event: Event): void {
+    onParameterChange (uid: string, event: Event): void {
       const value = Number((event.target as HTMLInputElement).value);
-      this.setSimParameterValue({ name, value });
+      this.setSimParameterValue({ uid, value });
     }
 
     clearGraph (): void {
@@ -157,8 +200,8 @@
     }
 
     drawGraph (): void {
-      // List of parameters names
-      const params = this.parameters.map(parameter => parameter.name);
+      // List of parameters by uid
+      const params = this.displayedParameters.map(parameter => parameter.uid);
 
       // List of runs
       const runs = this.getSimParameterArray;
@@ -177,7 +220,11 @@
       // X & Y Scales
       const xScale = param => {
         const minMax = svgUtil.extendRoundUpToPow10(runs, d => d[param]) as Iterable<d3.NumberValue>;
-        return d3.scaleLinear(minMax, xMinMax);
+        return {
+          min: minMax[0],
+          max: minMax[1],
+          scale: d3.scaleLinear(minMax, xMinMax),
+        };
       };
       const xScales = new Map(params.map(param => [param, xScale(param)]));
       const yScale = d3.scalePoint(params, yMinMax);
@@ -185,7 +232,7 @@
       // Runs Line method
       const line = d3.line()
         /* @ts-ignore */
-        .x(([param, value]) => xScales.get(param)(value))
+        .x(([param, value]) => xScales.get(param).scale(value))
         /* @ts-ignore */
         .y(([param]) => yScale(param));
 
@@ -208,21 +255,49 @@
 
       // Add the axis
       graph.append('g')
-        .selectAll('g')
+          .selectAll('g')
           .data(params)
-          .join('line')
-            .attr('class', 'axis')
-            .attr('transform', d => svgUtil.translate(0, yScale(d)))
-            .attr('x1', xMinMax[0])
-            .attr('x2', xMinMax[1]);
+          .join(enter => {
+            // Group for the parameter translated vertically
+            const g = enter.append('g')
+              .attr('class', d => d + ' axis')
+              .attr('transform', d => svgUtil.translate(0, yScale(d)));
+
+            // the axis
+            g.append('line')
+              .attr('x1', xMinMax[0])
+              .attr('x2', xMinMax[1]);
+
+            // min label
+            g.append('text')
+              .attr('x', xMinMax[0])
+              .text(d => shorterNb(xScales.get(d).min));
+
+            // max label
+            g.append('text')
+              .attr('x', xMinMax[1])
+              .text(d => shorterNb(xScales.get(d).max));
+
+            return g;
+          });
     }
 
     onHideAllParameters (): void {
-      this.parameters.forEach(parameter => { parameter.hidden = true; });
+      this.displayedParameters.forEach(parameter => { parameter.hidden = true; });
     }
 
     onShowAllParameters (): void {
-      this.parameters.forEach(parameter => { parameter.hidden = false; });
+      this.displayedParameters.forEach(parameter => { parameter.hidden = false; });
+    }
+
+    onAddAllParameters (): void {
+      this.showAllParameters();
+      this.showAllVariables();
+    }
+
+    onRemoveAllParameters (): void {
+      this.hideAllParameters();
+      this.hideAllVariables();
     }
   }
 </script>
@@ -232,10 +307,6 @@
     color: white;
     display: flex;
     flex-direction: column;
-  }
-
-  .settings-bar-container {
-    flex-shrink: 0;
   }
 
   .parameters {
@@ -262,8 +333,8 @@
   .parameter {
     display: grid;
     grid-template-areas:
-      ". . action"
-      "name . ."
+      ". . ."
+      "name . action"
       "value . ."
     ;
     grid-template-columns: min-content auto min-content;
@@ -308,11 +379,18 @@
 <style>
   /* For SVG you cannot scope the <style> */
 
-  .parameters-graph .axis {
+  .parameters-graph .axis line {
     fill: none;
     stroke: var(--colours-nodes-other);
     stroke-width: 1;
   }
+
+  .parameters-graph .axis text {
+    font-size: 10px;
+    stroke: var(--text-color-light);
+  }
+  .parameters-graph .axis text:first-of-type { translate: -1em .3em; }
+  .parameters-graph .axis text:last-of-type { translate: .5em .3em; }
 
   .parameters-graph .run {
     fill: none;

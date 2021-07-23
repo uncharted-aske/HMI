@@ -66,7 +66,6 @@
 
       const colors = BIO_GRAPH_COLORS;
       const layers = this.loadModelLayers(layerData);
-
       return { points, colors, layers };
     }
 

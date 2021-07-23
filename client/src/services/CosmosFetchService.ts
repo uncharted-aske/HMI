@@ -52,8 +52,10 @@ const COSMOS_ARTIFACT_URL = `${COSMOS_API_URL_PREFIX}/sets/xdd-covid-19/cosmos/a
 // eslint-disable-next-line camelcase
 export const cosmosArtifactsMem = async (paramObj: {doi: string, image_type?: string}): Promise<CosmosArtifactInterface> => {
   const artifactList = await getUtilMem(COSMOS_ARTIFACT_URL, addCosmosAPIKey({ ...paramObj }));
-  artifactList.objects.map(async (artifact, index) =>
-    Object.assign(artifactList.objects[index], artifact.children[0]));
+  if (artifactList.objects) {
+    artifactList.objects.map(async (artifact, index) =>
+      Object.assign(artifactList.objects[index], artifact.children[0]));
+  }
   return artifactList;
 };
 

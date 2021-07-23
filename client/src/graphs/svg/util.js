@@ -117,7 +117,7 @@ export const constructRootNode = (root) => {
 /**
  * Get the neighborhood graph for a selected node
  * @param {object} graph - an object of nodes/edges arrays
- * @param {string} node - a node object
+ * @param {object} node - a node object
  */
 
 export const calculateNodeNeighborhood = (graph, node) => {
