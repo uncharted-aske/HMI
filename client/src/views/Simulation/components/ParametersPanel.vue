@@ -90,7 +90,7 @@
               class="btn btn-secondary btn-sm"
               title="Remove parameter from editable panel"
               type="button"
-              @click="hideParameter(parameter.uid)"
+              @click="hideParameter({ modelId, selector: parameter.uid })"
             >
               <font-awesome-icon :icon="['fas', 'ban']" />
             </button>
@@ -122,9 +122,11 @@
   @Component({ components })
   export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
+    @Prop({ default: null }) modelId: number;
     @InjectReactive() resized!: boolean;
     @InjectReactive() isResizing!: boolean;
 
+    @Getter getSimModels;
     @Getter getSimParameters;
     @Getter getSimParameterArray;
     @Action setSimParameterValue;
@@ -147,7 +149,11 @@
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
     get parameters (): HMI.SimulationParameter[] {
-      const parameters = _.cloneDeep(this.getSimParameters);
+      const parameters = this.getSimModels?.[this.modelId]?.parameters ?? [];
+      console.log(this.getSimModels);
+      console.log(this.modelId);
+      console.log(this.getSimModels?.[`${this.modelId}`]);
+      console.log(parameters);
       // Order by ASC order
       return _.orderBy(parameters, ['metadata.name'], ['asc']);
     }
@@ -192,7 +198,7 @@
 
     onParameterChange (uid: string, event: Event): void {
       const value = Number((event.target as HTMLInputElement).value);
-      this.setSimParameterValue({ uid, value });
+      this.setSimParameterValue({ modelId: this.modelId, uid, value });
     }
 
     clearGraph (): void {
@@ -204,7 +210,8 @@
       const params = this.displayedParameters.map(parameter => parameter.uid);
 
       // List of runs
-      const runs = this.getSimParameterArray;
+      const runs = this.getSimParameterArray?.[this.modelId];
+      if (!runs) return;
 
       // Select the graph and size it
       this.clearGraph();
@@ -291,13 +298,13 @@
     }
 
     onAddAllParameters (): void {
-      this.showAllParameters();
-      this.showAllVariables();
+      this.showAllParameters(this.modelId);
+      this.showAllVariables(this.modelId);
     }
 
     onRemoveAllParameters (): void {
-      this.hideAllParameters();
-      this.hideAllVariables();
+      this.hideAllParameters(this.modelId);
+      this.hideAllVariables(this.modelId);
     }
   }
 </script>

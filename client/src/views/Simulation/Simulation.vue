@@ -53,26 +53,34 @@
       <search-bar />
     </aside>
 
-    <resizable-grid :map="gridMap" :dimensions="gridDimensions">
-      <model-panel
-        class="simulation-panel"
-        slot="model"
-        :expanded="expandedId === 'model'"
-        :model="selectedModel"
-        @expand="setExpandedId('model')"
-      />
-      <parameters-panel
-        class="simulation-panel"
-        slot="parameters"
-        :expanded="expandedId === 'parameters'"
-        @expand="setExpandedId('parameters')"
-      />
-      <variables-panel
-        class="simulation-panel"
-        slot="variables"
-        :expanded="expandedId === 'variables'"
-        @expand="setExpandedId('variables')"
-      />
+    <loader v-if="selectedModels.length < 1" loading="true" />
+    <resizable-grid v-else :map="gridMap" :dimensions="gridDimensions">
+      <template v-for="(model, index) in selectedModels">
+        <model-panel
+          class="simulation-panel"
+          :expanded="expandedId === 'model'"
+          :key="index"
+          :model="model"
+          :slot="('model_' + index)"
+          @expand="setExpandedId('model')"
+        />
+        <parameters-panel
+          class="simulation-panel"
+          :expanded="expandedId === 'parameters'"
+          :key="index"
+          :modelId="model.id"
+          :slot="('parameters_' + index)"
+          @expand="setExpandedId('parameters')"
+        />
+        <variables-panel
+          class="simulation-panel"
+          :expanded="expandedId === 'variables'"
+          :key="index"
+          :modelId="model.id"
+          :slot="('variables_' + index)"
+          @expand="setExpandedId('variables')"
+        />
+      </template>
     </resizable-grid>
   </div>
 </template>
@@ -90,6 +98,7 @@
   import * as Donu from '@/types/typesDonu';
 
   import Counters from '@/components/Counters.vue';
+  import Loader from '@/components/widgets/Loader.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import SearchBar from '@/components/SearchBar.vue';
 
@@ -100,6 +109,7 @@
 
   const components = {
     Counters,
+    Loader,
     ModelPanel,
     ParametersPanel,
     ResizableGrid,
@@ -133,7 +143,7 @@
       }
     }
 
-    @Watch('selectedModel') onModelChanged (): void {
+    @Watch('selectedModels') onModelChanged (): void {
       this.initializeSim();
     }
 
@@ -145,42 +155,65 @@
      *  needs to trigger a refresh of the results. */
     get triggerFetchResults (): string {
       const { end, start, step } = this.runConfig;
+      const allParameters = [];
+      // this.getSelectedModelIds.map(modelId => {
+      //   const modelParameters = this.getSimParameterArray?.[Number(modelId)] ?? [];
+      //   modelParameters.foreach(allParameters.push);
+      // });
+      // console.table(allParameters);
       const watchObject = {
         config: { end, start, step },
-        parameters: [...this.getSimParameterArray],
+        parameters: allParameters,
       };
       return JSON.stringify(watchObject);
     }
 
-    get selectedModel (): Model.Model {
+    get selectedModels (): Model.Model[] {
       if (
-        !this.getSelectedModelIds?.[0]?.toString() && // Are we missing the selectedModelId, toString to test id 0 as well,
+        this.getSelectedModelIds.length < 1 && // Are we missing the selectedModelId, toString to test id 0 as well,
         this.$route.params.model_id && // Does the model id is available from the route parameters,
-        !Number.isNaN(this.$route.params.model_id) // Make sure the model id from the route is not a NaN.
+        typeof this.$route.params.model_id === 'string' // Make sure the model id from the route is a string.
       ) {
         // Set the model id from the route as the selected model.
-        this.setSelectedModels(Number(this.$route.params.model_id));
+        this.$route.params.model_id.split(',').forEach(this.setSelectedModels);
       }
-      return this.getModelsList.find(model => model.id === Number(this.getSelectedModelIds[0]));
+      return this.getModelsList.filter(model => this.getSelectedModelIds.map(Number).includes(model.id));
     }
 
     get gridMap (): string[][] {
-      return this.expandedId
-      ? [[this.expandedId]]
-      : [
-          ['model', 'div1', 'parameters', 'div2', 'variables'],
-        ];
+      const gridMap: string[][] = [];
+
+      this.selectedModels.forEach((model, index) => {
+        if (this.expandedId) {
+          gridMap.push([this.expandedId + '_' + index]);
+        } else if (this.setSelectedModels) {
+          gridMap.push([
+            'model_' + index,
+            'model-parameters-separator',
+            'parameters_' + index,
+            'parameters-variables-separator',
+            'variables_' + index,
+          ]);
+        }
+        // gridMap.push(['row-separator']);
+      });
+
+      return gridMap; // .slice(0, -1); // remove the last 'row-separator';
     }
 
     get gridDimensions (): RGrid.DimensionsInterface {
       return {
-        div1: {
+        'model-parameters-separator': {
           width: '10px',
           widthFixed: true,
         },
-        div2: {
+        'parameters-variables-separator': {
           width: '10px',
           widthFixed: true,
+        },
+        'row-separator': {
+          height: '10px',
+          heightFixed: true,
         },
       };
     }
@@ -209,22 +242,21 @@
     }
 
     initializeSim (): void {
-      if (this.selectedModel && this.getSelectedModelGraphType) {
-        const args = {
-          model: this.selectedModel,
-          selectedModelGraphType: this.getSelectedModelGraphType,
-        };
-        this.initializeParameters(args);
-        this.initializeVariables(args);
+      const selectedModelGraphType = this.getSelectedModelGraphType;
+      if (this.selectedModels && selectedModelGraphType) {
+        this.selectedModels.forEach(model => {
+          this.initializeParameters({ model, selectedModelGraphType });
+          this.initializeVariables({ model, selectedModelGraphType });
+        });
       }
     }
 
     fetchResults (): void {
-      if (this.selectedModel) {
-        this.fetchModelResults({
-          model: this.selectedModel,
-          config: this.runConfig,
-          selectedModelGraphType: this.getSelectedModelGraphType,
+      if (this.selectedModels && this.getSelectedModelGraphType) {
+        const config = this.runConfig;
+        const selectedModelGraphType = this.getSelectedModelGraphType;
+        this.selectedModels.forEach(model => {
+          this.fetchModelResults({ model, config, selectedModelGraphType });
         });
       }
     }

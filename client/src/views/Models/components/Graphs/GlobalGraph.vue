@@ -158,6 +158,7 @@
 .global-graph-container {
   background-color: var(--bg-graphs);
   flex: 1;
+  overflow: hidden;
 }
 
 .global-graph-container::v-deep > svg {

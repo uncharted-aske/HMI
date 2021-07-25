@@ -12,7 +12,7 @@
         </button>
       </aside>
     </settings-bar>
-    <global-graph v-if="model" :data="graph" :highlighted-nodes="editedNodes" @node-dblclick="onNodeClick"/>
+    <global-graph v-if="graph" :data="graph" :highlighted-nodes="editedNodes" @node-dblclick="onNodeClick"/>
   </section>
 </template>
 
@@ -47,16 +47,27 @@
     settingsOpen: boolean = false;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      this.toggleParameter(selected.label);
-      this.toggleVariable(selected.label);
+      this.toggleParameter({ modelId: this.model.id, selector: selected.label });
+      this.toggleVariable({ modelId: this.model.id, selector: selected.label });
+    }
+
+    get parameters (): HMI.SimulationParameter[] {
+      return this.getSimParameters?.[this.model.id] ?? [];
+    }
+
+    get variables (): HMI.SimulationVariable[] {
+      return this.getSimVariables?.[this.model.id] ?? [];
     }
 
     get editedNodes (): Graph.SubgraphNodeInterface[] {
       const highlightedLabels = [
-        ...this.getSimParameters.filter(parameter => parameter.edited).map(parameter => parameter.metadata.name),
-        ...this.getSimVariables.filter(variable => variable.edited).map(variable => variable.metadata.name),
+        ...this.parameters.filter(parameter => parameter.edited).map(parameter => parameter.metadata.name),
+        ...this.variables.filter(variable => variable.edited).map(variable => variable.metadata.name),
       ];
-      return this.graph.nodes.filter(node => highlightedLabels.includes(node.label)).map(node => ({ id: node.id }));
+      const nodes = this.graph?.nodes
+        .filter(node => highlightedLabels.includes(node.label))
+        .map(node => ({ id: node.id }));
+      return nodes ?? [];
     }
 
     get graph (): Graph.GraphInterface {
@@ -69,16 +80,16 @@
 
     get countersData (): HMI.Counter[] {
       const data = [];
-      if (this.getSimParameters.length > 0) {
+      if (this.parameters.length > 0) {
         data.push({
           name: 'Parameters',
-          value: this.getSimParameters.length,
+          value: this.parameters.length,
         });
       }
-      if (this.getSimVariables.length > 0) {
+      if (this.variables.length > 0) {
         data.push({
           name: 'Variables',
-          value: this.getSimVariables.length,
+          value: this.variables.length,
         });
       }
       return data;

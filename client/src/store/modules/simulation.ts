@@ -6,79 +6,105 @@ import * as d3 from 'd3';
 
 type SimulationState = {
   numberOfSavedRuns: number,
-  parameters: HMI.SimulationParameter[],
-  variables: HMI.SimulationVariable[],
+  models: {
+    [modelId: number]: {
+      parameters: HMI.SimulationParameter[],
+      variables: HMI.SimulationVariable[],
+    }
+  },
 }
 
 const state: SimulationState = {
   numberOfSavedRuns: 0,
-  parameters: [],
-  variables: [],
+  models: {},
 };
 
 const currentNumberOfRuns = (state: SimulationState): number => {
-  return state.parameters?.[0]?.values.length ?? 0;
+  return state.models[0]?.parameters?.[0]?.values.length ?? 0;
 };
 
-const getParameter = (state: SimulationState, selector: string): HMI.SimulationParameter => {
-  return state.parameters.find(parameter => {
+const getParameter = (state: SimulationState, modelId: number, selector: string): HMI.SimulationParameter => {
+  return state.models[modelId]?.parameters.find(parameter => {
     return [parameter.uid, parameter.metadata.name].includes(selector);
   });
 };
 
-const getVariable = (state: SimulationState, selector: string): HMI.SimulationVariable => {
-  return state.variables.find(variable => {
+const getVariable = (state: SimulationState, modelId: number, selector: string): HMI.SimulationVariable => {
+  return state.models[modelId]?.variables.find(variable => {
     return [variable.uid, variable.metadata.name].includes(selector);
   });
 };
 
 const getters: GetterTree<any, HMI.SimulationParameter[]> = {
-  getSimParameters (state: SimulationState): HMI.SimulationParameter[] {
-    return state.parameters;
+  getSimModels (state: SimulationState) { return state.models; },
+
+  getSimParameters (state: SimulationState): { [modelId: number]: HMI.SimulationParameter[] } {
+    const parameters = {};
+    for (const modelId in state.models) {
+      parameters[modelId] = state.models[modelId]?.parameters ?? [];
+    }
+    return parameters;
   },
 
   getRunsCount (state: SimulationState): number {
     return currentNumberOfRuns(state);
   },
 
-  getSimParameterArray (state: SimulationState): any {
-    const RunsCount = currentNumberOfRuns(state);
-    const output = new Array(RunsCount);
-    for (let i = 0; i < RunsCount; i++) {
-      output[i] = state.parameters.reduce((obj, parameter) => {
-        obj[parameter.uid] = parameter.values[i];
-        return obj;
-      }, {});
+  getSimParameterArray (state: SimulationState): { [modelId: number]: any } {
+    const simParameterArray = {};
+    for (const modelId in state.models) {
+      const RunsCount = currentNumberOfRuns(state);
+      const output = new Array(RunsCount);
+      for (let i = 0; i < RunsCount; i++) {
+        output[i] = state.models[modelId]?.parameters.reduce((obj, parameter) => {
+          obj[parameter.uid] = parameter.values[i];
+          return obj;
+        }, {});
+      }
+      simParameterArray[modelId] = output;
     }
-    return output;
+    return simParameterArray;
   },
 
-  getSimVariables (state: SimulationState): HMI.SimulationVariable[] {
-    return state.variables;
+  getSimVariables (state: SimulationState): { [modelId: number]: HMI.SimulationVariable[] } {
+    const variables = {};
+    for (const modelId in state.models) {
+      variables[modelId] = state.models[modelId]?.variables ?? [];
+    }
+    return variables;
   },
 
   getVariablesRunsCount (state): number {
-    return state.variables?.[0]?.values?.length;
+    return state.models[0]?.variables?.[0]?.values?.length ?? 0;
   },
 };
 
 const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
-  setSimParameters ({ state, commit }, args: { parameters: HMI.SimulationParameter[], count: number }): void {
-    commit('setSimParameters', args.parameters);
+  setSimParameters ({ state, commit }, args: {
+    count: number,
+    modelId: number,
+    parameters: HMI.SimulationParameter[],
+  }): void {
+    const { modelId, parameters } = args;
+    commit('setSimParameters', { modelId, parameters });
     commit('setNumberOfSavedRuns', args.count ?? currentNumberOfRuns(state));
   },
 
-  setSimParameterValue ({ state, commit }, args: { uid: string, value: number }): void {
+  setSimParameterValue ({ state, commit }, args: {
+    modelId: number,
+    uid: string,
+    value: number,
+  }): void {
     let parameters = [] as HMI.SimulationParameter[];
 
     if (currentNumberOfRuns(state) < state.numberOfSavedRuns) {
-      parameters = state.parameters.map(parameter => {
+      parameters = state.models[args.modelId]?.parameters.map(parameter => {
         const currentParamsCount = parameter.values.length;
         parameter.values[currentParamsCount] = parameter.values[currentParamsCount - 1];
         return parameter;
       });
     } else {
-      parameters = state.parameters.map(parameter => {
+      parameters = state.models[args.modelId]?.parameters.map(parameter => {
         if (parameter.uid === args.uid) {
           parameter.values[parameter.values.length - 1] = args.value;
         }
@@ -86,7 +112,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
       });
     }
 
-    commit('setSimParameters', parameters);
+    commit('setSimParameters', { modelId: args.modelId, parameters });
   },
 
   incrNumberOfSavedRuns ({ state, commit }): void {
@@ -94,15 +120,16 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
   },
 
   async fetchModelResults ({ getters, commit }, { model, config, aggregator, selectedModelGraphType }): Promise<void> {
-    commit('resetVariablesValues');
+    commit('resetVariablesValues', model.id);
 
     // For each run of the model, fetch the results...
-    for (const param of getters.getSimParameterArray) {
+    for (const param of getters.getSimParameterArray?.[model.id]) {
       const response = await getModelResult(model, param, config, selectedModelGraphType);
       // The reponse.values is a list of variables results with the variable uid as key.
       // Each index of the result list correspond to the response.times list.
       for (const uid in response[0].values) {
         const args = {
+          modelId: model.id,
           uid: uid,
           values: response[0].values[uid].map((value, index) => ({ x: response[0].times[index], y: value })),
         };
@@ -122,7 +149,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
       hidden: false,
       values: [donuParameter.default],
     }));
-    commit('setSimParameters', parameters);
+    commit('setSimParameters', { modelId: args.model.id, parameters });
     commit('setNumberOfSavedRuns', 1);
   },
 
@@ -135,102 +162,131 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
       hidden: false,
       values: [],
     }));
-    commit('setSimVariables', variables);
+    commit('setSimVariables', { modelId: args.model.id, variables });
   },
 
-  hideAllParameters ({ commit }): void { commit('setAllParametersVisibility', false); },
-  showAllParameters ({ commit }): void { commit('setAllParametersVisibility', true); },
-  hideAllVariables ({ commit }): void { commit('setAllVariablesVisibility', false); },
-  showAllVariables ({ commit }): void { commit('setAllVariablesVisibility', true); },
-
-  hideParameter ({ commit }, selector: string): void {
-    const parameter = getParameter(state, selector);
-    if (parameter) {
-      const args = { uid: parameter.uid, visibility: false };
-      commit('setParameterVisibility', args);
-    }
+  hideAllParameters ({ commit }, modelId: number): void {
+    commit('setAllParametersVisibility', { modelId, visibility: false });
   },
-  showParameter ({ commit }, selector: string): void {
-    const parameter = getParameter(state, selector);
-    if (parameter) {
-      const args = { uid: parameter.uid, visibility: true };
-      commit('setParameterVisibility', args);
-    }
-  },
-  toggleParameter ({ state, commit }, selector: string): void {
-    const parameter = getParameter(state, selector);
-    if (parameter) {
-      const args = { uid: parameter.uid, visibility: !parameter.edited };
-      commit('setParameterVisibility', args);
-    }
+  showAllParameters ({ commit }, modelId: number): void {
+    commit('setAllParametersVisibility', { modelId, visibility: true });
   },
 
-  hideVariable ({ commit }, selector: string): void {
-    const variable = getVariable(state, selector);
-    if (variable) {
-      const args = { uid: variable.uid, visibility: false };
-      commit('setVariableVisibility', args);
+  hideAllVariables ({ commit }, modelId: number): void {
+    commit('setAllVariablesVisibility', { modelId, visibility: false });
+  },
+  showAllVariables ({ commit }, modelId: number): void {
+    commit('setAllVariablesVisibility', { modelId, visibility: true });
+  },
+
+  hideParameter ({ commit }, args: { modelId: number, selector: string }): void {
+    const parameter = getParameter(state, args.modelId, args.selector);
+    if (parameter) {
+      commit('setParameterVisibility', { modelId: args.modelId, uid: parameter.uid, visibility: false });
     }
   },
-  showVariable ({ commit }, selector: string): void {
-    const variable = getVariable(state, selector);
-    if (variable) {
-      const args = { uid: variable.uid, visibility: true };
-      commit('setVariableVisibility', args);
+  showParameter ({ commit }, args: { modelId: number, selector: string }): void {
+    const parameter = getParameter(state, args.modelId, args.selector);
+    if (parameter) {
+      commit('setParameterVisibility', { modelId: args.modelId, uid: parameter.uid, visibility: true });
     }
   },
-  toggleVariable ({ state, commit }, selector: string): void {
-    const variable = getVariable(state, selector);
+  toggleParameter ({ state, commit }, args: { modelId: number, selector: string }): void {
+    const parameter = getParameter(state, args.modelId, args.selector);
+    if (parameter) {
+      commit('setParameterVisibility', { modelId: args.modelId, uid: parameter.uid, visibility: !parameter.edited });
+    }
+  },
+
+  hideVariable ({ commit }, args: { modelId: number, selector: string }): void {
+    const variable = getVariable(state, args.modelId, args.selector);
     if (variable) {
-      const args = { uid: variable.uid, visibility: !variable.edited };
-      commit('setVariableVisibility', args);
+      commit('setVariableVisibility', { modelId: args.modelId, uid: variable.uid, visibility: false });
+    }
+  },
+  showVariable ({ commit }, args: { modelId: number, selector: string }): void {
+    const variable = getVariable(state, args.modelId, args.selector);
+    if (variable) {
+      commit('setVariableVisibility', { modelId: args.modelId, uid: variable.uid, visibility: true });
+    }
+  },
+  toggleVariable ({ state, commit }, args: { modelId: number, selector: string }): void {
+    const variable = getVariable(state, args.modelId, args.selector);
+    if (variable) {
+      commit('setVariableVisibility', { modelId: args.modelId, uid: variable.uid, visibility: !variable.edited });
     }
   },
 
   resetSim ({ commit }): void {
     commit('setNumberOfSavedRuns', 0);
-    commit('setSimParameters', []);
-    commit('setSimVariables', []);
-    commit('setVariablesAggregate');
+    commit('setModels', []);
   },
 };
 
 const mutations: MutationTree<SimulationState> = {
-  setSimParameters (state, parameters: HMI.SimulationParameter[]): void {
-    state.parameters = parameters;
+  setModels (state: SimulationState, models): void {
+    state.models = models ?? [];
   },
 
-  setSimVariables (state, variables: HMI.SimulationVariable[]): void {
-    state.variables = variables;
+  setSimParameters (state: SimulationState, args : {
+    modelId: number,
+    parameters: HMI.SimulationParameter[],
+  }): void {
+    if (!state.models[args.modelId]) {
+      state.models[args.modelId] = { parameters: [], variables: [] };
+    }
+    state.models[args.modelId].parameters = args.parameters;
   },
 
-  updateParameterValues (state, args: { selector: string, value: number }): void {
-    const parameter = getParameter(state, args.selector);
+  setSimVariables (state: SimulationState, args : {
+    modelId: number,
+    variables: HMI.SimulationVariable[],
+  }): void {
+    if (!state.models[args.modelId]) {
+      state.models[args.modelId] = { parameters: [], variables: [] };
+    }
+    state.models[args.modelId].variables = args.variables;
+  },
+
+  updateParameterValues (state: SimulationState, args: {
+    modelId: number,
+    selector: string,
+    value: number,
+  }): void {
+    const parameter = getParameter(state, args.modelId, args.selector);
     if (parameter) {
       parameter.values.push(args.value);
     }
   },
 
-  updateVariableValues (state, args: { uid: string, values: HMI.SimulationVariableValues }): void {
-    const variable = getVariable(state, args.uid);
+  updateVariableValues (state: SimulationState, args: {
+    modelId: number,
+    uid: string,
+    values: HMI.SimulationVariableValues,
+  }): void {
+    const variable = getVariable(state, args.modelId, args.uid);
     if (variable) {
       variable.values.push(args.values);
     }
   },
 
-  resetVariablesValues (state): void {
-    state.variables.forEach(variable => {
+  resetVariablesValues (state: SimulationState, modelId: number): void {
+    state.models[modelId]?.variables.forEach(variable => {
       variable.values = [];
       variable.aggregate = null;
     });
   },
 
-  setNumberOfSavedRuns (state, count: number): void {
+  setNumberOfSavedRuns (state: SimulationState, count: number): void {
     state.numberOfSavedRuns = count;
   },
 
-  setVariablesAggregate (state, aggregator: Function = d3.mean): void { /* eslint-disable-line @typescript-eslint/ban-types */
-    state.variables.forEach(variable => {
+  setVariablesAggregate (state: SimulationState, args: {
+    aggregator: Function, /* eslint-disable-line @typescript-eslint/ban-types */
+    modelId: number,
+  }): void {
+    if (!args.aggregator) args.aggregator = d3.mean;
+    state.models[args.modelId]?.variables.forEach(variable => {
       // No saved runs, no need to aggregate
       if (state.numberOfSavedRuns < 3) {
         variable.aggregate = null;
@@ -257,7 +313,7 @@ const mutations: MutationTree<SimulationState> = {
       for (const x in valuesOfAllRunsPerStep) {
         aggregate.push({
           x: Number(x),
-          y: aggregator(valuesOfAllRunsPerStep[x]),
+          y: args.aggregator(valuesOfAllRunsPerStep[x]),
         });
       }
 
@@ -266,22 +322,36 @@ const mutations: MutationTree<SimulationState> = {
     });
   },
 
-  setParameterVisibility (state, args: { uid: string, visibility: boolean }): void {
-    const parameter = state.parameters.find(parameter => parameter.uid === args.uid);
+  setParameterVisibility (state: SimulationState, args: {
+    modelId: number,
+    uid: string,
+    visibility: boolean,
+  }): void {
+    const parameter = state.models[args.modelId]?.parameters.find(parameter => parameter.uid === args.uid);
     parameter.edited = args.visibility;
   },
 
-  setAllParametersVisibility (state, visibility: boolean): void {
-    state.parameters.forEach(parameter => { parameter.edited = visibility; });
+  setAllParametersVisibility (state: SimulationState, args: {
+    modelId: number,
+    visibility: boolean,
+  }): void {
+    state.models[args.modelId]?.parameters.forEach(parameter => { parameter.edited = args.visibility; });
   },
 
-  setVariableVisibility (state, args: { uid: string, visibility: boolean }): void {
-    const variable = state.variables.find(variable => variable.uid === args.uid);
+  setVariableVisibility (state: SimulationState, args: {
+    modelId: number,
+    uid: string,
+    visibility: boolean,
+  }): void {
+    const variable = state.models[args.modelId]?.variables.find(variable => variable.uid === args.uid);
     variable.edited = args.visibility;
   },
 
-  setAllVariablesVisibility (state, visibility: boolean): void {
-    state.variables.forEach(variable => { variable.edited = visibility; });
+  setAllVariablesVisibility (state: SimulationState, args: {
+    modelId: number,
+    visibility: boolean,
+  }): void {
+    state.models[args.modelId]?.variables.forEach(variable => { variable.edited = args.visibility; });
   },
 };
 

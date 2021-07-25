@@ -14,7 +14,7 @@
             title="Add all Variables"
             type="button"
             :disabled="allVariablesAreDisplayed"
-            @click="showAllVariables"
+            @click="showAllVariables(modelId)"
           >
             <font-awesome-icon :icon="['fas', 'plus']" />
           </button>
@@ -23,7 +23,7 @@
             title="Remove all Vsariables"
             type="button"
             :disabled="noDisplayedVariables"
-            @click="hideAllVariables"
+            @click="hideAllVariables(modelId)"
           >
             <font-awesome-icon :icon="['fas', 'ban']" />
           </button>
@@ -63,7 +63,7 @@
               class="btn btn-secondary btn-sm"
               title="Remove Variable"
               type="button"
-              @click="hideVariable(plot.uid)"
+              @click="hideVariable({ modelId, selector: plot.uid })"
             >
               <font-awesome-icon :icon="['fas', 'ban']" />
             </button>
@@ -142,6 +142,7 @@
   @Component({ components })
   export default class VariablesPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
+    @Prop({ default: null }) modelId: number;
     @InjectReactive() resized!: boolean;
 
     @Getter getSimVariables;
@@ -151,7 +152,8 @@
     @Action showAllVariables;
 
     get variables (): HMI.SimulationVariable[] {
-      const variables = _.cloneDeep(this.getSimVariables);
+      let variables = this.getSimVariables?.[this.modelId] ?? [];
+      variables = _.cloneDeep(variables);
       variables.map(variable => {
         variable.styles = variable.styles || [];
         for (let i = 0; i < variable.values.length; i++) {
