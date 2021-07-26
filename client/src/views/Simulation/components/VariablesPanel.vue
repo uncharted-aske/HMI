@@ -40,23 +40,22 @@
 
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
-        <div
-          v-if="!getVariablesRunsCount"
-          class="alert alert-info m-3" role="alert"
-        >
+
+        <div v-if="!getVariablesRunsCount" class="alert alert-info m-3">
           Click Run to get variables output.
         </div>
         <div v-else-if="noDisplayedVariables" class="alert alert-info m-3">
           Use the model visualization on the left to add/remove variables.
         </div>
+
         <multi-line-plot
           v-else
           v-for="(plot, index) in displayedVariables"
-          :key="index"
-          :title="plot.metadata.name"
-          :data="plot.values"
-          :styles="plot.styles"
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
+          :data="plot.values"
+          :key="index"
+          :styles="plot.styles"
+          :title="plot.metadata.name"
         >
           <aside class="btn-group">
             <button
@@ -129,7 +128,6 @@
     if (modifyingStyle) {
       return _.merge(_.cloneDeep(DEFAULT_STYLE), modifyingStyle);
     }
-
     return DEFAULT_STYLE;
   };
 
@@ -152,7 +150,7 @@
     @Action showAllVariables;
 
     get variables (): HMI.SimulationVariable[] {
-      let variables = this.getSimModel(this.modelId)?.variables ?? [];
+      let variables = this.getSimModel(this.modelId).variables;
       variables = _.cloneDeep(variables);
       variables.map(variable => {
         variable.styles = variable.styles || [];
