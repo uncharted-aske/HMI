@@ -39,8 +39,7 @@
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
 
-    @Getter getSimParameters;
-    @Getter getSimVariables;
+    @Getter getSimModel;
     @Action toggleParameter;
     @Action toggleVariable;
 
@@ -52,17 +51,21 @@
     }
 
     get parameters (): HMI.SimulationParameter[] {
-      return this.getSimParameters?.[this.model.id] ?? [];
+      return this.getSimModel(this.model.id)?.parameters ?? [];
     }
 
     get variables (): HMI.SimulationVariable[] {
-      return this.getSimVariables?.[this.model.id] ?? [];
+      return this.getSimModel(this.model.id)?.variables ?? [];
     }
 
     get editedNodes (): Graph.SubgraphNodeInterface[] {
       const highlightedLabels = [
-        ...this.parameters.filter(parameter => parameter.edited).map(parameter => parameter.metadata.name),
-        ...this.variables.filter(variable => variable.edited).map(variable => variable.metadata.name),
+        ...this.parameters
+            .filter(parameter => parameter.edited)
+            .map(parameter => parameter.metadata.name),
+        ...this.variables
+            .filter(variable => variable.edited)
+            .map(variable => variable.metadata.name),
       ];
       const nodes = this.graph?.nodes
         .filter(node => highlightedLabels.includes(node.label))

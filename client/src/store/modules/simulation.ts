@@ -4,27 +4,16 @@ import * as Model from '@/types/typesModel';
 import { getModelParameters, getModelResult, getModelVariables } from '@/services/DonuService';
 import * as d3 from 'd3';
 
-type SimulationModel = {
-  id: number,
-  parameters: HMI.SimulationParameter[],
-  variables: HMI.SimulationVariable[],
-}
-
-type SimulationState = {
-  numberOfSavedRuns: number,
-  models: SimulationModel[],
-}
-
-const state: SimulationState = {
+const state: HMI.SimulationState = {
   numberOfSavedRuns: 0,
   models: [],
 };
 
-const currentNumberOfRuns = (state: SimulationState): number => {
+const currentNumberOfRuns = (state: HMI.SimulationState): number => {
   return state.models[0]?.parameters?.[0]?.values.length ?? 0;
 };
 
-const getModel = (state: SimulationState, modelId: number): SimulationModel => {
+const getModel = (state: HMI.SimulationState, modelId: number): HMI.SimulationModel => {
   let model = state.models.find(model => model.id === modelId);
   if (!model) {
     model = { id: modelId, parameters: [], variables: [] };
@@ -33,38 +22,30 @@ const getModel = (state: SimulationState, modelId: number): SimulationModel => {
   return model;
 };
 
-const getParameter = (state: SimulationState, modelId: number, selector: string): HMI.SimulationParameter => {
+const getParameter = (state: HMI.SimulationState, modelId: number, selector: string): HMI.SimulationParameter => {
   return getModel(state, modelId)?.parameters.find(parameter => {
     return [parameter.uid, parameter.metadata.name].includes(selector);
   });
 };
 
-const getVariable = (state: SimulationState, modelId: number, selector: string): HMI.SimulationVariable => {
+const getVariable = (state: HMI.SimulationState, modelId: number, selector: string): HMI.SimulationVariable => {
   return getModel(state, modelId)?.variables.find(variable => {
     return [variable.uid, variable.metadata.name].includes(selector);
   });
 };
 
 const getters: GetterTree<any, HMI.SimulationParameter[]> = {
-  getSimModels (state: SimulationState) { return state.models; },
+  getSimModels (state: HMI.SimulationState) { return state.models; },
 
-  getSimModel (state: SimulationState) {
-    return (modelId: number): SimulationModel => getModel(state, modelId);
+  getSimModel (state: HMI.SimulationState) {
+    return (modelId: number): HMI.SimulationModel => getModel(state, modelId);
   },
 
-  getSimParameters (state: SimulationState): { [modelId: number]: HMI.SimulationParameter[] } {
-    const parameters = {};
-    for (const modelId in state.models) {
-      parameters[modelId] = state.models[modelId]?.parameters ?? [];
-    }
-    return parameters;
-  },
-
-  getRunsCount (state: SimulationState): number {
+  getRunsCount (state: HMI.SimulationState): number {
     return currentNumberOfRuns(state);
   },
 
-  getSimParameterArray (state: SimulationState): { [modelId: number]: any } {
+  getSimParameterArray (state: HMI.SimulationState): { [modelId: number]: any } {
     const simParameterArray = {};
     for (const modelId in state.models) {
       const RunsCount = currentNumberOfRuns(state);
@@ -80,20 +61,12 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
     return simParameterArray;
   },
 
-  getSimVariables (state: SimulationState): { [modelId: number]: HMI.SimulationVariable[] } {
-    const variables = {};
-    for (const modelId in state.models) {
-      variables[modelId] = state.models[modelId]?.variables ?? [];
-    }
-    return variables;
-  },
-
   getVariablesRunsCount (state): number {
     return state.models[0]?.variables?.[0]?.values?.length ?? 0;
   },
 };
 
-const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
+const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
   setSimParameters ({ state, commit }, args: {
     count: number,
     modelId: number,
@@ -237,26 +210,26 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
   },
 };
 
-const mutations: MutationTree<SimulationState> = {
-  setModels (state: SimulationState, models): void {
+const mutations: MutationTree<HMI.SimulationState> = {
+  setModels (state: HMI.SimulationState, models): void {
     state.models = models ?? [];
   },
 
-  setSimParameters (state: SimulationState, args : {
+  setSimParameters (state: HMI.SimulationState, args : {
     modelId: number,
     parameters: HMI.SimulationParameter[],
   }): void {
     getModel(state, args.modelId).parameters = args.parameters;
   },
 
-  setSimVariables (state: SimulationState, args : {
+  setSimVariables (state: HMI.SimulationState, args : {
     modelId: number,
     variables: HMI.SimulationVariable[],
   }): void {
     getModel(state, args.modelId).variables = args.variables;
   },
 
-  updateParameterValues (state: SimulationState, args: {
+  updateParameterValues (state: HMI.SimulationState, args: {
     modelId: number,
     selector: string,
     value: number,
@@ -267,7 +240,7 @@ const mutations: MutationTree<SimulationState> = {
     }
   },
 
-  updateVariableValues (state: SimulationState, args: {
+  updateVariableValues (state: HMI.SimulationState, args: {
     modelId: number,
     uid: string,
     values: HMI.SimulationVariableValues,
@@ -278,23 +251,23 @@ const mutations: MutationTree<SimulationState> = {
     }
   },
 
-  resetVariablesValues (state: SimulationState, modelId: number): void {
-    state.models[modelId]?.variables.forEach(variable => {
+  resetVariablesValues (state: HMI.SimulationState, modelId: number): void {
+    getModel(state, modelId).variables.forEach(variable => {
       variable.values = [];
       variable.aggregate = null;
     });
   },
 
-  setNumberOfSavedRuns (state: SimulationState, count: number): void {
+  setNumberOfSavedRuns (state: HMI.SimulationState, count: number): void {
     state.numberOfSavedRuns = count;
   },
 
-  setVariablesAggregate (state: SimulationState, args: {
+  setVariablesAggregate (state: HMI.SimulationState, args: {
     aggregator: Function, /* eslint-disable-line @typescript-eslint/ban-types */
     modelId: number,
   }): void {
     if (!args.aggregator) args.aggregator = d3.mean;
-    state.models[args.modelId]?.variables.forEach(variable => {
+    getModel(state, args.modelId).variables.forEach(variable => {
       // No saved runs, no need to aggregate
       if (state.numberOfSavedRuns < 3) {
         variable.aggregate = null;
@@ -330,36 +303,40 @@ const mutations: MutationTree<SimulationState> = {
     });
   },
 
-  setParameterVisibility (state: SimulationState, args: {
+  setParameterVisibility (state: HMI.SimulationState, args: {
     modelId: number,
     uid: string,
     visibility: boolean,
   }): void {
-    const parameter = state.models[args.modelId]?.parameters.find(parameter => parameter.uid === args.uid);
+    const parameter = getParameter(state, args.modelId, args.uid);
     parameter.edited = args.visibility;
   },
 
-  setAllParametersVisibility (state: SimulationState, args: {
+  setAllParametersVisibility (state: HMI.SimulationState, args: {
     modelId: number,
     visibility: boolean,
   }): void {
-    state.models[args.modelId]?.parameters.forEach(parameter => { parameter.edited = args.visibility; });
+    getModel(state, args.modelId).parameters.forEach(parameter => {
+      parameter.edited = args.visibility;
+    });
   },
 
-  setVariableVisibility (state: SimulationState, args: {
+  setVariableVisibility (state: HMI.SimulationState, args: {
     modelId: number,
     uid: string,
     visibility: boolean,
   }): void {
-    const variable = state.models[args.modelId]?.variables.find(variable => variable.uid === args.uid);
+    const variable = getVariable(state, args.modelId, args.uid);
     variable.edited = args.visibility;
   },
 
-  setAllVariablesVisibility (state: SimulationState, args: {
+  setAllVariablesVisibility (state: HMI.SimulationState, args: {
     modelId: number,
     visibility: boolean,
   }): void {
-    state.models[args.modelId]?.variables.forEach(variable => { variable.edited = args.visibility; });
+    getModel(state, args.modelId).variables.forEach(variable => {
+      variable.edited = args.visibility;
+    });
   },
 };
 

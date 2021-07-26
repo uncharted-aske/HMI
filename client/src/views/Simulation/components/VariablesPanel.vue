@@ -145,14 +145,14 @@
     @Prop({ default: null }) modelId: number;
     @InjectReactive() resized!: boolean;
 
-    @Getter getSimVariables;
+    @Getter getSimModel;
     @Getter getVariablesRunsCount;
     @Action hideVariable;
     @Action hideAllVariables;
     @Action showAllVariables;
 
     get variables (): HMI.SimulationVariable[] {
-      let variables = this.getSimVariables?.[this.modelId] ?? [];
+      let variables = this.getSimModel(this.modelId)?.variables ?? [];
       variables = _.cloneDeep(variables);
       variables.map(variable => {
         variable.styles = variable.styles || [];

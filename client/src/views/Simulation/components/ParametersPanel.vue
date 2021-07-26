@@ -127,7 +127,6 @@
     @InjectReactive() isResizing!: boolean;
 
     @Getter getSimModel;
-    @Getter getSimParameters;
     @Getter getSimParameterArray;
     @Action setSimParameterValue;
     @Action hideParameter;
