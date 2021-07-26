@@ -13,24 +13,6 @@
         :data="countersData"
       />
       <aside slot="right">
-        <!-- <div class="btn-group" title="Show/Hide Parameters">
-          <button
-            class="btn btn-secondary"
-            title="Show all parameters"
-            type="button"
-            @click="onShowAllParameters"
-          >
-            <font-awesome-icon :icon="['fas', 'eye']" />
-          </button>
-          <button
-            class="btn btn-secondary"
-            title="Hide all parameters"
-            type="button"
-            @click="onHideAllParameters"
-          >
-            <font-awesome-icon :icon="['fas', 'eye-slash']" />
-          </button>
-        </div> -->
         <div class="btn-group" title="Add/Remove All Parameters & Variables">
           <button
             class="btn btn-secondary"
@@ -75,17 +57,6 @@
           <h4 :title="parameter.metadata.Description">{{ parameter.metadata.name }}</h4>
           <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.uid, e)" />
           <aside class="btn-group">
-            <!-- <button
-              class="btn btn-secondary btn-sm"
-              title="(parameter.hidden ? 'Show' : 'Hide' + ' parameter')"
-              type="button"
-              @click="parameter.hidden = !parameter.hidden"
-            >
-              <font-awesome-icon
-                class="fa-w-20"
-                :icon="['fas', (parameter.hidden ? 'eye' : 'eye-slash')]"
-              />
-            </button> -->
             <button
               class="btn btn-secondary btn-sm"
               title="Remove parameter from editable panel"
@@ -196,8 +167,14 @@
       this.setSimParameterValue({ modelId: this.modelId, uid, value });
     }
 
+    /** Return the CSS selector to target this model parameters graph. */
+    get graphSelector (): string {
+      // the ID `parameters_X` is from the Simulation.vue.
+      return `#parameters_${this.modelId} .parameters-graph svg`;
+    }
+
     clearGraph (): void {
-      d3.select('.parameters-graph svg').selectAll('*').remove();
+      d3.select(this.graphSelector).selectAll('*').remove();
     }
 
     drawGraph (): void {
@@ -210,7 +187,7 @@
 
       // Select the graph and size it
       this.clearGraph();
-      const graph = d3.select('.parameters-graph svg');
+      const graph = d3.select(this.graphSelector);
       svgUtil.createChart(graph, this.graphWidth(), this.graphHeight());
 
       // Dimensions
@@ -221,7 +198,7 @@
 
       // X & Y Scales
       const xScale = param => {
-        const minMax = svgUtil.extendRoundUpToPow10(runs, d => d[param]) as Iterable<d3.NumberValue>;
+        const minMax = svgUtil.extendRoundUpToPow10(runs, d => d[param] ?? 0) as Iterable<d3.NumberValue>;
         return {
           min: minMax[0],
           max: minMax[1],
@@ -284,14 +261,6 @@
           });
     }
 
-    onHideAllParameters (): void {
-      this.displayedParameters.forEach(parameter => { parameter.hidden = true; });
-    }
-
-    onShowAllParameters (): void {
-      this.displayedParameters.forEach(parameter => { parameter.hidden = false; });
-    }
-
     onAddAllParameters (): void {
       this.showAllParameters(this.modelId);
       this.showAllVariables(this.modelId);
@@ -314,6 +283,7 @@
   .parameters {
     background-color: var(--bg-graphs);
     flex-grow: 1;
+    overflow-y: scroll;
     position: relative;
   }
 
@@ -343,6 +313,11 @@
     grid-template-rows: 1fr 2em 1fr;
     height: var(--parameter-height);
     padding: var(--padding);
+  }
+
+  .parameter:last-of-type {
+    /* Small spacing to have some empty space at the bottom of the scroll bar. */
+    margin-bottom: 2em;
   }
 
   .parameter h4 {
@@ -391,8 +366,8 @@
     font-size: 10px;
     stroke: var(--text-color-light);
   }
-  .parameters-graph .axis text:first-of-type { translate: -1em .3em; }
-  .parameters-graph .axis text:last-of-type { translate: .5em .3em; }
+  .parameters-graph .axis text:first-of-type { translate: -1.5em .3em; }
+  .parameters-graph .axis text:last-of-type { translate: .75em .3em; }
 
   .parameters-graph .run {
     fill: none;

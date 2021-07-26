@@ -58,11 +58,11 @@
     }
 
     get parameters (): HMI.SimulationParameter[] {
-      return this.getSimModel(this.model.id)?.parameters ?? [];
+      return this.getSimModel(this.model.id).parameters;
     }
 
     get variables (): HMI.SimulationVariable[] {
-      return this.getSimModel(this.model.id)?.variables ?? [];
+      return this.getSimModel(this.model.id).variables;
     }
 
     get editedNodes (): Graph.SubgraphNodeInterface[] {
