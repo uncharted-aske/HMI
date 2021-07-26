@@ -155,15 +155,17 @@
      *  needs to trigger a refresh of the results. */
     get triggerFetchResults (): string {
       const { end, start, step } = this.runConfig;
-      const allParameters = [];
+      const currentRunAllParametersValues = [];
       this.getSelectedModelIds.map(modelId => {
         const modelParameters = this.getSimParameterArray(Number(modelId));
-        modelParameters.foreach(allParameters.push);
+        // Just check the current run change of values
+        if (modelParameters[0]) {
+          currentRunAllParametersValues.push(...Object.values(modelParameters[0]));
+        }
       });
-      console.table(allParameters);
       const watchObject = {
         config: { end, start, step },
-        parameters: allParameters,
+        parameters: currentRunAllParametersValues.filter(Boolean),
       };
       return JSON.stringify(watchObject);
     }
