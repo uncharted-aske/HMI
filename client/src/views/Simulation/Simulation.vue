@@ -156,11 +156,11 @@
     get triggerFetchResults (): string {
       const { end, start, step } = this.runConfig;
       const allParameters = [];
-      // this.getSelectedModelIds.map(modelId => {
-      //   const modelParameters = this.getSimParameterArray?.[Number(modelId)] ?? [];
-      //   modelParameters.foreach(allParameters.push);
-      // });
-      // console.table(allParameters);
+      this.getSelectedModelIds.map(modelId => {
+        const modelParameters = this.getSimParameterArray(Number(modelId));
+        modelParameters.foreach(allParameters.push);
+      });
+      console.table(allParameters);
       const watchObject = {
         config: { end, start, step },
         parameters: allParameters,

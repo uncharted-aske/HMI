@@ -45,20 +45,19 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
     return currentNumberOfRuns(state);
   },
 
-  getSimParameterArray (state: HMI.SimulationState): { [modelId: number]: any } {
-    const simParameterArray = {};
-    for (const modelId in state.models) {
+  getSimParameterArray (state: HMI.SimulationState) {
+    return (modelId: number): any => {
+      const parameters = getModel(state, modelId).parameters;
       const RunsCount = currentNumberOfRuns(state);
       const output = new Array(RunsCount);
       for (let i = 0; i < RunsCount; i++) {
-        output[i] = state.models[modelId]?.parameters.reduce((obj, parameter) => {
+        output[i] = parameters.reduce((obj, parameter) => {
           obj[parameter.uid] = parameter.values[i];
           return obj;
         }, {});
       }
-      simParameterArray[modelId] = output;
-    }
-    return simParameterArray;
+      return output;
+    };
   },
 
   getVariablesRunsCount (state): number {
@@ -166,7 +165,7 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     commit('setAllVariablesVisibility', { modelId, visibility: true });
   },
 
-  hideParameter ({ commit, getters }, args: { modelId: number, selector: string }): void {
+  hideParameter ({ commit }, args: { modelId: number, selector: string }): void {
     const parameter = getParameter(state, args.modelId, args.selector);
     if (parameter) {
       commit('setParameterVisibility', { modelId: args.modelId, uid: parameter.uid, visibility: false });

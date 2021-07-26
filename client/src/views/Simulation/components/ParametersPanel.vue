@@ -182,7 +182,7 @@
       const params = this.displayedParameters.map(parameter => parameter.uid);
 
       // List of runs
-      const runs = this.getSimParameterArray?.[this.modelId];
+      const runs = this.getSimParameterArray(this.modelId);
       if (!runs) return;
 
       // Select the graph and size it
