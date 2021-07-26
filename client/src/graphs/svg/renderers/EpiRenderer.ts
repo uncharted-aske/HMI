@@ -198,11 +198,13 @@ export default class EpiRenderer extends SVGRenderer {
 
   highlightNodes (nodesList: SubgraphNodeInterface[]): void {
     const chart = (this as any).chart;
-    chart.selectAll('.node-ui').each(function (d) {
-      const isHighlighted = nodesList.map(node => node.id).includes(d.id);
-      d3.select(this).select('rect')
-        .style('fill', isHighlighted ? Colors.NODES.EDITED : EpiRenderer.calcNodeColor(d));
-    });
+    if (chart) {
+      chart.selectAll('.node-ui').each(function (d) {
+        const isHighlighted = nodesList.map(node => node.id).includes(d.id);
+        d3.select(this).select('rect')
+          .style('fill', isHighlighted ? Colors.NODES.EDITED : EpiRenderer.calcNodeColor(d));
+      });
+    }
   }
 
   clearSelections ():void {

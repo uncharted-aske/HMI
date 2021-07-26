@@ -12,7 +12,13 @@
         </button>
       </aside>
     </settings-bar>
-    <global-graph v-if="graph" :data="graph" :highlighted-nodes="editedNodes" @node-dblclick="onNodeClick"/>
+
+    <global-graph
+      v-if="graph"
+      :data="graph"
+      :highlighted-nodes="editedNodes"
+      @node-dblclick="onNodeClick"
+    />
   </section>
 </template>
 
@@ -40,6 +46,7 @@
     @Prop({ default: null }) model: Model.Model;
 
     @Getter getSimModel;
+    @Getter getSelectedModelGraphType;
     @Action toggleParameter;
     @Action toggleVariable;
 
@@ -59,22 +66,32 @@
     }
 
     get editedNodes (): Graph.SubgraphNodeInterface[] {
-      const highlightedLabels = [
-        ...this.parameters
-            .filter(parameter => parameter.edited)
-            .map(parameter => parameter.metadata.name),
-        ...this.variables
-            .filter(variable => variable.edited)
-            .map(variable => variable.metadata.name),
-      ];
-      const nodes = this.graph?.nodes
-        .filter(node => highlightedLabels.includes(node.label))
-        .map(node => ({ id: node.id }));
-      return nodes ?? [];
+      const nodes = this.graph?.nodes;
+      if (nodes) {
+        const highlightedLabels = [
+          ...this.parameters
+              .filter(parameter => parameter.edited)
+              .map(parameter => parameter.metadata.name),
+          ...this.variables
+              .filter(variable => variable.edited)
+              .map(variable => variable.metadata.name),
+        ];
+
+        if (highlightedLabels.length > 0) {
+          return nodes
+            .filter(node => highlightedLabels.includes(node.label))
+            .map(node => ({ id: node.id }));
+        }
+      }
+      return [];
     }
 
     get graph (): Graph.GraphInterface {
-      return this.model?.modelGraph?.[0]?.graph;
+      // return this.model?.modelGraph?.[0]?.graph;
+      const selectedModelGraph = this.model?.modelGraph.find(graph => {
+        return graph.type === this.getSelectedModelGraphType;
+      });
+      return selectedModelGraph?.graph ?? null;
     }
 
     get modelName (): string {
