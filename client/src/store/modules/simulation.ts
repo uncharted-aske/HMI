@@ -4,39 +4,53 @@ import * as Model from '@/types/typesModel';
 import { getModelParameters, getModelResult, getModelVariables } from '@/services/DonuService';
 import * as d3 from 'd3';
 
+type SimulationModel = {
+  id: number,
+  parameters: HMI.SimulationParameter[],
+  variables: HMI.SimulationVariable[],
+}
+
 type SimulationState = {
   numberOfSavedRuns: number,
-  models: {
-    [modelId: number]: {
-      parameters: HMI.SimulationParameter[],
-      variables: HMI.SimulationVariable[],
-    }
-  },
+  models: SimulationModel[],
 }
 
 const state: SimulationState = {
   numberOfSavedRuns: 0,
-  models: {},
+  models: [],
 };
 
 const currentNumberOfRuns = (state: SimulationState): number => {
   return state.models[0]?.parameters?.[0]?.values.length ?? 0;
 };
 
+const getModel = (state: SimulationState, modelId: number): SimulationModel => {
+  let model = state.models.find(model => model.id === modelId);
+  if (!model) {
+    model = { id: modelId, parameters: [], variables: [] };
+    state.models.push(model);
+  }
+  return model;
+};
+
 const getParameter = (state: SimulationState, modelId: number, selector: string): HMI.SimulationParameter => {
-  return state.models[modelId]?.parameters.find(parameter => {
+  return getModel(state, modelId)?.parameters.find(parameter => {
     return [parameter.uid, parameter.metadata.name].includes(selector);
   });
 };
 
 const getVariable = (state: SimulationState, modelId: number, selector: string): HMI.SimulationVariable => {
-  return state.models[modelId]?.variables.find(variable => {
+  return getModel(state, modelId)?.variables.find(variable => {
     return [variable.uid, variable.metadata.name].includes(selector);
   });
 };
 
 const getters: GetterTree<any, HMI.SimulationParameter[]> = {
   getSimModels (state: SimulationState) { return state.models; },
+
+  getSimModel (state: SimulationState) {
+    return (modelId: number): SimulationModel => getModel(state, modelId);
+  },
 
   getSimParameters (state: SimulationState): { [modelId: number]: HMI.SimulationParameter[] } {
     const parameters = {};
@@ -179,7 +193,7 @@ const actions: ActionTree<SimulationState, HMI.SimulationParameter[]> = {
     commit('setAllVariablesVisibility', { modelId, visibility: true });
   },
 
-  hideParameter ({ commit }, args: { modelId: number, selector: string }): void {
+  hideParameter ({ commit, getters }, args: { modelId: number, selector: string }): void {
     const parameter = getParameter(state, args.modelId, args.selector);
     if (parameter) {
       commit('setParameterVisibility', { modelId: args.modelId, uid: parameter.uid, visibility: false });
@@ -232,20 +246,14 @@ const mutations: MutationTree<SimulationState> = {
     modelId: number,
     parameters: HMI.SimulationParameter[],
   }): void {
-    if (!state.models[args.modelId]) {
-      state.models[args.modelId] = { parameters: [], variables: [] };
-    }
-    state.models[args.modelId].parameters = args.parameters;
+    getModel(state, args.modelId).parameters = args.parameters;
   },
 
   setSimVariables (state: SimulationState, args : {
     modelId: number,
     variables: HMI.SimulationVariable[],
   }): void {
-    if (!state.models[args.modelId]) {
-      state.models[args.modelId] = { parameters: [], variables: [] };
-    }
-    state.models[args.modelId].variables = args.variables;
+    getModel(state, args.modelId).variables = args.variables;
   },
 
   updateParameterValues (state: SimulationState, args: {

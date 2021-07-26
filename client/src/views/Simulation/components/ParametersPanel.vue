@@ -126,7 +126,7 @@
     @InjectReactive() resized!: boolean;
     @InjectReactive() isResizing!: boolean;
 
-    @Getter getSimModels;
+    @Getter getSimModel;
     @Getter getSimParameters;
     @Getter getSimParameterArray;
     @Action setSimParameterValue;
@@ -149,11 +149,7 @@
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
     get parameters (): HMI.SimulationParameter[] {
-      const parameters = this.getSimModels?.[this.modelId]?.parameters ?? [];
-      console.log(this.getSimModels);
-      console.log(this.modelId);
-      console.log(this.getSimModels?.[`${this.modelId}`]);
-      console.log(parameters);
+      const parameters = this.getSimModel(this.modelId)?.parameters ?? [];
       // Order by ASC order
       return _.orderBy(parameters, ['metadata.name'], ['asc']);
     }
