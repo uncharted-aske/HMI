@@ -13,6 +13,14 @@ const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
   }
 };
 
+const callDonuCache = (request: Donu.Request): Promise<Donu.Response> => {
+  try {
+    return postUtilMem(process.env.DONU_ENDPOINT, request);
+  } catch (error) {
+    console.error('[DONU Service] — callDonu', error); // eslint-disable-line no-console
+  }
+};
+
 const getDonuModelSource = async (model: string, type: Donu.Type): Promise<Donu.ModelGraph> => {
   const request: Donu.Request = {
     command: Donu.RequestCommand.GET_MODEL_SOURCE,
@@ -109,7 +117,7 @@ export const getModelParameters = async (model: Model.Model, selectedModelGraphT
       } as Donu.ModelDefinition,
     };
 
-    const response = await postUtilMem(process.env.DONU_ENDPOINT, request);
+    const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       const result = response?.result as Donu.ModelDefinition;
       return result?.parameters ?? null;
@@ -134,7 +142,7 @@ export const getModelVariables = async (model: Model.Model, selectedModelGraphTy
       } as Donu.ModelDefinition,
     };
 
-    const response = await postUtilMem(process.env.DONU_ENDPOINT, request);
+    const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       const result = response?.result as Donu.ModelDefinition;
       return result?.measures ?? null;
@@ -166,7 +174,8 @@ export const getModelResult = async (
       start: config.start,
       step: config.step,
     };
-    const response = await postUtilMem(process.env.DONU_ENDPOINT, request);
+
+    const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       return response?.result as Donu.SimulationResponse ?? null;
     } else {
