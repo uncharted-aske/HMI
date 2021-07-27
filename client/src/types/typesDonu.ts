@@ -23,6 +23,13 @@ enum Type {
   GROMET_PRT = 'gromet-prt',
 }
 
+enum SimulationType {
+  ALGEBRAIC_JULIA = 'aj', // Supports petri net classic models
+  DISCRETE = 'discrete', // Supports discrete models
+  GSL = 'gsl', // Supports petri net classic and place/transition net models
+  AUTOMATES = 'automates', // Supports functional networks
+}
+
 type Metadata = {
   description?: string,
   group?: string,
@@ -86,6 +93,7 @@ type Request = {
   // name?: string;
   start?: number;
   step?: number;
+  'sim-type'?: SimulationType | void,
   // type?: string;
 }
 
@@ -122,4 +130,5 @@ export {
   ModelGraph,
   SimulationResponse,
   Type,
+  SimulationType,
 };
