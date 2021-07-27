@@ -1,17 +1,14 @@
 export abstract class Colors {
-  static readonly SUBGRAPH: string = '#FFA500';
   static readonly HIGHLIGHT: string = '#EBCB8B';
   static readonly STROKE: string = '#81A1C1';
 
   static readonly NODES: Record<string, any> = {
     DEFAULT: '#ECEFF4',
-    AGGREGATE: Colors.HIGHLIGHT,
-    OVERLAPPING: Colors.HIGHLIGHT,
     EDITED: '#D08770',
 
     // Gromet
     CONTAINER: '#2E3440',
-    VARIABLE: '#88C0D0',
+    VARIABLE: '#E75BCD',
   };
 
   // Bio graphs
@@ -30,7 +27,6 @@ export abstract class Colors {
 
   static readonly EDGES: Record<string, any> = {
     DEFAULT: '#c2c7d1',
-    OVERLAPPING: Colors.HIGHLIGHT,
   };
 
   static readonly LABELS: Record<string, any> = {
@@ -44,14 +40,10 @@ export abstract class Colors {
 export abstract class NodeTypes {
   static readonly NODES: Record<string, any> = {
     // GroMEt roles
-    CONTAINER: 'Box',
     VARIABLE: 'variable',
     PARAMETER: 'parameter',
+    INITIAL_CONDITION: 'initial_condition',
     // GroMEt roles
-
-    OVERLAPPING: 'overlapping',
-    ABSTRACTOVERLAPPING: 'AP',
-    NONOVERLAPPING: 'NOAP',
   }
 }
 
@@ -65,10 +57,6 @@ export abstract class EdgeTypes {
     PHOSPORYLATION: 'Phosporylation',
     DEPHOSPORYLATION: 'Dephosporylation',
     COMPLEX: 'Complex',
-
-    OVERLAPPING: 'overlapping',
-    ABSTRACTOVERLAPPING: 'AP',
-    NONOVERLAPPING: 'NOAP',
   }
 
   static readonly CURATION_STATUS: Record<string, any> = {
