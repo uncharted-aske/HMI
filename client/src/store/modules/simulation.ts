@@ -245,13 +245,15 @@ const mutations: MutationTree<HMI.SimulationState> = {
       // a list of {x: step, y: value} for each step.
       const valuesOfAllRunsPerStep = {};
       for (let run = 0; run < state.numberOfSavedRuns; run++) {
-        for (let step = 0; step < variable.values[run].length; step++) {
-          const { x, y } = variable.values[run][step];
+        if (variable.values[run]) {
+          for (let step = 0; step < variable.values[run].length; step++) {
+            const { x, y } = variable.values[run][step];
 
-          if (!valuesOfAllRunsPerStep[x]) {
-            valuesOfAllRunsPerStep[x] = [y];
-          } else {
-            valuesOfAllRunsPerStep[x].push(y);
+            if (!valuesOfAllRunsPerStep[x]) {
+              valuesOfAllRunsPerStep[x] = [y];
+            } else {
+              valuesOfAllRunsPerStep[x].push(y);
+            }
           }
         }
       }
