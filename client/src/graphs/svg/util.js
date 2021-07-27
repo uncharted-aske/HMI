@@ -139,26 +139,6 @@ export const calculateEdgeNeighborhood = (edge) => {
   };
 };
 
-export const calcNodeColor = (node) => {
-  if (node.nodes) {
-    // Distinction between the main container and the rest
-    return node.depth === 2 ? Colors.NODES.ROOT_CONTAINER : Colors.NODES.CONTAINER;
-  } else
-  if (node.nodeType === NodeTypes.NODES.VARIABLE) {
-    if (node.nodeSubType) {
-      if (node.nodeSubType.includes(NodeTypes.VARIABLES.MODEL_VARIABLE)) {
-        return Colors.NODES.MODEL_VARIABLE;
-      }
-      if (node.nodeSubType.includes(NodeTypes.VARIABLES.INITIAL_CONDITION)) {
-        return Colors.NODES.INITIAL_CONDITION;
-      }
-    }
-  } else if (node.nodeType === NodeTypes.NODES.OVERLAPPING) {
-    return Colors.NODES.OVERLAPPING;
-  }
-  return Colors.NODES.DEFAULT;
-};
-
 export const calcLabelColor = (node) => {
   if (node.nodes) {
     return Colors.LABELS.LIGHT;
