@@ -19,6 +19,7 @@
         <run-button
           :auto-run.sync="autoRun"
           :config.sync="runConfig"
+          :disabled="!isRunFeasible"
           @run="fetchResults"
         />
 
@@ -26,6 +27,7 @@
           <button
             class="btn btn-primary"
             title="Save current run"
+            :disabled="!isRunFeasible"
             @click="incrNumberOfSavedRuns"
           >
             <font-awesome-icon :icon="['fas', 'bookmark' ]" />
@@ -131,6 +133,7 @@
     @Action initializeParameters;
     @Action initializeVariables;
     @Action resetSim;
+    @Getter getSimModel;
     @Getter getModelsList;
     @Getter getSelectedModelGraphType
     @Getter getSelectedModelIds;
@@ -218,6 +221,18 @@
           heightFixed: true,
         },
       };
+    }
+
+    /** Check if a Run can be triggered or saved. */
+    get isRunFeasible (): boolean {
+      // Make sure that for every selected models
+      return this.selectedModels.every(model => {
+        // that every parameters of this model
+        return this.getSimModel(model.id).parameters.every(parameter => {
+          // does not contain any undefined or null values.
+          return !parameter.values.some(value => !value);
+        });
+      });
     }
 
     setExpandedId (id = ''): void {
