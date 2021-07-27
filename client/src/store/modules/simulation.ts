@@ -109,8 +109,8 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     commit('resetVariablesValues', model.id);
 
     // For each run of the model, fetch the results...
-    for (const param of getters.getSimParameterArray?.[model.id]) {
-      const response = await getModelResult(model, param, config, selectedModelGraphType);
+    for (const params of getters.getSimParameterArray(model.id)) {
+      const response = await getModelResult(model, params, config, selectedModelGraphType);
       // The reponse.values is a list of variables results with the variable uid as key.
       // Each index of the result list correspond to the response.times list.
       for (const uid in response[0].values) {

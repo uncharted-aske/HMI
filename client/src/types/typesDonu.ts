@@ -86,7 +86,7 @@ type Request = {
   // name?: string;
   start?: number;
   step?: number;
-  // type?: string;
+  'sim-type'?: string;
 }
 
 enum ResponseStatus {
