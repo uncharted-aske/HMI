@@ -266,13 +266,13 @@
             g.append('text')
               .attr('x', xMinMax[0])
               .attr('text-anchor', 'end')
-              .attr('transform', d => svgUtil.translate(-this.padding, 3))
+              .attr('transform', svgUtil.translate(-this.padding, 3))
               .text(d => shorterNb(xScales.get(d).min));
 
             // max label
             g.append('text')
               .attr('x', xMinMax[1])
-              .attr('transform', d => svgUtil.translate(this.padding, 3))
+              .attr('transform', svgUtil.translate(this.padding, 3))
               .text(d => shorterNb(xScales.get(d).max));
 
             return g;

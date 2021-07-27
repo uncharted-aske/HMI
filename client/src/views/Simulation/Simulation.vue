@@ -63,7 +63,7 @@
           :expanded="expandedId === 'model'"
           :key="index"
           :model="model"
-          :slot="('model_' + index)"
+          :slot="('model_' + model.id)"
           @expand="setExpandedId('model')"
         />
         <parameters-panel
@@ -71,7 +71,7 @@
           :expanded="expandedId === 'parameters'"
           :key="index"
           :modelId="model.id"
-          :slot="('parameters_' + index)"
+          :slot="('parameters_' + model.id)"
           @expand="setExpandedId('parameters')"
         />
         <variables-panel
@@ -79,7 +79,7 @@
           :expanded="expandedId === 'variables'"
           :key="index"
           :modelId="model.id"
-          :slot="('variables_' + index)"
+          :slot="('variables_' + model.id)"
           @expand="setExpandedId('variables')"
         />
       </template>
@@ -175,7 +175,7 @@
 
     get selectedModels (): Model.Model[] {
       if (
-        this.getSelectedModelIds.length < 1 && // Are we missing the selectedModelId, toString to test id 0 as well,
+        this.getSelectedModelIds.length < 1 && // Are we missing the selectedModelId,
         this.$route.params.model_id && // Does the model id is available from the route parameters,
         typeof this.$route.params.model_id === 'string' // Make sure the model id from the route is a string.
       ) {
@@ -188,16 +188,16 @@
     get gridMap (): string[][] {
       const gridMap: string[][] = [];
 
-      this.selectedModels.forEach((model, index) => {
+      this.selectedModels.forEach(model => {
         if (this.expandedId) {
-          gridMap.push([this.expandedId + '_' + index]);
+          gridMap.push([this.expandedId + '_' + model.id]);
         } else if (this.setSelectedModels) {
           gridMap.push([
-            'model_' + index,
+            'model_' + model.id,
             'model-parameters-separator',
-            'parameters_' + index,
+            'parameters_' + model.id,
             'parameters-variables-separator',
-            'variables_' + index,
+            'variables_' + model.id,
           ]);
         }
         // gridMap.push(['row-separator']);
@@ -230,7 +230,7 @@
         // that every parameters of this model
         return this.getSimModel(model.id).parameters.every(parameter => {
           // does not contain any undefined or null values.
-          return !parameter.values.some(value => !value);
+          return !parameter.values.some(value => value == null);
         });
       });
     }
