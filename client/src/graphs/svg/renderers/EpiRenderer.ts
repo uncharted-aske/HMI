@@ -4,7 +4,7 @@ import { SVGRenderer } from 'svg-flowgraph';
 
 import { SVGRendererOptionsInterface, SubgraphInterface, SubgraphNodeInterface } from '@/types/typesGraphs';
 
-import { calcEdgeColor, calcLabelColor, flatten } from '@/graphs/svg/util';
+import { calcLabelColor, flatten } from '@/graphs/svg/util';
 import { Colors, NodeTypes } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
 
@@ -18,7 +18,7 @@ const DEFAULT_STYLE = {
     borderRadius: 5,
   },
   edge: {
-    fill: 'none',
+    fill: Colors.EDGES.DEFAULT,
     strokeWidth: 5,
     controlRadius: 6,
     controlStrokeWidth: 2,
@@ -32,11 +32,7 @@ export default class EpiRenderer extends SVGRenderer {
   }
 
   static calcNodeColor (d: d3.Selection<any, any, any, any>): string {
-    if ((d as any).nodes) {
-      return Colors.NODES.CONTAINER;
-    } else {
-      return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.fill;
-    }
+    return (d as any).nodes ? Colors.NODES.CONTAINER : DEFAULT_STYLE.node.fill;
   }
 
   buildDefs (): void {
@@ -115,7 +111,8 @@ export default class EpiRenderer extends SVGRenderer {
         .attr('height', d => (d as any).height)
         .style('fill', EpiRenderer.calcNodeColor)
         .style('stroke', DEFAULT_STYLE.node.stroke)
-        .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+        .style('stroke-width', DEFAULT_STYLE.node.strokeWidth)
+        .style('cursor', 'pointer');
 
       selection.append('text')
         .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
@@ -137,7 +134,7 @@ export default class EpiRenderer extends SVGRenderer {
       .attr('d', d => pathFn(d.points))
       .style('fill', DEFAULT_STYLE.edge.fill)
       .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
-      .style('stroke', d => calcEdgeColor(d))
+      .style('stroke', DEFAULT_STYLE.edge.fill)
       .attr('marker-end', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');
@@ -148,26 +145,6 @@ export default class EpiRenderer extends SVGRenderer {
         const target = d.target.replace(/\s/g, '');
         return `url(#start-${source}-${target}`;
       });
-  }
-
-  renderEdgeUpdated (edgeSelection: d3.Selection<any, any, any, any>): void {
-    edgeSelection
-      .selectAll('.edge-path')
-      .attr('d', d => {
-        return pathFn((d as any).points);
-      });
-  }
-
-  renderEdgeRemoved (edgeSelection: d3.Selection<any, any, any, any>): void {
-    edgeSelection.each(function () {
-      d3.select(this)
-        .transition()
-        .on('end', function () {
-          d3.select(this).remove();
-        })
-        .duration(1500)
-        .style('opacity', 0.2);
-    });
   }
 
   hideSubgraph (): void {
