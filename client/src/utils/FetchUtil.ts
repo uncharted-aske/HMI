@@ -1,7 +1,34 @@
 import { DataFile, DataSource } from '@dekkai/data-source';
 import s3Client from '@/services/S3Service';
 
+const storeSizeLimit = 104857600; // 100MB in bytes
+const storeEntryLimit = 10485760; // 10MB in bytes
 const memoizedStore = new Map();
+const memoizedSize = new Map();
+
+const storeSize = (): number => {
+  let totalValue = 0;
+  for (const value of memoizedSize.values()) {
+    totalValue += value;
+  }
+  return totalValue;
+};
+
+const storeResult = (hash: string, result: unknown, size: number): void => {
+  if (size > storeEntryLimit) {
+    return;
+  }
+
+  // TO-DO: Optimize this
+  while (storeSize() + size > storeSizeLimit) {
+    const shiftKey = memoizedStore.keys().next().value;
+    memoizedStore.delete(shiftKey);
+    memoizedSize.delete(shiftKey);
+  }
+
+  memoizedStore.set(hash, result);
+  memoizedSize.set(hash, size);
+};
 
 export const getUtil = async (urlStr: string, paramObj?: Record<string, any>): Promise<any> => {
   const init: RequestInit = {
@@ -26,8 +53,10 @@ export const getUtilMem = async (urlStr: string, paramObj: Record<string, any>):
     return Promise.resolve(memoizedStore.get(hash));
   } else {
     try {
-      const result = await getUtil(urlStr, paramObj as URLSearchParams);
-      memoizedStore.set(hash, result);
+      const response = await fetch(urlStr, paramObj);
+      const resultSize = (await response.clone().arrayBuffer()).byteLength;
+      const result = await response.json();
+      storeResult(hash, result, resultSize);
       return result;
     } catch (e) {
       return e;
@@ -48,13 +77,19 @@ export const postUtil = async (urlStr: string, paramObj: Record<string, any>): P
 };
 
 export const postUtilMem = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
-  const hash = urlStr + JSON.stringify(paramObj);
+  const paramObjStr = JSON.stringify(paramObj);
+  const hash = urlStr + paramObjStr;
   if (memoizedStore.has(hash)) {
     return Promise.resolve(memoizedStore.get(hash));
   } else {
     try {
-      const result = await postUtil(urlStr, paramObj as URLSearchParams);
-      memoizedStore.set(hash, result);
+      const response = await fetch(urlStr, {
+        body: paramObjStr,
+        method: 'POST',
+      });
+      const resultSize = (await response.clone().arrayBuffer()).byteLength;
+      const result = await response.json();
+      storeResult(hash, result, resultSize);
       return result;
     } catch (e) {
       return e;
