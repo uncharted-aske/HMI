@@ -18,7 +18,8 @@ const DEFAULT_STYLE = {
     borderRadius: 5,
   },
   edge: {
-    fill: Colors.EDGES.DEFAULT,
+    fill: 'none',
+    stroke: Colors.EDGES.DEFAULT,
     strokeWidth: 5,
     controlRadius: 6,
     controlStrokeWidth: 2,
@@ -64,7 +65,7 @@ export default class EpiRenderer extends SVGRenderer {
       .attr('xoverflow', 'visible')
       .append('svg:path')
       .attr('d', SVGUtil.ARROW)
-      .style('fill', d => calcEdgeColor(d))
+      .style('fill', DEFAULT_STYLE.edge.stroke)
       .style('stroke', 'none');
 
     // Create filter with id #drop-shadow for containers
@@ -134,7 +135,7 @@ export default class EpiRenderer extends SVGRenderer {
       .attr('d', d => pathFn(d.points))
       .style('fill', DEFAULT_STYLE.edge.fill)
       .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
-      .style('stroke', DEFAULT_STYLE.edge.fill)
+      .style('stroke', DEFAULT_STYLE.edge.stroke)
       .attr('marker-end', d => {
         const source = d.source.replace(/\s/g, '');
         const target = d.target.replace(/\s/g, '');
