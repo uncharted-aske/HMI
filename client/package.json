@@ -24,7 +24,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "@types/chroma-js": "^2.1.3",
-    "@uncharted.software/bgraph": "0.2.0",
+    "@uncharted.software/bgraph": "0.3.2",
     "@uncharted.software/facets-core": "^3.1.0",
     "@uncharted.software/facets-plugins": "^3.1.0",
     "@uncharted.software/grafer": "^0.3.4",
