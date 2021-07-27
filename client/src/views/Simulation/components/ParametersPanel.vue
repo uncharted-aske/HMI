@@ -4,6 +4,8 @@
     :style="{
       '--padding': padding + 'px',
       '--parameter-height': parameterHeight + 'px',
+      '--parameter-input': parameterInput + 'px',
+      '--parameter-action': parameterAction + 'px',
     }"
   >
     <settings-bar>
@@ -107,7 +109,9 @@
     @Action showAllVariables;
 
     private padding: number = 5;
-    private parameterHeight: number = 100;
+    private parameterHeight: number = 75;
+    private parameterInput: number = 65;
+    private parameterAction: number = 35;
 
     // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
@@ -185,16 +189,22 @@
       const runs = this.getSimParameterArray(this.modelId);
       if (!runs) return;
 
-      // Select the graph and size it
-      this.clearGraph();
-      const graph = d3.select(this.graphSelector);
-      svgUtil.createChart(graph, this.graphWidth(), this.graphHeight());
-
       // Dimensions
-      const marginX = this.graphWidth() * 0.25;
-      const marginY = this.parameterHeight / 2;
-      const xMinMax = [marginX, this.graphWidth() - marginX];
-      const yMinMax = [marginY, this.graphHeight() - marginY];
+      const axisLabelWidth = 40;
+      const marginX = {
+        // Input button + .parameter padding + axis label padding + axis label width
+        left: (this.parameterInput + (this.padding * 3) + axisLabelWidth),
+        // Action button + .parameter padding + axis label padding + axis label width
+        right: (this.parameterAction + (this.padding * 3) + axisLabelWidth),
+      };
+      const marginY = {
+        // first .parameter: middle of the top half of the CSS grid
+        top: this.padding + this.parameterHeight * 0.25,
+        // last .parameter: middle of the top half of the CSS grid
+        bottom: this.parameterHeight * 0.75 - this.padding,
+      };
+      const xMinMax = [marginX.left, this.graphWidth() - marginX.right];
+      const yMinMax = [marginY.top, this.graphHeight() - marginY.bottom];
 
       // X & Y Scales
       const xScale = param => {
@@ -214,6 +224,11 @@
         .x(([param, value]) => xScales.get(param).scale(value))
         /* @ts-ignore */
         .y(([param]) => yScale(param));
+
+      // Select the graph and size it
+      this.clearGraph();
+      const graph = d3.select(this.graphSelector);
+      svgUtil.createChart(graph, this.graphWidth(), this.graphHeight());
 
       // Add the runs
       graph.append('g')
@@ -250,11 +265,14 @@
             // min label
             g.append('text')
               .attr('x', xMinMax[0])
+              .attr('text-anchor', 'end')
+              .attr('transform', d => svgUtil.translate(-this.padding, 3))
               .text(d => shorterNb(xScales.get(d).min));
 
             // max label
             g.append('text')
               .attr('x', xMinMax[1])
+              .attr('transform', d => svgUtil.translate(this.padding, 3))
               .text(d => shorterNb(xScales.get(d).max));
 
             return g;
@@ -283,7 +301,7 @@
   .parameters {
     background-color: var(--bg-graphs);
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
     position: relative;
   }
 
@@ -305,12 +323,11 @@
   .parameter {
     display: grid;
     grid-template-areas:
-      ". . ."
-      "name . action"
+      "name axis action"
       "value . ."
     ;
-    grid-template-columns: min-content auto min-content;
-    grid-template-rows: 1fr 2em 1fr;
+    grid-template-columns: var(--parameter-input) auto var(--parameter-action);
+    grid-template-rows: 1fr 1fr;
     height: var(--parameter-height);
     padding: var(--padding);
   }
@@ -366,8 +383,6 @@
     font-size: 10px;
     stroke: var(--text-color-light);
   }
-  .parameters-graph .axis text:first-of-type { translate: -1.5em .3em; }
-  .parameters-graph .axis text:last-of-type { translate: .75em .3em; }
 
   .parameters-graph .run {
     fill: none;

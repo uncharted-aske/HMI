@@ -10,6 +10,8 @@ const state: HMI.SimulationState = {
 };
 
 const currentNumberOfRuns = (state: HMI.SimulationState): number => {
+  // The number of runs is identical for all parameters, we select
+  // the first model for simplicity, but any `modelId` will work.
   return state.models[0]?.parameters?.[0]?.values.length ?? 0;
 };
 
@@ -48,9 +50,9 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
   getSimParameterArray (state: HMI.SimulationState) {
     return (modelId: number): any => {
       const parameters = getModel(state, modelId).parameters;
-      const RunsCount = currentNumberOfRuns(state);
-      const output = new Array(RunsCount);
-      for (let i = 0; i < RunsCount; i++) {
+      const runsCount = currentNumberOfRuns(state);
+      const output = new Array(runsCount);
+      for (let i = 0; i < runsCount; i++) {
         output[i] = parameters.reduce((obj, parameter) => {
           obj[parameter.uid] = parameter.values[i];
           return obj;
@@ -61,6 +63,8 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
   },
 
   getVariablesRunsCount (state): number {
+    // The number of runs is identical for all variables, we select
+    // the first model for simplicity, but any `modelId` will work.
     return state.models[0]?.variables?.[0]?.values?.length ?? 0;
   },
 };
@@ -84,13 +88,13 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     let parameters = [] as HMI.SimulationParameter[];
 
     if (currentNumberOfRuns(state) < state.numberOfSavedRuns) {
-      parameters = state.models[args.modelId]?.parameters.map(parameter => {
+      parameters = getModel(state, args.modelId).parameters.map(parameter => {
         const currentParamsCount = parameter.values.length;
         parameter.values[currentParamsCount] = parameter.values[currentParamsCount - 1];
         return parameter;
       });
     } else {
-      parameters = state.models[args.modelId]?.parameters.map(parameter => {
+      parameters = getModel(state, args.modelId).parameters.map(parameter => {
         if (parameter.uid === args.uid) {
           parameter.values[parameter.values.length - 1] = args.value;
         }
