@@ -57,7 +57,7 @@
           :class="{ hidden: parameter.hidden }"
         >
           <h4 :title="parameter.metadata.Description">{{ parameter.metadata.name }}</h4>
-          <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.uid, e)" />
+          <input type="text" v-model.number="parameterValues[parameter.uid]" />
           <aside class="btn-group">
             <button
               class="btn btn-secondary btn-sm"
@@ -112,6 +112,7 @@
     private parameterHeight: number = 75;
     private parameterInput: number = 65;
     private parameterAction: number = 35;
+    private parameterValues: { [uid: string]: number } = {};
 
     // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
@@ -121,6 +122,30 @@
 
     // Condition when to clear the Graph
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
+
+    // Parameters values update
+    @Watch('parameters') onParametersChange (): void {
+      this.parameters.forEach(parameter => {
+        if (!this.parameterValues[parameter.uid]) {
+          this.$set(this.parameterValues, parameter.uid, parameter.values[0] ?? null);
+        }
+      });
+    }
+
+    // Parameters values update
+    @Watch('triggerParameterValues') onParameterValuesChange (): void {
+      this.parameters.forEach(parameter => {
+        const value = this.parameterValues[parameter.uid];
+        const oldValue = parameter?.values?.[0];
+        if (value && !Number.isNaN(oldValue) && value !== oldValue) {
+          this.setSimParameterValue({ modelId: this.modelId, uid: parameter.uid, value });
+        }
+      });
+    }
+
+    get triggerParameterValues (): string {
+      return Object.values(this.parameterValues).join(',');
+    }
 
     get parameters (): HMI.SimulationParameter[] {
       const parameters = this.getSimModel(this.modelId)?.parameters ?? [];
@@ -153,10 +178,6 @@
       }
     }
 
-    getCurrentValue (parameter: HMI.SimulationParameter): number {
-      return parameter.values.slice(-1)[0];
-    }
-
     graphHeight (): number {
       return this.displayedParameters.length * this.parameterHeight;
     }
@@ -164,11 +185,6 @@
     graphWidth (): number {
       const figure = this.$refs.figure as HTMLElement;
       return figure?.getBoundingClientRect().width ?? 0;
-    }
-
-    onParameterChange (uid: string, event: Event): void {
-      const value = Number((event.target as HTMLInputElement).value);
-      this.setSimParameterValue({ modelId: this.modelId, uid, value });
     }
 
     /** Return the CSS selector to target this model parameters graph. */
