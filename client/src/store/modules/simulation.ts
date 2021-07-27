@@ -128,7 +128,7 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     }
 
     // ...and aggregate them
-    commit('setVariablesAggregate', aggregator);
+    commit('setVariablesAggregate', { aggregator, modelId: model.id });
   },
 
   async initializeParameters ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
