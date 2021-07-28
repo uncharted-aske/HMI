@@ -49,8 +49,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
     });
     // 3. Populate models with model source
     await Promise.all(models.map(async model => {
-      const gromet = await getDonuModelSource(model.source.model, model.type);
-      model.gromet = gromet;
+      model.gromet = await getDonuModelSource(model.source.model, model.type);
     }));
     // 4. Transform Gromet to graph for rendering
     models.forEach(model => {
@@ -72,6 +71,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
           edges: model.graph.edges,
         },
       };
+      delete model.gromet;
       if (name === 'SimpleSIR' || name === 'SimpleSIR_metadata') {
         output[0] = {
           id: 0,
