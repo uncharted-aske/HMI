@@ -37,7 +37,7 @@ export default class EpiRenderer extends SVGRenderer {
   }
 
   static calcNodeStrokeStyle (d: d3.Selection<any, any, any, any>): string {
-    return !(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? `5,5` : null;
+    return !(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? '5,5' : null;
   }
 
   static calcNodeStrokeWidth (d: d3.Selection<any, any, any, any>): number {
@@ -134,7 +134,7 @@ export default class EpiRenderer extends SVGRenderer {
           .attr('rx', d => (d as any).width / 2)
           .attr('ry', d => (d as any).height / 2)
           .style('fill', EpiRenderer.calcNodeColor)
-          .style('stroke',DEFAULT_STYLE.node.stroke)
+          .style('stroke', DEFAULT_STYLE.node.stroke)
           .style('stroke-width', EpiRenderer.calcNodeStrokeWidth)
           .style('stroke-dasharray', EpiRenderer.calcNodeStrokeStyle)
           .style('cursor', 'pointer');
