@@ -116,7 +116,6 @@
   import { bgraph } from '@uncharted.software/bgraph';
 
   import {
-    loadBGraphData,
     filterToBgraph,
     deepCopy,
   } from '@/utils/BGraphUtil';
