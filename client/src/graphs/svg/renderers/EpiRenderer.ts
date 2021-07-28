@@ -234,9 +234,8 @@ export default class EpiRenderer extends SVGRenderer {
           .style('fill', Colors.HIGHLIGHT)
           .style('stroke', DEFAULT_STYLE.node.stroke)
           .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
-
       } else {
-          d3.select(this).select('.edited-marker').remove();
+        d3.select(this).select('.edited-marker').remove();
       }
     });
   }
