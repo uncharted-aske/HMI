@@ -37,14 +37,8 @@ const getVariable = (state: HMI.SimulationState, modelId: number, selector: stri
 };
 
 const getters: GetterTree<any, HMI.SimulationParameter[]> = {
-  getSimModels (state: HMI.SimulationState) { return state.models; },
-
   getSimModel (state: HMI.SimulationState) {
     return (modelId: number): HMI.SimulationModel => getModel(state, modelId);
-  },
-
-  getRunsCount (state: HMI.SimulationState): number {
-    return currentNumberOfRuns(state);
   },
 
   getSimParameterArray (state: HMI.SimulationState) {
@@ -70,42 +64,26 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
 };
 
 const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
-  setSimParameters ({ state, commit }, args: {
-    count: number,
-    modelId: number,
-    parameters: HMI.SimulationParameter[],
-  }): void {
-    const { modelId, parameters } = args;
-    commit('setSimParameters', { modelId, parameters });
-    commit('setNumberOfSavedRuns', args.count ?? currentNumberOfRuns(state));
-  },
-
-  setSimParameterValue ({ state, commit }, args: {
+  setSimParameterValue ({ commit }, args: {
     modelId: number,
     uid: string,
     value: number,
   }): void {
-    let parameters = [] as HMI.SimulationParameter[];
-
-    if (currentNumberOfRuns(state) < state.numberOfSavedRuns) {
-      parameters = getModel(state, args.modelId).parameters.map(parameter => {
-        const currentParamsCount = parameter.values.length;
-        parameter.values[currentParamsCount] = parameter.values[currentParamsCount - 1];
-        return parameter;
-      });
-    } else {
-      parameters = getModel(state, args.modelId).parameters.map(parameter => {
-        if (parameter.uid === args.uid) {
-          parameter.values[parameter.values.length - 1] = args.value;
-        }
-        return parameter;
-      });
-    }
-
-    commit('setSimParameters', { modelId: args.modelId, parameters });
+    commit('updateParameterValues', {
+      modelId: args.modelId,
+      selector: args.uid,
+      value: args.value,
+    });
   },
 
   incrNumberOfSavedRuns ({ state, commit }): void {
+    state.models.forEach(model => {
+      const parameters = model.parameters.map(parameter => {
+        parameter.values.push(parameter.values[state.numberOfSavedRuns]);
+        return parameter;
+      });
+      commit('setSimParameters', { modelId: model.id, parameters });
+    });
     commit('setNumberOfSavedRuns', state.numberOfSavedRuns + 1);
   },
 
@@ -140,7 +118,7 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
       values: [donuParameter.default],
     }));
     commit('setSimParameters', { modelId: args.model.id, parameters });
-    commit('setNumberOfSavedRuns', 1);
+    commit('setNumberOfSavedRuns', 0);
   },
 
   async initializeVariables ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
@@ -175,12 +153,6 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
       commit('setParameterVisibility', { modelId: args.modelId, uid: parameter.uid, visibility: false });
     }
   },
-  showParameter ({ commit }, args: { modelId: number, selector: string }): void {
-    const parameter = getParameter(state, args.modelId, args.selector);
-    if (parameter) {
-      commit('setParameterVisibility', { modelId: args.modelId, uid: parameter.uid, visibility: true });
-    }
-  },
   toggleParameter ({ state, commit }, args: { modelId: number, selector: string }): void {
     const parameter = getParameter(state, args.modelId, args.selector);
     if (parameter) {
@@ -192,12 +164,6 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     const variable = getVariable(state, args.modelId, args.selector);
     if (variable) {
       commit('setVariableVisibility', { modelId: args.modelId, uid: variable.uid, visibility: false });
-    }
-  },
-  showVariable ({ commit }, args: { modelId: number, selector: string }): void {
-    const variable = getVariable(state, args.modelId, args.selector);
-    if (variable) {
-      commit('setVariableVisibility', { modelId: args.modelId, uid: variable.uid, visibility: true });
     }
   },
   toggleVariable ({ state, commit }, args: { modelId: number, selector: string }): void {
@@ -239,7 +205,14 @@ const mutations: MutationTree<HMI.SimulationState> = {
   }): void {
     const parameter = getParameter(state, args.modelId, args.selector);
     if (parameter) {
-      parameter.values.push(args.value);
+      // If
+      if (currentNumberOfRuns(state) < state.numberOfSavedRuns) {
+        parameter.values.unshift(args.value);
+      } else {
+        // Replace last value.
+        parameter.values.pop();
+        parameter.values.push(args.value);
+      }
     }
   },
 
@@ -250,7 +223,7 @@ const mutations: MutationTree<HMI.SimulationState> = {
   }): void {
     const variable = getVariable(state, args.modelId, args.uid);
     if (variable) {
-      variable.values.push(args.values);
+      variable.values.unshift(args.values);
     }
   },
 

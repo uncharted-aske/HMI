@@ -52,7 +52,7 @@ export const extendRoundUpToPow10 = (range, accessor): [number, number] => {
     else if (min > 0) return [0, max];
     else return [-1, 1];
   } else {
-    if (min > 0) min /= 10;
+    if (min > 1) min /= 10;
     return [min, max];
   }
 };

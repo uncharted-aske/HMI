@@ -123,11 +123,12 @@
     // Condition when to clear the Graph
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
-    // Parameters values update
     @Watch('parameters') onParametersChange (): void {
+      // If the parameterValues has no value for a parameter, we give the one in the store.
+      // This is used to set default parameter values.
       this.parameters.forEach(parameter => {
-        if (!this.parameterValues[parameter.uid]) {
-          this.$set(this.parameterValues, parameter.uid, parameter.values[0] ?? null);
+        if (!Object.prototype.hasOwnProperty.call(this.parameterValues, parameter.uid)) {
+          this.$set(this.parameterValues, parameter.uid, parameter.values[0]);
         }
       });
     }
@@ -135,12 +136,15 @@
     // Parameters values update
     @Watch('triggerParameterValues') onParameterValuesChange (): void {
       this.parameters.forEach(parameter => {
-        const value = this.parameterValues[parameter.uid];
-        const oldValue = parameter?.values?.[0];
-        if (value && !Number.isNaN(oldValue) && value !== oldValue) {
-          this.setSimParameterValue({ modelId: this.modelId, uid: parameter.uid, value });
+        if (this.parameterValues[parameter.uid] !== parameter.values[0]) {
+          this.setSimParameterValue({
+            modelId: this.modelId,
+            uid: parameter.uid,
+            value: this.parameterValues[parameter.uid],
+          });
         }
       });
+      this.drawGraph();
     }
 
     get triggerParameterValues (): string {

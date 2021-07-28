@@ -93,6 +93,7 @@
   import { Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
+  import _ from 'lodash';
 
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
@@ -229,8 +230,8 @@
       return this.selectedModels.every(model => {
         // that every parameters of this model
         return this.getSimModel(model.id).parameters.every(parameter => {
-          // does not contain any undefined or null values.
-          return !parameter.values.some(value => value == null);
+          // does only contain numbers
+          return parameter.values.every(_.isNumber);
         });
       });
     }
