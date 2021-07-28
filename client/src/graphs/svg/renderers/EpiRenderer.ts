@@ -16,6 +16,8 @@ const DEFAULT_STYLE = {
     stroke: Colors.STROKE,
     strokeWidth: 2,
     borderRadius: 5,
+    controlSize: 15,
+    controlColor: Colors.CONTAINER_CONTROL,
   },
   edge: {
     fill: 'none',
@@ -114,7 +116,7 @@ export default class EpiRenderer extends SVGRenderer {
       const selection = d3.select(this);
       const datum = selection.datum();
 
-      // Initial conditions are displayed as ellipses
+      // Initial conditions are displayed as ellipses, the rest as rectangles (except parameters that are displayed as squares)
       if (!(datum as any).data.role?.includes(NodeTypes.NODES.INITIAL_CONDITION)) {
         selection.append('rect')
           .attr('x', 0)
@@ -126,7 +128,7 @@ export default class EpiRenderer extends SVGRenderer {
           .style('stroke', DEFAULT_STYLE.node.stroke)
           .style('stroke-width', EpiRenderer.calcNodeStrokeWidth)
           .style('stroke-dasharray', EpiRenderer.calcNodeStrokeStyle)
-          .style('cursor', 'pointer');
+          .style('cursor', d=> (d as any).nodes ? '' : 'pointer');
       } else {
         selection.append('ellipse')
           .attr('cx', d => (d as any).width / 2)
@@ -140,11 +142,31 @@ export default class EpiRenderer extends SVGRenderer {
           .style('cursor', 'pointer');
       }
 
+      // Add +/- icon to boxes/containers
+      if ((datum as any).nodes) {
+        const containerControl = selection.append('g').classed('container-control', true).style('cursor', 'pointer');
+                
+        containerControl.append('rect')
+          .attr('x', d => (d as any).width - 20)
+          .attr('y', 5)
+          .attr('width', DEFAULT_STYLE.node.controlSize)
+          .attr('height', DEFAULT_STYLE.node.controlSize)
+          .style('fill', DEFAULT_STYLE.node.controlColor);
+        
+        containerControl.append('text')
+          .attr('x', d => (d as any).width - 12)
+          .attr('y', (DEFAULT_STYLE.node.controlSize / 2) + 10)
+          .style('fill', Colors.LABELS.LIGHT)
+          .style('font-weight', '500')
+          .style('text-anchor', 'middle')
+          .text(d=> (d as any).collapsed ? '+' : '-');
+      }
+
       selection.append('text')
         .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
         .attr('y', d => (d as any).nodes ? -5 : 25)
         .style('fill', d => calcLabelColor(d))
-        .style('font-weight', d => (d as any).nodes ? '800' : '500')
+        .style('font-weight', d => (d as any).nodes ? '1000' : '500')
         .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
         .text(d => (d as any).data.label);
 
@@ -210,7 +232,7 @@ export default class EpiRenderer extends SVGRenderer {
 
   clearSelections ():void {
     const chart = (this as any).chart;
-    chart.selectAll('rect')
+    chart.selectAll('rect, ellipse')
       .style('stroke', DEFAULT_STYLE.node.stroke)
       .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
   }

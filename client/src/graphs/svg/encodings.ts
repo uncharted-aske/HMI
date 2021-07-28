@@ -1,14 +1,13 @@
 export abstract class Colors {
   static readonly HIGHLIGHT: string = '#EBCB8B';
   static readonly STROKE: string = '#81A1C1';
+  static readonly CONTAINER_CONTROL: string = '#D08770';
 
   static readonly NODES: Record<string, any> = {
     DEFAULT: '#ECEFF4',
     EDITED: '#D08770',
 
-    // Gromet
     CONTAINER: '#2E3440',
-    VARIABLE: '#E75BCD',
   };
 
   // Bio graphs
