@@ -310,6 +310,7 @@
     }
 
     onRemoveAllParameters (): void {
+      this.parameterValues = {};
       this.hideAllParameters(this.modelId);
       this.hideAllVariables(this.modelId);
     }
