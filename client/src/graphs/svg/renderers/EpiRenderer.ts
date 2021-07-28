@@ -128,7 +128,7 @@ export default class EpiRenderer extends SVGRenderer {
           .style('stroke', DEFAULT_STYLE.node.stroke)
           .style('stroke-width', EpiRenderer.calcNodeStrokeWidth)
           .style('stroke-dasharray', EpiRenderer.calcNodeStrokeStyle)
-          .style('cursor', d=> (d as any).nodes ? '' : 'pointer');
+          .style('cursor', d => (d as any).nodes ? '' : 'pointer');
       } else {
         selection.append('ellipse')
           .attr('cx', d => (d as any).width / 2)
@@ -145,21 +145,21 @@ export default class EpiRenderer extends SVGRenderer {
       // Add +/- icon to boxes/containers
       if ((datum as any).nodes) {
         const containerControl = selection.append('g').classed('container-control', true).style('cursor', 'pointer');
-                
+
         containerControl.append('rect')
           .attr('x', d => (d as any).width - 20)
           .attr('y', 5)
           .attr('width', DEFAULT_STYLE.node.controlSize)
           .attr('height', DEFAULT_STYLE.node.controlSize)
           .style('fill', DEFAULT_STYLE.node.controlColor);
-        
+
         containerControl.append('text')
           .attr('x', d => (d as any).width - 12)
           .attr('y', (DEFAULT_STYLE.node.controlSize / 2) + 10)
           .style('fill', Colors.LABELS.LIGHT)
           .style('font-weight', 'bold')
           .style('text-anchor', 'middle')
-          .text(d=> (d as any).collapsed ? '+' : '-');
+          .text(d => (d as any).collapsed ? '+' : '-');
       }
 
       selection.append('text')
@@ -233,13 +233,12 @@ export default class EpiRenderer extends SVGRenderer {
   clearSelections ():void {
     const chart = (this as any).chart;
     chart
-      .selectAll('.node-ui').each(function(d) {
+      .selectAll('.node-ui').each(function (d) {
         if (!d.nodes) {
           d3.select(this).select('rect, ellipse')
-          .style('stroke', DEFAULT_STYLE.node.stroke)
-          .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+            .style('stroke', DEFAULT_STYLE.node.stroke)
+            .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
         }
       });
-      
   }
 }
