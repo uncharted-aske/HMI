@@ -14,7 +14,7 @@ const DEFAULT_STYLE = {
   node: {
     fill: Colors.NODES.DEFAULT,
     stroke: Colors.STROKE,
-    strokeWidth: 1,
+    strokeWidth: 2,
     borderRadius: 5,
   },
   edge: {
@@ -36,8 +36,12 @@ export default class EpiRenderer extends SVGRenderer {
     return (d as any).nodes ? Colors.NODES.CONTAINER : DEFAULT_STYLE.node.fill;
   }
 
+  static calcNodeStrokeStyle (d: d3.Selection<any, any, any, any>): string {
+    return !(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? `5,5` : null;
+  }
+
   static calcNodeStrokeWidth (d: d3.Selection<any, any, any, any>): number {
-    return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? 3 : DEFAULT_STYLE.node.strokeWidth;
+    return !(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? DEFAULT_STYLE.node.strokeWidth + 1 : DEFAULT_STYLE.node.strokeWidth;
   }
 
   buildDefs (): void {
@@ -69,7 +73,7 @@ export default class EpiRenderer extends SVGRenderer {
       .attr('xoverflow', 'visible')
       .append('svg:path')
       .attr('d', SVGUtil.ARROW)
-      .style('fill', DEFAULT_STYLE.edge.stroke)
+      .style('fill', Colors.EDGES.DEFAULT)
       .style('stroke', 'none');
 
     // Create filter with id #drop-shadow for containers
@@ -121,6 +125,7 @@ export default class EpiRenderer extends SVGRenderer {
           .style('fill', EpiRenderer.calcNodeColor)
           .style('stroke', DEFAULT_STYLE.node.stroke)
           .style('stroke-width', EpiRenderer.calcNodeStrokeWidth)
+          .style('stroke-dasharray', EpiRenderer.calcNodeStrokeStyle)
           .style('cursor', 'pointer');
       } else {
         selection.append('ellipse')
@@ -131,6 +136,7 @@ export default class EpiRenderer extends SVGRenderer {
           .style('fill', EpiRenderer.calcNodeColor)
           .style('stroke',DEFAULT_STYLE.node.stroke)
           .style('stroke-width', EpiRenderer.calcNodeStrokeWidth)
+          .style('stroke-dasharray', EpiRenderer.calcNodeStrokeStyle)
           .style('cursor', 'pointer');
       }
 
@@ -142,7 +148,7 @@ export default class EpiRenderer extends SVGRenderer {
         .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
         .text(d => (d as any).data.label);
 
-      // Special case for node parameters
+      // Special case for node parameters labels
       selection.selectAll('text')
         .filter(d => (d as any).data.role?.includes(NodeTypes.NODES.PARAMETER)).attr('y', -5);
     });
@@ -188,7 +194,7 @@ export default class EpiRenderer extends SVGRenderer {
   }
 
   selectNode (node: d3.Selection<any, any, any, any>): void {
-    node.select('rect')
+    node.selectAll('rect, ellipse')
       .style('stroke', Colors.HIGHLIGHT)
       .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
   }
