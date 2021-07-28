@@ -118,7 +118,12 @@
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
     @Watch('expanded') onExpanded (): void { this.drawGraph(); }
     @Watch('displayedParameters') onDisplayedParametersChanged (): void { this.drawGraph(); }
-    mounted (): void { this.drawGraph(); }
+
+    mounted (): void {
+      this.parameterValues = {};
+      this.onParametersChange();
+      this.drawGraph();
+    }
 
     // Condition when to clear the Graph
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }

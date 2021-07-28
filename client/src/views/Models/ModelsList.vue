@@ -38,7 +38,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter, Mutation } from 'vuex-class';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
   import { CardInterface, Counter, TabInterface } from '@/types/types';
@@ -84,10 +84,15 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'facets';
 
+    @Action resetSelectedModelIds;
     @Getter getFilters;
     @Getter getModelsList;
     @Getter getSelectedModelIds;
     @Mutation setSelectedModels;
+
+    activated (): void {
+      this.resetSelectedModelIds();
+    }
 
     get models (): Model.Model[] {
       return this.getModelsList;
