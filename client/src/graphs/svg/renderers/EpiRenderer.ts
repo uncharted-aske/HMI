@@ -36,8 +36,8 @@ export default class EpiRenderer extends SVGRenderer {
     return (d as any).nodes ? Colors.NODES.CONTAINER : DEFAULT_STYLE.node.fill;
   }
 
-  static calcNodeStroke (d: d3.Selection<any, any, any, any>): string {
-    return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? Colors.NODES.VARIABLE : DEFAULT_STYLE.node.stroke;
+  static calcNodeStrokeWidth (d: d3.Selection<any, any, any, any>): number {
+    return (d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? 3 : DEFAULT_STYLE.node.strokeWidth;
   }
 
   buildDefs (): void {
@@ -109,7 +109,7 @@ export default class EpiRenderer extends SVGRenderer {
     nodeSelection.each(function () {
       const selection = d3.select(this);
       const datum = selection.datum();
-      
+
       // Initial conditions are displayed as ellipses
       if (!(datum as any).data.role?.includes(NodeTypes.NODES.INITIAL_CONDITION)) {
         selection.append('rect')
@@ -119,21 +119,21 @@ export default class EpiRenderer extends SVGRenderer {
           .attr('width', d => (d as any).width)
           .attr('height', d => (d as any).height)
           .style('fill', EpiRenderer.calcNodeColor)
-          .style('stroke', EpiRenderer.calcNodeStroke)
-          .style('stroke-width', DEFAULT_STYLE.node.strokeWidth)
+          .style('stroke', DEFAULT_STYLE.node.stroke)
+          .style('stroke-width', EpiRenderer.calcNodeStrokeWidth)
           .style('cursor', 'pointer');
       } else {
         selection.append('ellipse')
-              .attr("cx", d => (d as any).width/2)
-              .attr("cy", d => (d as any).height/2)
-              .attr("rx", d => (d as any).width/2)
-              .attr("ry", d => (d as any).height/2)
-              .style('fill', EpiRenderer.calcNodeColor)
-              .style('stroke', EpiRenderer.calcNodeStroke)
-              .style('stroke-width', DEFAULT_STYLE.node.strokeWidth)
-              .style('cursor', 'pointer');      
+          .attr('cx', d => (d as any).width / 2)
+          .attr('cy', d => (d as any).height / 2)
+          .attr('rx', d => (d as any).width / 2)
+          .attr('ry', d => (d as any).height / 2)
+          .style('fill', EpiRenderer.calcNodeColor)
+          .style('stroke',DEFAULT_STYLE.node.stroke)
+          .style('stroke-width', EpiRenderer.calcNodeStrokeWidth)
+          .style('cursor', 'pointer');
       }
-      
+
       selection.append('text')
         .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
         .attr('y', d => (d as any).nodes ? -5 : 25)
@@ -145,7 +145,6 @@ export default class EpiRenderer extends SVGRenderer {
       // Special case for node parameters
       selection.selectAll('text')
         .filter(d => (d as any).data.role?.includes(NodeTypes.NODES.PARAMETER)).attr('y', -5);
-
     });
   }
 
