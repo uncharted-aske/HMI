@@ -157,7 +157,7 @@ export default class EpiRenderer extends SVGRenderer {
           .attr('x', d => (d as any).width - 12)
           .attr('y', (DEFAULT_STYLE.node.controlSize / 2) + 10)
           .style('fill', Colors.LABELS.LIGHT)
-          .style('font-weight', '500')
+          .style('font-weight', 'bold')
           .style('text-anchor', 'middle')
           .text(d=> (d as any).collapsed ? '+' : '-');
       }
@@ -166,7 +166,7 @@ export default class EpiRenderer extends SVGRenderer {
         .attr('x', d => (d as any).nodes ? 0 : 0.5 * (d as any).width)
         .attr('y', d => (d as any).nodes ? -5 : 25)
         .style('fill', d => calcLabelColor(d))
-        .style('font-weight', d => (d as any).nodes ? '1000' : '500')
+        .style('font-weight', d => (d as any).nodes ? 'bold' : 'normal')
         .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
         .text(d => (d as any).data.label);
 
@@ -232,8 +232,14 @@ export default class EpiRenderer extends SVGRenderer {
 
   clearSelections ():void {
     const chart = (this as any).chart;
-    chart.selectAll('rect, ellipse')
-      .style('stroke', DEFAULT_STYLE.node.stroke)
-      .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+    chart
+      .selectAll('.node-ui').each(function(d) {
+        if (!d.nodes) {
+          d3.select(this).select('rect, ellipse')
+          .style('stroke', DEFAULT_STYLE.node.stroke)
+          .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+        }
+      });
+      
   }
 }
