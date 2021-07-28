@@ -96,12 +96,8 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
       // The reponse.values is a list of variables results with the variable uid as key.
       // Each index of the result list correspond to the response.times list.
       for (const uid in response[0].values) {
-        const args = {
-          modelId: model.id,
-          uid: uid,
-          values: response[0].values[uid].map((value, index) => ({ x: response[0].times[index], y: value })),
-        };
-        commit('updateVariableValues', args);
+        const values = response[0].values[uid].map((value, index) => ({ x: response[0].times[index], y: value }));
+        commit('updateVariableValues', { modelId: model.id, uid: uid, values });
       }
     }
 
@@ -205,14 +201,9 @@ const mutations: MutationTree<HMI.SimulationState> = {
   }): void {
     const parameter = getParameter(state, args.modelId, args.selector);
     if (parameter) {
-      // If
-      if (currentNumberOfRuns(state) < state.numberOfSavedRuns) {
-        parameter.values.unshift(args.value);
-      } else {
-        // Replace last value.
-        parameter.values.pop();
-        parameter.values.push(args.value);
-      }
+      // Replace last value, using pop/push for reactivity.
+      parameter.values.pop();
+      parameter.values.push(args.value);
     }
   },
 
@@ -223,7 +214,7 @@ const mutations: MutationTree<HMI.SimulationState> = {
   }): void {
     const variable = getVariable(state, args.modelId, args.uid);
     if (variable) {
-      variable.values.unshift(args.values);
+      variable.values.push(args.values);
     }
   },
 
