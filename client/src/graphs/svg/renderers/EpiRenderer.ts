@@ -131,10 +131,10 @@ export default class EpiRenderer extends SVGRenderer {
           .style('cursor', d => (d as any).nodes ? '' : 'pointer');
       } else {
         selection.append('ellipse')
-          .attr('cx', d => (d as any).width / 2)
-          .attr('cy', d => (d as any).height / 2)
-          .attr('rx', d => (d as any).width / 2)
-          .attr('ry', d => (d as any).height / 2)
+          .attr('cx', d => (d as any).width * 0.5)
+          .attr('cy', d => (d as any).height * 0.5)
+          .attr('rx', d => (d as any).width * 0.5)
+          .attr('ry', d => (d as any).height * 0.5)
           .style('fill', EpiRenderer.calcNodeColor)
           .style('stroke', DEFAULT_STYLE.node.stroke)
           .style('stroke-width', EpiRenderer.calcNodeStrokeWidth)
@@ -221,12 +221,23 @@ export default class EpiRenderer extends SVGRenderer {
       .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
   }
 
-  highlightNodes (nodesList: SubgraphNodeInterface[]): void {
+  markEditedNodes (nodesList: SubgraphNodeInterface[]): void {
     const chart = (this as any).chart;
     chart.selectAll('.node-ui').each(function (d) {
       const isHighlighted = nodesList.map(node => node.id).includes(d.id);
-      d3.select(this).select('rect')
-        .style('fill', isHighlighted ? Colors.NODES.EDITED : EpiRenderer.calcNodeColor(d));
+      if (isHighlighted) {
+        d3.select(this).append('circle')
+          .classed('edited-marker', true)
+          .attr('cx', d => (d as any).width - 5)
+          .attr('cy', 5)
+          .attr('r', DEFAULT_STYLE.node.controlSize * 0.5)
+          .style('fill', Colors.HIGHLIGHT)
+          .style('stroke', DEFAULT_STYLE.node.stroke)
+          .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+
+      } else {
+          d3.select(this).select('.edited-marker').remove();
+      }
     });
   }
 
