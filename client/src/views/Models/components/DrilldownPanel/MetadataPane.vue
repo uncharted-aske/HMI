@@ -67,7 +67,7 @@
     }
 
     isTypeCodeSpanReference (datum: GroMET.Metadata): boolean {
-      return datum.metadata_type === GroMET.MetadateType.CodeSpanReference;
+      return datum.metadata_type === GroMET.MetadataType.CodeSpanReference;
     }
 
     provenanceDate (timestamp: string): string {

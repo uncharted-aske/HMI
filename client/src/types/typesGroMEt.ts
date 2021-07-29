@@ -21,15 +21,17 @@ export enum CodeType {
   Identifier = 'IDENTIFIER',
 }
 
-export enum MetadateType {
-  ModelInterface = 'ModelInterface',
+export enum MetadataType {
+  EquationDefinition = 'EquationDefinition',
   CodeCollectionReference = 'CodeCollectionReference',
   CodeSpanReference = 'CodeSpanReference',
+  ModelInterface = 'ModelInterface',
+  TextDefinition = 'TextDefinition',
   TextualDocumentReferenceSet = 'TextualDocumentReferenceSet',
 }
 
 export interface Metadata {
-  metadata_type: MetadateType,
+  metadata_type: MetadataType,
   provenance: Provenance,
   uid: string,
 }
