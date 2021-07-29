@@ -12,13 +12,7 @@
         </button>
       </aside>
     </settings-bar>
-
-    <global-graph
-      v-if="graph"
-      :data="graph"
-      :highlighted-nodes="editedNodes"
-      @node-dblclick="onNodeClick"
-    />
+    <global-graph v-if="model" :data="graph" :edited-nodes="editedNodes" @node-dblclick="onNodeClick"/>
   </section>
 </template>
 

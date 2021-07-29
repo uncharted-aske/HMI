@@ -2,6 +2,7 @@ import _ from 'lodash';
 import ELK from 'elkjs/lib/elk.bundled';
 import { layered } from '@/graphs/svg/elk/layouts';
 
+import { NodeTypes } from '@/graphs/svg/encodings.ts';
 import { makeEdgeMaps, traverse, changeKey } from '@/graphs/svg/util.js';
 
 /**
@@ -80,7 +81,7 @@ const injectELKOptions = (renderGraph, options) => {
       node.height = node.height || options.nodeHeight;
 
       // Special case for parameters
-      if (node.data && node.data.role?.includes('parameter')) {
+      if (node.data && node.data.role?.includes(NodeTypes.NODES.PARAMETER)) {
         node.width = options.parameterNodeSize || 30;
         node.height = options.parameterNodeSize || 30;
       }
