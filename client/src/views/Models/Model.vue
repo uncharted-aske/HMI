@@ -76,7 +76,7 @@
       @tab-click="onDrilldownTabClick"
     >
       <metadata-pane
-        v-if="drilldownActiveTabId === 'metadata'"
+        v-if="drilldownActiveTabId === 'metadata' && drilldownMetadata"
         slot="content"
         :metadata="drilldownMetadata"
         @open-modal="onOpenModalMetadata"
@@ -365,7 +365,7 @@
 
     onNodeClick (node: GraphNodeInterface): void {
       this.isOpenDrilldown = true;
-      this.drilldownActiveTabId = 'metadata';
+      this.drilldownActiveTabId = node.metadata ? 'metadata' : 'parameters';
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownMetadata = node.metadata;
