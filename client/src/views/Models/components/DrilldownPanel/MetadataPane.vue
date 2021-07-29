@@ -12,13 +12,18 @@
       <template v-if="isTypeCodeSpanReference(datum)">
         <summary :title="datum.uid">Code Reference</summary>
         <div class="metadata-content">
-          <h6>Type</h6>
-          <p>{{ datum.code_type | capitalize-formatter }}</p>
-          <h6>File</h6>
-          <p>
-            <a :href="datum.file_id">{{ datum.file_id }}</a><br>
-            {{ sourceFilePosition(datum) }}
-          </p>
+          <template v-if="datum.code_type">
+            <h6>Type</h6>
+            <p>{{ datum.code_type | capitalize-formatter }}</p>
+          </template>
+
+          <template v-if="datum.file_id">
+            <h6>File</h6>
+            <p>
+              <a :href="datum.file_id">{{ datum.file_id }}</a><br>
+              {{ sourceFilePosition(datum) }}
+            </p>
+          </template>
         </div>
       </template>
 
@@ -40,15 +45,10 @@
         </div>
       </template>
 
-      <template v-if="isTypeTextDefinition(datum)">
-        <summary :title="datum.uid">Text Definition</summary>
-        <div class="metadata-content">
-          <h6>XXX</h6>
-        </div>
-      </template>
-
-      <template v-if="isTypeTextParameter(datum)">
-        <summary :title="datum.uid">Text Parameter</summary>
+      <template v-if="isTypeText(datum)">
+        <summary :title="datum.uid">
+          Text {{ isTypeTextParameter(datum) ? 'Parameter' : 'Definition' }}
+        </summary>
         <div class="metadata-content">
           <h6>XXX</h6>
         </div>
@@ -72,27 +72,9 @@
   import * as GroMET from '@/types/typesGroMEt';
   import { formatFullDateTime } from '@/utils/DateTimeUtil';
 
-  const defaultCodeSpanReference: any = {
-    code_type: GroMET.CodeType.Identifier,
-    file_id: null,
-    line_begin: null,
-    line_end: null,
-    col_begin: null,
-    col_end: null,
-  };
-
   @Component
   export default class MetadataPane extends Vue {
-    @Prop({ default: null }) data: any[];
-
-    /** Clean the metadata to match our expected format. */
-    get metadata () : GroMET.Metadata[] {
-      if (!this.data) return [];
-      const cleanMetadata = this.data.map(datum => {
-        return { ...defaultCodeSpanReference, ...datum };
-      });
-      return cleanMetadata;
-    }
+    @Prop({ default: [] }) metadata: GroMET.Metadata[];
 
     get isEmptyMetadata (): boolean {
       return this.metadata.length === 0;
@@ -112,6 +94,11 @@
 
     isTypeTextParameter (datum: GroMET.Metadata): boolean {
       return datum.metadata_type === GroMET.MetadataType.TextParameter;
+    }
+
+    isTypeText (datum: GroMET.Metadata): boolean {
+      return this.isTypeTextDefinition(datum) ||
+        this.isTypeTextParameter(datum);
     }
 
     provenanceDate (timestamp: string): string {
