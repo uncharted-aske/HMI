@@ -50,7 +50,18 @@
           Text {{ isTypeTextParameter(datum) ? 'Parameter' : 'Definition' }}
         </summary>
         <div class="metadata-content">
-          <h6>XXX</h6>
+          <template v-if="datum.text_extraction">
+            <h6>{{ datum.text_extraction.document_reference_uid }}</h6>
+            {{ textExtraction(datum) }}
+          </template>
+
+          <template v-if="datum.variable_identifier">
+            <h6>Variable</h6>
+            <p>
+              <strong>{{ datum.variable_identifier }}</strong>:
+              {{ isTypeTextParameter(datum) ? datum.value : datum.variable_definition }}
+            </p>
+          </template>
         </div>
       </template>
 
@@ -133,6 +144,29 @@
       }
 
       return `${lines} ${columns}`.trim();
+    }
+
+    textExtraction (datum: GroMET.TextDefinition | GroMET.TextParameter): string {
+      const text = datum.text_extraction;
+      let result: string;
+
+      if (text.page) {
+        result += ` Page #${text.page}`;
+      }
+
+      if (text.block) {
+        result += ` Block #${text.page}`;
+      }
+
+      if (text.char_begin || text.char_end) {
+        result += ` Char #${text.char_begin ?? text.char_end}`;
+      }
+
+      if (text.char_begin && text.char_end) {
+        result += ` Chars #${text.char_begin}-${text.char_end}`;
+      }
+
+      return result.trim();
     }
 
     equationSourceMathML (mml: string): string {
