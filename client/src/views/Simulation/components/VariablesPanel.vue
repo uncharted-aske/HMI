@@ -51,7 +51,7 @@
         <multi-line-plot
           v-else
           v-for="(plot, index) in displayedVariables"
-          :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
+          :class="`pt-2 pl-2 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
           :data="plot.values"
           :key="index"
           :styles="plot.styles"
