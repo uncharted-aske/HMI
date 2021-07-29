@@ -5,6 +5,7 @@
 import * as Donu from '@/types/typesDonu';
 import * as Graph from '@/types/typesGraphs';
 import * as GroMEt from '@/types/typesGroMEt';
+import * as BGraph from '@/types/typesBGraph';
 
 type Metadata = {
   created?: string,
@@ -26,6 +27,7 @@ enum GraphTypes {
 type Graph = {
   donuType: Donu.Type,
   graph: Graph.GraphInterface,
+  bgraph: BGraph.BGraphInputDataInterface,
   model: string,
   metadata?: Array<GraphMetadata>,
   type: GraphTypes,

@@ -116,8 +116,8 @@
   import { bgraph } from '@uncharted.software/bgraph';
 
   import {
-    loadBGraphData,
     filterToBgraph,
+    deepCopy,
   } from '@/utils/BGraphUtil';
   import { TabInterface, ViewInterface } from '@/types/types';
   import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
@@ -245,11 +245,11 @@
 
     async loadData (): Promise<void> {
       if (this.selectedModel && this.getSelectedModelGraphType) {
-        const [bgNodes, bgEdges] = await loadBGraphData(
-          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.getSelectedModelGraphType}/nodes.jsonl`,
-          `${process.env.S3_BGRAPH_MODELS}/${this.selectedModel.metadata.name}/${this.getSelectedModelGraphType}/edges.jsonl`,
+        const bgraphGraphData = this.selectedModel.modelGraph.find(d => d.type === this.getSelectedModelGraphType).bgraph;
+        this.bgraphInstance = bgraph.graph(
+          deepCopy(bgraphGraphData.nodes),
+          deepCopy(bgraphGraphData.edges),
         );
-        this.bgraphInstance = bgraph.graph(bgNodes, bgEdges);
         this.executeFilters();
       }
     }
