@@ -147,5 +147,10 @@
 
       return `${lines} ${columns}`.trim();
     }
+
+    equationSourceMathML (mml: string): string {
+      const regex = /(<math).*?(<\/math>)/g;
+      return regex.exec(mml)[0] ?? null;
+    }
   }
 </script>
