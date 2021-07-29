@@ -13,7 +13,8 @@
       />
     </left-side-panel>
 
-    <section>
+    <loader v-if="!selectedGraph" loading="true" />
+    <section v-else>
       <header>
         <button
           class="btn btn-primary"
@@ -57,7 +58,6 @@
       </settings-bar>
 
       <global-graph
-        v-if="selectedGraph"
         :data="selectedGraph"
         :subgraph="subgraph"
         :layout="selectedLayoutId"
@@ -131,6 +131,7 @@
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
+  import Loader from '@/components/widgets/Loader.vue';
   import Settings from '@/views/Models/components/Settings.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
@@ -173,6 +174,7 @@
     SearchBar,
     SettingsBar,
     Counters,
+    Loader,
     Settings,
     LeftSidePanel,
     MetadataPanel,

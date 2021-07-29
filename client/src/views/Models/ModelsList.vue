@@ -1,20 +1,30 @@
 <template>
   <div class="view-container">
-    <main>
+    <loader v-if="modelsCards.length < 1" loading="true" />
+    <main v-else>
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for Models...`"/>
       </div>
       <settings-bar>
         <counters slot="left" :data="countersData"/>
-        <button
-          v-if="nbSelectedModelsIds > 0"
-          class="btn btn-primary"
-          slot="middle"
-          type="button"
-          @click="onClickAction"
-        >
-          {{ nbSelectedModelsIds > 1 ? 'Compare' : 'Open' }}
-        </button>
+        <div slot="right">
+          <button
+            v-if="nbSelectedModelsIds > 0"
+            class="btn btn-primary"
+            type="button"
+            @click="onClickAction"
+          >
+            {{ nbSelectedModelsIds > 1 ? 'Compare' : 'Open' }}
+          </button>
+          <button
+            v-if="nbSelectedModelsIds > 1"
+            class="btn btn-primary"
+            type="button"
+            @click="onClickSimulation"
+          >
+            {{ 'Open Multiple Simulation' }}
+          </button>
+        </div>
       </settings-bar>
       <card-container
         class="models-cards"
@@ -28,7 +38,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter, Mutation } from 'vuex-class';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
   import { CardInterface, Counter, TabInterface } from '@/types/types';
@@ -42,6 +52,7 @@
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
+  import Loader from '@/components/widgets/Loader.vue';
 
   import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import CardContainer from '@/components/Cards/CardContainer.vue';
@@ -62,6 +73,7 @@
     Counters,
     FacetsPane,
     LeftSidePanel,
+    Loader,
     SearchBar,
     Settings,
     SettingsBar,
@@ -72,10 +84,15 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'facets';
 
+    @Action resetSelectedModelIds;
     @Getter getFilters;
     @Getter getModelsList;
     @Getter getSelectedModelIds;
     @Mutation setSelectedModels;
+
+    activated (): void {
+      this.resetSelectedModelIds();
+    }
 
     get models (): Model.Model[] {
       return this.getModelsList;
@@ -135,6 +152,14 @@
           };
         }
       }
+      this.$router.push(options);
+    }
+
+    onClickSimulation (): void {
+      const options: RawLocation = { name: 'simulation' };
+      options.params = {
+        model_id: this.getSelectedModelIds.join(','),
+      };
       this.$router.push(options);
     }
   }

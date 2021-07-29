@@ -14,7 +14,7 @@
             title="Add all Variables"
             type="button"
             :disabled="allVariablesAreDisplayed"
-            @click="showAllVariables"
+            @click="showAllVariables(modelId)"
           >
             <font-awesome-icon :icon="['fas', 'plus']" />
           </button>
@@ -23,7 +23,7 @@
             title="Remove all Vsariables"
             type="button"
             :disabled="noDisplayedVariables"
-            @click="hideAllVariables"
+            @click="hideAllVariables(modelId)"
           >
             <font-awesome-icon :icon="['fas', 'ban']" />
           </button>
@@ -40,30 +40,29 @@
 
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
-        <div
-          v-if="!getVariablesRunsCount"
-          class="alert alert-info m-3" role="alert"
-        >
+
+        <div v-if="!getVariablesRunsCount" class="alert alert-info m-3">
           Click Run to get variables output.
         </div>
         <div v-else-if="noDisplayedVariables" class="alert alert-info m-3">
           Use the model visualization on the left to add/remove variables.
         </div>
+
         <multi-line-plot
           v-else
           v-for="(plot, index) in displayedVariables"
-          :key="index"
-          :title="plot.metadata.name"
-          :data="plot.values"
-          :styles="plot.styles"
           :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
+          :data="plot.values"
+          :key="index"
+          :styles="plot.styles"
+          :title="plot.metadata.name"
         >
           <aside class="btn-group">
             <button
               class="btn btn-secondary btn-sm"
               title="Remove Variable"
               type="button"
-              @click="hideVariable(plot.uid)"
+              @click="hideVariable({ modelId, selector: plot.uid })"
             >
               <font-awesome-icon :icon="['fas', 'ban']" />
             </button>
@@ -129,7 +128,6 @@
     if (modifyingStyle) {
       return _.merge(_.cloneDeep(DEFAULT_STYLE), modifyingStyle);
     }
-
     return DEFAULT_STYLE;
   };
 
@@ -142,16 +140,18 @@
   @Component({ components })
   export default class VariablesPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
+    @Prop({ default: null }) modelId: number;
     @InjectReactive() resized!: boolean;
 
-    @Getter getSimVariables;
+    @Getter getSimModel;
     @Getter getVariablesRunsCount;
     @Action hideVariable;
     @Action hideAllVariables;
     @Action showAllVariables;
 
     get variables (): HMI.SimulationVariable[] {
-      const variables = _.cloneDeep(this.getSimVariables);
+      let variables = this.getSimModel(this.modelId).variables;
+      variables = _.cloneDeep(variables);
       variables.map(variable => {
         variable.styles = variable.styles || [];
         for (let i = 0; i < variable.values.length; i++) {
