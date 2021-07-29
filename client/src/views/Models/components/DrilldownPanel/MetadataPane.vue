@@ -12,13 +12,18 @@
       <template v-if="isTypeCodeSpanReference(datum)">
         <summary :title="datum.uid">Code Reference</summary>
         <div class="metadata-content">
-          <h6>Type</h6>
-          <p>{{ datum.code_type | capitalize-formatter }}</p>
-          <h6>File</h6>
-          <p>
-            <a :href="datum.file_id">{{ datum.file_id }}</a><br>
-            {{ sourceFilePosition(datum) }}
-          </p>
+          <template v-if="datum.code_type">
+            <h6>Type</h6>
+            <p>{{ datum.code_type | capitalize-formatter }}</p>
+          </template>
+
+          <template v-if="datum.file_id">
+            <h6>File</h6>
+            <p>
+              <a :href="datum.file_id">{{ datum.file_id }}</a><br>
+              {{ sourceFilePosition(datum) }}
+            </p>
+          </template>
         </div>
       </template>
 
@@ -40,17 +45,23 @@
         </div>
       </template>
 
-      <template v-if="isTypeTextDefinition(datum)">
-        <summary :title="datum.uid">Text Definition</summary>
+      <template v-if="isTypeText(datum)">
+        <summary :title="datum.uid">
+          Text {{ isTypeTextParameter(datum) ? 'Parameter' : 'Definition' }}
+        </summary>
         <div class="metadata-content">
-          <h6>XXX</h6>
-        </div>
-      </template>
+          <template v-if="datum.text_extraction">
+            <h6>{{ datum.text_extraction.document_reference_uid }}</h6>
+            {{ textExtraction(datum) }}
+          </template>
 
-      <template v-if="isTypeTextParameter(datum)">
-        <summary :title="datum.uid">Text Parameter</summary>
-        <div class="metadata-content">
-          <h6>XXX</h6>
+          <template v-if="datum.variable_identifier">
+            <h6>Variable</h6>
+            <p>
+              <strong>{{ datum.variable_identifier }}</strong>:
+              {{ isTypeTextParameter(datum) ? datum.value : datum.variable_definition }}
+            </p>
+          </template>
         </div>
       </template>
 
@@ -72,27 +83,9 @@
   import * as GroMET from '@/types/typesGroMEt';
   import { formatFullDateTime } from '@/utils/DateTimeUtil';
 
-  const defaultCodeSpanReference: any = {
-    code_type: GroMET.CodeType.Identifier,
-    file_id: null,
-    line_begin: null,
-    line_end: null,
-    col_begin: null,
-    col_end: null,
-  };
-
   @Component
   export default class MetadataPane extends Vue {
-    @Prop({ default: null }) data: any[];
-
-    /** Clean the metadata to match our expected format. */
-    get metadata () : GroMET.Metadata[] {
-      if (!this.data) return [];
-      const cleanMetadata = this.data.map(datum => {
-        return { ...defaultCodeSpanReference, ...datum };
-      });
-      return cleanMetadata;
-    }
+    @Prop({ default: [] }) metadata: GroMET.Metadata[];
 
     get isEmptyMetadata (): boolean {
       return this.metadata.length === 0;
@@ -112,6 +105,11 @@
 
     isTypeTextParameter (datum: GroMET.Metadata): boolean {
       return datum.metadata_type === GroMET.MetadataType.TextParameter;
+    }
+
+    isTypeText (datum: GroMET.Metadata): boolean {
+      return this.isTypeTextDefinition(datum) ||
+        this.isTypeTextParameter(datum);
     }
 
     provenanceDate (timestamp: string): string {
@@ -146,6 +144,29 @@
       }
 
       return `${lines} ${columns}`.trim();
+    }
+
+    textExtraction (datum: GroMET.TextDefinition | GroMET.TextParameter): string {
+      const text = datum.text_extraction;
+      let result: string;
+
+      if (text.page) {
+        result += ` Page #${text.page}`;
+      }
+
+      if (text.block) {
+        result += ` Block #${text.page}`;
+      }
+
+      if (text.char_begin || text.char_end) {
+        result += ` Char #${text.char_begin ?? text.char_end}`;
+      }
+
+      if (text.char_begin && text.char_end) {
+        result += ` Chars #${text.char_begin}-${text.char_end}`;
+      }
+
+      return result.trim();
     }
 
     equationSourceMathML (mml: string): string {

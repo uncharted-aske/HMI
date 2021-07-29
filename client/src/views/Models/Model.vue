@@ -78,7 +78,7 @@
       <metadata-pane
         v-if="drilldownActiveTabId === 'metadata'"
         slot="content"
-        :data="drilldownMetadata"
+        :metadata="drilldownMetadata"
         @open-modal="onOpenModalMetadata"
       />
       <parameters-pane
