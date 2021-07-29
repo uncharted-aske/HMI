@@ -1,33 +1,28 @@
 import { DataFile, DataSource } from '@dekkai/data-source';
 import s3Client from '@/services/S3Service';
 
-const storeSizeLimit = 104857600; // 100MB in bytes
-const storeEntryLimit = 10485760; // 10MB in bytes
-const memoizedStore = new Map();
-const memoizedSize = new Map();
-
-const storeSize = (): number => {
-  let totalValue = 0;
-  for (const value of memoizedSize.values()) {
-    totalValue += value;
-  }
-  return totalValue;
-};
+const STORE_SIZE_LIMIT = 104857600; // 100MB in bytes
+const STORE_SIZE_ENTRY_LIMIT = 10485760; // 10MB in bytes
+const cacheStore = new Map();
+const cacheSize = new Map();
+let cacheSizeTotal = 0;
 
 const storeResult = (hash: string, result: unknown, size: number): void => {
-  if (size > storeEntryLimit) {
+  if (size > STORE_SIZE_ENTRY_LIMIT) {
     return;
   }
 
-  // TO-DO: Optimize this
-  while (storeSize() + size > storeSizeLimit) {
-    const shiftKey = memoizedStore.keys().next().value;
-    memoizedStore.delete(shiftKey);
-    memoizedSize.delete(shiftKey);
+  cacheSizeTotal += size;
+
+  while (cacheSizeTotal > STORE_SIZE_LIMIT) {
+    const shiftKey = cacheStore.keys().next().value;
+    cacheSizeTotal -= cacheSize.get(shiftKey);
+    cacheStore.delete(shiftKey);
+    cacheSize.delete(shiftKey);
   }
 
-  memoizedStore.set(hash, result);
-  memoizedSize.set(hash, size);
+  cacheStore.set(hash, result);
+  cacheSize.set(hash, size);
 };
 
 export const getUtil = async (urlStr: string, paramObj?: Record<string, any>): Promise<any> => {
@@ -49,8 +44,8 @@ export const getUtil = async (urlStr: string, paramObj?: Record<string, any>): P
 
 export const getUtilMem = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
   const hash = urlStr + JSON.stringify(paramObj);
-  if (memoizedStore.has(hash)) {
-    return Promise.resolve(memoizedStore.get(hash));
+  if (cacheStore.has(hash)) {
+    return Promise.resolve(cacheStore.get(hash));
   } else {
     try {
       const response = await fetch(urlStr, paramObj);
@@ -79,8 +74,8 @@ export const postUtil = async (urlStr: string, paramObj: Record<string, any>): P
 export const postUtilMem = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
   const paramObjStr = JSON.stringify(paramObj);
   const hash = urlStr + paramObjStr;
-  if (memoizedStore.has(hash)) {
-    return Promise.resolve(memoizedStore.get(hash));
+  if (cacheStore.has(hash)) {
+    return Promise.resolve(cacheStore.get(hash));
   } else {
     try {
       const response = await fetch(urlStr, {
