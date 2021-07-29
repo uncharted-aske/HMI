@@ -131,9 +131,10 @@ export const filterToBgraph = (bgraph: any, filters: Filters): any => {
 
         // Append path query results
         // TODO: Consider adding a way to flatten paths as a bgraph pipeline step
-        const path = bgraphPathQueryResults[i].state?.path || [];
-        for (const vertex of path) {
-          flattenedBGraphPathQueryResults.push(vertex);
+        let currPath = bgraphPathQueryResults[i].state?.path;
+        while (currPath) {
+          flattenedBGraphPathQueryResults.push(currPath.vertex);
+          currPath = currPath.parent;
         }
       }
       const bgraphQueryResults = _.uniqBy(flattenedBGraphPathQueryResults, '_id');

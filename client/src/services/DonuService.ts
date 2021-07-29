@@ -33,6 +33,40 @@ const getDonuModelSource = async (model: string, type: Donu.Type): Promise<Donu.
   }
 };
 
+const convertGrometNodesDataToBGraphNodesData = (nodes: any[], edges: any[]): any[] => {
+  const bgNodes = [];
+  for (const node of nodes) {
+    node._id = node.id;
+    node._type = 'node';
+    bgNodes.push(node);
+  }
+  for (const edge of edges) {
+    edge._id = `${edge.source}->${edge.target}`;
+    edge._type = 'edge';
+    bgNodes.push(edge);
+  }
+  return bgNodes;
+};
+
+const convertGrometEdgesDataToBGraphEdgesData = (edges: any[]): any[] => {
+  const bgEdges = [];
+  for (const edge of edges) {
+    const sourceEdge = {
+      _id: `${edge.source}->${edge.source}->${edge.target}`,
+      _out: edge.source,
+      _in: `${edge.source}->${edge.target}`,
+    };
+    const targetEdge = {
+      _id: `${edge.source}->${edge.target}->${edge.target}`,
+      _out: `${edge.source}->${edge.target}`,
+      _in: edge.target,
+    };
+    bgEdges.push(sourceEdge);
+    bgEdges.push(targetEdge);
+  }
+  return bgEdges;
+};
+
 /** Fetch a complete list of available models from Donu API */
 export const fetchDonuModels = async (): Promise<Model.Model[]> => {
   const request: Donu.Request = {
@@ -52,11 +86,14 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
       const gromet = await getDonuModelSource(model.source.model, model.type);
       model.gromet = gromet;
     }));
-    // 4. Transform Gromet to graph for rendering
+
     models.forEach(model => {
+      // 4. Transform Gromet to graph for rendering
       model.graph = GroMEt2Graph.parseGromet(model.gromet);
+      // 5. Transform Gromet to bgraph for querying
+      model.bgNodes = convertGrometNodesDataToBGraphNodesData(model.graph.nodes, model.graph.edges);
+      model.bgEdges = convertGrometEdgesDataToBGraphEdgesData(model.graph.edges);
     });
-    // TODO: 5. Transform Gromet to bgraph for querying
     // 6. Group models by model name
     const output = new Array(1);
     models.forEach(model => {
@@ -70,6 +107,10 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
         graph: {
           nodes: model.graph.nodes,
           edges: model.graph.edges,
+        },
+        bgraph: {
+          nodes: model.bgNodes,
+          edges: model.bgEdges,
         },
       };
       if (name === 'SimpleSIR' || name === 'SimpleSIR_metadata') {
