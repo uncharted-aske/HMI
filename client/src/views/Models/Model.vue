@@ -122,6 +122,7 @@
   import { TabInterface, ViewInterface } from '@/types/types';
   import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
   import * as Model from '@/types/typesModel';
+  import * as GroMEt from '@/types/typesGroMEt';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
@@ -349,9 +350,14 @@
       this.selectedLayoutId = layoutId;
     }
 
-    async searchCosmos (keyword: string): Promise<void> {
+    async getDrilldownKnowledge (): Promise<void> {
       try {
-        const response = await cosmosSearch(filterToParamObj({ cosmosQuery: [keyword] }));
+        const codeCollection = this.selectedGraphMetadata
+          .find(metadata => metadata.metadata_type === GroMEt.MetadataType.CodeCollectionReference);
+
+        const response = await cosmosSearch(filterToParamObj({
+          askeId: (codeCollection as GroMEt.CodeCollectionInterface).global_reference_id.id,
+        }));
         this.drilldownKnowledge = response;
       } catch (e) {
         throw Error(e);
@@ -369,6 +375,7 @@
       this.drilldownPaneTitle = node.label;
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownMetadata = node.metadata;
+      this.getDrilldownKnowledge();
     }
 
     onBackgroundClick ():void {

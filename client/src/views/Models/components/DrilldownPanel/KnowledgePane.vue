@@ -33,7 +33,7 @@
     dataLoading = false;
 
     get isEmptyData (): boolean {
-      return _.isEmpty(this.data);
+      return _.isEmpty(this.data) || Boolean(this.data.error);
     }
 
     showMoreHandler (doi: string): void {
