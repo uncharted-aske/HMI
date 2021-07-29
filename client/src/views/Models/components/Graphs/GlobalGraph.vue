@@ -30,7 +30,7 @@
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
     @Prop({ default: null }) subgraph: SubgraphInterface;
-    @Prop({ default: () => [] }) highlightedNodes: SubgraphNodeInterface[];
+    @Prop({ default: () => [] }) editedNodes: SubgraphNodeInterface[];
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -52,9 +52,9 @@
       this.subgraphChanged();
     }
 
-    @Watch('highlightedNodes')
-    async highlightedNodesChanged (): Promise<void> {
-      this.renderer.highlightNodes(this.highlightedNodes);
+    @Watch('editedNodes')
+    async editedNodesChanged (): Promise<void> {
+      this.renderer.markEditedNodes(this.editedNodes);
     }
 
     subgraphChanged (): void {
@@ -100,19 +100,6 @@
           this.$emit('node-click', node.datum().data);
         }
       });
-
-      // this.renderer.setCallback('nodeMouseEnter', (evt, node, /**renderer*/) => {
-      //   if (!node.datum().nodes) {
-      //     const data = node.datum();
-      //     /* @ts-ignore */
-      //     // showTooltip(renderer.chart, data.label, [data.x + data.width / 2, data.y]); // Fixme: tooltips for nodes within a container are not properly placed
-      //   }
-      // });
-
-      // this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
-      //   if (node.datum().nodes) return;
-      //   // hideTooltip(renderer.chart);
-      // });
 
       this.renderer.setCallback('backgroundClick', () => {
           this.renderer.hideSubgraph();

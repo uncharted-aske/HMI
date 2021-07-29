@@ -2,6 +2,8 @@
 import { traverse } from '@/graphs/svg/util';
 import dagre from 'dagre';
 
+import { NodeTypes } from '@/graphs/svg/encodings.ts';
+
 export default class DagreAdapter {
   constructor (options) {
     this.nodeWidth = options.nodeWidth;
@@ -16,7 +18,7 @@ export default class DagreAdapter {
         node.height = this.nodeHeight;
 
         // Special case for parameters
-        if (node?.data.role?.includes('parameter')) {
+        if (node.data && node.data.role?.includes(NodeTypes.NODES.PARAMETER)) {
           node.width = this.parameterNodeSize || 30;
           node.height = this.parameterNodeSize || 30;
         }
