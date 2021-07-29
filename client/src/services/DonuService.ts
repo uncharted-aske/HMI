@@ -2,12 +2,20 @@ import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
-import { postUtil } from '@/utils/FetchUtil';
+import { postUtil, postUtilMem } from '@/utils/FetchUtil';
 
 /** Send the request to Donu */
 const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
   try {
     return postUtil(process.env.DONU_ENDPOINT, request);
+  } catch (error) {
+    console.error('[DONU Service] — callDonu', error); // eslint-disable-line no-console
+  }
+};
+
+const callDonuCache = (request: Donu.Request): Promise<Donu.Response> => {
+  try {
+    return postUtilMem(process.env.DONU_ENDPOINT, request);
   } catch (error) {
     console.error('[DONU Service] — callDonu', error); // eslint-disable-line no-console
   }
@@ -33,6 +41,40 @@ const getDonuModelSource = async (model: string, type: Donu.Type): Promise<Donu.
   }
 };
 
+const convertGrometNodesDataToBGraphNodesData = (nodes: any[], edges: any[]): any[] => {
+  const bgNodes = [];
+  for (const node of nodes) {
+    node._id = node.id;
+    node._type = 'node';
+    bgNodes.push(node);
+  }
+  for (const edge of edges) {
+    edge._id = `${edge.source}->${edge.target}`;
+    edge._type = 'edge';
+    bgNodes.push(edge);
+  }
+  return bgNodes;
+};
+
+const convertGrometEdgesDataToBGraphEdgesData = (edges: any[]): any[] => {
+  const bgEdges = [];
+  for (const edge of edges) {
+    const sourceEdge = {
+      _id: `${edge.source}->${edge.source}->${edge.target}`,
+      _out: edge.source,
+      _in: `${edge.source}->${edge.target}`,
+    };
+    const targetEdge = {
+      _id: `${edge.source}->${edge.target}->${edge.target}`,
+      _out: `${edge.source}->${edge.target}`,
+      _in: edge.target,
+    };
+    bgEdges.push(sourceEdge);
+    bgEdges.push(targetEdge);
+  }
+  return bgEdges;
+};
+
 /** Fetch a complete list of available models from Donu API */
 export const fetchDonuModels = async (): Promise<Model.Model[]> => {
   const request: Donu.Request = {
@@ -51,11 +93,14 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
     await Promise.all(models.map(async model => {
       model.gromet = await getDonuModelSource(model.source.model, model.type);
     }));
-    // 4. Transform Gromet to graph for rendering
+
     models.forEach(model => {
+      // 4. Transform Gromet to graph for rendering
       model.graph = GroMEt2Graph.parseGromet(model.gromet);
+      // 5. Transform Gromet to bgraph for querying
+      model.bgNodes = convertGrometNodesDataToBGraphNodesData(model.graph.nodes, model.graph.edges);
+      model.bgEdges = convertGrometEdgesDataToBGraphEdgesData(model.graph.edges);
     });
-    // TODO: 5. Transform Gromet to bgraph for querying
     // 6. Group models by model name
     const output = new Array(1);
     models.forEach(model => {
@@ -69,6 +114,10 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
         graph: {
           nodes: model.graph.nodes,
           edges: model.graph.edges,
+        },
+        bgraph: {
+          nodes: model.bgNodes,
+          edges: model.bgEdges,
         },
       };
       delete model.gromet;
@@ -109,7 +158,7 @@ export const getModelParameters = async (model: Model.Model, selectedModelGraphT
       } as Donu.ModelDefinition,
     };
 
-    const response = await callDonu(request);
+    const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       const result = response?.result as Donu.ModelDefinition;
       return result?.parameters ?? null;
@@ -134,7 +183,7 @@ export const getModelVariables = async (model: Model.Model, selectedModelGraphTy
       } as Donu.ModelDefinition,
     };
 
-    const response = await callDonu(request);
+    const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       const result = response?.result as Donu.ModelDefinition;
       return result?.measures ?? null;
@@ -177,7 +226,7 @@ export const getModelResult = async (
       step: config.step,
     };
 
-    const response = await callDonu(request);
+    const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       return response?.result as Donu.SimulationResponse ?? null;
     } else {
