@@ -46,9 +46,7 @@
     </settings-bar>
     <div class="parameters">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
-      <div v-if="noDisplayedParameters" class="alert alert-info m-3">
-        Use the model visualization on the left to add/remove parameters.
-      </div>
+      <message-display v-if="noDisplayedParameters" :message="`Use the model visualization on the left or the ➕ and 🚫 buttons above to add/remove parameters.`" />
       <ul v-else class="parameters-list">
         <li
           class="parameter"
@@ -86,10 +84,13 @@
   import * as HMI from '@/types/types';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
+
 
   const components = {
     Counters,
     SettingsBar,
+    MessageDisplay,
   };
 
   @Component({ components })
