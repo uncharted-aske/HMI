@@ -76,8 +76,8 @@
         addons: [expandCollapse, highlight],
       });
 
-      this.renderer.setCallback('nodeDblClick', (evt, node) => { 
-        //Expand/collapse boxes       
+      this.renderer.setCallback('nodeDblClick', (evt, node) => {
+        // Expand/collapse boxes
         if (node.datum().nodes) {
           const id = node.datum().id;
           if (node.datum().collapsed === true) {
@@ -93,8 +93,8 @@
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
         this.renderer.hideSubgraph();
-          
-        //Only show neighborhood for children nodes
+
+        // Only show neighborhood for children nodes
         if (!node.datum().nodes) {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.showSubgraph(neighborhood);
@@ -104,7 +104,6 @@
         }
 
         this.$emit('node-click', node.datum().data);
-
       });
 
       this.renderer.setCallback('backgroundClick', () => {
