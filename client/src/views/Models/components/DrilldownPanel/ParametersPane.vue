@@ -14,9 +14,8 @@
         </div>
       </div>
   </div>
-  <div v-else class="alert alert-info" role="alert">
-    No metadata at the moment
-  </div>
+
+  <message-display v-else :message="`No metadata at the moment.`" />
 </template>
 
 <script lang="ts">
@@ -27,9 +26,11 @@
   import { Prop } from 'vue-property-decorator';
 
   import ScatterPlot from '@/components/widgets/charts/ScatterPlot.vue';
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
 
   const components = {
     ScatterPlot,
+    MessageDisplay,
   };
 
   @Component({ components })

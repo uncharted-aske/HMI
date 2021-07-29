@@ -10,9 +10,7 @@
         </div>
       </div>
     </div>
-    <div v-else class="alert alert-info" role="alert">
-      No metadata at the moment
-    </div>
+    <message-display v-else :message="`No metadata at the moment.`" />
   </div>
 </template>
 
@@ -25,7 +23,13 @@
 
   import { CosmosSearchInterface } from '@/types/typesCosmos';
 
-  @Component
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
+
+  const components = {
+    MessageDisplay,
+  };
+
+  @Component({ components })
   export default class KnowledgePane extends Vue {
     @Prop({ default: null }) data: CosmosSearchInterface;
 

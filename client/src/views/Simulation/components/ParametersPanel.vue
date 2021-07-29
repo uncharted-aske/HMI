@@ -86,7 +86,6 @@
   import SettingsBar from '@/components/SettingsBar.vue';
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
 
-
   const components = {
     Counters,
     SettingsBar,
