@@ -25,7 +25,18 @@
       <template v-if="isTypeEquationDefinition(datum)">
         <summary :title="datum.uid">Equation Definition</summary>
         <div class="metadata-content">
-          <h6>XXX</h6>
+          <h6>Number {{ datum.equation_number }}</h6>
+          <p>{{ datum.document_reference_uid }}</p>
+
+          <template v-if="datum.equation_source_latex">
+            <h6>LaTeX</h6>
+            <p>{{ datum.equation_source_latex }}</p>
+          </template>
+
+          <template v-if="datum.equation_source_mml">
+            <h6>Math ML</h6>
+            <template v-html="equationSourceMathML(datum.equation_source_mml)" />
+          </template>
         </div>
       </template>
 
