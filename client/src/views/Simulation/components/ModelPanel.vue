@@ -17,7 +17,7 @@
       v-if="graph"
       :data="graph"
       :highlighted-nodes="editedNodes"
-      @node-dblclick="onNodeClick"
+      @node-dblclick="onNodeDblClick"
     />
   </section>
 </template>
@@ -52,7 +52,7 @@
 
     settingsOpen: boolean = false;
 
-    onNodeClick (selected: Graph.GraphNodeInterface): void {
+    onNodeDblClick (selected: Graph.GraphNodeInterface): void {
       this.toggleParameter({ modelId: this.model.id, selector: selected.label });
       this.toggleVariable({ modelId: this.model.id, selector: selected.label });
     }
@@ -87,7 +87,6 @@
     }
 
     get graph (): Graph.GraphInterface {
-      // return this.model?.modelGraph?.[0]?.graph;
       const selectedModelGraph = this.model?.modelGraph.find(graph => {
         return graph.type === this.getSelectedModelGraphType;
       });
