@@ -109,7 +109,7 @@
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
   import svgUtil from '@/utils/SVGUtil';
-  import { shorterNb } from '@/utils/NumberUtil';
+  import { scientificNotation } from '@/utils/NumberUtil';
   import * as HMI from '@/types/types';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -271,12 +271,12 @@
             // min label
             g.append('text')
               .attr('x', xMinMax[0])
-              .text(d => shorterNb(xScales.get(d).min));
+              .text(d => scientificNotation(xScales.get(d).min));
 
             // max label
             g.append('text')
               .attr('x', xMinMax[1])
-              .text(d => shorterNb(xScales.get(d).max));
+              .text(d => scientificNotation(xScales.get(d).max));
 
             return g;
           });

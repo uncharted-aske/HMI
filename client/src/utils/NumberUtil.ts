@@ -1,6 +1,21 @@
 /**
- * Shorten a number using English scientific notation.
- * (i.e. 100,000 -> 100K)
+ * Display a number using scientific notation.
+ */
+export const scientificNotation = (value: number, asHTML: boolean = false): string => {
+  const scientificNotation = new Intl.NumberFormat('en', { notation: 'scientific' }).format(value);
+  const [decimal, power] = scientificNotation.split('E');
+  if (Number(power) === 0) {
+    return decimal;
+  } else if (asHTML) {
+    return `${decimal} &times; 10<sup>${power}</sup>`;
+  } else {
+    return `${decimal} x 10^${power}`;
+  }
+};
+
+/**
+ * Shorten a number using English short form.
+ * (i.e. 100000 -> 100K)
  */
 export const shorterNb = (value: number): string => {
   return new Intl.NumberFormat('en', { notation: 'compact' }).format(value);
