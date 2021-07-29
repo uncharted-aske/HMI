@@ -22,11 +22,12 @@ export enum CodeType {
 }
 
 export enum MetadataType {
-  EquationDefinition = 'EquationDefinition',
   CodeCollectionReference = 'CodeCollectionReference',
   CodeSpanReference = 'CodeSpanReference',
+  EquationDefinition = 'EquationDefinition',
   ModelInterface = 'ModelInterface',
   TextDefinition = 'TextDefinition',
+  TextParameter = 'TextParameter',
   TextualDocumentReferenceSet = 'TextualDocumentReferenceSet',
 }
 
@@ -58,4 +59,37 @@ export interface CodeSpanReference extends Metadata {
 
 export interface TextualDocumentReferenceSet extends Metadata {
   documents: any,
+}
+
+export interface EquationDefinition extends Metadata {
+  equation_extraction: {
+    document_reference_uid: string,
+    equation_number: number,
+    equation_source_latex: string,
+    equation_source_mml: string,
+  }
+}
+
+export interface TextDefinition extends Metadata {
+  text_extraction: {
+    document_reference_uid: string,
+    page: number,
+    block: number,
+    char_begin: number,
+    char_end: number
+  },
+  variable_identifier: string,
+  variable_definition: string,
+}
+
+export interface TextParameter extends Metadata {
+  text_extraction: {
+    document_reference_uid: string,
+    page: number,
+    block: number,
+    char_begin: number,
+    char_end: number
+  },
+  variable_identifier: string,
+  value: string,
 }

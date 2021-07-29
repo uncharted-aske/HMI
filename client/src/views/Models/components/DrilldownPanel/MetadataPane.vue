@@ -22,6 +22,27 @@
         </div>
       </template>
 
+      <template v-if="isTypeEquationDefinition(datum)">
+        <summary :title="datum.uid">Equation Definition</summary>
+        <div class="metadata-content">
+          <h6>XXX</h6>
+        </div>
+      </template>
+
+      <template v-if="isTypeTextDefinition(datum)">
+        <summary :title="datum.uid">Text Definition</summary>
+        <div class="metadata-content">
+          <h6>XXX</h6>
+        </div>
+      </template>
+
+      <template v-if="isTypeTextParameter(datum)">
+        <summary :title="datum.uid">Text Parameter</summary>
+        <div class="metadata-content">
+          <h6>XXX</h6>
+        </div>
+      </template>
+
       <aside class="metadata-provenance">
         {{ datum.provenance.method }}
         <time :datetime="datum.provenance.timestamp">
@@ -54,7 +75,7 @@
     @Prop({ default: null }) data: any[];
 
     /** Clean the metadata to match our expected format. */
-    get metadata () : GroMET.CodeSpanReference[] {
+    get metadata () : GroMET.Metadata[] {
       if (!this.data) return [];
       const cleanMetadata = this.data.map(datum => {
         return { ...defaultCodeSpanReference, ...datum };
@@ -68,6 +89,18 @@
 
     isTypeCodeSpanReference (datum: GroMET.Metadata): boolean {
       return datum.metadata_type === GroMET.MetadataType.CodeSpanReference;
+    }
+
+    isTypeEquationDefinition (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadataType.EquationDefinition;
+    }
+
+    isTypeTextDefinition (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadataType.TextDefinition;
+    }
+
+    isTypeTextParameter (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadataType.TextParameter;
     }
 
     provenanceDate (timestamp: string): string {
