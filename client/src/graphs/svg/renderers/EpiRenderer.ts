@@ -43,7 +43,9 @@ export default class EpiRenderer extends SVGRenderer {
   }
 
   static calcNodeStrokeWidth (d: d3.Selection<any, any, any, any>): number {
-    return !(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? DEFAULT_STYLE.node.strokeWidth + 1 : DEFAULT_STYLE.node.strokeWidth;
+    if (!(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE)) {
+      return DEFAULT_STYLE.node.strokeWidth + 1;
+    } else return DEFAULT_STYLE.node.strokeWidth;
   }
 
   buildDefs (): void {
