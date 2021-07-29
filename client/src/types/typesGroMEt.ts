@@ -44,8 +44,8 @@ export interface ModelInterface extends Metadata {
 }
 
 export interface CodeCollectionInterface extends Metadata {
-  fileIds: FileId[],
-  globalReferenceId: {id: string, type: string},
+  file_ids: FileId[],
+  global_reference_id: {id: string, type: string},
 }
 
 export interface CodeSpanReference extends Metadata {
