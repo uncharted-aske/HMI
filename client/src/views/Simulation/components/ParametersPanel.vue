@@ -53,7 +53,7 @@
         <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
         buttons above to add/remove parameters.
         </span>
-    </message-display>
+      </message-display>
       <ul v-else class="parameters-list">
         <li
           class="parameter"

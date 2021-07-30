@@ -45,13 +45,13 @@
           Click Run to get variables output
           </span>
         </message-display>
-          <message-display v-if="noDisplayedVariables" class="m-3">
+        <message-display v-if="noDisplayedVariables" class="m-3">
           <span slot="message">
-          Use the model visualization on the left or
-          <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
-          <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
-          buttons above to add/remove variables.
-        </span>
+            Use the model visualization on the left or
+            <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
+            <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
+            buttons above to add/remove variables.
+          </span>
         </message-display>
         <multi-line-plot
           v-else
