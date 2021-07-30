@@ -374,18 +374,15 @@
     }
 
     onNodeClick (node: GraphNodeInterface): void {
-      // Merge node metadata with Variables metadata. c.f. GraphNodeInterface type
-      const metadata = node.metadata ? node.metadata.flat() : null;
-
       // Select which tab should be open first, then open the drilldown.
-      this.drilldownActiveTabId = metadata ? 'metadata' : 'parameters';
+      this.drilldownActiveTabId = 'metadata';
       this.isOpenDrilldown = true;
 
-      // Set the information for each tab.
-      this.drilldownMetadata = metadata;
+      // Merge node metadata with Variables metadata. c.f. GraphNodeInterface type
+      this.drilldownMetadata = node.metadata ? node.metadata.flat() : null;
+
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownPaneTitle = node.label;
-
       this.getDrilldownKnowledge();
     }
 
