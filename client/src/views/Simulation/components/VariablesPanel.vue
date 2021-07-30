@@ -47,7 +47,10 @@
         </message-display>
           <message-display v-if="noDisplayedVariables">
           <span slot="message">
-          Use the model visualization on the left to add/remove variables.
+          Use the model visualization on the left or 
+          <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
+          <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
+          buttons above to add/remove variables.
         </span>
         </message-display>
         <multi-line-plot
