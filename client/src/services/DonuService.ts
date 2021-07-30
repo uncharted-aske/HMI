@@ -195,14 +195,6 @@ export const getModelVariables = async (model: Model.Model, selectedModelGraphTy
   }
 };
 
-const getSimulationType = (modelType: Donu.Type): Donu.SimulationType | void => {
-  if (modelType === Donu.Type.GROMET_PNC) {
-    // HACK: Donu defaults to Algebraic Julia as the sim engine for Petri Net Classics.
-    // here we've temporarily overwritten to use GSL as algebraic julia contains a bug
-    return Donu.SimulationType.GSL;
-  }
-};
-
 /** Fetch the result of a model simulation */
 export const getModelResult = async (
   model: Model.Model,
@@ -214,8 +206,6 @@ export const getModelResult = async (
   if (modelGraph) {
     const request: Donu.Request = {
       command: Donu.RequestCommand.SIMULATE,
-      // HACK: get simulation type is a temporary solution while the Donu service fixes their simulation engine calls
-      'sim-type': getSimulationType(modelGraph.donuType as Donu.Type),
       definition: {
         source: { model: modelGraph.model },
         type: modelGraph.donuType as Donu.Type,
