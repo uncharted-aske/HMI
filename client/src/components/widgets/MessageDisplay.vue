@@ -1,6 +1,6 @@
 <template>
   <div
-    class="alert m-3"
+    class="alert"
     :class="alertType">
     <font-awesome-icon class="icon" :icon="['fas', iconType]"/>
     <slot name="message" />
@@ -13,7 +13,7 @@
   import { Prop } from 'vue-property-decorator';
 
   @Component
-  export default class Counters extends Vue {
+  export default class MessageDisplay extends Vue {
     @Prop({ default: 'info' })
     messageType: string;
 

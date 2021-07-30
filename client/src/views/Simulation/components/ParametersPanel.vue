@@ -46,7 +46,7 @@
     </settings-bar>
     <div class="parameters">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
-       <message-display v-if="noDisplayedParameters">
+       <message-display class="m-3" v-if="noDisplayedParameters">
         <span slot="message">
         Use the model visualization on the left or the
         <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and

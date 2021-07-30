@@ -40,12 +40,12 @@
 
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
-        <message-display v-if="!getVariablesRunsCount">
+        <message-display v-if="!getVariablesRunsCount" class="m-3">
           <span slot="message">
           Click Run to get variables output
           </span>
         </message-display>
-          <message-display v-if="noDisplayedVariables">
+          <message-display v-if="noDisplayedVariables" class="m-3">
           <span slot="message">
           Use the model visualization on the left or
           <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
