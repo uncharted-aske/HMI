@@ -52,6 +52,8 @@ library.add(
   FA.faUndo,
   FA.faWindowMaximize,
   FA.faWindowMinimize,
+  FA.faInfoCircle,
+  FA.faExclamationTriangle,
 );
 // Enable automatic font awesome icon transformations
 dom.watch();

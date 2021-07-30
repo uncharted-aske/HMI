@@ -32,7 +32,12 @@
         </button>
       </aside>
     </settings-bar>
-    <global-graph v-if="model" :data="graph" :edited-nodes="editedNodes" @node-dblclick="onNodeClick"/>
+    <global-graph
+      v-if="graph"
+      :data="graph"
+      :edited-nodes="editedNodes"
+      @node-dblclick="onNodeDblClick"
+    />
   </section>
 </template>
 
@@ -59,8 +64,8 @@
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
 
-    @Getter getSimParameters;
-    @Getter getSimVariables;
+    @Getter getSimModel;
+    @Getter getSelectedModelGraphType;
 
     @Action hideAllParameters;
     @Action showAllParameters;
@@ -72,21 +77,45 @@
 
     settingsOpen: boolean = false;
 
-    onNodeClick (selected: Graph.GraphNodeInterface): void {
-      this.toggleParameter(selected.label);
-      this.toggleVariable(selected.label);
+    onNodeDblClick (selected: Graph.GraphNodeInterface): void {
+      this.toggleParameter({ modelId: this.model.id, selector: selected.label });
+      this.toggleVariable({ modelId: this.model.id, selector: selected.label });
+    }
+
+    get parameters (): HMI.SimulationParameter[] {
+      return this.getSimModel(this.model.id).parameters;
+    }
+
+    get variables (): HMI.SimulationVariable[] {
+      return this.getSimModel(this.model.id).variables;
     }
 
     get editedNodes (): Graph.SubgraphNodeInterface[] {
-      const highlightedLabels = [
-        ...this.getSimParameters.filter(parameter => parameter.edited).map(parameter => parameter.metadata.name),
-        ...this.getSimVariables.filter(variable => variable.edited).map(variable => variable.metadata.name),
-      ];
-      return this.graph.nodes.filter(node => highlightedLabels.includes(node.label)).map(node => ({ id: node.id }));
+      const nodes = this.graph?.nodes;
+      if (nodes) {
+        const highlightedLabels = [
+          ...this.parameters
+              .filter(parameter => parameter.edited)
+              .map(parameter => parameter.metadata.name),
+          ...this.variables
+              .filter(variable => variable.edited)
+              .map(variable => variable.metadata.name),
+        ];
+
+        if (highlightedLabels.length > 0) {
+          return nodes
+            .filter(node => highlightedLabels.includes(node.label))
+            .map(node => ({ id: node.id }));
+        }
+      }
+      return [];
     }
 
     get graph (): Graph.GraphInterface {
-      return this.model?.modelGraph?.[0]?.graph;
+      const selectedModelGraph = this.model?.modelGraph.find(graph => {
+        return graph.type === this.getSelectedModelGraphType;
+      });
+      return selectedModelGraph?.graph ?? null;
     }
 
     get modelName (): string {
@@ -95,32 +124,32 @@
 
     get countersData (): HMI.Counter[] {
       const data = [];
-      if (this.getSimParameters.length > 0) {
+      if (this.parameters.length > 0) {
         data.push({
           name: 'Parameters',
-          value: this.getSimParameters.length,
+          value: this.parameters.length,
         });
       }
-      if (this.getSimVariables.length > 0) {
+      if (this.variables.length > 0) {
         data.push({
           name: 'Variables',
-          value: this.getSimVariables.length,
+          value: this.variables.length,
         });
       }
       return data;
     }
 
     get nbDisplayedParameters (): number {
-      return this.getSimParameters.filter(parameter => parameter.edited).length;
+      return this.parameters.filter(parameter => parameter.edited).length;
     }
 
     get nbDisplayedVariables (): number {
-      return this.getSimVariables.filter(variable => variable.edited).length;
+      return this.variables.filter(variable => variable.edited).length;
     }
 
     get allParametersAndVariablesAreDisplayed (): boolean {
-      return this.nbDisplayedParameters === this.getSimParameters.length &&
-        this.nbDisplayedVariables === this.getSimVariables.length;
+      return this.nbDisplayedParameters === this.parameters.length &&
+        this.nbDisplayedVariables === this.variables.length;
     }
 
     get noDisplayedParametersAndVariables (): boolean {

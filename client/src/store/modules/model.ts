@@ -14,6 +14,10 @@ const actions: ActionTree<Model.State, any> = {
     commit('setModelsList', await fetchDonuModels());
     commit('setIsInitialized', true);
   },
+
+  resetSelectedModelIds ({ commit }) {
+    commit('resetSelectedModelIds');
+  },
 };
 
 const getters: GetterTree<Model.State, any> = {
@@ -50,6 +54,10 @@ const mutations: MutationTree<Model.State> = {
   setSelectedModelGraphType (state, value: Model.GraphTypes) {
     if (state.selectedModelGraphType === value) value = null;
     state.selectedModelGraphType = value;
+  },
+
+  resetSelectedModelIds (state: Model.State) {
+    state.selectedModelIds = new Set();
   },
 };
 

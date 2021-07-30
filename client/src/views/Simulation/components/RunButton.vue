@@ -3,6 +3,7 @@
     <button
       type="button"
       class="btn btn-primary blue"
+      :disabled="disabled"
       @click="onClickRun"
     >
       <font-awesome-icon :icon="['fas', ( autoRunInput ? 'pause' : 'play') ]" />
@@ -38,13 +39,14 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { PropSync } from 'vue-property-decorator';
+  import { Prop, PropSync } from 'vue-property-decorator';
   import * as Donu from '@/types/typesDonu';
 
   @Component
   export default class RunButton extends Vue {
     @PropSync('autoRun', { type: Boolean }) autoRunInput!: boolean;
     @PropSync('config', { type: Object }) configInput!: Donu.RequestConfig;
+    @Prop({ default: false }) disabled: boolean;
 
     dropdownOpen: boolean = false;
 

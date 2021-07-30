@@ -1,9 +1,10 @@
 <template>
   <div class="metadata-list">
-    <div v-if="isEmptyMetadata" class="alert alert-info">
-      No metadata at the moment
-    </div>
-
+    <message-display v-if="isEmptyMetadata" class="m-3">
+      <span slot="message">
+        No metadata at the moment.
+      </span>
+    </message-display>
     <details
       class="metadata" open
       v-else
@@ -40,6 +41,8 @@
   import * as GroMET from '@/types/typesGroMEt';
   import { formatFullDateTime } from '@/utils/DateTimeUtil';
 
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
+
   const defaultCodeSpanReference: any = {
     code_type: GroMET.CodeType.Identifier,
     file_id: null,
@@ -49,7 +52,11 @@
     col_end: null,
   };
 
-  @Component
+  const components = {
+    MessageDisplay,
+  };
+
+  @Component({ components })
   export default class MetadataPane extends Vue {
     @Prop({ default: null }) data: any[];
 

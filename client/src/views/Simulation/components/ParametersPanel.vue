@@ -4,6 +4,8 @@
     :style="{
       '--padding': padding + 'px',
       '--parameter-height': parameterHeight + 'px',
+      '--parameter-input': parameterInput + 'px',
+      '--parameter-action': parameterAction + 'px',
     }"
   >
     <settings-bar>
@@ -42,9 +44,14 @@
     </settings-bar>
     <div class="parameters">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
-      <div v-if="noDisplayedParameters" class="alert alert-info m-3">
-        Use the model visualization on the left to add/remove parameters.
-      </div>
+       <message-display class="m-3" v-if="noDisplayedParameters">
+        <span slot="message">
+        Use the model visualization on the left or the
+        <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
+        <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
+        buttons above to add/remove parameters.
+        </span>
+      </message-display>
       <ul v-else class="parameters-list">
         <li
           class="parameter"
@@ -52,25 +59,14 @@
           :key="index"
           :class="{ hidden: parameter.hidden }"
         >
-          <h4 :title="parameter.metadata.Description">{{ parameter.metadata.name }}</h4>
-          <input type="text" :value="getCurrentValue(parameter)" @change="e => onParameterChange(parameter.uid, e)" />
+          <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
+          <input type="text" v-model.number="parameterValues[parameter.uid]" />
           <aside class="btn-group">
-            <!-- <button
-              class="btn btn-secondary btn-sm"
-              title="(parameter.hidden ? 'Show' : 'Hide' + ' parameter')"
-              type="button"
-              @click="parameter.hidden = !parameter.hidden"
-            >
-              <font-awesome-icon
-                class="fa-w-20"
-                :icon="['fas', (parameter.hidden ? 'eye' : 'eye-slash')]"
-              />
-            </button> -->
             <button
               class="btn btn-secondary btn-sm"
               title="Remove parameter from editable panel"
               type="button"
-              @click="hideParameter(parameter.uid)"
+              @click="hideParameter({ modelId, selector: parameter.uid })"
             >
               <font-awesome-icon :icon="['fas', 'ban']" />
             </button>
@@ -93,37 +89,81 @@
   import * as HMI from '@/types/types';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
 
   const components = {
     Counters,
     SettingsBar,
+    MessageDisplay,
   };
 
   @Component({ components })
   export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
+    @Prop({ default: null }) modelId: number;
     @InjectReactive() resized!: boolean;
     @InjectReactive() isResizing!: boolean;
 
-    @Getter getSimParameters;
+    @Getter getSimModel;
     @Getter getSimParameterArray;
     @Action setSimParameterValue;
     @Action hideParameter;
 
     private padding: number = 5;
-    private parameterHeight: number = 100;
+    private parameterHeight: number = 75;
+    private parameterInput: number = 65;
+    private parameterAction: number = 35;
+    private parameterValues: { [uid: string]: number } = {};
 
     // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
     @Watch('expanded') onExpanded (): void { this.drawGraph(); }
     @Watch('displayedParameters') onDisplayedParametersChanged (): void { this.drawGraph(); }
-    mounted (): void { this.drawGraph(); }
+
+    mounted (): void {
+      this.parameterValues = {};
+      this.onParametersChange();
+      this.drawGraph();
+    }
 
     // Condition when to clear the Graph
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
+    @Watch('parameters') onParametersChange (): void {
+      // If the parameterValues has no value for a parameter, we give the one in the store.
+      // This is used to set default parameter values.
+      this.parameters.forEach(parameter => {
+        if (!Object.prototype.hasOwnProperty.call(this.parameterValues, parameter.uid)) {
+          this.$set(this.parameterValues, parameter.uid, parameter.values[0]);
+        }
+      });
+
+      // If none of the parameters are visible, we empty their values.
+      if (this.parameters.filter(p => p.edited).length < 1) {
+        this.parameterValues = {};
+      }
+    }
+
+    // Parameters values update
+    @Watch('triggerParameterValues') onParameterValuesChange (): void {
+      this.parameters.forEach(parameter => {
+        if (this.parameterValues[parameter.uid] !== parameter.values[0]) {
+          this.setSimParameterValue({
+            modelId: this.modelId,
+            uid: parameter.uid,
+            value: this.parameterValues[parameter.uid],
+          });
+        }
+      });
+      this.drawGraph();
+    }
+
+    get triggerParameterValues (): string {
+      return Object.values(this.parameterValues).join(',');
+    }
+
     get parameters (): HMI.SimulationParameter[] {
-      const parameters = _.cloneDeep(this.getSimParameters);
+      const parameters = this.getSimModel(this.modelId)?.parameters ?? [];
       // Order by ASC order
       return _.orderBy(parameters, ['metadata.name'], ['asc']);
     }
@@ -149,10 +189,6 @@
       }
     }
 
-    getCurrentValue (parameter: HMI.SimulationParameter): number {
-      return parameter.values.slice(-1)[0];
-    }
-
     graphHeight (): number {
       return this.displayedParameters.length * this.parameterHeight;
     }
@@ -162,13 +198,14 @@
       return figure?.getBoundingClientRect().width ?? 0;
     }
 
-    onParameterChange (uid: string, event: Event): void {
-      const value = Number((event.target as HTMLInputElement).value);
-      this.setSimParameterValue({ uid, value });
+    /** Return the CSS selector to target this model parameters graph. */
+    get graphSelector (): string {
+      // the ID `parameters_X` is from the Simulation.vue.
+      return `#parameters_${this.modelId} .parameters-graph svg`;
     }
 
     clearGraph (): void {
-      d3.select('.parameters-graph svg').selectAll('*').remove();
+      d3.select(this.graphSelector).selectAll('*').remove();
     }
 
     drawGraph (): void {
@@ -176,22 +213,29 @@
       const params = this.displayedParameters.map(parameter => parameter.uid);
 
       // List of runs
-      const runs = this.getSimParameterArray;
-
-      // Select the graph and size it
-      this.clearGraph();
-      const graph = d3.select('.parameters-graph svg');
-      svgUtil.createChart(graph, this.graphWidth(), this.graphHeight());
+      const runs = this.getSimParameterArray(this.modelId);
+      if (!runs) return;
 
       // Dimensions
-      const marginX = this.graphWidth() * 0.25;
-      const marginY = this.parameterHeight / 2;
-      const xMinMax = [marginX, this.graphWidth() - marginX];
-      const yMinMax = [marginY, this.graphHeight() - marginY];
+      const axisLabelWidth = 40;
+      const marginX = {
+        // Input button + .parameter padding + axis label padding + axis label width
+        left: (this.parameterInput + (this.padding * 3) + axisLabelWidth),
+        // Action button + .parameter padding + axis label padding + axis label width
+        right: (this.parameterAction + (this.padding * 3) + axisLabelWidth),
+      };
+      const marginY = {
+        // first .parameter: middle of the top half of the CSS grid
+        top: this.padding + this.parameterHeight * 0.25,
+        // last .parameter: middle of the top half of the CSS grid
+        bottom: this.parameterHeight * 0.75 - this.padding,
+      };
+      const xMinMax = [marginX.left, this.graphWidth() - marginX.right];
+      const yMinMax = [marginY.top, this.graphHeight() - marginY.bottom];
 
       // X & Y Scales
       const xScale = param => {
-        const minMax = svgUtil.extendRoundUpToPow10(runs, d => d[param]) as Iterable<d3.NumberValue>;
+        const minMax = svgUtil.extendRoundUpToPow10(runs, d => d[param] ?? 0) as Iterable<d3.NumberValue>;
         return {
           min: minMax[0],
           max: minMax[1],
@@ -207,6 +251,11 @@
         .x(([param, value]) => xScales.get(param).scale(value))
         /* @ts-ignore */
         .y(([param]) => yScale(param));
+
+      // Select the graph and size it
+      this.clearGraph();
+      const graph = d3.select(this.graphSelector);
+      svgUtil.createChart(graph, this.graphWidth(), this.graphHeight());
 
       // Add the runs
       graph.append('g')
@@ -243,11 +292,14 @@
             // min label
             g.append('text')
               .attr('x', xMinMax[0])
+              .attr('text-anchor', 'end')
+              .attr('transform', svgUtil.translate(-this.padding, 3))
               .text(d => scientificNotation(xScales.get(d).min));
 
             // max label
             g.append('text')
               .attr('x', xMinMax[1])
+              .attr('transform', svgUtil.translate(this.padding, 3))
               .text(d => scientificNotation(xScales.get(d).max));
 
             return g;
@@ -274,6 +326,7 @@
   .parameters {
     background-color: var(--bg-graphs);
     flex-grow: 1;
+    overflow-y: auto;
     position: relative;
   }
 
@@ -295,14 +348,18 @@
   .parameter {
     display: grid;
     grid-template-areas:
-      ". . ."
-      "name . action"
+      "name axis action"
       "value . ."
     ;
-    grid-template-columns: min-content auto min-content;
-    grid-template-rows: 1fr 2em 1fr;
+    grid-template-columns: var(--parameter-input) auto var(--parameter-action);
+    grid-template-rows: 1fr 1fr;
     height: var(--parameter-height);
     padding: var(--padding);
+  }
+
+  .parameter:last-of-type {
+    /* Small spacing to have some empty space at the bottom of the scroll bar. */
+    margin-bottom: 2em;
   }
 
   .parameter h4 {
@@ -311,6 +368,7 @@
     grid-area: name;
     line-height: 2em;
     margin: 0;
+    overflow: hidden;
   }
 
   .parameter input {
@@ -351,8 +409,6 @@
     font-size: 10px;
     stroke: var(--text-color-light);
   }
-  .parameters-graph .axis text:first-of-type { translate: -1em .3em; }
-  .parameters-graph .axis text:last-of-type { translate: .5em .3em; }
 
   .parameters-graph .run {
     fill: none;
