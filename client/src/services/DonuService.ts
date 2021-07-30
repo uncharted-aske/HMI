@@ -95,7 +95,12 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
       model.bgEdges = convertGrometEdgesDataToBGraphEdgesData(model.graph.edges);
     });
     // 6. Group models by model name
-    const output = new Array(1);
+    const output = [];
+    // Track seen model names to group models of different types but the same
+    // name together
+    // HACK: An assumption has been made that a model with the same name is
+    // the same model. This is currently true however is not guaranteed
+    const seenModelNames = new Map();
     models.forEach(model => {
       const { name } = model.gromet;
       const metadata = { name, description: '' };
@@ -113,21 +118,18 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
           edges: model.bgEdges,
         },
       };
-      if (name === 'SimpleSIR' || name === 'SimpleSIR_metadata') {
-        output[0] = {
-          id: 0,
-          metadata,
-          name: 'SimpleSIR',
-          modelGraph: output[0]?.modelGraph ?? [],
-        };
-        output[0].modelGraph.push(modelGraph);
+      if (seenModelNames.has(name)) {
+        const modelIndex = seenModelNames.get(name);
+        output[modelIndex].modelGraph.push(modelGraph);
       } else {
+        const index = output.length;
         output.push({
-          id: output.length,
+          id: index,
           metadata,
           name,
           modelGraph: [modelGraph],
         });
+        seenModelNames.set(name, index);
       }
     });
 
