@@ -1,33 +1,59 @@
 import { DataFile, DataSource } from '@dekkai/data-source';
 import s3Client from '@/services/S3Service';
 
-const memoizedStore = new Map();
+const STORE_SIZE_LIMIT = 104857600; // 100MB in bytes
+const STORE_SIZE_ENTRY_LIMIT = 10485760; // 10MB in bytes
+const cacheStore = new Map();
+const cacheSize = new Map();
+let cacheSizeTotal = 0;
+
+const storeResult = (hash: string, result: unknown, size: number): void => {
+  if (size > STORE_SIZE_ENTRY_LIMIT) {
+    return;
+  }
+
+  cacheSizeTotal += size;
+
+  while (cacheSizeTotal > STORE_SIZE_LIMIT) {
+    const shiftKey = cacheStore.keys().next().value;
+    cacheSizeTotal -= cacheSize.get(shiftKey);
+    cacheStore.delete(shiftKey);
+    cacheSize.delete(shiftKey);
+  }
+
+  cacheStore.set(hash, result);
+  cacheSize.set(hash, size);
+};
+
+const GET_INIT: RequestInit = {
+  method: 'GET',
+  mode: 'cors',
+  cache: 'default',
+};
 
 export const getUtil = async (urlStr: string, paramObj?: Record<string, any>): Promise<any> => {
-  const init: RequestInit = {
-    method: 'GET',
-    mode: 'cors',
-    cache: 'default',
-  };
-
-  const url = new URL(urlStr);
-  url.search = new URLSearchParams(paramObj).toString();
   try {
-    const response = await fetch(url as unknown as Request, init);
+    const url = new URL(urlStr);
+    url.search = new URLSearchParams(paramObj).toString();
+    const response = await fetch(url as unknown as Request, GET_INIT);
     return await response.json();
   } catch (e) {
     return e;
   }
 };
 
-export const getUtilMem = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
+export const getUtilMem = async (urlStr: string, paramObj?: Record<string, any>): Promise<any> => {
   const hash = urlStr + JSON.stringify(paramObj);
-  if (memoizedStore.has(hash)) {
-    return Promise.resolve(memoizedStore.get(hash));
+  if (cacheStore.has(hash)) {
+    return Promise.resolve(cacheStore.get(hash));
   } else {
     try {
-      const result = await getUtil(urlStr, paramObj as URLSearchParams);
-      memoizedStore.set(hash, result);
+      const url = new URL(urlStr);
+      url.search = new URLSearchParams(paramObj).toString();
+      const response = await fetch(url as unknown as Request, GET_INIT);
+      const resultSize = (await response.clone().arrayBuffer()).byteLength;
+      const result = await response.json();
+      storeResult(hash, result, resultSize);
       return result;
     } catch (e) {
       return e;
@@ -48,13 +74,19 @@ export const postUtil = async (urlStr: string, paramObj: Record<string, any>): P
 };
 
 export const postUtilMem = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
-  const hash = urlStr + JSON.stringify(paramObj);
-  if (memoizedStore.has(hash)) {
-    return Promise.resolve(memoizedStore.get(hash));
+  const paramObjStr = JSON.stringify(paramObj);
+  const hash = urlStr + paramObjStr;
+  if (cacheStore.has(hash)) {
+    return Promise.resolve(cacheStore.get(hash));
   } else {
     try {
-      const result = await postUtil(urlStr, paramObj as URLSearchParams);
-      memoizedStore.set(hash, result);
+      const response = await fetch(urlStr, {
+        body: paramObjStr,
+        method: 'POST',
+      });
+      const resultSize = (await response.clone().arrayBuffer()).byteLength;
+      const result = await response.json();
+      storeResult(hash, result, resultSize);
       return result;
     } catch (e) {
       return e;

@@ -43,6 +43,8 @@ type Counter = {
   inverse?: boolean,
 };
 
+/** Simulation types */
+
 interface SimulationParameter extends Donu.ModelParameter {
   edited?: boolean, // the parameter is edited or not
   hidden?: boolean, // the parameter is visible or not
@@ -63,13 +65,28 @@ type SimulationRun = {
   [key: string]: number,
 };
 
+type SimulationModel = {
+  id: number,
+  parameters: SimulationParameter[],
+  variables: SimulationVariable[],
+}
+
+type SimulationState = {
+  numberOfSavedRuns: number,
+  models: SimulationModel[],
+}
+
+/** Export */
+
 export {
   CardInterface,
   Counter,
   GraferEventDetail,
   ModelComponentMetadataInterface,
+  SimulationModel,
   SimulationParameter,
   SimulationRun,
+  SimulationState,
   SimulationVariable,
   SimulationVariableValues,
   TabInterface,

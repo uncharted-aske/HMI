@@ -43,7 +43,9 @@ export default class EpiRenderer extends SVGRenderer {
   }
 
   static calcNodeStrokeWidth (d: d3.Selection<any, any, any, any>): number {
-    return !(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? DEFAULT_STYLE.node.strokeWidth + 1 : DEFAULT_STYLE.node.strokeWidth;
+    if (!(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE)) {
+      return DEFAULT_STYLE.node.strokeWidth + 1;
+    } else return DEFAULT_STYLE.node.strokeWidth;
   }
 
   buildDefs (): void {
@@ -223,21 +225,23 @@ export default class EpiRenderer extends SVGRenderer {
 
   markEditedNodes (nodesList: SubgraphNodeInterface[]): void {
     const chart = (this as any).chart;
-    chart.selectAll('.node-ui').each(function (d) {
-      const isHighlighted = nodesList.map(node => node.id).includes(d.id);
-      if (isHighlighted) {
-        d3.select(this).append('circle')
-          .classed('edited-marker', true)
-          .attr('cx', d => (d as any).width - 5)
-          .attr('cy', 5)
-          .attr('r', DEFAULT_STYLE.node.controlSize * 0.5)
-          .style('fill', Colors.HIGHLIGHT)
-          .style('stroke', DEFAULT_STYLE.node.stroke)
-          .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
-      } else {
-        d3.select(this).select('.edited-marker').remove();
-      }
-    });
+    if (chart) {
+      chart.selectAll('.node-ui').each(function (d) {
+        const isHighlighted = nodesList.map(node => node.id).includes(d.id);
+        if (isHighlighted) {
+          d3.select(this).append('circle')
+            .classed('edited-marker', true)
+            .attr('cx', d => (d as any).width - 5)
+            .attr('cy', 5)
+            .attr('r', DEFAULT_STYLE.node.controlSize * 0.5)
+            .style('fill', Colors.HIGHLIGHT)
+            .style('stroke', DEFAULT_STYLE.node.stroke)
+            .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+        } else {
+          d3.select(this).select('.edited-marker').remove();
+        }
+      });
+    }
   }
 
   clearSelections ():void {
