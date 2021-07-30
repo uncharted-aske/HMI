@@ -1,13 +1,12 @@
 <template>
-    <div class="global-graph-container" ref="graph">
-    </div>
+  <div class="global-graph-container" ref="graph" />
 </template>
 
 <script lang="ts">
   import _ from 'lodash';
 
-  import Component from 'vue-class-component';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
   import { Prop, Watch } from 'vue-property-decorator';
 
   import { expandCollapse, highlight } from 'svg-flowgraph';
@@ -66,7 +65,7 @@
     }
 
     mounted (): void {
-       this.renderer = new EpiRenderer({
+      this.renderer = new EpiRenderer({
         el: this.$refs.graph,
         adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
         renderMode: 'basic',
@@ -77,7 +76,12 @@
       });
 
       this.renderer.setCallback('nodeDblClick', (evt, node) => {
-        // Expand/collapse boxes
+        this.$emit('node-dblclick', node.datum().data);
+      });
+
+      this.renderer.setCallback('nodeClick', (evt, node) => {
+        this.renderer.hideSubgraph();
+
         if (node.datum().nodes) {
           const id = node.datum().id;
           if (node.datum().collapsed === true) {
@@ -107,9 +111,9 @@
       });
 
       this.renderer.setCallback('backgroundClick', () => {
-          this.renderer.hideSubgraph();
-          this.renderer.clearSelections();
-          this.$emit('background-click');
+        this.renderer.hideSubgraph();
+        this.renderer.clearSelections();
+        this.$emit('background-click');
       });
 
       this.refresh();
@@ -150,6 +154,7 @@
 .global-graph-container {
   background-color: var(--bg-graphs);
   flex: 1;
+  overflow: hidden;
 }
 
 .global-graph-container::v-deep > svg {

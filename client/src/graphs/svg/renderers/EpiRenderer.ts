@@ -225,21 +225,23 @@ export default class EpiRenderer extends SVGRenderer {
 
   markEditedNodes (nodesList: SubgraphNodeInterface[]): void {
     const chart = (this as any).chart;
-    chart.selectAll('.node-ui').each(function (d) {
-      const isHighlighted = nodesList.map(node => node.id).includes(d.id);
-      if (isHighlighted) {
-        d3.select(this).append('circle')
-          .classed('edited-marker', true)
-          .attr('cx', d => (d as any).width - 5)
-          .attr('cy', 5)
-          .attr('r', DEFAULT_STYLE.node.controlSize * 0.5)
-          .style('fill', Colors.HIGHLIGHT)
-          .style('stroke', DEFAULT_STYLE.node.stroke)
-          .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
-      } else {
-        d3.select(this).select('.edited-marker').remove();
-      }
-    });
+    if (chart) {
+      chart.selectAll('.node-ui').each(function (d) {
+        const isHighlighted = nodesList.map(node => node.id).includes(d.id);
+        if (isHighlighted) {
+          d3.select(this).append('circle')
+            .classed('edited-marker', true)
+            .attr('cx', d => (d as any).width - 5)
+            .attr('cy', 5)
+            .attr('r', DEFAULT_STYLE.node.controlSize * 0.5)
+            .style('fill', Colors.HIGHLIGHT)
+            .style('stroke', DEFAULT_STYLE.node.stroke)
+            .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+        } else {
+          d3.select(this).select('.edited-marker').remove();
+        }
+      });
+    }
   }
 
   clearSelections ():void {

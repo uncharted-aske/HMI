@@ -25,30 +25,32 @@ const storeResult = (hash: string, result: unknown, size: number): void => {
   cacheSize.set(hash, size);
 };
 
-export const getUtil = async (urlStr: string, paramObj?: Record<string, any>): Promise<any> => {
-  const init: RequestInit = {
-    method: 'GET',
-    mode: 'cors',
-    cache: 'default',
-  };
+const GET_INIT: RequestInit = {
+  method: 'GET',
+  mode: 'cors',
+  cache: 'default',
+};
 
-  const url = new URL(urlStr);
-  url.search = new URLSearchParams(paramObj).toString();
+export const getUtil = async (urlStr: string, paramObj?: Record<string, any>): Promise<any> => {
   try {
-    const response = await fetch(url as unknown as Request, init);
+    const url = new URL(urlStr);
+    url.search = new URLSearchParams(paramObj).toString();
+    const response = await fetch(url as unknown as Request, GET_INIT);
     return await response.json();
   } catch (e) {
     return e;
   }
 };
 
-export const getUtilMem = async (urlStr: string, paramObj: Record<string, any>): Promise<any> => {
+export const getUtilMem = async (urlStr: string, paramObj?: Record<string, any>): Promise<any> => {
   const hash = urlStr + JSON.stringify(paramObj);
   if (cacheStore.has(hash)) {
     return Promise.resolve(cacheStore.get(hash));
   } else {
     try {
-      const response = await fetch(urlStr, paramObj);
+      const url = new URL(urlStr);
+      url.search = new URLSearchParams(paramObj).toString();
+      const response = await fetch(url as unknown as Request, GET_INIT);
       const resultSize = (await response.clone().arrayBuffer()).byteLength;
       const result = await response.json();
       storeResult(hash, result, resultSize);
