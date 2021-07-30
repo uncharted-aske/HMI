@@ -76,10 +76,6 @@
       });
 
       this.renderer.setCallback('nodeDblClick', (evt, node) => {
-        this.$emit('node-dblclick', node.datum().data);
-      });
-
-      this.renderer.setCallback('nodeClick', (evt, node) => {
         this.renderer.hideSubgraph();
 
         if (node.datum().nodes) {
