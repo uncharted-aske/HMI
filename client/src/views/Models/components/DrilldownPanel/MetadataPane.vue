@@ -9,20 +9,21 @@
       v-else
       v-for="(datum, index) in metadata" :key="index"
     >
-      <template v-if="isTypeCodeSpanReference(datum)">
-        <summary :title="datum.uid">Code Reference</summary>
+      <template v-if="isTypeText(datum)">
+        <summary :title="datum.uid">
+          Text {{ isTypeTextParameter(datum) ? 'Parameter' : 'Definition' }}
+        </summary>
         <div class="metadata-content">
-          <template v-if="datum.code_type">
-            <h6>Type</h6>
-            <p>{{ datum.code_type | capitalize-formatter }}</p>
+          <template v-if="datum.variable_identifier">
+            <h6>Variable {{ datum.variable_identifier }}</h6>
+            <p>{{ isTypeTextParameter(datum) ? datum.value : datum.variable_definition }}</p>
           </template>
-
-          <template v-if="datum.file_id">
-            <h6>File</h6>
-            <p>
-              <a :href="datum.file_id">{{ datum.file_id }}</a><br>
-              {{ sourceFilePosition(datum) }}
-            </p>
+          <template v-if="datum.text_extraction">
+            <h6>Reference</h6>
+            <ul>
+              <li>{{ datum.text_extraction.document_reference_uid }}</li>
+              <li>{{ textExtraction(datum) }}</li>
+            </ul>
           </template>
         </div>
       </template>
@@ -45,21 +46,19 @@
         </div>
       </template>
 
-      <template v-if="isTypeText(datum)">
-        <summary :title="datum.uid">
-          Text {{ isTypeTextParameter(datum) ? 'Parameter' : 'Definition' }}
-        </summary>
+      <template v-if="isTypeCodeSpanReference(datum)">
+        <summary :title="datum.uid">Code Reference</summary>
         <div class="metadata-content">
-          <template v-if="datum.text_extraction">
-            <h6>{{ datum.text_extraction.document_reference_uid }}</h6>
-            {{ textExtraction(datum) }}
+          <template v-if="datum.code_type">
+            <h6>Type</h6>
+            <p>{{ datum.code_type | capitalize-formatter }}</p>
           </template>
 
-          <template v-if="datum.variable_identifier">
-            <h6>Variable</h6>
+          <template v-if="datum.file_id">
+            <h6>File</h6>
             <p>
-              <strong>{{ datum.variable_identifier }}</strong>:
-              {{ isTypeTextParameter(datum) ? datum.value : datum.variable_definition }}
+              <a :href="datum.file_id">{{ datum.file_id }}</a><br>
+              {{ sourceFilePosition(datum) }}
             </p>
           </template>
         </div>
@@ -79,6 +78,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
+  import _ from 'lodash';
 
   import * as GroMET from '@/types/typesGroMEt';
   import { formatFullDateTime } from '@/utils/DateTimeUtil';
@@ -148,22 +148,20 @@
 
     textExtraction (datum: GroMET.TextDefinition | GroMET.TextParameter): string {
       const text = datum.text_extraction;
-      let result: string;
+      let result = '';
 
-      if (text.page) {
+      if (_.isNumber(text.page)) {
         result += ` Page #${text.page}`;
       }
 
-      if (text.block) {
-        result += ` Block #${text.page}`;
+      if (_.isNumber(text.block)) {
+        result += ` Block #${text.block}`;
       }
 
-      if (text.char_begin || text.char_end) {
-        result += ` Char #${text.char_begin ?? text.char_end}`;
-      }
-
-      if (text.char_begin && text.char_end) {
+      if (_.isNumber(text.char_begin) && _.isNumber(text.char_end)) {
         result += ` Chars #${text.char_begin}-${text.char_end}`;
+      } else if (_.isNumber(text.char_begin) || _.isNumber(text.char_end)) {
+        result += ` Char #${text.char_begin ?? text.char_end}`;
       }
 
       return result.trim();
