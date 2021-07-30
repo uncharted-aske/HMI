@@ -40,14 +40,19 @@
 
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
-
-        <div v-if="!getVariablesRunsCount" class="alert alert-info m-3">
-          Click Run to get variables output.
-        </div>
-        <div v-else-if="noDisplayedVariables" class="alert alert-info m-3">
-          Use the model visualization on the left to add/remove variables.
-        </div>
-
+        <message-display v-if="!getVariablesRunsCount" class="m-3">
+          <span slot="message">
+          Click Run to get variables output
+          </span>
+        </message-display>
+        <message-display v-if="noDisplayedVariables" class="m-3">
+          <span slot="message">
+            Use the model visualization on the left or
+            <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
+            <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
+            buttons above to add/remove variables.
+          </span>
+        </message-display>
         <multi-line-plot
           v-else
           v-for="(plot, index) in displayedVariables"
@@ -86,6 +91,7 @@
   import Counters from '@/components/Counters.vue';
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
   import { Colors } from '@/graphs/svg/encodings';
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
 
   const DEFAULT_STYLE = {
     node: {
@@ -141,6 +147,7 @@
     SettingsBar,
     Counters,
     MultiLinePlot,
+    MessageDisplay,
   };
 
   @Component({ components })
