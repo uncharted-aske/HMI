@@ -14,7 +14,7 @@
       <span slot="message">
         No metadata at the moment.
       </span>
-    </message-display>  
+    </message-display>
   </div>
 </template>
 

@@ -42,12 +42,12 @@
       <div class="position-absolute h-100 w-100 overflow-auto">
         <message-display v-if="!getVariablesRunsCount">
           <span slot="message">
-          Click Run to get variables output          
+          Click Run to get variables output
           </span>
-        </message-display> 
+        </message-display>
           <message-display v-if="noDisplayedVariables">
           <span slot="message">
-          Use the model visualization on the left to add/remove variables.            
+          Use the model visualization on the left to add/remove variables.
         </span>
         </message-display>
         <multi-line-plot
