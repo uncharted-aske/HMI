@@ -13,11 +13,12 @@ const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
   }
 };
 
+/** Send the request to Donu, via JS cache */
 const callDonuCache = (request: Donu.Request): Promise<Donu.Response> => {
   try {
     return postUtilMem(process.env.DONU_ENDPOINT, request);
   } catch (error) {
-    console.error('[DONU Service] — callDonu', error); // eslint-disable-line no-console
+    console.error('[DONU Service] — callDonuCache', error); // eslint-disable-line no-console
   }
 };
 
@@ -85,23 +86,26 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
   if (response.status === Donu.ResponseStatus.success) {
     // 1. Get models
     let models = response?.result ?? null;
+
     // 2. Filter models to PNC and FN type
     models = models.filter(model => {
       return [Donu.Type.GROMET_PNC, Donu.Type.GROMET_FN].includes(model.type);
     });
+
     // 3. Populate models with model source
     await Promise.all(models.map(async model => {
-      const gromet = await getDonuModelSource(model.source.model, model.type);
-      model.gromet = gromet;
+      model.gromet = await getDonuModelSource(model.source.model, model.type);
     }));
 
     models.forEach(model => {
       // 4. Transform Gromet to graph for rendering
       model.graph = GroMEt2Graph.parseGromet(model.gromet);
+
       // 5. Transform Gromet to bgraph for querying
       model.bgNodes = convertGrometNodesDataToBGraphNodesData(model.graph.nodes, model.graph.edges);
       model.bgEdges = convertGrometEdgesDataToBGraphEdgesData(model.graph.edges);
     });
+
     // 6. Group models by model name
     const output = new Array(1);
     models.forEach(model => {
@@ -121,6 +125,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
           edges: model.bgEdges,
         },
       };
+
       if (name === 'SimpleSIR' || name === 'SimpleSIR_metadata') {
         output[0] = {
           id: 0,
