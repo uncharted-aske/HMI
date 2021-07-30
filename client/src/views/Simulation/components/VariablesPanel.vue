@@ -40,8 +40,16 @@
 
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
-        <message-display v-if="!getVariablesRunsCount" :message="`Click Run to get variables output.`" />
-        <message-display v-else-if="noDisplayedVariables" :message="`Use the model visualization on the left to add/remove variables.`" />
+        <message-display v-if="!getVariablesRunsCount">
+          <span slot="message">
+          Click Run to get variables output          
+          </span>
+        </message-display> 
+          <message-display v-if="noDisplayedVariables">
+          <span slot="message">
+          Use the model visualization on the left to add/remove variables.            
+        </span>
+        </message-display>
         <multi-line-plot
           v-else
           v-for="(plot, index) in displayedVariables"

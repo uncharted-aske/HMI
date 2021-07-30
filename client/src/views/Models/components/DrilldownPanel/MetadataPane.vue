@@ -1,6 +1,10 @@
 <template>
   <div class="metadata-list">
-    <message-display v-if="isEmptyMetadata" :message="`No metadata at the moment.`" />
+    <message-display v-if="isEmptyMetadata">
+      <span slot="message">
+        No metadata at the moment.
+      </span>
+    </message-display>  
     <details
       class="metadata" open
       v-else

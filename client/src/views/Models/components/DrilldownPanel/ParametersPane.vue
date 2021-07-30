@@ -14,8 +14,11 @@
         </div>
       </div>
   </div>
-
-  <message-display v-else :message="`No metadata at the moment.`" />
+ <message-display v-else>
+      <span slot="message">
+        No metadata at the moment.
+      </span>
+    </message-display> 
 </template>
 
 <script lang="ts">

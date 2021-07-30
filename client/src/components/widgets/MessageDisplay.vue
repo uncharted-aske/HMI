@@ -3,7 +3,7 @@
     class="alert m-3"
     :class="alertType">
     <font-awesome-icon class="icon" :icon="['fas', iconType]"/>
-   {{message}}
+    <slot name="message" />
   </div>
 </template>
 
@@ -14,9 +14,6 @@
 
   @Component
   export default class Counters extends Vue {
-    @Prop({ default: '' })
-    message: string;
-
     @Prop({ default: 'info' })
     messageType: string;
 
