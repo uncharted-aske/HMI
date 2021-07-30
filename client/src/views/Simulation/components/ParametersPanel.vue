@@ -54,7 +54,6 @@
           class="parameter"
           v-for="(parameter, index) of displayedParameters"
           :key="index"
-          :class="{ hidden: parameter.hidden }"
         >
           <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
           <input type="text" v-model.number="parameterValues[parameter.uid]" />
@@ -391,10 +390,6 @@
   .parameter .btn-group button {
     padding-bottom: 0;
     padding-top: 0;
-  }
-
-  .parameter.hidden {
-    opacity: 0.5;
   }
 </style>
 <style>

@@ -221,10 +221,6 @@
     grid-area: action;
   }
 
-  .variable.hidden {
-    opacity: 0.5;
-  }
-
   .btn-settings {
     height: 25px;
     line-height: 0;

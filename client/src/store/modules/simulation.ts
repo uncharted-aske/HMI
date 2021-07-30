@@ -112,7 +112,6 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     const parameters = donuParameters.map(donuParameter => ({
       ...donuParameter,
       edited: false,
-      hidden: false,
       values: [donuParameter.default],
     }));
     commit('setSimParameters', { modelId: args.model.id, parameters });
@@ -125,7 +124,6 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
       ...donuVariable,
       aggregate: null,
       edited: false,
-      hidden: false,
       values: [],
     }));
     commit('setSimVariables', { modelId: args.model.id, variables });
