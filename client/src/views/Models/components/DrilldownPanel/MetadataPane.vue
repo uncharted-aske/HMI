@@ -7,7 +7,7 @@
     <details
       class="metadata" open
       v-else
-      v-for="(datum, index) in metadata" :key="index"
+      v-for="(datum, index) in sortedMetadata" :key="index"
     >
       <template v-if="isTypeText(datum)">
         <summary :title="datum.uid">
@@ -83,9 +83,24 @@
   import * as GroMET from '@/types/typesGroMEt';
   import { formatFullDateTime } from '@/utils/DateTimeUtil';
 
+  const METADATA_TYPES_ORDER = [
+    GroMET.MetadataType.TextDefinition,
+    GroMET.MetadataType.TextParameter,
+    GroMET.MetadataType.EquationDefinition,
+    GroMET.MetadataType.CodeSpanReference,
+  ];
+
   @Component
   export default class MetadataPane extends Vue {
     @Prop({ default: [] }) metadata: GroMET.Metadata[];
+
+    get sortedMetadata (): GroMET.Metadata[] {
+      return [...this.metadata].sort((a, b) => {
+        const indexA = METADATA_TYPES_ORDER.indexOf(a.metadata_type);
+        const indexB = METADATA_TYPES_ORDER.indexOf(b.metadata_type);
+        return indexA - indexB;
+      });
+    }
 
     get isEmptyMetadata (): boolean {
       return this.metadata.length === 0;
