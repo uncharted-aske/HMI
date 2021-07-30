@@ -120,7 +120,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
           edges: model.bgEdges,
         },
       };
-      delete model.gromet;
+
       if (name === 'SimpleSIR' || name === 'SimpleSIR_metadata') {
         output[0] = {
           id: 0,
