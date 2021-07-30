@@ -83,7 +83,6 @@
 
   import * as GroMET from '@/types/typesGroMEt';
   import { formatFullDateTime } from '@/utils/DateTimeUtil';
-  
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
 
   const METADATA_TYPES_ORDER = [
