@@ -5464,9 +5464,9 @@ requires-port@^1.0.0:
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
-"research@git+https://github.com/uncharted-aske/research.git#gromet":
+"research@git+https://github.com/uncharted-aske/research.git#aed359c844a6b9c6c6db6100190b9b9d2566e9e2":
   version "0.0.0"
-  resolved "git+https://github.com/uncharted-aske/research.git#d12927fe4430955e29d16471ffbbff58300ec11c"
+  resolved "git+https://github.com/uncharted-aske/research.git#aed359c844a6b9c6c6db6100190b9b9d2566e9e2"
 
 resolve-from@^4.0.0:
   version "4.0.0"

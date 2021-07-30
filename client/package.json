@@ -42,7 +42,7 @@
     "moment": "^2.29.1",
     "moment-timezone": "0.5.x",
     "preact": "8.x",
-    "research": "git+https://github.com/uncharted-aske/research.git#gromet",
+    "research": "git+https://github.com/uncharted-aske/research.git#aed359c844a6b9c6c6db6100190b9b9d2566e9e2",
     "sigma": "1.2.1",
     "svg-flowgraph": "^0.4.0",
     "tiny-emitter": "^2.1.0",
