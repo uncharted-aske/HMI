@@ -8,26 +8,6 @@
       />
       <aside slot="right">
         <span class="run-counter" v-if="getVariablesRunsCount">{{ runCounter }}</span>
-        <div class="btn-group" title="Add/Remove Variables">
-          <button
-            class="btn btn-secondary"
-            title="Add all Variables"
-            type="button"
-            :disabled="allVariablesAreDisplayed"
-            @click="showAllVariables"
-          >
-            <font-awesome-icon :icon="['fas', 'plus']" />
-          </button>
-          <button
-            class="btn btn-secondary"
-            title="Remove all Vsariables"
-            type="button"
-            :disabled="noDisplayedVariables"
-            @click="hideAllVariables"
-          >
-            <font-awesome-icon :icon="['fas', 'ban']" />
-          </button>
-        </div>
         <button
           class="btn btn-secondary"
           title="Expand Parameters Panel"
@@ -147,8 +127,6 @@
     @Getter getSimVariables;
     @Getter getVariablesRunsCount;
     @Action hideVariable;
-    @Action hideAllVariables;
-    @Action showAllVariables;
 
     get variables (): HMI.SimulationVariable[] {
       const variables = _.cloneDeep(this.getSimVariables);
@@ -173,10 +151,6 @@
 
     get noDisplayedVariables (): boolean {
       return this.displayedVariables.length === 0;
-    }
-
-    get allVariablesAreDisplayed (): boolean {
-      return this.displayedVariables.length === this.variables.length;
     }
 
     get countersTitle (): string {

@@ -31,26 +31,6 @@
             <font-awesome-icon :icon="['fas', 'eye-slash']" />
           </button>
         </div> -->
-        <div class="btn-group" title="Add/Remove All Parameters & Variables">
-          <button
-            class="btn btn-secondary"
-            title="Add all Parameters & Variables"
-            type="button"
-            :disabled="allParametersAreDisplayed"
-            @click="onAddAllParameters"
-          >
-            <font-awesome-icon :icon="['fas', 'plus']" />
-          </button>
-          <button
-            class="btn btn-secondary"
-            title="Remove all Parameters & Variables"
-            type="button"
-            :disabled="noDisplayedParameters"
-            @click="onRemoveAllParameters"
-          >
-            <font-awesome-icon :icon="['fas', 'ban']" />
-          </button>
-        </div>
         <button
           class="btn btn-secondary"
           title="Expand Parameters Panel"
@@ -129,10 +109,6 @@
     @Getter getSimParameterArray;
     @Action setSimParameterValue;
     @Action hideParameter;
-    @Action hideAllParameters;
-    @Action showAllParameters;
-    @Action hideAllVariables;
-    @Action showAllVariables;
 
     private padding: number = 5;
     private parameterHeight: number = 100;
@@ -158,10 +134,6 @@
 
     get noDisplayedParameters (): boolean {
       return this.displayedParameters.length === 0;
-    }
-
-    get allParametersAreDisplayed (): boolean {
-      return this.displayedParameters.length === this.parameters.length;
     }
 
     get countersTitle (): string {
@@ -288,16 +260,6 @@
 
     onShowAllParameters (): void {
       this.displayedParameters.forEach(parameter => { parameter.hidden = false; });
-    }
-
-    onAddAllParameters (): void {
-      this.showAllParameters();
-      this.showAllVariables();
-    }
-
-    onRemoveAllParameters (): void {
-      this.hideAllParameters();
-      this.hideAllVariables();
     }
   }
 </script>
