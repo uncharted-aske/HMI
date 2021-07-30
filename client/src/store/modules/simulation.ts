@@ -91,8 +91,10 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     commit('resetVariablesValues', model.id);
 
     // For each run of the model, fetch the results...
-    for (const params of getters.getSimParameterArray(model.id)) {
-      const response = await getModelResult(model, params, config, selectedModelGraphType);
+    const responseArr = await Promise.all(
+      getters.getSimParameterArray(model.id).map(param => getModelResult(model, param, config, selectedModelGraphType)),
+    );
+    for (const response of responseArr) {
       // The reponse.values is a list of variables results with the variable uid as key.
       // Each index of the result list correspond to the response.times list.
       for (const uid in response[0].values) {
@@ -245,13 +247,15 @@ const mutations: MutationTree<HMI.SimulationState> = {
       // a list of {x: step, y: value} for each step.
       const valuesOfAllRunsPerStep = {};
       for (let run = 0; run < state.numberOfSavedRuns; run++) {
-        for (let step = 0; step < variable.values[run].length; step++) {
-          const { x, y } = variable.values[run][step];
+        if (variable.values[run]) {
+          for (let step = 0; step < variable.values[run].length; step++) {
+            const { x, y } = variable.values[run][step];
 
-          if (!valuesOfAllRunsPerStep[x]) {
-            valuesOfAllRunsPerStep[x] = [y];
-          } else {
-            valuesOfAllRunsPerStep[x].push(y);
+            if (!valuesOfAllRunsPerStep[x]) {
+              valuesOfAllRunsPerStep[x] = [y];
+            } else {
+              valuesOfAllRunsPerStep[x].push(y);
+            }
           }
         }
       }

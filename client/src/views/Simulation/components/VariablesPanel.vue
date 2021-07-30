@@ -45,7 +45,7 @@
         <multi-line-plot
           v-else
           v-for="(plot, index) in displayedVariables"
-          :class="`pt-3 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
+          :class="`pt-2 pl-2 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
           :data="plot.values"
           :key="index"
           :styles="plot.styles"
@@ -119,9 +119,15 @@
     },
   };
 
-  const mergeStyle = modifyingStyle => {
+  const NO_LINE_STYLE = {
+    edge: {
+      strokeWidth: 0,
+    },
+  };
+
+  const mergeStyle = (...modifyingStyle) => {
     if (modifyingStyle) {
-      return _.merge(_.cloneDeep(DEFAULT_STYLE), modifyingStyle);
+      return _.merge(_.cloneDeep(DEFAULT_STYLE), ...modifyingStyle);
     }
     return DEFAULT_STYLE;
   };
@@ -151,7 +157,13 @@
       variables.map(variable => {
         variable.styles = variable.styles || [];
         for (let i = 0; i < variable.values.length; i++) {
-          variable.styles.push(mergeStyle(i !== variable.values.length - 1 && OTHER_STYLE));
+          if (variable.values.length > 5) {
+            i !== variable.values.length - 1
+              ? variable.styles.push(mergeStyle(OTHER_STYLE, NO_LINE_STYLE))
+              : variable.styles.push(mergeStyle());
+          } else {
+            variable.styles.push(mergeStyle(i !== variable.values.length - 1 && OTHER_STYLE));
+          }
         }
 
         if (variable.aggregate) {

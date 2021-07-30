@@ -2,12 +2,20 @@ import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
-import { postUtil } from '@/utils/FetchUtil';
+import { postUtil, postUtilMem } from '@/utils/FetchUtil';
 
 /** Send the request to Donu */
 const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
   try {
     return postUtil(process.env.DONU_ENDPOINT, request);
+  } catch (error) {
+    console.error('[DONU Service] — callDonu', error); // eslint-disable-line no-console
+  }
+};
+
+const callDonuCache = (request: Donu.Request): Promise<Donu.Response> => {
+  try {
+    return postUtilMem(process.env.DONU_ENDPOINT, request);
   } catch (error) {
     console.error('[DONU Service] — callDonu', error); // eslint-disable-line no-console
   }
@@ -112,7 +120,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
           edges: model.bgEdges,
         },
       };
-      delete model.gromet;
+
       if (name === 'SimpleSIR' || name === 'SimpleSIR_metadata') {
         output[0] = {
           id: 0,
@@ -150,7 +158,7 @@ export const getModelParameters = async (model: Model.Model, selectedModelGraphT
       } as Donu.ModelDefinition,
     };
 
-    const response = await callDonu(request);
+    const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       const result = response?.result as Donu.ModelDefinition;
       return result?.parameters ?? null;
@@ -175,7 +183,7 @@ export const getModelVariables = async (model: Model.Model, selectedModelGraphTy
       } as Donu.ModelDefinition,
     };
 
-    const response = await callDonu(request);
+    const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       const result = response?.result as Donu.ModelDefinition;
       return result?.measures ?? null;
@@ -218,7 +226,7 @@ export const getModelResult = async (
       step: config.step,
     };
 
-    const response = await callDonu(request);
+    const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       return response?.result as Donu.SimulationResponse ?? null;
     } else {

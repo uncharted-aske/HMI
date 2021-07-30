@@ -54,7 +54,7 @@
           :key="index"
           :class="{ hidden: parameter.hidden }"
         >
-          <h4 :title="parameter.metadata.Description">{{ parameter.metadata.name }}</h4>
+          <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
           <input type="text" v-model.number="parameterValues[parameter.uid]" />
           <aside class="btn-group">
             <button
@@ -369,6 +369,7 @@
     grid-area: name;
     line-height: 2em;
     margin: 0;
+    overflow: hidden;
   }
 
   .parameter input {

@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-2" ref="container">
+  <div ref="container">
     <div class="header" :style="{color: strokeColor}">
       {{title}}
       <slot/>
@@ -54,7 +54,7 @@
     }
 
     mounted (): void {
-      this.width = 500;
+      this.width = 1000;
       this.height = 150;
       this.margin = DEFAULT_CONFIG.margin;
       this.refresh();
