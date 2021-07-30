@@ -48,7 +48,11 @@
       <figure class="parameters-graph" ref="figure"><svg /></figure>
        <message-display v-if="noDisplayedParameters">
         <span slot="message">
-        Use the model visualization on the left or the ➕ and 🚫 buttons above to add/remove parameters.        </span>
+        Use the model visualization on the left or the
+        <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
+        <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
+        buttons above to add/remove parameters.
+        </span>
     </message-display>
       <ul v-else class="parameters-list">
         <li
