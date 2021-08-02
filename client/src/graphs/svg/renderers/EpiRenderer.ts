@@ -130,7 +130,7 @@ export default class EpiRenderer extends SVGRenderer {
           .style('stroke', DEFAULT_STYLE.node.stroke)
           .style('stroke-width', EpiRenderer.calcNodeStrokeWidth)
           .style('stroke-dasharray', EpiRenderer.calcNodeStrokeStyle)
-          .style('cursor', d => (d as any).nodes ? '' : 'pointer');
+          .style('cursor', 'pointer');
       } else {
         selection.append('ellipse')
           .attr('cx', d => (d as any).width * 0.5)
@@ -146,7 +146,7 @@ export default class EpiRenderer extends SVGRenderer {
 
       // Add +/- icon to boxes/containers
       if ((datum as any).nodes) {
-        const containerControl = selection.append('g').classed('container-control', true).style('cursor', 'pointer');
+        const containerControl = selection.append('g').classed('container-control', true);
 
         containerControl.append('rect')
           .attr('x', d => (d as any).width - 20)
