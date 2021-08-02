@@ -64,6 +64,7 @@
           :key="index"
           :model="model"
           :slot="('model_' + model.id)"
+          @highlight="onNodeHighlight"
           @expand="setExpandedId('model')"
         />
         <parameters-panel
@@ -72,6 +73,7 @@
           :key="index"
           :modelId="model.id"
           :slot="('parameters_' + model.id)"
+          :highlight="highlighted"
           @expand="setExpandedId('parameters')"
         />
         <variables-panel
@@ -128,6 +130,7 @@
     expandedId: string = '';
     runConfig: Donu.RequestConfig = { end: 120, start: 0, step: 30 };
     subgraph: Graph.GraphInterface = null;
+    highlighted: string = '';
 
     @Action fetchModelResults;
     @Action incrNumberOfSavedRuns;
@@ -277,6 +280,10 @@
           this.fetchModelResults({ model, config, selectedModelGraphType });
         });
       }
+    }
+
+    onNodeHighlight(label: string): void {
+      this.highlighted = label;
     }
   }
 </script>
