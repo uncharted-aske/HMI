@@ -283,7 +283,7 @@
       }
     }
 
-    onNodeHighlight(label: string): void {
+    onNodeHighlight (label: string): void {
       this.highlighted = label;
     }
   }

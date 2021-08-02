@@ -53,12 +53,14 @@
 
     settingsOpen: boolean = false;
 
-    onNodeClick(selected: Graph.GraphNodeInterface): void {
+    onNodeClick (selected: Graph.GraphNodeInterface): void {
       this.$emit('highlight', selected.label);
     }
-    onBackgroundClick(): void {
+
+    onBackgroundClick (): void {
       this.$emit('highlight', '');
     }
+
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
       this.toggleParameter({ modelId: this.model.id, selector: selected.label });
       this.toggleVariable({ modelId: this.model.id, selector: selected.label });
