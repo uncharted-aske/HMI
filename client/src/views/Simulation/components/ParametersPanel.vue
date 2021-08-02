@@ -59,7 +59,7 @@
           class="parameter"
           v-for="(parameter, index) of displayedParameters"
           :key="index"
-          :class="[{ hidden: parameter.hidden, highlighted: parameter.metadata.name === highlight }]"
+          :class="[{ hidden: parameter.hidden, highlighted: parameter.metadata.name === highlighted }]"
         >
           <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
           <input type="text" v-model.number="parameterValues[parameter.uid]" />
@@ -103,7 +103,7 @@
   export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) modelId: number;
-    @Prop({ default: '' }) highlight: string;
+    @Prop({ default: '' }) highlighted: string;
     @InjectReactive() resized!: boolean;
     @InjectReactive() isResizing!: boolean;
 

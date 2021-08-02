@@ -56,7 +56,8 @@
         <multi-line-plot
           v-else
           v-for="(plot, index) in displayedVariables"
-          :class="`pt-2 pl-2 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
+          class="pt-2 pl-2 pr-3"
+          :class="[{highlighted: plot.metadata.name === highlighted}]"
           :data="plot.values"
           :key="index"
           :styles="plot.styles"
@@ -154,6 +155,7 @@
   export default class VariablesPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) modelId: number;
+    @Prop({ default: '' }) highlighted: string;
     @InjectReactive() resized!: boolean;
 
     @Getter getSimModel;
@@ -228,10 +230,6 @@
     grid-area: action;
   }
 
-  .variable.hidden {
-    opacity: 0.5;
-  }
-
   .btn-settings {
     height: 25px;
     line-height: 0;
@@ -243,7 +241,7 @@
     margin-right: 1rem;
   }
 
-  .chart {
-    height: auto;
+  .highlighted {
+    border: 1px var(--selection) solid;
   }
 </style>

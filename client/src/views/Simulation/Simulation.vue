@@ -73,7 +73,7 @@
           :key="index"
           :modelId="model.id"
           :slot="('parameters_' + model.id)"
-          :highlight="highlighted"
+          :highlighted="highlighted"
           @expand="setExpandedId('parameters')"
         />
         <variables-panel
@@ -82,6 +82,7 @@
           :key="index"
           :modelId="model.id"
           :slot="('variables_' + model.id)"
+          :highlighted="highlighted"
           @expand="setExpandedId('variables')"
         />
       </template>
