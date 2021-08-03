@@ -103,7 +103,7 @@
   export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) modelId: number;
-    @Prop({ default: '' }) highlighted: string;
+    @Prop({ default: null }) highlighted: string;
     @InjectReactive() resized!: boolean;
     @InjectReactive() isResizing!: boolean;
 
@@ -364,6 +364,7 @@
     grid-template-rows: 1fr 1fr;
     height: var(--parameter-height);
     padding: var(--padding);
+    border: 1px solid transparent;
   }
 
   .parameter:last-of-type {
@@ -406,7 +407,7 @@
   }
 
   .parameter.highlighted {
-    border: 1px var(--selection) solid;
+    border-color: var(--selection);
   }
 </style>
 <style>
