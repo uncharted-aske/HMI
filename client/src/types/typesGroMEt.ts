@@ -101,8 +101,6 @@ export interface TextParameter extends Metadata {
   value: string,
 }
 
-
-
 export interface IndraAgentReferenceSet extends Metadata {
   indra_agent_references: IndraAgentReference[],
 }

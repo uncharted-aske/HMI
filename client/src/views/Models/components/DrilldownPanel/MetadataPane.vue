@@ -70,10 +70,10 @@
         <summary :title="datum.uid">Agent(s) Reference(s)</summary>
         <div class="metadata-content"  v-for="(entity, index) in emmaaInfo" :key="index">
            <details v-if="entity.definition" class="metadata" open>
-            <summary>Definition 
-              (<a v-if="entity.url" :href="entity.url">
-              {{ entity.name }}
-              </a>)
+            <summary>Definition
+              <a v-if="entity.url" :href="entity.url">
+              ({{ entity.name }})
+              </a>
             </summary>
             <div class="metadata-content">
               <p>{{ entity.definition }}</p>
@@ -119,12 +119,6 @@
     MessageDisplay,
     LoadingAlert,
   };
-
-  const emptyEmmaaInfo = {
-    definition: null,
-    name: null,
-    url: null,
-  } as EmmaaEntityInfoInterface;
 
   @Component({ components })
   export default class MetadataPane extends Vue {
@@ -196,12 +190,11 @@
 
        this.emmaaInfo = await Promise.all((this.metadata[0] as GroMET.IndraAgentReferenceSet)
        .indra_agent_references.map(async (reference) => {
-        const args = { modelName: null, namespace: Object.keys(reference.db_refs)[0], id:  Object.values(reference.db_refs)[0]};
+        const args = { modelName: null, namespace: Object.keys(reference.db_refs)[0], id: Object.values(reference.db_refs)[0] };
         const response = await emmaaEntityInfo(args as any);
          return response;
         }));
       this.isLoading = false;
-
     }
 
     sourceFilePosition (datum: GroMET.CodeSpanReference): string {
@@ -255,6 +248,5 @@
       const regex = /(<math).*?(<\/math>)/g;
       return regex.exec(mml)[0] ?? null;
     }
-
   }
 </script>
