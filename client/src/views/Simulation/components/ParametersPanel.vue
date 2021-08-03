@@ -60,6 +60,7 @@
           :class="{
             error: nonValidValue(parameterValues[parameter.uid]),
             hidden: parameter.hidden,
+            highlighted: parameter.metadata.name === highlighted,
           }"
         >
           <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
@@ -108,6 +109,7 @@
   export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) modelId: number;
+    @Prop({ default: null }) highlighted: string;
     @InjectReactive() resized!: boolean;
     @InjectReactive() isResizing!: boolean;
 
@@ -429,6 +431,10 @@
 
   .parameter.hidden {
     opacity: 0.5;
+  }
+  
+  .parameter.highlighted {
+    border-color: var(--selection);
   }
 
   .parameter.error {
