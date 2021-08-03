@@ -15,7 +15,7 @@
     <global-graph
       v-if="graph"
       :data="graph"
-      :edited-nodes="displayedNodes"
+      :displayed-nodes="displayedNodes"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
