@@ -59,6 +59,13 @@
   padding: 0;
 }
 
+.metadata pre {
+  background-color: var(--nord6);
+  border: var(--border);
+  border-radius: 3px;
+  padding: .5em;
+}
+
 /* If a details is within a metadata. */
 .metadata details {
   padding: .5em;

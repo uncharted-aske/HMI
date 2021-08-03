@@ -62,7 +62,7 @@ export interface GraphNodeInterface {
   nodeSubType?: string,
   dataType?:string,
   data?: GraphNodeDataInterface,
-  metadata?: any,
+  metadata?: any[][], // Temporary dump for FunctionalNetwork GroMEt Variables metadata
   parent?: string,
   role?: string[],
 }

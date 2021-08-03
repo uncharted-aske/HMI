@@ -59,6 +59,7 @@
           class="parameter"
           v-for="(parameter, index) of displayedParameters"
           :key="index"
+          :class="{ highlighted: parameter.metadata.name === highlighted }"
         >
           <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
           <input type="text" v-model.number="parameterValues[parameter.uid]" />
@@ -102,6 +103,7 @@
   export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) modelId: number;
+    @Prop({ default: null }) highlighted: string;
     @InjectReactive() resized!: boolean;
     @InjectReactive() isResizing!: boolean;
 
@@ -362,6 +364,7 @@
     grid-template-rows: 1fr 1fr;
     height: var(--parameter-height);
     padding: var(--padding);
+    border: 1px solid transparent;
   }
 
   .parameter:last-of-type {
@@ -397,6 +400,10 @@
   .parameter .btn-group button {
     padding-bottom: 0;
     padding-top: 0;
+  }
+
+  .parameter.highlighted {
+    border-color: var(--selection);
   }
 </style>
 <style>

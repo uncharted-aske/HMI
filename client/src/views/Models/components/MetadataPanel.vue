@@ -72,15 +72,15 @@
     @Prop({ default: null }) metadata: Model.GraphMetadata;
 
     isTypeModel (datum: GroMET.Metadata): boolean {
-      return datum.metadata_type === GroMET.MetadateType.ModelInterface;
+      return datum.metadata_type === GroMET.MetadataType.ModelInterface;
     }
 
     isTypeCode (datum: GroMET.Metadata): boolean {
-      return datum.metadata_type === GroMET.MetadateType.CodeCollectionReference;
+      return datum.metadata_type === GroMET.MetadataType.CodeCollectionReference;
     }
 
     isTypeDocuments (datum: GroMET.Metadata): boolean {
-      return datum.metadata_type === GroMET.MetadateType.TextualDocumentReferenceSet;
+      return datum.metadata_type === GroMET.MetadataType.TextualDocumentReferenceSet;
     }
 
     provenanceDate (timestamp: string): string {
