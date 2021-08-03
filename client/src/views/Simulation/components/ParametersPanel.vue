@@ -59,7 +59,7 @@
           class="parameter"
           v-for="(parameter, index) of displayedParameters"
           :key="index"
-          :class="[{ hidden: parameter.hidden, highlighted: parameter.metadata.name === highlighted }]"
+          :class="{ hidden: parameter.hidden, highlighted: parameter.metadata.name === highlighted }"
         >
           <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
           <input type="text" v-model.number="parameterValues[parameter.uid]" />
