@@ -42,45 +42,44 @@
         </button>
       </aside>
     </settings-bar>
-    <div class="parameters">
+    <div class="parameters" :class="{ message: someParametersAreInvalid }">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
 
-      <message-display class="m-3" v-if="noDisplayedParameters">
+      <message-display v-if="noDisplayedParameters">
         Use the model visualization on the left or the
         <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
         <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
         buttons above to add/remove <strong>parameters</strong>.
       </message-display>
 
-      <template v-else>
-        <message-display v-if="someParametersAreInvalid" messageType="danger">
-          One or more <strong>parameters</strong> values are&nbsp;invalid.
-        </message-display>
-        <ul class="parameters-list">
-          <li
-            class="parameter"
-            v-for="(parameter, index) of displayedParameters"
-            :key="index"
-            :class="{
-              error: nonValidValue(parameterValues[parameter.uid]),
-              hidden: parameter.hidden,
-            }"
-          >
-            <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
-            <input type="text" v-model.number="parameterValues[parameter.uid]" />
-            <aside class="btn-group">
-              <button
-                class="btn btn-secondary btn-sm"
-                title="Remove parameter from editable panel"
-                type="button"
-                @click="hideParameter({ modelId, selector: parameter.uid })"
-              >
-                <font-awesome-icon :icon="['fas', 'ban']" />
-              </button>
-            </aside>
-          </li>
-        </ul>
-      </template>
+      <ul v-else class="parameters-list">
+        <li
+          class="parameter"
+          v-for="(parameter, index) of displayedParameters"
+          :key="index"
+          :class="{
+            error: nonValidValue(parameterValues[parameter.uid]),
+            hidden: parameter.hidden,
+          }"
+        >
+          <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
+          <input type="text" v-model.number="parameterValues[parameter.uid]" />
+          <aside class="btn-group">
+            <button
+              class="btn btn-secondary btn-sm"
+              title="Remove parameter from editable panel"
+              type="button"
+              @click="hideParameter({ modelId, selector: parameter.uid })"
+            >
+              <font-awesome-icon :icon="['fas', 'ban']" />
+            </button>
+          </aside>
+        </li>
+      </ul>
+
+      <message-display v-if="someParametersAreInvalid" messageType="danger">
+        One or more <strong>parameters</strong> values are&nbsp;invalid.
+      </message-display>
     </div>
   </section>
 </template>
@@ -354,6 +353,14 @@
     flex-grow: 1;
     overflow-y: auto;
     position: relative;
+    scroll-snap-points-y: repeat(var(--parameter-height));
+    scroll-snap-destination: 0 0;
+    scroll-snap-type: y mandatory;
+    scroll-snap-type: mandatory;
+  }
+
+  .parameters.message {
+    --parameter-margin-top: 7em;
   }
 
   .parameters-graph,
@@ -363,7 +370,7 @@
     margin: 0;
     position: absolute;
     right: 0;
-    top: 0;
+    top: var(--parameter-margin-top, 0);
   }
 
   .parameters-list {
@@ -382,15 +389,12 @@
     grid-template-rows: 1fr 1fr;
     height: var(--parameter-height);
     padding: var(--padding);
+    scroll-snap-align: start;
   }
 
   .parameter:last-of-type {
     /* Small spacing to have some empty space at the bottom of the scroll bar. */
     margin-bottom: 2em;
-  }
-
-  .parameter.error {
-    border-color: var(--error);
   }
 
   .parameter h4 {
@@ -425,6 +429,20 @@
 
   .parameter.hidden {
     opacity: 0.5;
+  }
+
+  .parameter.error {
+    border-color: var(--error);
+  }
+
+  .parameter.error input {
+    background-color: var(--error);
+  }
+
+  .parameters .message-display {
+    margin: 1em;
+    position: sticky;
+    top: 1em;
   }
 </style>
 <style>
