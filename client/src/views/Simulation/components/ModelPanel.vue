@@ -16,6 +16,8 @@
       v-if="graph"
       :data="graph"
       :edited-nodes="editedNodes"
+      @node-click="onNodeClick"
+      @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
     />
   </section>
@@ -50,6 +52,14 @@
     @Action toggleVariable;
 
     settingsOpen: boolean = false;
+
+    onNodeClick (selected: Graph.GraphNodeInterface): void {
+      this.$emit('highlight', selected.label);
+    }
+
+    onBackgroundClick (): void {
+      this.$emit('highlight', '');
+    }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
       this.toggleParameter({ modelId: this.model.id, selector: selected.label });
