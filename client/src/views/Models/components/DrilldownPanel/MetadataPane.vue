@@ -5,6 +5,7 @@
         No metadata at the moment.
       </span>
     </message-display>
+    <loading-alert v-if="isLoading" />
     <details
       class="metadata" open
       v-else
@@ -65,6 +66,22 @@
         </div>
       </template>
 
+      <template v-if="isTypeIndraAgentReferenceSet(datum)">
+        <summary :title="datum.uid">Agent(s) Reference(s)</summary>
+        <div class="metadata-content"  v-for="(entity, index) in emmaaInfo" :key="index">
+           <details v-if="entity.definition" class="metadata" open>
+            <summary>Definition 
+              (<a v-if="entity.url" :href="entity.url">
+              {{ entity.name }}
+              </a>)
+            </summary>
+            <div class="metadata-content">
+              <p>{{ entity.definition }}</p>
+            </div>
+          </details>
+        </div>
+      </template>
+
       <aside class="metadata-provenance">
         {{ datum.provenance.method }}
         <time :datetime="datum.provenance.timestamp">
@@ -78,27 +95,55 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { Prop } from 'vue-property-decorator';
+  import { Prop, Watch } from 'vue-property-decorator';
   import _ from 'lodash';
 
+  import { emmaaEntityInfo } from '@/services/EmmaaFetchService';
+
   import * as GroMET from '@/types/typesGroMEt';
+  import { EmmaaEntityInfoInterface } from '@/types/typesEmmaa';
   import { formatFullDateTime } from '@/utils/DateTimeUtil';
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
+  import LoadingAlert from '@/components/widgets/LoadingAlert.vue';
 
   const METADATA_TYPES_ORDER = [
     GroMET.MetadataType.TextDefinition,
     GroMET.MetadataType.TextParameter,
     GroMET.MetadataType.EquationDefinition,
     GroMET.MetadataType.CodeSpanReference,
+    GroMET.MetadataType.CodeSpanReference,
+    GroMET.MetadataType.IndraAgentReferenceSet,
   ];
 
   const components = {
     MessageDisplay,
+    LoadingAlert,
   };
+
+  const emptyEmmaaInfo = {
+    definition: null,
+    name: null,
+    url: null,
+  } as EmmaaEntityInfoInterface;
 
   @Component({ components })
   export default class MetadataPane extends Vue {
     @Prop({ default: [] }) metadata: GroMET.Metadata[];
+
+    isLoading = false;
+    emmaaInfo: EmmaaEntityInfoInterface[] = [];
+
+    @Watch('metadata') onDataChange (): void {
+      if (this.isTypeIndraAgentReferenceSet) {
+        this.fetchExternalData();
+      }
+    }
+
+    mounted (): void {
+      if (this.isTypeIndraAgentReferenceSet) {
+        this.fetchExternalData();
+      }
+    }
 
     get sortedMetadata (): GroMET.Metadata[] {
       return [...this.metadata].sort((a, b) => {
@@ -133,12 +178,30 @@
         this.isTypeTextParameter(datum);
     }
 
+    isTypeIndraAgentReferenceSet (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadataType.IndraAgentReferenceSet;
+    }
+
     provenanceDate (timestamp: string): string {
       return formatFullDateTime(timestamp);
     }
 
     showMoreHandler (doi: string): void {
       this.$emit('open-modal', doi);
+    }
+
+    async fetchExternalData (): Promise<void> {
+      this.isLoading = true;
+      this.emmaaInfo = [];
+
+       this.emmaaInfo = await Promise.all((this.metadata[0] as GroMET.IndraAgentReferenceSet)
+       .indra_agent_references.map(async (reference) => {
+        const args = { modelName: null, namespace: Object.keys(reference.db_refs)[0], id:  Object.values(reference.db_refs)[0]};
+        const response = await emmaaEntityInfo(args as any);
+         return response;
+        }));
+      this.isLoading = false;
+
     }
 
     sourceFilePosition (datum: GroMET.CodeSpanReference): string {
@@ -192,5 +255,6 @@
       const regex = /(<math).*?(<\/math>)/g;
       return regex.exec(mml)[0] ?? null;
     }
+
   }
 </script>

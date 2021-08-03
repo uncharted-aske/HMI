@@ -16,6 +16,11 @@ type FileId = {
   uid: string,
 }
 
+type IndraAgentReference = {
+  db_refs: Record<string, string>,
+  name: string,
+};
+
 export enum CodeType {
   CodeBlock = 'CODE_BLOCK',
   Identifier = 'IDENTIFIER',
@@ -29,6 +34,8 @@ export enum MetadataType {
   TextDefinition = 'TextDefinition',
   TextParameter = 'TextParameter',
   TextualDocumentReferenceSet = 'TextualDocumentReferenceSet',
+  IndraAgentReferenceSet = 'IndraAgentReferenceSet',
+  ReactionReference = 'ReactionReference',
 }
 
 export interface Metadata {
@@ -92,4 +99,15 @@ export interface TextParameter extends Metadata {
   },
   variable_identifier: string,
   value: string,
+}
+
+
+
+export interface IndraAgentReferenceSet extends Metadata {
+  indra_agent_references: IndraAgentReference[],
+}
+
+export interface ReactionReference extends Metadata {
+  reaction_rule: string,
+  indra_stmt_hash: string,
 }

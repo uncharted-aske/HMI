@@ -365,6 +365,7 @@
             }));
           }
         }
+
       } catch (e) {
         throw Error(e);
       }
@@ -376,12 +377,13 @@
     }
 
     onNodeClick (node: GraphNodeInterface): void {
-      // Select which tab should be open first, then open the drilldown.
-      this.drilldownActiveTabId = 'metadata';
       this.isOpenDrilldown = true;
 
       // Merge node metadata with Variables metadata. c.f. GraphNodeInterface type
       this.drilldownMetadata = node.metadata ? node.metadata.flat() : null;
+
+      // Select tab to open
+      this.drilldownActiveTabId = this.drilldownMetadata.metadata_type === GroMEt.MetadataType.ReactionReference ? 'knowledge' : 'metadata';
 
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownPaneTitle = node.label;
