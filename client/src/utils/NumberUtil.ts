@@ -5,8 +5,8 @@ export const scientificNotation = (value: number, asHTML: boolean = false): stri
   const scientificNotation = new Intl.NumberFormat('en', { notation: 'scientific' }).format(value);
   const [decimal, power] = scientificNotation.split('E');
 
-  // Show the full decimal for the power of -1, 0, 1, and 2.
-  if ([-1, 0, 1, 2].includes(Number(power))) {
+  // Show the full decimal for the powers of -2, -1, 0, 1, and 2.
+  if ([-2, -1, 0, 1, 2].includes(Number(power))) {
     return (Number(decimal) * Math.pow(10, Number(power))).toString();
   } else if (asHTML) {
     return `${decimal} &times; 10<sup>${power}</sup>`;

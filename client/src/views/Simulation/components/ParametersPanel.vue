@@ -137,11 +137,6 @@
           this.$set(this.parameterValues, parameter.uid, parameter.values[0]);
         }
       });
-
-      // If none of the parameters are visible, we empty their values.
-      if (this.parameters.filter(p => p.edited).length < 1) {
-        this.parameterValues = {};
-      }
     }
 
     // Parameters values update
