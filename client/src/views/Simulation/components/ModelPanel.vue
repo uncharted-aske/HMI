@@ -15,7 +15,7 @@
     <global-graph
       v-if="graph"
       :data="graph"
-      :edited-nodes="editedNodes"
+      :edited-nodes="displayedNodes"
       @node-dblclick="onNodeDblClick"
     />
   </section>
@@ -64,15 +64,15 @@
       return this.getSimModel(this.model.id).variables;
     }
 
-    get editedNodes (): Graph.SubgraphNodeInterface[] {
+    get displayedNodes (): Graph.SubgraphNodeInterface[] {
       const nodes = this.graph?.nodes;
       if (nodes) {
         const highlightedLabels = [
           ...this.parameters
-              .filter(parameter => parameter.edited)
+              .filter(parameter => parameter.displayed)
               .map(parameter => parameter.metadata.name),
           ...this.variables
-              .filter(variable => variable.edited)
+              .filter(variable => variable.displayed)
               .map(variable => variable.metadata.name),
         ];
 

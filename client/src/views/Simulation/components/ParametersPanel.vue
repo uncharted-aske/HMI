@@ -169,7 +169,7 @@
     }
 
     get displayedParameters (): HMI.SimulationParameter[] {
-      return this.parameters.filter(parameter => parameter.edited);
+      return this.parameters.filter(parameter => parameter.displayed);
     }
 
     get noDisplayedParameters (): boolean {
