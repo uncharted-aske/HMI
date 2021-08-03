@@ -142,7 +142,15 @@
       // This is used to set default parameter values.
       this.parameters.forEach(parameter => {
         if (!Object.prototype.hasOwnProperty.call(this.parameterValues, parameter.uid)) {
-          this.$set(this.parameterValues, parameter.uid, parameter.values[0]);
+          let value = parameter.values[0];
+
+          // If the we have no default value and the parameter is a initial value,
+          // set it up to 1 so the user can run the model right away.
+          if (parameter.uid.includes('_init') && !value) {
+            value = 1;
+          }
+
+          this.$set(this.parameterValues, parameter.uid, value);
         }
       });
     }

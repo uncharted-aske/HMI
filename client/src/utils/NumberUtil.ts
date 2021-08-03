@@ -4,14 +4,15 @@
 export const scientificNotation = (value: number, asHTML: boolean = false): string => {
   const scientificNotation = new Intl.NumberFormat('en', { notation: 'scientific' }).format(value);
   const [decimal, power] = scientificNotation.split('E');
+  const roundDecimal = Math.round(Number(decimal));
 
-  // Show the full decimal for the powers of -2, -1, 0, 1, and 2.
-  if ([-2, -1, 0, 1, 2].includes(Number(power))) {
-    return (Number(decimal) * Math.pow(10, Number(power))).toString();
+  // Show the full decimal for the powers of -4, -3, -2, -1, 0, 1, 2, 3, and 4.
+  if ([-4, -3, -2, -1, 0, 1, 2, 3, 4].includes(Number(power))) {
+    return value.toString();
   } else if (asHTML) {
-    return `${decimal} &times; 10<sup>${power}</sup>`;
+    return `${roundDecimal}&times;10<sup>${power}</sup>`;
   } else {
-    return `${decimal} x 10^${power}`;
+    return `${roundDecimal}x10^${power}`;
   }
 };
 
