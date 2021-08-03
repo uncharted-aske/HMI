@@ -355,13 +355,15 @@
     async getDrilldownKnowledge (): Promise<void> {
       try {
         if (this.selectedGraphMetadata?.constructor === Array) {
-          const codeCollection = this.selectedGraphMetadata
-            .find(metadata => metadata.metadata_type === GroMEt.MetadataType.CodeCollectionReference);
+          const codeCollection = this.selectedGraphMetadata.find(metadata => {
+            return metadata.metadata_type === GroMEt.MetadataType.CodeCollectionReference;
+          }) as GroMEt.CodeCollectionInterface;
 
-          const response = await cosmosSearch(filterToParamObj({
-            askeId: (codeCollection as GroMEt.CodeCollectionInterface).global_reference_id.id,
-          }));
-          this.drilldownKnowledge = response;
+          if (codeCollection?.global_reference_id?.id) {
+            this.drilldownKnowledge = await cosmosSearch(filterToParamObj({
+              askeId: codeCollection.global_reference_id.id,
+            }));
+          }
         }
       } catch (e) {
         throw Error(e);
