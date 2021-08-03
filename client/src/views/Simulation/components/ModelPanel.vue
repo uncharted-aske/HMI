@@ -158,13 +158,13 @@
     }
 
     onAddAllParametersAndVariables (): void {
-      this.showAllParameters();
-      this.showAllVariables();
+      this.showAllParameters(this.model.id);
+      this.showAllVariables(this.model.id);
     }
 
     onRemoveAllParametersAndVariables (): void {
-      this.hideAllParameters();
-      this.hideAllVariables();
+      this.hideAllParameters(this.model.id);
+      this.hideAllVariables(this.model.id);
     }
   }
 </script>
