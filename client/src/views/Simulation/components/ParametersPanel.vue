@@ -353,6 +353,7 @@
   .parameters {
     background-color: var(--bg-graphs);
     flex-grow: 1;
+    overflow-x: hidden; /* Hide horizontal scrollbar */
     overflow-y: auto;
     position: relative;
     scroll-snap-points-y: repeat(var(--parameter-height));
