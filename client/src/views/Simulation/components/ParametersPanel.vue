@@ -432,7 +432,7 @@
   .parameter.hidden {
     opacity: 0.5;
   }
-  
+
   .parameter.highlighted {
     border-color: var(--selection);
   }
