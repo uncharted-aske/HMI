@@ -44,39 +44,43 @@
     </settings-bar>
     <div class="parameters">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
+
       <message-display class="m-3" v-if="noDisplayedParameters">
         Use the model visualization on the left or the
         <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
         <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
         buttons above to add/remove <strong>parameters</strong>.
       </message-display>
-      <ul v-else class="parameters-list">
-        <li
-          class="parameter"
-          v-for="(parameter, index) of displayedParameters"
-          :key="index"
-          :class="{
-            error: nonValidValue(parameterValues[parameter.uid]),
-            hidden: parameter.hidden,
-          }"
-        >
-          <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
-          <input type="text" v-model.number="parameterValues[parameter.uid]" />
-          <aside class="btn-group">
-            <button
-              class="btn btn-secondary btn-sm"
-              title="Remove parameter from editable panel"
-              type="button"
-              @click="hideParameter({ modelId, selector: parameter.uid })"
-            >
-              <font-awesome-icon :icon="['fas', 'ban']" />
-            </button>
-          </aside>
-        </li>
-      </ul>
-      <message-display v-if="true" messageType="danger">
-        One or more <strong>parameters</strong> values are invalid.
-      </message-display>
+
+      <template v-else>
+        <message-display v-if="someParametersAreInvalid" messageType="danger">
+          One or more <strong>parameters</strong> values are&nbsp;invalid.
+        </message-display>
+        <ul class="parameters-list">
+          <li
+            class="parameter"
+            v-for="(parameter, index) of displayedParameters"
+            :key="index"
+            :class="{
+              error: nonValidValue(parameterValues[parameter.uid]),
+              hidden: parameter.hidden,
+            }"
+          >
+            <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
+            <input type="text" v-model.number="parameterValues[parameter.uid]" />
+            <aside class="btn-group">
+              <button
+                class="btn btn-secondary btn-sm"
+                title="Remove parameter from editable panel"
+                type="button"
+                @click="hideParameter({ modelId, selector: parameter.uid })"
+              >
+                <font-awesome-icon :icon="['fas', 'ban']" />
+              </button>
+            </aside>
+          </li>
+        </ul>
+      </template>
     </div>
   </section>
 </template>
@@ -146,11 +150,14 @@
     // Parameters values update
     @Watch('triggerParameterValues') onParameterValuesChange (): void {
       this.parameters.forEach(parameter => {
-        if (this.parameterValues[parameter.uid] !== parameter.values[0]) {
+        const inputValue = this.parameterValues[parameter.uid];
+        const currentValue = parameter.values[parameter.values.length - 1];
+
+        if (inputValue !== currentValue) {
           this.setSimParameterValue({
             modelId: this.modelId,
             uid: parameter.uid,
-            value: this.parameterValues[parameter.uid],
+            value: inputValue,
           });
         }
       });
@@ -314,7 +321,15 @@
     }
 
     nonValidValue (value: number): boolean {
-      return !_.isNumber(value);
+      return !_.isNumber(value) || Number.isNaN(value);
+    }
+
+    get someParametersAreInvalid (): boolean {
+      // Make sure that for every parameters, their current value is valid.
+      return this.parameters.some(parameter => {
+        const currentValue = parameter.values[parameter.values.length - 1];
+        return this.nonValidValue(currentValue);
+      });
     }
   }
 </script>
