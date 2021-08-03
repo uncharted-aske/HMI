@@ -1,9 +1,7 @@
 <template>
   <div class="metadata-list">
     <message-display v-if="isEmptyMetadata" class="m-3">
-      <span slot="message">
-        No metadata at the moment.
-      </span>
+      No metadata at the moment.
     </message-display>
     <details
       class="metadata" open

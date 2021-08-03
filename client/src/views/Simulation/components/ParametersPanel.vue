@@ -44,20 +44,21 @@
     </settings-bar>
     <div class="parameters">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
-       <message-display class="m-3" v-if="noDisplayedParameters">
-        <span slot="message">
+      <message-display class="m-3" v-if="noDisplayedParameters">
         Use the model visualization on the left or the
         <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
         <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
-        buttons above to add/remove parameters.
-        </span>
+        buttons above to add/remove <strong>parameters</strong>.
       </message-display>
       <ul v-else class="parameters-list">
         <li
           class="parameter"
           v-for="(parameter, index) of displayedParameters"
           :key="index"
-          :class="{ hidden: parameter.hidden }"
+          :class="{
+            error: nonValidValue(parameterValues[parameter.uid]),
+            hidden: parameter.hidden,
+          }"
         >
           <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
           <input type="text" v-model.number="parameterValues[parameter.uid]" />
@@ -73,6 +74,9 @@
           </aside>
         </li>
       </ul>
+      <message-display v-if="true" messageType="danger">
+        One or more <strong>parameters</strong> values are invalid.
+      </message-display>
     </div>
   </section>
 </template>
@@ -308,6 +312,10 @@
     onShowAllParameters (): void {
       this.displayedParameters.forEach(parameter => { parameter.hidden = false; });
     }
+
+    nonValidValue (value: number): boolean {
+      return !_.isNumber(value);
+    }
   }
 </script>
 
@@ -341,6 +349,7 @@
   }
 
   .parameter {
+    border: 1px solid transparent;
     display: grid;
     grid-template-areas:
       "name axis action"
@@ -355,6 +364,10 @@
   .parameter:last-of-type {
     /* Small spacing to have some empty space at the bottom of the scroll bar. */
     margin-bottom: 2em;
+  }
+
+  .parameter.error {
+    border-color: var(--error);
   }
 
   .parameter h4 {

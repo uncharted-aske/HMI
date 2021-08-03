@@ -21,17 +21,13 @@
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
         <message-display v-if="!getVariablesRunsCount" class="m-3">
-          <span slot="message">
-          Click Run to get variables output
-          </span>
+          Click Run to get <strong>variables</strong> output
         </message-display>
         <message-display v-if="noDisplayedVariables" class="m-3">
-          <span slot="message">
-            Use the model visualization on the left or
-            <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
-            <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
-            buttons above to add/remove variables.
-          </span>
+          Use the model visualization on the left or
+          <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
+          <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
+          buttons above to add/remove <strong>variables</strong>.
         </message-display>
         <multi-line-plot
           v-else

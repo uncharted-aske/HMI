@@ -1,9 +1,9 @@
 <template>
   <div
-    class="alert"
-    :class="alertType">
+    class="message-display alert"
+    :class="`alert-${messageType}`">
     <font-awesome-icon class="icon" :icon="['fas', iconType]"/>
-    <slot name="message" />
+    <slot />
   </div>
 </template>
 
@@ -14,17 +14,7 @@
 
   @Component
   export default class MessageDisplay extends Vue {
-    @Prop({ default: 'info' })
-    messageType: string;
-
-    get alertType (): string {
-      if (this.messageType === 'warning') {
-        return 'alert-warning';
-      } else if (this.messageType === 'primary') {
-        return 'alert-primary';
-      }
-      return 'alert-info';
-    }
+    @Prop({ default: 'info' }) messageType: string;
 
     get iconType (): string {
       if (this.messageType === 'warning') {
@@ -36,7 +26,7 @@
 </script>
 
 <style scoped>
-  .fa {
-    padding-right: 5px;
+  .icon {
+    margin-right: 5px;
   }
 </style>
