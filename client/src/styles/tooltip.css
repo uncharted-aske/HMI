@@ -34,15 +34,6 @@
 }
 
 /**
- * Display on hover
- */
-
-.aske-tooltip:hover::after,
-.aske-tooltip:hover::before {
-  opacity: 1;
-}
-
-/**
  * Content
  */
 
@@ -67,8 +58,19 @@
   border-right: 1rem solid transparent;
   border-top: 1rem solid var(--tooltip-colour);
   content: '\0A';
+
+  /* position top by default */
   transform: translate(-50%, -100%);
 }
+
+/**
+ * Display on hover
+ */
+
+ .aske-tooltip:hover::after,
+ .aske-tooltip:hover::before {
+   opacity: 1;
+ }
 
 /**
  * Highlighted tooltip
