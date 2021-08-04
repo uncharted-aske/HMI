@@ -68,15 +68,18 @@
 
       <template v-if="isTypeIndraAgentReferenceSet(datum)">
         <summary :title="datum.uid">Agent(s) Reference(s)</summary>
-        <div class="metadata-content"  v-for="(entity, index) in emmaaInfo" :key="index">
-           <details v-if="entity.definition" class="metadata" open>
-            <summary>Definition
-              <a v-if="entity.url" :href="entity.url">
-              ({{ entity.name }})
+        <div class="metadata-content"  v-for="(reference, index) in agentsReferences" :key="index">
+           <details class="metadata" open>
+            <summary>
+              <a v-if="reference.url" :href="reference.url">
+              {{ reference.name }}
               </a>
             </summary>
-            <div class="metadata-content">
-              <p>{{ entity.definition }}</p>
+            <div v-if="reference.definition" class="metadata-content">
+              <p>{{ reference.definition }}</p>
+            </div>
+            <div v-else class="metadata-content">
+              No definition.
             </div>
           </details>
         </div>
@@ -125,17 +128,17 @@
     @Prop({ default: [] }) metadata: GroMET.Metadata[];
 
     isLoading = false;
-    emmaaInfo: EmmaaEntityInfoInterface[] = [];
+    agentsReferences: EmmaaEntityInfoInterface[] = [];
 
     @Watch('metadata') onDataChange (): void {
-      if (this.isTypeIndraAgentReferenceSet) {
-        this.fetchExternalData();
+      if (this.metadata.find(datum => datum.metadata_type === GroMET.MetadataType.IndraAgentReferenceSet)) {
+        this.fetchAgentsReferences();
       }
     }
 
     mounted (): void {
-      if (this.isTypeIndraAgentReferenceSet) {
-        this.fetchExternalData();
+      if (this.metadata.find(datum => datum.metadata_type === GroMET.MetadataType.IndraAgentReferenceSet)) {
+        this.fetchAgentsReferences();
       }
     }
 
@@ -184,16 +187,17 @@
       this.$emit('open-modal', doi);
     }
 
-    async fetchExternalData (): Promise<void> {
+    async fetchAgentsReferences (): Promise<void> {
       this.isLoading = true;
-      this.emmaaInfo = [];
+      this.agentsReferences = [];
 
-       this.emmaaInfo = await Promise.all((this.metadata[0] as GroMET.IndraAgentReferenceSet)
+      this.agentsReferences = await Promise.all((this.metadata[0] as GroMET.IndraAgentReferenceSet)
        .indra_agent_references.map(async (reference) => {
         const args = { modelName: null, namespace: Object.keys(reference.db_refs)[0], id: Object.values(reference.db_refs)[0] };
         const response = await emmaaEntityInfo(args as any);
          return response;
         }));
+      console.log(this.agentsReferences);
       this.isLoading = false;
     }
 

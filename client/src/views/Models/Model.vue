@@ -382,11 +382,10 @@
       this.drilldownMetadata = node.metadata ? node.metadata.flat() : null;
 
       // Select tab to open
-      this.drilldownActiveTabId = this.drilldownMetadata.metadata_type === GroMEt.MetadataType.ReactionReference ? 'knowledge' : 'metadata';
-
+      // this.drilldownActiveTabId = this.drilldownMetadata[0].metadata_type === GroMEt.MetadataType.ReactionReference ? 'knowledge' : 'metadata';
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownPaneTitle = node.label;
-      this.getDrilldownKnowledge();
+      // this.getDrilldownKnowledge();
     }
 
     onBackgroundClick ():void {
