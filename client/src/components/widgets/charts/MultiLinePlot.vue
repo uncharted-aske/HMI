@@ -38,6 +38,7 @@
   export default class MultiLinePlot extends Vue {
     @Prop({ default: 'Title' }) title: string;
     @Prop({ default: () => [[]] }) data: any;
+    @Prop({ default: () => [] }) polygon: any;
     @Prop({ default: () => [] }) styles: any;
 
     width: number;
@@ -160,6 +161,17 @@
           .attr('r', 3);
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    drawPolygon (svg, data): void {
+      svg.selectAll('polygon')
+        .data([data])
+        .enter().append('polygon')
+          .attr('points', d =>
+              d.map(d => [this.xScale(d.x), this.yScale(d.y)].join(',')).join(' '))
+          .attr('fill', '#647EA9')
+          .attr('opacity', '0.4');
+    }
+
     refresh (): void {
       const currentDataHash = JSON.stringify(this.data) + JSON.stringify(this.styles);
       if (currentDataHash === this.dataHash) {
@@ -178,6 +190,10 @@
 
       svg.append('g')
         .call(this.yAxis);
+
+      if (this.polygon?.length) {
+        this.drawPolygon(svg, this.polygon);
+      }
 
       this.data.map((dataset, i) => this.drawDataset(svg, dataset, this.styles[i]));
 

@@ -59,6 +59,7 @@
           class="pt-2 pl-2 pr-3 plot"
           :class="[{highlighted: plot.metadata.name === highlighted}]"
           :data="plot.values"
+          :polygon="plot.polygon"
           :key="index"
           :styles="plot.styles"
           :title="plot.metadata.name"
@@ -114,10 +115,10 @@
 
   const AGGREGATE_STYLE = {
     node: {
-      fill: Colors.NODES.AGGREGATE,
+      fill: '#EBCB8B',
     },
     edge: {
-      strokeColor: Colors.NODES.AGGREGATE,
+      strokeColor: '#EBCB8B',
     },
   };
 
@@ -128,12 +129,6 @@
     edge: {
       strokeColor: '#647EA9',
       transitionDuration: 0,
-    },
-  };
-
-  const NO_LINE_STYLE = {
-    edge: {
-      strokeWidth: 0,
     },
   };
 
@@ -164,20 +159,40 @@
     @Action hideAllVariables;
     @Action showAllVariables;
 
+    calcPolygon (variable: HMI.SimulationVariable): void {
+      const numRuns = variable.values.length;
+      const xArr = new Array(numRuns - 1);
+      const yMinArr = new Array(numRuns - 1);
+      const yMaxArr = new Array(numRuns - 1);
+
+      for (let runIndex = 0; runIndex < numRuns - 1; runIndex++) {
+        const run = variable.values.shift();
+        run.forEach((point, pointIndex) => {
+          xArr[pointIndex] = point.x;
+          yMinArr[pointIndex] = Math.min(yMinArr[pointIndex] ?? point.y, point.y);
+          yMaxArr[pointIndex] = Math.max(yMaxArr[pointIndex] ?? point.y, point.y);
+        });
+      }
+
+      variable.polygon = [
+        ...yMinArr.map((y, i) => ({ x: xArr[i], y })),
+        ...yMaxArr.map((y, i) => ({ x: xArr[i], y })).reverse(),
+      ];
+    }
+
     get variables (): HMI.SimulationVariable[] {
       let variables = this.getSimModel(this.modelId).variables;
       variables = _.cloneDeep(variables);
       variables.map(variable => {
         variable.styles = variable.styles || [];
-        for (let i = 0; i < variable.values.length; i++) {
-          if (variable.values.length > 5) {
-            i !== variable.values.length - 1
-              ? variable.styles.push(mergeStyle(OTHER_STYLE, NO_LINE_STYLE))
-              : variable.styles.push(mergeStyle());
-          } else {
-            variable.styles.push(mergeStyle(i !== variable.values.length - 1 && OTHER_STYLE));
+        if (variable.values.length > 5) {
+          this.calcPolygon(variable);
+        } else {
+          for (let i = 0; i < variable.values.length - 1; i++) {
+            variable.styles.push(mergeStyle(OTHER_STYLE));
           }
         }
+        variable.styles.push(mergeStyle());
 
         if (variable.aggregate) {
           variable.values.push(variable.aggregate);
