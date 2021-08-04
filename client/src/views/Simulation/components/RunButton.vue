@@ -1,26 +1,50 @@
 <template>
-  <div class="run-button btn-group">
+  <div class="run-button">
     <button
+      class="btn btn-primary blue aske-tooltip aske-tooltip-bottom aske-tooltip-highlight"
       type="button"
-      class="btn btn-primary blue"
       :disabled="disabled"
+      :data-tooltip="runButtonTitle"
       @click="onClickRun"
     >
-      <font-awesome-icon :icon="['fas', displayIcon ]" />
-      {{ displayText }}
-    </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      @click="settingOpen = !settingOpen"
-    >
-      <font-awesome-icon :icon="['fas', 'cog' ]" />
+      <font-awesome-icon :icon="['fas', runButtonIcon ]" />
+      {{ runButtonText }}
     </button>
 
+    <!-- Extra Commands -->
+    <div class="btn-group">
+      <button
+        class="btn btn-primary aske-tooltip aske-tooltip-bottom"
+        data-tooltip="Model Execution Configuration"
+        type="button"
+        @click="onClickSettings"
+      >
+        <font-awesome-icon :icon="['fas', 'cog' ]" />
+      </button>
+      <button
+        class="btn btn-primary aske-tooltip aske-tooltip-bottom"
+        data-tooltip="Save current run"
+        type="button"
+        :disabled="disabled"
+        @click="onClickSave"
+      >
+        <font-awesome-icon :icon="['fas', 'bookmark' ]" />
+      </button>
+      <button
+        class="btn btn-primary aske-tooltip aske-tooltip-bottom"
+        data-tooltip="Reset all saved runs"
+        type="button"
+        @click="onClickReset"
+      >
+        <font-awesome-icon :icon="['fas', 'undo' ]" />
+      </button>
+    </div>
+
+    <!-- Modal to configure Run configuration -->
     <modal v-if="settingOpen" @close="settingOpen = false">
-      <h5 class="header" slot="header">Model Execution Settings</h5>
+      <h5 class="header" slot="header">Model Execution Configuration</h5>
       <section slot="body" class="run-config">
-        <label for="auto-run-input" title="Enable model to run automatically on when Parameters are updated">Auto-Run</label>
+        <label for="auto-run-input" title="Enable model to run automatically when Parameters are updated">Auto-Run</label>
         <input type="checkbox" v-model="autoRunInput" id="auto-run-input" />
         <label for="start">Start</label>
         <input type="number" id="start" v-model.number="configInput.start" />
@@ -52,11 +76,17 @@
 
     settingOpen: boolean = false;
 
-    get displayText (): string {
+    get runButtonText (): string {
       return this.autoRunInput ? 'Auto-Run' : 'Run ';
     }
 
-    get displayIcon (): string {
+    get runButtonTitle (): string {
+      return this.autoRunInput
+        ? 'Execute a model automatically when a Parameter is updated. Caution, this can trigger many request.'
+        : 'Execute a model based on Parameters values and display the result in the variables panel.';
+    }
+
+    get runButtonIcon (): string {
       return this.autoRunInput ? 'pause' : 'play';
     }
 
@@ -67,6 +97,18 @@
       } else {
         this.$emit('run');
       }
+    }
+
+    onClickSettings (): void {
+      this.settingOpen = !this.settingOpen;
+    }
+
+    onClickSave (): void {
+      this.$emit('save');
+    }
+
+    onClickReset (): void {
+      this.$emit('reset');
     }
   }
 </script>
@@ -95,6 +137,8 @@
   .run-button::v-deep .modal-container {
     height: auto;
     max-height: 90vh;
+    max-width: 27rem;
+    min-width: 40vw;
     width: auto;
   }
 </style>
