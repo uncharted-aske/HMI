@@ -227,8 +227,8 @@ export default class EpiRenderer extends SVGRenderer {
     const chart = (this as any).chart;
     if (chart) {
       chart.selectAll('.node-ui').each(function (d) {
-        const isHighlighted = nodesList.map(node => node.id).includes(d.id);
-        if (isHighlighted) {
+        const isDisplayed = nodesList.map(node => node.id).includes(d.id);
+        if (isDisplayed) {
           d3.select(this).append('circle')
             .classed('displayed-marker', true)
             .attr('cx', d => (d as any).width - 5)
@@ -238,7 +238,7 @@ export default class EpiRenderer extends SVGRenderer {
             .style('stroke', DEFAULT_STYLE.node.stroke)
             .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
         } else {
-          d3.select(this).select('.displayed-marker').remove();
+          d3.select(this).selectAll('.displayed-marker').remove();
         }
       });
     }
