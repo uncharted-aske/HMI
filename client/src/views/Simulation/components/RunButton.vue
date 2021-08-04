@@ -43,16 +43,21 @@
     <!-- Modal to configure Run configuration -->
     <modal v-if="settingOpen" @close="settingOpen = false">
       <h5 class="header" slot="header">Model Execution Configuration</h5>
-      <section slot="body" class="run-config">
-        <label for="auto-run-input" title="Enable model to run automatically when Parameters are updated">Auto-Run</label>
-        <input type="checkbox" v-model="autoRunInput" id="auto-run-input" />
-        <label for="start">Start</label>
-        <input type="number" id="start" v-model.number="configInput.start" />
-        <label for="end">End</label>
-        <input type="number" id="end" v-model.number="configInput.end" />
-        <label for="step">Step</label>
-        <input type="number" id="step" v-model.number="configInput.step" />
-      </section>
+      <div slot="body" class="run-config">
+        <section>
+          <label for="auto-run-input">Auto-Run</label>
+          <input type="checkbox" v-model="autoRunInput" id="auto-run-input" />
+          <p class="info">Enable model to run automatically when Parameters are updated.</p>
+        </section>
+        <section>
+          <label for="start">Start</label>
+          <input type="number" id="start" v-model.number="configInput.start" />
+          <label for="end">End</label>
+          <input type="number" id="end" v-model.number="configInput.end" />
+          <label for="step">Step</label>
+          <input type="number" id="step" v-model.number="configInput.step" />
+        </section>
+      </div>
     </modal>
   </div>
 </template>
@@ -119,6 +124,21 @@
   }
 
   .run-config {
+    align-items: start;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .run-config section:not(:first-of-type) {
+    border-left: var(--border);
+    padding: 0 1rem;
+  }
+
+  .run-config section:first-of-type {
+    padding-right: 1rem;
+  }
+
+  .run-config section {
     align-items: center;
     display: grid;
     font-size: .9em;
@@ -131,6 +151,12 @@
   .run-config label {
     line-height: 2;
     margin: 0;
+  }
+
+  .run-config .info {
+    color: var(--text-color-panel-muted);
+    font-size: .8em;
+    grid-column: 1 / 3;
   }
 
   /* Overide modal styling */
