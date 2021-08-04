@@ -86,7 +86,7 @@
               .map(variable => variable.metadata.name),
         ];
 
-        if (displayedLabels.length > 0) { 
+        if (displayedLabels.length > 0) {
           return nodes
             .filter(node => displayedLabels.includes(node.label))
             .map(node => ({ id: node.id }));
