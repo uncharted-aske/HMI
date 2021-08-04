@@ -59,7 +59,7 @@
           class="parameter"
           v-for="(parameter, index) of displayedParameters"
           :key="index"
-          :class="{ hidden: parameter.hidden, highlighted: parameter.metadata.name === highlighted }"
+          :class="{ highlighted: parameter.metadata.name === highlighted }"
         >
           <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
           <input type="text" v-model.number="parameterValues[parameter.uid]" />
@@ -171,7 +171,7 @@
     }
 
     get displayedParameters (): HMI.SimulationParameter[] {
-      return this.parameters.filter(parameter => parameter.edited);
+      return this.parameters.filter(parameter => parameter.displayed);
     }
 
     get noDisplayedParameters (): boolean {
@@ -400,10 +400,6 @@
   .parameter .btn-group button {
     padding-bottom: 0;
     padding-top: 0;
-  }
-
-  .parameter.hidden {
-    opacity: 0.5;
   }
 
   .parameter.highlighted {

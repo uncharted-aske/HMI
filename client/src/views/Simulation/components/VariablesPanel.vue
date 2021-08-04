@@ -189,7 +189,7 @@
     }
 
     get displayedVariables (): HMI.SimulationVariable[] {
-      return this.variables.filter(variable => variable.edited);
+      return this.variables.filter(variable => variable.displayed);
     }
 
     get noDisplayedVariables (): boolean {
