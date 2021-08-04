@@ -47,7 +47,7 @@
         <section>
           <label for="auto-run-input">Auto-Run</label>
           <input type="checkbox" v-model="autoRunInput" id="auto-run-input" />
-          <p class="info">Enable model to run automatically when Parameters are updated.</p>
+          <p class="info">Enable model to run automatically when parameters are updated.</p>
         </section>
         <section>
           <label for="start">Start</label>
