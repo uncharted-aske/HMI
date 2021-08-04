@@ -59,7 +59,6 @@
           :key="index"
           :class="{
             error: nonValidValue(parameterValues[parameter.uid]),
-            hidden: parameter.hidden,
             highlighted: parameter.metadata.name === highlighted,
           }"
         >
@@ -184,7 +183,7 @@
     }
 
     get displayedParameters (): HMI.SimulationParameter[] {
-      return this.parameters.filter(parameter => parameter.edited);
+      return this.parameters.filter(parameter => parameter.displayed);
     }
 
     get noDisplayedParameters (): boolean {
@@ -428,10 +427,6 @@
   .parameter .btn-group button {
     padding-bottom: 0;
     padding-top: 0;
-  }
-
-  .parameter.hidden {
-    opacity: 0.5;
   }
 
   .parameter.highlighted {

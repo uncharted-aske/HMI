@@ -46,8 +46,7 @@ type Counter = {
 /** Simulation types */
 
 interface SimulationParameter extends Donu.ModelParameter {
-  edited?: boolean, // the parameter is edited or not
-  hidden?: boolean, // the parameter is visible or not
+  displayed?: boolean, // the parameter is visible or not
   values?: number[],
 }
 
@@ -55,9 +54,8 @@ interface SimulationParameter extends Donu.ModelParameter {
 type SimulationVariableValues = Array<{x: number, y: number}>;
 
 interface SimulationVariable extends Donu.ModelVariable {
-  edited?: boolean,
+  displayed?: boolean,
   aggregate: SimulationVariableValues,
-  hidden: boolean,
   values: SimulationVariableValues[],
 }
 
