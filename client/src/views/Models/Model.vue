@@ -65,7 +65,7 @@
         @background-click="onBackgroundClick"
       />
 
-      <graph-legend />
+      <graph-legend open />
     </section>
 
     <drilldown-panel
