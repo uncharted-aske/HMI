@@ -107,5 +107,6 @@ export interface IndraAgentReferenceSet extends Metadata {
 
 export interface ReactionReference extends Metadata {
   reaction_rule: string,
-  indra_stmt_hash: string,
+  indra_stmt_hash: number,
+  is_reverse: false,
 }

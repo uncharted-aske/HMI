@@ -79,6 +79,7 @@
         v-if="drilldownActiveTabId === 'metadata' && drilldownMetadata"
         slot="content"
         :metadata="drilldownMetadata"
+        :model-name="selectedModel.name"
         @open-modal="onOpenModalMetadata"
       />
       <parameters-pane
@@ -381,11 +382,9 @@
       // Merge node metadata with Variables metadata. c.f. GraphNodeInterface type
       this.drilldownMetadata = node.metadata ? node.metadata.flat() : null;
 
-      // Select tab to open
-      // this.drilldownActiveTabId = this.drilldownMetadata[0].metadata_type === GroMEt.MetadataType.ReactionReference ? 'knowledge' : 'metadata';
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownPaneTitle = node.label;
-      // this.getDrilldownKnowledge();
+      this.getDrilldownKnowledge();
     }
 
     onBackgroundClick ():void {
