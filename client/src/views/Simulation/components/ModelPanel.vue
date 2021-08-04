@@ -150,11 +150,11 @@
     }
 
     get nbDisplayedParameters (): number {
-      return this.parameters.filter(parameter => parameter.edited).length;
+      return this.parameters.filter(parameter => parameter.displayed).length;
     }
 
     get nbDisplayedVariables (): number {
-      return this.variables.filter(variable => variable.edited).length;
+      return this.variables.filter(variable => variable.displayed).length;
     }
 
     get allParametersAndVariablesAreDisplayed (): boolean {

@@ -15,24 +15,6 @@
         :data="countersData"
       />
       <aside slot="right">
-        <!-- <div class="btn-group" title="Show/Hide Parameters">
-          <button
-            class="btn btn-secondary"
-            title="Show all parameters"
-            type="button"
-            @click="onShowAllParameters"
-          >
-            <font-awesome-icon :icon="['fas', 'eye']" />
-          </button>
-          <button
-            class="btn btn-secondary"
-            title="Hide all parameters"
-            type="button"
-            @click="onHideAllParameters"
-          >
-            <font-awesome-icon :icon="['fas', 'eye-slash']" />
-          </button>
-        </div> -->
         <button
           class="btn btn-secondary"
           title="Expand Parameters Panel"
@@ -318,14 +300,6 @@
 
             return g;
           });
-    }
-
-    onHideAllParameters (): void {
-      this.displayedParameters.forEach(parameter => { parameter.hidden = true; });
-    }
-
-    onShowAllParameters (): void {
-      this.displayedParameters.forEach(parameter => { parameter.hidden = false; });
     }
 
     nonValidValue (value: number): boolean {
