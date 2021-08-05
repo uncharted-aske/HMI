@@ -3,6 +3,26 @@
     <settings-bar>
       <counters slot="left" :title="modelName" :data="countersData" />
       <aside slot="right">
+        <div class="btn-group" title="Add/Remove All Parameters & Variables">
+          <button
+            class="btn btn-secondary"
+            title="Add all Parameters & Variables"
+            type="button"
+            :disabled="allParametersAndVariablesAreDisplayed"
+            @click="onAddAllParametersAndVariables"
+          >
+            <font-awesome-icon :icon="['fas', 'plus']" />
+          </button>
+          <button
+            class="btn btn-secondary"
+            title="Remove all Parameters & Variables"
+            type="button"
+            :disabled="noDisplayedParametersAndVariables"
+            @click="onRemoveAllParametersAndVariables"
+          >
+            <font-awesome-icon :icon="['fas', 'ban']" />
+          </button>
+        </div>
         <button
           class="btn btn-secondary"
           title="Expand Model Panel"
@@ -48,7 +68,13 @@
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
+
+    @Action hideAllParameters;
+    @Action showAllParameters;
     @Action toggleParameter;
+
+    @Action hideAllVariables;
+    @Action showAllVariables;
     @Action toggleVariable;
 
     settingsOpen: boolean = false;
@@ -121,6 +147,34 @@
         });
       }
       return data;
+    }
+
+    get nbDisplayedParameters (): number {
+      return this.parameters.filter(parameter => parameter.displayed).length;
+    }
+
+    get nbDisplayedVariables (): number {
+      return this.variables.filter(variable => variable.displayed).length;
+    }
+
+    get allParametersAndVariablesAreDisplayed (): boolean {
+      return this.nbDisplayedParameters === this.parameters.length &&
+        this.nbDisplayedVariables === this.variables.length;
+    }
+
+    get noDisplayedParametersAndVariables (): boolean {
+      return this.nbDisplayedParameters === 0 &&
+        this.nbDisplayedVariables === 0;
+    }
+
+    onAddAllParametersAndVariables (): void {
+      this.showAllParameters(this.model.id);
+      this.showAllVariables(this.model.id);
+    }
+
+    onRemoveAllParametersAndVariables (): void {
+      this.hideAllParameters(this.model.id);
+      this.hideAllVariables(this.model.id);
     }
   }
 </script>

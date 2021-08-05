@@ -8,26 +8,6 @@
       />
       <aside slot="right">
         <span class="run-counter" v-if="getVariablesRunsCount">{{ runCounter }}</span>
-        <div class="btn-group" title="Add/Remove Variables">
-          <button
-            class="btn btn-secondary"
-            title="Add all Variables"
-            type="button"
-            :disabled="allVariablesAreDisplayed"
-            @click="showAllVariables(modelId)"
-          >
-            <font-awesome-icon :icon="['fas', 'plus']" />
-          </button>
-          <button
-            class="btn btn-secondary"
-            title="Remove all Vsariables"
-            type="button"
-            :disabled="noDisplayedVariables"
-            @click="hideAllVariables(modelId)"
-          >
-            <font-awesome-icon :icon="['fas', 'ban']" />
-          </button>
-        </div>
         <button
           class="btn btn-secondary"
           title="Expand Parameters Panel"
@@ -41,17 +21,13 @@
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
         <message-display v-if="!getVariablesRunsCount" class="m-3">
-          <span slot="message">
-          Click Run to get variables output
-          </span>
+          Click Run to get <strong>variables</strong> output
         </message-display>
         <message-display v-if="noDisplayedVariables" class="m-3">
-          <span slot="message">
-            Use the model visualization on the left or
-            <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
-            <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
-            buttons above to add/remove variables.
-          </span>
+          Use the model visualization on the left or
+          <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
+          <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
+          buttons above to add/remove <strong>variables</strong>.
         </message-display>
         <multi-line-plot
           v-else
@@ -161,8 +137,6 @@
     @Getter getSimModel;
     @Getter getVariablesRunsCount;
     @Action hideVariable;
-    @Action hideAllVariables;
-    @Action showAllVariables;
 
     get variables (): HMI.SimulationVariable[] {
       let variables = this.getSimModel(this.modelId).variables;
@@ -194,10 +168,6 @@
 
     get noDisplayedVariables (): boolean {
       return this.displayedVariables.length === 0;
-    }
-
-    get allVariablesAreDisplayed (): boolean {
-      return this.displayedVariables.length === this.variables.length;
     }
 
     get countersTitle (): string {

@@ -10,11 +10,7 @@
         </div>
       </div>
     </div>
-    <message-display v-else class="m-3">
-      <span slot="message">
-        No metadata at the moment.
-      </span>
-    </message-display>
+    <message-display v-else class="m-3">No metadata at the moment.</message-display>
   </div>
 </template>
 
