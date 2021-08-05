@@ -24,7 +24,7 @@
         </button>
       </aside>
     </settings-bar>
-    <div class="parameters" :class="{ message: someParametersAreInvalid }">
+    <div class="parameters" :class="{ message: someParametersAreInvalid}">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
 
       <message-display v-if="noDisplayedParameters">
@@ -59,7 +59,7 @@
         </li>
       </ul>
 
-      <message-display v-if="someParametersAreInvalid" messageType="danger">
+      <message-display v-if="someParametersAreInvalid && !noDisplayedParameters" messageType="danger">
         One or more <strong>parameters</strong> values are&nbsp;invalid.
       </message-display>
     </div>
