@@ -96,7 +96,7 @@
             <h6>Belief score</h6>
             <p>{{ nodeStatement.belief }}</p>
           </template>
-          <deta ils v-if="nodeStatement" class="metadata" open>
+          <details v-if="nodeStatement" class="metadata" open>
             <summary v-if="nodeStatement.evidence">Evidence ({{nodeStatement.evidence.length}})</summary>
             <div class="metadata-content">
               <figure
@@ -170,17 +170,13 @@
     }
 
     mounted (): void {
-      if (this.metadata.find(datum => datum.metadata_type === GroMET.MetadataType.IndraAgentReferenceSet)) {
+      if (this.metadata.find(this.isTypeIndraAgentReferenceSet)) {
         this.fetchAgentsReferences();
       }
-      if (this.metadata.find(datum => datum.metadata_type === GroMET.MetadataType.ReactionReference)) {
+      if (this.metadata.find(this.isTypeReactionReference)) {
         this.fetchNodeEvidences();
       }
     }
-
-    // get hasNodeStatement (): boolean {
-    //   return this.nodeStatement;
-    // }
 
     get sortedMetadata (): GroMET.Metadata[] {
       return [...this.metadata].sort((a, b) => {
@@ -191,7 +187,7 @@
     }
 
     get isEmptyMetadata (): boolean {
-      return this.metadata.length === 0;
+      return this.metadata?.length === 0 || this.metadata === [];
     }
 
     isTypeCodeSpanReference (datum: GroMET.Metadata): boolean {
