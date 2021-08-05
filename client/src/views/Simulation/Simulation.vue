@@ -10,9 +10,11 @@
         Search
       </button>
 
-      <button class="btn btn-primary">
+      <button 
+        class="btn btn-primary"
+        @click="onShowProvenanceGraph">
         <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
-        Provenance Graph
+        <span>{{ isOpenProvenanceGraph ? 'Close Provenance Graph' : 'Open Provenance Graph' }}</span>
       </button>
 
       <run-button
@@ -32,6 +34,19 @@
         Close Simulation
       </button>
     </header>
+
+    <provenance-graph @close-pane="onCloseProvenanceGraph" :is-open="isOpenProvenanceGraph" @toggle-click="onProvenanceToggleClick">
+      <condensed-graph
+        v-if="provenanceActivePaneId === 'condensed'"
+        slot="content"
+        :data="provenanceGraphData"
+      />
+      <expanded-graph
+        v-if="provenanceActivePaneId === 'expanded'"
+        slot="content"
+        :data="provenanceGraphData"
+      />
+    </provenance-graph>
 
     <aside class="search-bar" :class="{ 'active': displaySearch }">
       <search-bar />
@@ -94,12 +109,18 @@
   import ParametersPanel from '@/views/Simulation/components/ParametersPanel.vue';
   import VariablesPanel from '@/views/Simulation/components/VariablesPanel.vue';
   import RunButton from '@/views/Simulation/components/RunButton.vue';
+  import ProvenanceGraph from '@/views/Simulation/components/ProvenanceGraph/ProvenanceGraph.vue';
+  import CondensedGraph from '@/views/Simulation/components/ProvenanceGraph/CondensedGraph.vue';
+  import ExpandedGraph from '@/views/Simulation/components/ProvenanceGraph/ExpandedGraph.vue';
 
   const components = {
+    CondensedGraph,
     Counters,
+    ExpandedGraph,
     Loader,
     ModelPanel,
     ParametersPanel,
+    ProvenanceGraph,
     ResizableGrid,
     RunButton,
     SearchBar,
@@ -114,6 +135,10 @@
     runConfig: Donu.RequestConfig = { end: 120, start: 0, step: 30 };
     subgraph: Graph.GraphInterface = null;
     highlighted: string = '';
+
+    isOpenProvenanceGraph: boolean = false;
+    provenanceActivePaneId: string = '';
+    provenanceGraphData: any = null;
 
     @Action fetchModelResults;
     @Action incrNumberOfSavedRuns;
@@ -268,6 +293,31 @@
     onNodeHighlight (label: string): void {
       this.highlighted = label;
     }
+
+    onShowProvenanceGraph (): void {
+      if (this.isOpenProvenanceGraph) {
+        this.closeProvenanceGraph();
+      } else {
+        this.isOpenProvenanceGraph = true;
+        this.provenanceActivePaneId = 'condensed';
+        this.provenanceGraphData = null;
+      }
+    }
+
+    onProvenanceToggleClick (tabId: string): void {
+      this.provenanceActivePaneId = tabId;
+    }
+    
+    onCloseProvenanceGraph (): void {
+      this.closeProvenanceGraph;
+    }
+
+    closeProvenanceGraph (): void {
+      this.isOpenProvenanceGraph = false;
+      this.provenanceActivePaneId = null;
+      this.provenanceGraphData = null;
+    }
+
   }
 </script>
 
