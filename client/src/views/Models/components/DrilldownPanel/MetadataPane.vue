@@ -170,7 +170,7 @@
     }
 
     get hasNodeEvidences (): boolean {
-      return this.nodeEvidences.length > 0 ?? this.nodeEvidences === [];
+      return this.nodeEvidences?.length > 0 || this.nodeEvidences === [];
     }
 
     get sortedMetadata (): GroMET.Metadata[] {
@@ -228,7 +228,7 @@
 
       this.agentsReferences = await Promise.all((this.metadata[0] as GroMET.IndraAgentReferenceSet)
        .indra_agent_references.map(async (reference) => {
-        const args = { modelName: null, namespace: Object.keys(reference.db_refs)[0], id: Object.values(reference.db_refs)[0] };
+        const args = { modelName: this.modelName, namespace: Object.keys(reference.db_refs)[0], id: Object.values(reference.db_refs)[0] };
         const response = await emmaaEntityInfo(args as any);
          return response;
         }));
