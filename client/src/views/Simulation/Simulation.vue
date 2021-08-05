@@ -10,7 +10,7 @@
         Search
       </button>
 
-      <button 
+      <button
         class="btn btn-primary"
         @click="onShowProvenanceGraph">
         <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
@@ -307,9 +307,9 @@
     onProvenanceToggleClick (tabId: string): void {
       this.provenanceActivePaneId = tabId;
     }
-    
+
     onCloseProvenanceGraph (): void {
-      this.closeProvenanceGraph;
+      this.closeProvenanceGraph();
     }
 
     closeProvenanceGraph (): void {
@@ -317,7 +317,6 @@
       this.provenanceActivePaneId = null;
       this.provenanceGraphData = null;
     }
-
   }
 </script>
 

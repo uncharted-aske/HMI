@@ -7,6 +7,7 @@
       >{{ showCondensed ? 'Show Expanded' : 'Show Condensed' }}
       </button>
     </aside>
+    <provenance-close-button @close="onClose"/>
     <div class="flex-grow-1 position-relative overflow-scroll hide-scrollbar panel-body">
       <slot name="content"/>
     </div>
@@ -17,8 +18,13 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
+  import ProvenanceCloseButton from '@/components/widgets/ProvenanceCloseButton.vue';
 
-  @Component
+  const components = {
+    ProvenanceCloseButton,
+  };
+
+  @Component({ components })
   export default class ProvenanceGraph extends Vue {
     @Prop({ default: false })
     isOpen: boolean;
@@ -26,14 +32,14 @@
     @Prop({ required: false })
     activeTabId: string;
 
-    @Prop( { default: true })
+    @Prop({ default: true })
     showCondensed: boolean;
 
     onClose (): void {
       this.$emit('close-pane');
     }
 
-    onToggle(): void {
+    onToggle (): void {
       if (this.showCondensed) {
         this.$emit('toggle-click', 'expanded');
       } else {
@@ -41,7 +47,6 @@
       }
       this.showCondensed = !this.showCondensed;
     }
-    
   }
 </script>
 
