@@ -114,6 +114,7 @@
   import { RawLocation } from 'vue-router';
   import { Watch } from 'vue-property-decorator';
   import { bgraph } from '@uncharted.software/bgraph';
+  import { merge } from 'lodash';
 
   import {
     filterToBgraph,
@@ -360,9 +361,23 @@
           }) as GroMEt.CodeCollectionInterface;
 
           if (codeCollection?.global_reference_id?.id) {
-            this.drilldownKnowledge = await cosmosSearch(filterToParamObj({
+            this.drilldownKnowledge = merge(this.drilldownKnowledge, await cosmosSearch(filterToParamObj({
               askeId: codeCollection.global_reference_id.id,
-            }));
+            })));
+          }
+
+          const textualDocumentReference = this.selectedGraphMetadata.find(metadata => {
+            return metadata.metadata_type === GroMEt.MetadataType.TextualDocumentReferenceSet;
+          }) as GroMEt.TextualDocumentReferenceSet;
+
+          if (textualDocumentReference?.documents?.length) {
+            this.drilldownKnowledge = merge(this.drilldownKnowledge, await cosmosSearch(filterToParamObj({
+              askeId: textualDocumentReference.documents[0].global_reference_id.id,
+            })));
+          }
+
+          if (this.drilldownKnowledge.objects) {
+            delete this.drilldownKnowledge.error;
           }
         }
       } catch (e) {
