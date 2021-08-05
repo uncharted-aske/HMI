@@ -87,17 +87,27 @@
 
       <template v-if="isTypeReactionReference(datum)">
         <summary :title="datum.uid">Reaction Reference(s)</summary>
-            <details v-if="hasNodeEvidences" class="metadata" open>
-              <summary>Evidence ({{nodeEvidences.length}})</summary>
-              <div class="metadata-content">
-                  <figure
-                    v-for="(nodeEvidence, index) in nodeEvidences"
-                    :key="index"
-                  >
-                    {{ excerpt(nodeEvidence) }}
-                  </figure>
-              </div>
-            </details>
+        <div class="metadata-content">
+          <template v-if="nodeStatement.type">
+            <h6>Type</h6>
+            <p>{{ nodeStatement.type }}</p>
+          </template>
+          <template v-if="nodeStatement.belief">
+            <h6>Belief score</h6>
+            <p>{{ nodeStatement.belief }}</p>
+          </template>
+          <deta ils v-if="nodeStatement" class="metadata" open>
+            <summary v-if="nodeStatement.evidence">Evidence ({{nodeStatement.evidence.length}})</summary>
+            <div class="metadata-content">
+              <figure
+                v-for="(evidence, index) in nodeStatement.evidence"
+                :key="index"
+              >
+                {{ excerpt(evidence) }}
+              </figure>
+            </div>
+          </details>
+        </div>
       </template>
 
       <aside class="metadata-provenance">
@@ -148,10 +158,9 @@
 
     isLoading = false;
     agentsReferences: EMMAA.EmmaaEntityInfoInterface[] = [];
-    nodeEvidences: EMMAA.EmmaaEvidenceEvidenceInterface[] = [];
+    nodeStatement: EMMAA.EmmaaEvidenceInterface = null;
 
     @Watch('metadata') onDataChange (): void {
-
       if (this.metadata.find(this.isTypeIndraAgentReferenceSet)) {
         this.fetchAgentsReferences();
       }
@@ -169,9 +178,9 @@
       }
     }
 
-    get hasNodeEvidences (): boolean {
-      return this.nodeEvidences?.length > 0 || this.nodeEvidences === [];
-    }
+    // get hasNodeStatement (): boolean {
+    //   return this.nodeStatement;
+    // }
 
     get sortedMetadata (): GroMET.Metadata[] {
       return [...this.metadata].sort((a, b) => {
@@ -239,14 +248,13 @@
       this.isLoading = true;
 
       const statementId = (this.metadata[0] as GroMET.ReactionReference).indra_stmt_hash;
-      const resultEmmaaEvidence = await emmaaEvidence({
+      this.nodeStatement = await emmaaEvidence({
         stmt_hash: Number(statementId),
         source: 'model_statement',
         model: this.modelName,
         format: 'json',
       });
 
-      this.nodeEvidences = resultEmmaaEvidence.evidence;
       this.isLoading = false;
     }
 
