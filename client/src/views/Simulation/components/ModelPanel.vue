@@ -77,7 +77,7 @@
     get displayedNodes (): Graph.SubgraphNodeInterface[] {
       const nodes = this.graph?.nodes;
       if (nodes) {
-        const highlightedLabels = [
+        const displayedLabels = [
           ...this.parameters
               .filter(parameter => parameter.displayed)
               .map(parameter => parameter.metadata.name),
@@ -86,9 +86,9 @@
               .map(variable => variable.metadata.name),
         ];
 
-        if (highlightedLabels.length > 0) {
+        if (displayedLabels.length > 0) {
           return nodes
-            .filter(node => highlightedLabels.includes(node.label))
+            .filter(node => displayedLabels.includes(node.label))
             .map(node => ({ id: node.id }));
         }
       }
