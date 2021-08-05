@@ -90,14 +90,12 @@
             <details v-if="hasNodeEvidences" class="metadata" open>
               <summary>Evidence ({{nodeEvidences.length}})</summary>
               <div class="metadata-content">
-                <div class="metadata-content">
                   <figure
                     v-for="(nodeEvidence, index) in nodeEvidences"
                     :key="index"
                   >
                     {{ excerpt(nodeEvidence) }}
                   </figure>
-                </div>
               </div>
             </details>
       </template>
@@ -134,7 +132,6 @@
     GroMET.MetadataType.TextParameter,
     GroMET.MetadataType.EquationDefinition,
     GroMET.MetadataType.CodeSpanReference,
-    GroMET.MetadataType.CodeSpanReference,
     GroMET.MetadataType.IndraAgentReferenceSet,
     GroMET.MetadataType.ReactionReference,
   ];
@@ -154,10 +151,11 @@
     nodeEvidences: EMMAA.EmmaaEvidenceEvidenceInterface[] = [];
 
     @Watch('metadata') onDataChange (): void {
-      if (this.metadata.find(datum => datum.metadata_type === GroMET.MetadataType.IndraAgentReferenceSet)) {
+
+      if (this.metadata.find(this.isTypeIndraAgentReferenceSet)) {
         this.fetchAgentsReferences();
       }
-      if (this.metadata.find(datum => datum.metadata_type === GroMET.MetadataType.ReactionReference)) {
+      if (this.metadata.find(this.isTypeReactionReference)) {
         this.fetchNodeEvidences();
       }
     }
@@ -172,7 +170,7 @@
     }
 
     get hasNodeEvidences (): boolean {
-      return this.nodeEvidences.length > 0;
+      return this.nodeEvidences.length > 0 ?? this.nodeEvidences === [];
     }
 
     get sortedMetadata (): GroMET.Metadata[] {

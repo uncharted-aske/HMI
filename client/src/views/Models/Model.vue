@@ -377,6 +377,8 @@
     }
 
     onNodeClick (node: GraphNodeInterface): void {
+      // Select which tab should be open first, then open the drilldown.
+      this.drilldownActiveTabId = 'metadata';
       this.isOpenDrilldown = true;
 
       // Merge node metadata with Variables metadata. c.f. GraphNodeInterface type
