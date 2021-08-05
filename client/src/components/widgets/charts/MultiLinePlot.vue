@@ -23,6 +23,10 @@
     label: {
       text: Colors.LABELS.LIGHT,
     },
+    polygon: {
+      fill: '#647EA9',
+      opacity: '0.4',
+    },
   };
 
   const DEFAULT_CONFIG = {
@@ -168,8 +172,8 @@
         .enter().append('polygon')
           .attr('points', d =>
               d.map(d => [this.xScale(d.x), this.yScale(d.y)].join(',')).join(' '))
-          .attr('fill', '#647EA9')
-          .attr('opacity', '0.4');
+          .attr('fill', DEFAULT_STYLE.polygon.fill)
+          .attr('opacity', DEFAULT_STYLE.polygon.opacity);
     }
 
     refresh (): void {

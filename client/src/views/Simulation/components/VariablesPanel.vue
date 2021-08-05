@@ -132,6 +132,8 @@
     },
   };
 
+  const RUN_BAND_THRESHOLD = 5;
+
   const mergeStyle = (...modifyingStyle) => {
     if (modifyingStyle) {
       return _.merge(_.cloneDeep(DEFAULT_STYLE), ...modifyingStyle);
@@ -159,13 +161,13 @@
     @Action hideAllVariables;
     @Action showAllVariables;
 
-    calcPolygon (variable: HMI.SimulationVariable): void {
-      const numRuns = variable.values.length;
-      const xArr = new Array(numRuns - 1);
-      const yMinArr = new Array(numRuns - 1);
-      const yMaxArr = new Array(numRuns - 1);
+    calcBandPolygon (variable: HMI.SimulationVariable): void {
+      const numRunsLess1 = variable.values.length - 1;
+      const xArr = new Array(numRunsLess1);
+      const yMinArr = new Array(numRunsLess1);
+      const yMaxArr = new Array(numRunsLess1);
 
-      for (let runIndex = 0; runIndex < numRuns - 1; runIndex++) {
+      for (let runIndex = 0; runIndex < numRunsLess1; runIndex++) {
         const run = variable.values.shift();
         run.forEach((point, pointIndex) => {
           xArr[pointIndex] = point.x;
@@ -174,6 +176,11 @@
         });
       }
 
+      // The points in a polygon must be ordered so to draw the perimeter of the polygon if a line
+      // was drawn from each point to each of their adjacent points. To this end, the first half
+      // of the polygon is drawn left to right, the second half of the polygon is drawn right to
+      // left (in reverse), and the two halves are arranged so that the right-most point of the
+      // first half is adjacent to the right-most point of the second half forming a perimeter.
       variable.polygon = [
         ...yMinArr.map((y, i) => ({ x: xArr[i], y })),
         ...yMaxArr.map((y, i) => ({ x: xArr[i], y })).reverse(),
@@ -185,8 +192,8 @@
       variables = _.cloneDeep(variables);
       variables.map(variable => {
         variable.styles = variable.styles || [];
-        if (variable.values.length > 5) {
-          this.calcPolygon(variable);
+        if (variable.values.length > RUN_BAND_THRESHOLD) {
+          this.calcBandPolygon(variable);
         } else {
           for (let i = 0; i < variable.values.length - 1; i++) {
             variable.styles.push(mergeStyle(OTHER_STYLE));
