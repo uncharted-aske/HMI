@@ -1,173 +1,149 @@
 <template>
   <div class="view-container">
-    <div class="search-row">
+    <header>
+      <button
+        class="btn btn-primary"
+        :class="{ 'active': displaySearch }"
+        @click="displaySearch = !displaySearch"
+      >
+        <font-awesome-icon :icon="['fas', 'search' ]" />
+        Search
+      </button>
+    </header>
+
+    <aside class="search-bar" :class="{ 'active': displaySearch }">
       <search-bar />
-    </div>
-    <resizable-grid :map="gridMap" :dimensions="{'3': { width: '10px', widthFixed: true }}">
-      <div slot="1" class="h-100 w-100 d-flex flex-column">
-        <div class="h-50 w-100" v-for="(model) in selectedModels" :key="model.id">
-          <settings-bar>
-          <div slot="left">
-           <counters
-              :title="model.metadata.name"
-              :data="[
-                { name: 'Nodes', value: model.graph.detailed.nodes.length },
-                { name: 'Edges', value: model.graph.detailed.edges.length },
-              ]"
-            />
-          </div>
-          <div slot="right">
-            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div>
-        </settings-bar>
-        <global-graph class="h-100" :data="model.graph.detailed"/>
-        </div>
-      </div>
-      <div slot="2" class="h-100 w-100 d-flex flex-column">
-        <settings-bar>
-          <div slot="left">
-            <counters
-              :title="`Intersection Graph`"
-              :data="[
-                { name: 'Nodes', value: nodeCountIntersectionGraph },
-                { name: 'Edges', value: edgeCountIntersectionGraph },
-              ]"
-            />
-          </div>
-          <div slot="right">
-            <settings @view-change="onSetView" :views="views" :selected-view-id="selectedViewId"/>
-          </div>
-        </settings-bar>
-        <intersection-graph class="h-100" v-if="isSplitView" :data="intersectionGraph" @node-click="onNodeClick"/>
-      </div>
-    </resizable-grid>
-    <!-- <drilldown-panel @close-pane="onCloseDrilldownPanel" :is-open="isOpenDrilldown" :pane-title="drilldownPaneTitle" :pane-subtitle="drilldownPaneSubtitle" >
-      <div slot="content">
-        <drilldown-metadata-pane :metadata="drilldownMetadata"/>
-      </div>
-    </drilldown-panel> -->
+    </aside>
+
+    <loader v-if="selectedModels.length < 1" loading="true" />
+    <!-- <resizable-grid v-else :map="gridMap" :dimensions="gridDimensions">
+      <template v-for="(model, index) in selectedModels">
+        <model-panel
+          class="simulation-panel"
+          :expanded="expandedId === 'model'"
+          :key="index"
+          :model="model"
+          :slot="('model_' + model.id)"
+          @highlight="onNodeHighlight"
+          @expand="setExpandedId('model')"
+        />
+      </template>
+    </resizable-grid> -->
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { Getter } from 'vuex-class';
+  import { Watch } from 'vue-property-decorator';
+  import { Action, Getter, Mutation } from 'vuex-class';
+  import { RawLocation } from 'vue-router';
+  import _ from 'lodash';
 
-  import { TabInterface, ViewInterface, ModelComponentMetadataInterface } from '@/types/types';
-  import { GraphNodeInterface } from '@/types/typesGraphs';
+  import * as Model from '@/types/typesModel';
+  import * as Graph from '@/types/typesGraphs';
+  import * as RGrid from '@/types/typesResizableGrid';
 
-  import SearchBar from './components/SearchBar.vue';
-  import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
-  import Settings from '@/views/Models/components/Settings.vue';
-  import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
-  import IntersectionGraph from './components/Graphs/IntersectionGraph.vue';
+  import Loader from '@/components/widgets/Loader.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
-  // import DrilldownPanel from '@/components/DrilldownPanel.vue';
-  // import DrilldownMetadataPane from '@/views/Graphs/components/DrilldownMetadataPanel/DrilldownMetadataPane.vue';
+  import SearchBar from '@/components/SearchBar.vue';
 
-  const TABS: TabInterface[] = [
-    { name: 'Facets', icon: 'filter', id: 'facets' },
-    { name: 'Metadata', icon: 'info', id: 'metadata' },
-  ];
-
-  const VIEWS: ViewInterface[] = [
-    { name: 'Biomechanism', id: 'biomechanism' },
-    { name: 'Functional', id: 'functional' },
-  ];
-
+  import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
+  
   const components = {
-    SearchBar,
-    SettingsBar,
     Counters,
-    Settings,
-    GlobalGraph,
-    IntersectionGraph,
+    Loader,
+    ModelPanel,
     ResizableGrid,
-    // DrilldownPanel,
-    // DrilldownMetadataPane,
-  };
-
-  const intersectionGraph = {
-    nodes: [
-      { id: '1', label: 's, s_c', nodeType: 'overlapping' },
-      { id: '2', label: 'gamma', nodeType: 'overlapping' },
-      { id: '3', label: 'beta', nodeType: 'overlapping' },
-      { id: '4', label: 'i, i_c', nodeType: 'overlapping' },
-      { id: '5', label: 'r, r_c', nodeType: 'overlapping' },
-      { id: '6', label: 's, s_c', nodeType: 'overlapping' },
-      { id: '7', label: 'i, i_c', nodeType: 'overlapping' },
-      { id: '8', label: 'r, r_c', nodeType: 'overlapping' },
-      { id: '9', label: 'OAP-1', nodeType: 'AP' },
-      { id: '10', label: 'NOAP(SIR)-1', nodeType: 'NOAP' },
-      { id: '11', label: 'NOAP(CHIME)-2', nodeType: 'NOAP' },
-      { id: '12', label: 'NOAP(CHIME)-1', nodeType: 'NOAP' },
-    ],
-    edges: [
-      { source: '1', target: '9', edgeType: 'overlapping' },
-      { source: '2', target: '9', edgeType: 'overlapping' },
-      { source: '4', target: '9', edgeType: 'overlapping' },
-      { source: '5', target: '9', edgeType: 'overlapping' },
-      { source: '3', target: '9', edgeType: 'overlapping' },
-      { source: '9', target: '6', edgeType: 'overlapping' },
-      { source: '9', target: '7', edgeType: 'overlapping' },
-      { source: '9', target: '8', edgeType: 'overlapping' },
-      { source: '10', target: '9', edgeType: 'NOAP' },
-      { source: '11', target: '9', edgeType: 'NOAP' },
-      { source: '1', target: '12', edgeType: 'NOAP' },
-      { source: '2', target: '12', edgeType: 'NOAP' },
-      { source: '12', target: '3', edgeType: 'NOAP' },
-    ],
+    SearchBar,
   };
 
   @Component({ components })
-  export default class EpiView extends Vue {
-    tabs: TabInterface[] = TABS;
-    activeTabId: string = 'metadata';
-    views: ViewInterface[] = VIEWS;
-    selectedViewId: string = 'functional';
-    isOpenDrilldown: boolean = false;
-    isSplitView: boolean = true;
-    drilldownPaneTitle: string = '';
-    drilldownPaneSubtitle: string = '';
-    drilldownMetadata: ModelComponentMetadataInterface = null;
-    reference: string = ''
-    intersectionGraph: any = intersectionGraph;
+  export default class Simulation extends Vue {
+    displaySearch: boolean = false;
+    expandedId: string = '';
+    subgraph: Graph.GraphInterface = null;
+    highlighted: string = '';
 
-    @Getter getSelectedModelIds;
+    
+    @Getter getSelectedModelGraphType;
     @Getter getModelsList;
+    @Getter getSelectedModelIds;
+    @Mutation setSelectedModels;
+  
+    get selectedModels (): Model.Model[] {
+      if (
+        this.getSelectedModelIds.length < 1 && // Are we missing the selectedModelId,
+        this.$route.params.model_id && // Does the model id is available from the route parameters,
+        typeof this.$route.params.model_id === 'string' // Make sure the model id from the route is a string.
+      ) {
+        // Set the model id from the route as the selected model.
+        this.$route.params.model_id.split(',').forEach(this.setSelectedModels);
+      }
+      return this.getModelsList.filter(model => this.getSelectedModelIds.map(Number).includes(model.id));
+    }
 
     get gridMap (): string[][] {
-      return [['1', '3', '2']];
+      const gridMap: string[][] = [];
+
+      this.selectedModels.forEach(model => {
+        if (this.expandedId) {
+          gridMap.push([this.expandedId + '_' + model.id]);
+        } else if (this.setSelectedModels) {
+          gridMap.push([
+            'model_' + model.id,
+            'model-parameters-separator',
+            'parameters_' + model.id,
+            'parameters-variables-separator',
+            'variables_' + model.id,
+          ]);
+        }
+        // gridMap.push(['row-separator']);
+      });
+
+      return gridMap; // .slice(0, -1); // remove the last 'row-separator';
     }
 
-    get selectedModels (): any[] {
-      const modelsList = this.getModelsList;
-      const selectedIds = new Set(this.getSelectedModelIds);
-      return modelsList.filter(model => selectedIds.has(model.id));
+    get gridDimensions (): RGrid.DimensionsInterface {
+      return {
+        'model-parameters-separator': {
+          width: '10px',
+          widthFixed: true,
+        },
+        'parameters-variables-separator': {
+          width: '10px',
+          widthFixed: true,
+        },
+        'row-separator': {
+          height: '10px',
+          heightFixed: true,
+        },
+      };
     }
 
-    get nodeCountIntersectionGraph (): number {
-        return this.intersectionGraph.nodes.length;
+  
+
+    setExpandedId (id = ''): void {
+      this.expandedId = id !== this.expandedId ? id : '';
     }
 
-    get edgeCountIntersectionGraph (): number {
-        return this.intersectionGraph.edges.length;
+    onCloseSimView (): void {
+      const options: RawLocation = { name: 'model' };
+
+      // As of now we only allow one Knowledgable Graph to be selected at a time.
+      const modelId = this.$route.params.model_id;
+      if (modelId) {
+        options.params = {
+          model_id: modelId.toString(),
+        };
+      }
+
+      this.$router.push(options);
     }
 
-    onCloseDrilldownPanel ():void {
-      this.isOpenDrilldown = false;
-      this.drilldownPaneTitle = '';
-      this.drilldownMetadata = null;
-    }
-
-    onSetView (viewId: string): void {
-      this.selectedViewId = viewId;
-    }
-
-    onNodeHover (node: GraphNodeInterface):void {
-      this.reference = node['linked-to'][0]['node-id'];
+    onNodeHighlight (label: string): void {
+      this.highlighted = label;
     }
   }
 </script>
@@ -175,5 +151,64 @@
 <style scoped>
   .view-container {
     flex-direction: column;
+    flex-grow: 1;
+  }
+
+  header {
+    align-items: center;
+    background-color: var(--bg-secondary);
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    justify-content: space-between;
+    padding: 10px 5px;
+  }
+
+  header .btn-sim {
+    width: 10.5em; /* Same as the close button on the simulation view */
+  }
+
+  .search-bar {
+    background-color: var(--bg-secondary);
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none; /* Avoid potential clicks to happen */
+    transition: max-height 250ms ease-in-out;
+    will-change: max-height;
+  }
+
+  .search-bar.active {
+    max-height: 10rem; /* Random number bigger than actual height for the transition. */
+    pointer-events: auto;
+  }
+
+  .search-bar .search-bar-container {
+    margin-top: 0; /* To have an uniform spacing between the header and the search bar */
+    margin-bottom: 10px; /* To match the header vertical spacing */
+  }
+
+  /* Uniform sizing of the panels */
+  .simulation-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+
+  /* Uniform styling for the button in the settings-bars */
+  .view-container::v-deep .settings-bar-container button {
+    height: 2em;
+    line-height: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+
+  .view-container::v-deep .btn-primary.blue {
+    background: var(--muted-highlight);
+    border-color: var(--muted-highlight);
+  }
+
+  .left-side-panel {
+    flex-shrink: 0;
   }
 </style>

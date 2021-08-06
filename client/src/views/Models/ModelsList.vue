@@ -16,14 +16,6 @@
           >
             {{ nbSelectedModelsIds > 1 ? 'Compare' : 'Open' }}
           </button>
-          <button
-            v-if="nbSelectedModelsIds > 1"
-            class="btn btn-primary"
-            type="button"
-            @click="onClickSimulation"
-          >
-            {{ 'Open Multiple Simulation' }}
-          </button>
         </div>
       </settings-bar>
       <card-container
@@ -159,14 +151,6 @@
           };
         }
       }
-      this.$router.push(options);
-    }
-
-    onClickSimulation (): void {
-      const options: RawLocation = { name: 'simulation' };
-      options.params = {
-        model_id: this.getSelectedModelIds.join(','),
-      };
       this.$router.push(options);
     }
   }
