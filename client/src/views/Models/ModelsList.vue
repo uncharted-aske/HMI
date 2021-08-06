@@ -141,7 +141,11 @@
       const options: RawLocation = {};
       if (this.nbSelectedModelsIds > 1) {
         options.name = 'comparison';
-      } else {
+        options.params = {
+          model_id: this.getSelectedModelIds.join(','),
+        };
+      }
+       else {
         options.name = 'model';
 
         const selectedModel: Model.Model = this.models.find(model => model.id === this.getSelectedModelIds[0]);
