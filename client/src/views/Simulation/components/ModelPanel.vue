@@ -17,6 +17,7 @@
       :data="graph"
       :displayed-nodes="displayedNodes"
       :overlapping-elements="overlappingElements"
+      :subgraph="subgraph"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
@@ -63,9 +64,24 @@
     @Action toggleVariable;
 
     settingsOpen: boolean = false;
+    subgraph: Graph.SubgraphInterface = null;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
       this.$emit('highlight', selected.label);
+
+      //Calculate corresponding nodes for model comparison
+      if (this.overlappingElements.nodes.length > 0) {
+        let nodes = [];
+        if (this.modelName === 'SimpleSIR_metadata') {
+          nodes = Object.values(MODEL_COMPARISON).map(node=> ({id: node}));
+          
+        } else if (this.modelName === 'SimpleChime+') {
+          nodes = Object.keys(MODEL_COMPARISON).map(node=> ({id: node}));
+        }
+        const correspondingNode = nodes.find(node=> node.id === selected.label);
+        const selectedNode = { id: selected.label };
+        this.subgraph = {nodes:[correspondingNode, selectedNode], edges: []};
+      }
     }
 
     onBackgroundClick (): void {
@@ -73,8 +89,10 @@
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
-      this.toggleParameter({ modelId: this.model.id, selector: selected.label });
-      this.toggleVariable({ modelId: this.model.id, selector: selected.label });
+      if (this.overlappingElements.nodes.length === 0) {
+        this.toggleParameter({ modelId: this.model.id, selector: selected.label });
+        this.toggleVariable({ modelId: this.model.id, selector: selected.label });
+      }
     }
 
     get parameters (): HMI.SimulationParameter[] {

@@ -104,7 +104,6 @@
         if (!node.datum().nodes) {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.showSubgraph(neighborhood);
-
           this.renderer.clearSelections();
           this.renderer.selectNode(node);
         }
