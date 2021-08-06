@@ -49,10 +49,10 @@
 
   import SimilarDocs from '@/components/SimilarDocs.vue';
   import Modal from '@/components/Modal.vue';
-  import { CardInterface } from '@/types/types';
   import {
     CosmosArtifactInterface,
     CosmosArtifactObjectInterface,
+    CosmosSearchObjectsInterface,
     CosmosSearchBibjsonInterface,
     CosmosSearchChildrenInterface,
   } from '@/types/typesCosmos';
@@ -65,7 +65,7 @@
 
   @Component({ components })
   export default class ModalDocument extends Vue {
-    @Prop({ required: false }) private data: CardInterface;
+    @Prop({ required: false }) private data: CosmosSearchObjectsInterface;
     @Prop({ required: false }) private artifact: CosmosArtifactInterface;
     @Prop({ default: false }) linkToKnowledgeSpace: boolean;
 
@@ -74,11 +74,11 @@
     }
 
     get bibjson (): CosmosSearchBibjsonInterface {
-      return this.artifact?.bibjson ?? this.data?.raw?.bibjson;
+      return this.artifact?.bibjson ?? this.data?.bibjson;
     }
 
     get children (): CosmosSearchChildrenInterface[] | CosmosArtifactObjectInterface[] {
-      return this.artifact?.objects ?? this.data?.raw.children ?? [];
+      return this.artifact?.objects ?? this.data?.children ?? [];
     }
 
     get doi (): string {
@@ -94,7 +94,7 @@
     }
 
     get title (): string {
-      return this.bibjson?.title ?? this.data?.title ?? '';
+      return this.bibjson?.title ?? '';
     }
 
     get excerpt (): string {
@@ -106,7 +106,7 @@
     }
 
     get imagePreview (): string {
-      return this.children?.[0]?.bytes ?? this.data?.previewImageSrc;
+      return this.children?.[0]?.bytes;
     }
 
     get imageStyle (): any {
