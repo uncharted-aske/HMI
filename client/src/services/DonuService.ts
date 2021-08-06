@@ -2,7 +2,12 @@ import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
-import { postUtil, postUtilMem } from '@/utils/FetchUtil';
+import { getUtil, postUtil, postUtilMem } from '@/utils/FetchUtil';
+
+//REMOVE when Donu provides CHIME+
+export const staticFileURLs = [
+  `${window.location.origin}/gromets/CHIME+.json`,
+];
 
 /** Send the request to Donu */
 const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
@@ -76,6 +81,45 @@ const convertGrometEdgesDataToBGraphEdgesData = (edges: any[]): any[] => {
   return bgEdges;
 };
 
+//Remove when we fetch CHIME+ from DONU
+export const buildStaticModelsList = ({ CHIMEPlus }: any, modelIndex: number): Model.Model[] => {
+   //Parse GroMEt
+   const CHIMEPlus_PARSED = GroMEt2Graph.parseGromet(CHIMEPlus);
+
+   //Build object to store in models store
+   const { name } = CHIMEPlus;
+   const metadata = { name, description: '' };
+   const modelGraph = {
+     donuType: Donu.Type.GROMET_PNC,
+     model: null,
+     type: CHIMEPlus.type,
+     metadata: CHIMEPlus.metadata,
+     graph: {
+       nodes: CHIMEPlus_PARSED.nodes,
+       edges: CHIMEPlus_PARSED.edges,
+     },
+     bgraph: {
+       nodes: null,
+       edges: null,
+     },
+   };
+ 
+   const output = {id: modelIndex, metadata, name, modelGraph: [modelGraph] };
+   return [output as any]; //Not ideal but I was getting typescript errors
+};
+
+
+//Remove when we fetch CHIME+ from DONU
+export const fetchStaticModels = async (modelIndex: number): Promise<Model.Model[]> => {
+  const [CHIMEPlus] = await Promise.all(
+    staticFileURLs.map(url => getUtil(url)),
+  );
+
+  return buildStaticModelsList({ CHIMEPlus }, modelIndex);
+};
+
+
+
 /** Fetch a complete list of available models from Donu API */
 export const fetchDonuModels = async (): Promise<Model.Model[]> => {
   const request: Donu.Request = {
@@ -144,6 +188,12 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
         seenModelNames.set(name, index);
       }
     });
+
+    //HACK: Add CHIME+ PNC. This should be removed once CHIME+ is provided by donu
+    const staticModels = await fetchStaticModels(output.length + 1);
+    output.push(...staticModels);
+
+    console.log(output);
 
     return output;
   } else {

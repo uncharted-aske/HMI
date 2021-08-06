@@ -1,0 +1,455 @@
+{
+    "junctions": [
+      {
+        "value_type": "Float",
+        "name": "S",
+        "uid": "J:S",
+        "metadata": null,
+        "value": null,
+        "type": "State",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "I_U",
+        "uid": "J:I_U",
+        "metadata": null,
+        "value": null,
+        "type": "State",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "V",
+        "uid": "J:V",
+        "metadata": null,
+        "value": null,
+        "type": "State",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "R",
+        "uid": "J:R",
+        "metadata": null,
+        "value": null,
+        "type": "State",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "I_V",
+        "uid": "J:I_V",
+        "metadata": null,
+        "value": null,
+        "type": "State",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "rec_v",
+        "uid": "J:rec_v",
+        "metadata": null,
+        "value": null,
+        "type": "Rate",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "inf_vv",
+        "uid": "J:inf_vv",
+        "metadata": null,
+        "value": null,
+        "type": "Rate",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "inf_vu",
+        "uid": "J:inf_vu",
+        "metadata": null,
+        "value": null,
+        "type": "Rate",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "inf_uu",
+        "uid": "J:inf_uu",
+        "metadata": null,
+        "value": null,
+        "type": "Rate",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "inf_uv",
+        "uid": "J:inf_uv",
+        "metadata": null,
+        "value": null,
+        "type": "Rate",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "vax",
+        "uid": "J:vax",
+        "metadata": null,
+        "value": null,
+        "type": "Rate",
+        "syntax": "Junction"
+      },
+      {
+        "value_type": "Float",
+        "name": "rec_u",
+        "uid": "J:rec_u",
+        "metadata": null,
+        "value": null,
+        "type": "Rate",
+        "syntax": "Junction"
+      }
+    ],
+    "root": "B:SimpleChime+",
+    "wires": [
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:I_V.rec_v",
+        "src": "J:I_V",
+        "tgt": "J:rec_v",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:V.inf_vv",
+        "src": "J:V",
+        "tgt": "J:inf_vv",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:I_V.inf_vv",
+        "src": "J:I_V",
+        "tgt": "J:inf_vv",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:S.inf_vu",
+        "src": "J:S",
+        "tgt": "J:inf_vu",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:I_V.inf_vu",
+        "src": "J:I_V",
+        "tgt": "J:inf_vu",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:S.inf_uu",
+        "src": "J:S",
+        "tgt": "J:inf_uu",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:I_U.inf_uu",
+        "src": "J:I_U",
+        "tgt": "J:inf_uu",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:V.inf_uv",
+        "src": "J:V",
+        "tgt": "J:inf_uv",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:I_U.inf_uv",
+        "src": "J:I_U",
+        "tgt": "J:inf_uv",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:S.vax",
+        "src": "J:S",
+        "tgt": "J:vax",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:I_U.rec_u",
+        "src": "J:I_U",
+        "tgt": "J:rec_u",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:rec_v.R",
+        "src": "J:rec_v",
+        "tgt": "J:R",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:inf_vv.I_V",
+        "src": "J:inf_vv",
+        "tgt": "J:I_V",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:inf_vv.I_V_0",
+        "src": "J:inf_vv",
+        "tgt": "J:I_V",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:inf_vu.I_U",
+        "src": "J:inf_vu",
+        "tgt": "J:I_U",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:inf_vu.I_V",
+        "src": "J:inf_vu",
+        "tgt": "J:I_V",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:inf_uu.I_U",
+        "src": "J:inf_uu",
+        "tgt": "J:I_U",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:inf_uu.I_U_0",
+        "src": "J:inf_uu",
+        "tgt": "J:I_U",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:inf_uv.I_V",
+        "src": "J:inf_uv",
+        "tgt": "J:I_V",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:inf_uv.I_U",
+        "src": "J:inf_uv",
+        "tgt": "J:I_U",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:vax.V",
+        "src": "J:vax",
+        "tgt": "J:V",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      },
+      {
+        "value_type": null,
+        "name": null,
+        "uid": "W:rec_u.R",
+        "src": "J:rec_u",
+        "tgt": "J:R",
+        "metadata": null,
+        "value": null,
+        "type": null,
+        "syntax": "Wire"
+      }
+    ],
+    "types": null,
+    "name": "SimpleChime+",
+    "variables": null,
+    "literals": null,
+    "uid": "SimpleChime+PetriNetClassic",
+    "boxes": [
+      {
+        "junctions": [
+          "J:S",
+          "J:I_U",
+          "J:V",
+          "J:R",
+          "J:I_V",
+          "J:rec_v",
+          "J:inf_vv",
+          "J:inf_vu",
+          "J:inf_uu",
+          "J:inf_uv",
+          "J:vax",
+          "J:rec_u"
+        ],
+        "syntax": "Relation",
+        "name": "SimpleChime+",
+        "uid": "B:SimpleChime+",
+        "ports": null,
+        "boxes": null,
+        "metadata": null,
+        "type": null,
+        "wires": [
+          "W:I_V.rec_v",
+          "W:V.inf_vv",
+          "W:I_V.inf_vv",
+          "W:S.inf_vu",
+          "W:I_V.inf_vu",
+          "W:S.inf_uu",
+          "W:I_U.inf_uu",
+          "W:V.inf_uv",
+          "W:I_U.inf_uv",
+          "W:S.vax",
+          "W:I_U.rec_u",
+          "W:rec_v.R",
+          "W:inf_vv.I_V",
+          "W:inf_vv.I_V_0",
+          "W:inf_vu.I_U",
+          "W:inf_vu.I_V",
+          "W:inf_uu.I_U",
+          "W:inf_uu.I_U_0",
+          "W:inf_uv.I_V",
+          "W:inf_uv.I_U",
+          "W:vax.V",
+          "W:rec_u.R"
+        ]
+      }
+    ],
+    "ports": null,
+    "metadata": [
+      {
+        "provenance": {
+          "method": "FromPNC_baas@gt",
+          "timestamp": "2021-07-23T14:38:597310_UTC-0000",
+          "metadata_type": "Provenance"
+        },
+        "variables": [
+          "J:S",
+          "J:I_U",
+          "J:V",
+          "J:R",
+          "J:I_V",
+          "J:rec_v",
+          "J:inf_vv",
+          "J:inf_vu",
+          "J:inf_uu",
+          "J:inf_uv",
+          "J:vax",
+          "J:rec_u"
+        ],
+        "parameters": [
+          "J:rec_v",
+          "J:inf_vv",
+          "J:inf_vu",
+          "J:inf_uu",
+          "J:inf_uv",
+          "J:vax",
+          "J:rec_u"
+        ],
+        "uid": "SimpleChime+_PNC_model_interface",
+        "metadata_type": "ModelInterface",
+        "initial_conditions": [
+          "J:S",
+          "J:I_U",
+          "J:V",
+          "J:R",
+          "J:I_V"
+        ]
+      }
+    ],
+    "type": "PetriNetClassic",
+    "syntax": "Gromet"
+  }
