@@ -41,8 +41,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { Watch } from 'vue-property-decorator';
-  import { Action, Getter, Mutation } from 'vuex-class';
+  import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
   import * as Model from '@/types/typesModel';

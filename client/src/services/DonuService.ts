@@ -82,9 +82,10 @@ const convertGrometEdgesDataToBGraphEdgesData = (edges: any[]): any[] => {
 };
 
 // HACK: Remove when we fetch CHIME+ from DONU
+// eslint-disable-next-line
 export const buildStaticModelsList = ({ CHIMEPlus }: any, modelIndex: number): Model.Model[] => {
   // Parse GroMEt
-  const CHIMEPlus_PARSED = GroMEt2Graph.parseGromet(CHIMEPlus);
+  const CHIMEPlusPARSED = GroMEt2Graph.parseGromet(CHIMEPlus);
 
   // Build object to store in models store
   const { name } = CHIMEPlus;
@@ -95,8 +96,8 @@ export const buildStaticModelsList = ({ CHIMEPlus }: any, modelIndex: number): M
     type: CHIMEPlus.type,
     metadata: CHIMEPlus.metadata,
     graph: {
-      nodes: CHIMEPlus_PARSED.nodes,
-      edges: CHIMEPlus_PARSED.edges,
+      nodes: CHIMEPlusPARSED.nodes,
+      edges: CHIMEPlusPARSED.edges,
     },
     bgraph: {
       nodes: null,

@@ -37,14 +37,13 @@
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
 
-
   const MODEL_COMPARISON = {
-        "gamma": "rec_u",
-        "I": "I_U",
-        "R": "R",
-        "S": "S",
-        "beta": "inf_uu"
-  }
+    gamma: 'rec_u',
+    I: 'I_U',
+    R: 'R',
+    S: 'S',
+    beta: 'inf_uu',
+  };
 
   const components = {
     Counters,
@@ -69,18 +68,17 @@
     onNodeClick (selected: Graph.GraphNodeInterface): void {
       this.$emit('highlight', selected.label);
 
-      //Calculate corresponding nodes for model comparison
+      // Calculate corresponding nodes for model comparison
       if (this.overlappingElements.nodes.length > 0) {
         let nodes = [];
         if (this.modelName === 'SimpleSIR_metadata') {
-          nodes = Object.values(MODEL_COMPARISON).map(node=> ({id: node}));
-          
+          nodes = Object.values(MODEL_COMPARISON).map(node => ({ id: node }));
         } else if (this.modelName === 'SimpleChime+') {
-          nodes = Object.keys(MODEL_COMPARISON).map(node=> ({id: node}));
+          nodes = Object.keys(MODEL_COMPARISON).map(node => ({ id: node }));
         }
-        const correspondingNode = nodes.find(node=> node.id === selected.label);
+        const correspondingNode = nodes.find(node => node.id === selected.label);
         const selectedNode = { id: selected.label };
-        this.subgraph = {nodes:[correspondingNode, selectedNode], edges: []};
+        this.subgraph = { nodes: [correspondingNode, selectedNode], edges: [] };
       }
     }
 
@@ -152,15 +150,14 @@
       return data;
     }
 
-    get overlappingElements(): Graph.SubgraphInterface {
+    get overlappingElements (): Graph.SubgraphInterface {
       let nodes = [];
       if (this.modelName === 'SimpleSIR_metadata') {
-        nodes = Object.keys(MODEL_COMPARISON).map(node=> ({id: node}));
-
+        nodes = Object.keys(MODEL_COMPARISON).map(node => ({ id: node }));
       } else if (this.modelName === 'SimpleChime+') {
-        nodes = Object.values(MODEL_COMPARISON).map(node=> ({id: node}));
+        nodes = Object.values(MODEL_COMPARISON).map(node => ({ id: node }));
       }
-      return {nodes, edges: []};
+      return { nodes, edges: [] };
     }
   }
 </script>
