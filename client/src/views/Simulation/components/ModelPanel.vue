@@ -2,7 +2,7 @@
   <section class="simulation-model-panel">
     <settings-bar>
       <counters slot="left" :title="modelName" :data="countersData" />
-      <aside slot="right">
+      <aside slot="right" v-if="expandable">
         <button
           class="btn btn-secondary"
           title="Expand Model Panel"
@@ -16,6 +16,7 @@
       v-if="graph"
       :data="graph"
       :displayed-nodes="displayedNodes"
+      :overlapping-elements="overlappingElements"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
@@ -35,6 +36,15 @@
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
 
+
+  const MODEL_COMPARISON = {
+        "gamma": "rec_u",
+        "I": "I_U",
+        "R": "R",
+        "S": "S",
+        "beta": "inf_uu"
+  }
+
   const components = {
     Counters,
     GlobalGraph,
@@ -45,6 +55,7 @@
   export default class ModelPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
+    @Prop({ default: true }) expandable: boolean;
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
@@ -121,6 +132,17 @@
         });
       }
       return data;
+    }
+
+    get overlappingElements(): Graph.SubgraphInterface {
+      let nodes = [];
+      if (this.modelName === 'SimpleSIR_metadata') {
+        nodes = Object.keys(MODEL_COMPARISON).map(node=> ({id: node}));
+
+      } else if (this.modelName === 'SimpleChime+') {
+        nodes = Object.values(MODEL_COMPARISON).map(node=> ({id: node}));
+      }
+      return {nodes, edges: []};
     }
   }
 </script>

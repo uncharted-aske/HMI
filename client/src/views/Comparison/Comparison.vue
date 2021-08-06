@@ -30,6 +30,7 @@
           :key="index"
           :model="model"
           :slot="('model_' + model.id)"
+          :expandable="false"
           @highlight="onNodeHighlight"
         />
       </template>
@@ -43,7 +44,6 @@
   import { Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
-  import _ from 'lodash';
 
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
@@ -54,7 +54,7 @@
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import SearchBar from '@/components/SearchBar.vue';
 
-  import ModelPanel from '@/views/Comparison/components/ModelPanel.vue';
+  import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
 
   const components = {
     Counters,
@@ -106,7 +106,7 @@
     get gridDimensions (): RGrid.DimensionsInterface {
       return {
         'model-model-separator': {
-          width: '10px',
+          width: '1px',
           widthFixed: true,
         },
         'row-separator': {
@@ -115,7 +115,6 @@
         },
       };
     }
-
 
    onOpenSimView (): void {
       const options: RawLocation = { name: 'simulation' };

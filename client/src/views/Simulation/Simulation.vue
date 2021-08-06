@@ -227,8 +227,7 @@
     }
 
     onCloseSimView (): void {
-       const options: RawLocation = {};
-       console.log(this.getSelectedModelIds.length);
+      const options: RawLocation = {};
       if (this.getSelectedModelIds.length > 1) {
         options.name = 'comparison';
         options.params = {
