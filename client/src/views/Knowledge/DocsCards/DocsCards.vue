@@ -156,6 +156,7 @@
     get searchPills (): (KeyValuePill | TextPill)[] {
       return [
         new TextPill(QUERY_FIELDS_MAP.COSMOS_QUERY),
+        new TextPill(QUERY_FIELDS_MAP.COSMOS_ASKE_ID),
         new KeyValuePill(
           QUERY_FIELDS_MAP.COSMOS_TYPE,
           modelTypeUtil.COSMOS_TYPE_OPTIONS,

@@ -363,7 +363,7 @@
 
           if (codeCollection?.global_reference_id?.id) {
             this.drilldownKnowledge = merge(this.drilldownKnowledge, await cosmosSearch(filterToParamObj({
-              askeId: codeCollection.global_reference_id.id,
+              cosmosAskeId: codeCollection.global_reference_id.id,
             })));
           }
 
@@ -373,7 +373,7 @@
 
           if (textualDocumentReference?.documents?.length) {
             this.drilldownKnowledge = merge(this.drilldownKnowledge, await cosmosSearch(filterToParamObj({
-              askeId: textualDocumentReference.documents[0].global_reference_id.id,
+              cosmosAskeId: textualDocumentReference.documents[0].global_reference_id.id,
             })));
           }
 
