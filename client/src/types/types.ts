@@ -57,6 +57,7 @@ interface SimulationVariable extends Donu.ModelVariable {
   displayed?: boolean,
   aggregate: SimulationVariableValues,
   values: SimulationVariableValues[],
+  polygon?: SimulationVariableValues,
 }
 
 type SimulationRun = {

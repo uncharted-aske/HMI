@@ -35,6 +35,7 @@
           class="pt-2 pl-2 pr-3 plot"
           :class="[{highlighted: plot.metadata.name === highlighted}]"
           :data="plot.values"
+          :polygon="plot.polygon"
           :key="index"
           :styles="plot.styles"
           :title="plot.metadata.name"
@@ -90,10 +91,10 @@
 
   const AGGREGATE_STYLE = {
     node: {
-      fill: Colors.NODES.AGGREGATE,
+      fill: '#EBCB8B',
     },
     edge: {
-      strokeColor: Colors.NODES.AGGREGATE,
+      strokeColor: '#EBCB8B',
     },
   };
 
@@ -107,11 +108,7 @@
     },
   };
 
-  const NO_LINE_STYLE = {
-    edge: {
-      strokeWidth: 0,
-    },
-  };
+  const RUN_BAND_THRESHOLD = 5;
 
   const mergeStyle = (...modifyingStyle) => {
     if (modifyingStyle) {
@@ -138,20 +135,45 @@
     @Getter getVariablesRunsCount;
     @Action hideVariable;
 
+    calcBandPolygon (variable: HMI.SimulationVariable): void {
+      const numRunsLess1 = variable.values.length - 1;
+      const xArr = new Array(numRunsLess1);
+      const yMinArr = new Array(numRunsLess1);
+      const yMaxArr = new Array(numRunsLess1);
+
+      for (let runIndex = 0; runIndex < numRunsLess1; runIndex++) {
+        const run = variable.values.shift();
+        run.forEach((point, pointIndex) => {
+          xArr[pointIndex] = point.x;
+          yMinArr[pointIndex] = Math.min(yMinArr[pointIndex] ?? point.y, point.y);
+          yMaxArr[pointIndex] = Math.max(yMaxArr[pointIndex] ?? point.y, point.y);
+        });
+      }
+
+      // The points in a polygon must be ordered so to draw the perimeter of the polygon if a line
+      // was drawn from each point to each of their adjacent points. To this end, the first half
+      // of the polygon is drawn left to right, the second half of the polygon is drawn right to
+      // left (in reverse), and the two halves are arranged so that the right-most point of the
+      // first half is adjacent to the right-most point of the second half forming a perimeter.
+      variable.polygon = [
+        ...yMinArr.map((y, i) => ({ x: xArr[i], y })),
+        ...yMaxArr.map((y, i) => ({ x: xArr[i], y })).reverse(),
+      ];
+    }
+
     get variables (): HMI.SimulationVariable[] {
       let variables = this.getSimModel(this.modelId).variables;
       variables = _.cloneDeep(variables);
       variables.map(variable => {
         variable.styles = variable.styles || [];
-        for (let i = 0; i < variable.values.length; i++) {
-          if (variable.values.length > 5) {
-            i !== variable.values.length - 1
-              ? variable.styles.push(mergeStyle(OTHER_STYLE, NO_LINE_STYLE))
-              : variable.styles.push(mergeStyle());
-          } else {
-            variable.styles.push(mergeStyle(i !== variable.values.length - 1 && OTHER_STYLE));
+        if (variable.values.length > RUN_BAND_THRESHOLD) {
+          this.calcBandPolygon(variable);
+        } else {
+          for (let i = 0; i < variable.values.length - 1; i++) {
+            variable.styles.push(mergeStyle(OTHER_STYLE));
           }
         }
+        variable.styles.push(mergeStyle());
 
         if (variable.aggregate) {
           variable.values.push(variable.aggregate);
