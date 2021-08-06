@@ -227,16 +227,19 @@
     }
 
     onCloseSimView (): void {
-      const options: RawLocation = { name: 'model' };
-
-      // As of now we only allow one Knowledgable Graph to be selected at a time.
-      const modelId = this.$route.params.model_id;
-      if (modelId) {
+       const options: RawLocation = {};
+       console.log(this.getSelectedModelIds.length);
+      if (this.getSelectedModelIds.length > 1) {
+        options.name = 'comparison';
         options.params = {
-          model_id: modelId.toString(),
+          model_id: this.getSelectedModelIds.join(','),
+        };
+      } else {
+        options.name = 'model';
+        options.params = {
+          model_id: this.getSelectedModelIds.toString(),
         };
       }
-
       this.$router.push(options);
     }
 

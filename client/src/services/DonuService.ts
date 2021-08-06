@@ -4,7 +4,7 @@ import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
 import { getUtil, postUtil, postUtilMem } from '@/utils/FetchUtil';
 
-//HACK: REMOVE when Donu provides CHIME+
+// HACK: REMOVE when Donu provides CHIME+
 export const staticFileURLs = [
   `${window.location.origin}/gromets/CHIME+.json`,
 ];
@@ -81,35 +81,34 @@ const convertGrometEdgesDataToBGraphEdgesData = (edges: any[]): any[] => {
   return bgEdges;
 };
 
-//HACK: Remove when we fetch CHIME+ from DONU
+// HACK: Remove when we fetch CHIME+ from DONU
 export const buildStaticModelsList = ({ CHIMEPlus }: any, modelIndex: number): Model.Model[] => {
-   //Parse GroMEt
-   const CHIMEPlus_PARSED = GroMEt2Graph.parseGromet(CHIMEPlus);
+  // Parse GroMEt
+  const CHIMEPlus_PARSED = GroMEt2Graph.parseGromet(CHIMEPlus);
 
-   //Build object to store in models store
-   const { name } = CHIMEPlus;
-   const metadata = { name, description: '' };
-   const modelGraph = {
-     donuType: Donu.Type.GROMET_PNC,
-     model: null,
-     type: CHIMEPlus.type,
-     metadata: CHIMEPlus.metadata,
-     graph: {
-       nodes: CHIMEPlus_PARSED.nodes,
-       edges: CHIMEPlus_PARSED.edges,
-     },
-     bgraph: {
-       nodes: null,
-       edges: null,
-     },
-   };
- 
-   const output = {id: modelIndex, metadata, name, modelGraph: [modelGraph] };
-   return [output as any]; //Not ideal but I was getting typescript errors
+  // Build object to store in models store
+  const { name } = CHIMEPlus;
+  const metadata = { name, description: '' };
+  const modelGraph = {
+    donuType: Donu.Type.GROMET_PNC,
+    model: null,
+    type: CHIMEPlus.type,
+    metadata: CHIMEPlus.metadata,
+    graph: {
+      nodes: CHIMEPlus_PARSED.nodes,
+      edges: CHIMEPlus_PARSED.edges,
+    },
+    bgraph: {
+      nodes: null,
+      edges: null,
+    },
+  };
+
+  const output = { id: modelIndex, metadata, name, modelGraph: [modelGraph] };
+  return [output as any]; // Not ideal but I was getting typescript errors
 };
 
-
-//HACK: Remove when we fetch CHIME+ from DONU
+// HACK: Remove when we fetch CHIME+ from DONU
 export const fetchStaticModels = async (modelIndex: number): Promise<Model.Model[]> => {
   const [CHIMEPlus] = await Promise.all(
     staticFileURLs.map(url => getUtil(url)),
@@ -117,8 +116,6 @@ export const fetchStaticModels = async (modelIndex: number): Promise<Model.Model
 
   return buildStaticModelsList({ CHIMEPlus }, modelIndex);
 };
-
-
 
 /** Fetch a complete list of available models from Donu API */
 export const fetchDonuModels = async (): Promise<Model.Model[]> => {
@@ -189,7 +186,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
       }
     });
 
-    //HACK: Add CHIME+ PNC. This should be removed once CHIME+ is provided by donu
+    // HACK: Add CHIME+ PNC. This should be removed once CHIME+ is provided by donu
     const staticModels = await fetchStaticModels(output.length + 1);
     output.push(...staticModels);
 

@@ -144,8 +144,7 @@
         options.params = {
           model_id: this.getSelectedModelIds.join(','),
         };
-      }
-       else {
+      } else {
         options.name = 'model';
 
         const selectedModel: Model.Model = this.models.find(model => model.id === this.getSelectedModelIds[0]);

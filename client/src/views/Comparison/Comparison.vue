@@ -9,6 +9,13 @@
         <font-awesome-icon :icon="['fas', 'search' ]" />
         Search
       </button>
+       <button
+          class="btn-sim btn btn-primary"
+          @click="onOpenSimView"
+        >
+          <font-awesome-icon :icon="['fas', 'chart-line' ]" />
+          Open Simulation
+        </button>
     </header>
 
     <aside class="search-bar" :class="{ 'active': displaySearch }">
@@ -16,19 +23,17 @@
     </aside>
 
     <loader v-if="selectedModels.length < 1" loading="true" />
-    <!-- <resizable-grid v-else :map="gridMap" :dimensions="gridDimensions">
+    <resizable-grid v-else :map="gridMap" :dimensions="gridDimensions">
       <template v-for="(model, index) in selectedModels">
         <model-panel
-          class="simulation-panel"
-          :expanded="expandedId === 'model'"
+          class="comparison-panel"
           :key="index"
           :model="model"
           :slot="('model_' + model.id)"
           @highlight="onNodeHighlight"
-          @expand="setExpandedId('model')"
         />
       </template>
-    </resizable-grid> -->
+    </resizable-grid>
   </div>
 </template>
 
@@ -49,8 +54,8 @@
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import SearchBar from '@/components/SearchBar.vue';
 
-  import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
-  
+  import ModelPanel from '@/views/Comparison/components/ModelPanel.vue';
+
   const components = {
     Counters,
     Loader,
@@ -62,16 +67,14 @@
   @Component({ components })
   export default class Simulation extends Vue {
     displaySearch: boolean = false;
-    expandedId: string = '';
     subgraph: Graph.GraphInterface = null;
     highlighted: string = '';
 
-    
     @Getter getSelectedModelGraphType;
     @Getter getModelsList;
     @Getter getSelectedModelIds;
     @Mutation setSelectedModels;
-  
+
     get selectedModels (): Model.Model[] {
       if (
         this.getSelectedModelIds.length < 1 && // Are we missing the selectedModelId,
@@ -88,15 +91,10 @@
       const gridMap: string[][] = [];
 
       this.selectedModels.forEach(model => {
-        if (this.expandedId) {
-          gridMap.push([this.expandedId + '_' + model.id]);
-        } else if (this.setSelectedModels) {
+        if (this.setSelectedModels) {
           gridMap.push([
             'model_' + model.id,
-            'model-parameters-separator',
-            'parameters_' + model.id,
-            'parameters-variables-separator',
-            'variables_' + model.id,
+            'model-model-separator',
           ]);
         }
         // gridMap.push(['row-separator']);
@@ -107,11 +105,7 @@
 
     get gridDimensions (): RGrid.DimensionsInterface {
       return {
-        'model-parameters-separator': {
-          width: '10px',
-          widthFixed: true,
-        },
-        'parameters-variables-separator': {
+        'model-model-separator': {
           width: '10px',
           widthFixed: true,
         },
@@ -122,22 +116,12 @@
       };
     }
 
-  
 
-    setExpandedId (id = ''): void {
-      this.expandedId = id !== this.expandedId ? id : '';
-    }
-
-    onCloseSimView (): void {
-      const options: RawLocation = { name: 'model' };
-
-      // As of now we only allow one Knowledgable Graph to be selected at a time.
-      const modelId = this.$route.params.model_id;
-      if (modelId) {
-        options.params = {
-          model_id: modelId.toString(),
-        };
-      }
+   onOpenSimView (): void {
+      const options: RawLocation = { name: 'simulation' };
+      options.params = {
+          model_id: this.getSelectedModelIds.join(','),
+      };
 
       this.$router.push(options);
     }
@@ -188,7 +172,7 @@
   }
 
   /* Uniform sizing of the panels */
-  .simulation-panel {
+  .comparison-panel {
     display: flex;
     flex-direction: column;
     height: 100%;
