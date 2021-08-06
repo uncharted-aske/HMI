@@ -3,7 +3,7 @@
      <div v-if="!isEmptyData" class="mt-3 documents-container hide-scrollbar">
       <div class="mb-1 px-2 py-4 d-flex rounded-lg border" v-for="(object, index) in data.objects" :key="index">
         <div class="flex-grow-1">
-            <a :href="object.bibjson.link[0].url" target="_blank">
+            <a href="/" @click="e => openModal(e, index)">
                 <h6>{{object.bibjson.title}}</h6>
             </a>
             <div> {{object.bibjson.identifier[0].id}}</div>
@@ -15,6 +15,11 @@
         No metadata at the moment.
       </span>
     </message-display>
+    <modal-document
+      v-if="showModal"
+      :data="modalData"
+      @close="showModal = false"
+    />
   </div>
 </template>
 
@@ -25,12 +30,14 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
 
-  import { CosmosSearchInterface } from '@/types/typesCosmos';
+  import { CosmosSearchInterface, CosmosSearchObjectsInterface } from '@/types/typesCosmos';
 
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
+  import ModalDocument from '@/components/Modals/ModalDocument.vue';
 
   const components = {
     MessageDisplay,
+    ModalDocument,
   };
 
   @Component({ components })
@@ -38,14 +45,17 @@
     @Prop({ default: null }) data: CosmosSearchInterface;
 
     showModal: boolean = false;
+    modalData: CosmosSearchObjectsInterface = null;
     dataLoading = false;
 
     get isEmptyData (): boolean {
       return _.isEmpty(this.data.objects) || Boolean(this.data.error);
     }
 
-    showMoreHandler (doi: string): void {
-      this.$emit('open-modal', doi);
+    openModal (e: Event, index: number): void {
+      this.showModal = true;
+      this.modalData = this.data.objects[index];
+      e.preventDefault();
     }
   }
 </script>
