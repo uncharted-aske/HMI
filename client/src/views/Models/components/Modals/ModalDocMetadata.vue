@@ -4,7 +4,7 @@
       <a :href="data.bibjson.link[0].url" target="_blank">
         <h3>{{ data.bibjson.title }}</h3>
       </a>
-      <h5>{{ data.bibjson.identifier[0].id }}</h5>
+      <h5>{{ doi }}</h5>
     </div>
     <div slot="body" >
       <div class="d-flex flex-grow-1">
@@ -14,7 +14,15 @@
             <div class="font-weight-bolder mt-3">Publication Year</div>
             <div>{{ data.bibjson.year || 'None' }}</div>
             <div class="font-weight-bolder mt-3">Publisher</div>
-            <div>{{ data.publisher || 'None' }}</div>
+            <div>{{ data.publisher || data.bibjson.publisher || 'None' }}</div>
+            <template v-if="data.bibjson.file_url">
+              <div class="font-weight-bolder mt-3">File</div>
+              <div>
+                <a target="_blank" :href="data.bibjson.file_url">
+                  {{ data.bibjson.file }}
+                </a>
+              </div>
+            </template>
           </div>
       </div>
     </div>
@@ -50,14 +58,17 @@
       return getAuthorList(this.data?.bibjson);
     }
 
+    get doi (): string {
+      return this.data?.bibjson?.identifier[0]?.id;
+    }
+
     close (): void {
       this.$emit('close', null);
     }
 
     openKnowledgeView () : void {
       const name = 'docsCards';
-      const doi = this.data?.bibjson?.identifier[0]?.id;
-      const args = doi ? { name, query: { doi } } : { name };
+      const args = this.doi ? { name, query: { doi: this.doi } } : { name };
       this.$router.push(args);
     }
   }

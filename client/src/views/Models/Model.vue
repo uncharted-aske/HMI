@@ -10,6 +10,7 @@
         slot="content"
         v-if="activeTabId === 'metadata'"
         :metadata="selectedGraphMetadata"
+        @open-modal="onOpenModalMetadata"
       />
     </left-side-panel>
 
@@ -125,7 +126,7 @@
   import * as Model from '@/types/typesModel';
   import * as GroMEt from '@/types/typesGroMEt';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
-  import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
+  import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters, cosmosArtifactsMem } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
 
   import { NodeTypes } from '@/graphs/svg/encodings';
@@ -417,8 +418,14 @@
       this.showModalParameters = true;
     }
 
-    onOpenModalMetadata ():void {
-      // this.modalDataMetadata = bibjson;
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async onOpenModalMetadata (doc: any): Promise<void> {
+      if (doc) {
+        this.modalDataMetadata = merge(
+          await cosmosArtifactsMem({ aske_id: doc.global_reference_id.id }),
+          doc,
+        );
+      }
       this.showModalMetadata = true;
     }
   }

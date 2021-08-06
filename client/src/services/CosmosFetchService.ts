@@ -50,7 +50,7 @@ export const cosmosArtifactSrc = (id: string): Promise<CosmosSearchInterface> =>
 const COSMOS_ARTIFACT_URL = `${COSMOS_API_URL_PREFIX}/sets/xdd-covid-19/cosmos/api/document`;
 
 // eslint-disable-next-line camelcase
-export const cosmosArtifactsMem = async (paramObj: {doi: string, image_type?: string}): Promise<CosmosArtifactInterface> => {
+export const cosmosArtifactsMem = async (paramObj: {doi?: string, aske_id?: string, image_type?: string}): Promise<CosmosArtifactInterface> => {
   const artifactList = await getUtilMem(COSMOS_ARTIFACT_URL, addCosmosAPIKey({ ...paramObj }));
   if (artifactList.objects) {
     artifactList.objects.map(async (artifact, index) =>
