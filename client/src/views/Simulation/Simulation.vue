@@ -35,6 +35,10 @@
       </button>
     </header>
 
+    <aside class="search-bar" :class="{ 'active': displaySearch }">
+      <search-bar />
+    </aside>
+
     <provenance-graph @close-pane="onCloseProvenanceGraph" :is-open="isOpenProvenanceGraph" @toggle-click="onProvenanceToggleClick">
       <condensed-graph
         v-if="provenanceActivePaneId === 'condensed'"
@@ -47,10 +51,6 @@
         :data="provenanceGraphData"
       />
     </provenance-graph>
-
-    <aside class="search-bar" :class="{ 'active': displaySearch }">
-      <search-bar />
-    </aside>
 
     <loader v-if="selectedModels.length < 1" loading="true" />
     <resizable-grid v-else :map="gridMap" :dimensions="gridDimensions">

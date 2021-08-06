@@ -1,11 +1,18 @@
 <template>
   <div class="provenance-graph-container" v-if="isOpen">
     <aside slot="left">
-      <button
-        class="btn btn-secondary"
-        @click="onToggle"
-      >{{ showCondensed ? 'Show Expanded' : 'Show Condensed' }}
-      </button>
+      <div class="btn-group btn-group-sm">
+        <button
+          class="btn btn-secondary"
+          @click="onClickCondensed"
+          > Condensed
+        </button>
+        <button
+          class="btn btn-secondary"
+          @click="onClickExpanded"
+          > Expanded
+        </button>
+      </div>
     </aside>
     <provenance-close-button @close="onClose"/>
     <div class="flex-grow-1 position-relative overflow-scroll hide-scrollbar panel-body">
@@ -32,20 +39,16 @@
     @Prop({ required: false })
     activeTabId: string;
 
-    @Prop({ default: true })
-    showCondensed: boolean;
-
     onClose (): void {
       this.$emit('close-pane');
     }
 
-    onToggle (): void {
-      if (this.showCondensed) {
-        this.$emit('toggle-click', 'expanded');
-      } else {
-        this.$emit('toggle-click', 'condensed');
-      }
-      this.showCondensed = !this.showCondensed;
+    onClickCondensed (): void {
+      this.$emit('toggle-click', 'condensed');
+    }
+
+    onClickExpanded (): void {
+      this.$emit('toggle-click', 'expanded');
     }
   }
 </script>
