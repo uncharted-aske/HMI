@@ -3,6 +3,7 @@
     <message-display v-if="isEmptyMetadata" class="m-3">
       No metadata at the moment.
     </message-display>
+    <loading-alert v-if="isLoading" />
     <details
       class="metadata" open
       v-else
@@ -63,6 +64,50 @@
         </div>
       </template>
 
+      <template v-if="isTypeIndraAgentReferenceSet(datum)">
+        <summary :title="datum.uid">Agent(s) Reference(s)</summary>
+        <div class="metadata-content"  v-for="(reference, index) in agentsReferences" :key="index">
+           <details class="metadata" open>
+            <summary>
+              <a v-if="reference.url" :href="reference.url">
+              {{ reference.name }}
+              </a>
+            </summary>
+            <div v-if="reference.definition" class="metadata-content">
+              <p>{{ reference.definition }}</p>
+            </div>
+            <div v-else class="metadata-content">
+              No definition.
+            </div>
+          </details>
+        </div>
+      </template>
+
+      <template v-if="isTypeReactionReference(datum)">
+        <summary :title="datum.uid">Reaction Reference(s)</summary>
+        <div class="metadata-content">
+          <template v-if="nodeStatement.type">
+            <h6>Type</h6>
+            <p>{{ nodeStatement.type }}</p>
+          </template>
+          <template v-if="nodeStatement.belief">
+            <h6>Belief score</h6>
+            <p>{{ nodeStatement.belief }}</p>
+          </template>
+          <details v-if="nodeStatement" class="metadata" open>
+            <summary v-if="nodeStatement.evidence">Evidence ({{nodeStatement.evidence.length}})</summary>
+            <div class="metadata-content">
+              <figure
+                v-for="(evidence, index) in nodeStatement.evidence"
+                :key="index"
+              >
+                {{ excerpt(evidence) }}
+              </figure>
+            </div>
+          </details>
+        </div>
+      </template>
+
       <aside class="metadata-provenance">
         {{ datum.provenance.method }}
         <time :datetime="datum.provenance.timestamp">
@@ -76,27 +121,60 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { Prop } from 'vue-property-decorator';
+  import { Prop, Watch } from 'vue-property-decorator';
   import _ from 'lodash';
 
+  import { emmaaEntityInfo, emmaaEvidence } from '@/services/EmmaaFetchService';
+
+  import { truncateString } from '@/utils/StringUtil';
+
   import * as GroMET from '@/types/typesGroMEt';
+  import * as EMMAA from '@/types/typesEmmaa';
+
   import { formatFullDateTime } from '@/utils/DateTimeUtil';
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
+  import LoadingAlert from '@/components/widgets/LoadingAlert.vue';
 
   const METADATA_TYPES_ORDER = [
     GroMET.MetadataType.TextDefinition,
     GroMET.MetadataType.TextParameter,
     GroMET.MetadataType.EquationDefinition,
     GroMET.MetadataType.CodeSpanReference,
+    GroMET.MetadataType.IndraAgentReferenceSet,
+    GroMET.MetadataType.ReactionReference,
   ];
 
   const components = {
     MessageDisplay,
+    LoadingAlert,
   };
 
   @Component({ components })
   export default class MetadataPane extends Vue {
     @Prop({ default: [] }) metadata: GroMET.Metadata[];
+    @Prop({ default: '' }) modelName: string;
+
+    isLoading = false;
+    agentsReferences: EMMAA.EmmaaEntityInfoInterface[] = [];
+    nodeStatement: EMMAA.EmmaaEvidenceInterface = null;
+
+    @Watch('metadata') onDataChange (): void {
+      if (this.metadata.find(this.isTypeIndraAgentReferenceSet)) {
+        this.fetchAgentsReferences();
+      }
+      if (this.metadata.find(this.isTypeReactionReference)) {
+        this.fetchNodeEvidences();
+      }
+    }
+
+    mounted (): void {
+      if (this.metadata.find(this.isTypeIndraAgentReferenceSet)) {
+        this.fetchAgentsReferences();
+      }
+      if (this.metadata.find(this.isTypeReactionReference)) {
+        this.fetchNodeEvidences();
+      }
+    }
 
     get sortedMetadata (): GroMET.Metadata[] {
       return [...this.metadata].sort((a, b) => {
@@ -107,7 +185,7 @@
     }
 
     get isEmptyMetadata (): boolean {
-      return this.metadata.length === 0;
+      return this.metadata?.length === 0 || this.metadata === [];
     }
 
     isTypeCodeSpanReference (datum: GroMET.Metadata): boolean {
@@ -131,12 +209,53 @@
         this.isTypeTextParameter(datum);
     }
 
+    isTypeIndraAgentReferenceSet (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadataType.IndraAgentReferenceSet;
+    }
+
+    isTypeReactionReference (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadataType.ReactionReference;
+    }
+
     provenanceDate (timestamp: string): string {
       return formatFullDateTime(timestamp);
     }
 
     showMoreHandler (doi: string): void {
       this.$emit('open-modal', doi);
+    }
+
+    async fetchAgentsReferences (): Promise<void> {
+      this.isLoading = true;
+      this.agentsReferences = [];
+
+      this.agentsReferences = await Promise.all((this.metadata[0] as GroMET.IndraAgentReferenceSet)
+       .indra_agent_references.map(async (reference) => {
+        const args = { modelName: this.modelName, namespace: Object.keys(reference.db_refs)[0], id: Object.values(reference.db_refs)[0] };
+        const response = await emmaaEntityInfo(args as any);
+         return response;
+        }));
+      this.isLoading = false;
+    }
+
+     async fetchNodeEvidences (): Promise<void> {
+      this.isLoading = true;
+
+      const statementId = (this.metadata[0] as GroMET.ReactionReference).indra_stmt_hash;
+      this.nodeStatement = await emmaaEvidence({
+        stmt_hash: Number(statementId),
+        source: 'model_statement',
+        model: this.modelName,
+        format: 'json',
+      });
+
+      this.isLoading = false;
+    }
+
+    excerpt (evidence: EMMAA.EmmaaEvidenceEvidenceInterface): string {
+      if (evidence) {
+        return truncateString(evidence.text, 500);
+      }
     }
 
     sourceFilePosition (datum: GroMET.CodeSpanReference): string {
