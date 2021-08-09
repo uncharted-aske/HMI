@@ -1,10 +1,15 @@
 <template>
   <modal @close="close()">
-    <div slot="header">
+    <div class="flex-grow-1" slot="header">
       <a :href="data.bibjson.link[0].url" target="_blank">
         <h3>{{ data.bibjson.title }}</h3>
       </a>
-      <h5>{{ doi }}</h5>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">{{ id }}</h5>
+        <button class="btn btn-primary" @click="openKnowledgeView(true)">
+          Search Document Artifacts
+        </button>
+      </div>
     </div>
     <div slot="body" >
       <div class="d-flex flex-grow-1">
@@ -43,8 +48,10 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
+  import { Action } from 'vuex-class';
   import Modal from '@/components/Modal.vue';
-  import { getAuthorList } from '@/utils/CosmosDataUtil';
+  import { getAuthorList, ID_TYPE_MAP } from '@/utils/CosmosDataUtil';
+  import { addSearchTerm, newFilters } from '@/utils/FiltersUtil';
 
   const components = {
     Modal,
@@ -52,24 +59,36 @@
 
   @Component({ components })
   export default class ModalDocMetadata extends Vue {
+    @Action setFilters;
+
     @Prop({ default: null }) data: any;
 
     get authorList (): string {
       return getAuthorList(this.data?.bibjson);
     }
 
-    get doi (): string {
+    get id (): string {
       return this.data?.bibjson?.identifier[0]?.id;
+    }
+
+    get idType (): string {
+      return this.data?.bibjson?.identifier[0]?.type;
     }
 
     close (): void {
       this.$emit('close', null);
     }
 
-    openKnowledgeView () : void {
+    openKnowledgeView (loadId: boolean) : void {
       const name = 'docsCards';
-      const args = this.doi ? { name, query: { doi: this.doi } } : { name };
+      const args = { name };
       this.$router.push(args);
+
+      if (loadId && this.idType && ID_TYPE_MAP[this.idType]) {
+        const filters = newFilters();
+        addSearchTerm(filters, ID_TYPE_MAP[this.idType], this.id, 'or', false);
+        this.setFilters(filters);
+      }
     }
   }
 </script>
