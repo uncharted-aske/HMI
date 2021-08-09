@@ -49,6 +49,7 @@
     @Prop({ default: null }) model: Model.Model;
     @Prop({ default: true }) expandable: boolean;
     @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
+    @Prop({ default: null }) subgraph: Graph.SubgraphInterface;
 
 
     @Getter getSimModel;
@@ -57,14 +58,13 @@
     @Action toggleVariable;
 
     settingsOpen: boolean = false;
-    subgraph: Graph.SubgraphInterface = null;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      this.$emit('highlight', selected.label);
+      this.$emit('highlight', {label: selected.label, modelName:this.modelName} );
     }
 
     onBackgroundClick (): void {
-      this.$emit('highlight', '');
+      this.$emit('highlight', null);
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
