@@ -221,8 +221,8 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
   },
   // MODELS
   MODELS_TEXT_SEARCH: {
-    ..._field('modelsTextSearch', 'Text Search'),
-    ..._searchable('Text Search', false),
+    ..._field('modelsTextSearch', 'Keyword'),
+    ..._searchable('Keyword', false),
     baseType: 'string',
     lexType: 'string',
   },
