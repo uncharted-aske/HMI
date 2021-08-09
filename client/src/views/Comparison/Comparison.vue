@@ -29,9 +29,9 @@
           class="comparison-panel"
           :key="index"
           :model="model"
+          :overlapping-elements="model.modelGraph[0].overlappingElements"
           :slot="('model_' + model.id)"
           :expandable="false"
-          @highlight="onNodeHighlight"
         />
       </template>
     </resizable-grid>
@@ -55,6 +55,14 @@
 
   import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
 
+  const MODEL_COMPARISON = {
+    gamma: 'rec_u',
+    I: 'I_U',
+    R: 'R',
+    S: 'S',
+    beta: 'inf_uu',
+  };
+
   const components = {
     Counters,
     Loader,
@@ -64,7 +72,7 @@
   };
 
   @Component({ components })
-  export default class Simulation extends Vue {
+  export default class Comparison extends Vue {
     displaySearch: boolean = false;
     subgraph: Graph.GraphInterface = null;
     highlighted: string = '';
@@ -83,7 +91,19 @@
         // Set the model id from the route as the selected model.
         this.$route.params.model_id.split(',').forEach(this.setSelectedModels);
       }
-      return this.getModelsList.filter(model => this.getSelectedModelIds.map(Number).includes(model.id));
+
+      let selectedModels = this.getModelsList.filter(model => this.getSelectedModelIds.map(Number).includes(model.id));
+      //HACK: Adding the overlapping elements to the model graph information
+      let nodes = [];
+      selectedModels.forEach(model => {
+        if (model.name === 'SimpleSIR_metadata') {
+          nodes = Object.keys(MODEL_COMPARISON).map(node => ({ id: node }));
+        } else if (model.name === 'SimpleChime+') {
+          nodes = Object.values(MODEL_COMPARISON).map(node => ({ id: node }));
+        }
+        model.modelGraph[0].overlappingElements = { nodes, edges:[]};
+      });
+      return selectedModels;
     }
 
     get gridMap (): string[][] {
@@ -115,17 +135,13 @@
       };
     }
 
-   onOpenSimView (): void {
+    onOpenSimView (): void {
       const options: RawLocation = { name: 'simulation' };
       options.params = {
           model_id: this.getSelectedModelIds.join(','),
       };
 
       this.$router.push(options);
-    }
-
-    onNodeHighlight (label: string): void {
-      this.highlighted = label;
     }
   }
 </script>
