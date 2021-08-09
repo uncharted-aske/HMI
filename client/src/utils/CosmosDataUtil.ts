@@ -8,6 +8,9 @@ export const filterToParamObj = (filterObj: {[key: string]: any}): any => {
   if (!_.isEmpty(filterObj.cosmosQuery)) {
     output.query = filterObj.cosmosQuery;
   }
+  if (!_.isEmpty(filterObj.cosmosDoi)) {
+    output.doi = filterObj.cosmosDoi;
+  }
   if (!_.isEmpty(filterObj.cosmosAskeId)) {
     output.aske_id = filterObj.cosmosAskeId;
   }

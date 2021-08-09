@@ -199,7 +199,12 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     ..._searchable('ASKE ID', false),
     baseType: 'string',
     lexType: 'string',
-    order: 2,
+  },
+  COSMOS_DOI: {
+    ..._field('cosmosDoi', 'DOI'),
+    ..._searchable('DOI', false),
+    baseType: 'string',
+    lexType: 'string',
   },
   COSMOS_TYPE: {
     ..._field('cosmosType', 'Doc Artifact Type'),
