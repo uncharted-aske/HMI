@@ -23,11 +23,11 @@
 </template>
 
 <script lang="ts">
-/**
- * Simple modal wrapper
-*/
-  import Component from 'vue-class-component';
+  /**
+   * Simple modal wrapper
+   */
   import Vue from 'vue';
+  import Component from 'vue-class-component';
 
   import CloseButton from '@/components/widgets/CloseButton.vue';
 
@@ -35,7 +35,7 @@
     CloseButton,
   };
 
-@Component({ components })
+  @Component({ components })
   export default class Modal extends Vue {
     close (): void {
       this.$emit('close', null);
@@ -45,7 +45,6 @@
       e.stopPropagation();
     }
   }
-
 </script>
 
 <style scoped>
@@ -79,19 +78,24 @@
     padding: 1rem 0;
   }
 
+  /* Give space for the close button */
+  .modal-header {
+    padding-right: 2em;
+  }
+
   .modal-body {
     display: flex;
     flex-direction: column;
   }
 
   /*
-  * The following styles are auto-applied to elements with
-  * transition="modal" when their visibility is toggled
-  * by Vue.js.
-  *
-  * You can easily play with the modal transition by editing
-  * these styles.
-  */
+   * The following styles are auto-applied to elements with
+   * transition="modal" when their visibility is toggled
+   * by Vue.js.
+   *
+   * You can easily play with the modal transition by editing
+   * these styles.
+   */
 
   .modal-enter {
     opacity: 0;

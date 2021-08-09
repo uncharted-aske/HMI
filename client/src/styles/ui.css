@@ -13,6 +13,7 @@
   --z-index--dropdown: 500;
   --z-index--side-panel: 600;
   --z-index--modal:1200;
+  --z-index--tooltip: 2000;
 
   /**
    * Dimensions

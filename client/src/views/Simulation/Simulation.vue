@@ -15,32 +15,14 @@
         Provenance Graph
       </button>
 
-      <div class="runs-controls">
-        <run-button
-          :auto-run.sync="autoRun"
-          :config.sync="runConfig"
-          :disabled="!isRunFeasible"
-          @run="fetchResults"
-        />
-
-        <div class="btn-group">
-          <button
-            class="btn btn-primary"
-            title="Save current run"
-            :disabled="!isRunFeasible"
-            @click="incrNumberOfSavedRuns"
-          >
-            <font-awesome-icon :icon="['fas', 'bookmark' ]" />
-          </button>
-          <button
-            class="btn btn-primary"
-            title="Reset all saved runs"
-            @click="onResetSim"
-          >
-            <font-awesome-icon :icon="['fas', 'undo' ]" />
-          </button>
-        </div>
-      </div>
+      <run-button
+        :auto-run.sync="autoRun"
+        :config.sync="runConfig"
+        :disabled="!isRunFeasible"
+        @reset="onResetSim"
+        @run="fetchResults"
+        @save="incrNumberOfSavedRuns"
+      />
 
       <button
         class="btn-sim btn btn-primary"
