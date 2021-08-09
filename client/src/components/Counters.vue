@@ -22,7 +22,7 @@
 
     get processedData () : string[] {
       return this.data.reduce((acc: string[], counter: Counter) => {
-        const value = counter.value ? shorterNb(Number(counter.value)) : NaN;
+        const value = counter.value != null ? shorterNb(Number(counter.value)) : NaN;
         if (Number.isNaN(value)) {
           acc.push(counter.name);
         } else if (counter.inverse) {
