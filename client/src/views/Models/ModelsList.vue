@@ -159,17 +159,24 @@
 
     get modelsCards (): CardInterface[] {
       const selectedModelsList = new Set(this.getSelectedModelIds);
-       const screenshots = [
-        SIRScreenshot,
-        SEIRScreenshot,
-        SEIRDScreenshot,
-        SIRDScreenshot,
-        SpatialSIRDScreenshot,
-      ];
+      function getModelsPreviewImageSource (model) {
+        if (['SimpleSIR', 'SimpleSIR_metadata'].includes(model.name)) {
+          return SIRScreenshot;
+        } else if (model.name === 'SimpleSIRD') {
+          return SIRDScreenshot;
+        } else if (model.name === 'SimpleSEIR') {
+          return SEIRScreenshot;
+        } else if (model.name === 'SimpleSEIRD') {
+          return SEIRDScreenshot;
+        } else if (model.name === 'SimpleSpatialSIRD') {
+          return SpatialSIRDScreenshot;
+        }
+      }
       return this.models.map(model => {
+        const previewImageSrc = getModelsPreviewImageSource(model);
         return {
           id: model.id,
-          previewImageSrc: screenshots[model.id],
+          previewImageSrc,
           title: model.name ?? 'No Title',
           subtitle: model.metadata?.description ?? 'No Subtitle',
           checked: selectedModelsList.has(model.id),

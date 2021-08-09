@@ -29,7 +29,7 @@
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
     @Prop({ default: null }) subgraph: SubgraphInterface;
-    @Prop({ default: () => [] }) editedNodes: SubgraphNodeInterface[];
+    @Prop({ default: () => [] }) displayedNodes: SubgraphNodeInterface[];
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -51,9 +51,9 @@
       this.subgraphChanged();
     }
 
-    @Watch('editedNodes')
-    async editedNodesChanged (): Promise<void> {
-      this.renderer.markEditedNodes(this.editedNodes);
+    @Watch('displayedNodes')
+    async displayedNodesChanged (): Promise<void> {
+      this.renderer.markDisplayedNodes(this.displayedNodes);
     }
 
     subgraphChanged (): void {
@@ -76,10 +76,6 @@
       });
 
       this.renderer.setCallback('nodeDblClick', (evt, node) => {
-        this.$emit('node-dblclick', node.datum().data);
-      });
-
-      this.renderer.setCallback('nodeClick', (evt, node) => {
         this.renderer.hideSubgraph();
 
         if (node.datum().nodes) {
@@ -90,14 +86,24 @@
             this.renderer.collapse(id);
           }
           this.renderer.render();
-        } else {
+        }
+
+        this.$emit('node-dblclick', node.datum().data);
+      });
+
+      this.renderer.setCallback('nodeClick', (evt, node) => {
+        this.renderer.hideSubgraph();
+
+        // Only show neighborhood for children nodes
+        if (!node.datum().nodes) {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.showSubgraph(neighborhood);
 
           this.renderer.clearSelections();
           this.renderer.selectNode(node);
-          this.$emit('node-click', node.datum().data);
         }
+
+        this.$emit('node-click', node.datum().data);
       });
 
       this.renderer.setCallback('backgroundClick', () => {

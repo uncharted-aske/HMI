@@ -54,12 +54,12 @@
                       @edge-click="onEdgeClick"
                       @background-click ="onBackgroundClick"
                       @loaded="subgraphLoading = false"/>
-          <div v-if="showMessageTooLarge" class="alert alert-info mr-2" role="alert">
+          <message-display v-if="showMessageTooLarge" class="m-3">
             Results are too large. Keep adding filters to reduce the size.
-          </div>
-          <div v-if="showMessageEmpty" class="alert alert-info mr-2" role="alert">
+          </message-display>
+          <message-display v-if="showMessageEmpty" class="m-3">
             Results are empty. Try another query.
-          </div>
+          </message-display>
         </div>
       </resizable-grid>
     </div>
@@ -121,6 +121,7 @@
   import { cosmosArtifactsMem } from '@/services/CosmosFetchService';
 
   import Counters from '@/components/Counters.vue';
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
   import Loader from '@/components/widgets/Loader.vue';
@@ -166,6 +167,7 @@
     SearchBar,
     Settings,
     SettingsBar,
+    MessageDisplay,
   };
 
   @Component({ components })

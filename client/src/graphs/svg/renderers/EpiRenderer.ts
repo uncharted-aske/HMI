@@ -223,14 +223,14 @@ export default class EpiRenderer extends SVGRenderer {
       .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
   }
 
-  markEditedNodes (nodesList: SubgraphNodeInterface[]): void {
+  markDisplayedNodes (nodesList: SubgraphNodeInterface[]): void {
     const chart = (this as any).chart;
     if (chart) {
       chart.selectAll('.node-ui').each(function (d) {
-        const isHighlighted = nodesList.map(node => node.id).includes(d.id);
-        if (isHighlighted) {
+        const isDisplayed = nodesList.map(node => node.id).includes(d.id);
+        if (isDisplayed) {
           d3.select(this).append('circle')
-            .classed('edited-marker', true)
+            .classed('displayed-marker', true)
             .attr('cx', d => (d as any).width - 5)
             .attr('cy', 5)
             .attr('r', DEFAULT_STYLE.node.controlSize * 0.5)
@@ -238,7 +238,7 @@ export default class EpiRenderer extends SVGRenderer {
             .style('stroke', DEFAULT_STYLE.node.stroke)
             .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
         } else {
-          d3.select(this).select('.edited-marker').remove();
+          d3.select(this).selectAll('.displayed-marker').remove();
         }
       });
     }

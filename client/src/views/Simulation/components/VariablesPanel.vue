@@ -8,26 +8,6 @@
       />
       <aside slot="right">
         <span class="run-counter" v-if="getVariablesRunsCount">{{ runCounter }}</span>
-        <div class="btn-group" title="Add/Remove Variables">
-          <button
-            class="btn btn-secondary"
-            title="Add all Variables"
-            type="button"
-            :disabled="allVariablesAreDisplayed"
-            @click="showAllVariables(modelId)"
-          >
-            <font-awesome-icon :icon="['fas', 'plus']" />
-          </button>
-          <button
-            class="btn btn-secondary"
-            title="Remove all Vsariables"
-            type="button"
-            :disabled="noDisplayedVariables"
-            @click="hideAllVariables(modelId)"
-          >
-            <font-awesome-icon :icon="['fas', 'ban']" />
-          </button>
-        </div>
         <button
           class="btn btn-secondary"
           title="Expand Parameters Panel"
@@ -40,19 +20,22 @@
 
     <div class="position-relative d-flex flex-column scatterplot-chart-container">
       <div class="position-absolute h-100 w-100 overflow-auto">
-
-        <div v-if="!getVariablesRunsCount" class="alert alert-info m-3">
-          Click Run to get variables output.
-        </div>
-        <div v-else-if="noDisplayedVariables" class="alert alert-info m-3">
-          Use the model visualization on the left to add/remove variables.
-        </div>
-
+        <message-display v-if="!getVariablesRunsCount" class="m-3">
+          Click Run to get <strong>variables</strong> output
+        </message-display>
+        <message-display v-if="noDisplayedVariables" class="m-3">
+          Use the model visualization on the left or
+          <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
+          <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
+          buttons above to add/remove <strong>variables</strong>.
+        </message-display>
         <multi-line-plot
           v-else
           v-for="(plot, index) in displayedVariables"
-          :class="`pt-2 pl-2 pr-3 variable ${plot.hidden ? 'hidden' : ''}`"
+          class="pt-2 pl-2 pr-3 plot"
+          :class="[{highlighted: plot.metadata.name === highlighted}]"
           :data="plot.values"
+          :polygon="plot.polygon"
           :key="index"
           :styles="plot.styles"
           :title="plot.metadata.name"
@@ -86,6 +69,7 @@
   import Counters from '@/components/Counters.vue';
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
   import { Colors } from '@/graphs/svg/encodings';
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
 
   const DEFAULT_STYLE = {
     node: {
@@ -107,10 +91,10 @@
 
   const AGGREGATE_STYLE = {
     node: {
-      fill: Colors.NODES.AGGREGATE,
+      fill: '#EBCB8B',
     },
     edge: {
-      strokeColor: Colors.NODES.AGGREGATE,
+      strokeColor: '#EBCB8B',
     },
   };
 
@@ -124,11 +108,7 @@
     },
   };
 
-  const NO_LINE_STYLE = {
-    edge: {
-      strokeWidth: 0,
-    },
-  };
+  const RUN_BAND_THRESHOLD = 5;
 
   const mergeStyle = (...modifyingStyle) => {
     if (modifyingStyle) {
@@ -141,34 +121,59 @@
     SettingsBar,
     Counters,
     MultiLinePlot,
+    MessageDisplay,
   };
 
   @Component({ components })
   export default class VariablesPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) modelId: number;
+    @Prop({ default: null }) highlighted: string;
     @InjectReactive() resized!: boolean;
 
     @Getter getSimModel;
     @Getter getVariablesRunsCount;
     @Action hideVariable;
-    @Action hideAllVariables;
-    @Action showAllVariables;
+
+    calcBandPolygon (variable: HMI.SimulationVariable): void {
+      const numRunsLess1 = variable.values.length - 1;
+      const xArr = new Array(numRunsLess1);
+      const yMinArr = new Array(numRunsLess1);
+      const yMaxArr = new Array(numRunsLess1);
+
+      for (let runIndex = 0; runIndex < numRunsLess1; runIndex++) {
+        const run = variable.values.shift();
+        run.forEach((point, pointIndex) => {
+          xArr[pointIndex] = point.x;
+          yMinArr[pointIndex] = Math.min(yMinArr[pointIndex] ?? point.y, point.y);
+          yMaxArr[pointIndex] = Math.max(yMaxArr[pointIndex] ?? point.y, point.y);
+        });
+      }
+
+      // The points in a polygon must be ordered so to draw the perimeter of the polygon if a line
+      // was drawn from each point to each of their adjacent points. To this end, the first half
+      // of the polygon is drawn left to right, the second half of the polygon is drawn right to
+      // left (in reverse), and the two halves are arranged so that the right-most point of the
+      // first half is adjacent to the right-most point of the second half forming a perimeter.
+      variable.polygon = [
+        ...yMinArr.map((y, i) => ({ x: xArr[i], y })),
+        ...yMaxArr.map((y, i) => ({ x: xArr[i], y })).reverse(),
+      ];
+    }
 
     get variables (): HMI.SimulationVariable[] {
       let variables = this.getSimModel(this.modelId).variables;
       variables = _.cloneDeep(variables);
       variables.map(variable => {
         variable.styles = variable.styles || [];
-        for (let i = 0; i < variable.values.length; i++) {
-          if (variable.values.length > 5) {
-            i !== variable.values.length - 1
-              ? variable.styles.push(mergeStyle(OTHER_STYLE, NO_LINE_STYLE))
-              : variable.styles.push(mergeStyle());
-          } else {
-            variable.styles.push(mergeStyle(i !== variable.values.length - 1 && OTHER_STYLE));
+        if (variable.values.length > RUN_BAND_THRESHOLD) {
+          this.calcBandPolygon(variable);
+        } else {
+          for (let i = 0; i < variable.values.length - 1; i++) {
+            variable.styles.push(mergeStyle(OTHER_STYLE));
           }
         }
+        variable.styles.push(mergeStyle());
 
         if (variable.aggregate) {
           variable.values.push(variable.aggregate);
@@ -180,15 +185,11 @@
     }
 
     get displayedVariables (): HMI.SimulationVariable[] {
-      return this.variables.filter(variable => variable.edited);
+      return this.variables.filter(variable => variable.displayed);
     }
 
     get noDisplayedVariables (): boolean {
       return this.displayedVariables.length === 0;
-    }
-
-    get allVariablesAreDisplayed (): boolean {
-      return this.displayedVariables.length === this.variables.length;
     }
 
     get countersTitle (): string {
@@ -221,10 +222,6 @@
     grid-area: action;
   }
 
-  .variable.hidden {
-    opacity: 0.5;
-  }
-
   .btn-settings {
     height: 25px;
     line-height: 0;
@@ -236,7 +233,10 @@
     margin-right: 1rem;
   }
 
-  .chart {
-    height: auto;
+  .plot {
+    border: 1px solid transparent;
+  }
+  .plot.highlighted {
+    border-color: var(--selection);
   }
 </style>

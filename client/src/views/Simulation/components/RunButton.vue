@@ -1,38 +1,64 @@
 <template>
-  <div class="btn-group">
+  <div class="run-button">
     <button
+      class="btn btn-primary blue aske-tooltip aske-tooltip-bottom aske-tooltip-highlight"
       type="button"
-      class="btn btn-primary blue"
       :disabled="disabled"
+      :data-tooltip="runButtonTitle"
       @click="onClickRun"
     >
-      <font-awesome-icon :icon="['fas', ( autoRunInput ? 'pause' : 'play') ]" />
-      {{ displayText }}
+      <font-awesome-icon :icon="['fas', runButtonIcon ]" />
+      {{ runButtonText }}
     </button>
-    <button
-      type="button"
-      class="btn btn-primary blue dropdown-toggle dropdown-toggle-split"
-      :class="{ 'open': dropdownOpen }"
-      @click="dropdownOpen = !dropdownOpen"
-    />
-    <div class="dropdown-menu dropdown-menu-right" :class="{ 'show': dropdownOpen }">
-      <input type="checkbox" v-model="autoRunInput" id="auto-run-input" />
-      <label
-        for="auto-run-input"
-        title="Enable model to run automatically on when Parameters are updated">
-        Auto-Run
-      </label>
-      <div class="dropdown-divider" />
-      <h6 class="dropdown-header">Model Execution Settings</h6>
-      <div class="run-config">
-        <label for="run-config-start">Start</label>
-        <input type="number" id="run-config-start" v-model.number="configInput.start" />
-        <label for="run-config-end">End</label>
-        <input type="number" id="run-config-end" v-model.number="configInput.end" />
-        <label for="run-config-step">Step</label>
-        <input type="number" id="run-config-step" v-model.number="configInput.step" />
-      </div>
+
+    <!-- Extra Commands -->
+    <div class="btn-group">
+      <button
+        class="btn btn-primary aske-tooltip aske-tooltip-bottom"
+        data-tooltip="Model Execution Configuration"
+        type="button"
+        @click="onClickSettings"
+      >
+        <font-awesome-icon :icon="['fas', 'cog' ]" />
+      </button>
+      <button
+        class="btn btn-primary aske-tooltip aske-tooltip-bottom"
+        data-tooltip="Save current run"
+        type="button"
+        :disabled="disabled"
+        @click="onClickSave"
+      >
+        <font-awesome-icon :icon="['fas', 'bookmark' ]" />
+      </button>
+      <button
+        class="btn btn-primary aske-tooltip aske-tooltip-bottom"
+        data-tooltip="Reset all saved runs"
+        type="button"
+        @click="onClickReset"
+      >
+        <font-awesome-icon :icon="['fas', 'undo' ]" />
+      </button>
     </div>
+
+    <!-- Modal to configure Run configuration -->
+    <modal v-if="settingOpen" @close="settingOpen = false">
+      <h5 class="header" slot="header">Model Execution Configuration</h5>
+      <div slot="body" class="run-config">
+        <section>
+          <label for="auto-run-input">Auto-Run</label>
+          <input type="checkbox" v-model="autoRunInput" id="auto-run-input" />
+          <p class="info">Enable model to run automatically when parameters are updated.</p>
+        </section>
+        <section>
+          <label for="start">Start</label>
+          <input type="number" id="start" v-model.number="configInput.start" />
+          <label for="end">End</label>
+          <input type="number" id="end" v-model.number="configInput.end" />
+          <label for="step">Step</label>
+          <input type="number" id="step" v-model.number="configInput.step" />
+        </section>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -41,17 +67,32 @@
   import Component from 'vue-class-component';
   import { Prop, PropSync } from 'vue-property-decorator';
   import * as Donu from '@/types/typesDonu';
+  import Modal from '@/components/Modal.vue';
 
-  @Component
+  const components = {
+    Modal,
+  };
+
+  @Component({ components })
   export default class RunButton extends Vue {
     @PropSync('autoRun', { type: Boolean }) autoRunInput!: boolean;
     @PropSync('config', { type: Object }) configInput!: Donu.RequestConfig;
     @Prop({ default: false }) disabled: boolean;
 
-    dropdownOpen: boolean = false;
+    settingOpen: boolean = false;
 
-    get displayText (): string {
-      return this.autoRunInput ? 'Auto' : 'Run ';
+    get runButtonText (): string {
+      return this.autoRunInput ? 'Auto-Run' : 'Run ';
+    }
+
+    get runButtonTitle (): string {
+      return this.autoRunInput
+        ? 'Execute a model automatically when a Parameter is updated. Caution, this can trigger many request.'
+        : 'Execute a model based on Parameters values and display the result in the variables panel.';
+    }
+
+    get runButtonIcon (): string {
+      return this.autoRunInput ? 'pause' : 'play';
     }
 
     /* On auto-run, remove the auto-run feature, otherwise, run the simulation. */
@@ -62,44 +103,68 @@
         this.$emit('run');
       }
     }
+
+    onClickSettings (): void {
+      this.settingOpen = !this.settingOpen;
+    }
+
+    onClickSave (): void {
+      this.$emit('save');
+    }
+
+    onClickReset (): void {
+      this.$emit('reset');
+    }
   }
 </script>
 
 <style scoped>
-  button:first-of-type {
-    width: 5em;
-  }
-
-  .dropdown-menu {
-    padding: 1em;
-  }
-
-  .dropdown-header {
-    padding: 0 1.5em .5em 0;
-  }
-
-  /* Make the caret bigger */
-  .dropdown-toggle {
-    font-size: 1.5em;
-    padding: 0 .5625rem; /* Bootstap thingy */
-  }
-
-  /* Reverse the caret when open */
-  .dropdown-toggle.open::after {
-    border-bottom: 0.3em solid;
-    border-top: 0;
+  .header {
+    margin-bottom: 0;
   }
 
   .run-config {
+    align-items: start;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .run-config section:not(:first-of-type) {
+    border-left: var(--border);
+    padding: 0 1rem;
+  }
+
+  .run-config section:first-of-type {
+    padding-right: 1rem;
+  }
+
+  .run-config section {
+    align-items: center;
     display: grid;
     font-size: .9em;
     gap: .25em;
-    grid-template-columns: 3em auto;
+    grid-template-columns: 5em auto;
+    justify-items: start;
   }
 
   /* Align the label with the inputs */
   .run-config label {
     line-height: 2;
     margin: 0;
+  }
+
+  .run-config .info {
+    color: var(--text-color-panel-muted);
+    font-size: .8em;
+    grid-column: 1 / 3;
+  }
+
+  /* Overide modal styling */
+  .run-button::v-deep .modal-container {
+    height: auto;
+    max-height: 90vh;
+    max-width: 27rem;
+    min-width: 40vw;
+    width: auto;
   }
 </style>

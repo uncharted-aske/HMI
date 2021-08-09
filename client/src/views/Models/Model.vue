@@ -76,9 +76,10 @@
       @tab-click="onDrilldownTabClick"
     >
       <metadata-pane
-        v-if="drilldownActiveTabId === 'metadata'"
+        v-if="drilldownActiveTabId === 'metadata' && drilldownMetadata"
         slot="content"
-        :data="drilldownMetadata"
+        :metadata="drilldownMetadata"
+        :model-name="selectedModel.name"
         @open-modal="onOpenModalMetadata"
       />
       <parameters-pane
@@ -122,6 +123,7 @@
   import { TabInterface, ViewInterface } from '@/types/types';
   import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
   import * as Model from '@/types/typesModel';
+  import * as GroMEt from '@/types/typesGroMEt';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
   import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
@@ -351,10 +353,19 @@
       this.selectedLayoutId = layoutId;
     }
 
-    async searchCosmos (keyword: string): Promise<void> {
+    async getDrilldownKnowledge (): Promise<void> {
       try {
-        const response = await cosmosSearch(filterToParamObj({ cosmosQuery: [keyword] }));
-        this.drilldownKnowledge = response;
+        if (this.selectedGraphMetadata?.constructor === Array) {
+          const codeCollection = this.selectedGraphMetadata.find(metadata => {
+            return metadata.metadata_type === GroMEt.MetadataType.CodeCollectionReference;
+          }) as GroMEt.CodeCollectionInterface;
+
+          if (codeCollection?.global_reference_id?.id) {
+            this.drilldownKnowledge = await cosmosSearch(filterToParamObj({
+              askeId: codeCollection.global_reference_id.id,
+            }));
+          }
+        }
       } catch (e) {
         throw Error(e);
       }
@@ -366,11 +377,16 @@
     }
 
     onNodeClick (node: GraphNodeInterface): void {
-      this.isOpenDrilldown = true;
+      // Select which tab should be open first, then open the drilldown.
       this.drilldownActiveTabId = 'metadata';
-      this.drilldownPaneTitle = node.label;
+      this.isOpenDrilldown = true;
+
+      // Merge node metadata with Variables metadata. c.f. GraphNodeInterface type
+      this.drilldownMetadata = node.metadata ? node.metadata.flat() : null;
+
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
-      this.drilldownMetadata = node.metadata;
+      this.drilldownPaneTitle = node.label;
+      this.getDrilldownKnowledge();
     }
 
     onBackgroundClick ():void {

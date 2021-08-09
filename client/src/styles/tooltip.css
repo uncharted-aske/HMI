@@ -1,0 +1,110 @@
+/**
+ * Tooltip
+ *
+ * - Add `.aske-tooltip` to add it to an element.
+ * - Use the `[data-tooltip]` attribute for content.
+ * - Add `.aske-tooltip-bottom` to display under an element.
+ * - Add `.aske-tooltip-highlight` to use the `--muted-highlight` colour
+ *   Or override the `--tooltip-colour` with your own colour.
+ */
+
+.aske-tooltip {
+  --tooltip-colour: var(--muted);
+  position: relative;
+}
+
+/**
+ * Basic Layout
+ */
+
+.aske-tooltip::after,
+.aske-tooltip::before {
+  cursor: pointer;
+  left: 50%;
+  font-size: .85em;
+  pointer-events: none;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 200ms ease-in-out 500ms;
+  will-change: opacity;
+  z-index: var(--z-index--tooltip);
+
+  /* position top by default */
+  top: -2px;
+}
+
+/**
+ * Content
+ */
+
+.aske-tooltip::after {
+  background-color: var(--tooltip-colour);
+  border-radius: 5px;
+  content: attr(data-tooltip);
+  width: 12em;
+  overflow: hidden;
+  padding: .5rem;
+
+  /* position top by default */
+  transform: translate(-50%, calc((100% + 1em) * -1));
+}
+
+/**
+ * Arrow
+ */
+
+.aske-tooltip::before {
+  border-left: 1rem solid transparent;
+  border-right: 1rem solid transparent;
+  border-top: 1rem solid var(--tooltip-colour);
+  content: '\0A';
+
+  /* position top by default */
+  transform: translate(-50%, -100%);
+}
+
+/**
+ * Display on hover
+ */
+
+ .aske-tooltip:hover::after,
+ .aske-tooltip:hover::before {
+   opacity: 1;
+ }
+
+/**
+ * Highlighted tooltip
+ */
+
+.aske-tooltip-highlight {
+  --tooltip-colour: var(--muted-highlight);
+}
+
+/**
+ * Bottom position
+ */
+
+.aske-tooltip-bottom::after,
+.aske-tooltip-bottom::before {
+  bottom: -2px;
+  top: unset;
+}
+.aske-tooltip-bottom::after {
+  transform: translate(-50%, calc(100% + 1em));
+}
+.aske-tooltip-bottom::before {
+  border-bottom: 1rem solid var(--tooltip-colour);
+  border-top: none;
+  transform: translate(-50%, 100%);
+}
+
+/**
+ * Bootstrap overrides
+ */
+
+.aske-tooltip.btn.active,
+.aske-tooltip.btn:active,
+.aske-tooltip.btn:focus,
+.aske-tooltip.btn:hover {
+  z-index: var(--z-index--tooltip);
+}

@@ -16,20 +16,30 @@ type FileId = {
   uid: string,
 }
 
+type IndraAgentReference = {
+  db_refs: Record<string, string>,
+  name: string,
+};
+
 export enum CodeType {
   CodeBlock = 'CODE_BLOCK',
   Identifier = 'IDENTIFIER',
 }
 
-export enum MetadateType {
-  ModelInterface = 'ModelInterface',
+export enum MetadataType {
   CodeCollectionReference = 'CodeCollectionReference',
   CodeSpanReference = 'CodeSpanReference',
+  EquationDefinition = 'EquationDefinition',
+  ModelInterface = 'ModelInterface',
+  TextDefinition = 'TextDefinition',
+  TextParameter = 'TextParameter',
   TextualDocumentReferenceSet = 'TextualDocumentReferenceSet',
+  IndraAgentReferenceSet = 'IndraAgentReferenceSet',
+  ReactionReference = 'ReactionReference',
 }
 
 export interface Metadata {
-  metadata_type: MetadateType,
+  metadata_type: MetadataType,
   provenance: Provenance,
   uid: string,
 }
@@ -41,8 +51,8 @@ export interface ModelInterface extends Metadata {
 }
 
 export interface CodeCollectionInterface extends Metadata {
-  fileIds: FileId[],
-  globalReferenceId: {id: string, type: string},
+  file_ids: FileId[],
+  global_reference_id: {id: string, type: string},
 }
 
 export interface CodeSpanReference extends Metadata {
@@ -56,4 +66,47 @@ export interface CodeSpanReference extends Metadata {
 
 export interface TextualDocumentReferenceSet extends Metadata {
   documents: any,
+}
+
+export interface EquationDefinition extends Metadata {
+  equation_extraction: {
+    document_reference_uid: string,
+    equation_number: number,
+    equation_source_latex: string,
+    equation_source_mml: string,
+  }
+}
+
+export interface TextDefinition extends Metadata {
+  text_extraction: {
+    document_reference_uid: string,
+    page: number,
+    block: number,
+    char_begin: number,
+    char_end: number
+  },
+  variable_identifier: string,
+  variable_definition: string,
+}
+
+export interface TextParameter extends Metadata {
+  text_extraction: {
+    document_reference_uid: string,
+    page: number,
+    block: number,
+    char_begin: number,
+    char_end: number
+  },
+  variable_identifier: string,
+  value: string,
+}
+
+export interface IndraAgentReferenceSet extends Metadata {
+  indra_agent_references: IndraAgentReference[],
+}
+
+export interface ReactionReference extends Metadata {
+  reaction_rule: string,
+  indra_stmt_hash: number,
+  is_reverse: false,
 }

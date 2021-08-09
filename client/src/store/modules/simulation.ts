@@ -111,8 +111,7 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     const donuParameters = await getModelParameters(args.model, args.selectedModelGraphType) ?? [];
     const parameters = donuParameters.map(donuParameter => ({
       ...donuParameter,
-      edited: false,
-      hidden: false,
+      displayed: false,
       values: [donuParameter.default],
     }));
     commit('setSimParameters', { modelId: args.model.id, parameters });
@@ -124,8 +123,7 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     const variables = donuVariables.map(donuVariable => ({
       ...donuVariable,
       aggregate: null,
-      edited: false,
-      hidden: false,
+      displayed: false,
       values: [],
     }));
     commit('setSimVariables', { modelId: args.model.id, variables });
@@ -154,7 +152,7 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
   toggleParameter ({ state, commit }, args: { modelId: number, selector: string }): void {
     const parameter = getParameter(state, args.modelId, args.selector);
     if (parameter) {
-      commit('setParameterVisibility', { modelId: args.modelId, uid: parameter.uid, visibility: !parameter.edited });
+      commit('setParameterVisibility', { modelId: args.modelId, uid: parameter.uid, visibility: !parameter.displayed });
     }
   },
 
@@ -167,7 +165,7 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
   toggleVariable ({ state, commit }, args: { modelId: number, selector: string }): void {
     const variable = getVariable(state, args.modelId, args.selector);
     if (variable) {
-      commit('setVariableVisibility', { modelId: args.modelId, uid: variable.uid, visibility: !variable.edited });
+      commit('setVariableVisibility', { modelId: args.modelId, uid: variable.uid, visibility: !variable.displayed });
     }
   },
 
@@ -246,7 +244,7 @@ const mutations: MutationTree<HMI.SimulationState> = {
       // A variable.values are a list of runs each containing
       // a list of {x: step, y: value} for each step.
       const valuesOfAllRunsPerStep = {};
-      for (let run = 0; run < state.numberOfSavedRuns; run++) {
+      for (let run = 0; run < variable.values.length; run++) {
         if (variable.values[run]) {
           for (let step = 0; step < variable.values[run].length; step++) {
             const { x, y } = variable.values[run][step];
@@ -280,7 +278,7 @@ const mutations: MutationTree<HMI.SimulationState> = {
     visibility: boolean,
   }): void {
     const parameter = getParameter(state, args.modelId, args.uid);
-    parameter.edited = args.visibility;
+    parameter.displayed = args.visibility;
   },
 
   setAllParametersVisibility (state: HMI.SimulationState, args: {
@@ -288,7 +286,7 @@ const mutations: MutationTree<HMI.SimulationState> = {
     visibility: boolean,
   }): void {
     getModel(state, args.modelId).parameters.forEach(parameter => {
-      parameter.edited = args.visibility;
+      parameter.displayed = args.visibility;
     });
   },
 
@@ -298,7 +296,7 @@ const mutations: MutationTree<HMI.SimulationState> = {
     visibility: boolean,
   }): void {
     const variable = getVariable(state, args.modelId, args.uid);
-    variable.edited = args.visibility;
+    variable.displayed = args.visibility;
   },
 
   setAllVariablesVisibility (state: HMI.SimulationState, args: {
@@ -306,7 +304,7 @@ const mutations: MutationTree<HMI.SimulationState> = {
     visibility: boolean,
   }): void {
     getModel(state, args.modelId).variables.forEach(variable => {
-      variable.edited = args.visibility;
+      variable.displayed = args.visibility;
     });
   },
 };

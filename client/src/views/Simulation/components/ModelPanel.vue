@@ -3,6 +3,26 @@
     <settings-bar>
       <counters slot="left" :title="modelName" :data="countersData" />
       <aside slot="right">
+        <div class="btn-group" title="Add/Remove All Parameters & Variables">
+          <button
+            class="btn btn-secondary"
+            title="Add all Parameters & Variables"
+            type="button"
+            :disabled="allParametersAndVariablesAreDisplayed"
+            @click="onAddAllParametersAndVariables"
+          >
+            <font-awesome-icon :icon="['fas', 'plus']" />
+          </button>
+          <button
+            class="btn btn-secondary"
+            title="Remove all Parameters & Variables"
+            type="button"
+            :disabled="noDisplayedParametersAndVariables"
+            @click="onRemoveAllParametersAndVariables"
+          >
+            <font-awesome-icon :icon="['fas', 'ban']" />
+          </button>
+        </div>
         <button
           class="btn btn-secondary"
           title="Expand Model Panel"
@@ -15,7 +35,9 @@
     <global-graph
       v-if="graph"
       :data="graph"
-      :edited-nodes="editedNodes"
+      :displayed-nodes="displayedNodes"
+      @node-click="onNodeClick"
+      @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
     />
   </section>
@@ -46,10 +68,24 @@
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
+
+    @Action hideAllParameters;
+    @Action showAllParameters;
     @Action toggleParameter;
+
+    @Action hideAllVariables;
+    @Action showAllVariables;
     @Action toggleVariable;
 
     settingsOpen: boolean = false;
+
+    onNodeClick (selected: Graph.GraphNodeInterface): void {
+      this.$emit('highlight', selected.label);
+    }
+
+    onBackgroundClick (): void {
+      this.$emit('highlight', '');
+    }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
       this.toggleParameter({ modelId: this.model.id, selector: selected.label });
@@ -64,21 +100,21 @@
       return this.getSimModel(this.model.id).variables;
     }
 
-    get editedNodes (): Graph.SubgraphNodeInterface[] {
+    get displayedNodes (): Graph.SubgraphNodeInterface[] {
       const nodes = this.graph?.nodes;
       if (nodes) {
-        const highlightedLabels = [
+        const displayedLabels = [
           ...this.parameters
-              .filter(parameter => parameter.edited)
+              .filter(parameter => parameter.displayed)
               .map(parameter => parameter.metadata.name),
           ...this.variables
-              .filter(variable => variable.edited)
+              .filter(variable => variable.displayed)
               .map(variable => variable.metadata.name),
         ];
 
-        if (highlightedLabels.length > 0) {
+        if (displayedLabels.length > 0) {
           return nodes
-            .filter(node => highlightedLabels.includes(node.label))
+            .filter(node => displayedLabels.includes(node.label))
             .map(node => ({ id: node.id }));
         }
       }
@@ -111,6 +147,34 @@
         });
       }
       return data;
+    }
+
+    get nbDisplayedParameters (): number {
+      return this.parameters.filter(parameter => parameter.displayed).length;
+    }
+
+    get nbDisplayedVariables (): number {
+      return this.variables.filter(variable => variable.displayed).length;
+    }
+
+    get allParametersAndVariablesAreDisplayed (): boolean {
+      return this.nbDisplayedParameters === this.parameters.length &&
+        this.nbDisplayedVariables === this.variables.length;
+    }
+
+    get noDisplayedParametersAndVariables (): boolean {
+      return this.nbDisplayedParameters === 0 &&
+        this.nbDisplayedVariables === 0;
+    }
+
+    onAddAllParametersAndVariables (): void {
+      this.showAllParameters(this.model.id);
+      this.showAllVariables(this.model.id);
+    }
+
+    onRemoveAllParametersAndVariables (): void {
+      this.hideAllParameters(this.model.id);
+      this.hideAllVariables(this.model.id);
     }
   }
 </script>

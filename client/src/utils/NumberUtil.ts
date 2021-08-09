@@ -1,6 +1,24 @@
 /**
- * Shorten a number using English scientific notation.
- * (i.e. 100,000 -> 100K)
+ * Display a number using scientific notation.
+ */
+export const scientificNotation = (value: number, asHTML: boolean = false): string => {
+  const scientificNotation = new Intl.NumberFormat('en', { notation: 'scientific' }).format(value);
+  const [decimal, power] = scientificNotation.split('E');
+  const roundDecimal = Math.round(Number(decimal));
+
+  // Show the full decimal for the powers of -4, -3, -2, -1, 0, 1, 2, 3, and 4.
+  if ([-4, -3, -2, -1, 0, 1, 2, 3, 4].includes(Number(power))) {
+    return value.toString();
+  } else if (asHTML) {
+    return `${roundDecimal}&times;10<sup>${power}</sup>`;
+  } else {
+    return `${roundDecimal}x10^${power}`;
+  }
+};
+
+/**
+ * Shorten a number using English short form.
+ * (i.e. 100000 -> 100K)
  */
 export const shorterNb = (value: number): string => {
   return new Intl.NumberFormat('en', { notation: 'compact' }).format(value);

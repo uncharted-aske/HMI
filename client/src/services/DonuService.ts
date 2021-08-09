@@ -13,11 +13,12 @@ const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
   }
 };
 
+/** Send the request to Donu, via JS cache */
 const callDonuCache = (request: Donu.Request): Promise<Donu.Response> => {
   try {
     return postUtilMem(process.env.DONU_ENDPOINT, request);
   } catch (error) {
-    console.error('[DONU Service] — callDonu', error); // eslint-disable-line no-console
+    console.error('[DONU Service] — callDonuCache', error); // eslint-disable-line no-console
   }
 };
 
@@ -101,10 +102,12 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
   if (response.status === Donu.ResponseStatus.success) {
     // 1. Get models
     let models = response?.result ?? null;
+
     // 2. Filter models to PNC and FN type
     models = models.filter(model => {
       return [Donu.Type.GROMET_PNC, Donu.Type.GROMET_FN].includes(model.type);
     });
+
     // 3. Populate models with model source
     await Promise.all(models.map(async model => {
       model.gromet = await getDonuModelSource(model.source.model, model.type);
@@ -113,12 +116,19 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
     models.forEach(model => {
       // 4. Transform Gromet to graph for rendering
       model.graph = GroMEt2Graph.parseGromet(model.gromet);
+
       // 5. Transform Gromet to bgraph for querying
       model.bgNodes = convertGrometNodesDataToBGraphNodesData(model.graph.nodes, model.graph.edges);
       model.bgEdges = convertGrometEdgesDataToBGraphEdgesData(model.graph.edges);
     });
+
     // 6. Group models by model name
-    const output = new Array(1);
+    const output = [];
+    // Track seen model names to group models of different types but the same
+    // name together
+    // HACK: An assumption has been made that a model with the same name is
+    // the same model. This is currently true however is not guaranteed
+    const seenModelNames = new Map();
     models.forEach(model => {
       const { name } = model.gromet;
       const metadata = { name, description: '' };
@@ -136,22 +146,18 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
           edges: model.bgEdges,
         },
       };
-
-      if (name === 'SimpleSIR' || name === 'SimpleSIR_metadata') {
-        output[0] = {
-          id: 0,
-          metadata,
-          name: 'SimpleSIR',
-          modelGraph: output[0]?.modelGraph ?? [],
-        };
-        output[0].modelGraph.push(modelGraph);
+      if (seenModelNames.has(name)) {
+        const modelIndex = seenModelNames.get(name);
+        output[modelIndex].modelGraph.push(modelGraph);
       } else {
+        const index = output.length;
         output.push({
-          id: output.length,
+          id: index,
           metadata,
           name,
           modelGraph: [modelGraph],
         });
+        seenModelNames.set(name, index);
       }
     });
 
@@ -211,14 +217,6 @@ export const getModelVariables = async (model: Model.Model, selectedModelGraphTy
   }
 };
 
-const getSimulationType = (modelType: Donu.Type): Donu.SimulationType | void => {
-  if (modelType === Donu.Type.GROMET_PNC) {
-    // HACK: Donu defaults to Algebraic Julia as the sim engine for Petri Net Classics.
-    // here we've temporarily overwritten to use GSL as algebraic julia contains a bug
-    return Donu.SimulationType.GSL;
-  }
-};
-
 /** Fetch the result of a model simulation */
 export const getModelResult = async (
   model: Model.Model,
@@ -230,8 +228,6 @@ export const getModelResult = async (
   if (modelGraph) {
     const request: Donu.Request = {
       command: Donu.RequestCommand.SIMULATE,
-      // HACK: get simulation type is a temporary solution while the Donu service fixes their simulation engine calls
-      'sim-type': getSimulationType(modelGraph.donuType as Donu.Type),
       definition: {
         source: { model: modelGraph.model },
         type: modelGraph.donuType as Donu.Type,

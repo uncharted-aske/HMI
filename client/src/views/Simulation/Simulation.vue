@@ -15,32 +15,14 @@
         Provenance Graph
       </button>
 
-      <div class="runs-controls">
-        <run-button
-          :auto-run.sync="autoRun"
-          :config.sync="runConfig"
-          :disabled="!isRunFeasible"
-          @run="fetchResults"
-        />
-
-        <div class="btn-group">
-          <button
-            class="btn btn-primary"
-            title="Save current run"
-            :disabled="!isRunFeasible"
-            @click="incrNumberOfSavedRuns"
-          >
-            <font-awesome-icon :icon="['fas', 'bookmark' ]" />
-          </button>
-          <button
-            class="btn btn-primary"
-            title="Reset all saved runs"
-            @click="onResetSim"
-          >
-            <font-awesome-icon :icon="['fas', 'undo' ]" />
-          </button>
-        </div>
-      </div>
+      <run-button
+        :auto-run.sync="autoRun"
+        :config.sync="runConfig"
+        :disabled="!isRunFeasible"
+        @reset="onResetSim"
+        @run="fetchResults"
+        @save="incrNumberOfSavedRuns"
+      />
 
       <button
         class="btn-sim btn btn-primary"
@@ -64,6 +46,7 @@
           :key="index"
           :model="model"
           :slot="('model_' + model.id)"
+          @highlight="onNodeHighlight"
           @expand="setExpandedId('model')"
         />
         <parameters-panel
@@ -72,6 +55,7 @@
           :key="index"
           :modelId="model.id"
           :slot="('parameters_' + model.id)"
+          :highlighted="highlighted"
           @expand="setExpandedId('parameters')"
         />
         <variables-panel
@@ -80,6 +64,7 @@
           :key="index"
           :modelId="model.id"
           :slot="('variables_' + model.id)"
+          :highlighted="highlighted"
           @expand="setExpandedId('variables')"
         />
       </template>
@@ -128,6 +113,7 @@
     expandedId: string = '';
     runConfig: Donu.RequestConfig = { end: 120, start: 0, step: 30 };
     subgraph: Graph.GraphInterface = null;
+    highlighted: string = '';
 
     @Action fetchModelResults;
     @Action incrNumberOfSavedRuns;
@@ -277,6 +263,10 @@
           this.fetchModelResults({ model, config, selectedModelGraphType });
         });
       }
+    }
+
+    onNodeHighlight (label: string): void {
+      this.highlighted = label;
     }
   }
 </script>
