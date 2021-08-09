@@ -32,7 +32,6 @@
           :overlapping-elements="model.modelGraph[0].overlappingElements"
           :slot="('model_' + model.id)"
           :expandable="false"
-          @highlight="onHighlight"
         />
       </template>
     </resizable-grid>
