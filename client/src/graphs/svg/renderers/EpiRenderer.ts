@@ -10,7 +10,7 @@ import SVGUtil from '@/utils/SVGUtil';
 
 const pathFn = SVGUtil.pathFn().curve(d3.curveBasis);
 
-const DEFAULT_STYLE = {
+export const DEFAULT_STYLE = {
   node: {
     fill: Colors.NODES.DEFAULT,
     stroke: Colors.STROKE,
