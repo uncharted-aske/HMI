@@ -30,7 +30,7 @@
     data: Counter[];
 
     numberAsHTML (value: string | number): string {
-      if (value) {
+      if (value != null) {
         return scientificNotation(Number(value), true);
       }
     }

@@ -219,6 +219,13 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'string',
     lexType: 'string',
   },
+  // MODELS
+  MODELS_TEXT_SEARCH: {
+    ..._field('modelsTextSearch', 'Keyword'),
+    ..._searchable('Keyword', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
   // Placeholders for testing purposes
   HISTOGRAM: {
     ..._field('histogram', 'Histogram'),
