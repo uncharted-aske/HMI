@@ -105,6 +105,9 @@
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.showSubgraph(neighborhood);
           this.renderer.clearSelections();
+          if (this.overlappingElements) {
+            this.renderer.markOverlappingElements(this.overlappingElements);
+          }
           this.renderer.selectNode(node);
         }
 
@@ -113,8 +116,9 @@
 
       this.renderer.setCallback('backgroundClick', () => {
         this.renderer.hideSubgraph();
-        if (this.overlappingElements?.nodes.length === 0) {
-          this.renderer.clearSelections();
+        this.renderer.clearSelections();
+        if (this.overlappingElements) {
+          this.renderer.markOverlappingElements(this.overlappingElements);
         }
         this.$emit('background-click');
       });

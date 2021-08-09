@@ -69,17 +69,17 @@
       this.$emit('highlight', selected.label);
 
       // Calculate corresponding nodes for model comparison
-      if (this.overlappingElements.nodes.length > 0) {
-        let nodes = [];
-        if (this.modelName === 'SimpleSIR_metadata') {
-          nodes = Object.values(MODEL_COMPARISON).map(node => ({ id: node }));
-        } else if (this.modelName === 'SimpleChime+') {
-          nodes = Object.keys(MODEL_COMPARISON).map(node => ({ id: node }));
-        }
-        const correspondingNode = nodes.find(node => node.id === selected.label);
-        const selectedNode = { id: selected.label };
-        this.subgraph = { nodes: [correspondingNode, selectedNode], edges: [] };
-      }
+      // if (this.overlappingElements.nodes.length > 0) {
+      //   let nodes = [];
+      //   if (this.modelName === 'SimpleSIR_metadata') {
+      //     nodes = Object.values(MODEL_COMPARISON).map(node => ({ id: node }));
+      //   } else if (this.modelName === 'SimpleChime+') {
+      //     nodes = Object.keys(MODEL_COMPARISON).map(node => ({ id: node }));
+      //   }
+      //   const correspondingNode = nodes.find(node => node.id === selected.label);
+      //   const selectedNode = { id: selected.label };
+      //   this.subgraph = { nodes: [correspondingNode, selectedNode], edges: [] };
+      // }
     }
 
     onBackgroundClick (): void {
@@ -87,10 +87,8 @@
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
-      if (this.overlappingElements.nodes.length === 0) {
-        this.toggleParameter({ modelId: this.model.id, selector: selected.label });
-        this.toggleVariable({ modelId: this.model.id, selector: selected.label });
-      }
+      this.toggleParameter({ modelId: this.model.id, selector: selected.label });
+      this.toggleVariable({ modelId: this.model.id, selector: selected.label });
     }
 
     get parameters (): HMI.SimulationParameter[] {

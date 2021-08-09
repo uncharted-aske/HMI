@@ -249,7 +249,9 @@ export default class EpiRenderer extends SVGRenderer {
     if (chart) {
       chart.selectAll('.node-ui').each(function (d) {
         const isOverlapping = subgraph.nodes.map(node => node.id).includes(d.label);
-        d3.select(this).select('rect, ellipse').style('stroke', isOverlapping ? Colors.OVERLAPPING : DEFAULT_STYLE.node.stroke);
+        d3.select(this)
+          .select('rect, ellipse')
+          .style('stroke', isOverlapping ? Colors.OVERLAPPING : DEFAULT_STYLE.node.stroke);
       });
     }
   }
