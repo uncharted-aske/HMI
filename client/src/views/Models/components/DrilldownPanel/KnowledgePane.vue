@@ -3,9 +3,9 @@
      <div v-if="!isEmptyData" class="mt-3 documents-container hide-scrollbar">
       <div class="mb-1 px-2 py-4 d-flex rounded-lg border" v-for="(object, index) in data.objects" :key="index">
         <div class="flex-grow-1">
-            <a href="/" @click="e => openModal(e, index)">
+            <div type="button" class="btn-link" @click="openModal(index)">
                 <h6>{{object.bibjson.title}}</h6>
-            </a>
+            </div>
             <div> {{object.bibjson.identifier[0].id}}</div>
         </div>
       </div>
@@ -52,10 +52,9 @@
       return _.isEmpty(this.data.objects) || Boolean(this.data.error);
     }
 
-    openModal (e: Event, index: number): void {
+    openModal (index: number): void {
       this.showModal = true;
       this.modalData = this.data.objects[index];
-      e.preventDefault();
     }
   }
 </script>

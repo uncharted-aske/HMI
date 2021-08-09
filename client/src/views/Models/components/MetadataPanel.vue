@@ -39,7 +39,7 @@
           <summary v-for="(doc, index) in datum.documents" :key="index" :title="doc.uid">
             <a :href="doc.bibjson.website.url">{{ doc.bibjson.title }}</a>
             {{ doc.global_reference_id.type }} {{ doc.global_reference_id.id }}
-            <div class="mt-3"><a href="/" @click="e => openModal(e, doc)">Show more...</a></div>
+            <div type="button" class="mt-3 btn-link" @click="openModal(doc)">Show more...</div>
           </summary>
         </div>
       </template>
@@ -82,9 +82,8 @@
       return formatFullDateTime(timestamp);
     }
 
-    openModal (e: Event, datum: GroMET.Metadata): void {
+    openModal (datum: GroMET.Metadata): void {
       this.$emit('open-modal', datum);
-      e.preventDefault();
     }
   }
 </script>
