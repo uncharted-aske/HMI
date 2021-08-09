@@ -17,7 +17,6 @@
       :data="graph"
       :displayed-nodes="displayedNodes"
       :overlapping-elements="overlappingElements"
-      :subgraph="subgraph"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
@@ -49,8 +48,6 @@
     @Prop({ default: null }) model: Model.Model;
     @Prop({ default: true }) expandable: boolean;
     @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
-    @Prop({ default: null }) subgraph: Graph.SubgraphInterface;
-
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;

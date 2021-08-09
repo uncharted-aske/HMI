@@ -30,7 +30,6 @@
           :key="index"
           :model="model"
           :overlapping-elements="model.modelGraph[0].overlappingElements"
-          :subgraph="subgraph"
           :slot="('model_' + model.id)"
           :expandable="false"
           @highlight="onHighlight"
@@ -57,6 +56,7 @@
 
   import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
 
+
   const MODEL_COMPARISON = {
     gamma: 'rec_u',
     I: 'I_U',
@@ -77,7 +77,7 @@
   export default class Comparison extends Vue {
     displaySearch: boolean = false;
     highlighted: string = '';
-    subgraph: Graph.SubgraphInterface = null;
+    selectedModelForComparison: string = '';
 
 
     @Getter getSelectedModelGraphType;
@@ -137,7 +137,7 @@
         },
       };
     }
-
+    
     onOpenSimView (): void {
       const options: RawLocation = { name: 'simulation' };
       options.params = {
@@ -145,26 +145,6 @@
       };
 
       this.$router.push(options);
-    }
-
-    onHighlight(selection: any):void {
-      const { label, modelName } = selection;
-      let nodes = [];
-      //BIG HACK: this will probably change once we get the data from Arizona
-      if (modelName === 'SimpleSIR_metadata') {
-        const model = this.selectedModels.find(model => model.name === 'SimpleChime+');
-        const modelGraph = model.modelGraph[0]; 
-        const key = MODEL_COMPARISON[label];
-        const found = modelGraph.graph.nodes.find(node => node.label === key);
-        nodes = [found.id];  
-      } else {
-        const model = this.selectedModels.find(model => model.name === 'SimpleSIR_metadata');
-        const modelGraph = model.modelGraph[0]; 
-        const key = Object.keys(MODEL_COMPARISON).find(key => key === label);
-        const found = modelGraph.graph.nodes.find(node => node.label === key);
-        nodes = [found.id];
-      }
-      this.subgraph = {nodes, edges: []};    
     }
   }
 </script>
