@@ -13,7 +13,7 @@
   export default class ProvenanceGraphData extends Vue {
     @Prop({ required: false }) private data: any;
 
-    // This is a placeholder to show the switch between expanded and condensed 
+    // This is a placeholder to show the toggle between expanded and condensed
     get header (): string {
       if (this.data != null) {
         return this.data;

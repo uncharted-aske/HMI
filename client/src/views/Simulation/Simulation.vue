@@ -299,6 +299,8 @@
 
     onProvenanceToggleClick (tabId: string): void {
       this.provenanceActivePaneId = tabId;
+
+      // provenanceGraphData is a placeholder to show the toggle between condensed and expanded
       if (this.provenanceActivePaneId === 'condensed') {
         this.provenanceGraphData = 'Condensed Provenance Graph Placeholder';
       } else {
