@@ -3,13 +3,21 @@ import { COSMOS_TYPE_OPTIONS } from '@/utils/ModelTypeUtil';
 
 import { CosmosSearchBibjsonInterface } from '@/types/typesCosmos';
 
+export const ID_TYPE_MAP = {
+  aske_id: 'cosmosAskeId',
+  doi: 'cosmosDoi',
+};
+
 export const filterToParamObj = (filterObj: {[key: string]: any}): any => {
   const output: any = {};
   if (!_.isEmpty(filterObj.cosmosQuery)) {
     output.query = filterObj.cosmosQuery;
   }
-  if (!_.isEmpty(filterObj.askeId)) {
-    output.aske_id = filterObj.askeId;
+  if (!_.isEmpty(filterObj.cosmosDoi)) {
+    output.doi = filterObj.cosmosDoi;
+  }
+  if (!_.isEmpty(filterObj.cosmosAskeId)) {
+    output.aske_id = filterObj.cosmosAskeId;
   }
   if (!_.isEmpty(filterObj.cosmosType)) {
     output.type = filterObj.cosmosType.map(type => COSMOS_TYPE_OPTIONS[type]);

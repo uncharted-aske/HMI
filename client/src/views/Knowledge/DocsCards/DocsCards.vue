@@ -26,7 +26,7 @@
     </drilldown-panel>
     <modal-document
       v-if="showModalDocuments"
-      :data="drilldownData"
+      :data="drilldownData.raw"
       @close="showModalDocuments = false"
     />
   </div>
@@ -156,6 +156,8 @@
     get searchPills (): (KeyValuePill | TextPill)[] {
       return [
         new TextPill(QUERY_FIELDS_MAP.COSMOS_QUERY),
+        new TextPill(QUERY_FIELDS_MAP.COSMOS_DOI),
+        new TextPill(QUERY_FIELDS_MAP.COSMOS_ASKE_ID),
         new KeyValuePill(
           QUERY_FIELDS_MAP.COSMOS_TYPE,
           modelTypeUtil.COSMOS_TYPE_OPTIONS,
