@@ -14,7 +14,7 @@
         </button>
       </div>
     </aside>
-    <provenance-close-button @close="onClose"/>
+    <close-button @close="onClose"/>
     <div class="flex-grow-1 position-relative overflow-scroll hide-scrollbar panel-body">
       <slot name="content"/>
     </div>
@@ -25,10 +25,10 @@
   import Component from 'vue-class-component';
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
-  import ProvenanceCloseButton from '@/components/widgets/ProvenanceCloseButton.vue';
+  import CloseButton from '@/components/widgets/CloseButton.vue';
 
   const components = {
-    ProvenanceCloseButton,
+    CloseButton,
   };
 
   @Component({ components })
@@ -76,7 +76,12 @@
   cursor: default;
   border-bottom: 3px solid var(--selection);
 }
+
 .nav-link:not(.active) {
   cursor: pointer;
+}
+
+div > .close-button {
+  top: 66px;
 }
 </style>

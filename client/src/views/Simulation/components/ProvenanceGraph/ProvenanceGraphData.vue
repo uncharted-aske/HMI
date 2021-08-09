@@ -1,5 +1,5 @@
 <template>
-  <section class="condensed-graph">
+  <section class="provenance-graph-data">
     <h6>{{header}}</h6>
   </section>
 </template>
@@ -10,17 +10,22 @@
   import { Prop } from 'vue-property-decorator';
 
   @Component({ })
-  export default class CondensedGraph extends Vue {
+  export default class ProvenanceGraphData extends Vue {
     @Prop({ required: false }) private data: any;
 
+    // This is a placeholder to show the switch between expanded and condensed 
     get header (): string {
-      return 'Condensed Provenance Graph Placeholder';
+      if (this.data != null) {
+        return this.data;
+      } else {
+        return 'Placeholder';
+      }
     }
   }
 </script>
 
 <style scoped>
-  .condensed-graph {
+  .provenance-graph-data {
     display: flex;
     color: #ffffff;
   }

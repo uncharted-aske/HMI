@@ -12,9 +12,9 @@
 
       <button
         class="btn btn-primary"
-        @click="onShowProvenanceGraph">
+        @click="onToggleProvenanceGraph">
         <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
-        <span>{{ isOpenProvenanceGraph ? 'Close Provenance Graph' : 'Open Provenance Graph' }}</span>
+        <span>{{ isProvenanceGraphOpen ? 'Close Provenance Graph' : 'Open Provenance Graph' }}</span>
       </button>
 
       <run-button
@@ -39,14 +39,8 @@
       <search-bar />
     </aside>
 
-    <provenance-graph @close-pane="onCloseProvenanceGraph" :is-open="isOpenProvenanceGraph" @toggle-click="onProvenanceToggleClick">
-      <condensed-graph
-        v-if="provenanceActivePaneId === 'condensed'"
-        slot="content"
-        :data="provenanceGraphData"
-      />
-      <expanded-graph
-        v-if="provenanceActivePaneId === 'expanded'"
+    <provenance-graph @close-pane="onCloseProvenanceGraph" :is-open="isProvenanceGraphOpen" @toggle-click="onProvenanceToggleClick">
+      <provenance-graph-data
         slot="content"
         :data="provenanceGraphData"
       />
@@ -110,17 +104,15 @@
   import VariablesPanel from '@/views/Simulation/components/VariablesPanel.vue';
   import RunButton from '@/views/Simulation/components/RunButton.vue';
   import ProvenanceGraph from '@/views/Simulation/components/ProvenanceGraph/ProvenanceGraph.vue';
-  import CondensedGraph from '@/views/Simulation/components/ProvenanceGraph/CondensedGraph.vue';
-  import ExpandedGraph from '@/views/Simulation/components/ProvenanceGraph/ExpandedGraph.vue';
+  import ProvenanceGraphData from '@/views/Simulation/components/ProvenanceGraph/ProvenanceGraphData.vue';
 
   const components = {
-    CondensedGraph,
     Counters,
-    ExpandedGraph,
     Loader,
     ModelPanel,
     ParametersPanel,
     ProvenanceGraph,
+    ProvenanceGraphData,
     ResizableGrid,
     RunButton,
     SearchBar,
@@ -136,7 +128,7 @@
     subgraph: Graph.GraphInterface = null;
     highlighted: string = '';
 
-    isOpenProvenanceGraph: boolean = false;
+    isProvenanceGraphOpen: boolean = false;
     provenanceActivePaneId: string = '';
     provenanceGraphData: any = null;
 
@@ -294,18 +286,24 @@
       this.highlighted = label;
     }
 
-    onShowProvenanceGraph (): void {
-      if (this.isOpenProvenanceGraph) {
+    onToggleProvenanceGraph (): void {
+      if (this.isProvenanceGraphOpen) {
         this.closeProvenanceGraph();
       } else {
-        this.isOpenProvenanceGraph = true;
+        // Set the provenance graph state to open and show the condensed graph by default
+        this.isProvenanceGraphOpen = true;
         this.provenanceActivePaneId = 'condensed';
-        this.provenanceGraphData = null;
+        this.provenanceGraphData = 'Condensed Provenance Graph Placeholder';
       }
     }
 
     onProvenanceToggleClick (tabId: string): void {
       this.provenanceActivePaneId = tabId;
+      if (this.provenanceActivePaneId === 'condensed') {
+        this.provenanceGraphData = 'Condensed Provenance Graph Placeholder';
+      } else {
+        this.provenanceGraphData = 'Expanded Provenance Graph Placeholder';
+      }
     }
 
     onCloseProvenanceGraph (): void {
@@ -313,7 +311,7 @@
     }
 
     closeProvenanceGraph (): void {
-      this.isOpenProvenanceGraph = false;
+      this.isProvenanceGraphOpen = false;
       this.provenanceActivePaneId = null;
       this.provenanceGraphData = null;
     }
