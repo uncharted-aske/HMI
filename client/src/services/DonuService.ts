@@ -82,7 +82,7 @@ export const queryDonuModels = async (text: string): Promise<any[]> => {
     text,
   };
 
-  const response = await callDonu(request);
+  const response = await callDonuCache(request);
   if (response.status === Donu.ResponseStatus.success) {
     const models = response.result ?? [];
     return models;
