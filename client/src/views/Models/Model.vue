@@ -80,6 +80,7 @@
         v-if="drilldownActiveTabId === 'metadata' && drilldownMetadata"
         slot="content"
         :metadata="drilldownMetadata"
+        :model-name="selectedModel.name"
         @open-modal="onOpenModalMetadata"
       />
       <parameters-pane

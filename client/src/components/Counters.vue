@@ -1,7 +1,16 @@
 <template>
   <div class="counters-container">
     <span class="title" v-if="title">{{ title }}</span>
-    <span v-for="(counter, index) in processedData" :key="index" :class="{ 'highlighted': data[index].highlighted, '': !data[index].highlighted }">{{ counter }}</span>
+    <span
+      v-for="(counter, index) in data" :key="index"
+      :class="{ 'highlighted': data.highlighted }">
+      <template v-if="counter.inverse">
+        {{ counter.name }} <span v-html="numberAsHTML(counter.value)" />
+      </template>
+      <template v-else>
+        <span v-html="numberAsHTML(counter.value)" /> {{ counter.name }}
+      </template>
+    </span>
   </div>
 </template>
 
@@ -9,7 +18,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
-  import { shorterNb } from '@/utils/NumberUtil';
+  import { scientificNotation } from '@/utils/NumberUtil';
   import { Counter } from '@/types/types';
 
   @Component
@@ -18,21 +27,12 @@
     title: string;
 
     @Prop({ default: () => [] })
-    data: Array<Counter>;
+    data: Counter[];
 
-    get processedData () : string[] {
-      return this.data.reduce((acc: string[], counter: Counter) => {
-        const value = counter.value ? shorterNb(Number(counter.value)) : NaN;
-        if (Number.isNaN(value)) {
-          acc.push(counter.name);
-        } else if (counter.inverse) {
-          acc.push(counter.name + ' ' + value);
-        } else {
-          acc.push(value + ' ' + counter.name);
-        }
-
-        return acc;
-      }, []);
+    numberAsHTML (value: string | number): string {
+      if (value) {
+        return scientificNotation(Number(value), true);
+      }
     }
   }
 </script>
