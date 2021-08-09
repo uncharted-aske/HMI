@@ -1,5 +1,5 @@
 <template>
-  <div class="provenance-graph-container" v-if="isOpen">
+  <div class="provenance-graph-container">
     <aside slot="left">
       <div class="btn-group btn-group-sm">
         <button
@@ -33,9 +33,6 @@
 
   @Component({ components })
   export default class ProvenanceGraph extends Vue {
-    @Prop({ default: false })
-    isOpen: boolean;
-
     @Prop({ required: false })
     activeTabId: string;
 
@@ -44,11 +41,11 @@
     }
 
     onClickCondensed (): void {
-      this.$emit('toggle-click', 'condensed');
+      this.$emit('layout-change', 'condensed');
     }
 
     onClickExpanded (): void {
-      this.$emit('toggle-click', 'expanded');
+      this.$emit('layout-change', 'expanded');
     }
   }
 </script>
@@ -56,7 +53,7 @@
 <style scoped>
 .provenance-graph-container {
   background-color: var(--bg-graphs);
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

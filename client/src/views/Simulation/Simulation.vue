@@ -14,7 +14,7 @@
         class="btn btn-primary"
         @click="onToggleProvenanceGraph">
         <font-awesome-icon :icon="['fas', 'project-diagram' ]" />
-        <span>{{ isProvenanceGraphOpen ? 'Close Provenance Graph' : 'Open Provenance Graph' }}</span>
+        <span>{{ isProvenanceGraphOpen ? 'Close' : 'Open' }} Provenance Graph</span>
       </button>
 
       <run-button
@@ -39,7 +39,7 @@
       <search-bar />
     </aside>
 
-    <provenance-graph @close-pane="onCloseProvenanceGraph" :is-open="isProvenanceGraphOpen" @toggle-click="onProvenanceToggleClick">
+    <provenance-graph v-if="isProvenanceGraphOpen" @close-pane="onCloseProvenanceGraph" @layout-change="onSetProvenanceLayout">
       <provenance-graph-data
         slot="content"
         :data="provenanceGraphData"
@@ -297,7 +297,7 @@
       }
     }
 
-    onProvenanceToggleClick (tabId: string): void {
+    onSetProvenanceLayout (tabId: string): void {
       this.provenanceActivePaneId = tabId;
 
       // provenanceGraphData is a placeholder to show the toggle between condensed and expanded
