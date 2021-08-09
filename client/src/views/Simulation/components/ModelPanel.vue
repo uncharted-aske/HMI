@@ -57,7 +57,7 @@
     settingsOpen: boolean = false;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      this.$emit('highlight', {label: selected.label, modelName:this.modelName} );
+      this.$emit('highlight', { label: selected.label, modelName: this.modelName });
     }
 
     onBackgroundClick (): void {

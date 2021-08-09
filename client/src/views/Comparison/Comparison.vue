@@ -46,7 +46,7 @@
   import { RawLocation } from 'vue-router';
 
   import * as Model from '@/types/typesModel';
-  import * as Graph from '@/types/typesGraphs';
+  // import * as Graph from '@/types/typesGraphs';
   import * as RGrid from '@/types/typesResizableGrid';
 
   import Counters from '@/components/Counters.vue';
@@ -55,7 +55,6 @@
   import SearchBar from '@/components/SearchBar.vue';
 
   import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
-
 
   const MODEL_COMPARISON = {
     gamma: 'rec_u',
@@ -78,7 +77,6 @@
     displaySearch: boolean = false;
     highlighted: string = '';
     selectedModelForComparison: string = '';
-
 
     @Getter getSelectedModelGraphType;
     @Getter getModelsList;
@@ -137,7 +135,7 @@
         },
       };
     }
-    
+
     onOpenSimView (): void {
       const options: RawLocation = { name: 'simulation' };
       options.params = {
