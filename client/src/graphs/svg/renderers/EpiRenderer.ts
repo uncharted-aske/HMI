@@ -29,6 +29,13 @@ export const DEFAULT_STYLE = {
   },
 };
 
+export const DEFAULT_RENDERING_OPTIONS = {
+  nodeHeight: 40,
+  nodeWidth: 120,
+  padding: 5,
+  parameterNodeSize: 30,
+};
+
 export default class EpiRenderer extends SVGRenderer {
   constructor (options:SVGRendererOptionsInterface) {
     super(options);
