@@ -194,6 +194,18 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     lexType: 'string',
     order: 2,
   },
+  COSMOS_ASKE_ID: {
+    ..._field('cosmosAskeId', 'ASKE ID'),
+    ..._searchable('ASKE ID', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
+  COSMOS_DOI: {
+    ..._field('cosmosDoi', 'DOI'),
+    ..._searchable('DOI', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
   COSMOS_TYPE: {
     ..._field('cosmosType', 'Doc Artifact Type'),
     ..._searchable('Doc Artifact Type', false),
@@ -216,6 +228,13 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
   COSMOS_POSTPROCESSING_CONFIDENCE: {
     ..._field('cosmosPostProcConf', 'Post-Processing Confidence'),
     ..._searchable('Post-Processing Confidence', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
+  // MODELS
+  MODELS_TEXT_SEARCH: {
+    ..._field('modelsTextSearch', 'Keyword'),
+    ..._searchable('Keyword', false),
     baseType: 'string',
     lexType: 'string',
   },
