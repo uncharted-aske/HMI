@@ -138,7 +138,7 @@
     onOpenSimView (): void {
       const options: RawLocation = { name: 'simulation' };
       options.params = {
-          model_id: this.getSelectedModelIds.join(','),
+          model_ids: this.getSelectedModelIds.join(','),
       };
 
       this.$router.push(options);

@@ -325,7 +325,7 @@
       const modelId = this.$route.params.model_id;
       if (modelId) {
         options.params = {
-          model_id: modelId.toString(),
+          model_ids: modelId.toString(),
         };
       }
 
