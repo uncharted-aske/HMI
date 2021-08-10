@@ -36,16 +36,11 @@
       <template v-else-if="isTypeDocuments(datum)">
         <summary :title="datum.uid">Documents</summary>
         <div class="metadata-content">
-          <details v-for="(doc, index) in datum.documents" :key="index">
-            <summary :title="doc.uid">
-              <a :href="doc.bibjson.website.url">{{ doc.bibjson.title }}</a>
-              {{ doc.global_reference_id.type }} {{ doc.global_reference_id.id }}
-            </summary>
-            <h6>File</h6>
-            <p><a :href="doc.bibjson.file_url">{{ doc.bibjson.file }}</a></p>
-            <h6>Author(s)</h6>
-            <p>{{ doc.bibjson.author.map(a => a.name) | ArrayToList }}</p>
-          </details>
+          <summary v-for="(doc, index) in datum.documents" :key="index" :title="doc.uid">
+            <a :href="doc.bibjson.website.url">{{ doc.bibjson.title }}</a>
+            {{ doc.global_reference_id.type }} {{ doc.global_reference_id.id }}
+            <div type="button" class="mt-3 btn-link" @click="openModal(doc)">Show more...</div>
+          </summary>
         </div>
       </template>
 
@@ -85,6 +80,10 @@
 
     provenanceDate (timestamp: string): string {
       return formatFullDateTime(timestamp);
+    }
+
+    openModal (datum: GroMET.Metadata): void {
+      this.$emit('open-modal', datum);
     }
   }
 </script>

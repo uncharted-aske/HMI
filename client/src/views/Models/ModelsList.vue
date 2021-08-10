@@ -1,7 +1,6 @@
 <template>
   <div class="view-container">
-    <loader v-if="modelsCards.length < 1" loading="true" />
-    <main v-else>
+    <main>
       <div class="search-row">
         <search-bar :pills="searchPills" :placeholder="`Search for Models...`"/>
       </div>
@@ -18,11 +17,12 @@
           </button>
         </div>
       </settings-bar>
-      <card-container
+      <card-container v-if="!dataLoading"
         class="models-cards"
         :cards="modelsCards"
         @click-card="onClickCard"
       />
+      <loader :loading="dataLoading" />
     </main>
   </div>
 </template>
@@ -30,17 +30,21 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
+  import { Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
+  import { queryDonuModels } from '@/services/DonuService';
+
   import { CardInterface, Counter, TabInterface } from '@/types/types';
+  import { Filters } from '@/types/typesLex';
   import * as Model from '@/types/typesModel';
 
   import SearchBar from '@/components/SearchBar.vue';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from './components/Settings.vue';
-  import RangePill from '@/search/pills/RangePill';
+  import TextPill from '@/search/pills/TextPill';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
 
   import LeftSidePanel from '@/components/LeftSidePanel.vue';
@@ -75,6 +79,9 @@
   export default class ModelsList extends Vue {
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'facets';
+    allowModelSourceList: string[] = []; // Models that should not be filtered
+    dataLoading: boolean = true; // Toggles loading screen
+    models: Model.Model[] = [];
 
     @Action resetSelectedModelIds;
     @Getter getFilters;
@@ -82,17 +89,53 @@
     @Getter getSelectedModelIds;
     @Mutation setSelectedModels;
 
+    @Watch('getFilters') onGetFiltersChanged (newFilters: Filters): void {
+      this.handleFiltersChanged(newFilters);
+    }
+
+    @Watch('getModelsList') onGetModelsListChanged (): void {
+      this.setModels();
+    }
+
+    created (): void {
+      this.setModels();
+    }
+
     activated (): void {
       this.resetSelectedModelIds();
     }
 
-    get models (): Model.Model[] {
-      return this.getModelsList;
+    async handleFiltersChanged (newFilters: Filters): Promise<void> {
+      if (newFilters.clauses.length > 0) {
+        this.dataLoading = true;
+        const text = newFilters.clauses.find(clause => clause.field === QUERY_FIELDS_MAP.MODELS_TEXT_SEARCH.field)?.values[0] as string;
+        const models = await queryDonuModels(text);
+        this.allowModelSourceList = models.map(m => m.source.model);
+      }
+      this.setModels();
+    }
+
+    setModels (): void {
+      if (this.getModelsList.length === 0) {
+        // Models have not been loaded in store yet
+        this.models = [];
+      } else if (this.getModelsList.length > 0 && this.getFilters.clauses.length === 0) {
+        // No Query present: return full model list
+        this.models = this.getModelsList;
+        this.dataLoading = false;
+      } else {
+        // Query present: filter models based on model sources returned in query results
+        const models = this.getModelsList.filter(m => {
+          return m.modelGraph.find(d => this.allowModelSourceList.includes(d.model));
+        });
+        this.models = models;
+        this.dataLoading = false;
+      }
     }
 
     get searchPills (): any {
       return [
-        new RangePill(QUERY_FIELDS_MAP.HISTOGRAM),
+        new TextPill(QUERY_FIELDS_MAP.MODELS_TEXT_SEARCH),
       ];
     }
 

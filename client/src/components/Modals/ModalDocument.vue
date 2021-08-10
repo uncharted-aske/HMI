@@ -1,8 +1,15 @@
 <template>
   <modal @close="onClickClose">
-    <div slot="header">
-      <a :href="url" target="_blank"><h3>{{ title }}</h3></a>
-      <h5 class="m-0">{{ doi }}</h5>
+    <div class="flex-grow-1" slot="header">
+      <a :href="url" target="_blank">
+        <h3>{{ title }}</h3>
+      </a>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">{{ doi }}</h5>
+        <button class="btn btn-primary" @click="openKnowledgeView(true)">
+          Search Document Artifacts
+        </button>
+      </div>
     </div>
     <div slot="body" class="d-flex flex-column flex-grow-1">
       <div class="d-flex flex-grow-1">
@@ -43,16 +50,18 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
+  import { Action } from 'vuex-class';
 
   import { getAuthorList } from '@/utils/CosmosDataUtil';
+  import { addSearchTerm, newFilters } from '@/utils/FiltersUtil';
   import CloseButton from '@/components/widgets/CloseButton.vue';
 
   import SimilarDocs from '@/components/SimilarDocs.vue';
   import Modal from '@/components/Modal.vue';
-  import { CardInterface } from '@/types/types';
   import {
     CosmosArtifactInterface,
     CosmosArtifactObjectInterface,
+    CosmosSearchObjectsInterface,
     CosmosSearchBibjsonInterface,
     CosmosSearchChildrenInterface,
   } from '@/types/typesCosmos';
@@ -65,7 +74,9 @@
 
   @Component({ components })
   export default class ModalDocument extends Vue {
-    @Prop({ required: false }) private data: CardInterface;
+    @Action setFilters;
+
+    @Prop({ required: false }) private data: CosmosSearchObjectsInterface;
     @Prop({ required: false }) private artifact: CosmosArtifactInterface;
     @Prop({ default: false }) linkToKnowledgeSpace: boolean;
 
@@ -74,11 +85,11 @@
     }
 
     get bibjson (): CosmosSearchBibjsonInterface {
-      return this.artifact?.bibjson ?? this.data?.raw?.bibjson;
+      return this.artifact?.bibjson ?? this.data?.bibjson;
     }
 
     get children (): CosmosSearchChildrenInterface[] | CosmosArtifactObjectInterface[] {
-      return this.artifact?.objects ?? this.data?.raw.children ?? [];
+      return this.artifact?.objects ?? this.data?.children ?? [];
     }
 
     get doi (): string {
@@ -94,7 +105,7 @@
     }
 
     get title (): string {
-      return this.bibjson?.title ?? this.data?.title ?? '';
+      return this.bibjson?.title ?? '';
     }
 
     get excerpt (): string {
@@ -106,7 +117,7 @@
     }
 
     get imagePreview (): string {
-      return this.children?.[0]?.bytes ?? this.data?.previewImageSrc;
+      return this.children?.[0]?.bytes;
     }
 
     get imageStyle (): any {
@@ -135,10 +146,16 @@
       e.stopPropagation();
     }
 
-    openKnowledgeView () : void {
+    openKnowledgeView (loadId: boolean) : void {
       const name = 'docsCards';
-      const args = this.doi ? { name, query: { doi: this.doi } } : { name };
+      const args = { name };
       this.$router.push(args);
+
+      if (loadId) {
+        const filters = newFilters();
+        addSearchTerm(filters, 'cosmosDoi', this.doi, 'or', false);
+        this.setFilters(filters);
+      }
     }
   }
 </script>

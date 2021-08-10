@@ -23,6 +23,7 @@
   --selection-highlight-dark: var(--nord9);
   --muted: #B6C3CE;
   --muted-highlight: #86B3D0;
+  --error: var(--nord11);
 
   /**
    * Text

@@ -10,6 +10,7 @@ enum RequestCommand {
   // GET_MODEL_SCHEMATIC = 'get-model-schematic',
   GET_MODEL_SOURCE = 'get-model-source',
   LIST_MODELS = 'list-models',
+  QUERY_MODELS = 'query-models',
   SIMULATE = 'simulate',
   // UPLOAD_MODEL = 'upload-model',
 }
@@ -94,6 +95,7 @@ type Request = {
   start?: number;
   step?: number;
   'sim-type'?: SimulationType | void,
+  text?: string,
   // type?: string;
 }
 

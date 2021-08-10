@@ -10,6 +10,7 @@
         slot="content"
         v-if="activeTabId === 'metadata'"
         :metadata="selectedGraphMetadata"
+        @open-modal="onOpenModalMetadata"
       />
     </left-side-panel>
 
@@ -79,6 +80,7 @@
         v-if="drilldownActiveTabId === 'metadata' && drilldownMetadata"
         slot="content"
         :metadata="drilldownMetadata"
+        :model-name="selectedModel.name"
         @open-modal="onOpenModalMetadata"
       />
       <parameters-pane
@@ -114,6 +116,7 @@
   import { RawLocation } from 'vue-router';
   import { Watch } from 'vue-property-decorator';
   import { bgraph } from '@uncharted.software/bgraph';
+  import { merge } from 'lodash';
 
   import {
     filterToBgraph,
@@ -124,7 +127,7 @@
   import * as Model from '@/types/typesModel';
   import * as GroMEt from '@/types/typesGroMEt';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
-  import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters } from '@/services/CosmosFetchService';
+  import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters, cosmosArtifactsMem } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
 
   import { NodeTypes } from '@/graphs/svg/encodings';
@@ -360,9 +363,23 @@
           }) as GroMEt.CodeCollectionInterface;
 
           if (codeCollection?.global_reference_id?.id) {
-            this.drilldownKnowledge = await cosmosSearch(filterToParamObj({
-              askeId: codeCollection.global_reference_id.id,
-            }));
+            this.drilldownKnowledge = merge(this.drilldownKnowledge, await cosmosSearch(filterToParamObj({
+              cosmosAskeId: codeCollection.global_reference_id.id,
+            })));
+          }
+
+          const textualDocumentReference = this.selectedGraphMetadata.find(metadata => {
+            return metadata.metadata_type === GroMEt.MetadataType.TextualDocumentReferenceSet;
+          }) as GroMEt.TextualDocumentReferenceSet;
+
+          if (textualDocumentReference?.documents?.length) {
+            this.drilldownKnowledge = merge(this.drilldownKnowledge, await cosmosSearch(filterToParamObj({
+              cosmosAskeId: textualDocumentReference.documents[0].global_reference_id.id,
+            })));
+          }
+
+          if (this.drilldownKnowledge.objects) {
+            delete this.drilldownKnowledge.error;
           }
         }
       } catch (e) {
@@ -402,8 +419,14 @@
       this.showModalParameters = true;
     }
 
-    onOpenModalMetadata ():void {
-      // this.modalDataMetadata = bibjson;
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async onOpenModalMetadata (doc: any): Promise<void> {
+      if (doc) {
+        this.modalDataMetadata = merge(
+          await cosmosArtifactsMem({ aske_id: doc.global_reference_id.id }),
+          doc,
+        );
+      }
       this.showModalMetadata = true;
     }
   }
