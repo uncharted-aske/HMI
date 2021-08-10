@@ -172,5 +172,4 @@ export default class ProvenanceRenderer extends SVGRenderer {
         return `url(#start-${source}-${target}`;
       });
   }
-
 }
