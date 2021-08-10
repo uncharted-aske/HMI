@@ -40,6 +40,7 @@
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
     />
+    <graph-legend />
   </section>
 </template>
 
@@ -54,10 +55,12 @@
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
+  import GraphLegend from '@/views/Models/components/Graphs/GraphLegend.vue';
 
   const components = {
     Counters,
     GlobalGraph,
+    GraphLegend,
     SettingsBar,
   };
 

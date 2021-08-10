@@ -11,8 +11,8 @@
     }"
   >
     <header>
-      Legend
       <button type="button" @click="toggleLegend()">
+        Legend
         <font-awesome-icon :icon="['fas', toggleIcon ]" />
       </button>
     </header>
@@ -96,25 +96,18 @@
   }
 
   header {
-    font-size: .85em;
-    font-weight: bold;
-    line-height: 1rem;
     padding: .33em 0;
     text-align: center;
-    text-transform: uppercase;
   }
 
   header button {
     background-color: var(--background-colour);
     border: none;
+    font-size: .85em;
+    font-weight: bold;
+    line-height: 1rem;
     outline: none;
-  }
-
-  .legend {
-    max-height: 0;
-    padding: 0;
-    transition: all 500ms ease-in-out;
-    will-change: max-height, padding;
+    text-transform: uppercase;
   }
 
   .legend ul {
@@ -128,9 +121,16 @@
   }
 
   /* isOpen */
+  .legend {
+    max-height: 0;
+    padding: 0;
+    transition: max-height 100ms, padding 50ms;
+    will-change: max-height, padding;
+  }
   .graph-legend.open .legend {
     max-height: 100vh;
     padding: 1em;
+    transition: max-height 250ms, padding 50ms;
   }
 </style>
 <style>
