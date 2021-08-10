@@ -15,26 +15,6 @@
         :data="countersData"
       />
       <aside slot="right">
-        <div class="btn-group" title="Add/Remove All Parameters & Variables">
-          <button
-            class="btn btn-secondary"
-            title="Add all Parameters & Variables"
-            type="button"
-            :disabled="allParametersAreDisplayed"
-            @click="onAddAllParameters"
-          >
-            <font-awesome-icon :icon="['fas', 'plus']" />
-          </button>
-          <button
-            class="btn btn-secondary"
-            title="Remove all Parameters & Variables"
-            type="button"
-            :disabled="noDisplayedParameters"
-            @click="onRemoveAllParameters"
-          >
-            <font-awesome-icon :icon="['fas', 'ban']" />
-          </button>
-        </div>
         <button
           class="btn btn-secondary"
           title="Expand Parameters Panel"
@@ -44,22 +24,25 @@
         </button>
       </aside>
     </settings-bar>
-    <div class="parameters">
+    <div class="parameters" :class="{ message: someParametersAreInvalid}">
       <figure class="parameters-graph" ref="figure"><svg /></figure>
-       <message-display class="m-3" v-if="noDisplayedParameters">
-        <span slot="message">
+
+      <message-display v-if="noDisplayedParameters">
         Use the model visualization on the left or the
         <font-awesome-icon class="icon" :icon="['fas', 'plus']"/> and
         <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
-        buttons above to add/remove parameters.
-        </span>
+        buttons above to add/remove <strong>parameters</strong>.
       </message-display>
+
       <ul v-else class="parameters-list">
         <li
           class="parameter"
           v-for="(parameter, index) of displayedParameters"
           :key="index"
-          :class="{ highlighted: parameter.metadata.name === highlighted }"
+          :class="{
+            error: nonValidValue(parameterValues[parameter.uid]),
+            highlighted: parameter.metadata.name === highlighted,
+          }"
         >
           <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
           <input type="text" v-model.number="parameterValues[parameter.uid]" />
@@ -75,6 +58,10 @@
           </aside>
         </li>
       </ul>
+
+      <message-display v-if="someParametersAreInvalid && !noDisplayedParameters" messageType="danger">
+        One or more <strong>parameters</strong> values are&nbsp;invalid.
+      </message-display>
     </div>
   </section>
 </template>
@@ -87,7 +74,7 @@
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
   import svgUtil from '@/utils/SVGUtil';
-  import { shorterNb } from '@/utils/NumberUtil';
+  import { scientificNotation } from '@/utils/NumberUtil';
   import * as HMI from '@/types/types';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -111,10 +98,6 @@
     @Getter getSimParameterArray;
     @Action setSimParameterValue;
     @Action hideParameter;
-    @Action hideAllParameters;
-    @Action showAllParameters;
-    @Action hideAllVariables;
-    @Action showAllVariables;
 
     private padding: number = 5;
     private parameterHeight: number = 75;
@@ -141,7 +124,15 @@
       // This is used to set default parameter values.
       this.parameters.forEach(parameter => {
         if (!Object.prototype.hasOwnProperty.call(this.parameterValues, parameter.uid)) {
-          this.$set(this.parameterValues, parameter.uid, parameter.values[0]);
+          let value = parameter.values[0];
+
+          // If the we have no default value and the parameter is a initial value,
+          // set it up to 1 so the user can run the model right away.
+          if (parameter.uid.includes('_init') && !value) {
+            value = 1;
+          }
+
+          this.$set(this.parameterValues, parameter.uid, value);
         }
       });
     }
@@ -149,11 +140,14 @@
     // Parameters values update
     @Watch('triggerParameterValues') onParameterValuesChange (): void {
       this.parameters.forEach(parameter => {
-        if (this.parameterValues[parameter.uid] !== parameter.values[0]) {
+        const inputValue = this.parameterValues[parameter.uid];
+        const currentValue = parameter.values[parameter.values.length - 1];
+
+        if (inputValue !== currentValue) {
           this.setSimParameterValue({
             modelId: this.modelId,
             uid: parameter.uid,
-            value: this.parameterValues[parameter.uid],
+            value: inputValue,
           });
         }
       });
@@ -176,10 +170,6 @@
 
     get noDisplayedParameters (): boolean {
       return this.displayedParameters.length === 0;
-    }
-
-    get allParametersAreDisplayed (): boolean {
-      return this.displayedParameters.length === this.parameters.length;
     }
 
     get countersTitle (): string {
@@ -300,27 +290,28 @@
               .attr('x', xMinMax[0])
               .attr('text-anchor', 'end')
               .attr('transform', svgUtil.translate(-this.padding, 3))
-              .text(d => shorterNb(xScales.get(d).min));
+              .text(d => scientificNotation(xScales.get(d).min));
 
             // max label
             g.append('text')
               .attr('x', xMinMax[1])
               .attr('transform', svgUtil.translate(this.padding, 3))
-              .text(d => shorterNb(xScales.get(d).max));
+              .text(d => scientificNotation(xScales.get(d).max));
 
             return g;
           });
     }
 
-    onAddAllParameters (): void {
-      this.showAllParameters(this.modelId);
-      this.showAllVariables(this.modelId);
+    nonValidValue (value: number): boolean {
+      return !_.isNumber(value) || Number.isNaN(value);
     }
 
-    onRemoveAllParameters (): void {
-      this.parameterValues = {};
-      this.hideAllParameters(this.modelId);
-      this.hideAllVariables(this.modelId);
+    get someParametersAreInvalid (): boolean {
+      // Make sure that for every parameters, their current value is valid.
+      return this.parameters.some(parameter => {
+        const currentValue = parameter.values[parameter.values.length - 1];
+        return this.nonValidValue(currentValue);
+      });
     }
   }
 </script>
@@ -335,8 +326,17 @@
   .parameters {
     background-color: var(--bg-graphs);
     flex-grow: 1;
+    overflow-x: hidden; /* Hide horizontal scrollbar */
     overflow-y: auto;
     position: relative;
+    scroll-snap-points-y: repeat(var(--parameter-height));
+    scroll-snap-destination: 0 0;
+    scroll-snap-type: y mandatory;
+    scroll-snap-type: mandatory;
+  }
+
+  .parameters.message {
+    --parameter-margin-top: 7em;
   }
 
   .parameters-graph,
@@ -346,7 +346,7 @@
     margin: 0;
     position: absolute;
     right: 0;
-    top: 0;
+    top: var(--parameter-margin-top, 0);
   }
 
   .parameters-list {
@@ -355,6 +355,7 @@
   }
 
   .parameter {
+    border: 1px solid transparent;
     display: grid;
     grid-template-areas:
       "name axis action"
@@ -364,7 +365,7 @@
     grid-template-rows: 1fr 1fr;
     height: var(--parameter-height);
     padding: var(--padding);
-    border: 1px solid transparent;
+    scroll-snap-align: start;
   }
 
   .parameter:last-of-type {
@@ -404,6 +405,20 @@
 
   .parameter.highlighted {
     border-color: var(--selection);
+  }
+
+  .parameter.error {
+    border-color: var(--error);
+  }
+
+  .parameter.error input {
+    background-color: var(--error);
+  }
+
+  .parameters .message-display {
+    margin: 1em;
+    position: sticky;
+    top: 1em;
   }
 </style>
 <style>

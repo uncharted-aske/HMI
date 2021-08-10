@@ -55,10 +55,10 @@
                       @background-click ="onBackgroundClick"
                       @loaded="subgraphLoading = false"/>
           <message-display v-if="showMessageTooLarge" class="m-3">
-            <span slot="message">Results are too large. Keep adding filters to reduce the size.</span>
+            Results are too large. Keep adding filters to reduce the size.
           </message-display>
           <message-display v-if="showMessageEmpty" class="m-3">
-            <span slot="message">Results are empty. Try another query.</span>
+            Results are empty. Try another query.
           </message-display>
         </div>
       </resizable-grid>
