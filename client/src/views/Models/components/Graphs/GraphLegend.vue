@@ -89,9 +89,10 @@
     --background-colour: white;
     background-color: var(--background-colour);
     border: var(--border);
-    border-radius: 5px 5px 0 0;
-    bottom: 0;
-    left: 1rem;
+    border-radius: 5px;
+    bottom: .5em;
+    left: 1em;
+    overflow: hidden;
     position: absolute;
   }
 
