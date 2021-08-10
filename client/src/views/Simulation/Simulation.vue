@@ -130,7 +130,7 @@
 
     isProvenanceGraphOpen: boolean = false;
     provenanceActivePaneId: string = '';
-    provenanceGraphData: any = null;
+    provenanceGraphData: Graph.GraphInterface = null;
 
     @Action fetchModelResults;
     @Action incrNumberOfSavedRuns;
@@ -293,7 +293,19 @@
         // Set the provenance graph state to open and show the condensed graph by default
         this.isProvenanceGraphOpen = true;
         this.provenanceActivePaneId = 'condensed';
-        this.provenanceGraphData = 'Condensed Provenance Graph Placeholder';
+
+        // Toy data to test renderer
+        this.provenanceGraphData = ({
+          nodes: [{ id: 'box', label: '', role: ['Box'], parent: null },
+              { id: 'Select', label: 'Select', role: ['Operation'], parent: 'box' },
+              { id: 'Execute 1', label: 'Execute', role: ['Operation'], parent: 'box' },
+              { id: 'Edit 1', label: 'Edit', role: ['Operation'], parent: 'box' },
+              ],
+          edges: [{ id: 'Edge 1', source: 'Select', target: 'Execute 1' },
+                  { id: 'Edge 2', source: 'Select', target: 'Edit 1' },
+                  { id: 'Edge 3', source: 'Edit 1', target: 'Execute 1' },
+                ],
+        });
       }
     }
 
@@ -302,9 +314,9 @@
 
       // provenanceGraphData is a placeholder to show the toggle between condensed and expanded
       if (this.provenanceActivePaneId === 'condensed') {
-        this.provenanceGraphData = 'Condensed Provenance Graph Placeholder';
+        // this.provenanceGraphData = 'Condensed Provenance Graph Placeholder';
       } else {
-        this.provenanceGraphData = 'Expanded Provenance Graph Placeholder';
+        // this.provenanceGraphData = 'Expanded Provenance Graph Placeholder';
       }
     }
 

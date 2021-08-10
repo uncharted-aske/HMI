@@ -53,7 +53,6 @@
 <style scoped>
 .provenance-graph-container {
   background-color: var(--bg-graphs);
-  /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
