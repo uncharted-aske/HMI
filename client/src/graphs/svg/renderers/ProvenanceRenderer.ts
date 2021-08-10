@@ -2,12 +2,11 @@ import * as d3 from 'd3';
 
 import { SVGRenderer } from 'svg-flowgraph';
 
-import { SVGRendererOptionsInterface, SubgraphInterface, SubgraphNodeInterface } from '@/types/typesGraphs';
+import { SVGRendererOptionsInterface } from '@/types/typesGraphs';
 
-import { calcLabelColor, flatten } from '@/graphs/svg/util';
-import { Colors, NodeTypes } from '@/graphs/svg/encodings';
+import { flatten } from '@/graphs/svg/util';
+import { Colors } from '@/graphs/svg/encodings';
 import SVGUtil from '@/utils/SVGUtil';
-import { select } from 'd3';
 
 const pathFn = SVGUtil.pathFn().curve(d3.curveBasis);
 
@@ -37,16 +36,6 @@ export default class ProvenanceRenderer extends SVGRenderer {
 
   static calcNodeColor (d: d3.Selection<any, any, any, any>): string {
     return (d as any).nodes ? Colors.NODES.CONTAINER : DEFAULT_STYLE.node.fill;
-  }
-
-  static calcNodeStrokeStyle (d: d3.Selection<any, any, any, any>): string {
-    return !(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE) ? '5,5' : null;
-  }
-
-  static calcNodeStrokeWidth (d: d3.Selection<any, any, any, any>): number {
-    if (!(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE)) {
-      return DEFAULT_STYLE.node.strokeWidth + 1;
-    } else return DEFAULT_STYLE.node.strokeWidth;
   }
 
   buildDefs (): void {
@@ -129,8 +118,6 @@ export default class ProvenanceRenderer extends SVGRenderer {
           .attr('height', d => (d as any).height)
           .style('fill', ProvenanceRenderer.calcNodeColor)
           .style('stroke', DEFAULT_STYLE.node.stroke)
-          .style('stroke-width', ProvenanceRenderer.calcNodeStrokeWidth)
-          .style('stroke-dasharray', ProvenanceRenderer.calcNodeStrokeStyle)
           .style('cursor', d => (d as any).nodes ? '' : 'pointer');
       } else {
         selection.append('ellipse')
@@ -140,8 +127,6 @@ export default class ProvenanceRenderer extends SVGRenderer {
           .attr('ry', d => (d as any).height * 0.5)
           .style('fill', ProvenanceRenderer.calcNodeColor)
           .style('stroke', DEFAULT_STYLE.node.stroke)
-          .style('stroke-width', ProvenanceRenderer.calcNodeStrokeWidth)
-          .style('stroke-dasharray', ProvenanceRenderer.calcNodeStrokeStyle)
           .style('cursor', 'pointer');
       }
 
