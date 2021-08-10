@@ -138,7 +138,7 @@
   .graph-legend .legend svg {
     display: inline-block;
     margin-right: 1em;
-    width: 8em;
+    width: 5em;
   }
 
   .graph-legend .legend rect,
