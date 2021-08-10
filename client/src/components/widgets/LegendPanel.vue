@@ -49,7 +49,7 @@
   }
 
   header {
-    padding: .33em 0;
+    padding: .33em 2em;
     text-align: center;
   }
 
