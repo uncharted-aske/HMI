@@ -36,6 +36,7 @@
       v-if="graph"
       :data="graph"
       :displayed-nodes="displayedNodes"
+      :layout="getModelsLayout"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
@@ -68,6 +69,7 @@
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
+    @Getter getModelsLayout;
 
     @Action hideAllParameters;
     @Action showAllParameters;

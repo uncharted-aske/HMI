@@ -50,10 +50,10 @@
         <settings
           slot="right"
           :layouts="layouts"
-          :selected-layout-id="selectedLayoutId"
+          :selected-layout-id="getModelsLayout"
           :selected-view-id="getSelectedModelGraphType"
           :views="graphTypesAvailable"
-          @layout-change="onSetLayout"
+          @layout-change="setModelsLayout"
           @view-change="setSelectedModelGraphType"
         />
       </settings-bar>
@@ -61,7 +61,7 @@
       <global-graph
         :data="selectedGraph"
         :subgraph="subgraph"
-        :layout="selectedLayoutId"
+        :layout="getModelsLayout"
         @node-click="onNodeClick"
         @background-click="onBackgroundClick"
       />
@@ -202,7 +202,6 @@
     activeTabId: string = 'metadata';
 
     layouts: GraphLayoutInterface[] = LAYOUTS;
-    selectedLayoutId: string = GraphLayoutInterfaceType.elk;
 
     drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
@@ -226,8 +225,10 @@
     @Getter getModelsList;
     @Getter getFilters;
     @Getter getSelectedModelGraphType;
+    @Getter getModelsLayout;
     @Mutation setSelectedModels;
     @Mutation setSelectedModelGraphType;
+    @Mutation setModelsLayout;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.executeFilters();
@@ -349,10 +350,6 @@
       this.drilldownPaneTitle = '';
       this.drilldownPaneSubtitle = '';
       this.drilldownMetadata = null;
-    }
-
-    onSetLayout (layoutId: string): void {
-      this.selectedLayoutId = layoutId;
     }
 
     async getDrilldownKnowledge (): Promise<void> {

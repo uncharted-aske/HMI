@@ -45,6 +45,7 @@ type State = {
   modelsList: Model[],
   selectedModelGraphType?: GraphTypes,
   selectedModelIds: Set<string>,
+  modelsLayout: string,
 };
 
 export {
