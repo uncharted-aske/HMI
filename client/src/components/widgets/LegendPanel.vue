@@ -66,6 +66,7 @@
   .legends {
     display: flex;
     flex-direction: row;
+    gap: 2em;
   }
 
   /* isOpen */
