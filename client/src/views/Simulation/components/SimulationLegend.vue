@@ -2,7 +2,7 @@
   <ul class="legend-simulation">
     <li class="run current">Current Run</li>
     <li class="run previous">Previous Runs</li>
-    <li class="run aggregate">Aggregate of all Runs</li>
+    <li class="run average">Average of all Runs</li>
     <li class="observational">Observational Data</li>
   </ul>
 </template>
@@ -34,18 +34,18 @@
     width: 3em;
   }
 
-  .aggregate::before {
+  .run.average::before {
     background-color: var(--selection);
   }
 
-  .current::before {
+  .run.current::before {
     background-color: var(--colours-nodes-default);
 
     /* To help separate from the panel background */
     border: 1px solid var(--nord4);
   }
 
-  .previous::before {
+  .run.previous::before {
     background-color: var(--colours-nodes-other);
   }
 
