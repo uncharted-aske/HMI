@@ -93,6 +93,7 @@
     activeTabId: string = 'facets';
     allowModelSourceList: string[] = []; // Models that should not be filtered
     dataLoading: boolean = true; // Toggles loading screen
+    displaySearch: boolean = false; // Toggles search bar
     models: Model.Model[] = [];
 
     @Action resetSelectedModelIds;
@@ -215,6 +216,10 @@
 </script>
 
 <style scoped>
+  .view-container {
+    flex-direction: column;
+  }
+
   .search-bar {
     background-color: var(--bg-secondary);
     flex-shrink: 0;
