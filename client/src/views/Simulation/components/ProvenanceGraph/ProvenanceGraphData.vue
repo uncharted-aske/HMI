@@ -1,23 +1,17 @@
 <template>
-  <div class="provenance-graph-data" ref="graph" />
+  <section class="provenance-graph-data" ref="graph" />
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop, Watch } from 'vue-property-decorator';
-
   import { expandCollapse } from 'svg-flowgraph';
-
   import { GraphInterface } from '@/types/typesGraphs';
+  import { DEFAULT_RENDERING_OPTIONS } from '@/graphs/svg/renderers/EpiRenderer';
 
   import ProvenanceRenderer from '@/graphs/svg/renderers/ProvenanceRenderer';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
-
-  const DEFAULT_RENDERING_OPTIONS = {
-    nodeWidth: 120,
-    nodeHeight: 40,
-  };
 
   @Component({ })
   export default class ProvenanceGraphData extends Vue {

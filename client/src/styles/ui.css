@@ -21,4 +21,5 @@
   --navbar-outer-height: 56px; /* Main navbar height */
   --content-full-height: calc(100vh - var(--navbar-outer-height));
   --secondary-bar-width: 50px; /* Secondary bar width */
+  --provenance-graph-height: 25vh;
 }

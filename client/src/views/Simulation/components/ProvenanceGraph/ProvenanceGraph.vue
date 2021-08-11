@@ -56,14 +56,14 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 25vh;
+  height: var(--provenance-graph-height);
   padding: 5px;
   width: var(--content-full-width);
   z-index: var(--z-index--side-panel);
 }
 
 .provenance-graph-data {
-  height: 24vh;
+  height: var(--provenance-graph-height);
   width: var(--content-full-width);
 }
 
