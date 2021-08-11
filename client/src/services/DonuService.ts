@@ -81,6 +81,22 @@ const convertGrometEdgesDataToBGraphEdgesData = (edges: any[]): any[] => {
   return bgEdges;
 };
 
+/** Query available models from Donu API */
+export const queryDonuModels = async (text: string): Promise<any[]> => {
+  const request: Donu.Request = {
+    command: Donu.RequestCommand.QUERY_MODELS,
+    text,
+  };
+
+  const response = await callDonuCache(request);
+  if (response.status === Donu.ResponseStatus.success) {
+    const models = response.result ?? [];
+    return models;
+  } else {
+    console.error('[DONU Service] — queryDonuModels', response); // eslint-disable-line no-console
+  }
+};
+
 // HACK: Remove when we fetch CHIME+ from DONU
 // eslint-disable-next-line
 export const buildStaticModelsList = ({ CHIMEPlus }: any, modelIndex: number): Model.Model[] => {
