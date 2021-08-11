@@ -10,7 +10,7 @@ import SVGUtil from '@/utils/SVGUtil';
 
 const pathFn = SVGUtil.pathFn().curve(d3.curveBasis);
 
-const DEFAULT_STYLE = {
+export const DEFAULT_STYLE = {
   node: {
     fill: Colors.NODES.DEFAULT,
     stroke: Colors.STROKE,
@@ -27,6 +27,13 @@ const DEFAULT_STYLE = {
     controlStrokeWidth: 2,
     controlStrokeColor: Colors.NODES.DEFAULT,
   },
+};
+
+export const DEFAULT_RENDERING_OPTIONS = {
+  nodeHeight: 40,
+  nodeWidth: 120,
+  padding: 5,
+  parameterNodeSize: 30,
 };
 
 export default class EpiRenderer extends SVGRenderer {
