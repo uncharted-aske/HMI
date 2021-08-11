@@ -3,6 +3,7 @@ import * as HMI from '@/types/types';
 import * as Model from '@/types/typesModel';
 import { getModelParameters, getModelResult, getModelVariables } from '@/services/DonuService';
 import * as d3 from 'd3';
+import _ from 'lodash';
 
 const state: HMI.SimulationState = {
   numberOfSavedRuns: 0,
@@ -109,7 +110,11 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
 
   async initializeParameters ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
     const donuParameters = await getModelParameters(args.model, args.selectedModelGraphType) ?? [];
-    const parameters = donuParameters.map(donuParameter => {
+
+    // Filter out parameters with the same not so unique UID.
+    const uniqueDonuParameters = _.uniqBy(donuParameters, 'uid');
+
+    const parameters = uniqueDonuParameters.map(donuParameter => {
       const parameter = {
         ...donuParameter,
         displayed: false,
@@ -123,6 +128,7 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
 
       return parameter;
     });
+
     commit('setSimParameters', { modelId: args.model.id, parameters });
     commit('setNumberOfSavedRuns', 0);
   },
