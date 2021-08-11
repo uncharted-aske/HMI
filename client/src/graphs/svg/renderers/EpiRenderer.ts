@@ -21,6 +21,7 @@ const DEFAULT_STYLE = {
   },
   edge: {
     fill: 'none',
+    opacity: 1,
     stroke: Colors.EDGES.DEFAULT,
     strokeWidth: 5,
     controlRadius: 6,
@@ -46,6 +47,10 @@ export default class EpiRenderer extends SVGRenderer {
     if (!(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE)) {
       return DEFAULT_STYLE.node.strokeWidth + 1;
     } else return DEFAULT_STYLE.node.strokeWidth;
+  }
+
+  static calcEdgeOpacity (edgeSelection: d3.Selection<any, any, any, any>): number {
+    return edgeSelection.size() >= 100 ? 0.1 : DEFAULT_STYLE.edge.opacity;
   }
 
   buildDefs (): void {
@@ -178,11 +183,13 @@ export default class EpiRenderer extends SVGRenderer {
     });
   }
 
-  renderEdge (edgeSelection:d3.Selection<any, any, any, any>):void {
+  renderEdge (edgeSelection: d3.Selection<any, any, any, any>): void {
+    const opacity = EpiRenderer.calcEdgeOpacity(edgeSelection);
     edgeSelection.append('path')
       .classed('edge-path', true)
       .attr('d', d => pathFn(d.points))
       .style('fill', DEFAULT_STYLE.edge.fill)
+      .style('opacity', opacity)
       .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
       .style('stroke', DEFAULT_STYLE.edge.stroke)
       .attr('marker-end', d => {
