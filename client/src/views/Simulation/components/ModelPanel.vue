@@ -2,31 +2,7 @@
   <section class="simulation-model-panel">
     <settings-bar>
       <counters slot="left" :title="modelName" :data="countersData" />
-<<<<<<< HEAD
       <aside slot="right" v-if="expandable">
-=======
-      <aside slot="right">
-        <div class="btn-group" title="Add/Remove All Parameters & Variables">
-          <button
-            class="btn btn-secondary"
-            title="Add all Parameters & Variables"
-            type="button"
-            :disabled="allParametersAndVariablesAreDisplayed"
-            @click="onAddAllParametersAndVariables"
-          >
-            <font-awesome-icon :icon="['fas', 'plus']" />
-          </button>
-          <button
-            class="btn btn-secondary"
-            title="Remove all Parameters & Variables"
-            type="button"
-            :disabled="noDisplayedParametersAndVariables"
-            @click="onRemoveAllParametersAndVariables"
-          >
-            <font-awesome-icon :icon="['fas', 'ban']" />
-          </button>
-        </div>
->>>>>>> main
         <button
           class="btn btn-secondary"
           title="Expand Model Panel"
