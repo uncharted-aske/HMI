@@ -115,6 +115,13 @@
   import ProvenanceGraphData from '@/views/Simulation/components/ProvenanceGraph/ProvenanceGraphData.vue';
   import { ProvenanceData } from '@/views/Simulation/components/ProvenanceGraph/ProvenanceData';
 
+  const MODEL_COMPARISON = {
+    gamma: 'rec_u',
+    I: 'I_U',
+    R: 'R',
+    S: 'S',
+    beta: 'inf_uu',
+  };
   const components = {
     Counters,
     GraphLegend,

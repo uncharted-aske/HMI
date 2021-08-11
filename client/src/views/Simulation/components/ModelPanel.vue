@@ -36,11 +36,11 @@
       v-if="graph"
       :data="graph"
       :displayed-nodes="displayedNodes"
+      :overlapping-elements="overlappingElements"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
     />
-    <graph-legend />
   </section>
 </template>
 
@@ -55,12 +55,10 @@
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
-  import GraphLegend from '@/views/Models/components/Graphs/GraphLegend.vue';
 
   const components = {
     Counters,
     GlobalGraph,
-    GraphLegend,
     SettingsBar,
   };
 
@@ -68,6 +66,8 @@
   export default class ModelPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
+    @Prop({ default: true }) expandable: boolean;
+    @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
@@ -83,11 +83,11 @@
     settingsOpen: boolean = false;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      this.$emit('highlight', selected.label);
+      this.$emit('highlight', { label: selected.label, modelName: this.modelName });
     }
 
     onBackgroundClick (): void {
-      this.$emit('highlight', '');
+      this.$emit('highlight', null);
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {

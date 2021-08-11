@@ -51,12 +51,12 @@ const RouterSingleton = ((): any => {
           component: Model,
         },
         {
-          path: '/simulation/:model_id',
+          path: '/simulation/:model_ids',
           name: 'simulation',
           component: Simulation,
         },
         {
-          path: '/comparison',
+          path: '/comparison/:model_ids',
           name: 'comparison',
           component: Comparison,
         },
