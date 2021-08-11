@@ -1,29 +1,41 @@
 <template>
   <div class="view-container">
-    <main>
-      <div class="search-row">
-        <search-bar :pills="searchPills" :placeholder="`Search for Models...`"/>
+    <header>
+      <button
+        class="btn btn-primary"
+        :class="{ 'active': displaySearch }"
+        @click="displaySearch = !displaySearch"
+      >
+        <font-awesome-icon :icon="['fas', 'search' ]" />
+        Search
+      </button>
+    </header>
+
+    <aside class="search-bar" :class="{ 'active': displaySearch }">
+      <search-bar :pills="searchPills" :placeholder="`Search for Models...`"/>
+    </aside>
+
+    <settings-bar>
+      <counters slot="left" :data="countersData"/>
+      <div slot="right">
+        <button
+          v-if="nbSelectedModelsIds > 0"
+          class="btn btn-primary"
+          type="button"
+          @click="onClickAction"
+        >
+          {{ nbSelectedModelsIds > 1 ? 'Compare' : 'Open' }}
+        </button>
       </div>
-      <settings-bar>
-        <counters slot="left" :data="countersData"/>
-        <div slot="right">
-          <button
-            v-if="nbSelectedModelsIds > 0"
-            class="btn btn-primary"
-            type="button"
-            @click="onClickAction"
-          >
-            {{ nbSelectedModelsIds > 1 ? 'Compare' : 'Open' }}
-          </button>
-        </div>
-      </settings-bar>
-      <card-container v-if="!dataLoading"
-        class="models-cards"
-        :cards="modelsCards"
-        @click-card="onClickCard"
-      />
-      <loader :loading="dataLoading" />
-    </main>
+    </settings-bar>
+
+    <loader v-if="dataLoading" loading="true" />
+    <card-container
+      v-else
+      class="models-cards"
+      :cards="modelsCards"
+      @click-card="onClickCard"
+    />
   </div>
 </template>
 
@@ -203,10 +215,23 @@
 </script>
 
 <style scoped>
-  main {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
+  .search-bar {
+    background-color: var(--bg-secondary);
+    flex-shrink: 0;
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none; /* Avoid potential clicks to happen */
+    transition: max-height 250ms ease-in-out;
+    will-change: max-height;
+  }
+
+  .search-bar.active {
+    max-height: 10rem; /* Random number bigger than actual height for the transition. */
+    pointer-events: auto;
+  }
+
+  .search-bar .search-bar-container {
+    margin-top: 0; /* To have an uniform spacing between the header and the search bar */
+    margin-bottom: 10px; /* To match the header vertical spacing */
   }
 </style>
