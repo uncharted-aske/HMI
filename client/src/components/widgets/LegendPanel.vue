@@ -64,9 +64,24 @@
   }
 
   .legends {
+    --gap: 1em;
     display: flex;
     flex-direction: row;
-    gap: 2em;
+  }
+
+  /* Border between legends */
+  .legends > *:nth-child(n+2) {
+    border-left: var(--border);
+    margin-left: var(--gap);
+    padding-left: var(--gap);
+  }
+
+  /* Optional Title for the legends */
+  .legends > *::before {
+    content: attr(title);
+    display: block;
+    font-weight: bold;
+    margin-bottom: 1em;
   }
 
   /* isOpen */

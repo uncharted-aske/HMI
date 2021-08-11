@@ -80,8 +80,8 @@
     </resizable-grid>
 
     <legend-panel>
-      <graph-legend />
-      <simulation-legend />
+      <graph-legend title="Graph" />
+      <simulation-legend title="Simulation" />
     </legend-panel>
   </div>
 </template>

@@ -3,6 +3,7 @@
     <li class="run current">Current Run</li>
     <li class="run previous">Previous Runs</li>
     <li class="run aggregate">Aggregate of all Runs</li>
+    <li class="observational">Observational Data</li>
   </ul>
 </template>
 
@@ -25,7 +26,7 @@
     margin-top: .5em;
   }
 
-  .run::before {
+  li::before {
     content: "\0A";
     display: inline-block;
     height: .5em;
@@ -46,5 +47,9 @@
 
   .previous::before {
     background-color: var(--colours-nodes-other);
+  }
+
+  .observational::before {
+    background-color: var(--colours-observational);
   }
 </style>
