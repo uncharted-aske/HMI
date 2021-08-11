@@ -62,6 +62,11 @@
   z-index: var(--z-index--side-panel);
 }
 
+.provenance-graph-data {
+  height: 24vh;
+  width: var(--content-full-width);
+}
+
 .panel-body {
   margin-top: 5px;
   overflow-x: hidden;

@@ -69,38 +69,6 @@ export default class ProvenanceRenderer extends SVGRenderer {
       .attr('d', SVGUtil.ARROW)
       .style('fill', Colors.EDGES.DEFAULT)
       .style('stroke', 'none');
-
-    // Create filter with id #drop-shadow for containers
-    // height=130% so that the shadow is not clipped
-    const filter = svg.select('defs').append('filter')
-      .attr('id', 'drop-shadow')
-      .attr('height', '130%');
-
-    // SourceAlpha refers to opacity of graphic that this filter will be applied to
-    // convolve that with a Gaussian with standard deviation 3 and store result
-    // in blur
-    filter.append('feGaussianBlur')
-      .attr('in', 'SourceAlpha')
-      .attr('stdDeviation', 8)
-      .attr('result', 'blur');
-
-    // translate output of Gaussian blur to the right and downwards with 2px
-    // store result in offsetBlur
-    filter.append('feOffset')
-      .attr('in', 'blur')
-      .attr('dx', 5)
-      .attr('dy', 5)
-      .attr('result', 'offsetBlur');
-
-    // overlay original SourceGraphic over translated blurred opacity by using
-    // feMerge filter. Order of specifying inputs is important!
-    const feMerge = filter.append('feMerge');
-
-    feMerge.append('feMergeNode')
-      .attr('in', 'offsetBlur');
-    feMerge.append('feMergeNode')
-      .attr('in', 'SourceGraphic')
-      .attr('color', 'SourceGraphic');
   }
 
   renderNode (nodeSelection: d3.Selection<any, any, any, any>): void {
@@ -108,7 +76,7 @@ export default class ProvenanceRenderer extends SVGRenderer {
       const selection = d3.select(this);
       const datum = selection.datum();
 
-      // Operations are displayed as rectangles while data is displayed as ellipses
+      // Operations are displayed as rectangles while models, parameters, and variables are displayed as ellipses
       if (!(datum as any).data.role?.includes('Operation')) {
         selection.append('rect')
           .attr('x', 0)

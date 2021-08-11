@@ -1,13 +1,13 @@
 <template>
-  <div class="global-graph-container" ref="graph" />
+  <div class="provenance-graph-data" ref="graph" />
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { Prop } from 'vue-property-decorator';
+  import { Prop, Watch } from 'vue-property-decorator';
 
-  import { expandCollapse, highlight } from 'svg-flowgraph';
+  import { expandCollapse } from 'svg-flowgraph';
 
   import { GraphInterface } from '@/types/typesGraphs';
 
@@ -26,6 +26,11 @@
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
 
+    @Watch('data')
+    dataChanged (): void {
+      this.refresh();
+    }
+
     mounted (): void {
       this.renderer = new ProvenanceRenderer({
         el: this.$refs.graph,
@@ -34,7 +39,7 @@
         useEdgeControl: false,
         useZoom: true,
         useMinimap: false,
-        addons: [expandCollapse, highlight],
+        addons: [expandCollapse],
       });
 
       this.refresh();
@@ -42,9 +47,6 @@
 
     async refresh (): Promise<void> {
       if (!this.data) return;
-
-      // Print data for debugging
-      console.log(this.data);
       this.renderer.setData(this.data);
       await this.renderer.render();
     }
@@ -53,8 +55,9 @@
 
 <style scoped>
   .provenance-graph-data {
-    display: flex;
-    color: #ffffff;
+    background-color: var(--bg-graphs);
+    flex: 1;
+    overflow: hidden;
   }
 
   .provenance-graph-data::v-deep > svg {
