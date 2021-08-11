@@ -220,6 +220,16 @@
     flex-direction: column;
   }
 
+  header {
+    align-items: center;
+    background-color: var(--bg-secondary);
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    justify-content: space-between;
+    padding: 10px 5px;
+  }
+
   .search-bar {
     background-color: var(--bg-secondary);
     flex-shrink: 0;
