@@ -79,6 +79,11 @@
         />
       </template>
     </resizable-grid>
+
+    <legend-panel>
+      <graph-legend title="Graph" />
+      <simulation-legend title="Simulation" />
+    </legend-panel>
   </div>
 </template>
 
@@ -99,7 +104,9 @@
   import Loader from '@/components/widgets/Loader.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import SearchBar from '@/components/SearchBar.vue';
-
+  import LegendPanel from '@/components/widgets/LegendPanel.vue';
+  import GraphLegend from '@/views/Models/components/Graphs/GraphLegend.vue';
+  import SimulationLegend from '@/views/Simulation/components/SimulationLegend.vue';
   import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
   import ParametersPanel from '@/views/Simulation/components/ParametersPanel.vue';
   import VariablesPanel from '@/views/Simulation/components/VariablesPanel.vue';
@@ -116,6 +123,8 @@
   };
   const components = {
     Counters,
+    GraphLegend,
+    LegendPanel,
     Loader,
     ModelPanel,
     ParametersPanel,
@@ -124,6 +133,7 @@
     ResizableGrid,
     RunButton,
     SearchBar,
+    SimulationLegend,
     VariablesPanel,
   };
 

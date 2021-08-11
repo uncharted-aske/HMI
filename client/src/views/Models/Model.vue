@@ -66,7 +66,9 @@
         @background-click="onBackgroundClick"
       />
 
-      <graph-legend open="open" />
+      <legend-panel open="open">
+        <graph-legend />
+      </legend-panel>
     </section>
 
     <drilldown-panel
@@ -143,6 +145,7 @@
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import GlobalGraph from './components/Graphs/GlobalGraph.vue';
+  import LegendPanel from '@/components/widgets/LegendPanel.vue';
   import GraphLegend from './components/Graphs/GraphLegend.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
@@ -185,6 +188,7 @@
     GraphLegend,
     KnowledgePane,
     LeftSidePanel,
+    LegendPanel,
     Loader,
     MetadataPane,
     MetadataPanel,
