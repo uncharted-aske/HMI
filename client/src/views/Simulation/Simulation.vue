@@ -54,6 +54,7 @@
           :expanded="expandedId === 'model'"
           :key="index"
           :model="model"
+          :overlapping-elements="model.modelGraph[0].overlappingElements"
           :slot="('model_' + model.id)"
           @highlight="onNodeHighlight"
           @expand="setExpandedId('model')"
@@ -78,6 +79,11 @@
         />
       </template>
     </resizable-grid>
+
+    <legend-panel>
+      <graph-legend title="Graph" />
+      <simulation-legend title="Simulation" />
+    </legend-panel>
   </div>
 </template>
 
@@ -98,7 +104,9 @@
   import Loader from '@/components/widgets/Loader.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import SearchBar from '@/components/SearchBar.vue';
-
+  import LegendPanel from '@/components/widgets/LegendPanel.vue';
+  import GraphLegend from '@/views/Models/components/Graphs/GraphLegend.vue';
+  import SimulationLegend from '@/views/Simulation/components/SimulationLegend.vue';
   import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
   import ParametersPanel from '@/views/Simulation/components/ParametersPanel.vue';
   import VariablesPanel from '@/views/Simulation/components/VariablesPanel.vue';
@@ -187,6 +195,8 @@
 
   const components = {
     Counters,
+    GraphLegend,
+    LegendPanel,
     Loader,
     ModelPanel,
     ParametersPanel,
@@ -195,6 +205,7 @@
     ResizableGrid,
     RunButton,
     SearchBar,
+    SimulationLegend,
     VariablesPanel,
   };
 
@@ -265,7 +276,19 @@
         // Set the model id from the route as the selected model.
         this.$route.params.model_id.split(',').forEach(this.setSelectedModels);
       }
-      return this.getModelsList.filter(model => this.getSelectedModelIds.map(Number).includes(model.id));
+
+      const selectedModels = this.getModelsList.filter(model => this.getSelectedModelIds.map(Number).includes(model.id));
+      // HACK: Adding the overlapping elements to the model graph information
+      let nodes = [];
+      selectedModels.forEach(model => {
+        if (model.name === 'SimpleSIR_metadata') {
+          nodes = Object.keys(MODEL_COMPARISON).map(node => ({ id: node }));
+        } else if (model.name === 'SimpleChime+') {
+          nodes = Object.values(MODEL_COMPARISON).map(node => ({ id: node }));
+        }
+        model.modelGraph[0].overlappingElements = { nodes, edges: [] };
+      });
+      return selectedModels;
     }
 
     get gridMap (): string[][] {
@@ -323,16 +346,18 @@
     }
 
     onCloseSimView (): void {
-      const options: RawLocation = { name: 'model' };
-
-      // As of now we only allow one Knowledgable Graph to be selected at a time.
-      const modelId = this.$route.params.model_id;
-      if (modelId) {
+      const options: RawLocation = {};
+      if (this.getSelectedModelIds.length > 1) {
+        options.name = 'comparison';
         options.params = {
-          model_id: modelId.toString(),
+          model_ids: this.getSelectedModelIds.join(','),
+        };
+      } else {
+        options.name = 'model';
+        options.params = {
+          model_id: this.getSelectedModelIds.toString(),
         };
       }
-
       this.$router.push(options);
     }
 
