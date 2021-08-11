@@ -30,6 +30,7 @@
     @Prop({ default: null }) data: GraphInterface;
     @Prop({ default: null }) subgraph: SubgraphInterface;
     @Prop({ default: () => [] }) displayedNodes: SubgraphNodeInterface[];
+    @Prop({ default: null }) overlappingElements: SubgraphInterface;
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
@@ -54,6 +55,11 @@
     @Watch('displayedNodes')
     async displayedNodesChanged (): Promise<void> {
       this.renderer.markDisplayedNodes(this.displayedNodes);
+    }
+
+    @Watch('overlappingElements')
+    overlappingElementsChanged ():void {
+      this.renderer.markOverlappingElements(this.overlappingElements);
     }
 
     subgraphChanged (): void {
@@ -98,8 +104,10 @@
         if (!node.datum().nodes) {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.showSubgraph(neighborhood);
-
           this.renderer.clearSelections();
+          if (this.overlappingElements) {
+            this.renderer.markOverlappingElements(this.overlappingElements);
+          }
           this.renderer.selectNode(node);
         }
 
@@ -109,6 +117,9 @@
       this.renderer.setCallback('backgroundClick', () => {
         this.renderer.hideSubgraph();
         this.renderer.clearSelections();
+        if (this.overlappingElements) {
+          this.renderer.markOverlappingElements(this.overlappingElements);
+        }
         this.$emit('background-click');
       });
 
@@ -133,6 +144,9 @@
 
       this.renderer.setData(data);
       await this.renderer.render();
+      if (this.overlappingElements) {
+        this.renderer.markOverlappingElements(this.overlappingElements);
+      }
 
       // Collapse top-level boxes by default
       // HACK: The collapse/expand functions are asynchronous and trying to execute them all at once

@@ -2,27 +2,7 @@
   <section class="simulation-model-panel">
     <settings-bar>
       <counters slot="left" :title="modelName" :data="countersData" />
-      <aside slot="right">
-        <div class="btn-group" title="Add/Remove All Parameters & Variables">
-          <button
-            class="btn btn-secondary"
-            title="Add all Parameters & Variables"
-            type="button"
-            :disabled="allParametersAndVariablesAreDisplayed"
-            @click="onAddAllParametersAndVariables"
-          >
-            <font-awesome-icon :icon="['fas', 'plus']" />
-          </button>
-          <button
-            class="btn btn-secondary"
-            title="Remove all Parameters & Variables"
-            type="button"
-            :disabled="noDisplayedParametersAndVariables"
-            @click="onRemoveAllParametersAndVariables"
-          >
-            <font-awesome-icon :icon="['fas', 'ban']" />
-          </button>
-        </div>
+      <aside slot="right" v-if="expandable">
         <button
           class="btn btn-secondary"
           title="Expand Model Panel"
@@ -36,6 +16,7 @@
       v-if="graph"
       :data="graph"
       :displayed-nodes="displayedNodes"
+      :overlapping-elements="overlappingElements"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
@@ -68,6 +49,8 @@
   export default class ModelPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
+    @Prop({ default: true }) expandable: boolean;
+    @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
@@ -83,11 +66,11 @@
     settingsOpen: boolean = false;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      this.$emit('highlight', selected.label);
+      this.$emit('highlight', { label: selected.label, modelName: this.modelName });
     }
 
     onBackgroundClick (): void {
-      this.$emit('highlight', '');
+      this.$emit('highlight', null);
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
