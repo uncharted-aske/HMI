@@ -109,11 +109,20 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
 
   async initializeParameters ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
     const donuParameters = await getModelParameters(args.model, args.selectedModelGraphType) ?? [];
-    const parameters = donuParameters.map(donuParameter => ({
-      ...donuParameter,
-      displayed: false,
-      values: [donuParameter.default],
-    }));
+    const parameters = donuParameters.map(donuParameter => {
+      const parameter = {
+        ...donuParameter,
+        displayed: false,
+        values: [donuParameter.default],
+      };
+
+      // If the API does not provide a name, we leverage the UID.
+      if (!parameter.metadata.name) {
+        parameter.metadata.name = parameter.uid;
+      }
+
+      return parameter;
+    });
     commit('setSimParameters', { modelId: args.model.id, parameters });
     commit('setNumberOfSavedRuns', 0);
   },
