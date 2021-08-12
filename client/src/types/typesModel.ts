@@ -2,6 +2,7 @@
  * Define Types used for Computational Models
  */
 
+import * as HMI from '@/types/types';
 import * as Donu from '@/types/typesDonu';
 import * as Graph from '@/types/typesGraphs';
 import * as GroMEt from '@/types/typesGroMEt';
@@ -49,11 +50,22 @@ type State = {
   modelsLayout: string,
 };
 
+interface ViewInterface extends HMI.ViewInterface {
+  id: GraphTypes;
+}
+
+const GRAPHTYPE_VIEWS: ViewInterface[] = [
+  { name: 'Petri Net Classic', id: GraphTypes.PetriNetClassic },
+  { name: 'Functional Network', id: GraphTypes.FunctionNetwork },
+];
+
 export {
   Graph,
   GraphMetadata,
   GraphTypes,
   Model,
+  ViewInterface,
   Metadata,
   State,
+  GRAPHTYPE_VIEWS,
 };

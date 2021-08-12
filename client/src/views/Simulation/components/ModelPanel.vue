@@ -32,8 +32,12 @@
         </button>
       </aside>
     </settings-bar>
+
+    <message-display v-if="!graph">
+      <strong>{{ modelName }}</strong> is not available as a <strong>{{ getSelectedModelGraphType }}</strong>
+    </message-display>
     <global-graph
-      v-if="graph"
+      v-else
       :data="graph"
       :displayed-nodes="displayedNodes"
       :layout="getModelsLayout"
@@ -54,12 +58,14 @@
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
   import Counters from '@/components/Counters.vue';
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
 
   const components = {
     Counters,
     GlobalGraph,
+    MessageDisplay,
     SettingsBar,
   };
 
@@ -185,6 +191,10 @@
 </script>
 
 <style scoped>
+  .simulation-model-panel {
+    background-color: var(--bg-graphs);
+  }
+
   .settings-bar-container aside {
     display: flex;
     gap: .3em;
@@ -196,5 +206,10 @@
 
   .dropdown-header {
     padding: 0 1.5em .5em 0;
+  }
+
+  .message-display {
+    align-self: center;
+    margin: 1em;
   }
 </style>
