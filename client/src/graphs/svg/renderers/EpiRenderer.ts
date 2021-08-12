@@ -10,7 +10,7 @@ import SVGUtil from '@/utils/SVGUtil';
 
 const pathFn = SVGUtil.pathFn().curve(d3.curveBasis);
 
-const DEFAULT_STYLE = {
+export const DEFAULT_STYLE = {
   node: {
     fill: Colors.NODES.DEFAULT,
     stroke: Colors.STROKE,
@@ -27,6 +27,13 @@ const DEFAULT_STYLE = {
     controlStrokeWidth: 2,
     controlStrokeColor: Colors.NODES.DEFAULT,
   },
+};
+
+export const DEFAULT_RENDERING_OPTIONS = {
+  nodeHeight: 40,
+  nodeWidth: 120,
+  padding: 5,
+  parameterNodeSize: 30,
 };
 
 export default class EpiRenderer extends SVGRenderer {
@@ -240,6 +247,18 @@ export default class EpiRenderer extends SVGRenderer {
         } else {
           d3.select(this).selectAll('.displayed-marker').remove();
         }
+      });
+    }
+  }
+
+  markOverlappingElements (subgraph: SubgraphInterface): void {
+    const chart = (this as any).chart;
+    if (chart) {
+      chart.selectAll('.node-ui').each(function (d) {
+        const isOverlapping = subgraph.nodes.some(node => node.id === d.label);
+        d3.select(this)
+          .select('rect, ellipse')
+          .style('stroke', isOverlapping ? Colors.OVERLAPPING : DEFAULT_STYLE.node.stroke);
       });
     }
   }

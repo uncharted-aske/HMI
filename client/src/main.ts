@@ -20,8 +20,10 @@ const router = Router.getRouter(Vue);
 sync(store, router);
 
 library.add(
+  FA.faAngleDoubleDown,
   FA.faAngleDoubleLeft,
   FA.faAngleDoubleRight,
+  FA.faAngleDoubleUp,
   FA.faArrowsAltH,
   FA.faBan,
   FA.faBook,

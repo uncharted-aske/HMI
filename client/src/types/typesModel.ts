@@ -31,6 +31,7 @@ type Graph = {
   model: string,
   metadata?: Array<GraphMetadata>,
   type: GraphTypes,
+  overlappingElements?: Graph.SubgraphInterface,
 };
 
 type Model = {

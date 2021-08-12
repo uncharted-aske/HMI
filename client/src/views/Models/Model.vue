@@ -65,6 +65,10 @@
         @node-click="onNodeClick"
         @background-click="onBackgroundClick"
       />
+
+      <legend-panel open="open">
+        <graph-legend />
+      </legend-panel>
     </section>
 
     <drilldown-panel
@@ -141,6 +145,8 @@
   import MetadataPanel from '@/views/Models/components/MetadataPanel.vue';
   import FacetsPane from '@/views/Models/components/FacetsPane.vue';
   import GlobalGraph from './components/Graphs/GlobalGraph.vue';
+  import LegendPanel from '@/components/widgets/LegendPanel.vue';
+  import GraphLegend from './components/Graphs/GraphLegend.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import DrilldownPanel from '@/components/DrilldownPanel.vue';
   import MetadataPane from './components/DrilldownPanel/MetadataPane.vue';
@@ -175,22 +181,24 @@
   ];
 
   const components = {
-    SearchBar,
-    SettingsBar,
     Counters,
-    Loader,
-    Settings,
-    LeftSidePanel,
-    MetadataPanel,
+    DrilldownPanel,
     FacetsPane,
     GlobalGraph,
-    ResizableGrid,
-    DrilldownPanel,
-    MetadataPane,
-    ParametersPane,
+    GraphLegend,
     KnowledgePane,
-    ModalParameters,
+    LeftSidePanel,
+    LegendPanel,
+    Loader,
+    MetadataPane,
+    MetadataPanel,
     ModalDocMetadata,
+    ModalParameters,
+    ParametersPane,
+    ResizableGrid,
+    SearchBar,
+    Settings,
+    SettingsBar,
   };
 
   @Component({ components })
@@ -329,7 +337,7 @@
       const modelId = this.$route.params.model_id;
       if (modelId) {
         options.params = {
-          model_id: modelId.toString(),
+          model_ids: modelId.toString(),
         };
       }
 
