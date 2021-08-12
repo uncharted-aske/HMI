@@ -1,37 +1,37 @@
 <template>
-  <div class="global-graph-container" ref="graph" />
+  <section class="global-graph-container" ref="graph" />
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop, Watch } from 'vue-property-decorator';
 
+  import _ from 'lodash';
   import { expandCollapse, highlight } from 'svg-flowgraph';
 
-  import { GraphInterface, SubgraphInterface, SubgraphNodeInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
+  import * as Graph from '@/types/typesGraphs';
 
-  import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
+  import EpiRenderer from '@/graphs/svg/renderers/EpiRenderer';
+
   import { /** showTooltip, hideTooltip */ hierarchyFn } from '@/utils/SVGUtil.js'; // TODO: Put tooltips back when we fix the positioning issue
   import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse } from '@/graphs/svg/util.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
-    nodeWidth: 120,
     nodeHeight: 40,
+    nodeWidth: 120,
     parameterNodeSize: 30,
   };
 
   @Component
   export default class GlobalGraph extends Vue {
-    @Prop({ default: null }) data: GraphInterface;
-    @Prop({ default: null }) subgraph: SubgraphInterface;
-    @Prop({ default: () => [] }) displayedNodes: SubgraphNodeInterface[];
-    @Prop({ default: null }) overlappingElements: SubgraphInterface;
-    @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
+    @Prop({ default: null }) data: Graph.GraphInterface;
+    @Prop({ default: null }) subgraph: Graph.SubgraphInterface;
+    @Prop({ default: () => [] }) displayedNodes: Graph.SubgraphNodeInterface[];
+    @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
+    @Prop({ default: Graph.GraphLayoutInterfaceType.elk }) layout: string;
 
     renderingOptions = DEFAULT_RENDERING_OPTIONS;
     renderer = null;
@@ -131,7 +131,7 @@
       let data = _.cloneDeep(this.data);
 
       // Layout selection
-      if (this.layout === GraphLayoutInterfaceType.elk) {
+      if (this.layout === Graph.GraphLayoutInterfaceType.elk) {
         this.renderer.adapter = new ELKAdapter(DEFAULT_RENDERING_OPTIONS);
       } else {
         this.renderer.adapter = new DagreAdapter(DEFAULT_RENDERING_OPTIONS);
@@ -161,15 +161,14 @@
 </script>
 
 <style scoped>
-.global-graph-container {
-  background-color: var(--bg-graphs);
-  flex: 1;
-  overflow: hidden;
-}
+  .global-graph-container {
+    background-color: var(--bg-graphs);
+    flex: 1;
+    overflow: hidden;
+  }
 
-.global-graph-container::v-deep > svg {
-  height: 100%;
-  width: 100%;
-}
-
+  .global-graph-container::v-deep > svg {
+    height: 100%;
+    width: 100%;
+  }
 </style>
