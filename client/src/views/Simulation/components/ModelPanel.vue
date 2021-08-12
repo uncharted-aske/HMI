@@ -37,6 +37,7 @@
       :data="graph"
       :displayed-nodes="displayedNodes"
       :layout="getModelsLayout"
+      :overlapping-elements="overlappingElements"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
@@ -66,6 +67,8 @@
   export default class ModelPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
+    @Prop({ default: true }) expandable: boolean;
+    @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
@@ -82,11 +85,11 @@
     settingsOpen: boolean = false;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      this.$emit('highlight', selected.label);
+      this.$emit('highlight', { label: selected.label, modelName: this.modelName });
     }
 
     onBackgroundClick (): void {
-      this.$emit('highlight', '');
+      this.$emit('highlight', null);
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
