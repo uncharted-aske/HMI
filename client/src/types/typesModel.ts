@@ -41,11 +41,34 @@ type Model = {
   metadata?: Metadata,
 };
 
+type ModelComparisonData = {
+  apex: string,
+  legs: {
+    [key: string]: {
+      [key: string]: string,
+    }[]
+  }
+};
+
+type ModelComparisonMap = {
+  [key: string]: {
+    [key: string]: {
+      [key: string]: Set<string>,
+    }
+  }
+};
+
+type SelectedNode = {
+  model: number,
+  node: string,
+};
+
 type State = {
   isInitialized: boolean,
   modelsList: Model[],
   selectedModelGraphType?: GraphTypes,
-  selectedModelIds: Set<string>,
+  selectedModelIds: Set<number>,
+  selectedNodes: SelectedNode[],
 };
 
 export {
@@ -54,5 +77,8 @@ export {
   GraphTypes,
   Model,
   Metadata,
+  ModelComparisonData,
+  ModelComparisonMap,
+  SelectedNode,
   State,
 };

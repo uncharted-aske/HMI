@@ -29,6 +29,7 @@
   export default class GlobalGraph extends Vue {
     @Prop({ default: null }) data: GraphInterface;
     @Prop({ default: null }) subgraph: SubgraphInterface;
+    @Prop({ default: null }) highlight: SubgraphInterface;
     @Prop({ default: () => [] }) displayedNodes: SubgraphNodeInterface[];
     @Prop({ default: null }) overlappingElements: SubgraphInterface;
     @Prop({ default: GraphLayoutInterfaceType.elk }) layout: string;
@@ -43,30 +44,44 @@
 
     @Watch('subgraph')
     onSubgraphChange (): void {
-      this.subgraphChanged();
+      this.dataDecorationChanged();
+    }
+
+    @Watch('highlight')
+    onHighlightChange (): void {
+      this.dataDecorationChanged();
     }
 
     @Watch('layout')
     async layoutChanged (): Promise<void> {
       await this.refresh();
-      this.subgraphChanged();
+      this.dataDecorationChanged();
     }
 
     @Watch('displayedNodes')
-    async displayedNodesChanged (): Promise<void> {
-      this.renderer.markDisplayedNodes(this.displayedNodes);
+    displayedNodesChanged (): void {
+      this.dataDecorationChanged();
     }
 
     @Watch('overlappingElements')
     overlappingElementsChanged ():void {
-      this.renderer.markOverlappingElements(this.overlappingElements);
+      this.dataDecorationChanged();
     }
 
-    subgraphChanged (): void {
+    dataDecorationChanged (): void {
       if (this.subgraph) {
         this.renderer.showSubgraph(this.subgraph);
       } else {
         this.renderer.hideSubgraph();
+      }
+      if (this.displayedNodes) {
+        this.renderer.markDisplayedNodes(this.displayedNodes);
+      }
+      if (this.overlappingElements) {
+        this.renderer.markOverlappingElements(this.overlappingElements);
+      }
+      if (this.highlight) {
+        this.renderer.showHighlight(this.highlight);
       }
     }
 
