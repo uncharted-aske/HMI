@@ -39,7 +39,7 @@
       <search-bar />
     </aside>
 
-    <provenance-graph v-if="isProvenanceGraphOpen" @close-pane="onCloseProvenanceGraph" @layout-change="onSetProvenanceLayout">
+    <provenance-graph v-if="isProvenanceGraphOpen" :layouts="provenanceLayouts" :selectedLayoutId="selectedProvenanceLayout" @close-pane="onCloseProvenanceGraph" @layout-change="onSetProvenanceLayout">
       <provenance-graph-data
         slot="content"
         :data="provenanceGraphData"
@@ -113,7 +113,7 @@
   import RunButton from '@/views/Simulation/components/RunButton.vue';
   import ProvenanceGraph from '@/views/Simulation/components/ProvenanceGraph/ProvenanceGraph.vue';
   import ProvenanceGraphData from '@/views/Simulation/components/ProvenanceGraph/ProvenanceGraphData.vue';
-  import { ProvenanceData } from '@/views/Simulation/components/ProvenanceGraph/ProvenanceData';
+  import { ProvenanceData, ProvenanceLayoutInterface, ProvenanceLayoutInterfaceType } from '@/views/Simulation/components/ProvenanceGraph/ProvenanceData';
 
   const MODEL_COMPARISON = {
     gamma: 'rec_u',
@@ -122,6 +122,12 @@
     S: 'S',
     beta: 'inf_uu',
   };
+
+  const PROVENANCE_LAYOUTS: ProvenanceLayoutInterface[] = [
+    { name: 'Condensed', id: ProvenanceLayoutInterfaceType.condensed },
+    { name: 'Expanded', id: ProvenanceLayoutInterfaceType.expanded },
+  ];
+
   const components = {
     Counters,
     GraphLegend,
@@ -148,7 +154,8 @@
     highlighted: string = '';
 
     isProvenanceGraphOpen: boolean = false;
-    provenanceActivePaneId: string = '';
+    provenanceLayouts: ProvenanceLayoutInterface[] = PROVENANCE_LAYOUTS;
+    selectedProvenanceLayout: string = '';
     provenanceGraphData: Graph.GraphInterface = null;
 
     @Action fetchModelResults;
@@ -270,17 +277,17 @@
       });
     }
 
-    get provenanceLayout (): Graph.GraphInterface {
+    get provenanceData (): Graph.GraphInterface {
       // If one model is selected, show the provenance graphs for the single model workflow
       if (this.selectedModels.length === 1) {
-        if (this.provenanceActivePaneId === 'condensed') {
+        if (this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed) {
           return ProvenanceData.SINGLE_MODEL_CONDENSED;
         } else {
           return ProvenanceData.SINGLE_MODEL_EXPANDED;
         }
       } else {
       // If multiple models are selected, show the provenance graph for the multiple model workflow
-        if (this.provenanceActivePaneId === 'condensed') {
+        if (this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed) {
           return ProvenanceData.MULTI_MODEL_CONDENSED;
         } else {
           return ProvenanceData.MULTI_MODEL_EXPANDED;
@@ -344,14 +351,14 @@
       } else {
       // If the provenance graph is closed, open it and show the condensed graph by default
         this.isProvenanceGraphOpen = true;
-        this.provenanceActivePaneId = 'condensed';
-        this.provenanceGraphData = this.provenanceLayout;
+        this.selectedProvenanceLayout = ProvenanceLayoutInterfaceType.condensed;
+        this.provenanceGraphData = this.provenanceData;
       }
     }
 
-    onSetProvenanceLayout (tabId: string): void {
-      this.provenanceActivePaneId = tabId;
-      this.provenanceGraphData = this.provenanceLayout;
+    onSetProvenanceLayout (layoutId: string): void {
+      this.selectedProvenanceLayout = layoutId;
+      this.provenanceGraphData = this.provenanceData;
     }
 
     onCloseProvenanceGraph (): void {
@@ -360,7 +367,7 @@
 
     closeProvenanceGraph (): void {
       this.isProvenanceGraphOpen = false;
-      this.provenanceActivePaneId = null;
+      this.selectedProvenanceLayout = null;
       this.provenanceGraphData = null;
     }
   }

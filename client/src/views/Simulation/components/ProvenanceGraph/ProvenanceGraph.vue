@@ -3,14 +3,13 @@
     <aside slot="left">
       <div class="btn-group btn-group-sm">
         <button
+          v-for="layout in layouts" :key="layout.id"
           class="btn btn-secondary"
-          @click="onClickCondensed"
-          > Condensed
-        </button>
-        <button
-          class="btn btn-secondary"
-          @click="onClickExpanded"
-          > Expanded
+          type="button"
+          :class="{'active': layout.id === selectedLayoutId}"
+          @click="onLayoutSelection(layout.id)"
+        >
+          {{ layout.name }}
         </button>
       </div>
     </aside>
@@ -26,6 +25,7 @@
   import Vue from 'vue';
   import { Prop } from 'vue-property-decorator';
   import CloseButton from '@/components/widgets/CloseButton.vue';
+  import { ProvenanceLayoutInterface } from '@/views/Simulation/components/ProvenanceGraph/ProvenanceData';
 
   const components = {
     CloseButton,
@@ -33,19 +33,15 @@
 
   @Component({ components })
   export default class ProvenanceGraph extends Vue {
-    @Prop({ required: false })
-    activeTabId: string;
+    @Prop({ default: () => [] }) layouts: ProvenanceLayoutInterface[];
+    @Prop({ default: '' }) selectedLayoutId: string;
 
     onClose (): void {
       this.$emit('close-pane');
     }
 
-    onClickCondensed (): void {
-      this.$emit('layout-change', 'condensed');
-    }
-
-    onClickExpanded (): void {
-      this.$emit('layout-change', 'expanded');
+    onLayoutSelection (layoutId:string):void {
+      this.$emit('layout-change', layoutId);
     }
   }
 </script>

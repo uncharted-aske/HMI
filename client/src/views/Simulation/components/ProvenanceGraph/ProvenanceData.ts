@@ -80,3 +80,13 @@ export abstract class ProvenanceData {
       ],
     });
 }
+
+export enum ProvenanceLayoutInterfaceType {
+  condensed = 'condensed',
+  expanded = 'expanded',
+}
+
+export interface ProvenanceLayoutInterface {
+  name: string,
+  id: ProvenanceLayoutInterfaceType,
+}
