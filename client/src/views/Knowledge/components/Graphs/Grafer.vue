@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
   import {
     GraferController,
     GraferNodesType,
