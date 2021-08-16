@@ -52,6 +52,7 @@
         <model-panel
           class="simulation-panel"
           simulation="true"
+          show-graph-type="true"
           :expanded="expandedId === 'model'"
           :key="index"
           :model="model"

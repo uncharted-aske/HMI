@@ -240,7 +240,7 @@ export const getModelParameters = async (model: Model.Model, selectedModelGraphT
       console.error('[DONU Service] — getModelParameters', response); // eslint-disable-line no-console
     }
   } else {
-    console.error('[DONU Service] — getModelParameters', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
+    console.warn('[DONU Service] — getModelParameters', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
   }
 };
 
@@ -265,7 +265,7 @@ export const getModelVariables = async (model: Model.Model, selectedModelGraphTy
       console.error('[DONU Service] — getModelVariables', response); // eslint-disable-line no-console
     }
   } else {
-    console.error('[DONU Service] — getModelParameters', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
+    console.warn('[DONU Service] — getModelParameters', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
   }
 };
 

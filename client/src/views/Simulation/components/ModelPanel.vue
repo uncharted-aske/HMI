@@ -77,6 +77,7 @@
     @Prop({ default: null }) model: Model.Model;
     @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
     @Prop({ default: false }) simulation: boolean;
+    @Prop({ default: false }) showGraphType: boolean;
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
@@ -149,9 +150,11 @@
       const data: HMI.Counter[] = [];
 
       // Graph Type
-      data.push({
-        name: this.getSelectedModelGraphType,
-      });
+      if (this.showGraphType) {
+        data.push({
+          name: this.getSelectedModelGraphType,
+        });
+      }
 
       if (this.parameters.length > 0) {
         data.push({

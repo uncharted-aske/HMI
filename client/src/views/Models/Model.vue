@@ -109,7 +109,7 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter, Mutation } from 'vuex-class';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
   import { Watch } from 'vue-property-decorator';
   import { bgraph } from '@uncharted.software/bgraph';
@@ -205,6 +205,9 @@
     modalDataParameters: any = null;
     modalDataMetadata: any = null;
 
+    @Action initializeParameters;
+    @Action initializeVariables;
+
     @Getter getFilters;
     @Getter getModelsLayout;
     @Getter getModelsList;
@@ -220,8 +223,20 @@
       this.executeFilters();
     }
 
+    @Watch('getSelectedModelGraphType') onModelGraphTypeChanged (): void {
+      this.initializeSim();
+    }
+
     mounted (): void {
       this.loadData();
+      this.initializeSim();
+    }
+
+    initializeSim (): void {
+      const model = this.selectedModel;
+      const selectedModelGraphType = this.getSelectedModelGraphType;
+      this.initializeParameters({ model, selectedModelGraphType });
+      this.initializeVariables({ model, selectedModelGraphType });
     }
 
     executeFilters (): void {
