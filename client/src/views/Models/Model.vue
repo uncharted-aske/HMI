@@ -25,6 +25,15 @@
           <font-awesome-icon :icon="['fas', 'search' ]" />
           Search
         </button>
+        <settings
+          slot="right"
+          :layouts="layouts"
+          :selected-layout-id="getModelsLayout"
+          :selected-view-id="getSelectedModelGraphType"
+          :views="graphTypesAvailable"
+          @layout-change="setModelsLayout"
+          @view-change="setSelectedModelGraphType"
+        />
         <button
           class="btn-sim btn btn-primary"
           @click="onOpenSimView"
@@ -54,7 +63,7 @@
       <global-graph
         :data="selectedGraph"
         :subgraph="subgraph"
-        :layout="selectedLayoutId"
+        :layout="getModelsLayout"
         @node-click="onNodeClick"
         @background-click="onBackgroundClick"
       />
@@ -149,20 +158,6 @@
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
-  interface ModelViewInterface extends HMI.ViewInterface {
-    id: Model.GraphTypes;
-  }
-
-  const GRAPHTYPE_VIEWS: ModelViewInterface[] = [
-    { name: 'Petri Net Classic', id: Model.GraphTypes.PetriNetClassic },
-    { name: 'Functional Network', id: Model.GraphTypes.FunctionNetwork },
-  ];
-
-  const LAYOUTS: Graph.GraphLayoutInterface[] = [
-    { name: 'Layered', id: Graph.GraphLayoutInterfaceType.elk },
-    { name: 'Dagre', id: Graph.GraphLayoutInterfaceType.dagre },
-  ];
-
   const DRILLDOWN_TABS: HMI.TabInterface[] = [
     { name: 'Metadata', icon: '', id: 'metadata' },
     { name: 'Parameters', icon: '', id: 'parameters' },
@@ -198,8 +193,8 @@
     tabs: HMI.TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
-    layouts: Graph.GraphLayoutInterface[] = LAYOUTS;
     selectedLayoutId: string = Graph.GraphLayoutInterfaceType.elk;
+    layouts: Graph.GraphLayoutInterface[] = Graph.LAYOUTS;
 
     drilldownTabs: HMI.TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
@@ -220,11 +215,13 @@
     modalDataMetadata: any = null;
 
     @Getter getFilters;
+    @Getter getModelsLayout;
     @Getter getModelsList;
     @Getter getSelectedModelGraphType;
     @Getter getSelectedModelIds;
     @Getter getSimModel;
 
+    @Mutation setModelsLayout;
     @Mutation setSelectedModelGraphType;
     @Mutation setSelectedModels;
 
@@ -291,7 +288,7 @@
       return this.selectedModelGraph?.graph ?? null;
     }
 
-    get graphTypesAvailable (): ModelViewInterface[] {
+    get graphTypesAvailable (): Model.ViewInterface[] {
       if (!this.selectedModel) return [];
 
       // Get the list of all the graph types available in the selected model
@@ -299,7 +296,7 @@
       if (graphTypesAvailable.length === 0) return [];
 
       // Filter the constant and only display the available ones
-      return GRAPHTYPE_VIEWS.filter(view => {
+      return Model.GRAPHTYPE_VIEWS.filter(view => {
         return graphTypesAvailable.includes(view.id);
       });
     }
@@ -356,10 +353,6 @@
       this.drilldownPaneTitle = '';
       this.drilldownPaneSubtitle = '';
       this.drilldownMetadata = null;
-    }
-
-    onSetLayout (layoutId: string): void {
-      this.selectedLayoutId = layoutId;
     }
 
     async getDrilldownKnowledge (): Promise<void> {

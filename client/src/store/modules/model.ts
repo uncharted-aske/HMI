@@ -1,12 +1,14 @@
 import { GetterTree, MutationTree, ActionTree } from 'vuex';
 import { fetchDonuModels } from '@/services/DonuService';
 import * as Model from '@/types/typesModel';
+import * as Graphs from '@/types/typesGraphs';
 
 const state: Model.State = {
   isInitialized: false,
   selectedModelIds: new Set(),
   modelsList: [],
   selectedModelGraphType: Model.GraphTypes.PetriNetClassic, // Petri Net Classic as default
+  modelsLayout: Graphs.GraphLayoutInterfaceType.elk, // Layered as default
 };
 
 const actions: ActionTree<Model.State, any> = {
@@ -25,6 +27,7 @@ const getters: GetterTree<Model.State, any> = {
   getSelectedModelIds: state => [...state.selectedModelIds],
   getSelectedModelGraphType: state => state.selectedModelGraphType,
   getCountComputationalModels: (state): number => state.modelsList.length,
+  getModelsLayout: state => state.modelsLayout,
 };
 
 const mutations: MutationTree<Model.State> = {
@@ -39,6 +42,10 @@ const mutations: MutationTree<Model.State> = {
 
   setModelsList (state, newModelsList) {
     state.modelsList = newModelsList;
+  },
+
+  setModelsLayout (state, newModelsLayout) {
+    state.modelsLayout = newModelsLayout;
   },
 
   setSelectedModels (state, newSelectedModelId) {
