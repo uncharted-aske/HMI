@@ -76,8 +76,17 @@ export default class ProvenanceRenderer extends SVGRenderer {
       const selection = d3.select(this);
       const datum = selection.datum();
 
-      // Operations are displayed as rectangles while models, parameters, and variables are displayed as ellipses
-      if ((datum as any).data.role?.includes('Operation')) {
+      // Data including models, parameters, and variables are displayed as ellipses while operations and box containers are displayed as rectangles
+      if ((datum as any).data.role?.includes('Data')) {
+        selection.append('ellipse')
+          .attr('cx', d => (d as any).width * 0.5)
+          .attr('cy', d => (d as any).height * 0.5)
+          .attr('rx', d => (d as any).width * 0.5)
+          .attr('ry', d => (d as any).height * 0.5)
+          .style('fill', ProvenanceRenderer.calcNodeColor)
+          .style('stroke', DEFAULT_STYLE.node.stroke)
+          .style('cursor', 'pointer');
+      } else {
         selection.append('rect')
           .attr('x', 0)
           .attr('y', 0)
@@ -87,15 +96,27 @@ export default class ProvenanceRenderer extends SVGRenderer {
           .style('fill', ProvenanceRenderer.calcNodeColor)
           .style('stroke', DEFAULT_STYLE.node.stroke)
           .style('cursor', d => (d as any).nodes ? '' : 'pointer');
-      } else {
-        selection.append('ellipse')
-          .attr('cx', d => (d as any).width * 0.5)
-          .attr('cy', d => (d as any).height * 0.5)
-          .attr('rx', d => (d as any).width * 0.5)
-          .attr('ry', d => (d as any).height * 0.5)
-          .style('fill', ProvenanceRenderer.calcNodeColor)
-          .style('stroke', DEFAULT_STYLE.node.stroke)
-          .style('cursor', 'pointer');
+      }
+
+      // Add +/- icon to boxes/containers
+      if ((datum as any).nodes) {
+        const containerControl = selection.append('g').style('cursor', 'pointer');
+
+        containerControl.append('rect')
+          .classed('container-control', true)
+          .attr('x', d => (d as any).width - 20)
+          .attr('y', 5)
+          .attr('width', DEFAULT_STYLE.node.controlSize)
+          .attr('height', DEFAULT_STYLE.node.controlSize)
+          .style('fill', DEFAULT_STYLE.node.controlColor);
+
+        containerControl.append('text')
+          .attr('x', d => (d as any).width - 12)
+          .attr('y', (DEFAULT_STYLE.node.controlSize / 2) + 10)
+          .style('fill', Colors.LABELS.LIGHT)
+          .style('font-weight', 'bold')
+          .style('text-anchor', 'middle')
+          .text(d => (d as any).collapsed ? '+' : '-');
       }
 
       selection.append('text')
