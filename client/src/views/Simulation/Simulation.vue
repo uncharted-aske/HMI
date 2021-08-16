@@ -51,6 +51,7 @@
       <template v-for="(model, index) in selectedModels">
         <model-panel
           class="simulation-panel"
+          simulation="true"
           :expanded="expandedId === 'model'"
           :key="index"
           :model="model"

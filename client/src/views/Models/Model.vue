@@ -25,6 +25,15 @@
           <font-awesome-icon :icon="['fas', 'search' ]" />
           Search
         </button>
+        <settings
+          slot="right"
+          :layouts="layouts"
+          :selected-layout-id="getModelsLayout"
+          :selected-view-id="getSelectedModelGraphType"
+          :views="graphTypesAvailable"
+          @layout-change="setModelsLayout"
+          @view-change="setSelectedModelGraphType"
+        />
         <button
           class="btn-sim btn btn-primary"
           @click="onOpenSimView"
@@ -46,15 +55,6 @@
             { name: 'Nodes', value: nodeCount },
             { name: 'Edges', value: edgeCount },
           ]"
-        />
-        <settings
-          slot="right"
-          :layouts="layouts"
-          :selected-layout-id="getModelsLayout"
-          :selected-view-id="getSelectedModelGraphType"
-          :views="graphTypesAvailable"
-          @layout-change="setModelsLayout"
-          @view-change="setSelectedModelGraphType"
         />
       </settings-bar>
 
@@ -126,8 +126,8 @@
     filterToBgraph,
     deepCopy,
   } from '@/utils/BGraphUtil';
-  import { TabInterface, ViewInterface } from '@/types/types';
-  import { GraphInterface, GraphLayoutInterface, GraphNodeInterface, SubgraphInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
+  import { TabInterface } from '@/types/types';
+  import * as Graph from '@/types/typesGraphs';
   import * as Model from '@/types/typesModel';
   import * as GroMEt from '@/types/typesGroMEt';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
@@ -158,20 +158,6 @@
   const TABS: TabInterface[] = [
     // { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
-  ];
-
-  interface ModelViewInterface extends ViewInterface {
-    id: Model.GraphTypes;
-  }
-
-  const GRAPHTYPE_VIEWS: ModelViewInterface[] = [
-    { name: 'Petri Net Classic', id: Model.GraphTypes.PetriNetClassic },
-    { name: 'Functional Network', id: Model.GraphTypes.FunctionNetwork },
-  ];
-
-  const LAYOUTS: GraphLayoutInterface[] = [
-    { name: 'Layered', id: GraphLayoutInterfaceType.elk },
-    { name: 'Dagre', id: GraphLayoutInterfaceType.dagre },
   ];
 
   const DRILLDOWN_TABS: TabInterface[] = [
@@ -209,7 +195,7 @@
     tabs: TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
-    layouts: GraphLayoutInterface[] = LAYOUTS;
+    layouts: Graph.GraphLayoutInterface[] = Graph.LAYOUTS;
 
     drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
@@ -223,7 +209,7 @@
 
     displaySearch: boolean = false;
     isSplitView = false;
-    subgraph: SubgraphInterface = null;
+    subgraph: Graph.SubgraphInterface = null;
     showModalParameters: boolean = false;
     showModalMetadata: boolean = false;
     modalDataParameters: any = null;
@@ -297,11 +283,11 @@
       return this.selectedModelGraph?.metadata ?? null;
     }
 
-    get selectedGraph (): GraphInterface {
+    get selectedGraph (): Graph.GraphInterface {
       return this.selectedModelGraph?.graph ?? null;
     }
 
-    get graphTypesAvailable (): ModelViewInterface[] {
+    get graphTypesAvailable (): Model.ViewInterface[] {
       if (!this.selectedModel) return [];
 
       // Get the list of all the graph types available in the selected model
@@ -309,7 +295,7 @@
       if (graphTypesAvailable.length === 0) return [];
 
       // Filter the constant and only display the available ones
-      return GRAPHTYPE_VIEWS.filter(view => {
+      return Model.GRAPHTYPE_VIEWS.filter(view => {
         return graphTypesAvailable.includes(view.id);
       });
     }
@@ -397,12 +383,12 @@
       this.drilldownRelatedParameters = response.data;
     }
 
-    onNodeClick (node: GraphNodeInterface): void {
+    onNodeClick (node: Graph.GraphNodeInterface): void {
       // Select which tab should be open first, then open the drilldown.
       this.drilldownActiveTabId = 'metadata';
       this.isOpenDrilldown = true;
 
-      // Merge node metadata with Variables metadata. c.f. GraphNodeInterface type
+      // Merge node metadata with Variables metadata. c.f. Graph.GraphNodeInterface type
       this.drilldownMetadata = node.metadata ? node.metadata.flat() : null;
 
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
