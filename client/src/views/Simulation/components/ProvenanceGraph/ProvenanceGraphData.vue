@@ -1,32 +1,61 @@
 <template>
-  <section class="provenance-graph-data">
-    <h6>{{header}}</h6>
-  </section>
+  <section class="provenance-graph-data" ref="graph" />
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { Prop } from 'vue-property-decorator';
+  import { Prop, Watch } from 'vue-property-decorator';
+  import { expandCollapse } from 'svg-flowgraph';
+  import { GraphInterface } from '@/types/typesGraphs';
+  import { DEFAULT_RENDERING_OPTIONS } from '@/graphs/svg/renderers/EpiRenderer';
+
+  import ProvenanceRenderer from '@/graphs/svg/renderers/ProvenanceRenderer';
+  import ELKAdapter from '@/graphs/svg/elk/adapter';
 
   @Component({ })
   export default class ProvenanceGraphData extends Vue {
-    @Prop({ required: false }) private data: any;
+    @Prop({ default: null }) data: GraphInterface;
 
-    // This is a placeholder to show the toggle between expanded and condensed
-    get header (): string {
-      if (this.data != null) {
-        return this.data;
-      } else {
-        return 'Placeholder';
-      }
+    renderingOptions = DEFAULT_RENDERING_OPTIONS;
+    renderer = null;
+
+    @Watch('data')
+    dataChanged (): void {
+      this.refresh();
+    }
+
+    mounted (): void {
+      this.renderer = new ProvenanceRenderer({
+        el: this.$refs.graph,
+        adapter: new ELKAdapter(DEFAULT_RENDERING_OPTIONS),
+        renderMode: 'basic',
+        useEdgeControl: false,
+        useZoom: true,
+        useMinimap: false,
+        addons: [expandCollapse],
+      });
+
+      this.refresh();
+    }
+
+    async refresh (): Promise<void> {
+      if (!this.data) return;
+      this.renderer.setData(this.data);
+      await this.renderer.render();
     }
   }
 </script>
 
 <style scoped>
   .provenance-graph-data {
-    display: flex;
-    color: #ffffff;
+    background-color: var(--bg-graphs);
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .provenance-graph-data::v-deep > svg {
+    height: 100%;
+    width: 100%;
   }
 </style>
