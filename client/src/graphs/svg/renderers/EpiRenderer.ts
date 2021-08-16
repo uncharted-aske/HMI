@@ -267,10 +267,10 @@ export default class EpiRenderer extends SVGRenderer {
   clearSelections ():void {
     const chart = (this as any).chart;
     chart
-      .selectAll('.node-ui').each(function (d) {
-          d3.select(this).select('rect, ellipse')
-            .style('stroke', DEFAULT_STYLE.node.stroke)
-            .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+      .selectAll('.node-ui').each(function () {
+        d3.select(this).select('rect, ellipse')
+          .style('stroke', DEFAULT_STYLE.node.stroke)
+          .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
       });
   }
 }
