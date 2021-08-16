@@ -229,7 +229,8 @@
 
     get searchPills (): (KeyValuePill | TextPill)[] {
       return [
-        new TextPill(QUERY_FIELDS_MAP.DOCS_NODE_TITLE),
+        new TextPill(QUERY_FIELDS_MAP.DOCS_CLUSTERS_NODE_TITLE),
+        new TextPill(QUERY_FIELDS_MAP.DOCS_CLUSTERS_NODE_DOI),
       ];
     }
 

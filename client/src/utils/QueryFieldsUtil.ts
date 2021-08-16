@@ -95,9 +95,16 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'integer',
   },
-  DOCS_NODE_TITLE: {
-    ..._field('docsTitle', 'Document Title'),
-    ..._searchable('Document Title', false),
+  DOCS_CLUSTERS_NODE_TITLE: {
+    ..._field('docsClustersNodeTitle', 'Keyword'),
+    ..._searchable('Keyword', false),
+    baseType: 'string',
+    lexType: 'string',
+    order: 2,
+  },
+  DOCS_CLUSTERS_NODE_DOI: {
+    ..._field('docsClustersNodeDOI', 'DOI'),
+    ..._searchable('DOI', false),
     baseType: 'string',
     lexType: 'string',
   },
