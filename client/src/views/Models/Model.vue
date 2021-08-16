@@ -49,15 +49,6 @@
 
       <settings-bar>
         <counters slot="left" :title="modelName" :data="countersData" />
-        <settings
-          slot="right"
-          :layouts="layouts"
-          :selected-layout-id="selectedLayoutId"
-          :selected-view-id="getSelectedModelGraphType"
-          :views="graphTypesAvailable"
-          @layout-change="onSetLayout"
-          @view-change="setSelectedModelGraphType"
-        />
       </settings-bar>
 
       <global-graph
