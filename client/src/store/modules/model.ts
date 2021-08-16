@@ -4,6 +4,7 @@ import { processModelComparison } from '@/utils/ModelUtil';
 import * as Model from '@/types/typesModel';
 import * as Graphs from '@/types/typesGraphs';
 
+// Temporary model comparison data until data available on donu
 // Model names modified
 const MODEL_COMPARISON = {
   apex: 'SimpleSIR_metadata',
@@ -53,7 +54,7 @@ const getters: GetterTree<Model.State, any> = {
   getCountComputationalModels: (state): number => state.modelsList.length,
   getModelComparisonMap: (): Model.ModelComparisonMap => processModelComparison(MODEL_COMPARISON),
   getSharedNodes: (state, getters) => (modelId: number): Graphs.SubgraphInterface => {
-    const selectedModel = state.modelsList.find(model => model.id === modelId).name;
+    const selectedModel = state.modelsList.find(model => model.id === modelId)?.name;
     const comparedModels = state.modelsList
       .filter(model => model.id !== modelId && state.selectedModelIds.has(model.id))
       .map(model => model.name);

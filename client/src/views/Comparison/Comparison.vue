@@ -82,7 +82,7 @@
         this.$route.params.model_id.split(',').forEach(this.setSelectedModels);
       }
 
-      return this.getModelsList.filter(model => this.getSelectedModelIds.map(Number).includes(model.id));
+      return this.getModelsList.filter(model => this.getSelectedModelIds.includes(model.id));
     }
 
     get gridMap (): string[][] {

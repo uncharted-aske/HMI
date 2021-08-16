@@ -51,9 +51,9 @@ type ModelComparisonData = {
 };
 
 type ModelComparisonMap = {
-  [key: string]: {
-    [key: string]: {
-      [key: string]: Set<string>,
+  [key: string]: { // Compare Against Model ID (name)
+    [key: string]: { // Compare To Model ID (name)
+      [key: string]: Set<string>, // Compare Against Node ID (name): Set<Compare To Node ID (name)>
     }
   }
 };

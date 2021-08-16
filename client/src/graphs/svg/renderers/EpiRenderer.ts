@@ -231,7 +231,7 @@ export default class EpiRenderer extends SVGRenderer {
     const nodes = subgraph.nodes;
     if (chart) {
       chart.selectAll('.node-ui').each(function (d) {
-        if (nodes.map(node => node.id).includes(d.label)) {
+        if (nodes.some(node => node.id === d.label)) {
           d3.select(this)
             .select('rect, ellipse')
             .style('stroke', Colors.HIGHLIGHT)
