@@ -94,3 +94,8 @@ export interface SubgraphInterface {
   nodes: SubgraphNodeInterface[],
   edges: SubgraphEdgeInterface[],
 }
+
+export const LAYOUTS: GraphLayoutInterface[] = [
+  { name: 'Layered', id: GraphLayoutInterfaceType.elk },
+  { name: 'Dagre', id: GraphLayoutInterfaceType.dagre },
+];

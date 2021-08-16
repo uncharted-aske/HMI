@@ -2,7 +2,7 @@
   <section class="simulation-model-panel">
     <settings-bar>
       <counters slot="left" :title="modelName" :data="countersData" />
-      <aside slot="right">
+      <aside slot="right" v-if="simulation">
         <div class="btn-group" title="Add/Remove All Parameters & Variables">
           <button
             class="btn btn-secondary"
@@ -24,6 +24,7 @@
           </button>
         </div>
         <button
+          v-if="expandable"
           class="btn btn-secondary"
           title="Expand Model Panel"
           type="button"
@@ -32,10 +33,15 @@
         </button>
       </aside>
     </settings-bar>
+
+    <message-display v-if="!graph">
+      <strong>{{ modelName }}</strong> is not available as a <strong>{{ getSelectedModelGraphType }}</strong>
+    </message-display>
     <global-graph
-      v-if="graph"
+      v-else
       :data="graph"
       :displayed-nodes="displayedNodes"
+      :layout="getModelsLayout"
       :overlapping-elements="overlappingElements"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
@@ -53,24 +59,28 @@
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
   import Counters from '@/components/Counters.vue';
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
 
   const components = {
     Counters,
     GlobalGraph,
+    MessageDisplay,
     SettingsBar,
   };
 
   @Component({ components })
   export default class ModelPanel extends Vue {
+    @Prop({ default: true }) expandable: boolean;
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
-    @Prop({ default: true }) expandable: boolean;
     @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
+    @Prop({ default: false }) simulation: boolean;
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
+    @Getter getModelsLayout;
 
     @Action hideAllParameters;
     @Action showAllParameters;
@@ -189,6 +199,10 @@
 </script>
 
 <style scoped>
+  .simulation-model-panel {
+    background-color: var(--bg-graphs);
+  }
+
   .settings-bar-container aside {
     display: flex;
     gap: .3em;
@@ -200,5 +214,10 @@
 
   .dropdown-header {
     padding: 0 1.5em .5em 0;
+  }
+
+  .message-display {
+    align-self: center;
+    margin: 1em;
   }
 </style>

@@ -18,6 +18,7 @@
 <style scoped>
   .settings-bar-container {
     align-items: center;
+    background-color: var(--bg-body);
     display: flex;
     flex-shrink: 0;
     gap: 5px;
