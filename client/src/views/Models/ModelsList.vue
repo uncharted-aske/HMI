@@ -135,15 +135,14 @@
       } else if (this.getModelsList.length > 0 && this.getFilters.clauses.length === 0) {
         // No Query present: return full model list
         this.models = this.getModelsList;
-        this.dataLoading = false;
       } else {
         // Query present: filter models based on model sources returned in query results
         const models = this.getModelsList.filter(m => {
           return m.modelGraph.find(d => this.allowModelSourceList.includes(d.model));
         });
         this.models = models;
-        this.dataLoading = false;
       }
+      this.dataLoading = false;
     }
 
     get searchPills (): any {
