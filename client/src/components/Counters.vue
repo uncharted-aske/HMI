@@ -5,12 +5,10 @@
       v-for="(counter, index) in data" :key="index"
       :class="{ 'highlighted': data.highlighted }">
       <template v-if="counter.inverse">
-        {{ counter.name }}
-        <span v-if="counter.value" v-html="numberAsHTML(counter.value)" />
+        {{ counter.name }}<span v-if="counter.value" v-html="numberAsHTML(counter.value)" />
       </template>
       <template v-else>
-        <span v-if="counter.value" v-html="numberAsHTML(counter.value)" />
-        {{ counter.name }}
+        <span v-if="counter.value" v-html="numberAsHTML(counter.value)" />{{ counter.name }}
       </template>
     </span>
   </div>
@@ -49,7 +47,7 @@
   padding: 0 5px;
 }
 
-.counters-container > * {
+.counters-container * {
   margin-right: 5px;
 }
 
