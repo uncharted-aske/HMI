@@ -2,7 +2,7 @@
   <section class="simulation-model-panel">
     <settings-bar>
       <counters slot="left" :title="modelName" :data="countersData" />
-      <aside slot="right">
+      <aside slot="right" v-if="simulation">
         <div class="btn-group" title="Add/Remove All Parameters & Variables">
           <button
             class="btn btn-secondary"
@@ -24,6 +24,7 @@
           </button>
         </div>
         <button
+          v-if="expandable"
           class="btn btn-secondary"
           title="Expand Model Panel"
           type="button"
@@ -71,10 +72,11 @@
 
   @Component({ components })
   export default class ModelPanel extends Vue {
+    @Prop({ default: true }) expandable: boolean;
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
-    @Prop({ default: true }) expandable: boolean;
     @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
+    @Prop({ default: false }) simulation: boolean;
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
