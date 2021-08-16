@@ -25,6 +25,15 @@
           <font-awesome-icon :icon="['fas', 'search' ]" />
           Search
         </button>
+        <settings
+          slot="right"
+          :layouts="layouts"
+          :selected-layout-id="getModelsLayout"
+          :selected-view-id="getSelectedModelGraphType"
+          :views="graphTypesAvailable"
+          @layout-change="setModelsLayout"
+          @view-change="setSelectedModelGraphType"
+        />
         <button
           class="btn-sim btn btn-primary"
           @click="onOpenSimView"
@@ -46,15 +55,6 @@
             { name: 'Nodes', value: nodeCount },
             { name: 'Edges', value: edgeCount },
           ]"
-        />
-        <settings
-          slot="right"
-          :layouts="layouts"
-          :selected-layout-id="getModelsLayout"
-          :selected-view-id="getSelectedModelGraphType"
-          :views="graphTypesAvailable"
-          @layout-change="setModelsLayout"
-          @view-change="setSelectedModelGraphType"
         />
       </settings-bar>
 
