@@ -21,7 +21,10 @@ const DEFAULT_STYLE = {
   },
   edge: {
     fill: 'none',
-    opacity: 1,
+    opacity: {
+      low: 0.3,
+      high: 1.0,
+    },
     stroke: Colors.EDGES.DEFAULT,
     strokeWidth: 5,
     controlRadius: 6,
@@ -50,7 +53,7 @@ export default class EpiRenderer extends SVGRenderer {
   }
 
   static calcEdgeOpacity (edgeSelection: d3.Selection<any, any, any, any>): number {
-    return edgeSelection.size() >= 100 ? 0.1 : DEFAULT_STYLE.edge.opacity;
+    return edgeSelection.size() >= 100 ? DEFAULT_STYLE.edge.opacity.low : DEFAULT_STYLE.edge.opacity.high;
   }
 
   buildDefs (): void {
