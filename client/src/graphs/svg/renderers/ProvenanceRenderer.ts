@@ -77,7 +77,7 @@ export default class ProvenanceRenderer extends SVGRenderer {
       const datum = selection.datum();
 
       // Operations are displayed as rectangles while models, parameters, and variables are displayed as ellipses
-      if (!(datum as any).data.role?.includes('Operation')) {
+      if ((datum as any).data.role?.includes('Operation')) {
         selection.append('rect')
           .attr('x', 0)
           .attr('y', 0)

@@ -278,20 +278,12 @@
     }
 
     get provenanceData (): Graph.GraphInterface {
-      // If one model is selected, show the provenance graphs for the single model workflow
-      if (this.selectedModels.length === 1) {
-        if (this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed) {
-          return ProvenanceData.SINGLE_MODEL_CONDENSED;
-        } else {
-          return ProvenanceData.SINGLE_MODEL_EXPANDED;
-        }
+      // If one model is selected, show the provenance graphs for the single model workflow      
+      if (this.selectedModels.length === 1) { 
+        return this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed ? ProvenanceData.SINGLE_MODEL_CONDENSED : ProvenanceData.SINGLE_MODEL_EXPANDED;
       } else {
       // If multiple models are selected, show the provenance graph for the multiple model workflow
-        if (this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed) {
-          return ProvenanceData.MULTI_MODEL_CONDENSED;
-        } else {
-          return ProvenanceData.MULTI_MODEL_EXPANDED;
-        }
+        return this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed ? ProvenanceData.MULTI_MODEL_CONDENSED : ProvenanceData.MULTI_MODEL_EXPANDED;
       }
     }
 
