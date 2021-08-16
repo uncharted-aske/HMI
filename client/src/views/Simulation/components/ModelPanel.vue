@@ -136,7 +136,13 @@
     }
 
     get countersData (): HMI.Counter[] {
-      const data = [];
+      const data: HMI.Counter[] = [];
+
+      // Graph Type
+      data.push({
+        name: this.getSelectedModelGraphType,
+      });
+
       if (this.parameters.length > 0) {
         data.push({
           name: 'Parameters',
