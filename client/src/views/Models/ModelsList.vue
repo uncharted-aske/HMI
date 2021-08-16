@@ -1,29 +1,41 @@
 <template>
   <div class="view-container">
-    <main>
-      <div class="search-row">
-        <search-bar :pills="searchPills" :placeholder="`Search for Models...`"/>
+    <header>
+      <button
+        class="btn btn-primary"
+        :class="{ 'active': displaySearch }"
+        @click="displaySearch = !displaySearch"
+      >
+        <font-awesome-icon :icon="['fas', 'search' ]" />
+        Search
+      </button>
+    </header>
+
+    <aside class="search-bar" :class="{ 'active': displaySearch }">
+      <search-bar :pills="searchPills" :placeholder="`Search for Models...`"/>
+    </aside>
+
+    <settings-bar>
+      <counters slot="left" :data="countersData"/>
+      <div slot="right">
+        <button
+          v-if="nbSelectedModelsIds > 0"
+          class="btn btn-primary"
+          type="button"
+          @click="onClickAction"
+        >
+          {{ nbSelectedModelsIds > 1 ? 'Compare' : 'Open' }}
+        </button>
       </div>
-      <settings-bar>
-        <counters slot="left" :data="countersData"/>
-        <div slot="right">
-          <button
-            v-if="nbSelectedModelsIds > 0"
-            class="btn btn-primary"
-            type="button"
-            @click="onClickAction"
-          >
-            {{ nbSelectedModelsIds > 1 ? 'Compare' : 'Open' }}
-          </button>
-        </div>
-      </settings-bar>
-      <card-container v-if="!dataLoading"
-        class="models-cards"
-        :cards="modelsCards"
-        @click-card="onClickCard"
-      />
-      <loader :loading="dataLoading" />
-    </main>
+    </settings-bar>
+
+    <loader v-if="dataLoading" loading="true" />
+    <card-container
+      v-else
+      class="models-cards"
+      :cards="modelsCards"
+      @click-card="onClickCard"
+    />
   </div>
 </template>
 
@@ -81,6 +93,7 @@
     activeTabId: string = 'facets';
     allowModelSourceList: string[] = []; // Models that should not be filtered
     dataLoading: boolean = true; // Toggles loading screen
+    displaySearch: boolean = false; // Toggles search bar
     models: Model.Model[] = [];
 
     @Action resetSelectedModelIds;
@@ -122,15 +135,14 @@
       } else if (this.getModelsList.length > 0 && this.getFilters.clauses.length === 0) {
         // No Query present: return full model list
         this.models = this.getModelsList;
-        this.dataLoading = false;
       } else {
         // Query present: filter models based on model sources returned in query results
         const models = this.getModelsList.filter(m => {
           return m.modelGraph.find(d => this.allowModelSourceList.includes(d.model));
         });
         this.models = models;
-        this.dataLoading = false;
       }
+      this.dataLoading = false;
     }
 
     get searchPills (): any {
@@ -203,10 +215,37 @@
 </script>
 
 <style scoped>
-  main {
-    display: flex;
+  .view-container {
     flex-direction: column;
-    height: 100%;
-    width: 100%;
+  }
+
+  header {
+    align-items: center;
+    background-color: var(--bg-secondary);
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    justify-content: space-between;
+    padding: 10px 5px;
+  }
+
+  .search-bar {
+    background-color: var(--bg-secondary);
+    flex-shrink: 0;
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none; /* Avoid potential clicks to happen */
+    transition: max-height 250ms ease-in-out;
+    will-change: max-height;
+  }
+
+  .search-bar.active {
+    max-height: 10rem; /* Random number bigger than actual height for the transition. */
+    pointer-events: auto;
+  }
+
+  .search-bar .search-bar-container {
+    margin-top: 0; /* To have an uniform spacing between the header and the search bar */
+    margin-bottom: 10px; /* To match the header vertical spacing */
   }
 </style>

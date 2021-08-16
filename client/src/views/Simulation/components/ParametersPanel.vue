@@ -365,7 +365,6 @@
     grid-template-rows: 1fr 1fr;
     height: var(--parameter-height);
     padding: var(--padding);
-    scroll-snap-align: start;
   }
 
   .parameter:last-of-type {

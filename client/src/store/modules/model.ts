@@ -33,6 +33,7 @@ const state: Model.State = {
   selectedModelIds: new Set(),
   modelsList: [],
   selectedModelGraphType: Model.GraphTypes.PetriNetClassic, // Petri Net Classic as default
+  modelsLayout: Graphs.GraphLayoutInterfaceType.elk, // Layered as default
   selectedNodes: [],
 };
 
@@ -52,6 +53,7 @@ const getters: GetterTree<Model.State, any> = {
   getSelectedModelIds: state => [...state.selectedModelIds],
   getSelectedModelGraphType: state => state.selectedModelGraphType,
   getCountComputationalModels: (state): number => state.modelsList.length,
+  getModelsLayout: state => state.modelsLayout,
   getModelComparisonMap: (): Model.ModelComparisonMap => processModelComparison(MODEL_COMPARISON),
   getSharedNodes: (state, getters) => (modelId: number): Graphs.SubgraphInterface => {
     const selectedModel = state.modelsList.find(model => model.id === modelId)?.name;
@@ -102,6 +104,10 @@ const mutations: MutationTree<Model.State> = {
 
   setModelsList (state, newModelsList) {
     state.modelsList = newModelsList;
+  },
+
+  setModelsLayout (state, newModelsLayout) {
+    state.modelsLayout = newModelsLayout;
   },
 
   setSelectedModels (state, newSelectedModelId) {

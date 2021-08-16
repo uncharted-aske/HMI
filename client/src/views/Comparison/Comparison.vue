@@ -9,13 +9,21 @@
         <font-awesome-icon :icon="['fas', 'search' ]" />
         Search
       </button>
-       <button
-          class="btn-sim btn btn-primary"
-          @click="onOpenSimView"
-        >
-          <font-awesome-icon :icon="['fas', 'chart-line' ]" />
-          Open Simulation
-        </button>
+      <settings
+        :layouts="layouts"
+        :selected-layout-id="getModelsLayout"
+        :selected-view-id="getSelectedModelGraphType"
+        :views="graphTypesAvailable"
+        @layout-change="setModelsLayout"
+        @view-change="setSelectedModelGraphType"
+      />
+      <button
+        class="btn-sim btn btn-primary"
+        @click="onOpenSimView"
+      >
+        <font-awesome-icon :icon="['fas', 'chart-line' ]" />
+        Open Simulation
+      </button>
     </header>
 
     <aside class="search-bar" :class="{ 'active': displaySearch }">
@@ -30,7 +38,6 @@
           :key="index"
           :model="model"
           :slot="('model_' + model.id)"
-          :expandable="false"
         />
       </template>
     </resizable-grid>
@@ -43,6 +50,7 @@
   import { Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
+  import * as Graph from '@/types/typesGraphs';
   import * as Model from '@/types/typesModel';
   import * as RGrid from '@/types/typesResizableGrid';
 
@@ -50,6 +58,7 @@
   import Loader from '@/components/widgets/Loader.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import SearchBar from '@/components/SearchBar.vue';
+  import Settings from '@/views/Models/components/Settings.vue';
 
   import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
 
@@ -59,6 +68,7 @@
     ModelPanel,
     ResizableGrid,
     SearchBar,
+    Settings,
   };
 
   @Component({ components })
@@ -67,9 +77,14 @@
     highlighted: string = '';
     selectedModelForComparison: string = '';
 
+    layouts: Graph.GraphLayoutInterface[] = Graph.LAYOUTS;
+
     @Getter getSelectedModelGraphType;
+    @Getter getModelsLayout;
     @Getter getModelsList;
     @Getter getSelectedModelIds;
+    @Mutation setModelsLayout;
+    @Mutation setSelectedModelGraphType;
     @Mutation setSelectedModels;
 
     get selectedModels (): Model.Model[] {
@@ -112,6 +127,21 @@
           heightFixed: true,
         },
       };
+    }
+
+    get graphTypesAvailable (): Model.ViewInterface[] {
+      if (!this.selectedModels) return [];
+
+      // Get the list of all the graph types available in the selected model
+      const graphTypesAvailable = [...new Set(this.selectedModels.map(model => {
+        return model?.modelGraph.map(graph => graph.type);
+      }).flat())];
+      if (graphTypesAvailable.length === 0) return [];
+
+      // Filter the constant and only display the available ones
+      return Model.GRAPHTYPE_VIEWS.filter(view => {
+        return graphTypesAvailable.includes(view.id);
+      });
     }
 
     onOpenSimView (): void {

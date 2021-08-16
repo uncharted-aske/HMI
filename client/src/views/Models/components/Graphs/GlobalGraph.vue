@@ -123,8 +123,8 @@
           if (this.overlappingElements) {
             this.renderer.markOverlappingElements(this.overlappingElements);
           }
-          this.renderer.selectNode(node);
         }
+        this.renderer.selectNode(node);
 
         this.$emit('node-click', node.datum().data);
       });

@@ -21,6 +21,10 @@ export const DEFAULT_STYLE = {
   },
   edge: {
     fill: 'none',
+    opacity: {
+      low: 0.3,
+      high: 1.0,
+    },
     stroke: Colors.EDGES.DEFAULT,
     strokeWidth: 5,
     controlRadius: 6,
@@ -53,6 +57,10 @@ export default class EpiRenderer extends SVGRenderer {
     if (!(d as any).nodes && !(d as any).data.role?.includes(NodeTypes.NODES.VARIABLE)) {
       return DEFAULT_STYLE.node.strokeWidth + 1;
     } else return DEFAULT_STYLE.node.strokeWidth;
+  }
+
+  static calcEdgeOpacity (edgeSelection: d3.Selection<any, any, any, any>): number {
+    return edgeSelection.size() >= 100 ? DEFAULT_STYLE.edge.opacity.low : DEFAULT_STYLE.edge.opacity.high;
   }
 
   buildDefs (): void {
@@ -153,9 +161,10 @@ export default class EpiRenderer extends SVGRenderer {
 
       // Add +/- icon to boxes/containers
       if ((datum as any).nodes) {
-        const containerControl = selection.append('g').classed('container-control', true).style('cursor', 'pointer');
+        const containerControl = selection.append('g').style('cursor', 'pointer');
 
         containerControl.append('rect')
+          .classed('container-control', true)
           .attr('x', d => (d as any).width - 20)
           .attr('y', 5)
           .attr('width', DEFAULT_STYLE.node.controlSize)
@@ -185,11 +194,13 @@ export default class EpiRenderer extends SVGRenderer {
     });
   }
 
-  renderEdge (edgeSelection:d3.Selection<any, any, any, any>):void {
+  renderEdge (edgeSelection: d3.Selection<any, any, any, any>): void {
+    const opacity = EpiRenderer.calcEdgeOpacity(edgeSelection);
     edgeSelection.append('path')
       .classed('edge-path', true)
       .attr('d', d => pathFn(d.points))
       .style('fill', DEFAULT_STYLE.edge.fill)
+      .style('opacity', opacity)
       .style('stroke-width', DEFAULT_STYLE.edge.strokeWidth)
       .style('stroke', DEFAULT_STYLE.edge.stroke)
       .attr('marker-end', d => {
@@ -246,7 +257,7 @@ export default class EpiRenderer extends SVGRenderer {
   }
 
   selectNode (node: d3.Selection<any, any, any, any>): void {
-    node.selectAll('rect, ellipse')
+    node.selectAll('rect:not(.container-control), ellipse')
       .style('stroke', Colors.HIGHLIGHT)
       .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
   }
@@ -287,12 +298,10 @@ export default class EpiRenderer extends SVGRenderer {
   clearSelections ():void {
     const chart = (this as any).chart;
     chart
-      .selectAll('.node-ui').each(function (d) {
-        if (!d.nodes) {
-          d3.select(this).select('rect, ellipse')
-            .style('stroke', DEFAULT_STYLE.node.stroke)
-            .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
-        }
+      .selectAll('.node-ui').each(function () {
+        d3.select(this).select('rect, ellipse')
+          .style('stroke', DEFAULT_STYLE.node.stroke)
+          .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
       });
   }
 }
