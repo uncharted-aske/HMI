@@ -153,9 +153,10 @@ export default class EpiRenderer extends SVGRenderer {
 
       // Add +/- icon to boxes/containers
       if ((datum as any).nodes) {
-        const containerControl = selection.append('g').classed('container-control', true).style('cursor', 'pointer');
+        const containerControl = selection.append('g').style('cursor', 'pointer');
 
         containerControl.append('rect')
+          .classed('container-control', true)
           .attr('x', d => (d as any).width - 20)
           .attr('y', 5)
           .attr('width', DEFAULT_STYLE.node.controlSize)
@@ -225,7 +226,7 @@ export default class EpiRenderer extends SVGRenderer {
   }
 
   selectNode (node: d3.Selection<any, any, any, any>): void {
-    node.selectAll('rect, ellipse')
+    node.selectAll('rect:not(.container-control), ellipse')
       .style('stroke', Colors.HIGHLIGHT)
       .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
   }
