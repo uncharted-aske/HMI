@@ -95,6 +95,12 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     baseType: 'integer',
     lexType: 'integer',
   },
+  DOCS_NODE_TITLE: {
+    ..._field('docsTitle', 'Document Title'),
+    ..._searchable('Document Title', false),
+    baseType: 'string',
+    lexType: 'string',
+  },
   BIO_EDGE_PRE: {
     ..._field('bioEdgePre', 'Edge Pre'),
     ..._searchable('Edge Pre', false),
