@@ -66,11 +66,15 @@
   import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
-  import SIRScreenshot from '@/assets/img/SIR.png';
-  import SEIRScreenshot from '@/assets/img/SEIR.png';
-  import SEIRDScreenshot from '@/assets/img/SEIRD.png';
-  import SIRDScreenshot from '@/assets/img/SIRD.png';
-  import SpatialSIRDScreenshot from '@/assets/img/SpatialSIRD.png';
+  import ChimeScreenshot from '@/assets/img/CHIME_SIR.png';
+  import ChimePlusScreenshot from '@/assets/img/SimpleChime+.png';
+  import SIRScreenshot from '@/assets/img/SimpleSIR.png';
+  import SEIRScreenshot from '@/assets/img/SimpleSEIR.png';
+  import SEIRDScreenshot from '@/assets/img/SimpleSEIRD.png';
+  import SIRDScreenshot from '@/assets/img/SimpleSIRD.png';
+  import SpatialSIRDScreenshot from '@/assets/img/SimpleSpatialSIRD.png';
+  import MarmScreenshot from '@/assets/img/marm_model.png';
+  import PlaceholderScreenshot from '@/assets/img/placeholder_image.png';
 
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
@@ -174,7 +178,13 @@
           return SEIRDScreenshot;
         } else if (model.name === 'SimpleSpatialSIRD') {
           return SpatialSIRDScreenshot;
-        }
+        } else if (model.name === 'marm_model') {
+          return MarmScreenshot;
+        } else if (model.name === 'CHIME_SIR') {
+          return ChimeScreenshot;
+        } else if (model.name === 'SimpleChime+') {
+          return ChimePlusScreenshot;
+        } else return PlaceholderScreenshot;
       }
       return this.models.map(model => {
         const previewImageSrc = getModelsPreviewImageSource(model);
