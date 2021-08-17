@@ -37,7 +37,6 @@
           class="comparison-panel"
           :key="index"
           :model="model"
-          :overlapping-elements="model.modelGraph[0].overlappingElements"
           :slot="('model_' + model.id)"
         />
       </template>
@@ -62,14 +61,6 @@
   import Settings from '@/views/Models/components/Settings.vue';
 
   import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
-
-  const MODEL_COMPARISON = {
-    gamma: 'rec_u',
-    I: 'I_U',
-    R: 'R',
-    S: 'S',
-    beta: 'inf_uu',
-  };
 
   const components = {
     Counters,
@@ -106,18 +97,7 @@
         this.$route.params.model_id.split(',').forEach(this.setSelectedModels);
       }
 
-      const selectedModels = this.getModelsList.filter(model => this.getSelectedModelIds.map(Number).includes(model.id));
-      // HACK: Adding the overlapping elements to the model graph information
-      let nodes = [];
-      selectedModels.forEach(model => {
-        if (model.name === 'SimpleSIR_metadata') {
-          nodes = Object.keys(MODEL_COMPARISON).map(node => ({ id: node }));
-        } else if (model.name === 'SimpleChime+') {
-          nodes = Object.values(MODEL_COMPARISON).map(node => ({ id: node }));
-        }
-        model.modelGraph[0].overlappingElements = { nodes, edges: [] };
-      });
-      return selectedModels;
+      return this.getModelsList.filter(model => this.getSelectedModelIds.includes(model.id));
     }
 
     get gridMap (): string[][] {

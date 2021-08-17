@@ -41,8 +41,9 @@
       v-else
       :data="graph"
       :displayed-nodes="displayedNodes"
+      :overlapping-elements="getSharedNodes(model.id)"
+      :highlight="getSelectedNodes(model.id)"
       :layout="getModelsLayout"
-      :overlapping-elements="overlappingElements"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
@@ -54,7 +55,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
-  import { Action, Getter } from 'vuex-class';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import * as HMI from '@/types/types';
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
@@ -75,12 +76,14 @@
     @Prop({ default: true }) expandable: boolean;
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
-    @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
     @Prop({ default: false }) simulation: boolean;
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
     @Getter getModelsLayout;
+    @Getter getSharedNodes;
+    @Getter getSelectedNodes;
+    @Mutation setSelectedNodes;
 
     @Action hideAllParameters;
     @Action showAllParameters;
@@ -93,11 +96,11 @@
     settingsOpen: boolean = false;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      this.$emit('highlight', { label: selected.label, modelName: this.modelName });
+      this.setSelectedNodes([{ model: this.model.id, node: selected.label }]);
     }
 
     onBackgroundClick (): void {
-      this.$emit('highlight', null);
+      this.setSelectedNodes([]);
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {

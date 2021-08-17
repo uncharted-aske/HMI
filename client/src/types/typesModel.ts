@@ -42,11 +42,34 @@ type Model = {
   metadata?: Metadata,
 };
 
+type ModelComparisonData = {
+  apex: string,
+  legs: {
+    [key: string]: {
+      [key: string]: string,
+    }[]
+  }
+};
+
+type ModelComparisonMap = {
+  [key: string]: { // Compare Against Model ID (name)
+    [key: string]: { // Compare To Model ID (name)
+      [key: string]: Set<string>, // Compare Against Node ID (name): Set<Compare To Node ID (name)>
+    }
+  }
+};
+
+type SelectedNode = {
+  model: number,
+  node: string,
+};
+
 type State = {
   isInitialized: boolean,
   modelsList: Model[],
   selectedModelGraphType?: GraphTypes,
-  selectedModelIds: Set<string>,
+  selectedModelIds: Set<number>,
+  selectedNodes: SelectedNode[],
   modelsLayout: string,
 };
 
@@ -66,6 +89,9 @@ export {
   Model,
   ViewInterface,
   Metadata,
+  ModelComparisonData,
+  ModelComparisonMap,
+  SelectedNode,
   State,
   GRAPHTYPE_VIEWS,
 };

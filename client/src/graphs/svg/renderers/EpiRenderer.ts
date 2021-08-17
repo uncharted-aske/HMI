@@ -217,7 +217,9 @@ export default class EpiRenderer extends SVGRenderer {
 
   hideSubgraph (): void {
     const chart = (this as any).chart;
-    chart.selectAll('.node-ui,.edge').style('opacity', 1);
+    if (chart) {
+      chart.selectAll('.node-ui,.edge').style('opacity', 1);
+    }
   }
 
   showSubgraph (subgraph: SubgraphInterface): void {
@@ -233,6 +235,25 @@ export default class EpiRenderer extends SVGRenderer {
       const isNeighbour = nodes.map(node => node).includes(d.id);
       d3.select(this).style('opacity', isNeighbour ? '1' : '0.1');
     });
+  }
+
+  showHighlight (subgraph: SubgraphInterface): void {
+    const chart = (this as any).chart;
+    const nodes = subgraph.nodes;
+    if (chart) {
+      chart.selectAll('.node-ui').each(function (d) {
+        if (nodes.some(node => node.id === d.label)) {
+          d3.select(this)
+            .select('rect, ellipse')
+            .style('stroke', Colors.HIGHLIGHT)
+            .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
+        } else {
+          d3.select(this)
+            .select('rect, ellipse')
+            .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+        }
+      });
+    }
   }
 
   selectNode (node: d3.Selection<any, any, any, any>): void {
