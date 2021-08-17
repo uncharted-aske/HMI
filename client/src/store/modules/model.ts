@@ -51,7 +51,17 @@ const actions: ActionTree<Model.State, any> = {
 const getters: GetterTree<Model.State, any> = {
   getModelsList: state => state.modelsList,
   getSelectedModelIds: state => [...state.selectedModelIds],
-  getSelectedModelGraphType: state => state.selectedModelGraphType,
+  getSelectedModelGraphType: (state, getters) => {
+    if (state.selectedModelIds.size === 1) {
+      const modelGraphTypeList = state.modelsList
+        .find(model => model.id === getters.getSelectedModelIds[0])?.modelGraph
+        .map(modelGraph => modelGraph.type);
+      if (modelGraphTypeList?.length && !modelGraphTypeList.includes(state.selectedModelGraphType)) {
+        return modelGraphTypeList[0];
+      }
+    }
+    return state.selectedModelGraphType;
+  },
   getCountComputationalModels: (state): number => state.modelsList.length,
   getModelsLayout: state => state.modelsLayout,
   getModelComparisonMap: (): Model.ModelComparisonMap => processModelComparison(MODEL_COMPARISON),
