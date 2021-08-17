@@ -75,7 +75,7 @@ const getters: GetterTree<Model.State, any> = {
 
     for (const compareTo in comparisonMap) {
       if (comparedModels.includes(compareTo)) {
-        Object.keys(comparisonMap[compareTo]).forEach(nodeName => nodes.add(nodeName));
+        Object.keys(comparisonMap[compareTo]).forEach(nodeGrometId => nodes.add(nodeGrometId));
       }
     }
     return { nodes: [...nodes].map(node => ({ id: node })), edges: [] };

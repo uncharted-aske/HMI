@@ -43,12 +43,11 @@ export const processModelComparison = (input: Model.ModelComparisonData): Model.
   for (const compareTo in input.legs) {
     compareAgainst[compareTo] = compareAgainst[compareTo] ?? {};
     input.legs[compareTo].forEach(compareSet => {
-      for (let compareAgainstKey in compareSet) {
-        compareAgainstKey = compareAgainstKey.substr(2);
+      for (const compareAgainstKey in compareSet) {
         if (!compareAgainst[compareTo][compareAgainstKey]) {
           compareAgainst[compareTo][compareAgainstKey] = new Set();
         }
-        compareAgainst[compareTo][compareAgainstKey].add(compareSet['J:' + compareAgainstKey].substr(2));
+        compareAgainst[compareTo][compareAgainstKey].add(compareSet[compareAgainstKey]);
       }
     });
   }

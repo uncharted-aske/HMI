@@ -242,7 +242,7 @@ export default class EpiRenderer extends SVGRenderer {
     const nodes = subgraph.nodes;
     if (chart) {
       chart.selectAll('.node-ui').each(function (d) {
-        if (nodes.some(node => node.id === d.label)) {
+        if (nodes.some(node => node.id === d.data.grometID)) {
           d3.select(this)
             .select('rect, ellipse')
             .style('stroke', Colors.HIGHLIGHT)
@@ -287,7 +287,7 @@ export default class EpiRenderer extends SVGRenderer {
     const chart = (this as any).chart;
     if (chart) {
       chart.selectAll('.node-ui').each(function (d) {
-        const isOverlapping = subgraph.nodes.some(node => node.id === d.label);
+        const isOverlapping = subgraph.nodes.some(node => node.id === d.data.grometID);
         d3.select(this)
           .select('rect, ellipse')
           .style('stroke', isOverlapping ? Colors.OVERLAPPING : DEFAULT_STYLE.node.stroke);
