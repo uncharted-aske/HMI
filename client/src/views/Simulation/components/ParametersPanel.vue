@@ -104,6 +104,7 @@
     private parameterInput: number = 65;
     private parameterAction: number = 35;
     private parameterValues: { [uid: string]: number } = {};
+    private someParametersAreInvalid: boolean = false;
 
     // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
@@ -128,7 +129,7 @@
 
           // If the we have no default value and the parameter is a initial value,
           // set it up to 1 so the user can run the model right away.
-          if (parameter.uid.includes('_init') && !value) {
+          if (parameter.initial_condition && !value) {
             value = 1;
           }
 
@@ -152,6 +153,12 @@
         }
       });
       this.drawGraph();
+
+      // Make sure that for every parameters, their current value is valid.
+      this.someParametersAreInvalid = this.parameters.some(parameter => {
+        const currentValue = parameter.values[parameter.values.length - 1];
+        return this.nonValidValue(currentValue);
+      });
     }
 
     get triggerParameterValues (): string {
@@ -304,14 +311,6 @@
 
     nonValidValue (value: number): boolean {
       return !_.isNumber(value) || Number.isNaN(value);
-    }
-
-    get someParametersAreInvalid (): boolean {
-      // Make sure that for every parameters, their current value is valid.
-      return this.parameters.some(parameter => {
-        const currentValue = parameter.values[parameter.values.length - 1];
-        return this.nonValidValue(currentValue);
-      });
     }
   }
 </script>
