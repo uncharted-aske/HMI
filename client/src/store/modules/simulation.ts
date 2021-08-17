@@ -155,44 +155,6 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     commit('setNumberOfSavedRuns', 0);
   },
 
-  /*
-  async initializeParameters ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
-    const donuParameters = await getModelParameters(args.model, args.selectedModelGraphType) ?? [];
-
-    // Filter out parameters with the same not so unique UID.
-    const uniqueDonuParameters = _.uniqBy(donuParameters, 'uid');
-
-    const parameters = uniqueDonuParameters.map(donuParameter => {
-      const parameter = {
-        ...donuParameter,
-        displayed: false,
-        values: [donuParameter.default],
-      };
-
-      // If the API does not provide a name, we leverage the UID.
-      if (!parameter.metadata.name) {
-        parameter.metadata.name = parameter.uid;
-      }
-
-      return parameter;
-    });
-
-    commit('setSimParameters', { modelId: args.model.id, parameters });
-    commit('setNumberOfSavedRuns', 0);
-  },
-
-  async initializeVariables ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
-    const donuVariables = await getModelVariables(args.model, args.selectedModelGraphType) ?? [];
-    const variables = donuVariables.map(donuVariable => ({
-      ...donuVariable,
-      aggregate: null,
-      displayed: false,
-      values: [],
-    }));
-    commit('setSimVariables', { modelId: args.model.id, variables });
-  },
-  */
-
   hideAllParameters ({ commit }, modelId: number): void {
     commit('setAllParametersVisibility', { modelId, visibility: false });
   },
