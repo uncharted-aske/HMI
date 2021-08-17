@@ -1,40 +1,41 @@
 <template>
-  <div :class="['card', { checked: checked }, { highlight: isHighlighted }]">
+  <div
+    class="card"
+    :class="[
+      { checked: checked },
+      { highlight: isHighlighted },
+    ]"
+  >
     <div
       v-if="hasImage"
       :class="['preview-img', hasImage ? '' : 'no-image']"
       :style="imageStyle"
       :title="'Preview of ' + title"
     />
-    <div class="title-wrapper">
-      <h5 class="title">{{ title }}</h5>
-    </div>
+
+    <h5 class="title">{{ title }}</h5>
     <h6 class="subtitle hide-scrollbar">{{ subtitle }}</h6>
-    <div class="mt-2 d-flex justify-content-between align-items-center">
-      <input :class="classCheckbox" type="checkbox" :checked="checked"/>
-      <font-awesome-icon class="icon" :icon="['fas', iconType]"/>
-    </div>
+
+    <footer class="mt-2 d-flex justify-content-between align-items-center">
+      <input :class="classCheckbox" type="checkbox" :checked="checked" />
+      <font-awesome-icon class="icon" :icon="['fas', iconType]" />
+    </footer>
   </div>
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
-  @Component({ })
+  @Component
   export default class Card extends Vue {
-    @Prop({ default: '' }) previewImageSrc: string;
-
-    @Prop({ default: '' }) title: string;
-
-    @Prop({ default: '' }) subtitle: string;
-
-    @Prop({ default: 'faExclamationTriangle' }) icon: string;
-
     @Prop({ default: undefined }) checked: boolean;
-
     @Prop({ default: false }) highlighted: boolean;
+    @Prop({ default: 'faExclamationTriangle' }) icon: string;
+    @Prop({ default: null }) previewImageSrc: string;
+    @Prop({ default: null }) subtitle: string;
+    @Prop({ default: null }) title: string;
 
     get classCheckbox (): string {
       return this.checked === undefined ? 'invisible' : 'visible';
