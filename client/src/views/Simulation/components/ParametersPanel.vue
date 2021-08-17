@@ -159,6 +159,7 @@
         const currentValue = parameter.values[parameter.values.length - 1];
         return this.nonValidValue(currentValue);
       });
+      this.$emit('invalid', this.someParametersAreInvalid);
     }
 
     get triggerParameterValues (): string {
