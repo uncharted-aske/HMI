@@ -1,3 +1,5 @@
+/* eslint camelcase: 0 */
+
 import * as Donu from '@/types/typesDonu';
 
 interface ModelComponentMetadataInterface {
@@ -66,6 +68,7 @@ type SimulationRun = {
 
 type SimulationModel = {
   id: number,
+  initial_condition: SimulationParameter[],
   parameters: SimulationParameter[],
   variables: SimulationVariable[],
 }

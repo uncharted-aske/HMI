@@ -205,8 +205,7 @@
     modalDataParameters: any = null;
     modalDataMetadata: any = null;
 
-    @Action initializeParameters;
-    @Action initializeVariables;
+    @Action initializeInterface;
 
     @Getter getFilters;
     @Getter getModelsLayout;
@@ -235,8 +234,7 @@
     initializeSim (): void {
       const model = this.selectedModel;
       const selectedModelGraphType = this.getSelectedModelGraphType;
-      this.initializeParameters({ model, selectedModelGraphType });
-      this.initializeVariables({ model, selectedModelGraphType });
+      this.initializeInterface({ model, selectedModelGraphType });
     }
 
     executeFilters (): void {

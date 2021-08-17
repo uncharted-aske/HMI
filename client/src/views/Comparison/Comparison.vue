@@ -89,8 +89,7 @@
 
     layouts: Graph.GraphLayoutInterface[] = Graph.LAYOUTS;
 
-    @Action initializeParameters;
-    @Action initializeVariables;
+    @Action initializeInterface;
 
     @Getter getSelectedModelGraphType;
     @Getter getModelsLayout;
@@ -190,8 +189,7 @@
       const selectedModelGraphType = this.getSelectedModelGraphType;
       if (this.selectedModels && selectedModelGraphType) {
         this.selectedModels.forEach(model => {
-          this.initializeParameters({ model, selectedModelGraphType });
-          this.initializeVariables({ model, selectedModelGraphType });
+          this.initializeInterface({ model, selectedModelGraphType });
         });
       }
     }
