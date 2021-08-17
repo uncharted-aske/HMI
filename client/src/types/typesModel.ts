@@ -2,6 +2,7 @@
  * Define Types used for Computational Models
  */
 
+import * as HMI from '@/types/types';
 import * as Donu from '@/types/typesDonu';
 import * as Graph from '@/types/typesGraphs';
 import * as GroMEt from '@/types/typesGroMEt';
@@ -41,18 +42,56 @@ type Model = {
   metadata?: Metadata,
 };
 
+type ModelComparisonData = {
+  apex: string,
+  legs: {
+    [key: string]: {
+      [key: string]: string,
+    }[]
+  }
+};
+
+type ModelComparisonMap = {
+  [key: string]: { // Compare Against Model ID (name)
+    [key: string]: { // Compare To Model ID (name)
+      [key: string]: Set<string>, // Compare Against Node ID (name): Set<Compare To Node ID (name)>
+    }
+  }
+};
+
+type SelectedNode = {
+  model: number,
+  node: string,
+};
+
 type State = {
   isInitialized: boolean,
   modelsList: Model[],
   selectedModelGraphType?: GraphTypes,
-  selectedModelIds: Set<string>,
+  selectedModelIds: Set<number>,
+  selectedNodes: SelectedNode[],
+  modelsLayout: string,
 };
+
+interface ViewInterface extends HMI.ViewInterface {
+  id: GraphTypes;
+}
+
+const GRAPHTYPE_VIEWS: ViewInterface[] = [
+  { name: 'Petri Net Classic', id: GraphTypes.PetriNetClassic },
+  { name: 'Functional Network', id: GraphTypes.FunctionNetwork },
+];
 
 export {
   Graph,
   GraphMetadata,
   GraphTypes,
   Model,
+  ViewInterface,
   Metadata,
+  ModelComparisonData,
+  ModelComparisonMap,
+  SelectedNode,
   State,
+  GRAPHTYPE_VIEWS,
 };

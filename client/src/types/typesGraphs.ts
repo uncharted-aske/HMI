@@ -8,6 +8,7 @@ export interface SVGRendererOptionsInterface {
   edgeControlOffset?: number,
   useMinimap?: boolean,
   useZoom?: boolean,
+  useStableZoomPan?: boolean, // false by default. Zoom/Pan remains stable on render changes
   addons?: any
 }
 
@@ -94,3 +95,8 @@ export interface SubgraphInterface {
   nodes: SubgraphNodeInterface[],
   edges: SubgraphEdgeInterface[],
 }
+
+export const LAYOUTS: GraphLayoutInterface[] = [
+  { name: 'Layered', id: GraphLayoutInterfaceType.elk },
+  { name: 'Dagre', id: GraphLayoutInterfaceType.dagre },
+];

@@ -135,6 +135,28 @@ export const CLUSTER_GRAPH_COLORS = [
   COLORS.AURORA_4_GREEN, // Used for nodes to signify cluster relationship with other nodes
   COLORS.AURORA_5_PURPLE, // Used for nodes to signify cluster relationship with other nodes
 ];
+export const CLUSTER_NODES_LAYERS_CONFIG = {
+  options: {
+    // Foreground options are meant for layers that a user should focus on
+    foreground: {
+      nodes: {
+        desaturate: 0,
+      },
+      edges: {
+        desaturate: 0,
+      },
+    },
+    // Background options are meant for layers that act as context
+    background: {
+      nodes: {
+        desaturate: 0.9,
+      },
+      edges: {
+        desaturate: 0.9,
+      },
+    },
+  },
+};
 
 export const buildHighlightClusterLayer = (name: string, edges: unknown[], clusters: unknown[]): GraferLayerData => {
   return {

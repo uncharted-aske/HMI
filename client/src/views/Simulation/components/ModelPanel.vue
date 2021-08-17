@@ -2,7 +2,7 @@
   <section class="simulation-model-panel">
     <settings-bar>
       <counters slot="left" :title="modelName" :data="countersData" />
-      <aside slot="right">
+      <aside slot="right" v-if="simulation">
         <div class="btn-group" title="Add/Remove All Parameters & Variables">
           <button
             class="btn btn-secondary"
@@ -24,6 +24,7 @@
           </button>
         </div>
         <button
+          v-if="expandable"
           class="btn btn-secondary"
           title="Expand Model Panel"
           type="button"
@@ -32,11 +33,17 @@
         </button>
       </aside>
     </settings-bar>
+
+    <message-display v-if="!graph">
+      <strong>{{ modelName }}</strong> is not available as a <strong>{{ getSelectedModelGraphType }}</strong>
+    </message-display>
     <global-graph
-      v-if="graph"
+      v-else
       :data="graph"
       :displayed-nodes="displayedNodes"
-      :overlapping-elements="overlappingElements"
+      :overlapping-elements="getSharedNodes(model.id)"
+      :highlight="getSelectedNodes(model.id)"
+      :layout="getModelsLayout"
       @node-click="onNodeClick"
       @background-click="onBackgroundClick"
       @node-dblclick="onNodeDblClick"
@@ -48,29 +55,35 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
-  import { Action, Getter } from 'vuex-class';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import * as HMI from '@/types/types';
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
   import Counters from '@/components/Counters.vue';
+  import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
 
   const components = {
     Counters,
     GlobalGraph,
+    MessageDisplay,
     SettingsBar,
   };
 
   @Component({ components })
   export default class ModelPanel extends Vue {
+    @Prop({ default: true }) expandable: boolean;
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
-    @Prop({ default: true }) expandable: boolean;
-    @Prop({ default: null }) overlappingElements: Graph.SubgraphInterface;
+    @Prop({ default: false }) simulation: boolean;
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
+    @Getter getModelsLayout;
+    @Getter getSharedNodes;
+    @Getter getSelectedNodes;
+    @Mutation setSelectedNodes;
 
     @Action hideAllParameters;
     @Action showAllParameters;
@@ -83,11 +96,11 @@
     settingsOpen: boolean = false;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      this.$emit('highlight', { label: selected.label, modelName: this.modelName });
+      this.setSelectedNodes([{ model: this.model.id, node: selected.label }]);
     }
 
     onBackgroundClick (): void {
-      this.$emit('highlight', null);
+      this.setSelectedNodes([]);
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
@@ -136,7 +149,13 @@
     }
 
     get countersData (): HMI.Counter[] {
-      const data = [];
+      const data: HMI.Counter[] = [];
+
+      // Graph Type
+      data.push({
+        name: this.getSelectedModelGraphType,
+      });
+
       if (this.parameters.length > 0) {
         data.push({
           name: 'Parameters',
@@ -183,6 +202,10 @@
 </script>
 
 <style scoped>
+  .simulation-model-panel {
+    background-color: var(--bg-graphs);
+  }
+
   .settings-bar-container aside {
     display: flex;
     gap: .3em;
@@ -194,5 +217,10 @@
 
   .dropdown-header {
     padding: 0 1.5em .5em 0;
+  }
+
+  .message-display {
+    align-self: center;
+    margin: 1em;
   }
 </style>
