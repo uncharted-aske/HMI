@@ -121,7 +121,7 @@ export const showTooltip = (svgContainer, text, position, preferredAngle?, flexP
   const svgTooltipText = svgTooltipContents
     .append('text')
     .style('font-weight', 600)
-    .style('font-size', '10px')
+    .style('font-size', '12px')
     .style('fill', 'white');
 
   const tspans = String(text).replace(/<br \/>/g, '\n').split('\n')

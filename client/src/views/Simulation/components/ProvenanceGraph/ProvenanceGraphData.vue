@@ -55,8 +55,8 @@
 
       this.renderer.setCallback('nodeMouseEnter', (evt, node, renderer) => {
         const data = node.datum();
-        // Only show tooltips for nodes, not boxes
-        if (data.data.role) showTooltip(renderer.chart, data.data.nodeType, [data.x + data.width / 2, data.y]);
+        // Only show tooltips for nodes that have data defined (container boxes and "Models" nodes don't)
+        if (data.data.nodeType) showTooltip(renderer.chart, data.data.nodeType, [data.x + data.width / 2, data.y], -Math.PI / 2, true);
       });
 
       this.renderer.setCallback('nodeMouseLeave', (evt, node, renderer) => {
