@@ -3,7 +3,7 @@ import * as MARM_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/marm_m
 
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
-import { getUtil, postUtil, postUtilMem } from '@/utils/FetchUtil';
+import { postUtil, postUtilMem } from '@/utils/FetchUtil';
 
 // HACK: REMOVE when Donu provides CHIME+
 export const staticFileURLs = [
@@ -98,43 +98,6 @@ export const queryDonuModels = async (text: string): Promise<any[]> => {
   }
 };
 
-// HACK: Remove when we fetch CHIME+ from DONU
-// eslint-disable-next-line
-export const buildStaticModelsList = ({ CHIMEPlus }: any, modelIndex: number): Model.Model[] => {
-  // Parse GroMEt
-  const CHIMEPlusPARSED = GroMEt2Graph.parseGromet(CHIMEPlus);
-
-  // Build object to store in models store
-  const { name } = CHIMEPlus;
-  const metadata = { name, description: '' };
-  const modelGraph = {
-    donuType: Donu.Type.GROMET_PNC,
-    model: null,
-    type: CHIMEPlus.type,
-    metadata: CHIMEPlus.metadata,
-    graph: {
-      nodes: CHIMEPlusPARSED.nodes,
-      edges: CHIMEPlusPARSED.edges,
-    },
-    bgraph: {
-      nodes: null,
-      edges: null,
-    },
-  };
-
-  const output = { id: modelIndex, metadata, name, modelGraph: [modelGraph] };
-  return [output as any]; // Not ideal but I was getting typescript errors
-};
-
-// HACK: Remove when we fetch CHIME+ from DONU
-export const fetchStaticModels = async (modelIndex: number): Promise<Model.Model[]> => {
-  const [CHIMEPlus] = await Promise.all(
-    staticFileURLs.map(url => getUtil(url)),
-  );
-
-  return buildStaticModelsList({ CHIMEPlus }, modelIndex);
-};
-
 /** Fetch a complete list of available models from Donu API */
 export const fetchDonuModels = async (): Promise<Model.Model[]> => {
   const request: Donu.Request = {
@@ -208,10 +171,6 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
         seenModelNames.set(name, index);
       }
     });
-
-    // HACK: Add CHIME+ PNC. This should be removed once CHIME+ is provided by donu
-    const staticModels = await fetchStaticModels(output.length + 1);
-    output.push(...staticModels);
 
     return output;
   } else {
