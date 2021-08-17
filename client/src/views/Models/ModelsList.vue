@@ -76,7 +76,6 @@
   import MarmScreenshot from '@/assets/img/marm_model.png';
   import PlaceholderScreenshot from '@/assets/img/placeholder_image.png';
 
-
   const TABS: TabInterface[] = [
     { name: 'Facets', icon: 'filter', id: 'facets' },
   ];
