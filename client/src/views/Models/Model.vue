@@ -312,12 +312,21 @@
     get countersData (): HMI.Counter[] {
       const data: HMI.Counter[] = [];
 
-      const { parameters, variables } = this.getSimModel(this.selectedModel.id);
+      const { parameters, variables } = this.getSimModel(this.selectedModel.id) as HMI.SimulationModel;
 
       if (parameters.length > 0) {
+        const nbInitialCondition = parameters.filter(p => p.initial_condition).length;
+
+        if (nbInitialCondition > 0) {
+          data.push({
+            name: 'Initial Conditions',
+            value: nbInitialCondition,
+          });
+        }
+
         data.push({
           name: 'Parameters',
-          value: parameters.length,
+          value: parameters.length - nbInitialCondition,
         });
       }
       if (variables.length > 0) {

@@ -157,9 +157,18 @@
       }
 
       if (this.parameters.length > 0) {
+        const nbInitialCondition = this.parameters.filter(p => p.initial_condition).length;
+
+        if (nbInitialCondition > 0) {
+          data.push({
+            name: 'Initial Conditions',
+            value: nbInitialCondition,
+          });
+        }
+
         data.push({
           name: 'Parameters',
-          value: this.parameters.length,
+          value: this.parameters.length - nbInitialCondition,
         });
       }
       if (this.variables.length > 0) {
