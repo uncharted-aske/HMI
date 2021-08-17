@@ -3,7 +3,7 @@ import * as MARM_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/marm_m
 
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
-import { getUtil, postUtil, postUtilMem } from '@/utils/FetchUtil';
+import { postUtil, postUtilMem } from '@/utils/FetchUtil';
 
 // HACK: REMOVE when Donu provides CHIME+
 export const staticFileURLs = [
