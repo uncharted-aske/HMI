@@ -150,6 +150,35 @@ const bioNodeOutDegree = (bgraphPathQuery, clause: Filter): any => {
   });
 };
 
+const docsClustersNodeTitle = (bgraphPathQuery, clause: Filter): any => {
+  let titles = clause.values as string[];
+  // Filter fuzzy matches case insensitive titles
+  titles = titles.map(title => title.toLowerCase());
+  return bgraphPathQuery.filter(document => {
+    if (document._type === 'node') {
+      const node = document;
+      return titles.some(title => node.label.toLowerCase().includes(title));
+    }
+    // Document is not a node
+    return false;
+  });
+};
+const docsClustersNodeDOI = (bgraphPathQuery, clause: Filter): any => {
+  const dois = clause.values as string[];
+  return bgraphPathQuery.filter(document => {
+    if (document._type === 'node') {
+      const node = document;
+      const nodeDOI = node.extras?.bibjson?.identifier?.find(d => d.type === 'doi')?.id;
+      if (!nodeDOI) {
+        return false;
+      }
+      return dois.some(doi => nodeDOI.includes(doi));
+    }
+    // Document is not a node
+    return false;
+  });
+};
+
 // EPI PATH QUERIES
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const epiPathPre = (bgraphPathQuery, clause: Filter): any => {
@@ -220,6 +249,9 @@ export const filterTermToPriorityRank = {
   [QUERY_FIELDS_MAP.EPI_PATH_PRE_NODE_FILTER_LOOP.field]: 3,
   [QUERY_FIELDS_MAP.EPI_PATH.field]: PATH_PRIORITY_RANK,
   [QUERY_FIELDS_MAP.EPI_PATH_POST.field]: 8,
+  // DOCS Node Terms
+  [QUERY_FIELDS_MAP.DOCS_CLUSTERS_NODE_TITLE.field]: NODE_PRIORITY_RANK,
+  [QUERY_FIELDS_MAP.DOCS_CLUSTERS_NODE_DOI.field]: NODE_PRIORITY_RANK,
 };
 
 // Assume that bgraph instance passed in has already been initialized
@@ -275,6 +307,13 @@ export const executeBgraphNodes = (bgraphNodeQuery: any, clause: Filter): any =>
     case QUERY_FIELDS_MAP.BIO_NODE_IN_DEGREE.field: return bioNodeInDegree(bgraphNodeQuery, clause);
     case QUERY_FIELDS_MAP.BIO_NODE_OUT_DEGREE.field: return bioNodeOutDegree(bgraphNodeQuery, clause);
     case QUERY_FIELDS_MAP.BIO_NODE_POST.field: return bgraphNodeQuery;
+    // DOC CLAUSES
+    // TODO: Currently we are using the BIO_NODE_PRE/POST for document cluster queries
+    // as they both just return the query but may want to differentiate in the future.
+    // case QUERY_FIELDS_MAP.DOCS_NODE_PRE.field: return bgraphNodeQuery;
+    case QUERY_FIELDS_MAP.DOCS_CLUSTERS_NODE_TITLE.field: return docsClustersNodeTitle(bgraphNodeQuery, clause);
+    case QUERY_FIELDS_MAP.DOCS_CLUSTERS_NODE_DOI.field: return docsClustersNodeDOI(bgraphNodeQuery, clause);
+    // case QUERY_FIELDS_MAP.DOCS_NODE_POST.field: return bgraphNodeQuery;
     default: return bgraphNodeQuery;
   }
 };

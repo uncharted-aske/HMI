@@ -22,6 +22,9 @@
     GroupHullEdge,
     LayoutInfo,
   } from './convertDataToGraferV4';
+  import {
+    CLUSTER_NODES_LAYERS_CONFIG,
+  } from '@/utils/GraferUtil';
 
   import Loader from '@/components/widgets/Loader.vue';
   import eventHub from '@/eventHub';
@@ -50,7 +53,82 @@
     graferNodesData: any = undefined;
 
     mounted (): void {
-        eventHub.$on('load-grafer-data', this.loadGraph);
+      eventHub.$on('load-grafer-data', this.loadGraph);
+      eventHub.$on('update-layers', (layers: GraferLayerData[], layerNames: string[]) => {
+        this.updateLayers(layers, layerNames);
+      });
+      eventHub.$on('remove-layers', (layerNames: string[]) => {
+          this.removeLayers(layerNames);
+      });
+      eventHub.$on('foreground-full-graph', () => {
+        this.foregroundFullGraph();
+      });
+      eventHub.$on('background-full-graph', () => {
+        this.backgroundFullGraph();
+      });
+    }
+
+    destroyed (): void {
+      eventHub.$off('load-layers');
+      eventHub.$off('update-layers');
+      eventHub.$off('remove-layers');
+      eventHub.$off('foreground-full-graph');
+      eventHub.$off('background-full-graph');
+    }
+
+    removeLayers (layerNames: string[]): void {
+      for (const layerName of layerNames) {
+        this.controller.removeLayerByName(layerName);
+      }
+      this.controller.render();
+    }
+
+    updateLayers (layers: GraferLayerData[], layerNames: string[]): void {
+      for (const layerName of layerNames) {
+        this.controller.removeLayerByName(layerName);
+      }
+      for (let i = 0; i < layers.length; i++) {
+        this.controller.addLayer(layers[i], layerNames[i]);
+      }
+      this.controller.render();
+    }
+
+    foregroundFullGraph (): void {
+      // Get internal pointer to graph layers
+      // NOTE: This is a temporary interface, Grafer is developing a user interface into layers that
+      //       this should be replaced with
+      const layers = this.controller.viewport.graph.layers;
+      layers.forEach(l => {
+        if (l.name.includes('highlight')) {
+          // Ignore query/highlight layers
+          return;
+        }
+        if (l.nodes) {
+          Object.assign(l.nodes, CLUSTER_NODES_LAYERS_CONFIG.options.foreground.nodes);
+        }
+        if (l.edges) {
+          Object.assign(l.edges, CLUSTER_NODES_LAYERS_CONFIG.options.foreground.edges);
+        }
+      });
+    }
+
+    backgroundFullGraph (): void {
+      // Get internal pointer to graph layers
+      // NOTE: This is a temporary interface, Grafer is developing a user interface into layers that
+      //       this should be replaced with
+      const layers = this.controller.viewport.graph.layers;
+      layers.forEach(l => {
+        if (l.name.includes('highlight')) {
+          // Ignore query/highlight layers
+          return;
+        }
+        if (l.nodes) {
+          Object.assign(l.nodes, CLUSTER_NODES_LAYERS_CONFIG.options.background.nodes);
+        }
+        if (l.edges) {
+          Object.assign(l.edges, CLUSTER_NODES_LAYERS_CONFIG.options.background.edges);
+        }
+      });
     }
 
     forwardEvents (controller: GraferController): void {
@@ -286,6 +364,8 @@
 
         this.forwardEvents(this.controller);
         this.loading = false;
+        this.$emit('loaded-layers', layers);
+        this.$emit('loaded');
     }
   }
 
