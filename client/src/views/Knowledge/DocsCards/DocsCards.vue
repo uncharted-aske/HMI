@@ -68,7 +68,7 @@
   import * as filtersUtil from '@/utils/FiltersUtil';
   import * as modelTypeUtil from '@/utils/ModelTypeUtil';
   import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
-  import { filterToParamObj, getAuthorList } from '@/utils/CosmosDataUtil';
+  import { filterToParamObj, getPublicationInfo } from '@/utils/CosmosDataUtil';
 
   import { cosmosSearch } from '@/services/CosmosFetchService';
 
@@ -209,18 +209,18 @@
       const data = this.data as CosmosSearchInterface;
       if (!data.objects) return;
 
-      return data.objects.map((item, index) => (
-        {
+      return data.objects.map((item, index) => {
+        return {
           id: index,
           title: item.bibjson.title,
-          subtitle: `${item.bibjson.year} ?? 'Unknown Year'} - ${getAuthorList(item.bibjson)}`,
+          subtitle: getPublicationInfo(item?.bibjson),
           type: item.bibjson.type,
           previewImageSrc: item.children[0].bytes,
           raw: item,
           // If the drilldown is open, we highlight the corresponding card.
           highlighted: this.isDrilldownCard(index),
-        } as CardInterface
-      ));
+        } as CardInterface;
+      });
     }
 
     onDrilldownTabClick (tabId: string): void {

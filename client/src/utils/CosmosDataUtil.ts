@@ -36,13 +36,34 @@ export const filterToParamObj = (filterObj: {[key: string]: any}): any => {
 };
 
 export const getAuthorList = (bibjson: CosmosSearchBibjsonInterface): string => {
-  return bibjson === undefined || bibjson.author.length === 0
-    ? 'Unknown Author'
-    : bibjson.author.reduce((acc, author, index) => {
-      acc += author.name;
-      if (index !== bibjson.author.length - 1) {
-        acc += ', ';
-      }
-      return acc;
-    }, '');
+  let authors = bibjson?.author;
+
+  if (!authors || authors.length === 0) {
+    return 'Unknown Author';
+  }
+
+  if (authors.length > 1 && authors.length < 4) {
+    authors[authors.length - 1].name = 'and ' + authors[authors.length - 1].name;
+  }
+
+  if (authors.length > 3) {
+    authors = authors.slice(0, 3);
+    authors.push({ name: 'et al.' });
+  }
+
+  return authors.map(author => author.name).join(', ');
+};
+
+export const getJournal = (bibjson: CosmosSearchBibjsonInterface): string => {
+  const journal = bibjson?.journal;
+  return (!journal || journal.length === 0) ? 'Unknown Journal' : journal;
+};
+
+export const getYear = (bibjson: CosmosSearchBibjsonInterface): string => {
+  const year = bibjson?.year;
+  return (!year || year.length === 0) ? 'Unknown Year' : year;
+};
+
+export const getPublicationInfo = (bibjson: CosmosSearchBibjsonInterface): string => {
+  return `${getJournal(bibjson)} ${getYear(bibjson)} – ${getAuthorList(bibjson)}`;
 };
