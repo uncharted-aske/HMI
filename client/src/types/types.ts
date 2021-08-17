@@ -50,6 +50,7 @@ type Counter = {
 interface SimulationParameter extends Donu.ModelParameter {
   displayed?: boolean, // the parameter is visible or not
   values?: number[],
+  initial_condition?: boolean, // a quick way to know if the parameter is an initial condition
 }
 
 // List of runs, containing a list of coordinates.
@@ -68,7 +69,6 @@ type SimulationRun = {
 
 type SimulationModel = {
   id: number,
-  initial_condition: SimulationParameter[],
   parameters: SimulationParameter[],
   variables: SimulationVariable[],
 }
