@@ -52,6 +52,7 @@
         <model-panel
           class="simulation-panel"
           simulation="true"
+          show-graph-type="true"
           :expanded="expandedId === 'model'"
           :key="index"
           :model="model"
@@ -161,14 +162,15 @@
 
     @Action fetchModelResults;
     @Action incrNumberOfSavedRuns;
-    @Action initializeParameters;
-    @Action initializeVariables;
+    @Action initializeInterface;
     @Action resetSim;
+
     @Getter getSimModel;
     @Getter getModelsList;
     @Getter getSelectedModelGraphType
     @Getter getSelectedModelIds;
     @Getter getSimParameterArray;
+
     @Mutation setSelectedModels;
 
     @Watch('triggerFetchResults') onTriggerFetchResults (): void {
@@ -317,8 +319,7 @@
       const selectedModelGraphType = this.getSelectedModelGraphType;
       if (this.selectedModels && selectedModelGraphType) {
         this.selectedModels.forEach(model => {
-          this.initializeParameters({ model, selectedModelGraphType });
-          this.initializeVariables({ model, selectedModelGraphType });
+          this.initializeInterface({ model, selectedModelGraphType });
         });
       }
     }

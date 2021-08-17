@@ -47,7 +47,8 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { Getter, Mutation } from 'vuex-class';
+  import { Watch } from 'vue-property-decorator';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
   import * as Graph from '@/types/typesGraphs';
@@ -79,13 +80,24 @@
 
     layouts: Graph.GraphLayoutInterface[] = Graph.LAYOUTS;
 
+    @Action initializeInterface;
+
     @Getter getSelectedModelGraphType;
     @Getter getModelsLayout;
     @Getter getModelsList;
     @Getter getSelectedModelIds;
+
     @Mutation setModelsLayout;
     @Mutation setSelectedModelGraphType;
     @Mutation setSelectedModels;
+
+    @Watch('getSelectedModelGraphType') onModelGraphTypeChanged (): void {
+      this.initializeSim();
+    }
+
+    mounted (): void {
+      this.initializeSim();
+    }
 
     get selectedModels (): Model.Model[] {
       if (
@@ -151,6 +163,15 @@
       };
 
       this.$router.push(options);
+    }
+
+    initializeSim (): void {
+      const selectedModelGraphType = this.getSelectedModelGraphType;
+      if (this.selectedModels && selectedModelGraphType) {
+        this.selectedModels.forEach(model => {
+          this.initializeInterface({ model, selectedModelGraphType });
+        });
+      }
     }
   }
 </script>

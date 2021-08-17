@@ -1,7 +1,8 @@
 import { ActionTree, GetterTree, MutationTree } from 'vuex';
 import * as HMI from '@/types/types';
 import * as Model from '@/types/typesModel';
-import { getModelParameters, getModelResult, getModelVariables } from '@/services/DonuService';
+import * as Donu from '@/types/typesDonu';
+import { getModelInterface, getModelResult } from '@/services/DonuService';
 import * as d3 from 'd3';
 import _ from 'lodash';
 
@@ -35,6 +36,11 @@ const getVariable = (state: HMI.SimulationState, modelId: number, selector: stri
   return getModel(state, modelId)?.variables.find(variable => {
     return [variable.uid, variable.metadata.name].includes(selector);
   });
+};
+
+/** Test to know if a parameter is an initial condition based on Galois' information */
+const isInitialCondition = (parameter: Donu.ModelParameter): boolean => {
+  return parameter.metadata.group === 'Initial State' || parameter.uid.includes('_init');
 };
 
 const getters: GetterTree<any, HMI.SimulationParameter[]> = {
@@ -108,40 +114,45 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     commit('setVariablesAggregate', { aggregator, modelId: model.id });
   },
 
-  async initializeParameters ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
-    const donuParameters = await getModelParameters(args.model, args.selectedModelGraphType) ?? [];
+  async initializeInterface ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
+    const {
+      parameters: donuParameters,
+      measures: donuVariables,
+    } = await getModelInterface(args.model, args.selectedModelGraphType) ?? {} as Donu.ModelDefinition;
 
-    // Filter out parameters with the same not so unique UID.
-    const uniqueDonuParameters = _.uniqBy(donuParameters, 'uid');
+    if (donuParameters) {
+      // Filter out parameters with the same not so unique UID.
+      const uniqueParameters = _.uniqBy(donuParameters, 'uid');
 
-    const parameters = uniqueDonuParameters.map(donuParameter => {
-      const parameter = {
-        ...donuParameter,
+      const parameters = uniqueParameters.map(donuParameter => {
+        const parameter = {
+          ...donuParameter,
+          displayed: false,
+          values: [donuParameter.default],
+          initial_condition: isInitialCondition(donuParameter),
+        } as HMI.SimulationParameter;
+
+        // If the API does not provide a name, we leverage the UID.
+        if (!parameter.metadata.name) {
+          parameter.metadata.name = parameter.uid;
+        }
+
+        return parameter;
+      });
+      commit('setSimParameters', { modelId: args.model.id, parameters });
+    }
+
+    if (donuVariables) {
+      const variables = donuVariables.map(donuVariable => ({
+        ...donuVariable,
+        aggregate: null,
         displayed: false,
-        values: [donuParameter.default],
-      };
+        values: [],
+      }));
+      commit('setSimVariables', { modelId: args.model.id, variables });
+    }
 
-      // If the API does not provide a name, we leverage the UID.
-      if (!parameter.metadata.name) {
-        parameter.metadata.name = parameter.uid;
-      }
-
-      return parameter;
-    });
-
-    commit('setSimParameters', { modelId: args.model.id, parameters });
     commit('setNumberOfSavedRuns', 0);
-  },
-
-  async initializeVariables ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
-    const donuVariables = await getModelVariables(args.model, args.selectedModelGraphType) ?? [];
-    const variables = donuVariables.map(donuVariable => ({
-      ...donuVariable,
-      aggregate: null,
-      displayed: false,
-      values: [],
-    }));
-    commit('setSimVariables', { modelId: args.model.id, variables });
   },
 
   hideAllParameters ({ commit }, modelId: number): void {
