@@ -8,6 +8,7 @@ export interface SVGRendererOptionsInterface {
   edgeControlOffset?: number,
   useMinimap?: boolean,
   useZoom?: boolean,
+  useStableZoomPan?: boolean, // false by default. Zoom/Pan remains stable on render changes
   addons?: any
 }
 

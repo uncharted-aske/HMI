@@ -92,6 +92,7 @@
         renderMode: 'basic',
         useEdgeControl: false,
         useZoom: true,
+        useStableZoomPan: true,
         useMinimap: false,
         addons: [expandCollapse, highlight],
       });
