@@ -97,10 +97,12 @@
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
       this.setSelectedNodes([{ model: this.model.id, node: selected.label }]);
+      this.$emit('highlight', selected.label);
     }
 
     onBackgroundClick (): void {
       this.setSelectedNodes([]);
+      this.$emit('highlight', '');
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
