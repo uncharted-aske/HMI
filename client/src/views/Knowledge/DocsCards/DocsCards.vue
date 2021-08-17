@@ -18,10 +18,29 @@
       />
     </main>
 
-    <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" :active-tab-id="drilldownActiveTabId" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
-      <knowledge-preview-pane v-if="drilldownActiveTabId === 'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true"/>
-      <models-pane v-if="drilldownActiveTabId === 'models'" slot="content" :data="drilldownData"/>
-      <entities-pane v-if="drilldownActiveTabId === 'entities'" slot="content" :data="drilldownData"/>
+    <drilldown-panel
+      :active-tab-id="drilldownActiveTabId"
+      :is-open="isOpenDrilldown"
+      :tabs="drilldownTabs"
+      @close-pane="onCloseDrilldownPanel"
+      @tab-click="onDrilldownTabClick"
+    >
+      <knowledge-preview-pane
+        v-if="drilldownActiveTabId === 'preview'"
+        slot="content"
+        :data="drilldownData"
+        @open-modal="showModalDocuments = true"
+      />
+      <models-pane
+        v-if="drilldownActiveTabId === 'models'"
+        slot="content"
+        :data="drilldownData"
+      />
+      <entities-pane
+        v-if="drilldownActiveTabId === 'entities'"
+        slot="content"
+        :data="drilldownData"
+      />
     </drilldown-panel>
 
     <modal-document
