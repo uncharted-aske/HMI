@@ -101,11 +101,15 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     const responseArr = await Promise.all(
       getters.getSimParameterArray(model.id).map(param => getModelResult(model, param, config, selectedModelGraphType)),
     );
+
+    // The property in which the xAxis values are stored depends on the Graph Type. c.f. types/typesDonu.ts
+    const xAxis = selectedModelGraphType === Model.GraphTypes.FunctionNetwork ? 'domain_parameter' : 'times';
+
     for (const response of responseArr) {
       // The reponse.values is a list of variables results with the variable uid as key.
       // Each index of the result list correspond to the response.times list.
       for (const uid in response[0].values) {
-        const values = response[0].values[uid].map((value, index) => ({ x: response[0].times[index], y: value }));
+        const values = response[0].values[uid].map((value, index) => ({ x: response[0][xAxis][index], y: value }));
         commit('updateVariableValues', { modelId: model.id, uid: uid, values });
       }
     }

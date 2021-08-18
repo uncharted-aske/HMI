@@ -222,6 +222,12 @@ export const getModelResult = async (
       step: config.step,
     };
 
+    /** TODO
+     * This is a temporary mock up for Demonstration purposes.
+     * The DONU API needs to be clearer on which outputs can be selected programatically.
+     * Also, the HMI needs to be updated to allow the user to select which paramaters
+     * to use as `domain_parameter` for the simulation steps.
+     */
     if (selectedModelGraphType === Model.GraphTypes.FunctionNetwork) {
       if (modelGraph.model === 'SimpleSIR_metadata_gromet_FunctionNetwork.json') {
         request.outputs = ['P:sir.out.S', 'P:sir.out.I', 'P:sir.out.R'];
@@ -230,7 +236,7 @@ export const getModelResult = async (
         request.outputs = ['P:sir.s_out', 'P:sir.i_out', 'P:sir.r_out'];
         request.domain_parameter = 'P:sir.n';
       } else {
-        console.warn('[DONU Service] — getModelResult', '_outputs_ and _domainParameter_ are missing, and the request cannot be executed.'); // eslint-disable-line no-console
+        console.warn('[DONU Service] — getModelResult', 'The request cannot be executed because _outputs_ or/and _domainParameter_ are missing.'); // eslint-disable-line no-console
       }
     }
 

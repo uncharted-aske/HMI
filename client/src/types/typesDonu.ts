@@ -69,7 +69,9 @@ type ModelDefinition = {
 type ModelGraph = any;
 
 type SimulationResponse = {
-  times: number[],
+  // `domain_parameter` and `times` are identical,
+  domain_parameter?: number[], // for Functional Network,
+  times?: number[], // for Petri Net Classic.
   values: {
     [key: string]: number[],
   }
