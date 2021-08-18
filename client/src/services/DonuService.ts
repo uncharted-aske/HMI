@@ -44,7 +44,7 @@ const getDonuModelSource = async (model: string, type: Donu.Type): Promise<Donu.
     return JSON.parse(modelSource);
   } else {
     // eslint-disable-next-line no-console
-    console.error('[DONU Service] — fetchDonuModelSource', response);
+    console.error('[DONU Service] — fetchDonuModelSource', response.error);
   }
 };
 
@@ -91,10 +91,9 @@ export const queryDonuModels = async (text: string): Promise<any[]> => {
 
   const response = await callDonuCache(request);
   if (response.status === Donu.ResponseStatus.success) {
-    const models = response.result ?? [];
-    return models;
+    return response.result ?? [];
   } else {
-    console.error('[DONU Service] — queryDonuModels', response); // eslint-disable-line no-console
+    console.error('[DONU Service] — queryDonuModels', response.error); // eslint-disable-line no-console
   }
 };
 
@@ -174,7 +173,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
 
     return output;
   } else {
-    console.error('[DONU Service] — fetchDonuModels', response); // eslint-disable-line no-console
+    console.error('[DONU Service] — fetchDonuModels', response.error); // eslint-disable-line no-console
   }
 };
 
@@ -195,7 +194,7 @@ export const getModelInterface = async (model: Model.Model, selectedModelGraphTy
     if (response.status === Donu.ResponseStatus.success) {
       return response?.result as Donu.ModelDefinition;
     } else {
-      console.error('[DONU Service] — getModelInterface', response); // eslint-disable-line no-console
+      console.error('[DONU Service] — getModelInterface', response.error); // eslint-disable-line no-console
     }
   } else {
     console.warn('[DONU Service] — getModelInterface', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
@@ -223,13 +222,25 @@ export const getModelResult = async (
       step: config.step,
     };
 
+    if (selectedModelGraphType === Model.GraphTypes.FunctionNetwork) {
+      if (modelGraph.model === 'SimpleSIR_metadata_gromet_FunctionNetwork.json') {
+        request.outputs = ['P:sir.out.S', 'P:sir.out.I', 'P:sir.out.R'];
+        request.domain_parameter = 'P:sir.in.dt';
+      } else if (modelGraph.model === 'CHIME_SIR_v01_gromet_FunctionNetwork_by_hand.json') {
+        request.outputs = ['P:sir.s_out', 'P:sir.i_out', 'P:sir.r_out'];
+        request.domain_parameter = 'P:sir.n';
+      } else {
+        console.warn('[DONU Service] — getModelResult', '_outputs_ and _domainParameter_ are missing, and the request cannot be executed.'); // eslint-disable-line no-console
+      }
+    }
+
     const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       return response?.result as Donu.SimulationResponse ?? null;
     } else {
-      console.error('[DONU Service] — getModelResult', response); // eslint-disable-line no-console
+      console.error('[DONU Service] — getModelResult', response.error); // eslint-disable-line no-console
     }
   } else {
-    console.error('[DONU Service] — getModelResult', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
+    console.warn('[DONU Service] — getModelResult', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
   }
 };

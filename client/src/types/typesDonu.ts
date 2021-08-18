@@ -89,13 +89,15 @@ type Request = {
   command: RequestCommand;
   definition?: string | ModelDefinition;
   parameters?: RequestParameters,
-  // 'dest-type'?: string;
+  outputs?: string[],
+  domain_parameter?: string,
   end?: number;
-  // name?: string;
   start?: number;
   step?: number;
   'sim-type'?: SimulationType | void,
   text?: string,
+  // name?: string;
+  // 'dest-type'?: string;
   // type?: string;
 }
 
