@@ -151,7 +151,7 @@
     autoRun: boolean = false;
     displaySearch: boolean = false;
     expandedId: string = '';
-    runConfig: Donu.RequestConfig = { end: 120, start: 0, step: 30 };
+    runConfig: Donu.RequestConfig = { end: 100, start: 0, step: 1 };
     subgraph: Graph.GraphInterface = null;
     highlighted: string = '';
 
