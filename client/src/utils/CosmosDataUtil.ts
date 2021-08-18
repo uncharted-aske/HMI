@@ -36,22 +36,35 @@ export const filterToParamObj = (filterObj: {[key: string]: any}): any => {
 };
 
 export const getAuthorList = (bibjson: CosmosSearchBibjsonInterface): string => {
-  let authors = bibjson?.author;
+  const list = bibjson?.author;
 
-  if (!authors || authors.length === 0) {
+  if (!list || list.length === 0) {
     return 'Unknown Author';
   }
 
+  // Remove comma to avoid mistake with the list itself.
+  // TODO - There is no way to clean this up efficiently, there are so many cases
+  // and the data isn't clean enough. I think this is out of scope for now.
+  let authors = list.map(author => {
+    if (author.name.includes(',')) {
+      const [lastname, firstnames] = author.name.split(', ');
+      return firstnames + ' ' + lastname;
+    }
+    return author.name;
+  });
+
+  // If the list is three or less, we use an Oxford comma.
   if (authors.length > 1 && authors.length < 4) {
-    authors[authors.length - 1].name = 'and ' + authors[authors.length - 1].name;
+    authors.push('and ' + authors.pop());
   }
 
+  // If there is more than three, we cut off the others.
   if (authors.length > 3) {
     authors = authors.slice(0, 3);
-    authors.push({ name: 'et al.' });
+    authors.push('et al.');
   }
 
-  return authors.map(author => author.name).join(', ');
+  return authors.join(', ');
 };
 
 export const getJournal = (bibjson: CosmosSearchBibjsonInterface): string => {
