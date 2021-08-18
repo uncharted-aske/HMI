@@ -5,25 +5,44 @@
         <search-bar :pills="searchPills" :placeholder="`Search for documents including a specific keyword (e.g. IL-6)...`" />
       </div>
       <settings-bar>
-        <div slot="left">
-          <counters :data="countersData"/>
-        </div>
-        <div slot="right">
-          <settings />
-        </div>
+        <counters slot="left" :data="countersData"/>
+        <settings slot="right" />
       </settings-bar>
+
+      <loader v-if="!docsCards" :loading="true" />
       <card-container
+        v-else
         :header="`Knowledge`"
         :cards="docsCards"
         @click-card="onClickCard"
       />
-      <loader :loading="dataLoading" />
     </main>
-    <drilldown-panel :tabs="drilldownTabs" :is-open="isOpenDrilldown" :active-tab-id="drilldownActiveTabId" @close-pane="onCloseDrilldownPanel" @tab-click="onDrilldownTabClick">
-      <knowledge-preview-pane v-if="drilldownActiveTabId === 'preview'" slot="content" :data="drilldownData" @open-modal="showModalDocuments = true"/>
-      <models-pane v-if="drilldownActiveTabId === 'models'" slot="content" :data="drilldownData"/>
-      <entities-pane v-if="drilldownActiveTabId === 'entities'" slot="content" :data="drilldownData"/>
+
+    <drilldown-panel
+      :active-tab-id="drilldownActiveTabId"
+      :is-open="isOpenDrilldown"
+      :tabs="drilldownTabs"
+      @close-pane="onCloseDrilldownPanel"
+      @tab-click="onDrilldownTabClick"
+    >
+      <knowledge-preview-pane
+        v-if="drilldownActiveTabId === 'preview'"
+        slot="content"
+        :data="drilldownData"
+        @open-modal="showModalDocuments = true"
+      />
+      <models-pane
+        v-if="drilldownActiveTabId === 'models'"
+        slot="content"
+        :data="drilldownData"
+      />
+      <entities-pane
+        v-if="drilldownActiveTabId === 'entities'"
+        slot="content"
+        :data="drilldownData"
+      />
     </drilldown-panel>
+
     <modal-document
       v-if="showModalDocuments"
       :data="drilldownData.raw"
@@ -33,9 +52,9 @@
 </template>
 
 <script lang="ts">
+  import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Watch } from 'vue-property-decorator';
-  import Vue from 'vue';
   import { Getter } from 'vuex-class';
   import _ from 'lodash';
 
@@ -43,16 +62,17 @@
   import { FacetTermsSelectionMap } from '@/types/typesFacets';
   import { CardInterface, Counter, TabInterface } from '@/types/types';
 
-  import SearchBar from '@/components/SearchBar.vue';
   import TextPill from '@/search/pills/TextPill';
   import KeyValuePill from '@/search/pills/KeyValuePill';
-  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
-  import * as modelTypeUtil from '@/utils/ModelTypeUtil';
 
   import * as filtersUtil from '@/utils/FiltersUtil';
-  import { cosmosSearch } from '@/services/CosmosFetchService';
-  import { filterToParamObj, getAuthorList } from '@/utils/CosmosDataUtil';
+  import * as modelTypeUtil from '@/utils/ModelTypeUtil';
+  import { QUERY_FIELDS_MAP } from '@/utils/QueryFieldsUtil';
+  import { filterToParamObj, getPublicationInfo } from '@/utils/CosmosDataUtil';
 
+  import { cosmosSearch } from '@/services/CosmosFetchService';
+
+  import SearchBar from '@/components/SearchBar.vue';
   import Loader from '@/components/widgets/Loader.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import Settings from '../components/Settings.vue';
@@ -71,22 +91,21 @@
   ];
 
   const components = {
+    CardContainer,
+    Counters,
+    DrilldownPanel,
+    EntitiesPane,
+    KnowledgePreviewPane,
+    Loader,
+    ModalDocument,
+    ModelsPane,
     SearchBar,
     Settings,
     SettingsBar,
-    Counters,
-    CardContainer,
-    DrilldownPanel,
-    KnowledgePreviewPane,
-    ModelsPane,
-    EntitiesPane,
-    ModalDocument,
-    Loader,
   };
 
   @Component({ components })
   export default class DocsCards extends Vue {
-    dataLoading = false;
     data: CosmosSearchInterface | Record<any, never> = {};
     filterHash: string = '';
 
@@ -94,7 +113,6 @@
     isOpenDrilldown: boolean = false;
     drilldownActiveTabId: string = '';
     drilldownData: CardInterface | Record<any, never> = {};
-
     showModalDocuments: boolean = false;
 
     @Getter getFilters;
@@ -108,19 +126,15 @@
     }
 
     async fetchCosmos (): Promise<void> {
-      const facetSelection = this.facetSelection;
-      const filterHashNew = JSON.stringify(facetSelection);
+      const filterHashNew = JSON.stringify(this.facetSelection);
 
-      if (filterHashNew !== this.filterHash || !_.isEmpty(facetSelection.cosmosQuery)) {
+      if (filterHashNew !== this.filterHash || !_.isEmpty(this.facetSelection.cosmosQuery)) {
         this.filterHash = filterHashNew;
         try {
-          this.dataLoading = true;
-          const response = await cosmosSearch(filterToParamObj(this.facetSelection));
-          this.data = response;
+          this.data = await cosmosSearch(filterToParamObj(this.facetSelection));
         } catch (e) {
           throw Error(e);
         }
-        this.dataLoading = false;
       }
     }
 
@@ -193,20 +207,20 @@
 
     get docsCards (): CardInterface[] {
       const data = this.data as CosmosSearchInterface;
-      if (!data.objects) return [];
+      if (!data.objects) return;
 
-      return data.objects.map((item, index) => (
-        {
+      return data.objects.map((item, index) => {
+        return {
           id: index,
           title: item.bibjson.title,
-          subtitle: `${item.bibjson.year} ?? 'Unknown Year'} - ${getAuthorList(item.bibjson)}`,
+          subtitle: getPublicationInfo(item?.bibjson),
           type: item.bibjson.type,
           previewImageSrc: item.children[0].bytes,
           raw: item,
           // If the drilldown is open, we highlight the corresponding card.
           highlighted: this.isDrilldownCard(index),
-        } as CardInterface
-      ));
+        } as CardInterface;
+      });
     }
 
     onDrilldownTabClick (tabId: string): void {
