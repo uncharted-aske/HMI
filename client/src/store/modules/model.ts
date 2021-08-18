@@ -3,7 +3,7 @@ import { fetchDonuModels } from '@/services/DonuService';
 import * as Model from '@/types/typesModel';
 import * as Graphs from '@/types/typesGraphs';
 
-import * as MODEL_COMPARISON from '@/static/model_comparison.json';
+import MODEL_COMPARISON from '@/static/model_comparison.json';
 
 const state: Model.State = {
   isInitialized: false,
@@ -43,26 +43,32 @@ const getters: GetterTree<Model.State, any> = {
   getModelsLayout: state => state.modelsLayout,
   getModelComparisonMap: (): Model.ModelComparisonMap => MODEL_COMPARISON,
   getSharedNodes: (state, getters) => (modelId: number): Graphs.SubgraphInterface => {
-    const selectedModel = state.modelsList.find(model => model.id === modelId)?.name;
+    const modelGraphType = getters.getSelectedModelGraphType;
+    const selectedModel = state.modelsList.find(model => model.id === modelId)?.name + modelGraphType;
     const comparedModels = state.modelsList
       .filter(model => model.id !== modelId && state.selectedModelIds.has(model.id))
-      .map(model => model.name);
+      .map(model => model.name + modelGraphType);
     const comparisonMap = getters.getModelComparisonMap[selectedModel];
     const nodes: Set<string> = new Set();
 
     for (const compareTo in comparisonMap) {
       if (comparedModels.includes(compareTo)) {
-        Object.keys(comparisonMap[compareTo]).forEach(nodeGrometId => nodes.add(nodeGrometId));
+        Object.keys(comparisonMap[compareTo]).forEach(nodeGrometId => {
+          if (comparisonMap[compareTo][nodeGrometId].length) {
+            nodes.add(nodeGrometId);
+          }
+        });
       }
     }
     return { nodes: [...nodes].map(node => ({ id: node })), edges: [] };
   },
   getSelectedNodes: (state, getters) => (modelId: number): Graphs.SubgraphInterface => {
-    const selectedModel = state.modelsList.find(model => model.id === modelId).name;
+    const modelGraphType = getters.getSelectedModelGraphType;
+    const selectedModel = state.modelsList.find(model => model.id === modelId).name + modelGraphType;
     const nodes: Set<string> = new Set();
 
     state.selectedNodes.forEach(selectedNode => {
-      const selectedNodeModel = state.modelsList.find(model => model.id === selectedNode.model).name;
+      const selectedNodeModel = state.modelsList.find(model => model.id === selectedNode.model).name + modelGraphType;
       if (selectedNodeModel === selectedModel) {
         nodes.add(selectedNode.node);
       } else {
