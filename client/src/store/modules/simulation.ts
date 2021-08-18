@@ -147,12 +147,21 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     }
 
     if (donuVariables) {
-      const variables = donuVariables.map(donuVariable => ({
-        ...donuVariable,
-        aggregate: null,
-        displayed: false,
-        values: [],
-      }));
+      const variables = donuVariables.map(donuVariable => {
+        const variable = {
+          ...donuVariable,
+          aggregate: null,
+          displayed: false,
+          values: [],
+        };
+
+        // If the API does not provide a name, we leverage the UID.
+        if (!variable.metadata.name) {
+          variable.metadata.name = variable.uid;
+        }
+
+        return variable;
+      });
       commit('setSimVariables', { modelId: args.model.id, variables });
     }
 
