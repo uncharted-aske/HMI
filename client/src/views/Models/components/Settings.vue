@@ -98,10 +98,12 @@
 
     onViewSelection (viewId:string):void {
       this.$emit('view-change', viewId);
+      this.showDropdownViews = false;
     }
 
     onLayoutSelection (layoutId:string):void {
       this.$emit('layout-change', layoutId);
+      this.showDropdownLayouts = false;
     }
 
     runQuery (): void {
