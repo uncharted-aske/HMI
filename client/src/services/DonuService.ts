@@ -192,6 +192,28 @@ export const getModelInterface = async (model: Model.Model, selectedModelGraphTy
 
     const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
+      /** TODO
+       * This is a temporary mock up for Demonstration purposes.
+       * The DONU API needs to be clearer on which outputs can be selected programatically.
+       * Also, the HMI needs to be updated to allow the user to select which paramaters
+       * to use as `domain_parameter` for the simulation steps.
+       */
+      if (selectedModelGraphType === Model.GraphTypes.FunctionNetwork) {
+        const result = response?.result as Donu.ModelDefinition;
+        let outputs = [];
+        let domainParameter;
+        if (modelGraph.model === 'SimpleSIR_metadata_gromet_FunctionNetwork.json') {
+          outputs = ['P:sir.out.S', 'P:sir.out.I', 'P:sir.out.R'];
+          domainParameter = 'P:sir.in.dt';
+        } else if (modelGraph.model === 'CHIME_SIR_v01_gromet_FunctionNetwork_by_hand.json') {
+          outputs = ['P:sir.s_out', 'P:sir.i_out', 'P:sir.r_out'];
+          domainParameter = 'P:sir.n';
+        }
+        result.measures = result.measures.filter(measure => outputs.includes(measure.uid));
+        result.parameters = result.parameters.filter(parameter => parameter.uid !== domainParameter);
+        return result;
+      }
+
       return response?.result as Donu.ModelDefinition;
     } else {
       console.error('[DONU Service] — getModelInterface', response.error); // eslint-disable-line no-console
