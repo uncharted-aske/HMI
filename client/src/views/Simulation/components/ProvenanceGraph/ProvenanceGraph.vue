@@ -12,7 +12,7 @@
           {{ layout.name }}
         </button>
       </div>
-      <h8>{{sessionMetadata}}</h8>
+      <h7>{{sessionMetadata}}</h7>
     </aside>
     <close-button @close="onClose"/>
     <div class="flex-grow-1 position-relative overflow-scroll hide-scrollbar panel-body">
