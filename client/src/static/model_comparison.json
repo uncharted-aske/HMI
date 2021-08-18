@@ -1,0 +1,202 @@
+{
+    "SimpleSIR_metadata": {
+      "CHIME_SIR_01": {
+        "P:sir.in.S": [
+          "P:sir.s_in",
+          "P:sir_s_n_exp.s",
+          "P:sir_i_n_exp.s"
+        ],
+        "P:infected_exp.in.S": [
+          "P:sir.s_in",
+          "P:sir_s_n_exp.s",
+          "P:sir_i_n_exp.s"
+        ],
+        "P:S_update_exp.in.S": [
+          "P:sir.s_in",
+          "P:sir_s_n_exp.s",
+          "P:sir_i_n_exp.s"
+        ],
+        "P:sir.in.I": [
+          "P:sir.i_in",
+          "P:sir_s_n_exp.i",
+          "P:sir_i_n_exp.i",
+          "P:sir_r_n_exp.i"
+        ],
+        "P:infected_exp.in.I": [
+          "P:sir.i_in",
+          "P:sir_s_n_exp.i",
+          "P:sir_i_n_exp.i",
+          "P:sir_r_n_exp.i"
+        ],
+        "P:recovered_exp.in.I": [
+          "P:sir.i_in",
+          "P:sir_s_n_exp.i",
+          "P:sir_i_n_exp.i",
+          "P:sir_r_n_exp.i"
+        ],
+        "P:I_update_exp.in.I": [
+          "P:sir.i_in",
+          "P:sir_s_n_exp.i",
+          "P:sir_i_n_exp.i",
+          "P:sir_r_n_exp.i"
+        ],
+        "P:sir.in.R": [
+          "P:sir.r_in",
+          "P:sir_r_n_exp.r"
+        ],
+        "P:infected_exp.in.R": [
+          "P:sir.r_in",
+          "P:sir_r_n_exp.r"
+        ],
+        "P:R_update_exp.in.R": [
+          "P:sir.r_in",
+          "P:sir_r_n_exp.r"
+        ],
+        "P:sir.in.beta": [
+          "P:sir.beta",
+          "P:sir_s_n_exp.beta",
+          "P:sir_i_n_exp.beta"
+        ],
+        "P:infected_exp.in.beta": [
+          "P:sir.beta",
+          "P:sir_s_n_exp.beta",
+          "P:sir_i_n_exp.beta"
+        ],
+        "P:sir.in.gamma": [
+          "P:sir.gamma",
+          "P:sir_i_n_exp.gamma",
+          "P:sir_r_n_exp.gamma"
+        ],
+        "P:recovered_exp.in.gamma": [
+          "P:sir.gamma",
+          "P:sir_i_n_exp.gamma",
+          "P:sir_r_n_exp.gamma"
+        ],
+        "P:sir.out.S": [
+          "P:sir_s_exp.s",
+          "P:sir.s_out"
+        ],
+        "P:S_update_exp.out.S": [
+          "P:sir_s_exp.s",
+          "P:sir.s_out"
+        ],
+        "P:sir.out.I": [
+          "P:sir_i_exp.i",
+          "P:sir.i_out"
+        ],
+        "P:I_update_exp.out.I": [
+          "P:sir_i_exp.i",
+          "P:sir.i_out"
+        ],
+        "P:sir.out.R": [
+          "P:sir_r_exp.r",
+          "P:sir.r_out"
+        ],
+        "P:R_update_exp.out.R": [
+          "P:sir_r_exp.r",
+          "P:sir.r_out"
+        ]
+      }
+    },
+    "CHIME_SIR_01": {
+      "SimpleSIR_metadata": {
+        "P:sir.s_in": [
+          "P:sir.in.S",
+          "P:infected_exp.in.S",
+          "P:S_update_exp.in.S"
+        ],
+        "P:sir_s_n_exp.s": [
+          "P:sir.in.S",
+          "P:infected_exp.in.S",
+          "P:S_update_exp.in.S"
+        ],
+        "P:sir_i_n_exp.s": [
+          "P:sir.in.S",
+          "P:infected_exp.in.S",
+          "P:S_update_exp.in.S"
+        ],
+        "P:sir.i_in": [
+          "P:sir.in.I",
+          "P:infected_exp.in.I",
+          "P:recovered_exp.in.I",
+          "P:I_update_exp.in.I"
+        ],
+        "P:sir_s_n_exp.i": [
+          "P:sir.in.I",
+          "P:infected_exp.in.I",
+          "P:recovered_exp.in.I",
+          "P:I_update_exp.in.I"
+        ],
+        "P:sir_i_n_exp.i": [
+          "P:sir.in.I",
+          "P:infected_exp.in.I",
+          "P:recovered_exp.in.I",
+          "P:I_update_exp.in.I"
+        ],
+        "P:sir_r_n_exp.i": [
+          "P:sir.in.I",
+          "P:infected_exp.in.I",
+          "P:recovered_exp.in.I",
+          "P:I_update_exp.in.I"
+        ],
+        "P:sir.r_in": [
+          "P:sir.in.R",
+          "P:infected_exp.in.R",
+          "P:R_update_exp.in.R"
+        ],
+        "P:sir_r_n_exp.r": [
+          "P:sir.in.R",
+          "P:infected_exp.in.R",
+          "P:R_update_exp.in.R"
+        ],
+        "P:sir.beta": [
+          "P:sir.in.beta",
+          "P:infected_exp.in.beta"
+        ],
+        "P:sir_s_n_exp.beta": [
+          "P:sir.in.beta",
+          "P:infected_exp.in.beta"
+        ],
+        "P:sir_i_n_exp.beta": [
+          "P:sir.in.beta",
+          "P:infected_exp.in.beta"
+        ],
+        "P:sir.gamma": [
+          "P:sir.in.gamma",
+          "P:recovered_exp.in.gamma"
+        ],
+        "P:sir_i_n_exp.gamma": [
+          "P:sir.in.gamma",
+          "P:recovered_exp.in.gamma"
+        ],
+        "P:sir_r_n_exp.gamma": [
+          "P:sir.in.gamma",
+          "P:recovered_exp.in.gamma"
+        ],
+        "P:sir_s_exp.s": [
+          "P:sir.out.S",
+          "P:S_update_exp.out.S"
+        ],
+        "P:sir.s_out": [
+          "P:sir.out.S",
+          "P:S_update_exp.out.S"
+        ],
+        "P:sir_i_exp.i": [
+          "P:sir.out.I",
+          "P:I_update_exp.out.I"
+        ],
+        "P:sir.i_out": [
+          "P:sir.out.I",
+          "P:I_update_exp.out.I"
+        ],
+        "P:sir_r_exp.r": [
+          "P:sir.out.R",
+          "P:R_update_exp.out.R"
+        ],
+        "P:sir.r_out": [
+          "P:sir.out.R",
+          "P:R_update_exp.out.R"
+        ]
+      }
+    }
+  }
