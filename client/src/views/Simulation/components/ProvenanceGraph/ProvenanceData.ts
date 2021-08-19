@@ -27,7 +27,7 @@ export abstract class ProvenanceData {
       ],
     });
 
-    static readonly SINGLE_MODEL_EXPANDED: GraphInterface = ({
+    static readonly SINGLE_MODEL_DETAILED: GraphInterface = ({
       nodes: [{ id: 'Box 0', label: '', parent: null },
         { id: 'Select', label: 'Select', role: ['Operation'], parent: 'Box 0', tooltip: '2021-08-27T11:00:00' },
         { id: 'Box 1', label: '', parent: 'Box 0' },
@@ -104,7 +104,7 @@ export abstract class ProvenanceData {
       ],
     });
 
-    static readonly MULTI_MODEL_EXPANDED: GraphInterface = ({
+    static readonly MULTI_MODEL_DETAILED: GraphInterface = ({
       nodes: [{ id: 'Box 0', label: '', parent: null },
         { id: 'Select', label: 'Select', role: ['Operation'], parent: 'Box 0', tooltip: '2021-08-27T11:00:00' },
         { id: 'Box 1', label: '', parent: 'Box 0' },
@@ -178,7 +178,7 @@ export abstract class ProvenanceData {
 
 export enum ProvenanceLayoutInterfaceType {
   condensed = 'condensed',
-  expanded = 'expanded',
+  detailed = 'detailed',
 }
 
 export interface ProvenanceLayoutInterface {
