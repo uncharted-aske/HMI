@@ -74,6 +74,7 @@
   import SIRDScreenshot from '@/assets/img/SimpleSIRD.png';
   import SpatialSIRDScreenshot from '@/assets/img/SimpleSpatialSIRD.png';
   import MarmScreenshot from '@/assets/img/marm_model.png';
+  import Covid19Screenshot from '@/assets/img/covid19_inflammasome.png';
   import PlaceholderScreenshot from '@/assets/img/placeholder_image.png';
 
   const TABS: TabInterface[] = [
@@ -180,6 +181,8 @@
           return SpatialSIRDScreenshot;
         } else if (model.name === 'marm_model') {
           return MarmScreenshot;
+        } else if (model.name === 'covid19_inflammasome') {
+          return Covid19Screenshot;
         } else if (model.name === 'CHIME_SIR') {
           return ChimeScreenshot;
         } else if (model.name === 'SimpleChime+') {
