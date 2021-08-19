@@ -69,6 +69,7 @@
           :slot="('parameters_' + model.id)"
           :highlighted="highlighted"
           @expand="setExpandedId('parameters')"
+          @invalid="isRunFeasible = !$event"
         />
         <variables-panel
           class="simulation-panel"
@@ -95,7 +96,6 @@
   import { Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
-  import _ from 'lodash';
 
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
@@ -154,6 +154,7 @@
     runConfig: Donu.RequestConfig = { end: 120, start: 0, step: 30 };
     subgraph: Graph.GraphInterface = null;
     highlighted: string = '';
+    isRunFeasible: boolean = true; // Check if a Run can be triggered or saved.
 
     isProvenanceGraphOpen: boolean = false;
     provenanceLayouts: ProvenanceLayoutInterface[] = PROVENANCE_LAYOUTS;
@@ -266,18 +267,6 @@
           heightFixed: true,
         },
       };
-    }
-
-    /** Check if a Run can be triggered or saved. */
-    get isRunFeasible (): boolean {
-      // Make sure that for every selected models
-      return this.selectedModels.every(model => {
-        // that every parameters of this model
-        return this.getSimModel(model.id).parameters.every(parameter => {
-          // does only contain numbers
-          return parameter.values.every(_.isNumber);
-        });
-      });
     }
 
     get provenanceData (): Graph.GraphInterface {
