@@ -98,9 +98,6 @@ type Request = {
   step?: number;
   'sim-type'?: SimulationType | void,
   text?: string,
-  // name?: string;
-  // 'dest-type'?: string;
-  // type?: string;
 }
 
 enum ResponseStatus {
