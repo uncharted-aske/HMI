@@ -44,8 +44,9 @@
             highlighted: parameter.metadata.name === highlighted,
             'domain_parameter': isDomainParameter(parameter),
           }"
+          :title="parameter.metadata.name"
         >
-          <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
+          <h4>{{ parameter.metadata.name }}</h4>
           <input
             type="text"
             v-model.number="parameterValues[parameter.uid]"
@@ -160,11 +161,13 @@
       });
       this.drawGraph();
 
-      // Make sure that for every parameters, their current value is valid.
-      this.someParametersAreInvalid = this.parameters.some(parameter => {
-        const currentValue = parameter.values[parameter.values.length - 1];
-        return this.nonValidValue(currentValue);
-      });
+      // Make sure that for every non domain parameters, their current value is valid.
+      this.someParametersAreInvalid = this.parameters
+        .filter(parameter => !this.isDomainParameter(parameter))
+        .some(parameter => {
+          const currentValue = parameter.values[parameter.values.length - 1];
+          return this.nonValidValue(currentValue);
+        });
       this.$emit('invalid', this.someParametersAreInvalid);
     }
 
@@ -179,7 +182,10 @@
     }
 
     get displayedParameters (): HMI.SimulationParameter[] {
-      return this.parameters.filter(parameter => parameter.displayed);
+      return this.parameters
+        .filter(parameter => parameter.displayed)
+        // Put the domain parameter at the end to have a concistent graph
+        .sort(parameter => !this.isDomainParameter(parameter) ? -1 : 1);
     }
 
     get noDisplayedParameters (): boolean {
@@ -348,6 +354,12 @@
     scroll-snap-type: mandatory;
   }
 
+  .parameters .message-display {
+    margin: 1em;
+    position: sticky;
+    top: 1em;
+  }
+
   .parameters.message {
     --parameter-margin-top: 7em;
   }
@@ -378,6 +390,7 @@
     grid-template-rows: 1fr 1fr;
     height: var(--parameter-height);
     padding: var(--padding);
+    position: relative;
   }
 
   .parameter:last-of-type {
@@ -419,18 +432,37 @@
     border-color: var(--selection);
   }
 
-  .parameter.error {
+  /* Domain Parameter */
+  .parameter.domain_parameter::after {
+    content: 'Domain Parameter: ' attr(title);
+    font-weight: bold;
+    left: 50%;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 75%;
+  }
+
+  .parameter.domain_parameter::before {
+    background: var(--bg-graphs);
+    bottom: 0;
+    content: '\0A';
+    left: 0;
+    opacity: .6;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  /* Error */
+  .parameter:not(.domain_parameter).error {
     border-color: var(--error);
   }
 
-  .parameter.error input {
+  .parameter:not(.domain_parameter).error input {
     background-color: var(--error);
-  }
-
-  .parameters .message-display {
-    margin: 1em;
-    position: sticky;
-    top: 1em;
   }
 </style>
 <style>
