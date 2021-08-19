@@ -4,6 +4,8 @@ import * as MARM_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/marm_m
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
 import { getUtil, postUtil, postUtilMem } from '@/utils/FetchUtil';
+import { linearInterpolations } from '@/utils/InterpolationModelsUtil';
+import { L2Norm } from '@/utils/ErrorModelsUtil';
 
 // HACK: REMOVE when Donu provides CHIME+
 export const staticFileURLs = [
@@ -301,55 +303,12 @@ export const getModelResult = async (
   }
 };
 
-const L2Norm = (x: number[]): number => {
-  // See: https://mathworld.wolfram.com/L2-Norm.html
-  return Math.sqrt(x.reduce((acc, val) => {
-    return acc + Math.abs(val) ** 2;
-  }, 0));
-};
-
-const linearInterpolation = (xInterp: number, x: number[], y: number[]): [number, number] => {
-  // See: https://en.wikipedia.org/wiki/Linear_interpolation
-  const len = x.length;
-  if (xInterp < x[0]) {
-    return [y[0] + (xInterp - x[0]) * ((y[1] - y[0]) / (x[1] - x[0])), -1];
-  } else if (xInterp > x[len - 1]) {
-    return [y[len - 1] + (xInterp - x[len - 1]) * ((y[len - 1] - y[len - 2]) / (x[len - 1] - x[len - 2])), len - 1];
-  }
-  let i = 0;
-  while (i < x.length) {
-    if (x[i] === xInterp) {
-      return [y[i], i];
-    }
-    if (x[i] <= xInterp && xInterp < x[i + 1]) {
-      return [y[i] + (xInterp - x[i]) * ((y[i + 1] - y[i]) / (x[i + 1] - x[i])), i];
-    }
-    i++;
-  }
-};
-
-// Utility function to linearly interpolate a set of points
-// NOTE: All arrays are assumed to be sorted in ascending order
-const linearInterpolations = (xInterps: number[], x: number[], y: number[]): void => {
-  let i = 0;
-  while (i < xInterps.length) {
-    // TODO: Searching for the index to interpolate within each loop is highly inefficient
-    // however it is conceptually easier to understand
-    const [yInterp, interpIdx] = linearInterpolation(xInterps[i], x, y);
-    if (x[interpIdx] !== xInterps[i]) {
-      x.splice(interpIdx + 1, 0, xInterps[i]);
-      y.splice(interpIdx + 1, 0, yInterp);
-    }
-    i++;
-  }
-};
-
 /** Mock Donu Model Simulation Error API call */
 export const computeDonuModelSimulationError = async (
   measures: Donu.Measure[],
   interpolationModel: Donu.InterpolationModelTypes,
   errorModel: Donu.ErrorModelTypes,
-): Promise<any> => {
+): Promise<Donu.Response> => {
   // NOTE: This utility function is a temporary mock of Donu's compute error API endpoint
   // the functionality should be near identical. The request is planned to look like the
   // below:
@@ -414,7 +373,7 @@ export const computeDonuModelSimulationError = async (
   const errorTotal = measureErrors.reduce((acc, measure) => acc + measure.errorTotal, 0) / measureErrors.length;
 
   return {
-    status: 'success',
+    status: Donu.ResponseStatus.success,
     result: {
       measures: measureErrors,
       errorTotal,
