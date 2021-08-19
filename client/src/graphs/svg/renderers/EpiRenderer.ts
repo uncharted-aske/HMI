@@ -256,8 +256,7 @@ export default class EpiRenderer extends SVGRenderer {
 
   selectNode (node: d3.Selection<any, any, any, any>): void {
     node.selectAll('rect:not(.container-control), ellipse')
-      .style('stroke', Colors.HIGHLIGHT)
-      .style('stroke-width', DEFAULT_STYLE.node.strokeWidth + 3);
+      .style('fill', Colors.HIGHLIGHT);
   }
 
   markDisplayedNodes (nodesList: SubgraphNodeInterface[]): void {
