@@ -117,6 +117,32 @@ type Response = {
   status?: ResponseStatus,
 }
 
+type Measure = {
+  uid: string,
+  predicted: {
+    times: number[],
+    values: number[]
+  },
+  observed: {
+    times: number[],
+    values: number[],
+  }
+};
+
+type MeasureError = {
+  uid: string,
+  errorIndividual: number[],
+  errorTotal: number,
+};
+
+enum ErrorModelTypes {
+  L2 = 'L2',
+}
+
+enum InterpolationModelTypes {
+  Linear = 'linear',
+}
+
 export {
   DataSource,
   Metadata,
@@ -133,4 +159,8 @@ export {
   SimulationResponse,
   Type,
   SimulationType,
+  Measure,
+  MeasureError,
+  ErrorModelTypes,
+  InterpolationModelTypes,
 };

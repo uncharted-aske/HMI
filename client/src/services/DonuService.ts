@@ -300,3 +300,120 @@ export const getModelResult = async (
     console.error('[DONU Service] — getModelResult', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
   }
 };
+
+const L2Norm = (x: number[]): number => {
+  // See: https://mathworld.wolfram.com/L2-Norm.html
+  return Math.sqrt(x.reduce((acc, val) => {
+    return acc + Math.abs(val) ** 2;
+  }, 0));
+};
+
+const linearInterpolation = (xInterp: number, x: number[], y: number[]): [number, number] => {
+  // See: https://en.wikipedia.org/wiki/Linear_interpolation
+  const len = x.length;
+  if (xInterp < x[0]) {
+    return [y[0] + (xInterp - x[0]) * ((y[1] - y[0]) / (x[1] - x[0])), -1];
+  } else if (xInterp > x[len - 1]) {
+    return [y[len - 1] + (xInterp - x[len - 1]) * ((y[len - 1] - y[len - 2]) / (x[len - 1] - x[len - 2])), len - 1];
+  }
+  let i = 0;
+  while (i < x.length) {
+    if (x[i] === xInterp) {
+      return [y[i], i];
+    }
+    if (x[i] <= xInterp && xInterp < x[i + 1]) {
+      return [y[i] + (xInterp - x[i]) * ((y[i + 1] - y[i]) / (x[i + 1] - x[i])), i];
+    }
+    i++;
+  }
+};
+
+// Utility function to linearly interpolate a set of points
+// NOTE: All arrays are assumed to be sorted in ascending order
+const linearInterpolations = (xInterps: number[], x: number[], y: number[]): void => {
+  let i = 0;
+  while (i < xInterps.length) {
+    // TODO: Searching for the index to interpolate within each loop is highly inefficient
+    // however it is conceptually easier to understand
+    const [yInterp, interpIdx] = linearInterpolation(xInterps[i], x, y);
+    if (x[interpIdx] !== xInterps[i]) {
+      x.splice(interpIdx + 1, 0, xInterps[i]);
+      y.splice(interpIdx + 1, 0, yInterp);
+    }
+    i++;
+  }
+};
+
+/** Mock Donu Model Simulation Error API call */
+export const computeDonuModelSimulationError = async (
+  measures: Donu.Measure[],
+  interpolationModel: Donu.InterpolationModelTypes,
+  errorModel: Donu.ErrorModelTypes,
+): Promise<any> => {
+  // NOTE: This utility function is a temporary mock of Donu's compute error API endpoint
+  // the functionality should be near identical. The request is planned to look like the
+  // below:
+  // const request: Donu.Request = {
+  //   command: Donu.RequestCommand.COMPUTE_ERROR,
+  //   'interp-model': 'linear',
+  //   'error-model': 'L2',
+  //   measures: [
+  //     {
+  //        "uid": "J:I",
+  //        "predicted": {
+  //           "times": [...],
+  //           "values": [...],
+  //         }
+  //        "observed": {
+  //           "times": [...],
+  //           "values": [...],
+  //         }
+  //     }, ...
+  //   ],
+  // };
+
+  // Select interpolation function for aligning observed and predicted points
+  let interpolationFn;
+  if (interpolationModel === Donu.InterpolationModelTypes.Linear) {
+    interpolationFn = linearInterpolations;
+  } else {
+    throw new Error('No valid interpolation model selected.');
+  }
+  // Select error function
+  let errorFn;
+  if (errorModel === Donu.ErrorModelTypes.L2) {
+    errorFn = L2Norm;
+  } else {
+    throw new Error('No valid error model selected.');
+  }
+  const measureErrors: Donu.MeasureError[] = [];
+  measures.forEach(measure => {
+    // Interpolate predicted and observed values for point alignment
+    interpolationFn(measure.observed.times, measure.predicted.times, measure.predicted.values);
+    interpolationFn(measure.predicted.times, measure.observed.times, measure.observed.values);
+
+    // Compute errors over points within a measure
+    const errorIndividual: number[] = [];
+    for (let i = 0; i < measure.predicted.times.length; i++) {
+      const norm = errorFn([measure.observed.values[i] - measure.predicted.values[i]]);
+      errorIndividual.push(norm);
+    }
+    // Compute total error of the measure using an average over individual point errors
+    const errorMeasureTotal = errorIndividual.reduce((a, b) => a + b, 0) / errorIndividual.length;
+    measureErrors.push({
+      uid: measure.uid,
+      errorIndividual,
+      errorTotal: errorMeasureTotal,
+    });
+  });
+  // Compute total error of the model using an average over each measure's total error
+  const errorTotal = measureErrors.reduce((acc, measure) => acc + measure.errorTotal, 0) / measureErrors.length;
+
+  return {
+    status: 'success',
+    result: {
+      measures: measureErrors,
+      errorTotal,
+    },
+  };
+};
