@@ -3,7 +3,7 @@ import * as MARM_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/marm_m
 
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
-import { getUtil, postUtil, postUtilMem } from '@/utils/FetchUtil';
+import { postUtil, postUtilMem } from '@/utils/FetchUtil';
 import { linearInterpolations } from '@/utils/InterpolationModelsUtil';
 import { L2Norm } from '@/utils/ErrorModelsUtil';
 
@@ -100,43 +100,6 @@ export const queryDonuModels = async (text: string): Promise<any[]> => {
   }
 };
 
-// HACK: Remove when we fetch CHIME+ from DONU
-// eslint-disable-next-line
-export const buildStaticModelsList = ({ CHIMEPlus }: any, modelIndex: number): Model.Model[] => {
-  // Parse GroMEt
-  const CHIMEPlusPARSED = GroMEt2Graph.parseGromet(CHIMEPlus);
-
-  // Build object to store in models store
-  const { name } = CHIMEPlus;
-  const metadata = { name, description: '' };
-  const modelGraph = {
-    donuType: Donu.Type.GROMET_PNC,
-    model: null,
-    type: CHIMEPlus.type,
-    metadata: CHIMEPlus.metadata,
-    graph: {
-      nodes: CHIMEPlusPARSED.nodes,
-      edges: CHIMEPlusPARSED.edges,
-    },
-    bgraph: {
-      nodes: null,
-      edges: null,
-    },
-  };
-
-  const output = { id: modelIndex, metadata, name, modelGraph: [modelGraph] };
-  return [output as any]; // Not ideal but I was getting typescript errors
-};
-
-// HACK: Remove when we fetch CHIME+ from DONU
-export const fetchStaticModels = async (modelIndex: number): Promise<Model.Model[]> => {
-  const [CHIMEPlus] = await Promise.all(
-    staticFileURLs.map(url => getUtil(url)),
-  );
-
-  return buildStaticModelsList({ CHIMEPlus }, modelIndex);
-};
-
 /** Fetch a complete list of available models from Donu API */
 export const fetchDonuModels = async (): Promise<Model.Model[]> => {
   const request: Donu.Request = {
@@ -211,18 +174,14 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
       }
     });
 
-    // HACK: Add CHIME+ PNC. This should be removed once CHIME+ is provided by donu
-    const staticModels = await fetchStaticModels(output.length + 1);
-    output.push(...staticModels);
-
     return output;
   } else {
     console.error('[DONU Service] — fetchDonuModels', response); // eslint-disable-line no-console
   }
 };
 
-/** Fetch the parameters of a model */
-export const getModelParameters = async (model: Model.Model, selectedModelGraphType: Model.GraphTypes): Promise<Donu.ModelParameter[]> => {
+/** Fetch the interface of a model */
+export const getModelInterface = async (model: Model.Model, selectedModelGraphType: Model.GraphTypes): Promise<Donu.ModelDefinition> => {
   if (!model) return;
   const modelGraph = model.modelGraph.find(graph => graph.type === selectedModelGraphType);
   if (modelGraph) {
@@ -236,38 +195,12 @@ export const getModelParameters = async (model: Model.Model, selectedModelGraphT
 
     const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
-      const result = response?.result as Donu.ModelDefinition;
-      return result?.parameters ?? null;
+      return response?.result as Donu.ModelDefinition;
     } else {
-      console.error('[DONU Service] — getModelParameters', response); // eslint-disable-line no-console
+      console.error('[DONU Service] — getModelInterface', response); // eslint-disable-line no-console
     }
   } else {
-    console.error('[DONU Service] — getModelParameters', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
-  }
-};
-
-/** Fetch the state variable of a model */
-export const getModelVariables = async (model: Model.Model, selectedModelGraphType: Model.GraphTypes): Promise<Donu.ModelVariable[]> => {
-  if (!model) return;
-  const modelGraph = model.modelGraph.find(graph => graph.type === selectedModelGraphType);
-  if (modelGraph) {
-    const request: Donu.Request = {
-      command: Donu.RequestCommand.DESCRIBE_MODEL_INTERFACE,
-      definition: {
-        source: { model: modelGraph.model },
-        type: modelGraph.donuType as Donu.Type,
-      } as Donu.ModelDefinition,
-    };
-
-    const response = await callDonuCache(request);
-    if (response.status === Donu.ResponseStatus.success) {
-      const result = response?.result as Donu.ModelDefinition;
-      return result?.measures ?? null;
-    } else {
-      console.error('[DONU Service] — getModelVariables', response); // eslint-disable-line no-console
-    }
-  } else {
-    console.error('[DONU Service] — getModelParameters', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
+    console.warn('[DONU Service] — getModelInterface', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
   }
 };
 

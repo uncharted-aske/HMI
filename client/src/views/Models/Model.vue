@@ -48,14 +48,7 @@
       </aside>
 
       <settings-bar>
-        <counters
-          slot="left"
-          :title="selectedModel && selectedModel.name"
-          :data="[
-            { name: 'Nodes', value: nodeCount },
-            { name: 'Edges', value: edgeCount },
-          ]"
-        />
+        <counters slot="left" :title="modelName" :data="countersData" />
       </settings-bar>
 
       <global-graph
@@ -116,25 +109,21 @@
 <script lang="ts">
   import Component from 'vue-class-component';
   import Vue from 'vue';
-  import { Getter, Mutation } from 'vuex-class';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
   import { Watch } from 'vue-property-decorator';
   import { bgraph } from '@uncharted.software/bgraph';
   import { merge } from 'lodash';
 
-  import {
-    filterToBgraph,
-    deepCopy,
-  } from '@/utils/BGraphUtil';
-  import { TabInterface } from '@/types/types';
+  import * as HMI from '@/types/types';
   import * as Graph from '@/types/typesGraphs';
-  import * as Model from '@/types/typesModel';
   import * as GroMEt from '@/types/typesGroMEt';
+  import * as Model from '@/types/typesModel';
   import { CosmosSearchInterface } from '@/types/typesCosmos';
-  import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters, cosmosArtifactsMem } from '@/services/CosmosFetchService';
-  import { filterToParamObj } from '@/utils/CosmosDataUtil';
 
-  import { NodeTypes } from '@/graphs/svg/encodings';
+  import { cosmosArtifactSrc, cosmosSearch, cosmosRelatedParameters, cosmosArtifactsMem } from '@/services/CosmosFetchService';
+  import { filterToBgraph, deepCopy } from '@/utils/BGraphUtil';
+  import { filterToParamObj } from '@/utils/CosmosDataUtil';
 
   import SearchBar from './components/SearchBar.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -155,12 +144,12 @@
   import ModalParameters from './components/Modals/ModalParameters.vue';
   import ModalDocMetadata from './components/Modals/ModalDocMetadata.vue';
 
-  const TABS: TabInterface[] = [
+  const TABS: HMI.TabInterface[] = [
     // { name: 'Facets', icon: 'filter', id: 'facets' },
     { name: 'Metadata', icon: 'info', id: 'metadata' },
   ];
 
-  const DRILLDOWN_TABS: TabInterface[] = [
+  const DRILLDOWN_TABS: HMI.TabInterface[] = [
     { name: 'Metadata', icon: '', id: 'metadata' },
     { name: 'Parameters', icon: '', id: 'parameters' },
     { name: 'Knowledge', icon: '', id: 'knowledge' },
@@ -192,12 +181,13 @@
     // Initialize as undefined to prevent vue from tracking changes to the bgraph instance
     bgraphInstance: any;
 
-    tabs: TabInterface[] = TABS;
+    tabs: HMI.TabInterface[] = TABS;
     activeTabId: string = 'metadata';
 
+    selectedLayoutId: string = Graph.GraphLayoutInterfaceType.elk;
     layouts: Graph.GraphLayoutInterface[] = Graph.LAYOUTS;
 
-    drilldownTabs: TabInterface[] = DRILLDOWN_TABS;
+    drilldownTabs: HMI.TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
     drilldownActiveTabId: string = 'metadata';
     drilldownPaneTitle = '';
@@ -215,21 +205,36 @@
     modalDataParameters: any = null;
     modalDataMetadata: any = null;
 
-    @Getter getSelectedModelIds;
-    @Getter getModelsList;
+    @Action initializeInterface;
+
     @Getter getFilters;
-    @Getter getSelectedModelGraphType;
     @Getter getModelsLayout;
-    @Mutation setSelectedModels;
-    @Mutation setSelectedModelGraphType;
+    @Getter getModelsList;
+    @Getter getSelectedModelGraphType;
+    @Getter getSelectedModelIds;
+    @Getter getSimModel;
+
     @Mutation setModelsLayout;
+    @Mutation setSelectedModelGraphType;
+    @Mutation setSelectedModels;
 
     @Watch('getFilters') onGetFiltersChanged (): void {
       this.executeFilters();
     }
 
+    @Watch('getSelectedModelGraphType') onModelGraphTypeChanged (): void {
+      this.initializeSim();
+    }
+
     mounted (): void {
       this.loadData();
+      this.initializeSim();
+    }
+
+    initializeSim (): void {
+      const model = this.selectedModel;
+      const selectedModelGraphType = this.getSelectedModelGraphType;
+      this.initializeInterface({ model, selectedModelGraphType });
     }
 
     executeFilters (): void {
@@ -300,20 +305,37 @@
       });
     }
 
-    get nodeCount (): number {
-      return this.selectedGraph?.nodes.filter(n => n?.nodeType !== NodeTypes.NODES.CONTAINER).length;
+    get modelName (): string {
+      return this.selectedModel?.metadata?.name;
     }
 
-    get edgeCount (): number {
-      return this.selectedGraph?.edges.length;
-    }
+    get countersData (): HMI.Counter[] {
+      const data: HMI.Counter[] = [];
 
-    get subgraphNodeCount (): number {
-      return this.subgraph?.nodes.length;
-    }
+      const { parameters, variables } = this.getSimModel(this.selectedModel.id) as HMI.SimulationModel;
 
-    get subgraphEdgeCount (): number {
-      return this.subgraph?.edges.length;
+      if (parameters.length > 0) {
+        const nbInitialCondition = parameters.filter(p => p.initial_condition).length;
+
+        if (nbInitialCondition > 0) {
+          data.push({
+            name: 'Initial Conditions',
+            value: nbInitialCondition,
+          });
+        }
+
+        data.push({
+          name: 'Parameters',
+          value: parameters.length - nbInitialCondition,
+        });
+      }
+      if (variables.length > 0) {
+        data.push({
+          name: 'Variables',
+          value: variables.length,
+        });
+      }
+      return data;
     }
 
     onOpenSimView (): void {
@@ -378,6 +400,7 @@
       }
     }
 
+    // TODO - Does not seems to be used.
     async getRelatedParameters (keyword: string): Promise<void> {
       const response = await cosmosRelatedParameters({ word: keyword, model: 'trigram', n: 10 });
       this.drilldownRelatedParameters = response.data;

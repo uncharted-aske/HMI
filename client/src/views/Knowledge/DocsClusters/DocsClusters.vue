@@ -7,6 +7,13 @@
         </div>
         <settings-bar>
           <counters slot="left" :data="[{ name: 'Documents', value: 176000 }]"/>
+          <button
+            type="button" class="btn btn-secondary mr-1"
+            slot="right"
+            @click="$router.push({ name: 'docsCards' })"
+          >
+            Document Artifact-based View
+          </button>
         </settings-bar>
         <grafer
           class="grafer"

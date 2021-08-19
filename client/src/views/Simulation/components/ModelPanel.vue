@@ -77,6 +77,7 @@
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) model: Model.Model;
     @Prop({ default: false }) simulation: boolean;
+    @Prop({ default: false }) showGraphType: boolean;
 
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
@@ -97,10 +98,12 @@
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
       this.setSelectedNodes([{ model: this.model.id, node: selected.label }]);
+      this.$emit('highlight', selected.label);
     }
 
     onBackgroundClick (): void {
       this.setSelectedNodes([]);
+      this.$emit('highlight', '');
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
@@ -152,14 +155,25 @@
       const data: HMI.Counter[] = [];
 
       // Graph Type
-      data.push({
-        name: this.getSelectedModelGraphType,
-      });
+      if (this.showGraphType) {
+        data.push({
+          name: this.getSelectedModelGraphType,
+        });
+      }
 
       if (this.parameters.length > 0) {
+        const nbInitialCondition = this.parameters.filter(p => p.initial_condition).length;
+
+        if (nbInitialCondition > 0) {
+          data.push({
+            name: 'Initial Conditions',
+            value: nbInitialCondition,
+          });
+        }
+
         data.push({
           name: 'Parameters',
-          value: this.parameters.length,
+          value: this.parameters.length - nbInitialCondition,
         });
       }
       if (this.variables.length > 0) {

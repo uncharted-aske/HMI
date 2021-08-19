@@ -103,7 +103,7 @@
     }
 
     get doi (): string {
-      return this.data.raw.bibjson.identifier[0].id;
+      return this.data.raw.bibjson.identifier?.[0]?.id;
     }
 
     get authorList (): string {

@@ -1,3 +1,5 @@
+/* eslint camelcase: 0 */
+
 import * as Donu from '@/types/typesDonu';
 
 interface ModelComponentMetadataInterface {
@@ -48,6 +50,7 @@ type Counter = {
 interface SimulationParameter extends Donu.ModelParameter {
   displayed?: boolean, // the parameter is visible or not
   values?: number[],
+  initial_condition?: boolean, // a quick way to know if the parameter is an initial condition
 }
 
 // List of runs, containing a list of coordinates.

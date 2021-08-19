@@ -2,17 +2,17 @@
   <div class="entities-pane-container">
     <div class="border-bottom">
       <a :href="data.raw.bibjson.link[0].url" target="_blank">
-        <h5>{{data.title}}</h5>
+        <h5>{{ data.title }}</h5>
       </a>
-      <h6>{{doi}}</h6>
+      <h6>{{ doi }}</h6>
     </div>
     <div class="mt-3 entities-container hide-scrollbar">
       <div class="mb-1 px-2 py-4 d-flex rounded-lg border" v-for="(drug, index) in drugsList" :key="index + drug.drugs">
         <div class="flex-grow-1">
-            <div class="font-weight-bold">{{drug.drugs}}</div>
-            <div class="text-muted">{{drug.drugID}}</div>
+          <div class="font-weight-bold">{{ drug.drugs }}</div>
+          <div class="text-muted">{{ drug.drugID }}</div>
         </div>
-        <div class="d-flex align-items-center mr-3">{{`${drug.hits} Hits`}}</div>
+        <div class="d-flex align-items-center mr-3">{{ `${drug.hits} Hits` }}</div>
       </div>
     </div>
   </div>
@@ -47,7 +47,7 @@
     }
 
     get doi (): string {
-      return this.data.raw.bibjson.identifier[0].id;
+      return this.data.raw.bibjson.identifier?.[0]?.id;
     }
   }
 </script>

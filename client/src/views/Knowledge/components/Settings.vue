@@ -2,15 +2,9 @@
   <div class="settings-container">
     <button
       type="button" class="btn btn-secondary mr-1"
-      disabled
+      @click="$router.push({ name: 'docsClusters' })"
     >
-      Entity-based Views
-    </button>
-    <button
-      type="button" class="btn btn-secondary mr-1"
-      disabled
-    >
-      Document-based Views
+      Document Clustering-based View
     </button>
     <button type="button" class="btn btn-secondary mr-1" disabled>Layouts</button>
     <button type="button" class="btn btn-secondary mr-1" disabled>Settings</button>
