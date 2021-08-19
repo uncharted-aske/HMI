@@ -1,9 +1,12 @@
 import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 import * as MARM_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/marm_model_gromet_2021-06-28-17-07-14_graph_agg_rev_rategroups.json';
+import * as COVID_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/covid19_inflammasome_gromet_2021-08-17-17-47-36_agg_rev_rategroups.json';
 
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
 import { postUtil, postUtilMem } from '@/utils/FetchUtil';
+import { linearInterpolations } from '@/utils/InterpolationModelsUtil';
+import { L2Norm } from '@/utils/ErrorModelsUtil';
 
 /** Send the request to Donu */
 const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
@@ -39,7 +42,7 @@ const getDonuModelSource = async (model: string, type: Donu.Type): Promise<Donu.
     return JSON.parse(modelSource);
   } else {
     // eslint-disable-next-line no-console
-    console.error('[DONU Service] — fetchDonuModelSource', response);
+    console.error('[DONU Service] — fetchDonuModelSource', response.error);
   }
 };
 
@@ -86,10 +89,9 @@ export const queryDonuModels = async (text: string): Promise<any[]> => {
 
   const response = await callDonuCache(request);
   if (response.status === Donu.ResponseStatus.success) {
-    const models = response.result ?? [];
-    return models;
+    return response.result ?? [];
   } else {
-    console.error('[DONU Service] — queryDonuModels', response); // eslint-disable-line no-console
+    console.error('[DONU Service] — queryDonuModels', response.error); // eslint-disable-line no-console
   }
 };
 
@@ -125,6 +127,9 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
       if (model.source.model === 'marm_model_gromet_2021-06-28-17-07-14.json' && model.type === Donu.Type.GROMET_PNC) {
         // HACK: Use aggregated marm model as visual graph
         model.graph = MARM_MODEL_AGGREGATED;
+      }
+      if (model.source.model === 'covid19_inflammasome_gromet_2021-08-17-17-47-36.json' && model.type === Donu.Type.GROMET_PNC) {
+        model.graph = COVID_MODEL_AGGREGATED;
       }
     });
 
@@ -169,7 +174,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
 
     return output;
   } else {
-    console.error('[DONU Service] — fetchDonuModels', response); // eslint-disable-line no-console
+    console.error('[DONU Service] — fetchDonuModels', response.error); // eslint-disable-line no-console
   }
 };
 
@@ -188,9 +193,45 @@ export const getModelInterface = async (model: Model.Model, selectedModelGraphTy
 
     const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
+      /** TODO
+       * This is a temporary mock up for Demonstration purposes.
+       * The DONU API needs to be clearer on which outputs can be selected programatically.
+       * Also, the HMI needs to be updated to allow the user to select which paramaters
+       * to use as `domain_parameter` for the simulation steps.
+       */
+      if (selectedModelGraphType === Model.GraphTypes.FunctionNetwork) {
+        const result = response?.result as Donu.ModelDefinition;
+        let parameters, outputs, domainParameter;
+        if (modelGraph.model === 'SimpleSIR_metadata_gromet_FunctionNetwork.json') {
+          domainParameter = 'P:sir.in.dt';
+          parameters = { 'P:sir.in.S': 'S', 'P:sir.in.I': 'I', 'P:sir.in.R': 'R', 'P:sir.in.beta': 'beta', 'P:sir.in.gamma': 'gamma', 'P:sir.in.dt': 'dt' };
+          outputs = { 'P:sir.out.S': 'S', 'P:sir.out.I': 'I', 'P:sir.out.R': 'R' };
+        } else if (modelGraph.model === 'CHIME_SIR_v01_gromet_FunctionNetwork_by_hand.json') {
+          domainParameter = 'P:sir.n';
+          parameters = { 'P:sir.s_in': 'S', 'P:sir.i_in': 'I', 'P:sir.r_in': 'R', 'P:sir.beta': 'beta', 'P:sir.gamma': 'gamma', 'P:sir.n': 'n' };
+          outputs = { 'P:sir.s_out': 'S', 'P:sir.i_out': 'I', 'P:sir.r_out': 'R' };
+        }
+        result.measures = result.measures
+          .filter(measure => Object.keys(outputs).includes(measure.uid))
+          .map(measure => {
+            measure.metadata.name = outputs[measure.uid];
+            return measure;
+          });
+
+        result.parameters = result.parameters
+          .map(parameter => {
+            parameter.metadata.name = parameters?.[parameter.uid] ?? parameter.uid;
+            if (parameter.uid === domainParameter) {
+              parameter.value_type = 'domain_parameter'; // Leveraging this unused property.
+            }
+            return parameter;
+          });
+        return result;
+      }
+
       return response?.result as Donu.ModelDefinition;
     } else {
-      console.error('[DONU Service] — getModelInterface', response); // eslint-disable-line no-console
+      console.error('[DONU Service] — getModelInterface', response.error); // eslint-disable-line no-console
     }
   } else {
     console.warn('[DONU Service] — getModelInterface', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
@@ -218,13 +259,109 @@ export const getModelResult = async (
       step: config.step,
     };
 
+    /** TODO
+     * This is a temporary mock up for Demonstration purposes.
+     * The DONU API needs to be clearer on which outputs can be selected programatically.
+     * Also, the HMI needs to be updated to allow the user to select which paramaters
+     * to use as `domain_parameter` for the simulation steps.
+     */
+    if (selectedModelGraphType === Model.GraphTypes.FunctionNetwork) {
+      if (modelGraph.model === 'SimpleSIR_metadata_gromet_FunctionNetwork.json') {
+        request.outputs = ['P:sir.out.S', 'P:sir.out.I', 'P:sir.out.R'];
+        request.domain_parameter = 'P:sir.in.dt';
+      } else if (modelGraph.model === 'CHIME_SIR_v01_gromet_FunctionNetwork_by_hand.json') {
+        request.outputs = ['P:sir.s_out', 'P:sir.i_out', 'P:sir.r_out'];
+        request.domain_parameter = 'P:sir.n';
+      } else {
+        console.warn('[DONU Service] — getModelResult', 'The request cannot be executed because _outputs_ or/and _domainParameter_ are missing.'); // eslint-disable-line no-console
+      }
+    }
+
     const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
       return response?.result as Donu.SimulationResponse ?? null;
     } else {
-      console.error('[DONU Service] — getModelResult', response); // eslint-disable-line no-console
+      console.error('[DONU Service] — getModelResult', response.error); // eslint-disable-line no-console
     }
   } else {
-    console.error('[DONU Service] — getModelResult', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
+    console.warn('[DONU Service] — getModelResult', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
   }
+};
+
+/** Mock Donu Model Simulation Error API call */
+export const computeDonuModelSimulationError = async (
+  measures: Donu.Measure[],
+  interpolationModel: Donu.InterpolationModelTypes,
+  errorModel: Donu.ErrorModelTypes,
+): Promise<Donu.Response> => {
+  // NOTE: This utility function is a temporary mock of Donu's compute error API endpoint
+  // the functionality should be near identical. The request is planned to look like the
+  // below:
+  // const request: Donu.Request = {
+  //   command: Donu.RequestCommand.COMPUTE_ERROR,
+  //   'interp-model': 'linear',
+  //   'error-model': 'L2',
+  //   measures: [
+  //     {
+  //        "uid": "J:I",
+  //        "predicted": {
+  //           "times": [...],
+  //           "values": [...],
+  //         }
+  //        "observed": {
+  //           "times": [...],
+  //           "values": [...],
+  //         }
+  //     }, ...
+  //   ],
+  // };
+
+  // Select interpolation function for aligning observed and predicted points
+  let interpolationFn;
+  if (interpolationModel === Donu.InterpolationModelTypes.Linear) {
+    interpolationFn = linearInterpolations;
+  } else {
+    throw new Error('No valid interpolation model selected.');
+  }
+  // Select error function
+  let errorFn;
+  if (errorModel === Donu.ErrorModelTypes.L2) {
+    errorFn = L2Norm;
+  } else {
+    throw new Error('No valid error model selected.');
+  }
+  const measureErrors: Donu.MeasureError[] = [];
+  measures.forEach(measure => {
+    // Interpolate predicted and observed values for point alignment
+    interpolationFn(measure.observed.times, measure.predicted.times, measure.predicted.values);
+    interpolationFn(measure.predicted.times, measure.observed.times, measure.observed.values);
+
+    // Compute errors over points within a measure
+    const errorIndividual = {
+      values: [],
+      times: [],
+    };
+    for (let i = 0; i < measure.predicted.times.length; i++) {
+      const norm = errorFn([measure.observed.values[i] - measure.predicted.values[i]]);
+      errorIndividual.values.push(norm);
+      errorIndividual.times.push(measure.predicted.times[i]);
+    }
+    // Compute total error of the measure using an average over individual point errors
+    const errorMeasureTotal = errorIndividual.values.reduce((a, b) => a + b, 0) / errorIndividual.values.length;
+    measureErrors.push({
+      uid: measure.uid,
+      errorIndividual,
+      errorTotal: errorMeasureTotal,
+    });
+  });
+  // Compute total error of the model using an average over each measure's total error
+  const errorTotal = measureErrors.reduce((acc, measure) => acc + measure.errorTotal, 0) / measureErrors.length;
+
+  return {
+    status: Donu.ResponseStatus.success,
+    result: {
+      measures: measureErrors,
+      errorTotal,
+    },
+  };
 };

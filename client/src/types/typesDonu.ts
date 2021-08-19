@@ -65,14 +65,50 @@ type ModelDefinition = {
   type: Type;
 }
 
+type Measure = {
+  uid: string,
+  predicted: {
+    times: number[],
+    values: number[]
+  },
+  observed: {
+    times: number[],
+    values: number[],
+  }
+};
+
+type MeasureError = {
+  uid: string,
+  errorIndividual: {
+    times: number[],
+    values: number[],
+  },
+  errorTotal: number,
+};
+
+enum ErrorModelTypes {
+  L2 = 'L2',
+}
+
+enum InterpolationModelTypes {
+  Linear = 'linear',
+}
+
 // TO-DO: Export GroMEt type from research/gromet/tools/types/GroMEt
 type ModelGraph = any;
 
 type SimulationResponse = {
-  times: number[],
+  // `domain_parameter` and `times` are identical,
+  domain_parameter?: number[], // for Functional Network,
+  times?: number[], // for Petri Net Classic.
   values: {
     [key: string]: number[],
   }
+}
+
+type ComputeErrorResponse = {
+  measures: MeasureError,
+  errorTotal: number,
 }
 
 type RequestParameters = {
@@ -89,14 +125,13 @@ type Request = {
   command: RequestCommand;
   definition?: string | ModelDefinition;
   parameters?: RequestParameters,
-  // 'dest-type'?: string;
+  outputs?: string[],
+  domain_parameter?: string,
   end?: number;
-  // name?: string;
   start?: number;
   step?: number;
   'sim-type'?: SimulationType | void,
   text?: string,
-  // type?: string;
 }
 
 enum ResponseStatus {
@@ -108,7 +143,8 @@ type ResponseResult =
   ModelGraph |
   ModelDefinition |
   ModelDefinition[] |
-  SimulationResponse
+  SimulationResponse |
+  ComputeErrorResponse
 ;
 
 type Response = {
@@ -133,4 +169,8 @@ export {
   SimulationResponse,
   Type,
   SimulationType,
+  Measure,
+  MeasureError,
+  ErrorModelTypes,
+  InterpolationModelTypes,
 };

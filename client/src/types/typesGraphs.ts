@@ -57,6 +57,7 @@ export interface GraphNodeDataInterface {
 
 export interface GraphNodeInterface {
   id: string,
+  grometID?: string,
   concept?: string,
   label?: string,
   nodeType?: string,
@@ -66,6 +67,7 @@ export interface GraphNodeInterface {
   metadata?: any[][], // Temporary dump for FunctionalNetwork GroMEt Variables metadata
   parent?: string,
   role?: string[],
+  tooltip?: string, // Stores tooltip for nodes in the provenance graph
 }
 
 export interface GraphEdgeInterface {

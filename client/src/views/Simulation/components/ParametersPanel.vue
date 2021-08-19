@@ -42,10 +42,16 @@
           :class="{
             error: nonValidValue(parameterValues[parameter.uid]),
             highlighted: parameter.metadata.name === highlighted,
+            'domain_parameter': isDomainParameter(parameter),
           }"
+          :title="parameter.metadata.name"
         >
-          <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
-          <input type="text" v-model.number="parameterValues[parameter.uid]" />
+          <h4>{{ parameter.metadata.name }}</h4>
+          <input
+            type="text"
+            v-model.number="parameterValues[parameter.uid]"
+            :disabled="isDomainParameter(parameter)"
+          />
           <aside class="btn-group">
             <button
               class="btn btn-secondary btn-sm"
@@ -104,6 +110,7 @@
     private parameterInput: number = 65;
     private parameterAction: number = 35;
     private parameterValues: { [uid: string]: number } = {};
+    private someParametersAreInvalid: boolean = false;
 
     // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
@@ -111,7 +118,6 @@
     @Watch('displayedParameters') onDisplayedParametersChanged (): void { this.drawGraph(); }
 
     mounted (): void {
-      this.parameterValues = {};
       this.onParametersChange();
       this.drawGraph();
     }
@@ -120,19 +126,21 @@
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
     @Watch('parameters') onParametersChange (): void {
+      this.parameterValues = {};
+
       // If the parameterValues has no value for a parameter, we give the one in the store.
       // This is used to set default parameter values.
       this.parameters.forEach(parameter => {
         if (!Object.prototype.hasOwnProperty.call(this.parameterValues, parameter.uid)) {
-          let value = parameter.values[0];
+          let currentValue = parameter.values[parameter.values.length - 1];
 
           // If the we have no default value and the parameter is a initial value,
           // set it up to 1 so the user can run the model right away.
-          if (parameter.uid.includes('_init') && !value) {
-            value = 1;
+          if (parameter.initial_condition && !currentValue) {
+            currentValue = 1;
           }
 
-          this.$set(this.parameterValues, parameter.uid, value);
+          this.$set(this.parameterValues, parameter.uid, currentValue);
         }
       });
     }
@@ -152,6 +160,15 @@
         }
       });
       this.drawGraph();
+
+      // Make sure that for every non domain parameters, their current value is valid.
+      this.someParametersAreInvalid = this.parameters
+        .filter(parameter => !this.isDomainParameter(parameter))
+        .some(parameter => {
+          const currentValue = parameter.values[parameter.values.length - 1];
+          return this.nonValidValue(currentValue);
+        });
+      this.$emit('invalid', this.someParametersAreInvalid);
     }
 
     get triggerParameterValues (): string {
@@ -165,7 +182,10 @@
     }
 
     get displayedParameters (): HMI.SimulationParameter[] {
-      return this.parameters.filter(parameter => parameter.displayed);
+      return this.parameters
+        .filter(parameter => parameter.displayed)
+        // Put the domain parameter at the end to have a concistent graph
+        .sort(parameter => !this.isDomainParameter(parameter) ? -1 : 1);
     }
 
     get noDisplayedParameters (): boolean {
@@ -306,12 +326,11 @@
       return !_.isNumber(value) || Number.isNaN(value);
     }
 
-    get someParametersAreInvalid (): boolean {
-      // Make sure that for every parameters, their current value is valid.
-      return this.parameters.some(parameter => {
-        const currentValue = parameter.values[parameter.values.length - 1];
-        return this.nonValidValue(currentValue);
-      });
+    /** A Domain Parameter is used in Functional Network as parameter of change,
+     * this is the parameter that will be used to apply the Simulation steps.
+     */
+    isDomainParameter (parameter: HMI.SimulationParameter): boolean {
+      return parameter.value_type === 'domain_parameter';
     }
   }
 </script>
@@ -333,6 +352,12 @@
     scroll-snap-destination: 0 0;
     scroll-snap-type: y mandatory;
     scroll-snap-type: mandatory;
+  }
+
+  .parameters .message-display {
+    margin: 1em;
+    position: sticky;
+    top: 1em;
   }
 
   .parameters.message {
@@ -365,6 +390,7 @@
     grid-template-rows: 1fr 1fr;
     height: var(--parameter-height);
     padding: var(--padding);
+    position: relative;
   }
 
   .parameter:last-of-type {
@@ -406,18 +432,37 @@
     border-color: var(--selection);
   }
 
-  .parameter.error {
+  /* Domain Parameter */
+  .parameter.domain_parameter::after {
+    content: 'Domain Parameter: ' attr(title);
+    font-weight: bold;
+    left: 50%;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 75%;
+  }
+
+  .parameter.domain_parameter::before {
+    background: var(--bg-graphs);
+    bottom: 0;
+    content: '\0A';
+    left: 0;
+    opacity: .6;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  /* Error */
+  .parameter:not(.domain_parameter).error {
     border-color: var(--error);
   }
 
-  .parameter.error input {
+  .parameter:not(.domain_parameter).error input {
     background-color: var(--error);
-  }
-
-  .parameters .message-display {
-    margin: 1em;
-    position: sticky;
-    top: 1em;
   }
 </style>
 <style>

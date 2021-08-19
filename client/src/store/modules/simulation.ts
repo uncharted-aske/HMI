@@ -20,7 +20,12 @@ const currentNumberOfRuns = (state: HMI.SimulationState): number => {
 const getModel = (state: HMI.SimulationState, modelId: number): HMI.SimulationModel => {
   let model = state.models.find(model => model.id === modelId);
   if (!model) {
-    model = { id: modelId, parameters: [], variables: [] };
+    model = {
+      id: modelId,
+      initialised: false,
+      parameters: [],
+      variables: [],
+    };
     state.models.push(model);
   }
   return model;
@@ -101,11 +106,15 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     const responseArr = await Promise.all(
       getters.getSimParameterArray(model.id).map(param => getModelResult(model, param, config, selectedModelGraphType)),
     );
+
+    // The property in which the xAxis values are stored depends on the Graph Type. c.f. types/typesDonu.ts
+    const xAxis = selectedModelGraphType === Model.GraphTypes.FunctionNetwork ? 'domain_parameter' : 'times';
+
     for (const response of responseArr) {
       // The reponse.values is a list of variables results with the variable uid as key.
       // Each index of the result list correspond to the response.times list.
       for (const uid in response[0].values) {
-        const values = response[0].values[uid].map((value, index) => ({ x: response[0].times[index], y: value }));
+        const values = response[0].values[uid].map((value, index) => ({ x: response[0][xAxis][index], y: value }));
         commit('updateVariableValues', { modelId: model.id, uid: uid, values });
       }
     }
@@ -114,7 +123,10 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     commit('setVariablesAggregate', { aggregator, modelId: model.id });
   },
 
-  async initializeInterface ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
+  async initializeInterface ({ state, commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
+    // Check if the model interface has already been initialised.
+    if (getModel(state, args.model.id).initialised) return;
+
     const {
       parameters: donuParameters,
       measures: donuVariables,
@@ -143,15 +155,25 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     }
 
     if (donuVariables) {
-      const variables = donuVariables.map(donuVariable => ({
-        ...donuVariable,
-        aggregate: null,
-        displayed: false,
-        values: [],
-      }));
+      const variables = donuVariables.map(donuVariable => {
+        const variable = {
+          ...donuVariable,
+          aggregate: null,
+          displayed: false,
+          values: [],
+        };
+
+        // If the API does not provide a name, we leverage the UID.
+        if (!variable.metadata.name) {
+          variable.metadata.name = variable.uid;
+        }
+
+        return variable;
+      });
       commit('setSimVariables', { modelId: args.model.id, variables });
     }
 
+    commit('setModelIsInitialised', args.model.id);
     commit('setNumberOfSavedRuns', 0);
   },
 
@@ -204,6 +226,10 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
 const mutations: MutationTree<HMI.SimulationState> = {
   setModels (state: HMI.SimulationState, models): void {
     state.models = models ?? [];
+  },
+
+  setModelIsInitialised (state: HMI.SimulationState, modelId): void {
+    getModel(state, modelId).initialised = true;
   },
 
   setSimParameters (state: HMI.SimulationState, args : {
