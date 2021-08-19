@@ -135,7 +135,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
         model.graph = MARM_MODEL_AGGREGATED;
       }
       if (model.source.model === 'covid19_inflammasome_gromet_2021-08-17-17-47-36.json' && model.type === Donu.Type.GROMET_PNC) {
-         model.graph = COVID_MODEL_AGGREGATED;
+        model.graph = COVID_MODEL_AGGREGATED;
       }
     });
 

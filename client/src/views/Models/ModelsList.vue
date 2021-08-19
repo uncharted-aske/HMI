@@ -169,7 +169,6 @@
     get modelsCards (): CardInterface[] {
       const selectedModelsList = new Set(this.getSelectedModelIds);
       function getModelsPreviewImageSource (model) {
-        console.log(model.name);
         if (['SimpleSIR', 'SimpleSIR_metadata'].includes(model.name)) {
           return SIRScreenshot;
         } else if (model.name === 'SimpleSIRD') {
