@@ -82,7 +82,7 @@
       />
       <parameters-pane
         v-if="drilldownActiveTabId === 'parameters'"
-        slot="content" :data="drilldownParameters"
+        slot="content"
         :related="drilldownRelatedParameters"
         @open-modal="onOpenModalParameters"
       />
@@ -195,7 +195,6 @@
     drilldownMetadata: any = null;
     drilldownKnowledge: CosmosSearchInterface | Record<any, never> = {};
     drilldownRelatedParameters: any = null;
-    drilldownParameters: any = null;
 
     displaySearch: boolean = false;
     isSplitView = false;
@@ -400,7 +399,6 @@
       }
     }
 
-    // TODO - Does not seems to be used.
     async getRelatedParameters (keyword: string): Promise<void> {
       const response = await cosmosRelatedParameters({ word: keyword, model: 'trigram', n: 10 });
       this.drilldownRelatedParameters = response.data;
@@ -417,6 +415,7 @@
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownPaneTitle = node.label;
       this.getDrilldownKnowledge();
+      this.getRelatedParameters(node.label);
     }
 
     onBackgroundClick ():void {

@@ -1,48 +1,44 @@
 <template>
-  <div v-if="!isEmptyData" class="h-100 d-flex flex-column parameters-pane-container">
-    <div class="parameter-title">{{title | capitalize-first-letter-formatter}}</div>
-    <scatter-plot :data="data" :size="[400, 500]" @dot-click="onDotClick"/>
-    <div class="parameter-title">Related Parameters</div>
-    <div class="position-relative flex-grow-1">
-      <div class="position-absolute h-100 w-100 related-params hide-scrollbar">
-        <div class="mb-1 px-2 py-2 d-flex rounded-lg border" v-for="(param, index) in related" :key="index">
-          <div class="flex-grow-1">
-            <h6>{{ param[0] | underscore-remover-formatter | capitalize-first-letter-formatter }}</h6>
-            <div>{{ param[1] }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <message-display v-else class="m-3">No metadata at the moment.</message-display>
+  <section class="parameters-pane-container">
+    <scatter-plot :data="data" size="[400, 500]" @dot-click="onDotClick"/>
+
+    <h6>Related Parameters</h6>
+    <message-display v-if="noRelatedParameter">
+      No <strong>Related Parameters</strong> at the moment.
+    </message-display>
+    <ul v-else class="related-parameters">
+      <li v-for="(param, index) in related" :key="index">
+        <strong>{{ param[0] | underscore-remover-formatter | capitalize-first-letter-formatter }}</strong>
+        {{ param[1] }}
+      </li>
+    </ul>
+  </section>
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
-  import Component from 'vue-class-component';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
-  import ScatterPlot from '@/components/widgets/charts/ScatterPlot.vue';
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
+  import ScatterPlot from '@/components/widgets/charts/ScatterPlot.vue';
 
   const components = {
-    ScatterPlot,
     MessageDisplay,
+    ScatterPlot,
   };
+
+  // Source: http://teststrata.geology.wisc.edu/xdd/extract.php?doc_set=xdd-covid-19
+  const DATA = {};
 
   @Component({ components })
   export default class ParametersPane extends Vue {
-    @Prop({ default: null }) data: any;
-    @Prop({ default: null }) related: any;
+    @Prop({ default: null }) related: [string, number][];
 
-    get isEmptyData (): boolean {
-      return _.isEmpty(this.data);
-    }
+    private data = DATA;
 
-    get title (): string {
-      return !_.isEmpty(this.data) && this.data[0].variable;
+    get noRelatedParameter (): boolean {
+      return !this.related || this.related.length === 0;
     }
 
     onDotClick (doi:string): void {
@@ -53,14 +49,32 @@
 
 <style scoped>
   .parameters-pane-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     padding: 5px;
   }
 
-  .parameter-title {
+  h6 {
     font-weight: bold;
   }
 
-  .related-params {
-    overflow: hidden scroll;
+  .related-parameters {
+    list-style: none;
+    margin: 0;
+    overflow-y: scroll;
+    padding: 0;
+    width: 100%;
+  }
+
+  .related-parameters li {
+    border: var(--border);
+    border-radius: .3em;
+    margin-bottom: .25em;
+    padding: .5em;
+  }
+
+  .related-parameters strong {
+    display: block;
   }
 </style>
