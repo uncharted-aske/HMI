@@ -217,9 +217,7 @@ export default class EpiRenderer extends SVGRenderer {
 
   hideSubgraph (): void {
     const chart = (this as any).chart;
-    if (chart) {
-      chart.selectAll('.node-ui,.edge').style('opacity', 1);
-    }
+    chart?.selectAll('.node-ui,.edge').style('opacity', 1);
   }
 
   showSubgraph (subgraph: SubgraphInterface): void {
@@ -240,9 +238,9 @@ export default class EpiRenderer extends SVGRenderer {
   showHighlight (subgraph: SubgraphInterface): void {
     const chart = (this as any).chart;
     const nodes = subgraph.nodes;
-    if (chart) {
-      chart.selectAll('.node-ui').each(function (d) {
-        if (nodes.some(node => node.id === d.data.grometID)) {
+    chart?.selectAll('.node-ui').each(function (d) {
+      if (nodes.some(node => node.id === d.data.grometID)) {
+        if (d.nodes) {
           d3.select(this)
             .select('rect, ellipse')
             .style('stroke', Colors.HIGHLIGHT)
@@ -250,10 +248,10 @@ export default class EpiRenderer extends SVGRenderer {
         } else {
           d3.select(this)
             .select('rect, ellipse')
-            .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+            .style('fill', Colors.HIGHLIGHT);
         }
-      });
-    }
+      }
+    });
   }
 
   selectNode (node: d3.Selection<any, any, any, any>): void {
@@ -285,23 +283,23 @@ export default class EpiRenderer extends SVGRenderer {
 
   markOverlappingElements (subgraph: SubgraphInterface): void {
     const chart = (this as any).chart;
-    if (chart) {
-      chart.selectAll('.node-ui').each(function (d) {
-        const isOverlapping = subgraph.nodes.some(node => node.id === d.data.grometID);
+    chart?.selectAll('.node-ui').each(function (d) {
+      const isOverlapping = subgraph.nodes.some(node => node.id === d.data.grometID);
+      if (isOverlapping) {
         d3.select(this)
           .select('rect, ellipse')
-          .style('stroke', isOverlapping ? Colors.OVERLAPPING : DEFAULT_STYLE.node.stroke);
-      });
-    }
+          .style('fill', Colors.OVERLAPPING);
+      }
+    });
   }
 
   clearSelections ():void {
     const chart = (this as any).chart;
-    chart
-      .selectAll('.node-ui').each(function () {
-        d3.select(this).select('rect, ellipse')
-          .style('stroke', DEFAULT_STYLE.node.stroke)
-          .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
-      });
+    chart?.selectAll('.node-ui').each(function (d) {
+      d3.select(this).select('rect, ellipse')
+        .style('fill', EpiRenderer.calcNodeColor(d))
+        .style('stroke', DEFAULT_STYLE.node.stroke)
+        .style('stroke-width', DEFAULT_STYLE.node.strokeWidth);
+    });
   }
 }
