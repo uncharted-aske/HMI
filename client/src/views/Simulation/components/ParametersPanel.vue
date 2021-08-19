@@ -49,7 +49,7 @@
           <input
             type="text"
             v-model.number="parameterValues[parameter.uid]"
-            :aria-disabled="isDomainParameter(parameter)"
+            :disabled="isDomainParameter(parameter)"
           />
           <aside class="btn-group">
             <button
