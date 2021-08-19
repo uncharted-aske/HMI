@@ -200,17 +200,31 @@ export const getModelInterface = async (model: Model.Model, selectedModelGraphTy
        */
       if (selectedModelGraphType === Model.GraphTypes.FunctionNetwork) {
         const result = response?.result as Donu.ModelDefinition;
-        let outputs = [];
-        let domainParameter;
+        let parameters, outputs, domainParameter;
         if (modelGraph.model === 'SimpleSIR_metadata_gromet_FunctionNetwork.json') {
-          outputs = ['P:sir.out.S', 'P:sir.out.I', 'P:sir.out.R'];
           domainParameter = 'P:sir.in.dt';
+          parameters = { 'P:sir.in.S': 'S', 'P:sir.in.I': 'I', 'P:sir.in.R': 'R', 'P:sir.in.beta': 'beta', 'P:sir.in.gamma': 'gamma', 'P:sir.in.dt': 'dt' };
+          outputs = { 'P:sir.out.S': 'S', 'P:sir.out.I': 'I', 'P:sir.out.R': 'R' };
         } else if (modelGraph.model === 'CHIME_SIR_v01_gromet_FunctionNetwork_by_hand.json') {
-          outputs = ['P:sir.s_out', 'P:sir.i_out', 'P:sir.r_out'];
           domainParameter = 'P:sir.n';
+          parameters = { 'P:sir.s_in': 'S', 'P:sir.i_in': 'I', 'P:sir.r_in': 'R', 'P:sir.beta': 'beta', 'P:sir.gamma': 'gamma', 'P:sir.n': 'n' };
+          outputs = { 'P:sir.s_out': 'S', 'P:sir.i_out': 'I', 'P:sir.r_out': 'R' };
         }
-        result.measures = result.measures.filter(measure => outputs.includes(measure.uid));
-        result.parameters = result.parameters.filter(parameter => parameter.uid !== domainParameter);
+        result.measures = result.measures
+          .filter(measure => Object.keys(outputs).includes(measure.uid))
+          .map(measure => {
+            measure.metadata.name = outputs[measure.uid];
+            return measure;
+          });
+
+        result.parameters = result.parameters
+          .map(parameter => {
+            parameter.metadata.name = parameters?.[parameter.uid] ?? parameter.uid;
+            if (parameter.uid === domainParameter) {
+              parameter.value_type = 'domain_parameter'; // Leveraging this unused property.
+            }
+            return parameter;
+          });
         return result;
       }
 

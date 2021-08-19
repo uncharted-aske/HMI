@@ -42,10 +42,15 @@
           :class="{
             error: nonValidValue(parameterValues[parameter.uid]),
             highlighted: parameter.metadata.name === highlighted,
+            'domain_parameter': isDomainParameter(parameter),
           }"
         >
           <h4 :title="parameter.metadata.name">{{ parameter.metadata.name }}</h4>
-          <input type="text" v-model.number="parameterValues[parameter.uid]" />
+          <input
+            type="text"
+            v-model.number="parameterValues[parameter.uid]"
+            :aria-disabled="isDomainParameter(parameter)"
+          />
           <aside class="btn-group">
             <button
               class="btn btn-secondary btn-sm"
@@ -305,6 +310,13 @@
 
     nonValidValue (value: number): boolean {
       return !_.isNumber(value) || Number.isNaN(value);
+    }
+
+    /** A Domain Parameter is used in Functional Network as parameter of change,
+     * this is the parameter that will be used to apply the Simulation steps.
+     */
+    isDomainParameter (parameter: HMI.SimulationParameter): boolean {
+      return parameter.value_type === 'domain_parameter';
     }
 
     get someParametersAreInvalid (): boolean {
