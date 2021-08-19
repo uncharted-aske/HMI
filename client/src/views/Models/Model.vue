@@ -206,6 +206,7 @@
     modalDataMetadata: any = null;
 
     @Action initializeInterface;
+    @Action resetSim;
 
     @Getter getFilters;
     @Getter getModelsLayout;
@@ -223,6 +224,7 @@
     }
 
     @Watch('getSelectedModelGraphType') onModelGraphTypeChanged (): void {
+      this.resetSim(); // We only save simulation info per model.id, not model.id + graph type.
       this.initializeSim();
     }
 
