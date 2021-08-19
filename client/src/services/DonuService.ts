@@ -123,7 +123,6 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
     }));
 
     models.forEach(model => {
-      console.log(model.source.model);
       // 4. Transform Gromet to graph for rendering
       model.graph = GroMEt2Graph.parseGromet(model.gromet);
 
