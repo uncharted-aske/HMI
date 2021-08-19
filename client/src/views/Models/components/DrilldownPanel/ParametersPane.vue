@@ -24,37 +24,35 @@
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
   import ScatterPlot from '@/components/widgets/charts/ScatterPlot.vue';
 
+  // Source: http://teststrata.geology.wisc.edu/xdd/extract.php?doc_set=xdd-covid-19
+  import * as PARAMETERS_EXTRACT from '@/static/parameters_extract.json';
+
   const components = {
     MessageDisplay,
     ScatterPlot,
   };
 
-  // Source: http://teststrata.geology.wisc.edu/xdd/extract.php?doc_set=xdd-covid-19
-  const DATA: HMI.ExtractDataParameters = {
-    R0: [],
-    Reff: [],
-    'incubation period': [],
-    'incubation time': [],
-    'infection period': [],
-    'infection rate': [],
-    'infectious period': [],
-    'fatality rate': [],
-    'death rate': [],
-    'latent period': [],
-    'tranmission rate': [],
-    'asymptomatic rate': [],
-    'critical symptomatic rate': [],
-    'severe symptomatic rate': [],
-    'doubling time': [],
-    'growth rate': [],
-  };
-
   @Component({ components })
   export default class ParametersPane extends Vue {
     @Prop({ default: null }) related: [string, number][];
+    private selectedVariable: string = 'incubation period';
+
+    get getVariables (): string[] {
+      return Array.from(new Set(PARAMETERS_EXTRACT.map(info => info.variable)));
+    }
 
     get selectedData (): HMI.ExtractDataParameter {
-      return DATA['incubation period'];
+      return PARAMETERS_EXTRACT.map(info => {
+        if (info.variable === this.selectedVariable) {
+          return {
+            date: info.date + ' - ' + info.year,
+            doi: info.doi,
+            location: info.location,
+            object_id: info.object_id,
+            value: info.value,
+          };
+        }
+      });
     }
 
     get noRelatedParameter (): boolean {

@@ -47,8 +47,10 @@ type Counter = {
 
 type ExtractDataParameter = Array<{
   date: string,
+  doi: string,
   location: string,
-  value: number,
+  object_id: string,
+  value: number | string,
 }>;
 
 type ExtractDataParameters = {

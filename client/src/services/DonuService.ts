@@ -5,11 +5,6 @@ import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
 import { postUtil, postUtilMem } from '@/utils/FetchUtil';
 
-// HACK: REMOVE when Donu provides CHIME+
-export const staticFileURLs = [
-  `${window.location.origin}/gromets/CHIME+.json`,
-];
-
 /** Send the request to Donu */
 const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
   try {
