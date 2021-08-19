@@ -115,12 +115,12 @@
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
         this.renderer.hideSubgraph();
+        this.renderer.clearSelections();
 
         // Only show neighborhood for children nodes
         if (!node.datum().nodes) {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.showSubgraph(neighborhood);
-          this.renderer.clearSelections();
           if (this.overlappingElements) {
             this.renderer.markOverlappingElements(this.overlappingElements);
           }
