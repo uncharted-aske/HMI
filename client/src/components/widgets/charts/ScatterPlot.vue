@@ -13,6 +13,8 @@
   import * as d3 from 'd3';
   import svgUtil from '@/utils/SVGUtil';
 
+  import * as HMI from '@/types/types';
+
   const DEFAULT_CONFIG = {
     margin: {
       top: 25,
@@ -24,7 +26,7 @@
 
   @Component
   export default class ScatterPlot extends Vue {
-    @Prop({ default: null }) data: any;
+    @Prop({ default: null }) data: HMI.ExtractDataParameter;
     @Prop({ default: () => [450, 400] }) size: Array<number>;
 
     mounted (): void {
