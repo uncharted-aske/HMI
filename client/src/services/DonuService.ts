@@ -1,5 +1,6 @@
 import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 import * as MARM_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/marm_model_gromet_2021-06-28-17-07-14_graph_agg_rev_rategroups.json';
+import * as COVID_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/covid19_inflammasome_gromet_2021-08-17-17-47-36_agg_rev_rategroups.json';
 
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
@@ -122,6 +123,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
     }));
 
     models.forEach(model => {
+      console.log(model.source.model);
       // 4. Transform Gromet to graph for rendering
       model.graph = GroMEt2Graph.parseGromet(model.gromet);
 
@@ -131,7 +133,7 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
 
       if (model.source.model === 'marm_model_gromet_2021-06-28-17-07-14.json' && model.type === Donu.Type.GROMET_PNC) {
         // HACK: Use aggregated marm model as visual graph
-        model.graph = MARM_MODEL_AGGREGATED;
+        model.graph = COVID_MODEL_AGGREGATED;
       }
     });
 
