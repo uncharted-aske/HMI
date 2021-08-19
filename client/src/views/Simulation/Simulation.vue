@@ -69,6 +69,7 @@
           :slot="('parameters_' + model.id)"
           :highlighted="highlighted"
           @expand="setExpandedId('parameters')"
+          @invalid="isRunFeasible = !$event"
         />
         <variables-panel
           class="simulation-panel"
@@ -95,7 +96,6 @@
   import { Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
-  import _ from 'lodash';
 
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
@@ -127,7 +127,7 @@
 
   const PROVENANCE_LAYOUTS: ProvenanceLayoutInterface[] = [
     { name: 'Condensed', id: ProvenanceLayoutInterfaceType.condensed },
-    { name: 'Expanded', id: ProvenanceLayoutInterfaceType.expanded },
+    { name: 'Detailed', id: ProvenanceLayoutInterfaceType.detailed },
   ];
 
   const components = {
@@ -154,6 +154,7 @@
     runConfig: Donu.RequestConfig = { end: 100, start: 0, step: 1 };
     subgraph: Graph.GraphInterface = null;
     highlighted: string = '';
+    isRunFeasible: boolean = true; // Check if a Run can be triggered or saved.
 
     isProvenanceGraphOpen: boolean = false;
     provenanceLayouts: ProvenanceLayoutInterface[] = PROVENANCE_LAYOUTS;
@@ -268,25 +269,13 @@
       };
     }
 
-    /** Check if a Run can be triggered or saved. */
-    get isRunFeasible (): boolean {
-      // Make sure that for every selected models
-      return this.selectedModels.every(model => {
-        // that every parameters of this model
-        return this.getSimModel(model.id).parameters.every(parameter => {
-          // does only contain numbers
-          return parameter.values.every(_.isNumber);
-        });
-      });
-    }
-
     get provenanceData (): Graph.GraphInterface {
       // If one model is selected, show the provenance graphs for the single model workflow
       if (this.selectedModels.length === 1) {
-        return this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed ? ProvenanceData.SINGLE_MODEL_CONDENSED : ProvenanceData.SINGLE_MODEL_EXPANDED;
+        return this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed ? ProvenanceData.SINGLE_MODEL_CONDENSED : ProvenanceData.SINGLE_MODEL_DETAILED;
       } else {
       // If multiple models are selected, show the provenance graph for the multiple model workflow
-        return this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed ? ProvenanceData.MULTI_MODEL_CONDENSED : ProvenanceData.MULTI_MODEL_EXPANDED;
+        return this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed ? ProvenanceData.MULTI_MODEL_CONDENSED : ProvenanceData.MULTI_MODEL_DETAILED;
       }
     }
 

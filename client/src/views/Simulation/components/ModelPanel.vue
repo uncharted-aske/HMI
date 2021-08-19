@@ -97,7 +97,7 @@
     settingsOpen: boolean = false;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
-      this.setSelectedNodes([{ model: this.model.id, node: selected.label }]);
+      this.setSelectedNodes([{ model: this.model.id, node: selected.grometID }]);
       this.$emit('highlight', selected.label);
     }
 

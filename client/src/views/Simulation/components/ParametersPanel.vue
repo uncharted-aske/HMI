@@ -109,6 +109,7 @@
     private parameterInput: number = 65;
     private parameterAction: number = 35;
     private parameterValues: { [uid: string]: number } = {};
+    private someParametersAreInvalid: boolean = false;
 
     // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
@@ -130,15 +131,15 @@
       // This is used to set default parameter values.
       this.parameters.forEach(parameter => {
         if (!Object.prototype.hasOwnProperty.call(this.parameterValues, parameter.uid)) {
-          let value = parameter.values[parameter.values.length - 1];
+          let currentValue = parameter.values[parameter.values.length - 1];
 
           // If the we have no default value and the parameter is a initial value,
           // set it up to 1 so the user can run the model right away.
-          if (parameter.uid.includes('_init') && !value) {
-            value = 1;
+          if (parameter.initial_condition && !currentValue) {
+            currentValue = 1;
           }
 
-          this.$set(this.parameterValues, parameter.uid, value);
+          this.$set(this.parameterValues, parameter.uid, currentValue);
         }
       });
     }
@@ -158,6 +159,13 @@
         }
       });
       this.drawGraph();
+
+      // Make sure that for every parameters, their current value is valid.
+      this.someParametersAreInvalid = this.parameters.some(parameter => {
+        const currentValue = parameter.values[parameter.values.length - 1];
+        return this.nonValidValue(currentValue);
+      });
+      this.$emit('invalid', this.someParametersAreInvalid);
     }
 
     get triggerParameterValues (): string {
@@ -317,14 +325,6 @@
      */
     isDomainParameter (parameter: HMI.SimulationParameter): boolean {
       return parameter.value_type === 'domain_parameter';
-    }
-
-    get someParametersAreInvalid (): boolean {
-      // Make sure that for every parameters, their current value is valid.
-      return this.parameters.some(parameter => {
-        const currentValue = parameter.values[parameter.values.length - 1];
-        return this.nonValidValue(currentValue);
-      });
     }
   }
 </script>

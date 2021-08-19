@@ -12,6 +12,7 @@
           {{ layout.name }}
         </button>
       </div>
+      <h6 class="d-inline-block">{{sessionMetadata}}</h6>
     </aside>
     <close-button @close="onClose"/>
     <div class="flex-grow-1 position-relative overflow-scroll hide-scrollbar panel-body">
@@ -36,6 +37,8 @@
     @Prop({ default: () => [] }) layouts: ProvenanceLayoutInterface[];
     @Prop({ default: '' }) selectedLayoutId: string;
 
+    sessionMetadata: string = ' | Start Time: 2021-08-27T11:00:00';
+
     onClose (): void {
       this.$emit('close-pane');
     }
@@ -50,6 +53,7 @@
 .provenance-graph-container {
   background-color: var(--bg-graphs);
   box-sizing: border-box;
+  color: white;
   display: flex;
   flex-direction: column;
   height: var(--provenance-graph-height);

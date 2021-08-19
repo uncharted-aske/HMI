@@ -20,7 +20,12 @@ const currentNumberOfRuns = (state: HMI.SimulationState): number => {
 const getModel = (state: HMI.SimulationState, modelId: number): HMI.SimulationModel => {
   let model = state.models.find(model => model.id === modelId);
   if (!model) {
-    model = { id: modelId, parameters: [], variables: [] };
+    model = {
+      id: modelId,
+      initialised: false,
+      parameters: [],
+      variables: [],
+    };
     state.models.push(model);
   }
   return model;
@@ -118,7 +123,10 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
     commit('setVariablesAggregate', { aggregator, modelId: model.id });
   },
 
-  async initializeInterface ({ commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
+  async initializeInterface ({ state, commit }, args: { model: Model.Model, selectedModelGraphType: Model.GraphTypes }): Promise<void> {
+    // Check if the model interface has already been initialised.
+    if (getModel(state, args.model.id).initialised) return;
+
     const {
       parameters: donuParameters,
       measures: donuVariables,
@@ -165,6 +173,7 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
       commit('setSimVariables', { modelId: args.model.id, variables });
     }
 
+    commit('setModelIsInitialised', args.model.id);
     commit('setNumberOfSavedRuns', 0);
   },
 
@@ -217,6 +226,10 @@ const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
 const mutations: MutationTree<HMI.SimulationState> = {
   setModels (state: HMI.SimulationState, models): void {
     state.models = models ?? [];
+  },
+
+  setModelIsInitialised (state: HMI.SimulationState, modelId): void {
+    getModel(state, modelId).initialised = true;
   },
 
   setSimParameters (state: HMI.SimulationState, args : {

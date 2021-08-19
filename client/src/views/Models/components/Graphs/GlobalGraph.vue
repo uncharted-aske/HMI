@@ -69,6 +69,8 @@
     }
 
     dataDecorationChanged (): void {
+      this.renderer.clearSelections();
+
       if (this.subgraph) {
         this.renderer.showSubgraph(this.subgraph);
       } else {
@@ -115,12 +117,12 @@
 
       this.renderer.setCallback('nodeClick', (evt, node) => {
         this.renderer.hideSubgraph();
+        this.renderer.clearSelections();
 
         // Only show neighborhood for children nodes
         if (!node.datum().nodes) {
           const neighborhood = calculateNodeNeighborhood(this.data, node.datum());
           this.renderer.showSubgraph(neighborhood);
-          this.renderer.clearSelections();
           if (this.overlappingElements) {
             this.renderer.markOverlappingElements(this.overlappingElements);
           }
@@ -160,9 +162,6 @@
 
       this.renderer.setData(data);
       await this.renderer.render();
-      if (this.overlappingElements) {
-        this.renderer.markOverlappingElements(this.overlappingElements);
-      }
 
       // Collapse top-level boxes by default
       // HACK: The collapse/expand functions are asynchronous and trying to execute them all at once
@@ -170,8 +169,10 @@
       const collapsedIds = calcNodesToCollapse(this.layout, this.renderer.layout);
       if (collapsedIds.length > 0) {
         collapsedIds.forEach(nextId => this.renderer.collapse(nextId));
-        this.renderer.render();
+        await this.renderer.render();
       }
+
+      this.dataDecorationChanged();
     }
   }
 </script>

@@ -69,6 +69,7 @@ type SimulationRun = {
 
 type SimulationModel = {
   id: number,
+  initialised: boolean,
   parameters: SimulationParameter[],
   variables: SimulationVariable[],
 }
