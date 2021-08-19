@@ -1,21 +1,16 @@
 <template>
-  <div
-    class="scatterplot-chart-container"
-  >
-    <svg
-      ref="container"
-      class="chart"
-    />
+  <div class="scatterplot-chart-container">
+    <svg ref="container" class="chart" />
   </div>
 </template>
 
 <script lang="ts">
+  import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { Prop } from 'vue-property-decorator';
+
   import _ from 'lodash';
   import * as d3 from 'd3';
-
-  import Component from 'vue-class-component';
-  import Vue from 'vue';
-  import { Prop } from 'vue-property-decorator';
   import svgUtil from '@/utils/SVGUtil';
 
   const DEFAULT_CONFIG = {
@@ -27,16 +22,12 @@
     },
   };
 
-@Component
+  @Component
   export default class ScatterPlot extends Vue {
     @Prop({ default: null }) data: any;
     @Prop({ default: () => [450, 400] }) size: Array<number>;
 
     mounted (): void {
-        this.refresh();
-    }
-
-    refresh ():void {
       if (_.isEmpty(this.data)) return;
       const data = this.data;
       const svg = d3.select(this.$refs.container as any);
@@ -110,7 +101,6 @@
           });
     }
   }
-
 </script>
 
 <style scoped>
