@@ -57,6 +57,7 @@ export interface GraphNodeDataInterface {
 
 export interface GraphNodeInterface {
   id: string,
+  grometID?: string,
   concept?: string,
   label?: string,
   nodeType?: string,
