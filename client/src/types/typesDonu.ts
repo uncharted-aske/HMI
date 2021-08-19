@@ -65,6 +65,35 @@ type ModelDefinition = {
   type: Type;
 }
 
+type Measure = {
+  uid: string,
+  predicted: {
+    times: number[],
+    values: number[]
+  },
+  observed: {
+    times: number[],
+    values: number[],
+  }
+};
+
+type MeasureError = {
+  uid: string,
+  errorIndividual: {
+    times: number[],
+    values: number[],
+  },
+  errorTotal: number,
+};
+
+enum ErrorModelTypes {
+  L2 = 'L2',
+}
+
+enum InterpolationModelTypes {
+  Linear = 'linear',
+}
+
 // TO-DO: Export GroMEt type from research/gromet/tools/types/GroMEt
 type ModelGraph = any;
 
@@ -75,6 +104,11 @@ type SimulationResponse = {
   values: {
     [key: string]: number[],
   }
+}
+
+type ComputeErrorResponse = {
+  measures: MeasureError,
+  errorTotal: number,
 }
 
 type RequestParameters = {
@@ -109,7 +143,8 @@ type ResponseResult =
   ModelGraph |
   ModelDefinition |
   ModelDefinition[] |
-  SimulationResponse
+  SimulationResponse |
+  ComputeErrorResponse
 ;
 
 type Response = {
@@ -134,4 +169,8 @@ export {
   SimulationResponse,
   Type,
   SimulationType,
+  Measure,
+  MeasureError,
+  ErrorModelTypes,
+  InterpolationModelTypes,
 };

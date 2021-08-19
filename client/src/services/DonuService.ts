@@ -4,6 +4,8 @@ import * as MARM_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/marm_m
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
 import { postUtil, postUtilMem } from '@/utils/FetchUtil';
+import { linearInterpolations } from '@/utils/InterpolationModelsUtil';
+import { L2Norm } from '@/utils/ErrorModelsUtil';
 
 // HACK: REMOVE when Donu provides CHIME+
 export const staticFileURLs = [
@@ -285,4 +287,82 @@ export const getModelResult = async (
   } else {
     console.warn('[DONU Service] — getModelResult', `No ${selectedModelGraphType} Graph available in this model`); // eslint-disable-line no-console
   }
+};
+
+/** Mock Donu Model Simulation Error API call */
+export const computeDonuModelSimulationError = async (
+  measures: Donu.Measure[],
+  interpolationModel: Donu.InterpolationModelTypes,
+  errorModel: Donu.ErrorModelTypes,
+): Promise<Donu.Response> => {
+  // NOTE: This utility function is a temporary mock of Donu's compute error API endpoint
+  // the functionality should be near identical. The request is planned to look like the
+  // below:
+  // const request: Donu.Request = {
+  //   command: Donu.RequestCommand.COMPUTE_ERROR,
+  //   'interp-model': 'linear',
+  //   'error-model': 'L2',
+  //   measures: [
+  //     {
+  //        "uid": "J:I",
+  //        "predicted": {
+  //           "times": [...],
+  //           "values": [...],
+  //         }
+  //        "observed": {
+  //           "times": [...],
+  //           "values": [...],
+  //         }
+  //     }, ...
+  //   ],
+  // };
+
+  // Select interpolation function for aligning observed and predicted points
+  let interpolationFn;
+  if (interpolationModel === Donu.InterpolationModelTypes.Linear) {
+    interpolationFn = linearInterpolations;
+  } else {
+    throw new Error('No valid interpolation model selected.');
+  }
+  // Select error function
+  let errorFn;
+  if (errorModel === Donu.ErrorModelTypes.L2) {
+    errorFn = L2Norm;
+  } else {
+    throw new Error('No valid error model selected.');
+  }
+  const measureErrors: Donu.MeasureError[] = [];
+  measures.forEach(measure => {
+    // Interpolate predicted and observed values for point alignment
+    interpolationFn(measure.observed.times, measure.predicted.times, measure.predicted.values);
+    interpolationFn(measure.predicted.times, measure.observed.times, measure.observed.values);
+
+    // Compute errors over points within a measure
+    const errorIndividual = {
+      values: [],
+      times: [],
+    };
+    for (let i = 0; i < measure.predicted.times.length; i++) {
+      const norm = errorFn([measure.observed.values[i] - measure.predicted.values[i]]);
+      errorIndividual.values.push(norm);
+      errorIndividual.times.push(measure.predicted.times[i]);
+    }
+    // Compute total error of the measure using an average over individual point errors
+    const errorMeasureTotal = errorIndividual.values.reduce((a, b) => a + b, 0) / errorIndividual.values.length;
+    measureErrors.push({
+      uid: measure.uid,
+      errorIndividual,
+      errorTotal: errorMeasureTotal,
+    });
+  });
+  // Compute total error of the model using an average over each measure's total error
+  const errorTotal = measureErrors.reduce((acc, measure) => acc + measure.errorTotal, 0) / measureErrors.length;
+
+  return {
+    status: Donu.ResponseStatus.success,
+    result: {
+      measures: measureErrors,
+      errorTotal,
+    },
+  };
 };
