@@ -393,13 +393,17 @@ export const computeDonuModelSimulationError = async (
     interpolationFn(measure.predicted.times, measure.observed.times, measure.observed.values);
 
     // Compute errors over points within a measure
-    const errorIndividual: number[] = [];
+    const errorIndividual = {
+      values: [],
+      times: [],
+    };
     for (let i = 0; i < measure.predicted.times.length; i++) {
       const norm = errorFn([measure.observed.values[i] - measure.predicted.values[i]]);
-      errorIndividual.push(norm);
+      errorIndividual.values.push(norm);
+      errorIndividual.times.push(measure.predicted.times[i]);
     }
     // Compute total error of the measure using an average over individual point errors
-    const errorMeasureTotal = errorIndividual.reduce((a, b) => a + b, 0) / errorIndividual.length;
+    const errorMeasureTotal = errorIndividual.values.reduce((a, b) => a + b, 0) / errorIndividual.values.length;
     measureErrors.push({
       uid: measure.uid,
       errorIndividual,

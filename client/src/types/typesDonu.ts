@@ -131,7 +131,10 @@ type Measure = {
 
 type MeasureError = {
   uid: string,
-  errorIndividual: number[],
+  errorIndividual: {
+    times: number[],
+    values: number[],
+  },
   errorTotal: number,
 };
 
