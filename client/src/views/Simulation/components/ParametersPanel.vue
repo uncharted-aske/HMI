@@ -112,7 +112,6 @@
     @Watch('displayedParameters') onDisplayedParametersChanged (): void { this.drawGraph(); }
 
     mounted (): void {
-      this.parameterValues = {};
       this.onParametersChange();
       this.drawGraph();
     }
@@ -121,19 +120,21 @@
     @Watch('isResizing') onIsResising (): void { this.isResizing && this.clearGraph(); }
 
     @Watch('parameters') onParametersChange (): void {
+      this.parameterValues = {};
+
       // If the parameterValues has no value for a parameter, we give the one in the store.
       // This is used to set default parameter values.
       this.parameters.forEach(parameter => {
         if (!Object.prototype.hasOwnProperty.call(this.parameterValues, parameter.uid)) {
-          let value = parameter.values[0];
+          let currentValue = parameter.values[parameter.values.length - 1];
 
           // If the we have no default value and the parameter is a initial value,
           // set it up to 1 so the user can run the model right away.
-          if (parameter.initial_condition && !value) {
-            value = 1;
+          if (parameter.initial_condition && !currentValue) {
+            currentValue = 1;
           }
 
-          this.$set(this.parameterValues, parameter.uid, value);
+          this.$set(this.parameterValues, parameter.uid, currentValue);
         }
       });
     }
