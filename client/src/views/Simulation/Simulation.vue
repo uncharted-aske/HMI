@@ -127,7 +127,7 @@
 
   const PROVENANCE_LAYOUTS: ProvenanceLayoutInterface[] = [
     { name: 'Condensed', id: ProvenanceLayoutInterfaceType.condensed },
-    { name: 'Expanded', id: ProvenanceLayoutInterfaceType.expanded },
+    { name: 'Detailed', id: ProvenanceLayoutInterfaceType.detailed },
   ];
 
   const components = {
@@ -272,10 +272,10 @@
     get provenanceData (): Graph.GraphInterface {
       // If one model is selected, show the provenance graphs for the single model workflow
       if (this.selectedModels.length === 1) {
-        return this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed ? ProvenanceData.SINGLE_MODEL_CONDENSED : ProvenanceData.SINGLE_MODEL_EXPANDED;
+        return this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed ? ProvenanceData.SINGLE_MODEL_CONDENSED : ProvenanceData.SINGLE_MODEL_DETAILED;
       } else {
       // If multiple models are selected, show the provenance graph for the multiple model workflow
-        return this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed ? ProvenanceData.MULTI_MODEL_CONDENSED : ProvenanceData.MULTI_MODEL_EXPANDED;
+        return this.selectedProvenanceLayout === ProvenanceLayoutInterfaceType.condensed ? ProvenanceData.MULTI_MODEL_CONDENSED : ProvenanceData.MULTI_MODEL_DETAILED;
       }
     }
 
