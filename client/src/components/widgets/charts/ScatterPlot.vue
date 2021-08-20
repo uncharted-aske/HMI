@@ -106,7 +106,7 @@
           .attr('cy', d => yscale(d.location))
           .attr('r', 5)
           .on('mouseover', (event, d) => {
-            const text = `Value: ${d.value}\nDate: ${d.date}`;
+            const text = `Value: ${d.value}\nLocation: ${d.location}\nDate: ${d.date}`;
             const position = [xscale(d.value), yscale(d.location)];
             svgUtil.showTooltip(chart, text, position);
           })
