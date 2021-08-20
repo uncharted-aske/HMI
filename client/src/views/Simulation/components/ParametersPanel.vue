@@ -4,7 +4,7 @@
     :style="{
       '--padding': padding + 'px',
       '--parameter-height': parameterHeight + 'px',
-      '--parameter-input': parameterInput + 'px',
+      '--parameter-input': parameterInput + '%',
       '--parameter-action': parameterAction + 'px',
     }"
   >
@@ -106,9 +106,9 @@
     @Action hideParameter;
 
     private padding: number = 5;
-    private parameterHeight: number = 75;
-    private parameterInput: number = 65;
-    private parameterAction: number = 35;
+    private parameterHeight: number = 75; // in pixels
+    private parameterInput: number = 40; // in %
+    private parameterAction: number = 35; // in pixels
     private parameterValues: { [uid: string]: number } = {};
     private someParametersAreInvalid: boolean = false;
 
@@ -236,7 +236,7 @@
       const axisLabelWidth = 40;
       const marginX = {
         // Input button + .parameter padding + axis label padding + axis label width
-        left: (this.parameterInput + (this.padding * 3) + axisLabelWidth),
+        left: ((this.parameterInput / 100 * this.graphWidth()) + (this.padding * 3) + axisLabelWidth),
         // Action button + .parameter padding + axis label padding + axis label width
         right: (this.parameterAction + (this.padding * 3) + axisLabelWidth),
       };
