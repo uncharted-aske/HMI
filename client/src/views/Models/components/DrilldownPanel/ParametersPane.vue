@@ -2,7 +2,7 @@
   <section class="parameters-pane-container">
     <aside class="dropdown">
       <button
-        class="btn btn-secondary dropdown-toggle"
+        class="btn btn-primary dropdown-toggle"
         :class="{ show: isVariableDropdownOpen }"
         type="button"
         @click="toggleVariableDropdown"
@@ -58,17 +58,23 @@
   @Component({ components })
   export default class ParametersPane extends Vue {
     @Prop({ default: null }) related: [string, number][];
-    private selectedVariable: string = 'incubation period';
-    private data = PARAMETERS_EXTRACT.data;
-    private isVariableDropdownOpen: boolean = false;
+
+    data = PARAMETERS_EXTRACT.data;
+    isVariableDropdownOpen: boolean = false;
+    selectedVariable: string;
+
+    mounted (): void {
+      this.selectedVariable = this.getVariables[0];
+    }
 
     get getVariables (): string[] {
       return Array.from(new Set(this.data.map(info => info.variable))).sort();
     }
 
     get selectedData (): HMI.ExtractDataParameter {
-      return this.data.map(info => {
-        if (info.variable === this.selectedVariable) {
+      return this.data
+        .filter(info => info.variable === this.selectedVariable)
+        .map(info => {
           return {
             date: info.date + ' - ' + info.year,
             doi: info.doi,
@@ -76,8 +82,7 @@
             object_id: info.object_id,
             value: info.value,
           };
-        }
-      });
+        });
     }
 
     get noRelatedParameter (): boolean {
