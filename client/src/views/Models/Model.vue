@@ -189,7 +189,7 @@
 
     drilldownTabs: HMI.TabInterface[] = DRILLDOWN_TABS;
     isOpenDrilldown = false;
-    drilldownActiveTabId: string = 'metadata';
+    drilldownActiveTabId: string = 'parameters';
     drilldownPaneTitle = '';
     drilldownPaneSubtitle = '';
     drilldownMetadata: any = null;
@@ -408,7 +408,7 @@
 
     onNodeClick (node: Graph.GraphNodeInterface): void {
       // Select which tab should be open first, then open the drilldown.
-      this.drilldownActiveTabId = 'metadata';
+      this.drilldownActiveTabId = 'parameters';
       this.isOpenDrilldown = true;
 
       // Merge node metadata with Variables metadata. c.f. Graph.GraphNodeInterface type

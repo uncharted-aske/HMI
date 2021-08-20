@@ -1,5 +1,28 @@
 <template>
   <section class="parameters-pane-container">
+    <aside class="dropdown">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        :class="{ show: isVariableDropdownOpen }"
+        type="button"
+        @click="toggleVariableDropdown"
+      >
+        {{ selectedVariable }}
+      </button>
+      <ul
+        class="dropdown-menu"
+        :class="{ show: isVariableDropdownOpen }"
+      >
+        <li
+          v-for="(variable, index) in getVariables" :key="index"
+          class="dropdown-item"
+          @click="setSelectedVariable(variable)"
+        >
+          {{ variable }}
+        </li>
+      </ul>
+    </aside>
+    {{ this.selectedData.length }}
     <scatter-plot :data="selectedData" size="[400, 500]" @dot-click="onDotClick"/>
 
     <h6>Related Parameters</h6>
@@ -36,13 +59,15 @@
   export default class ParametersPane extends Vue {
     @Prop({ default: null }) related: [string, number][];
     private selectedVariable: string = 'incubation period';
+    private data = PARAMETERS_EXTRACT.data;
+    private isVariableDropdownOpen: boolean = false;
 
     get getVariables (): string[] {
-      return Array.from(new Set(PARAMETERS_EXTRACT.map(info => info.variable)));
+      return Array.from(new Set(this.data.map(info => info.variable))).sort();
     }
 
     get selectedData (): HMI.ExtractDataParameter {
-      return PARAMETERS_EXTRACT.map(info => {
+      return this.data.map(info => {
         if (info.variable === this.selectedVariable) {
           return {
             date: info.date + ' - ' + info.year,
@@ -57,6 +82,15 @@
 
     get noRelatedParameter (): boolean {
       return !this.related || this.related.length === 0;
+    }
+
+    toggleVariableDropdown (): void {
+      this.isVariableDropdownOpen = !this.isVariableDropdownOpen;
+    }
+
+    setSelectedVariable (variable: string): void {
+      this.selectedVariable = variable;
+      this.isVariableDropdownOpen = false;
     }
 
     onDotClick (doi:string): void {
