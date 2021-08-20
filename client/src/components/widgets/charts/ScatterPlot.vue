@@ -38,7 +38,6 @@
     }
 
     drawGraph (): void {
-      console.log(this.data);
       if (_.isEmpty(this.data)) return;
       const data = this.data;
       const svg = d3.select(this.$refs.container as any);
@@ -51,33 +50,40 @@
       const innerWidth = outerWidth - margin.left - margin.right;
       const innerHeight = outerHeight - margin.top - margin.bottom;
 
-      const chart = svgUtil.createChart(svg, outerWidth, outerHeight)
+      const chart = svgUtil
+        .createChart(svg, outerWidth, outerHeight)
         .append('g')
         .attr('transform', svgUtil.translate(margin.left, margin.top));
 
       // Define scales
-      const xscale = d3.scaleLinear()
+      const xscale = d3
+        .scaleLinear()
         .range([0, innerWidth]);
-      const yscale = d3.scaleBand()
+
+      const yscale = d3
+          .scaleBand()
           .rangeRound([innerHeight, 0])
           .padding(0.1);
 
       xscale.domain(d3.extent(data, (d) => Number((d as any).value)));
       yscale.domain(data.map(d => d.location));
 
-      chart.append('g')
+      chart
+        .append('g')
         .attr('class', 'x-axis')
         .attr('transform', svgUtil.translate(0, innerHeight))
         .call(d3.axisBottom(xscale))
             .selectAll('text')
-            .attr('transform', 'translate(-10,0)rotate(-45)')
+            .attr('transform', 'translate(-10,0) rotate(-45)')
             .style('text-anchor', 'end');
 
-      chart.append('g')
+      chart
+        .append('g')
         .attr('class', 'y-axis')
         .call(d3.axisLeft(yscale));
 
-      chart.append('line')
+      chart
+        .append('line')
         .style('stroke', 'lightgray')
         .style('stroke-dasharray', '5,5')
         .style('stroke-width', 1)
@@ -87,29 +93,27 @@
         .attr('y2', innerHeight);
 
       // Draw dots
-      const dots = chart.append('g')
+      const dots = chart
+        .append('g')
         .attr('class', 'dots');
 
-      dots.selectAll('dot')
+      dots
+        .selectAll('dot')
         .data(data)
         .enter()
         .append('circle')
           .attr('cx', (d) => xscale(d.value))
           .attr('cy', (d) => yscale(d.location))
           .attr('r', 5)
-          .style('fill', '#5E81AC')
+          .attr('title', d => `Value: ${d.value} Date: ${d.date}`)
           .on('mouseover', (d) => {
             const coords = [xscale(d.value), yscale(d.location)];
             const tooltipText = 'Value: ' + d.value + ' ' + 'Date: ' + d.date;
             /* @ts-ignore */
             svgUtil.showTooltip(chart, tooltipText, coords);
           })
-          .on('mouseout', () => {
-            svgUtil.hideTooltip(chart);
-          })
-          .on('click', (d) => {
-            this.$emit('dot-click', d.object_id);
-          });
+          .on('mouseout', () => svgUtil.hideTooltip(chart))
+          .on('click', d => console.log(d) /* this.$emit('dot-click', d.object_id) */);
     }
   }
 </script>
@@ -125,5 +129,11 @@
 
   .chart {
     height: auto;
+  }
+</style>
+<style>
+  /* For SVG you cannot scope the <style> */
+  .scatterplot-chart-container .chart .dots circle {
+    fill: var(--nord10);
   }
 </style>
