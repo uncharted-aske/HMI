@@ -405,6 +405,7 @@
     line-height: 2em;
     margin: 0;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .parameter input {
@@ -416,7 +417,6 @@
     font-weight: bold;
     grid-area: value;
     padding: .25em .5em;
-    width: 5em;
   }
 
   .parameter .btn-group {
