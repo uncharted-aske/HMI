@@ -22,8 +22,15 @@
         </li>
       </ul>
     </aside>
-    {{ this.selectedData.length }}
-    <scatter-plot :data="selectedData" size="[400, 500]" @dot-click="onDotClick"/>
+    <message-display v-if="noSelectedData">
+      No data to display.
+    </message-display>
+    <scatter-plot
+      v-else
+      :data="selectedData"
+      size="[400, 500]"
+      @dot-click="onDotClick"
+    />
 
     <h6>Related Parameters</h6>
     <message-display v-if="noRelatedParameter">
@@ -61,10 +68,10 @@
 
     data = PARAMETERS_EXTRACT.data;
     isVariableDropdownOpen: boolean = false;
-    selectedVariable: string;
+    selectedVariable: string = null;
 
     mounted (): void {
-      this.selectedVariable = this.getVariables[0];
+      this.selectedVariable = 'Ro';
     }
 
     get getVariables (): string[] {
@@ -83,6 +90,10 @@
             value: info.value,
           };
         });
+    }
+
+    get noSelectedData (): boolean {
+      return !this.selectedData || this.selectedData.length < 1;
     }
 
     get noRelatedParameter (): boolean {
@@ -110,6 +121,11 @@
     flex-direction: column;
     height: 100%;
     padding: 5px;
+  }
+
+  .dropdown-toggle {
+    white-space: initial;
+    width: 100%;
   }
 
   h6 {

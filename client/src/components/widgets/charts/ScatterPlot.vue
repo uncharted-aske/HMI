@@ -7,7 +7,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { Prop } from 'vue-property-decorator';
+  import { Prop, Watch } from 'vue-property-decorator';
 
   import _ from 'lodash';
   import * as d3 from 'd3';
@@ -30,6 +30,15 @@
     @Prop({ default: () => [450, 400] }) size: Array<number>;
 
     mounted (): void {
+      this.drawGraph();
+    }
+
+    @Watch('data') onDataChanged (): void {
+      this.drawGraph();
+    }
+
+    drawGraph (): void {
+      console.log(this.data);
       if (_.isEmpty(this.data)) return;
       const data = this.data;
       const svg = d3.select(this.$refs.container as any);
