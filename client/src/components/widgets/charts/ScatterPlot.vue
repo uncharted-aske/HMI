@@ -113,7 +113,7 @@
             svgUtil.showTooltip(chart, tooltipText, coords);
           })
           .on('mouseout', () => svgUtil.hideTooltip(chart))
-          .on('click', (event, d) => console.log(event, d) /* this.$emit('dot-click', d.object_id) */);
+          .on('click', (event, d) => this.$emit('dot-click', d.object_id));
     }
   }
 </script>
@@ -135,5 +135,9 @@
   /* For SVG you cannot scope the <style> */
   .scatterplot-chart-container .chart .dots circle {
     fill: var(--nord10);
+  }
+
+  .scatterplot-chart-container .chart .dots circle:hover {
+    fill: var(--selection);
   }
 </style>
