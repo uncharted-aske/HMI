@@ -105,12 +105,10 @@
           .attr('cx', d => xscale(d.value))
           .attr('cy', d => yscale(d.location))
           .attr('r', 5)
-          .attr('title', d => `Value: ${d.value} Date: ${d.date}`)
-          .on('mouseover', d => {
-            const coords = [xscale(d.value), yscale(d.location)];
-            const tooltipText = 'Value: ' + d.value + ' ' + 'Date: ' + d.date;
-            /* @ts-ignore */
-            svgUtil.showTooltip(chart, tooltipText, coords);
+          .on('mouseover', (event, d) => {
+            const text = `Value: ${d.value}\nDate: ${d.date}`;
+            const position = [xscale(d.value), yscale(d.location)];
+            svgUtil.showTooltip(chart, text, position);
           })
           .on('mouseout', () => svgUtil.hideTooltip(chart))
           .on('click', (event, d) => this.$emit('dot-click', d.object_id));
