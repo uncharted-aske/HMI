@@ -102,18 +102,18 @@
         .data(data)
         .enter()
         .append('circle')
-          .attr('cx', (d) => xscale(d.value))
-          .attr('cy', (d) => yscale(d.location))
+          .attr('cx', d => xscale(d.value))
+          .attr('cy', d => yscale(d.location))
           .attr('r', 5)
           .attr('title', d => `Value: ${d.value} Date: ${d.date}`)
-          .on('mouseover', (d) => {
+          .on('mouseover', d => {
             const coords = [xscale(d.value), yscale(d.location)];
             const tooltipText = 'Value: ' + d.value + ' ' + 'Date: ' + d.date;
             /* @ts-ignore */
             svgUtil.showTooltip(chart, tooltipText, coords);
           })
           .on('mouseout', () => svgUtil.hideTooltip(chart))
-          .on('click', d => console.log(d) /* this.$emit('dot-click', d.object_id) */);
+          .on('click', (event, d) => console.log(event, d) /* this.$emit('dot-click', d.object_id) */);
     }
   }
 </script>
