@@ -139,25 +139,84 @@ const postProcess = (layout) => {
     const sourceNode = nodeMap.get(edge.source);
     const targetNode = nodeMap.get(edge.target);
 
-    const edgeContainerId = getEdgeContainerId(sourceNode, targetNode);
-    if (edgeContainerId) {
-      tx += nodeGlobalPosition.get(edgeContainerId).x;
-      ty += nodeGlobalPosition.get(edgeContainerId).y;
+    // const edgeContainerId = getEdgeContainerId(sourceNode, targetNode);
+    // if (edgeContainerId) {
+    //   tx += nodeGlobalPosition.get(edgeContainerId).x;
+    //   ty += nodeGlobalPosition.get(edgeContainerId).y;
+    // }
+
+    let sourceInTarget = false;
+    const sourceChain = [];
+    let targetInSource = false;
+    const targetChain = [];
+    let p = sourceNode;
+    while (true) {
+      p = p.parent;
+      if (!p) break;
+      sourceChain.push(p.id);
+      if (p.id === targetNode.id) {
+        sourceInTarget = true;
+      }
+    }
+    p = targetNode;
+    while (true) {
+      p = p.parent;
+      if (!p) break;
+      targetChain.push(p.id);
+      if (p.id === sourceNode.id) {
+        targetInSource = true;
+      }
+    }
+
+    console.log(`${sourceNode.id}-${targetNode.id} Source in target ${sourceInTarget}, Target in source ${targetInSource}`);
+    console.log('\tsource-chaing', sourceChain);
+    console.log('\ttarget-chaing', targetChain);
+
+    if (sourceNode.id === targetNode.id) {
+      const p = sourceNode.parent;
+      tx += nodeGlobalPosition.get(p.id).x;
+      ty += nodeGlobalPosition.get(p.id).y;
+    } else {
+      if (targetInSource) {
+        tx += nodeGlobalPosition.get(sourceNode.id).x;
+        ty += nodeGlobalPosition.get(sourceNode.id).y;
+      } else if (sourceInTarget) {
+        tx += nodeGlobalPosition.get(targetNode.id).x;
+        ty += nodeGlobalPosition.get(targetNode.id).y;
+      } else {
+        console.log('\thazzah');
+        // const common = _.intersection(sourceChain, targetChain);
+        // if (common.length > 0) {
+        //   console.log('\t', common[0]);
+        //   console.log('\t', nodeGlobalPosition.get(common[0]));
+        //   tx += nodeGlobalPosition.get(sourceNode.parent.id).x;
+        //   ty += nodeGlobalPosition.get(sourceNode.parent.id).y;
+        // }
+        if (sourceNode.parent.id === targetNode.parent.id) {
+          tx += nodeGlobalPosition.get(sourceNode.parent.id).x;
+          ty += nodeGlobalPosition.get(sourceNode.parent.id).y;
+        }
+
+        /*
+        tx += nodeGlobalPosition.get(sourceNode.parent.id).x;
+        ty += nodeGlobalPosition.get(sourceNode.parent.id).y;
+        */
+      }
     }
 
     edge.points = [startPoint, ...bendPoints, endPoint].map(p => {
       return {
         x: p.x + tx,
-        y: p.y + ty,
+        y: p.y + ty
       };
     });
 
     // perfectly straight edges can be ugly - adding simple points to give the d3 spline function something to work with.
-    if (bendPoints.length === 0 && edge.points[0].x < edge.points[1].x && Math.abs(edge.points[0].y - edge.points[1].y) > 10) {
-      edge.points.splice(1, 0, ..._.cloneDeep(edge.points));
-      edge.points[1].x += 10;
-      edge.points[2].x -= 10;
-    }
+    // if (bendPoints.length === 0 && edge.points[0].x < edge.points[1].x && Math.abs(edge.points[0].y - edge.points[1].y) > 10) {
+    //   edge.points.splice(1, 0, ..._.cloneDeep(edge.points));
+    //   edge.points[1].x += 10;
+    //   edge.points[2].x -= 10;
+    // }
   };
 
   const splitLineSegments = (edge) => {
@@ -168,7 +227,7 @@ const postProcess = (layout) => {
     for (let i = 1; i < t.length - 1; i++) {
       edge.points.push({
         x: 0.5 * (p.x + t[i].x),
-        y: 0.5 * (p.y + t[i].y),
+        y: 0.5 * (p.y + t[i].y)
       });
       edge.points.push(t[i]);
       p = t[i];
@@ -182,12 +241,12 @@ const postProcess = (layout) => {
     if (!node.parent) {
       nodeGlobalPosition.set(node.id, {
         x: node.x,
-        y: node.y,
+        y: node.y
       });
     } else {
       nodeGlobalPosition.set(node.id, {
         x: node.x + nodeGlobalPosition.get(node.parent.id).x,
-        y: node.y + nodeGlobalPosition.get(node.parent.id).y,
+        y: node.y + nodeGlobalPosition.get(node.parent.id).y
       });
     }
   });
@@ -208,6 +267,7 @@ const postProcess = (layout) => {
 
   return layout;
 };
+
 
 const getEdgeContainerId = (sourceNode, targetNode) => {
   if (sourceNode.parent === null || targetNode.parent === null) {
