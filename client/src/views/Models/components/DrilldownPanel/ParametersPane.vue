@@ -2,9 +2,8 @@
   <section class="parameters-pane-container">
     <aside class="dropdown">
       <button
-        class="btn btn-primary dropdown-toggle"
-        :class="{ show: isVariableDropdownOpen }"
         type="button"
+        class="btn btn-primary dropdown-toggle"
         @click="toggleVariableDropdown"
       >
         {{ selectedVariable }}
@@ -25,12 +24,7 @@
     <message-display v-if="noSelectedData">
       No data to display.
     </message-display>
-    <scatter-plot
-      v-else
-      :data="selectedData"
-      size="[400, 500]"
-      @dot-click="onDotClick"
-    />
+    <scatter-plot v-else :data="selectedData" @dot-click="onDotClick" />
 
     <h6>Related Parameters</h6>
     <message-display v-if="noRelatedParameter">
