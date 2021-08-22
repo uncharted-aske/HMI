@@ -162,13 +162,6 @@ const postProcess = (layout) => {
       }
     }
 
-    // eslint-disable-next-line
-    console.log(`${sourceNode.id}-${targetNode.id} Source in target ${sourceInTarget}, Target in source ${targetInSource}`);
-    // eslint-disable-next-line
-    console.log('\tsource-chaing', sourceChain);
-    // eslint-disable-next-line
-    console.log('\ttarget-chaing', targetChain);
-
     if (sourceNode.id === targetNode.id) {
       const p = sourceNode.parent;
       tx += nodeGlobalPosition.get(p.id).x;
