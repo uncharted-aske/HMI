@@ -7,11 +7,6 @@ import { postUtil, postUtilMem } from '@/utils/FetchUtil';
 import { linearInterpolations } from '@/utils/InterpolationModelsUtil';
 import { L2Norm } from '@/utils/ErrorModelsUtil';
 
-// HACK: REMOVE when Donu provides CHIME+
-export const staticFileURLs = [
-  `${window.location.origin}/gromets/CHIME+.json`,
-];
-
 /** Send the request to Donu */
 const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
   try {
