@@ -34,7 +34,7 @@
       top: 15,
       right: 15,
       bottom: 35,
-      left: 35,
+      left: 55,
     },
   };
 
