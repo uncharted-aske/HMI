@@ -69,8 +69,9 @@
         <div class="metadata-content"  v-for="(reference, index) in agentsReferences" :key="index">
            <details class="metadata" open>
             <summary>
+              <p v-if="reference.name">{{ reference.name }}</p>
               <a v-if="reference.url" :href="reference.url">
-              {{ reference.name }}
+              {{ formatUrl(reference.url) }}
               </a>
             </summary>
             <div v-if="reference.definition" class="metadata-content">
@@ -85,7 +86,7 @@
 
       <template v-if="isTypeReactionReference(datum)">
         <summary :title="datum.uid">Reaction Reference(s)</summary>
-        <div class="metadata-content">
+        <div v-if="nodeStatement" class="metadata-content">
           <template v-if="nodeStatement.type">
             <h6>Type</h6>
             <p>{{ nodeStatement.type }}</p>
@@ -96,12 +97,14 @@
           </template>
           <details v-if="nodeStatement" class="metadata" open>
             <summary v-if="nodeStatement.evidence">Evidence ({{nodeStatement.evidence.length}})</summary>
-            <div class="metadata-content">
+            <div v-if="nodeStatement.evidence" class="metadata-content">
               <figure
                 v-for="(evidence, index) in nodeStatement.evidence"
                 :key="index"
               >
-                {{ excerpt(evidence) }}
+                  <span v-if="evidence.text">
+                    {{ excerpt(evidence) }}
+                  </span>
               </figure>
             </div>
           </details>
@@ -231,7 +234,7 @@
 
       this.agentsReferences = await Promise.all((this.metadata[0] as GroMET.IndraAgentReferenceSet)
        .indra_agent_references.map(async (reference) => {
-        const args = { modelName: this.modelName, namespace: Object.keys(reference.db_refs)[0], id: Object.values(reference.db_refs)[0] };
+        const args = { modelName: 'covid19', namespace: Object.keys(reference.db_refs)[0], id: Object.values(reference.db_refs)[0] };
         const response = await emmaaEntityInfo(args as any);
          return response;
         }));
@@ -252,8 +255,15 @@
       this.isLoading = false;
     }
 
+    formatUrl (url: string): string {
+      if (url) {
+        const slicedUrl = url.split('/');
+        return slicedUrl[slicedUrl.length - 1];
+      }
+    }
+
     excerpt (evidence: EMMAA.EmmaaEvidenceEvidenceInterface): string {
-      if (evidence) {
+      if (evidence && evidence.text) {
         return truncateString(evidence.text, 500);
       }
     }
