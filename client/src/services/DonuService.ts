@@ -4,8 +4,6 @@ import * as MARM_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/marm_m
 import * as Donu from '@/types/typesDonu';
 import * as Model from '@/types/typesModel';
 import { postUtil, postUtilMem } from '@/utils/FetchUtil';
-import { linearInterpolations } from '@/utils/InterpolationModelsUtil';
-import { L2Norm } from '@/utils/ErrorModelsUtil';
 
 /** Send the request to Donu */
 const callDonu = (request: Donu.Request): Promise<Donu.Response> => {
@@ -284,80 +282,79 @@ export const getModelResult = async (
   }
 };
 
-/** Mock Donu Model Simulation Error API call */
-export const computeDonuModelSimulationError = async (
+export const getSimulationError = async (
   measures: Donu.Measure[],
   interpolationModel: Donu.InterpolationModelTypes,
   errorModel: Donu.ErrorModelTypes,
-): Promise<Donu.Response> => {
-  // NOTE: This utility function is a temporary mock of Donu's compute error API endpoint
-  // the functionality should be near identical. The request is planned to look like the
-  // below:
-  // const request: Donu.Request = {
-  //   command: Donu.RequestCommand.COMPUTE_ERROR,
-  //   'interp-model': 'linear',
-  //   'error-model': 'L2',
-  //   measures: [
-  //     {
-  //        "uid": "J:I",
-  //        "predicted": {
-  //           "times": [...],
-  //           "values": [...],
-  //         }
-  //        "observed": {
-  //           "times": [...],
-  //           "values": [...],
-  //         }
-  //     }, ...
-  //   ],
-  // };
+): Promise<Donu.ComputeErrorResponse> => {
+  const request: Donu.Request = {
+    command: Donu.RequestCommand.COMPUTE_ERROR,
+    'interp-model': interpolationModel,
+    'error-model': errorModel,
+    measures,
+  };
 
-  // Select interpolation function for aligning observed and predicted points
-  let interpolationFn;
-  if (interpolationModel === Donu.InterpolationModelTypes.Linear) {
-    interpolationFn = linearInterpolations;
+  const response = await callDonuCache(request);
+  if (response.status === Donu.ResponseStatus.success) {
+    return response.result as unknown as Donu.ComputeErrorResponse;
   } else {
-    throw new Error('No valid interpolation model selected.');
+    console.error('[DONU Service] — getSimulationError', response); // eslint-disable-line no-console
   }
-  // Select error function
-  let errorFn;
-  if (errorModel === Donu.ErrorModelTypes.L2) {
-    errorFn = L2Norm;
+};
+
+// List Dataset Response output
+// [{
+//   source: {
+//     model: {
+//       'JHU-Infections-TN.json', // Data file name is used as an identifier to retrieve dataset
+//     },
+//   },
+//   name: 'JHU Infection Data',
+//   description: 'Infection data for TN',
+// }]
+/** Fetch the result of a model simulation */
+export const listDatasetsResult = async (): Promise<Donu.ListDatasetsResponse[]> => {
+  const request: Donu.Request = {
+    command: Donu.RequestCommand.LIST_DATASETS,
+  };
+
+  const response = await callDonuCache(request);
+  if (response.status === Donu.ResponseStatus.success) {
+    return response.result as Donu.ListDatasetsResponse[];
   } else {
-    throw new Error('No valid error model selected.');
+    console.error('[DONU Service] — listDatasetsResult', response); // eslint-disable-line no-console
   }
-  const measureErrors: Donu.MeasureError[] = [];
-  measures.forEach(measure => {
-    // Interpolate predicted and observed values for point alignment
-    interpolationFn(measure.observed.times, measure.predicted.times, measure.predicted.values);
-    interpolationFn(measure.predicted.times, measure.observed.times, measure.observed.values);
+};
 
-    // Compute errors over points within a measure
-    const errorIndividual = {
-      values: [],
-      times: [],
-    };
-    for (let i = 0; i < measure.predicted.times.length; i++) {
-      const norm = errorFn([measure.observed.values[i] - measure.predicted.values[i]]);
-      errorIndividual.values.push(norm);
-      errorIndividual.times.push(measure.predicted.times[i]);
-    }
-    // Compute total error of the measure using an average over individual point errors
-    const errorMeasureTotal = errorIndividual.values.reduce((a, b) => a + b, 0) / errorIndividual.values.length;
-    measureErrors.push({
-      uid: measure.uid,
-      errorIndividual,
-      errorTotal: errorMeasureTotal,
-    });
-  });
-  // Compute total error of the model using an average over each measure's total error
-  const errorTotal = measureErrors.reduce((acc, measure) => acc + measure.errorTotal, 0) / measureErrors.length;
-
-  return {
-    status: Donu.ResponseStatus.success,
-    result: {
-      measures: measureErrors,
-      errorTotal,
+// Get Dataset Response output
+// {
+//   name: "GDA Infection Data",
+//   description: "Infection data for FL",
+//   columns: [
+//     {
+//       values: [0, 1, 2, 3, ...],
+//       name: 'date',
+//       description: 'date',
+//     },
+//     {
+//       values: [129, 32, 0, 213, ...],
+//       name: 'daily_cases',
+//       description: 'daily_cases',
+//     }
+//   ]
+// }
+export const getDatasetResult = async (model: string): Promise<Donu.GetDatasetResponse> => {
+  const request: Donu.Request = {
+    command: Donu.RequestCommand.GET_DATASET,
+    source: {
+      model,
     },
   };
+
+  const response = await callDonuCache(request);
+  if (response.status === Donu.ResponseStatus.success) {
+    return response.result as Donu.GetDatasetResponse;
+  } else {
+    console.error('[DONU Service] — getDatasetResult', response); // eslint-disable-line no-console
+  }
 };

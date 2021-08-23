@@ -73,6 +73,9 @@ interface SimulationVariable extends Donu.ModelVariable {
   aggregate: SimulationVariableValues,
   values: SimulationVariableValues[],
   polygon?: SimulationVariableValues,
+  observedId?: string,
+  observed: SimulationVariableValues,
+  currentRunError?: number,
 }
 
 type SimulationRun = {
@@ -84,6 +87,7 @@ type SimulationModel = {
   initialised: boolean,
   parameters: SimulationParameter[],
   variables: SimulationVariable[],
+  aggregateError?: number,
 }
 
 type SimulationState = {

@@ -1,7 +1,7 @@
 <template>
   <div ref="container">
     <div class="header" :style="{color: strokeColor}">
-      {{title}}
+      <span v-html="title"/>
       <slot/>
     </div>
   </div>

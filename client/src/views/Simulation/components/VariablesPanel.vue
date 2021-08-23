@@ -29,28 +29,40 @@
           <font-awesome-icon class="icon" :icon="['fas', 'ban']"/>
           buttons above to add/remove <strong>variables</strong>.
         </message-display>
-        <multi-line-plot
-          v-else
-          v-for="(plot, index) in displayedVariables"
-          class="pt-2 pl-2 pr-3 plot"
-          :class="[{highlighted: plot.metadata.name === highlighted}]"
-          :data="plot.values"
-          :polygon="plot.polygon"
-          :key="index"
-          :styles="plot.styles"
-          :title="plot.metadata.name"
-        >
-          <aside class="btn-group">
-            <button
-              class="btn btn-secondary btn-sm"
-              title="Remove Variable"
-              type="button"
-              @click="hideVariable({ modelId, selector: plot.uid })"
-            >
-              <font-awesome-icon :icon="['fas', 'ban']" />
-            </button>
-          </aside>
-        </multi-line-plot>
+        <template v-else v-for="(plot, index) in displayedVariables">
+          <multi-line-plot
+            class="pt-2 pl-2 pr-3 plot"
+            :class="[{highlighted: plot.metadata.name === highlighted}]"
+            :data="plot.values"
+            :polygon="plot.polygon"
+            :key="'plot' + index"
+            :styles="plot.styles"
+            :title="generatePlotName(plot)"
+          >
+            <aside class="btn-group">
+              <button
+                class="btn btn-secondary btn-sm"
+                type="button"
+                @click="loadDatasets(plot)">
+                <font-awesome-icon :icon="['fas', 'chart-line']" />
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                title="Remove Variable"
+                type="button"
+                @click="hideVariable({ modelId, selector: plot.uid })"
+              >
+                <font-awesome-icon :icon="['fas', 'ban']" />
+              </button>
+            </aside>
+          </multi-line-plot>
+          <observed-modal
+            @datasetSelected="setObservedId"
+            :data="plot.uid === variableOpen ? plot : false"
+            @close="variableOpen = ''"
+            :key="'modal' + index"
+          />
+        </template>
       </div>
     </div>
   </section>
@@ -64,12 +76,16 @@
   import { Action, Getter } from 'vuex-class';
 
   import * as HMI from '@/types/types';
+  import * as Donu from '@/types/typesDonu';
 
   import SettingsBar from '@/components/SettingsBar.vue';
   import Counters from '@/components/Counters.vue';
   import MultiLinePlot from '@/components/widgets/charts/MultiLinePlot.vue';
+  import ObservedModal from './ObservedModal.vue';
   import { Colors } from '@/graphs/svg/encodings';
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
+  import { listDatasetsResult } from '@/services/DonuService';
+  import { scientificNotation } from '@/utils/NumberUtil';
 
   const DEFAULT_STYLE = {
     node: {
@@ -98,6 +114,15 @@
     },
   };
 
+  const OBSERVED_STYLE = {
+    node: {
+      fill: '#E75BCD',
+    },
+    edge: {
+      strokeColor: '#E75BCD',
+    },
+  };
+
   const OTHER_STYLE = {
     node: {
       fill: '#647EA9',
@@ -122,6 +147,7 @@
     Counters,
     MultiLinePlot,
     MessageDisplay,
+    ObservedModal,
   };
 
   @Component({ components })
@@ -134,6 +160,14 @@
     @Getter getSimModel;
     @Getter getVariablesRunsCount;
     @Action hideVariable;
+    @Action setVariableObservedId;
+
+    variablesData: any = [];
+    variableOpen: string = '';
+
+    mounted (): void {
+      (window as any).x = this.updateVariables;
+    }
 
     calcBandPolygon (variable: HMI.SimulationVariable): void {
       const numRunsLess1 = variable.values.length - 1;
@@ -162,6 +196,10 @@
     }
 
     get variables (): HMI.SimulationVariable[] {
+      return this.updateVariables();
+    }
+
+    updateVariables (): HMI.SimulationVariable[] {
       let variables = this.getSimModel(this.modelId).variables;
       variables = _.cloneDeep(variables);
       variables.map(variable => {
@@ -179,13 +217,19 @@
           variable.values.push(variable.aggregate);
           variable.styles.push(mergeStyle(AGGREGATE_STYLE));
         }
+
+        if (variable.observed) {
+          variable.values.push(variable.observed);
+          variable.styles.push(mergeStyle(OBSERVED_STYLE));
+        }
       });
 
+      this.variablesData = _.orderBy(variables, ['metadata.name'], ['asc']);
       return _.orderBy(variables, ['metadata.name'], ['asc']);
     }
 
     get displayedVariables (): HMI.SimulationVariable[] {
-      return this.variables.filter(variable => variable.displayed);
+      return this.variablesData?.filter(variable => variable.displayed);
     }
 
     get noDisplayedVariables (): boolean {
@@ -194,7 +238,22 @@
 
     get countersTitle (): string {
       const count = this.displayedVariables.length;
-      return `${count > 0 ? count : '—'} Variable${count > 1 ? 's' : ''}`;
+      const model = this.getSimModel(this.modelId);
+      return (`${count > 0 ? count : '—'} Variable${count > 1 ? 's' : ''}`) +
+        (
+          model.aggregateError
+            ? ` | Error = ${scientificNotation(model.aggregateError, true)}`
+            : ''
+        );
+    }
+
+    generatePlotName (plot: HMI.SimulationVariable): string {
+      return plot.metadata.name +
+        (
+          typeof plot.currentRunError === 'number'
+            ? ` | Error = ${scientificNotation(plot.currentRunError, true)}`
+            : ''
+        );
     }
 
     get countersData (): HMI.Counter[] {
@@ -208,6 +267,20 @@
     get runCounter (): string {
       const count = this.getVariablesRunsCount;
       return `${count} run${count > 1 ? 's' : ''}`;
+    }
+
+    loadDatasets (plot: Donu.ModelVariable): Promise<unknown> {
+      this.variableOpen = plot.uid;
+      this.updateVariables();
+      return listDatasetsResult();
+    }
+
+    setObservedId (observedId: string): void {
+      this.setVariableObservedId({
+        modelId: this.modelId,
+        uid: this.variableOpen,
+        observedId,
+      });
     }
   }
 </script>

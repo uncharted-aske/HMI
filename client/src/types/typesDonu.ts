@@ -13,6 +13,9 @@ enum RequestCommand {
   QUERY_MODELS = 'query-models',
   SIMULATE = 'simulate',
   // UPLOAD_MODEL = 'upload-model',
+  LIST_DATASETS = 'list-datasets',
+  GET_DATASET = 'get-dataset',
+  COMPUTE_ERROR = 'compute-error',
 }
 
 enum Type {
@@ -79,11 +82,8 @@ type Measure = {
 
 type MeasureError = {
   uid: string,
-  errorIndividual: {
-    times: number[],
-    values: number[],
-  },
-  errorTotal: number,
+  error_ind: number[],
+  error_total: number,
 };
 
 enum ErrorModelTypes {
@@ -107,8 +107,26 @@ type SimulationResponse = {
 }
 
 type ComputeErrorResponse = {
-  measures: MeasureError,
-  errorTotal: number,
+  measures: MeasureError[],
+  error_total: number,
+}
+
+type ListDatasetsResponse = {
+  source: {
+    model: string,
+  },
+  name: string,
+  description: string,
+}
+
+type GetDatasetResponse = {
+  name: string,
+  description: string,
+  columns: [{
+    values: number[],
+    name: string,
+    description: string,
+  }]
 }
 
 type RequestParameters = {
@@ -125,6 +143,9 @@ type Request = {
   command: RequestCommand;
   definition?: string | ModelDefinition;
   parameters?: RequestParameters,
+  'interp-model'?: InterpolationModelTypes,
+  'error-model'?: ErrorModelTypes,
+  // 'dest-type'?: string;
   outputs?: string[],
   domain_parameter?: string,
   end?: number;
@@ -132,6 +153,11 @@ type Request = {
   step?: number;
   'sim-type'?: SimulationType | void,
   text?: string,
+  // type?: string;
+  source?: {
+    model: string,
+  },
+  measures?: any,
 }
 
 enum ResponseStatus {
@@ -144,7 +170,9 @@ type ResponseResult =
   ModelDefinition |
   ModelDefinition[] |
   SimulationResponse |
-  ComputeErrorResponse
+  ComputeErrorResponse |
+  ListDatasetsResponse[] |
+  GetDatasetResponse
 ;
 
 type Response = {
@@ -154,6 +182,7 @@ type Response = {
 }
 
 export {
+  ComputeErrorResponse,
   DataSource,
   Metadata,
   ModelDefinition,
@@ -167,6 +196,8 @@ export {
   ResponseStatus,
   ModelGraph,
   SimulationResponse,
+  ListDatasetsResponse,
+  GetDatasetResponse,
   Type,
   SimulationType,
   Measure,

@@ -2,7 +2,7 @@ import { ActionTree, GetterTree, MutationTree } from 'vuex';
 import * as HMI from '@/types/types';
 import * as Model from '@/types/typesModel';
 import * as Donu from '@/types/typesDonu';
-import { getModelInterface, getModelResult } from '@/services/DonuService';
+import { getDatasetResult, getModelInterface, getModelResult, getSimulationError } from '@/services/DonuService';
 import * as d3 from 'd3';
 import _ from 'lodash';
 
@@ -76,6 +76,14 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
 };
 
 const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
+  setVariableObservedId ({ commit }, args: {
+    modelId: number,
+    uid: string,
+    observedId: string,
+  }): void {
+    commit('setVariableObservedId', args);
+  },
+
   setSimParameterValue ({ commit }, args: {
     modelId: number,
     uid: string,
@@ -280,6 +288,67 @@ const mutations: MutationTree<HMI.SimulationState> = {
   setNumberOfSavedRuns (state: HMI.SimulationState, count: number): void {
     state.numberOfSavedRuns = count;
   },
+
+  async setVariableObservedId (state: HMI.SimulationState, args: {
+    modelId: number,
+    uid: string,
+    observedId: string,
+  }): Promise<void> {
+    const variable = getVariable(state, args.modelId, args.uid);
+    variable.observedId = args.observedId;
+
+    // Build measures array for error calculation
+    const allowedTimeColumnNames = ['date', 'time', 'Day', 'week', 'month', 'year'];
+    const measures: Donu.Measure[] = [];
+    const model = getModel(state, args.modelId);
+    for (const variable of model.variables) {
+      const observedId = variable.observedId;
+      if (observedId) {
+        const result = await getDatasetResult(observedId);
+        // TODO: Donu should indicate to us which column is time based and which should be used as a value
+        // Currently some datasets may contain multiple value columns, here we find the first one
+        const observedTimes = result.columns.find(column => allowedTimeColumnNames.some(timeName => timeName === column.name));
+        const observedValues = result.columns.find(column => !allowedTimeColumnNames.some(timeName => timeName === column.name));
+
+        // Format observed data for chart consumption
+        const observed = [];
+        for (let i = 0; i < observedTimes.values.length; i++) {
+          observed.push({
+            x: observedTimes.values[i],
+            y: observedValues.values[i],
+          });
+        }
+        variable.observed = observed;
+        measures.push({
+          uid: variable.uid,
+          observed: {
+            times: observedTimes.values,
+            values: observedValues.values,
+          },
+          predicted: {
+            times: variable.values[variable.values.length - 1].map(d => d.x),
+            values: variable.values[variable.values.length - 1].map(d => d.y),
+          },
+        });
+      }
+    }
+
+    const currentRunErrors = await getSimulationError(
+      measures,
+      Donu.InterpolationModelTypes.Linear,
+      Donu.ErrorModelTypes.L2,
+    );
+    for (const variable of model.variables) {
+      variable.currentRunError = currentRunErrors.measures.find(m => m.uid === variable.uid)?.error_total;
+    }
+    model.aggregateError = currentRunErrors?.error_total;
+
+    // Force reactive update
+    state.models = [...state.models];
+  },
+  // 1. Get list of datasets from Donu -store in memory
+  // 2. User clicks a dataset
+  // 3. Retrieve dataset values from Donu
 
   setVariablesAggregate (state: HMI.SimulationState, args: {
     aggregator: Function, /* eslint-disable-line @typescript-eslint/ban-types */
