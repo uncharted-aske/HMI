@@ -102,9 +102,9 @@
                 v-for="(evidence, index) in nodeStatement.evidence"
                 :key="index"
               >
-                <span v-if="evidence.text">
-                  {{ excerpt(evidence) }}
-                </span>
+                  <span v-if="evidence.text">
+                    {{ excerpt(evidence) }}
+                  </span>
               </figure>
             </div>
           </details>
