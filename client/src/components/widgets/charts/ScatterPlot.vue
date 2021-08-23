@@ -125,8 +125,9 @@
     position: relative;
   }
 
-  .chart {
+  .scatterplot-chart-container .chart {
     height: auto;
+    width: 100%;
   }
 </style>
 <style>

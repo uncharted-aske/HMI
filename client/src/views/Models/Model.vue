@@ -65,6 +65,7 @@
     </section>
 
     <drilldown-panel
+      class="drilldown-panel-model"
       :active-tab-id="drilldownActiveTabId"
       :is-open="isOpenDrilldown"
       :pane-subtitle="drilldownPaneSubtitle"
@@ -491,5 +492,11 @@
   .search-bar .search-bar-container {
     margin-top: 0; /* To have an uniform spacing between the header and the search bar */
     margin-bottom: 10px; /* To match the header vertical spacing */
+  }
+
+  .drilldown-panel-container.drilldown-panel-model {
+    max-width: 25vw;
+    min-width: 500px;
+    width: 500px;
   }
 </style>
