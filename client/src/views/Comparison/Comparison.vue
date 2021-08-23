@@ -81,6 +81,7 @@
     layouts: Graph.GraphLayoutInterface[] = Graph.LAYOUTS;
 
     @Action initializeInterface;
+    @Action resetSim;
 
     @Getter getSelectedModelGraphType;
     @Getter getModelsLayout;
@@ -92,6 +93,7 @@
     @Mutation setSelectedModels;
 
     @Watch('getSelectedModelGraphType') onModelGraphTypeChanged (): void {
+      this.resetSim(); // We only save simulation info per model.id, not model.id + graph type.
       this.initializeSim();
     }
 

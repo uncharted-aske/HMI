@@ -45,6 +45,18 @@ type Counter = {
   inverse?: boolean,
 };
 
+type ExtractDataParameter = Array<{
+  date: string,
+  doi: string,
+  location: string,
+  object_id: string,
+  value: number | string,
+}>;
+
+type ExtractDataParameters = {
+  [key: string]: ExtractDataParameter,
+};
+
 /** Simulation types */
 
 interface SimulationParameter extends Donu.ModelParameter {
@@ -90,6 +102,8 @@ export {
   Counter,
   GraferEventDetail,
   ModelComponentMetadataInterface,
+  ExtractDataParameters,
+  ExtractDataParameter,
   SimulationModel,
   SimulationParameter,
   SimulationRun,

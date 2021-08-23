@@ -98,7 +98,9 @@ enum InterpolationModelTypes {
 type ModelGraph = any;
 
 type SimulationResponse = {
-  times: number[],
+  // `domain_parameter` and `times` are identical,
+  domain_parameter?: number[], // for Functional Network,
+  times?: number[], // for Petri Net Classic.
   values: {
     [key: string]: number[],
   }
@@ -144,8 +146,9 @@ type Request = {
   'interp-model'?: InterpolationModelTypes,
   'error-model'?: ErrorModelTypes,
   // 'dest-type'?: string;
+  outputs?: string[],
+  domain_parameter?: string,
   end?: number;
-  // name?: string;
   start?: number;
   step?: number;
   'sim-type'?: SimulationType | void,

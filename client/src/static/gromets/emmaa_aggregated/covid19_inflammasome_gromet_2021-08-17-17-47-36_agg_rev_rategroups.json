@@ -1,0 +1,6683 @@
+{
+  "nodes": [
+    {
+      "id": "0",
+      "grometID": "covid19_inflammasome",
+      "concept": "Relation",
+      "role": [],
+      "label": "covid19_inflammasome",
+      "nodeType": "Box",
+      "dataType": "PetriNetClassic",
+      "parent": null,
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": []
+    },
+    {
+      "id": "0::2",
+      "grometID": "J:mitochondrion()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "mitochondrion()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "mitochondrion",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "mitochondrion()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:676663_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "mitochondrion",
+                "db_refs": {}
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::5",
+      "grometID": "J:reactive_oxygen_species(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "reactive_oxygen_species(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "reactive_oxygen_species",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "reactive_oxygen_species(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:676807_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "reactive_oxygen_species",
+                "db_refs": {
+                  "MESH": "D017382",
+                  "CHEBI": "CHEBI:26523"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::10",
+      "grometID": "J:dioxygen()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "dioxygen()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "dioxygen",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "dioxygen()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:676856_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "dioxygen",
+                "db_refs": {
+                  "CHEBI": "CHEBI:15379",
+                  "MESH": "D010100",
+                  "CAS": "7782-44-7",
+                  "DRUGBANK": "DB09140",
+                  "PUBCHEM": "977",
+                  "HMDB": "HMDB0001377",
+                  "CHEMBL": "CHEMBL1234886"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::13",
+      "grometID": "J:water(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "water(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "water",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "water(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:676903_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "water",
+                "db_refs": {
+                  "CHEBI": "CHEBI:15377",
+                  "CHEMBL": "CHEMBL1098659",
+                  "HMDB": "HMDB0002111",
+                  "DRUGBANK": "DB09145",
+                  "PUBCHEM": "962",
+                  "MESH": "D014867"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::20",
+      "grometID": "J:biliverdin(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "biliverdin(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "biliverdin",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "biliverdin(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:676941_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "biliverdin",
+                "db_refs": {
+                  "CHEBI": "CHEBI:17033",
+                  "CAS": "114-25-0",
+                  "CHEMBL": "CHEMBL455477",
+                  "PUBCHEM": "5280353",
+                  "MESH": "D001664",
+                  "DRUGBANK": "DB02073",
+                  "HMDB": "HMDB0001008"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::27",
+      "grometID": "J:carbon_monoxide(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "carbon_monoxide(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "carbon_monoxide",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "carbon_monoxide(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677009_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "carbon_monoxide",
+                "db_refs": {
+                  "CHEBI": "CHEBI:17245",
+                  "HMDB": "HMDB0001361",
+                  "PUBCHEM": "281",
+                  "DRUGBANK": "DB11588",
+                  "CAS": "630-08-0",
+                  "CHEMBL": "CHEMBL1231840"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::34",
+      "grometID": "J:NADP___(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "NADP___(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "NADP___",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NADP___(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677053_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NADP___",
+                "db_refs": {
+                  "PUBCHEM": "5886",
+                  "CHEBI": "CHEBI:18009",
+                  "HMDB": "HMDB0000217"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::41",
+      "grometID": "J:iron_2__(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "iron_2__(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "iron_2__",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "iron_2__(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677096_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "iron_2__",
+                "db_refs": {
+                  "CHEBI": "CHEBI:29033",
+                  "PUBCHEM": "27284",
+                  "HMDB": "HMDB0000692",
+                  "CAS": "15438-31-0",
+                  "DRUGBANK": "DB14510"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::46",
+      "grometID": "J:hyaluronic_acid()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "hyaluronic_acid()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "hyaluronic_acid",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "hyaluronic_acid()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677131_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "hyaluronic_acid",
+                "db_refs": {
+                  "CHEBI": "CHEBI:16336",
+                  "CAS": "9004-61-9",
+                  "HMDB": "HMDB0002061"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::49",
+      "grometID": "J:NLRP3(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "NLRP3(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "NLRP3",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NLRP3(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677166_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NLRP3",
+                "db_refs": {
+                  "UP": "Q96P20",
+                  "HGNC": "16400",
+                  "REFSEQ_PROT": "NM_004895",
+                  "ENSEMBL": "ENSG00000162711",
+                  "EGID": "114548",
+                  "MESH": "D000071199"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::56",
+      "grometID": "J:SUGT1(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "SUGT1(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "SUGT1",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "SUGT1(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677200_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "SUGT1",
+                "db_refs": {
+                  "UP": "Q9Y2Z0",
+                  "HGNC": "16987",
+                  "MESH": "C490164",
+                  "EGID": "10910"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::63",
+      "grometID": "J:NADPH()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "NADPH()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "NADPH",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NADPH()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677234_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NADPH",
+                "db_refs": {
+                  "CHEBI": "CHEBI:16474",
+                  "CHEMBL": "CHEMBL407009",
+                  "CAS": "53-57-6",
+                  "PUBCHEM": "5884",
+                  "HMDB": "HMDB0000221",
+                  "DRUGBANK": "DB02338"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::171",
+      "grometID": "J:TXN(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "TXN(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "TXN",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TXN(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677268_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TXN",
+                "db_refs": {
+                  "EGID": "7295",
+                  "UP": "P10599",
+                  "HGNC": "12435",
+                  "ENSEMBL": "ENSG00000136810",
+                  "REFSEQ_PROT": "NM_001244938",
+                  "MESH": "C491203"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::158",
+      "grometID": "J:calcium_2__(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "calcium_2__(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "calcium_2__",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "calcium_2__(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677305_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "calcium_2__",
+                "db_refs": {
+                  "CHEBI": "CHEBI:29108",
+                  "PUBCHEM": "271",
+                  "CAS": "14127-61-8",
+                  "HMDB": "HMDB0000464"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::89",
+      "grometID": "J:heme()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "heme()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "heme",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "heme()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677342_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "heme",
+                "db_refs": {
+                  "CHEBI": "CHEBI:30413",
+                  "DRUGBANK": "DB03014"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::115",
+      "grometID": "J:pattern_recognition_receptor_signaling_pathway()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "pattern_recognition_receptor_signaling_pathway()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "pattern_recognition_receptor_signaling_pathway",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "pattern_recognition_receptor_signaling_pathway()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677380_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "pattern_recognition_receptor_signaling_pathway",
+                "db_refs": {
+                  "GO": "GO:0002221"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::150",
+      "grometID": "J:TRAF3(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "TRAF3(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "TRAF3",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TRAF3(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677419_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TRAF3",
+                "db_refs": {
+                  "UP": "Q13114",
+                  "TAXONOMY": "694009",
+                  "EGID": "7187",
+                  "MESH": "C090656",
+                  "HGNC": "12033",
+                  "ENSEMBL": "ENSG00000131323",
+                  "REFSEQ_PROT": "NM_145725"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::198",
+      "grometID": "J:NFKB1(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "NFKB1(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "NFKB1",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NFKB1(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677454_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NFKB1",
+                "db_refs": {
+                  "EGID": "4790",
+                  "UP": "P19838",
+                  "HGNC": "7794",
+                  "MESH": "C489548"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::238",
+      "grometID": "J:TXNIP(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "TXNIP(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "TXNIP",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TXNIP(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677488_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TXNIP",
+                "db_refs": {
+                  "UP": "Q9H3M7",
+                  "MESH": "C486715",
+                  "HGNC": "16952",
+                  "EGID": "10628"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::250",
+      "grometID": "J:CASP1(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "CASP1(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "CASP1",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "CASP1(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677522_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "CASP1",
+                "db_refs": {
+                  "UP": "P29466",
+                  "MESH": "D020170",
+                  "HGNC": "1499",
+                  "EGID": "834",
+                  "ENSEMBL": "ENSG00000137752",
+                  "REFSEQ_PROT": "NM_033292"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::257",
+      "grometID": "J:IL18(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "IL18(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "IL18",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "IL18(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677556_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "IL18",
+                "db_refs": {
+                  "EGID": "3606",
+                  "UP": "Q14116",
+                  "MESH": "D020382",
+                  "HGNC": "5986"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::264",
+      "grometID": "J:IL1B(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "IL1B(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "IL1B",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "IL1B(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677590_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "IL1B",
+                "db_refs": {
+                  "UP": "P01584",
+                  "EGID": "3553",
+                  "MESH": "D053583",
+                  "HGNC": "5992"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::205",
+      "grometID": "J:PYCARD(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "PYCARD(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "PYCARD",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "PYCARD(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677624_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "PYCARD",
+                "db_refs": {
+                  "UP": "Q9ULZ3",
+                  "HGNC": "16608",
+                  "EGID": "29108",
+                  "MESH": "C402202"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::126",
+      "grometID": "J:HMOX1()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "HMOX1()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "HMOX1",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "HMOX1()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677658_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "HMOX1",
+                "db_refs": {
+                  "ENSEMBL": "ENSG00000100292",
+                  "HGNC": "5013",
+                  "REFSEQ_PROT": "NM_002133",
+                  "UP": "P09601",
+                  "EGID": "3162",
+                  "MESH": "C496541"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::153",
+      "grometID": "J:p3a()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "p3a()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "p3a",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "p3a()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677695_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "p3a",
+                "db_refs": {
+                  "UP": "P59632",
+                  "EGID": "1489669",
+                  "TAXONOMY": "694009"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::161",
+      "grometID": "J:E()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "E()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "E",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "E()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677730_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "E",
+                "db_refs": {
+                  "UP": "P59637",
+                  "TAXONOMY": "694009",
+                  "EGID": "1489671"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::168",
+      "grometID": "J:Orf9b()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "Orf9b()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "Orf9b",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "Orf9b()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677769_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "Orf9b",
+                "db_refs": {
+                  "UP": "P0DTD2"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::291",
+      "grometID": "J:Pralnacasan()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "Pralnacasan()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "Pralnacasan",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "Pralnacasan()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677811_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "Pralnacasan",
+                "db_refs": {}
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::226",
+      "grometID": "J:parthenolide()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "parthenolide()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "parthenolide",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "parthenolide()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677847_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "parthenolide",
+                "db_refs": {
+                  "PUBCHEM": "7251185",
+                  "CHEBI": "CHEBI:7939",
+                  "CAS": "20554-84-1",
+                  "CHEMBL": "CHEMBL388727"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::307",
+      "grometID": "J:IKBKB(activity='inactive')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "IKBKB(activity='inactive')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "IKBKB",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "IKBKB(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677882_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "IKBKB",
+                "db_refs": {
+                  "UP": "O14920",
+                  "HGNC": "5960"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::232",
+      "grometID": "J:_E__3_tosylacrylonitrile()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "_E__3_tosylacrylonitrile()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "_E__3_tosylacrylonitrile",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "_E__3_tosylacrylonitrile()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678031_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "_E__3_tosylacrylonitrile",
+                "db_refs": {
+                  "CHEBI": "CHEBI:85928"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::302",
+      "grometID": "J:Proteasome()",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "Proteasome()",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "Proteasome",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "Proteasome()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678072_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "Proteasome",
+                "db_refs": {
+                  "FPLX": "Proteasome"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::8",
+      "grometID": "J:reactive_oxygen_species(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "reactive_oxygen_species(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "reactive_oxygen_species",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "reactive_oxygen_species(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678112_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "reactive_oxygen_species",
+                "db_refs": {
+                  "MESH": "D017382",
+                  "CHEBI": "CHEBI:26523"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::16",
+      "grometID": "J:water(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "water(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "water",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "water(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678152_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "water",
+                "db_refs": {
+                  "CHEBI": "CHEBI:15377",
+                  "CHEMBL": "CHEMBL1098659",
+                  "HMDB": "HMDB0002111",
+                  "DRUGBANK": "DB09145",
+                  "PUBCHEM": "962",
+                  "MESH": "D014867"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::23",
+      "grometID": "J:biliverdin(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "biliverdin(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "biliverdin",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "biliverdin(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678191_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "biliverdin",
+                "db_refs": {
+                  "CHEBI": "CHEBI:17033",
+                  "CAS": "114-25-0",
+                  "CHEMBL": "CHEMBL455477",
+                  "PUBCHEM": "5280353",
+                  "MESH": "D001664",
+                  "DRUGBANK": "DB02073",
+                  "HMDB": "HMDB0001008"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::30",
+      "grometID": "J:carbon_monoxide(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "carbon_monoxide(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "carbon_monoxide",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "carbon_monoxide(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678228_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "carbon_monoxide",
+                "db_refs": {
+                  "CHEBI": "CHEBI:17245",
+                  "HMDB": "HMDB0001361",
+                  "PUBCHEM": "281",
+                  "DRUGBANK": "DB11588",
+                  "CAS": "630-08-0",
+                  "CHEMBL": "CHEMBL1231840"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::37",
+      "grometID": "J:NADP___(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "NADP___(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "NADP___",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NADP___(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678270_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NADP___",
+                "db_refs": {
+                  "PUBCHEM": "5886",
+                  "CHEBI": "CHEBI:18009",
+                  "HMDB": "HMDB0000217"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::44",
+      "grometID": "J:iron_2__(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "iron_2__(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "iron_2__",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "iron_2__(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678326_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "iron_2__",
+                "db_refs": {
+                  "CHEBI": "CHEBI:29033",
+                  "PUBCHEM": "27284",
+                  "HMDB": "HMDB0000692",
+                  "CAS": "15438-31-0",
+                  "DRUGBANK": "DB14510"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::52",
+      "grometID": "J:NLRP3(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "NLRP3(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "NLRP3",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NLRP3(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678365_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NLRP3",
+                "db_refs": {
+                  "UP": "Q96P20",
+                  "HGNC": "16400",
+                  "REFSEQ_PROT": "NM_004895",
+                  "ENSEMBL": "ENSG00000162711",
+                  "EGID": "114548",
+                  "MESH": "D000071199"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::59",
+      "grometID": "J:SUGT1(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "SUGT1(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "SUGT1",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "SUGT1(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678415_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "SUGT1",
+                "db_refs": {
+                  "UP": "Q9Y2Z0",
+                  "HGNC": "16987",
+                  "MESH": "C490164",
+                  "EGID": "10910"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::156",
+      "grometID": "J:TRAF3(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "TRAF3(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "TRAF3",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TRAF3(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678457_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TRAF3",
+                "db_refs": {
+                  "UP": "Q13114",
+                  "TAXONOMY": "694009",
+                  "EGID": "7187",
+                  "MESH": "C090656",
+                  "HGNC": "12033",
+                  "ENSEMBL": "ENSG00000131323",
+                  "REFSEQ_PROT": "NM_145725"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::164",
+      "grometID": "J:calcium_2__(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "calcium_2__(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "calcium_2__",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "calcium_2__(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678505_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "calcium_2__",
+                "db_refs": {
+                  "CHEBI": "CHEBI:29108",
+                  "PUBCHEM": "271",
+                  "CAS": "14127-61-8",
+                  "HMDB": "HMDB0000464"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::176",
+      "grometID": "J:TXN(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "TXN(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "TXN",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TXN(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678553_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TXN",
+                "db_refs": {
+                  "EGID": "7295",
+                  "UP": "P10599",
+                  "HGNC": "12435",
+                  "ENSEMBL": "ENSG00000136810",
+                  "REFSEQ_PROT": "NM_001244938",
+                  "MESH": "C491203"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::203",
+      "grometID": "J:NFKB1(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "NFKB1(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "NFKB1",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NFKB1(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678593_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NFKB1",
+                "db_refs": {
+                  "EGID": "4790",
+                  "UP": "P19838",
+                  "HGNC": "7794",
+                  "MESH": "C489548"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::210",
+      "grometID": "J:PYCARD(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "PYCARD(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "PYCARD",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "PYCARD(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678631_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "PYCARD",
+                "db_refs": {
+                  "UP": "Q9ULZ3",
+                  "HGNC": "16608",
+                  "EGID": "29108",
+                  "MESH": "C402202"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::243",
+      "grometID": "J:TXNIP(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "TXNIP(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "TXNIP",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TXNIP(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678668_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TXNIP",
+                "db_refs": {
+                  "UP": "Q9H3M7",
+                  "MESH": "C486715",
+                  "HGNC": "16952",
+                  "EGID": "10628"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::255",
+      "grometID": "J:CASP1(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "CASP1(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "CASP1",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "CASP1(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678706_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "CASP1",
+                "db_refs": {
+                  "UP": "P29466",
+                  "MESH": "D020170",
+                  "HGNC": "1499",
+                  "EGID": "834",
+                  "ENSEMBL": "ENSG00000137752",
+                  "REFSEQ_PROT": "NM_033292"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::262",
+      "grometID": "J:IL18(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "IL18(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "IL18",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "IL18(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678742_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "IL18",
+                "db_refs": {
+                  "EGID": "3606",
+                  "UP": "Q14116",
+                  "MESH": "D020382",
+                  "HGNC": "5986"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::269",
+      "grometID": "J:IL1B(activity='active')",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "initial_condition"
+      ],
+      "label": "IL1B(activity='active')",
+      "nodeType": "Junction",
+      "dataType": "Integer",
+      "parent": "IL1B",
+      "nodeSubType": [
+        "State"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "IL1B(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678781_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "IL1B",
+                "db_refs": {
+                  "UP": "P01584",
+                  "EGID": "3553",
+                  "MESH": "D053583",
+                  "HGNC": "5992"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::3",
+      "grometID": "J:kf_mr_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_mr_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('reactive_oxygen_species',), ('mitochondrion',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_mr_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678863_MST-0700"
+            },
+            "indra_stmt_hash": 12835542771633592,
+            "reaction_rule": "mitochondrion_activates_reactive_oxygen_species_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::11",
+      "grometID": "J:kf_dw_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_dw_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('water',), ('dioxygen',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_dw_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679013_MST-0700"
+            },
+            "indra_stmt_hash": -33791666966162264,
+            "reaction_rule": "dioxygen_activates_water_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::18",
+      "grometID": "J:kf_db_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_db_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('biliverdin',), ('dioxygen',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_db_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679159_MST-0700"
+            },
+            "indra_stmt_hash": -23254141572933850,
+            "reaction_rule": "dioxygen_activates_biliverdin_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::25",
+      "grometID": "J:kf_dc_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_dc_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('carbon_monoxide',), ('dioxygen',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_dc_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679268_MST-0700"
+            },
+            "indra_stmt_hash": -19358276560732316,
+            "reaction_rule": "dioxygen_activates_carbon_monoxide_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::32",
+      "grometID": "J:kf_dn_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_dn_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NADP___',), ('dioxygen',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_dn_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679365_MST-0700"
+            },
+            "indra_stmt_hash": -20462194123865484,
+            "reaction_rule": "dioxygen_activates_NADP____activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::39",
+      "grometID": "J:kf_di_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_di_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('iron_2__',), ('dioxygen',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_di_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679434_MST-0700"
+            },
+            "indra_stmt_hash": -9172999005745560,
+            "reaction_rule": "dioxygen_activates_iron_2___activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::47",
+      "grometID": "J:kf_hn_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hn_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NLRP3',), ('hyaluronic_acid',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hn_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679501_MST-0700"
+            },
+            "indra_stmt_hash": -20108495150093596,
+            "reaction_rule": "hyaluronic_acid_activates_NLRP3_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::54",
+      "grometID": "J:kf_hs_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hs_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('SUGT1',), ('hyaluronic_acid',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hs_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679591_MST-0700"
+            },
+            "indra_stmt_hash": 8423295275635649,
+            "reaction_rule": "hyaluronic_acid_activates_SUGT1_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::61",
+      "grometID": "J:kf_nw_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_nw_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NADPH',), ('water',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_nw_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679707_MST-0700"
+            },
+            "indra_stmt_hash": -33615998528389900,
+            "reaction_rule": "NADPH_activates_water_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::67",
+      "grometID": "J:kf_nb_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_nb_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('biliverdin',), ('NADPH',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_nb_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679784_MST-0700"
+            },
+            "indra_stmt_hash": 27449522310373504,
+            "reaction_rule": "NADPH_activates_biliverdin_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::72",
+      "grometID": "J:kf_nc_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_nc_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('carbon_monoxide',), ('NADPH',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_nc_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679851_MST-0700"
+            },
+            "indra_stmt_hash": -27109350041880052,
+            "reaction_rule": "NADPH_activates_carbon_monoxide_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::77",
+      "grometID": "J:kf_nn_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_nn_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NADP___',), ('NADPH',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_nn_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679924_MST-0700"
+            },
+            "indra_stmt_hash": -28402272758547468,
+            "reaction_rule": "NADPH_activates_NADP____activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::82",
+      "grometID": "J:kf_ni_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_ni_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NADPH',), ('iron_2__',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_ni_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:679993_MST-0700"
+            },
+            "indra_stmt_hash": -2549998563827919,
+            "reaction_rule": "NADPH_activates_iron_2___activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::87",
+      "grometID": "J:kf_hw_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hw_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('heme',), ('water',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hw_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680061_MST-0700"
+            },
+            "indra_stmt_hash": -18389485349912460,
+            "reaction_rule": "heme_activates_water_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::93",
+      "grometID": "J:kf_hb_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hb_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('biliverdin',), ('heme',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hb_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680125_MST-0700"
+            },
+            "indra_stmt_hash": -34850584861702652,
+            "reaction_rule": "heme_activates_biliverdin_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::98",
+      "grometID": "J:kf_hc_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hc_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('carbon_monoxide',), ('heme',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hc_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680192_MST-0700"
+            },
+            "indra_stmt_hash": -20247715615526404,
+            "reaction_rule": "heme_activates_carbon_monoxide_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::103",
+      "grometID": "J:kf_hn_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hn_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NADP___',), ('heme',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hn_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680295_MST-0700"
+            },
+            "indra_stmt_hash": -26807453749483020,
+            "reaction_rule": "heme_activates_NADP____activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::108",
+      "grometID": "J:kf_hi_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hi_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('heme',), ('iron_2__',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hi_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680388_MST-0700"
+            },
+            "indra_stmt_hash": -14335330989363216,
+            "reaction_rule": "heme_activates_iron_2___activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::113",
+      "grometID": "J:kf_pn_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_pn_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('pattern_recognition_receptor_signaling_pathway',), ('NLRP3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_pn_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680462_MST-0700"
+            },
+            "indra_stmt_hash": -7900295090152057,
+            "reaction_rule": "pattern_recognition_receptor_signaling_pathway_activates_NLRP3_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::119",
+      "grometID": "J:kf_ps_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_ps_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('pattern_recognition_receptor_signaling_pathway',), ('SUGT1',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_ps_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680535_MST-0700"
+            },
+            "indra_stmt_hash": -33026345100004450,
+            "reaction_rule": "pattern_recognition_receptor_signaling_pathway_activates_SUGT1_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::124",
+      "grometID": "J:kf_hw_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hw_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('HMOX1',), ('water',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hw_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680630_MST-0700"
+            },
+            "indra_stmt_hash": 9482328515580424,
+            "reaction_rule": "HMOX1_activates_water_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::130",
+      "grometID": "J:kf_hb_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hb_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('HMOX1',), ('biliverdin',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hb_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680737_MST-0700"
+            },
+            "indra_stmt_hash": 4165033709137679,
+            "reaction_rule": "HMOX1_activates_biliverdin_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::135",
+      "grometID": "J:kf_hc_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hc_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('carbon_monoxide',), ('HMOX1',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hc_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680846_MST-0700"
+            },
+            "indra_stmt_hash": 20810695862211084,
+            "reaction_rule": "HMOX1_activates_carbon_monoxide_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::140",
+      "grometID": "J:kf_hn_act_3:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hn_act_3",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NADP___',), ('HMOX1',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hn_act_3:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:680933_MST-0700"
+            },
+            "indra_stmt_hash": -32006360760956236,
+            "reaction_rule": "HMOX1_activates_NADP____activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::145",
+      "grometID": "J:kf_hi_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_hi_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('HMOX1',), ('iron_2__',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_hi_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681017_MST-0700"
+            },
+            "indra_stmt_hash": -4429435735465789,
+            "reaction_rule": "HMOX1_activates_iron_2___activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::151",
+      "grometID": "J:kf_3t_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_3t_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('p3a',), ('TRAF3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_3t_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681118_MST-0700"
+            },
+            "indra_stmt_hash": 7825810811169163,
+            "reaction_rule": "p3a_activates_TRAF3_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::159",
+      "grometID": "J:kf_ec_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_ec_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('calcium_2__',), ('E',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_ec_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681213_MST-0700"
+            },
+            "indra_stmt_hash": -24735111122940356,
+            "reaction_rule": "E_activates_calcium_2___activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::166",
+      "grometID": "J:kf_ot_deg_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_ot_deg_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('Orf9b',), ('TRAF3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_ot_deg_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681314_MST-0700"
+            },
+            "indra_stmt_hash": 3979344232136451,
+            "reaction_rule": "Orf9b_degrades_TRAF3",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::172",
+      "grometID": "J:kf_rt_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_rt_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('reactive_oxygen_species',), ('TXN',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_rt_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681389_MST-0700"
+            },
+            "indra_stmt_hash": 23667018272748060,
+            "reaction_rule": "reactive_oxygen_species_act_activates_TXN_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::178",
+      "grometID": "J:kf_rn_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_rn_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('reactive_oxygen_species',), ('NLRP3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_rn_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681518_MST-0700"
+            },
+            "indra_stmt_hash": -33112545592478984,
+            "reaction_rule": "reactive_oxygen_species_act_activates_NLRP3_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::183",
+      "grometID": "J:kf_rs_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_rs_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('reactive_oxygen_species',), ('SUGT1',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_rs_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681614_MST-0700"
+            },
+            "indra_stmt_hash": 9483031281970412,
+            "reaction_rule": "reactive_oxygen_species_act_activates_SUGT1_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::188",
+      "grometID": "J:kf_cn_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_cn_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('calcium_2__',), ('NLRP3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_cn_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681693_MST-0700"
+            },
+            "indra_stmt_hash": -6899295879885749,
+            "reaction_rule": "calcium_2___act_activates_NLRP3_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::193",
+      "grometID": "J:kf_cs_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_cs_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('calcium_2__',), ('SUGT1',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_cs_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681772_MST-0700"
+            },
+            "indra_stmt_hash": -11523416584483540,
+            "reaction_rule": "calcium_2___act_activates_SUGT1_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::199",
+      "grometID": "J:kf_tn_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_tn_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NFKB1',), ('TRAF3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_tn_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681841_MST-0700"
+            },
+            "indra_stmt_hash": 18750495497402700,
+            "reaction_rule": "TRAF3_act_activates_NFKB1_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::206",
+      "grometID": "J:kf_np_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_np_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('PYCARD',), ('NLRP3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_np_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:681931_MST-0700"
+            },
+            "indra_stmt_hash": 17602490124120764,
+            "reaction_rule": "NLRP3_act_activates_PYCARD_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::212",
+      "grometID": "J:kf_sn_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_sn_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('SUGT1',), ('NLRP3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_sn_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682025_MST-0700"
+            },
+            "indra_stmt_hash": 1380654838385392,
+            "reaction_rule": "SUGT1_act_activates_NLRP3_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::217",
+      "grometID": "J:kf_ot_deg_1:2",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_ot_deg_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('Orf9b',), ('TRAF3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_ot_deg_1:2_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682100_MST-0700"
+            },
+            "indra_stmt_hash": 3979344232136451,
+            "reaction_rule": "Orf9b_degrades_TRAF3",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::221",
+      "grometID": "J:kf_cr_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_cr_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('reactive_oxygen_species',), ('carbon_monoxide',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_cr_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682179_MST-0700"
+            },
+            "indra_stmt_hash": 29747368600195804,
+            "reaction_rule": "carbon_monoxide_act_deactivates_reactive_oxygen_species_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::227",
+      "grometID": "J:kf_pn_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_pn_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('parthenolide',), ('NLRP3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_pn_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682267_MST-0700"
+            },
+            "indra_stmt_hash": 21689955333705852,
+            "reaction_rule": "parthenolide_deactivates_NLRP3_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::233",
+      "grometID": "J:kf__n_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf__n_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NLRP3',), ('_E__3_tosylacrylonitrile',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf__n_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682355_MST-0700"
+            },
+            "indra_stmt_hash": -19046700989119560,
+            "reaction_rule": "_E__3_tosylacrylonitrile_deactivates_NLRP3_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::239",
+      "grometID": "J:kf_tt_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_tt_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('TXN',), ('TXNIP',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_tt_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682431_MST-0700"
+            },
+            "indra_stmt_hash": -14607233151538372,
+            "reaction_rule": "TXN_act_activates_TXNIP_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::245",
+      "grometID": "J:kf_pt_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_pt_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('PYCARD',), ('TRAF3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_pt_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682504_MST-0700"
+            },
+            "indra_stmt_hash": 3726856741857303,
+            "reaction_rule": "PYCARD_act_activates_TRAF3_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::251",
+      "grometID": "J:kf_pc_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_pc_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('CASP1',), ('PYCARD',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_pc_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682592_MST-0700"
+            },
+            "indra_stmt_hash": -13187163498274088,
+            "reaction_rule": "PYCARD_act_activates_CASP1_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::258",
+      "grometID": "J:kf_ni_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_ni_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NFKB1',), ('IL18',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_ni_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682677_MST-0700"
+            },
+            "indra_stmt_hash": -11050218521189594,
+            "reaction_rule": "NFKB1_act_activates_IL18_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::265",
+      "grometID": "J:kf_ni_act_3:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_ni_act_3",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('NFKB1',), ('IL1B',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_ni_act_3:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682763_MST-0700"
+            },
+            "indra_stmt_hash": 21288829100978590,
+            "reaction_rule": "NFKB1_act_activates_IL1B_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::271",
+      "grometID": "J:kf_ci_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_ci_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('CASP1',), ('IL18',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_ci_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682853_MST-0700"
+            },
+            "indra_stmt_hash": -10468666881688478,
+            "reaction_rule": "CASP1_act_activates_IL18_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::276",
+      "grometID": "J:kf_ci_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_ci_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('CASP1',), ('IL1B',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_ci_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:682959_MST-0700"
+            },
+            "indra_stmt_hash": 23836089500517480,
+            "reaction_rule": "CASP1_act_activates_IL1B_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::281",
+      "grometID": "J:kf_tn_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_tn_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('TXNIP',), ('NLRP3',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_tn_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:683054_MST-0700"
+            },
+            "indra_stmt_hash": 14060996188083640,
+            "reaction_rule": "TXNIP_act_activates_NLRP3_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::286",
+      "grometID": "J:kf_ts_act_1:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_ts_act_1",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('SUGT1',), ('TXNIP',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_ts_act_1:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:683130_MST-0700"
+            },
+            "indra_stmt_hash": -13383633333682528,
+            "reaction_rule": "TXNIP_act_activates_SUGT1_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::292",
+      "grometID": "J:kf_pc_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_pc_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('CASP1',), ('Pralnacasan',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_pc_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:683205_MST-0700"
+            },
+            "indra_stmt_hash": -6092028988306676,
+            "reaction_rule": "Pralnacasan_deactivates_CASP1_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::297",
+      "grometID": "J:kf_pc_act_3:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_pc_act_3",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('parthenolide',), ('CASP1',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_pc_act_3:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:683278_MST-0700"
+            },
+            "indra_stmt_hash": -691138474812308,
+            "reaction_rule": "parthenolide_deactivates_CASP1_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "0::303",
+      "grometID": "J:kf_pi_act_2:1",
+      "concept": "Junction",
+      "role": [
+        "variable",
+        "parameter"
+      ],
+      "label": "kf_pi_act_2",
+      "nodeType": "Junction",
+      "dataType": "Float",
+      "parent": "(('Proteasome',), ('IL18',))",
+      "nodeSubType": [
+        "Rate"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "ReactionReference",
+            "uid": "kf_pi_act_2:1_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:683356_MST-0700"
+            },
+            "indra_stmt_hash": -16803551771535352,
+            "reaction_rule": "Proteasome_deactivates_IL18_activity",
+            "is_reverse": false
+          }
+        ]
+      ]
+    },
+    {
+      "id": "mitochondrion",
+      "concept": "Relation",
+      "role": null,
+      "label": "mitochondrion",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "mitochondrion()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:676663_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "mitochondrion",
+                "db_refs": {}
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "reactive_oxygen_species",
+      "concept": "Relation",
+      "role": null,
+      "label": "reactive_oxygen_species",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "reactive_oxygen_species(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:676807_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "reactive_oxygen_species",
+                "db_refs": {
+                  "MESH": "D017382",
+                  "CHEBI": "CHEBI:26523"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "reactive_oxygen_species(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678112_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "reactive_oxygen_species",
+                "db_refs": {
+                  "MESH": "D017382",
+                  "CHEBI": "CHEBI:26523"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "dioxygen",
+      "concept": "Relation",
+      "role": null,
+      "label": "dioxygen",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "dioxygen()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:676856_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "dioxygen",
+                "db_refs": {
+                  "CHEBI": "CHEBI:15379",
+                  "MESH": "D010100",
+                  "CAS": "7782-44-7",
+                  "DRUGBANK": "DB09140",
+                  "PUBCHEM": "977",
+                  "HMDB": "HMDB0001377",
+                  "CHEMBL": "CHEMBL1234886"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "water",
+      "concept": "Relation",
+      "role": null,
+      "label": "water",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "water(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:676903_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "water",
+                "db_refs": {
+                  "CHEBI": "CHEBI:15377",
+                  "CHEMBL": "CHEMBL1098659",
+                  "HMDB": "HMDB0002111",
+                  "DRUGBANK": "DB09145",
+                  "PUBCHEM": "962",
+                  "MESH": "D014867"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "water(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678152_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "water",
+                "db_refs": {
+                  "CHEBI": "CHEBI:15377",
+                  "CHEMBL": "CHEMBL1098659",
+                  "HMDB": "HMDB0002111",
+                  "DRUGBANK": "DB09145",
+                  "PUBCHEM": "962",
+                  "MESH": "D014867"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "biliverdin",
+      "concept": "Relation",
+      "role": null,
+      "label": "biliverdin",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "biliverdin(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:676941_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "biliverdin",
+                "db_refs": {
+                  "CHEBI": "CHEBI:17033",
+                  "CAS": "114-25-0",
+                  "CHEMBL": "CHEMBL455477",
+                  "PUBCHEM": "5280353",
+                  "MESH": "D001664",
+                  "DRUGBANK": "DB02073",
+                  "HMDB": "HMDB0001008"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "biliverdin(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678191_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "biliverdin",
+                "db_refs": {
+                  "CHEBI": "CHEBI:17033",
+                  "CAS": "114-25-0",
+                  "CHEMBL": "CHEMBL455477",
+                  "PUBCHEM": "5280353",
+                  "MESH": "D001664",
+                  "DRUGBANK": "DB02073",
+                  "HMDB": "HMDB0001008"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "carbon_monoxide",
+      "concept": "Relation",
+      "role": null,
+      "label": "carbon_monoxide",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "carbon_monoxide(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677009_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "carbon_monoxide",
+                "db_refs": {
+                  "CHEBI": "CHEBI:17245",
+                  "HMDB": "HMDB0001361",
+                  "PUBCHEM": "281",
+                  "DRUGBANK": "DB11588",
+                  "CAS": "630-08-0",
+                  "CHEMBL": "CHEMBL1231840"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "carbon_monoxide(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678228_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "carbon_monoxide",
+                "db_refs": {
+                  "CHEBI": "CHEBI:17245",
+                  "HMDB": "HMDB0001361",
+                  "PUBCHEM": "281",
+                  "DRUGBANK": "DB11588",
+                  "CAS": "630-08-0",
+                  "CHEMBL": "CHEMBL1231840"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "NADP___",
+      "concept": "Relation",
+      "role": null,
+      "label": "NADP___",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NADP___(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677053_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NADP___",
+                "db_refs": {
+                  "PUBCHEM": "5886",
+                  "CHEBI": "CHEBI:18009",
+                  "HMDB": "HMDB0000217"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NADP___(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678270_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NADP___",
+                "db_refs": {
+                  "PUBCHEM": "5886",
+                  "CHEBI": "CHEBI:18009",
+                  "HMDB": "HMDB0000217"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "iron_2__",
+      "concept": "Relation",
+      "role": null,
+      "label": "iron_2__",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "iron_2__(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677096_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "iron_2__",
+                "db_refs": {
+                  "CHEBI": "CHEBI:29033",
+                  "PUBCHEM": "27284",
+                  "HMDB": "HMDB0000692",
+                  "CAS": "15438-31-0",
+                  "DRUGBANK": "DB14510"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "iron_2__(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678326_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "iron_2__",
+                "db_refs": {
+                  "CHEBI": "CHEBI:29033",
+                  "PUBCHEM": "27284",
+                  "HMDB": "HMDB0000692",
+                  "CAS": "15438-31-0",
+                  "DRUGBANK": "DB14510"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "hyaluronic_acid",
+      "concept": "Relation",
+      "role": null,
+      "label": "hyaluronic_acid",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "hyaluronic_acid()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677131_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "hyaluronic_acid",
+                "db_refs": {
+                  "CHEBI": "CHEBI:16336",
+                  "CAS": "9004-61-9",
+                  "HMDB": "HMDB0002061"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "NLRP3",
+      "concept": "Relation",
+      "role": null,
+      "label": "NLRP3",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NLRP3(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677166_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NLRP3",
+                "db_refs": {
+                  "UP": "Q96P20",
+                  "HGNC": "16400",
+                  "REFSEQ_PROT": "NM_004895",
+                  "ENSEMBL": "ENSG00000162711",
+                  "EGID": "114548",
+                  "MESH": "D000071199"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NLRP3(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678365_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NLRP3",
+                "db_refs": {
+                  "UP": "Q96P20",
+                  "HGNC": "16400",
+                  "REFSEQ_PROT": "NM_004895",
+                  "ENSEMBL": "ENSG00000162711",
+                  "EGID": "114548",
+                  "MESH": "D000071199"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "SUGT1",
+      "concept": "Relation",
+      "role": null,
+      "label": "SUGT1",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "SUGT1(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677200_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "SUGT1",
+                "db_refs": {
+                  "UP": "Q9Y2Z0",
+                  "HGNC": "16987",
+                  "MESH": "C490164",
+                  "EGID": "10910"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "SUGT1(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678415_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "SUGT1",
+                "db_refs": {
+                  "UP": "Q9Y2Z0",
+                  "HGNC": "16987",
+                  "MESH": "C490164",
+                  "EGID": "10910"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "NADPH",
+      "concept": "Relation",
+      "role": null,
+      "label": "NADPH",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NADPH()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677234_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NADPH",
+                "db_refs": {
+                  "CHEBI": "CHEBI:16474",
+                  "CHEMBL": "CHEMBL407009",
+                  "CAS": "53-57-6",
+                  "PUBCHEM": "5884",
+                  "HMDB": "HMDB0000221",
+                  "DRUGBANK": "DB02338"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "TXN",
+      "concept": "Relation",
+      "role": null,
+      "label": "TXN",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TXN(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677268_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TXN",
+                "db_refs": {
+                  "EGID": "7295",
+                  "UP": "P10599",
+                  "HGNC": "12435",
+                  "ENSEMBL": "ENSG00000136810",
+                  "REFSEQ_PROT": "NM_001244938",
+                  "MESH": "C491203"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TXN(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678553_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TXN",
+                "db_refs": {
+                  "EGID": "7295",
+                  "UP": "P10599",
+                  "HGNC": "12435",
+                  "ENSEMBL": "ENSG00000136810",
+                  "REFSEQ_PROT": "NM_001244938",
+                  "MESH": "C491203"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "calcium_2__",
+      "concept": "Relation",
+      "role": null,
+      "label": "calcium_2__",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "calcium_2__(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677305_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "calcium_2__",
+                "db_refs": {
+                  "CHEBI": "CHEBI:29108",
+                  "PUBCHEM": "271",
+                  "CAS": "14127-61-8",
+                  "HMDB": "HMDB0000464"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "calcium_2__(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678505_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "calcium_2__",
+                "db_refs": {
+                  "CHEBI": "CHEBI:29108",
+                  "PUBCHEM": "271",
+                  "CAS": "14127-61-8",
+                  "HMDB": "HMDB0000464"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "heme",
+      "concept": "Relation",
+      "role": null,
+      "label": "heme",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "heme()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677342_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "heme",
+                "db_refs": {
+                  "CHEBI": "CHEBI:30413",
+                  "DRUGBANK": "DB03014"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "pattern_recognition_receptor_signaling_pathway",
+      "concept": "Relation",
+      "role": null,
+      "label": "pattern_recognition_receptor_signaling_pathway",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "pattern_recognition_receptor_signaling_pathway()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677380_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "pattern_recognition_receptor_signaling_pathway",
+                "db_refs": {
+                  "GO": "GO:0002221"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "TRAF3",
+      "concept": "Relation",
+      "role": null,
+      "label": "TRAF3",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TRAF3(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677419_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TRAF3",
+                "db_refs": {
+                  "UP": "Q13114",
+                  "TAXONOMY": "694009",
+                  "EGID": "7187",
+                  "MESH": "C090656",
+                  "HGNC": "12033",
+                  "ENSEMBL": "ENSG00000131323",
+                  "REFSEQ_PROT": "NM_145725"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TRAF3(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678457_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TRAF3",
+                "db_refs": {
+                  "UP": "Q13114",
+                  "TAXONOMY": "694009",
+                  "EGID": "7187",
+                  "MESH": "C090656",
+                  "HGNC": "12033",
+                  "ENSEMBL": "ENSG00000131323",
+                  "REFSEQ_PROT": "NM_145725"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "NFKB1",
+      "concept": "Relation",
+      "role": null,
+      "label": "NFKB1",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NFKB1(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677454_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NFKB1",
+                "db_refs": {
+                  "EGID": "4790",
+                  "UP": "P19838",
+                  "HGNC": "7794",
+                  "MESH": "C489548"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "NFKB1(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678593_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "NFKB1",
+                "db_refs": {
+                  "EGID": "4790",
+                  "UP": "P19838",
+                  "HGNC": "7794",
+                  "MESH": "C489548"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "TXNIP",
+      "concept": "Relation",
+      "role": null,
+      "label": "TXNIP",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TXNIP(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677488_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TXNIP",
+                "db_refs": {
+                  "UP": "Q9H3M7",
+                  "MESH": "C486715",
+                  "HGNC": "16952",
+                  "EGID": "10628"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "TXNIP(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678668_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "TXNIP",
+                "db_refs": {
+                  "UP": "Q9H3M7",
+                  "MESH": "C486715",
+                  "HGNC": "16952",
+                  "EGID": "10628"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "CASP1",
+      "concept": "Relation",
+      "role": null,
+      "label": "CASP1",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "CASP1(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677522_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "CASP1",
+                "db_refs": {
+                  "UP": "P29466",
+                  "MESH": "D020170",
+                  "HGNC": "1499",
+                  "EGID": "834",
+                  "ENSEMBL": "ENSG00000137752",
+                  "REFSEQ_PROT": "NM_033292"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "CASP1(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678706_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "CASP1",
+                "db_refs": {
+                  "UP": "P29466",
+                  "MESH": "D020170",
+                  "HGNC": "1499",
+                  "EGID": "834",
+                  "ENSEMBL": "ENSG00000137752",
+                  "REFSEQ_PROT": "NM_033292"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "IL18",
+      "concept": "Relation",
+      "role": null,
+      "label": "IL18",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "IL18(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677556_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "IL18",
+                "db_refs": {
+                  "EGID": "3606",
+                  "UP": "Q14116",
+                  "MESH": "D020382",
+                  "HGNC": "5986"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "IL18(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678742_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "IL18",
+                "db_refs": {
+                  "EGID": "3606",
+                  "UP": "Q14116",
+                  "MESH": "D020382",
+                  "HGNC": "5986"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "IL1B",
+      "concept": "Relation",
+      "role": null,
+      "label": "IL1B",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "IL1B(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677590_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "IL1B",
+                "db_refs": {
+                  "UP": "P01584",
+                  "EGID": "3553",
+                  "MESH": "D053583",
+                  "HGNC": "5992"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "IL1B(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678781_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "IL1B",
+                "db_refs": {
+                  "UP": "P01584",
+                  "EGID": "3553",
+                  "MESH": "D053583",
+                  "HGNC": "5992"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "PYCARD",
+      "concept": "Relation",
+      "role": null,
+      "label": "PYCARD",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "PYCARD(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677624_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "PYCARD",
+                "db_refs": {
+                  "UP": "Q9ULZ3",
+                  "HGNC": "16608",
+                  "EGID": "29108",
+                  "MESH": "C402202"
+                }
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "PYCARD(activity='active')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678631_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "PYCARD",
+                "db_refs": {
+                  "UP": "Q9ULZ3",
+                  "HGNC": "16608",
+                  "EGID": "29108",
+                  "MESH": "C402202"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "HMOX1",
+      "concept": "Relation",
+      "role": null,
+      "label": "HMOX1",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "HMOX1()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677658_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "HMOX1",
+                "db_refs": {
+                  "ENSEMBL": "ENSG00000100292",
+                  "HGNC": "5013",
+                  "REFSEQ_PROT": "NM_002133",
+                  "UP": "P09601",
+                  "EGID": "3162",
+                  "MESH": "C496541"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "p3a",
+      "concept": "Relation",
+      "role": null,
+      "label": "p3a",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "p3a()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677695_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "p3a",
+                "db_refs": {
+                  "UP": "P59632",
+                  "EGID": "1489669",
+                  "TAXONOMY": "694009"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "E",
+      "concept": "Relation",
+      "role": null,
+      "label": "E",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "E()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677730_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "E",
+                "db_refs": {
+                  "UP": "P59637",
+                  "TAXONOMY": "694009",
+                  "EGID": "1489671"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "Orf9b",
+      "concept": "Relation",
+      "role": null,
+      "label": "Orf9b",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "Orf9b()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677769_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "Orf9b",
+                "db_refs": {
+                  "UP": "P0DTD2"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "Pralnacasan",
+      "concept": "Relation",
+      "role": null,
+      "label": "Pralnacasan",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "Pralnacasan()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677811_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "Pralnacasan",
+                "db_refs": {}
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "parthenolide",
+      "concept": "Relation",
+      "role": null,
+      "label": "parthenolide",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "parthenolide()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677847_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "parthenolide",
+                "db_refs": {
+                  "PUBCHEM": "7251185",
+                  "CHEBI": "CHEBI:7939",
+                  "CAS": "20554-84-1",
+                  "CHEMBL": "CHEMBL388727"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "IKBKB",
+      "concept": "Relation",
+      "role": null,
+      "label": "IKBKB",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "IKBKB(activity='inactive')_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:677882_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "IKBKB",
+                "db_refs": {
+                  "UP": "O14920",
+                  "HGNC": "5960"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "_E__3_tosylacrylonitrile",
+      "concept": "Relation",
+      "role": null,
+      "label": "_E__3_tosylacrylonitrile",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "_E__3_tosylacrylonitrile()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678031_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "_E__3_tosylacrylonitrile",
+                "db_refs": {
+                  "CHEBI": "CHEBI:85928"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "Proteasome",
+      "concept": "Relation",
+      "role": null,
+      "label": "Proteasome",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "0",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": [
+        [
+          {
+            "metadata_type": "IndraAgentReferenceSet",
+            "uid": "Proteasome()_metadata",
+            "provenance": {
+              "metadata_type": "Provenance",
+              "method": "from_emmaa_model",
+              "timestamp": "2021-08-18T19:49:23:678072_MST-0700"
+            },
+            "indra_agent_references": [
+              {
+                "name": "Proteasome",
+                "db_refs": {
+                  "FPLX": "Proteasome"
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "(('reactive_oxygen_species',), ('mitochondrion',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('reactive_oxygen_species',), ('mitochondrion',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "reactive_oxygen_species",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('water',), ('dioxygen',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('water',), ('dioxygen',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "water",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('biliverdin',), ('dioxygen',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('biliverdin',), ('dioxygen',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "biliverdin",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('carbon_monoxide',), ('dioxygen',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('carbon_monoxide',), ('dioxygen',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "carbon_monoxide",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NADP___',), ('dioxygen',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NADP___',), ('dioxygen',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NADP___",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('iron_2__',), ('dioxygen',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('iron_2__',), ('dioxygen',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "iron_2__",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NLRP3',), ('hyaluronic_acid',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NLRP3',), ('hyaluronic_acid',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NLRP3",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('SUGT1',), ('hyaluronic_acid',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('SUGT1',), ('hyaluronic_acid',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "SUGT1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NADPH',), ('water',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NADPH',), ('water',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NADPH",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('biliverdin',), ('NADPH',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('biliverdin',), ('NADPH',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "biliverdin",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('carbon_monoxide',), ('NADPH',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('carbon_monoxide',), ('NADPH',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "carbon_monoxide",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NADP___',), ('NADPH',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NADP___',), ('NADPH',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NADP___",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NADPH',), ('iron_2__',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NADPH',), ('iron_2__',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NADPH",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('heme',), ('water',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('heme',), ('water',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "heme",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('biliverdin',), ('heme',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('biliverdin',), ('heme',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "biliverdin",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('carbon_monoxide',), ('heme',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('carbon_monoxide',), ('heme',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "carbon_monoxide",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NADP___',), ('heme',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NADP___',), ('heme',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NADP___",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('heme',), ('iron_2__',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('heme',), ('iron_2__',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "heme",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('pattern_recognition_receptor_signaling_pathway',), ('NLRP3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('pattern_recognition_receptor_signaling_pathway',), ('NLRP3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "pattern_recognition_receptor_signaling_pathway",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('pattern_recognition_receptor_signaling_pathway',), ('SUGT1',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('pattern_recognition_receptor_signaling_pathway',), ('SUGT1',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "pattern_recognition_receptor_signaling_pathway",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('HMOX1',), ('water',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('HMOX1',), ('water',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "HMOX1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('HMOX1',), ('biliverdin',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('HMOX1',), ('biliverdin',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "HMOX1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('carbon_monoxide',), ('HMOX1',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('carbon_monoxide',), ('HMOX1',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "carbon_monoxide",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NADP___',), ('HMOX1',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NADP___',), ('HMOX1',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NADP___",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('HMOX1',), ('iron_2__',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('HMOX1',), ('iron_2__',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "HMOX1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('p3a',), ('TRAF3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('p3a',), ('TRAF3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "p3a",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('calcium_2__',), ('E',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('calcium_2__',), ('E',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "calcium_2__",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('Orf9b',), ('TRAF3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('Orf9b',), ('TRAF3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "Orf9b",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('reactive_oxygen_species',), ('TXN',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('reactive_oxygen_species',), ('TXN',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "reactive_oxygen_species",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('reactive_oxygen_species',), ('NLRP3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('reactive_oxygen_species',), ('NLRP3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "reactive_oxygen_species",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('reactive_oxygen_species',), ('SUGT1',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('reactive_oxygen_species',), ('SUGT1',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "reactive_oxygen_species",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('calcium_2__',), ('NLRP3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('calcium_2__',), ('NLRP3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "calcium_2__",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('calcium_2__',), ('SUGT1',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('calcium_2__',), ('SUGT1',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "calcium_2__",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NFKB1',), ('TRAF3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NFKB1',), ('TRAF3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NFKB1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('PYCARD',), ('NLRP3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('PYCARD',), ('NLRP3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "PYCARD",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('SUGT1',), ('NLRP3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('SUGT1',), ('NLRP3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "SUGT1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('reactive_oxygen_species',), ('carbon_monoxide',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('reactive_oxygen_species',), ('carbon_monoxide',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "reactive_oxygen_species",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('parthenolide',), ('NLRP3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('parthenolide',), ('NLRP3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "parthenolide",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NLRP3',), ('_E__3_tosylacrylonitrile',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NLRP3',), ('_E__3_tosylacrylonitrile',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NLRP3",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('TXN',), ('TXNIP',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('TXN',), ('TXNIP',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "TXN",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('PYCARD',), ('TRAF3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('PYCARD',), ('TRAF3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "PYCARD",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('CASP1',), ('PYCARD',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('CASP1',), ('PYCARD',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "CASP1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NFKB1',), ('IL18',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NFKB1',), ('IL18',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NFKB1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('NFKB1',), ('IL1B',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('NFKB1',), ('IL1B',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "NFKB1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('CASP1',), ('IL18',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('CASP1',), ('IL18',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "CASP1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('CASP1',), ('IL1B',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('CASP1',), ('IL1B',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "CASP1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('TXNIP',), ('NLRP3',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('TXNIP',), ('NLRP3',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "TXNIP",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('SUGT1',), ('TXNIP',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('SUGT1',), ('TXNIP',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "SUGT1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('CASP1',), ('Pralnacasan',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('CASP1',), ('Pralnacasan',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "CASP1",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('parthenolide',), ('CASP1',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('parthenolide',), ('CASP1',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "parthenolide",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    },
+    {
+      "id": "(('Proteasome',), ('IL18',))",
+      "concept": "Relation",
+      "role": null,
+      "label": "(('Proteasome',), ('IL18',))",
+      "nodeType": "Box",
+      "dataType": null,
+      "parent": "Proteasome",
+      "nodeSubType": [
+        "Relation"
+      ],
+      "metadata": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "0::2",
+      "target": "0::3"
+    },
+    {
+      "source": "0::5",
+      "target": "0::3"
+    },
+    {
+      "source": "0::3",
+      "target": "0::2"
+    },
+    {
+      "source": "0::3",
+      "target": "0::8"
+    },
+    {
+      "source": "0::10",
+      "target": "0::11"
+    },
+    {
+      "source": "0::13",
+      "target": "0::11"
+    },
+    {
+      "source": "0::11",
+      "target": "0::10"
+    },
+    {
+      "source": "0::11",
+      "target": "0::16"
+    },
+    {
+      "source": "0::10",
+      "target": "0::18"
+    },
+    {
+      "source": "0::20",
+      "target": "0::18"
+    },
+    {
+      "source": "0::18",
+      "target": "0::10"
+    },
+    {
+      "source": "0::18",
+      "target": "0::23"
+    },
+    {
+      "source": "0::10",
+      "target": "0::25"
+    },
+    {
+      "source": "0::27",
+      "target": "0::25"
+    },
+    {
+      "source": "0::25",
+      "target": "0::10"
+    },
+    {
+      "source": "0::25",
+      "target": "0::30"
+    },
+    {
+      "source": "0::10",
+      "target": "0::32"
+    },
+    {
+      "source": "0::34",
+      "target": "0::32"
+    },
+    {
+      "source": "0::32",
+      "target": "0::10"
+    },
+    {
+      "source": "0::32",
+      "target": "0::37"
+    },
+    {
+      "source": "0::10",
+      "target": "0::39"
+    },
+    {
+      "source": "0::41",
+      "target": "0::39"
+    },
+    {
+      "source": "0::39",
+      "target": "0::10"
+    },
+    {
+      "source": "0::39",
+      "target": "0::44"
+    },
+    {
+      "source": "0::46",
+      "target": "0::47"
+    },
+    {
+      "source": "0::49",
+      "target": "0::47"
+    },
+    {
+      "source": "0::47",
+      "target": "0::46"
+    },
+    {
+      "source": "0::47",
+      "target": "0::52"
+    },
+    {
+      "source": "0::46",
+      "target": "0::54"
+    },
+    {
+      "source": "0::56",
+      "target": "0::54"
+    },
+    {
+      "source": "0::54",
+      "target": "0::46"
+    },
+    {
+      "source": "0::54",
+      "target": "0::59"
+    },
+    {
+      "source": "0::13",
+      "target": "0::61"
+    },
+    {
+      "source": "0::63",
+      "target": "0::61"
+    },
+    {
+      "source": "0::61",
+      "target": "0::63"
+    },
+    {
+      "source": "0::61",
+      "target": "0::16"
+    },
+    {
+      "source": "0::20",
+      "target": "0::67"
+    },
+    {
+      "source": "0::63",
+      "target": "0::67"
+    },
+    {
+      "source": "0::67",
+      "target": "0::63"
+    },
+    {
+      "source": "0::67",
+      "target": "0::23"
+    },
+    {
+      "source": "0::27",
+      "target": "0::72"
+    },
+    {
+      "source": "0::63",
+      "target": "0::72"
+    },
+    {
+      "source": "0::72",
+      "target": "0::63"
+    },
+    {
+      "source": "0::72",
+      "target": "0::30"
+    },
+    {
+      "source": "0::34",
+      "target": "0::77"
+    },
+    {
+      "source": "0::63",
+      "target": "0::77"
+    },
+    {
+      "source": "0::77",
+      "target": "0::63"
+    },
+    {
+      "source": "0::77",
+      "target": "0::37"
+    },
+    {
+      "source": "0::41",
+      "target": "0::82"
+    },
+    {
+      "source": "0::63",
+      "target": "0::82"
+    },
+    {
+      "source": "0::82",
+      "target": "0::63"
+    },
+    {
+      "source": "0::82",
+      "target": "0::44"
+    },
+    {
+      "source": "0::13",
+      "target": "0::87"
+    },
+    {
+      "source": "0::89",
+      "target": "0::87"
+    },
+    {
+      "source": "0::87",
+      "target": "0::89"
+    },
+    {
+      "source": "0::87",
+      "target": "0::16"
+    },
+    {
+      "source": "0::20",
+      "target": "0::93"
+    },
+    {
+      "source": "0::89",
+      "target": "0::93"
+    },
+    {
+      "source": "0::93",
+      "target": "0::89"
+    },
+    {
+      "source": "0::93",
+      "target": "0::23"
+    },
+    {
+      "source": "0::27",
+      "target": "0::98"
+    },
+    {
+      "source": "0::89",
+      "target": "0::98"
+    },
+    {
+      "source": "0::98",
+      "target": "0::89"
+    },
+    {
+      "source": "0::98",
+      "target": "0::30"
+    },
+    {
+      "source": "0::34",
+      "target": "0::103"
+    },
+    {
+      "source": "0::89",
+      "target": "0::103"
+    },
+    {
+      "source": "0::103",
+      "target": "0::89"
+    },
+    {
+      "source": "0::103",
+      "target": "0::37"
+    },
+    {
+      "source": "0::41",
+      "target": "0::108"
+    },
+    {
+      "source": "0::89",
+      "target": "0::108"
+    },
+    {
+      "source": "0::108",
+      "target": "0::89"
+    },
+    {
+      "source": "0::108",
+      "target": "0::44"
+    },
+    {
+      "source": "0::49",
+      "target": "0::113"
+    },
+    {
+      "source": "0::115",
+      "target": "0::113"
+    },
+    {
+      "source": "0::113",
+      "target": "0::115"
+    },
+    {
+      "source": "0::113",
+      "target": "0::52"
+    },
+    {
+      "source": "0::56",
+      "target": "0::119"
+    },
+    {
+      "source": "0::115",
+      "target": "0::119"
+    },
+    {
+      "source": "0::119",
+      "target": "0::115"
+    },
+    {
+      "source": "0::119",
+      "target": "0::59"
+    },
+    {
+      "source": "0::13",
+      "target": "0::124"
+    },
+    {
+      "source": "0::126",
+      "target": "0::124"
+    },
+    {
+      "source": "0::124",
+      "target": "0::126"
+    },
+    {
+      "source": "0::124",
+      "target": "0::16"
+    },
+    {
+      "source": "0::20",
+      "target": "0::130"
+    },
+    {
+      "source": "0::126",
+      "target": "0::130"
+    },
+    {
+      "source": "0::130",
+      "target": "0::126"
+    },
+    {
+      "source": "0::130",
+      "target": "0::23"
+    },
+    {
+      "source": "0::27",
+      "target": "0::135"
+    },
+    {
+      "source": "0::126",
+      "target": "0::135"
+    },
+    {
+      "source": "0::135",
+      "target": "0::126"
+    },
+    {
+      "source": "0::135",
+      "target": "0::30"
+    },
+    {
+      "source": "0::34",
+      "target": "0::140"
+    },
+    {
+      "source": "0::126",
+      "target": "0::140"
+    },
+    {
+      "source": "0::140",
+      "target": "0::126"
+    },
+    {
+      "source": "0::140",
+      "target": "0::37"
+    },
+    {
+      "source": "0::41",
+      "target": "0::145"
+    },
+    {
+      "source": "0::126",
+      "target": "0::145"
+    },
+    {
+      "source": "0::145",
+      "target": "0::126"
+    },
+    {
+      "source": "0::145",
+      "target": "0::44"
+    },
+    {
+      "source": "0::150",
+      "target": "0::151"
+    },
+    {
+      "source": "0::153",
+      "target": "0::151"
+    },
+    {
+      "source": "0::151",
+      "target": "0::153"
+    },
+    {
+      "source": "0::151",
+      "target": "0::156"
+    },
+    {
+      "source": "0::158",
+      "target": "0::159"
+    },
+    {
+      "source": "0::161",
+      "target": "0::159"
+    },
+    {
+      "source": "0::159",
+      "target": "0::161"
+    },
+    {
+      "source": "0::159",
+      "target": "0::164"
+    },
+    {
+      "source": "0::150",
+      "target": "0::166"
+    },
+    {
+      "source": "0::168",
+      "target": "0::166"
+    },
+    {
+      "source": "0::166",
+      "target": "0::168"
+    },
+    {
+      "source": "0::171",
+      "target": "0::172"
+    },
+    {
+      "source": "0::8",
+      "target": "0::172"
+    },
+    {
+      "source": "0::172",
+      "target": "0::8"
+    },
+    {
+      "source": "0::172",
+      "target": "0::176"
+    },
+    {
+      "source": "0::49",
+      "target": "0::178"
+    },
+    {
+      "source": "0::8",
+      "target": "0::178"
+    },
+    {
+      "source": "0::178",
+      "target": "0::8"
+    },
+    {
+      "source": "0::178",
+      "target": "0::52"
+    },
+    {
+      "source": "0::56",
+      "target": "0::183"
+    },
+    {
+      "source": "0::8",
+      "target": "0::183"
+    },
+    {
+      "source": "0::183",
+      "target": "0::8"
+    },
+    {
+      "source": "0::183",
+      "target": "0::59"
+    },
+    {
+      "source": "0::49",
+      "target": "0::188"
+    },
+    {
+      "source": "0::164",
+      "target": "0::188"
+    },
+    {
+      "source": "0::188",
+      "target": "0::52"
+    },
+    {
+      "source": "0::188",
+      "target": "0::164"
+    },
+    {
+      "source": "0::56",
+      "target": "0::193"
+    },
+    {
+      "source": "0::164",
+      "target": "0::193"
+    },
+    {
+      "source": "0::193",
+      "target": "0::59"
+    },
+    {
+      "source": "0::193",
+      "target": "0::164"
+    },
+    {
+      "source": "0::198",
+      "target": "0::199"
+    },
+    {
+      "source": "0::156",
+      "target": "0::199"
+    },
+    {
+      "source": "0::199",
+      "target": "0::156"
+    },
+    {
+      "source": "0::199",
+      "target": "0::203"
+    },
+    {
+      "source": "0::205",
+      "target": "0::206"
+    },
+    {
+      "source": "0::52",
+      "target": "0::206"
+    },
+    {
+      "source": "0::206",
+      "target": "0::52"
+    },
+    {
+      "source": "0::206",
+      "target": "0::210"
+    },
+    {
+      "source": "0::49",
+      "target": "0::212"
+    },
+    {
+      "source": "0::59",
+      "target": "0::212"
+    },
+    {
+      "source": "0::212",
+      "target": "0::52"
+    },
+    {
+      "source": "0::212",
+      "target": "0::59"
+    },
+    {
+      "source": "0::168",
+      "target": "0::217"
+    },
+    {
+      "source": "0::156",
+      "target": "0::217"
+    },
+    {
+      "source": "0::217",
+      "target": "0::168"
+    },
+    {
+      "source": "0::8",
+      "target": "0::221"
+    },
+    {
+      "source": "0::30",
+      "target": "0::221"
+    },
+    {
+      "source": "0::221",
+      "target": "0::5"
+    },
+    {
+      "source": "0::221",
+      "target": "0::30"
+    },
+    {
+      "source": "0::226",
+      "target": "0::227"
+    },
+    {
+      "source": "0::52",
+      "target": "0::227"
+    },
+    {
+      "source": "0::227",
+      "target": "0::49"
+    },
+    {
+      "source": "0::227",
+      "target": "0::226"
+    },
+    {
+      "source": "0::232",
+      "target": "0::233"
+    },
+    {
+      "source": "0::52",
+      "target": "0::233"
+    },
+    {
+      "source": "0::233",
+      "target": "0::49"
+    },
+    {
+      "source": "0::233",
+      "target": "0::232"
+    },
+    {
+      "source": "0::238",
+      "target": "0::239"
+    },
+    {
+      "source": "0::176",
+      "target": "0::239"
+    },
+    {
+      "source": "0::239",
+      "target": "0::176"
+    },
+    {
+      "source": "0::239",
+      "target": "0::243"
+    },
+    {
+      "source": "0::150",
+      "target": "0::245"
+    },
+    {
+      "source": "0::210",
+      "target": "0::245"
+    },
+    {
+      "source": "0::245",
+      "target": "0::156"
+    },
+    {
+      "source": "0::245",
+      "target": "0::210"
+    },
+    {
+      "source": "0::250",
+      "target": "0::251"
+    },
+    {
+      "source": "0::210",
+      "target": "0::251"
+    },
+    {
+      "source": "0::251",
+      "target": "0::210"
+    },
+    {
+      "source": "0::251",
+      "target": "0::255"
+    },
+    {
+      "source": "0::257",
+      "target": "0::258"
+    },
+    {
+      "source": "0::203",
+      "target": "0::258"
+    },
+    {
+      "source": "0::258",
+      "target": "0::203"
+    },
+    {
+      "source": "0::258",
+      "target": "0::262"
+    },
+    {
+      "source": "0::264",
+      "target": "0::265"
+    },
+    {
+      "source": "0::203",
+      "target": "0::265"
+    },
+    {
+      "source": "0::265",
+      "target": "0::203"
+    },
+    {
+      "source": "0::265",
+      "target": "0::269"
+    },
+    {
+      "source": "0::257",
+      "target": "0::271"
+    },
+    {
+      "source": "0::255",
+      "target": "0::271"
+    },
+    {
+      "source": "0::271",
+      "target": "0::255"
+    },
+    {
+      "source": "0::271",
+      "target": "0::262"
+    },
+    {
+      "source": "0::264",
+      "target": "0::276"
+    },
+    {
+      "source": "0::255",
+      "target": "0::276"
+    },
+    {
+      "source": "0::276",
+      "target": "0::255"
+    },
+    {
+      "source": "0::276",
+      "target": "0::269"
+    },
+    {
+      "source": "0::49",
+      "target": "0::281"
+    },
+    {
+      "source": "0::243",
+      "target": "0::281"
+    },
+    {
+      "source": "0::281",
+      "target": "0::52"
+    },
+    {
+      "source": "0::281",
+      "target": "0::243"
+    },
+    {
+      "source": "0::56",
+      "target": "0::286"
+    },
+    {
+      "source": "0::243",
+      "target": "0::286"
+    },
+    {
+      "source": "0::286",
+      "target": "0::59"
+    },
+    {
+      "source": "0::286",
+      "target": "0::243"
+    },
+    {
+      "source": "0::291",
+      "target": "0::292"
+    },
+    {
+      "source": "0::255",
+      "target": "0::292"
+    },
+    {
+      "source": "0::292",
+      "target": "0::250"
+    },
+    {
+      "source": "0::292",
+      "target": "0::291"
+    },
+    {
+      "source": "0::226",
+      "target": "0::297"
+    },
+    {
+      "source": "0::255",
+      "target": "0::297"
+    },
+    {
+      "source": "0::297",
+      "target": "0::250"
+    },
+    {
+      "source": "0::297",
+      "target": "0::226"
+    },
+    {
+      "source": "0::302",
+      "target": "0::303"
+    },
+    {
+      "source": "0::262",
+      "target": "0::303"
+    },
+    {
+      "source": "0::303",
+      "target": "0::257"
+    },
+    {
+      "source": "0::303",
+      "target": "0::302"
+    }
+  ],
+  "metadata": [
+    {
+      "metadata_type": "ModelInterface",
+      "uid": "covid19_inflammasome_model_interface",
+      "provenance": {
+        "metadata_type": "Provenance",
+        "method": "from_emmaa_model",
+        "timestamp": "2021-08-18T19:49:23:683470_MST-0700"
+      },
+      "variables": null,
+      "parameters": null,
+      "initial_conditions": null
+    }
+  ]
+}
