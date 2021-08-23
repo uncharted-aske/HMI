@@ -163,15 +163,6 @@
       this.renderer.setData(data);
       await this.renderer.render();
 
-      // Collapse top-level boxes by default
-      // HACK: The collapse/expand functions are asynchronous and trying to execute them all at once
-      // seems to create problems with the tracker.
-      const collapsedIds = calcNodesToCollapse(this.layout, this.renderer.layout);
-      if (collapsedIds.length > 0) {
-        collapsedIds.forEach(nextId => this.renderer.collapse(nextId));
-        await this.renderer.render();
-      }
-
       this.dataDecorationChanged();
     }
   }
