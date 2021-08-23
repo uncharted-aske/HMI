@@ -69,8 +69,9 @@
         <div class="metadata-content"  v-for="(reference, index) in agentsReferences" :key="index">
            <details class="metadata" open>
             <summary>
+              <p v-if="reference.name">{{ reference.name }}</p>
               <a v-if="reference.url" :href="reference.url">
-              {{ reference.name }}
+              {{ formatUrl(reference.url) }}
               </a>
             </summary>
             <div v-if="reference.definition" class="metadata-content">
@@ -250,6 +251,13 @@
       });
 
       this.isLoading = false;
+    }
+
+    formatUrl (url: string): string {
+      if (url) {
+        const slicedUrl = url.split('/');
+        return slicedUrl[slicedUrl.length - 1];
+      }
     }
 
     excerpt (evidence: EMMAA.EmmaaEvidenceEvidenceInterface): string {
