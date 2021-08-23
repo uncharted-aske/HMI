@@ -65,6 +65,7 @@
     </section>
 
     <drilldown-panel
+      class="drilldown-panel-model"
       :active-tab-id="drilldownActiveTabId"
       :is-open="isOpenDrilldown"
       :pane-subtitle="drilldownPaneSubtitle"
@@ -82,7 +83,7 @@
       />
       <parameters-pane
         v-if="drilldownActiveTabId === 'parameters'"
-        slot="content" :data="drilldownParameters"
+        slot="content"
         :related="drilldownRelatedParameters"
         @open-modal="onOpenModalParameters"
       />
@@ -195,7 +196,6 @@
     drilldownMetadata: any = null;
     drilldownKnowledge: CosmosSearchInterface | Record<any, never> = {};
     drilldownRelatedParameters: any = null;
-    drilldownParameters: any = null;
 
     displaySearch: boolean = false;
     isSplitView = false;
@@ -402,7 +402,6 @@
       }
     }
 
-    // TODO - Does not seems to be used.
     async getRelatedParameters (keyword: string): Promise<void> {
       const response = await cosmosRelatedParameters({ word: keyword, model: 'trigram', n: 10 });
       this.drilldownRelatedParameters = response.data;
@@ -419,6 +418,7 @@
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownPaneTitle = node.label;
       this.getDrilldownKnowledge();
+      this.getRelatedParameters(node.label);
     }
 
     onBackgroundClick ():void {
@@ -492,5 +492,11 @@
   .search-bar .search-bar-container {
     margin-top: 0; /* To have an uniform spacing between the header and the search bar */
     margin-bottom: 10px; /* To match the header vertical spacing */
+  }
+
+  .drilldown-panel-container.drilldown-panel-model {
+    max-width: 25vw;
+    min-width: 500px;
+    width: 500px;
   }
 </style>

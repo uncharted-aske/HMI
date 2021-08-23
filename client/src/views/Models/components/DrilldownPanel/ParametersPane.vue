@@ -1,48 +1,106 @@
 <template>
-  <div v-if="!isEmptyData" class="h-100 d-flex flex-column parameters-pane-container">
-    <div class="parameter-title">{{title | capitalize-first-letter-formatter}}</div>
-    <scatter-plot :data="data" :size="[400, 500]" @dot-click="onDotClick"/>
-    <div class="parameter-title">Related Parameters</div>
-    <div class="position-relative flex-grow-1">
-      <div class="position-absolute h-100 w-100 related-params hide-scrollbar">
-        <div class="mb-1 px-2 py-2 d-flex rounded-lg border" v-for="(param, index) in related" :key="index">
-          <div class="flex-grow-1">
-            <h6>{{ param[0] | underscore-remover-formatter | capitalize-first-letter-formatter }}</h6>
-            <div>{{ param[1] }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <message-display v-else class="m-3">No metadata at the moment.</message-display>
+  <section class="parameters-pane-container">
+    <aside class="dropdown">
+      <button
+        type="button"
+        class="btn btn-primary dropdown-toggle"
+        @click="toggleVariableDropdown"
+      >
+        {{ selectedVariable }}
+      </button>
+      <ul
+        class="dropdown-menu"
+        :class="{ show: isVariableDropdownOpen }"
+      >
+        <li
+          v-for="(variable, index) in getVariables" :key="index"
+          class="dropdown-item"
+          @click="setSelectedVariable(variable)"
+        >
+          {{ variable }}
+        </li>
+      </ul>
+    </aside>
+    <message-display v-if="noSelectedData">
+      No data to display.
+    </message-display>
+    <scatter-plot v-else :data="selectedData" @dot-click="onDotClick" />
+
+    <h6>Related Parameters</h6>
+    <message-display v-if="noRelatedParameter">
+      No <strong>Related Parameters</strong> at the moment.
+    </message-display>
+    <ul v-else class="related-parameters">
+      <li v-for="(param, index) in related" :key="index">
+        <strong>{{ param[0] | underscore-remover-formatter | capitalize-first-letter-formatter }}</strong>
+        {{ param[1] }}
+      </li>
+    </ul>
+  </section>
 </template>
 
 <script lang="ts">
-  import _ from 'lodash';
-
-  import Component from 'vue-class-component';
   import Vue from 'vue';
+  import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
 
-  import ScatterPlot from '@/components/widgets/charts/ScatterPlot.vue';
+  import * as HMI from '@/types/types';
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
+  import ScatterPlot from '@/components/widgets/charts/ScatterPlot.vue';
+
+  // Source: http://teststrata.geology.wisc.edu/xdd/extract.php?doc_set=xdd-covid-19
+  import * as PARAMETERS_EXTRACT from '@/static/parameters_extract.json';
 
   const components = {
-    ScatterPlot,
     MessageDisplay,
+    ScatterPlot,
   };
 
   @Component({ components })
   export default class ParametersPane extends Vue {
-    @Prop({ default: null }) data: any;
-    @Prop({ default: null }) related: any;
+    @Prop({ default: null }) related: [string, number][];
 
-    get isEmptyData (): boolean {
-      return _.isEmpty(this.data);
+    data = PARAMETERS_EXTRACT.data;
+    isVariableDropdownOpen: boolean = false;
+    selectedVariable: string = null;
+
+    mounted (): void {
+      this.selectedVariable = 'Ro';
     }
 
-    get title (): string {
-      return !_.isEmpty(this.data) && this.data[0].variable;
+    get getVariables (): string[] {
+      return Array.from(new Set(this.data.map(info => info.variable))).sort();
+    }
+
+    get selectedData (): HMI.ExtractDataParameter {
+      return this.data
+        .filter(info => info.variable === this.selectedVariable)
+        .map(info => {
+          return {
+            date: info.date + ' - ' + info.year,
+            doi: info.doi,
+            location: info.location,
+            object_id: info.object_id,
+            value: info.value,
+          };
+        });
+    }
+
+    get noSelectedData (): boolean {
+      return !this.selectedData || this.selectedData.length < 1;
+    }
+
+    get noRelatedParameter (): boolean {
+      return !this.related || this.related.length === 0;
+    }
+
+    toggleVariableDropdown (): void {
+      this.isVariableDropdownOpen = !this.isVariableDropdownOpen;
+    }
+
+    setSelectedVariable (variable: string): void {
+      this.selectedVariable = variable;
+      this.isVariableDropdownOpen = false;
     }
 
     onDotClick (doi:string): void {
@@ -53,14 +111,37 @@
 
 <style scoped>
   .parameters-pane-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     padding: 5px;
   }
 
-  .parameter-title {
+  .dropdown-toggle {
+    white-space: initial;
+    width: 100%;
+  }
+
+  h6 {
     font-weight: bold;
   }
 
-  .related-params {
-    overflow: hidden scroll;
+  .related-parameters {
+    list-style: none;
+    margin: 0;
+    overflow-y: scroll;
+    padding: 0;
+    width: 100%;
+  }
+
+  .related-parameters li {
+    border: var(--border);
+    border-radius: .3em;
+    margin-bottom: .25em;
+    padding: .5em;
+  }
+
+  .related-parameters strong {
+    display: block;
   }
 </style>
