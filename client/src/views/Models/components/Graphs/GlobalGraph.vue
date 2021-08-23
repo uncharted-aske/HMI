@@ -17,7 +17,7 @@
   import DagreAdapter from '@/graphs/svg/dagre/adapter';
   import ELKAdapter from '@/graphs/svg/elk/adapter';
   import { /** showTooltip, hideTooltip */ hierarchyFn } from '@/utils/SVGUtil.js'; // TODO: Put tooltips back when we fix the positioning issue
-  import { calculateNodeNeighborhood, constructRootNode, calcNodesToCollapse } from '@/graphs/svg/util.js';
+  import { calculateNodeNeighborhood, constructRootNode } from '@/graphs/svg/util.js';
 
   const DEFAULT_RENDERING_OPTIONS = {
     nodeWidth: 120,
