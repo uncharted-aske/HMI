@@ -69,7 +69,6 @@
     }
 
     get getVariables (): string[] {
-      console.log(Array.from(new Set(this.data.map(info => info.variable))).sort());
       return Array.from(new Set(this.data.map(info => info.variable))).sort();
     }
 
