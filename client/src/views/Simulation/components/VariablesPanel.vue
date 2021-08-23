@@ -37,7 +37,7 @@
             :polygon="plot.polygon"
             :key="'plot' + index"
             :styles="plot.styles"
-            :title="plot.metadata.name"
+            :title="generatePlotName(plot)"
           >
             <aside class="btn-group">
               <button
@@ -85,6 +85,7 @@
   import { Colors } from '@/graphs/svg/encodings';
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
   import { listDatasetsResult } from '@/services/DonuService';
+  import { scientificNotation } from '@/utils/NumberUtil';
 
   const DEFAULT_STYLE = {
     node: {
@@ -237,8 +238,22 @@
 
     get countersTitle (): string {
       const count = this.displayedVariables.length;
-      // const model = this.getSimModel(this.modelId);
-      return `${count > 0 ? count : '—'} Variable${count > 1 ? 's' : ''}`;
+      const model = this.getSimModel(this.modelId);
+      return (`${count > 0 ? count : '—'} Variable${count > 1 ? 's' : ''}`) +
+        (
+          model.aggregateError
+            ? ` | Error = ${scientificNotation(model.aggregateError, true)}`
+            : ''
+        );
+    }
+
+    generatePlotName (plot: HMI.SimulationVariable): string {
+      return plot.metadata.name +
+        (
+          typeof plot.currentRunError === 'number'
+            ? ` | Error = ${scientificNotation(plot.currentRunError, true)}`
+            : ''
+        );
     }
 
     get countersData (): HMI.Counter[] {

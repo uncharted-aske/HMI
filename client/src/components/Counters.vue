@@ -1,6 +1,6 @@
 <template>
   <div class="counters-container">
-    <span class="title" v-if="title">{{ title }}</span>
+    <span class="title" v-if="title" v-html="title"></span>
     <span
       v-for="(counter, index) in data" :key="index"
       :class="{ 'highlighted': data.highlighted }">
