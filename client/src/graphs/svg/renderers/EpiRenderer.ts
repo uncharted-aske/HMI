@@ -35,8 +35,8 @@ export const DEFAULT_STYLE = {
 
 export const DEFAULT_RENDERING_OPTIONS = {
   nodeHeight: 40,
-  nodeWidth: 120,
-  padding: 5,
+  nodeWidth: 155,
+  padding: 10,
   parameterNodeSize: 30,
 };
 
@@ -186,6 +186,7 @@ export default class EpiRenderer extends SVGRenderer {
         .style('fill', d => calcLabelColor(d))
         .style('font-weight', d => (d as any).nodes ? 'bold' : 'normal')
         .style('text-anchor', d => (d as any).nodes ? 'left' : 'middle')
+        .style('font-size', d => (d as any).nodes ? '14px' : '12px')
         .text(d => (d as any).data.label);
 
       // Special case for node parameters labels
