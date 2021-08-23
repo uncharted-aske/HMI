@@ -44,9 +44,10 @@
             highlighted: parameter.metadata.name === highlighted,
             'domain_parameter': isDomainParameter(parameter),
           }"
-          :title="parameter.metadata.name"
+          :title="parameter.metadata.Description"
         >
-          <h4>{{ parameter.metadata.name }}</h4>
+          <h4
+          >{{ parameter.metadata.name }}</h4>
           <input
             type="text"
             v-model.number="parameterValues[parameter.uid]"
