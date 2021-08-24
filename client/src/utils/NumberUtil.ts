@@ -17,6 +17,14 @@ export const scientificNotation = (value: number, asHTML: boolean = false): stri
 };
 
 /**
+ * Format number using plain number formatting
+ * (i.e. 1000.123456 -> 1,000.123)
+ */
+export const standardNb = (value: number): string => {
+  return new Intl.NumberFormat('en', { notation: 'standard' }).format(value);
+};
+
+/**
  * Shorten a number using English short form.
  * (i.e. 100000 -> 100K)
  */
