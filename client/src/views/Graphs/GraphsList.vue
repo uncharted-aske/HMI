@@ -52,18 +52,18 @@
   import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
-  import LeukemiaScreenshot from '@/assets/img/leukemia.png';
-  import COVID19Screenshot from '@/assets/img/covid_19.png';
-  import BreastCancerScreenshot from '@/assets/img/breast_cancer.png';
-  import LungCancerScreenshot from '@/assets/img/lung_adenocarcinoma.png';
-  import MelanomaScreenshot from '@/assets/img/melanoma.png';
-  import MultipleSclerosisScreenshot from '@/assets/img/multiple_sclerosis.png';
-  import NeurofibromatosisScreenshot from '@/assets/img/neurofibromatosis.png';
-  import PainMachineScreenshot from '@/assets/img/pain_machine.png';
-  import PancreaticAdenocarcinomaScreenshot from '@/assets/img/pancreatic_adenocarcinoma.png';
-  import ProstateAdenocarcinomaScreenshot from '@/assets/img/prostate_adenocarcinoma.png';
-  import RasMachineScreenshot from '@/assets/img/ras_machine.png';
-  import VitiligoScreenshot from '@/assets/img/vitiligo.png';
+  import LeukemiaScreenshot from '@/assets/img/graphs/leukemia.png';
+  import COVID19Screenshot from '@/assets/img/graphs/covid_19.png';
+  import BreastCancerScreenshot from '@/assets/img/graphs/breast_cancer.png';
+  import LungCancerScreenshot from '@/assets/img/graphs/lung_adenocarcinoma.png';
+  import MelanomaScreenshot from '@/assets/img/graphs/melanoma.png';
+  import MultipleSclerosisScreenshot from '@/assets/img/graphs/multiple_sclerosis.png';
+  import NeurofibromatosisScreenshot from '@/assets/img/graphs/neurofibromatosis.png';
+  import PainMachineScreenshot from '@/assets/img/graphs/pain_machine.png';
+  import PancreaticAdenocarcinomaScreenshot from '@/assets/img/graphs/pancreatic_adenocarcinoma.png';
+  import ProstateAdenocarcinomaScreenshot from '@/assets/img/graphs/prostate_adenocarcinoma.png';
+  import RasMachineScreenshot from '@/assets/img/graphs/ras_machine.png';
+  import VitiligoScreenshot from '@/assets/img/graphs/vitiligo.png';
   import PlaceholderScreenshot from '@/assets/img/placeholder_image.png';
 
   const TABS: TabInterface[] = [
@@ -113,6 +113,7 @@
         LeukemiaScreenshot,
         BreastCancerScreenshot,
         COVID19Screenshot,
+        PlaceholderScreenshot,
         PlaceholderScreenshot,
         PlaceholderScreenshot,
         LungCancerScreenshot,
