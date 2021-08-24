@@ -50,7 +50,7 @@ export abstract class ProvenanceData {
         { source: 'Edit 2', target: 'Param:v2' },
         { source: 'Param:v2', target: 'Execute 2' },
         { source: 'Execute 2', target: 'Variables:v2' },
-        { source: 'Model', target: 'Execute 2' },      
+        { source: 'Model', target: 'Execute 2' },
       ],
     });
 
