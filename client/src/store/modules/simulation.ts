@@ -304,6 +304,9 @@ const mutations: MutationTree<HMI.SimulationState> = {
     for (const variable of model.variables) {
       const observedId = variable.observedId;
       if (observedId) {
+        const currentRunVariableValues = variable.values[variable.values.length - 1];
+        const currentRunVariableValuesLen = currentRunVariableValues.length;
+
         const result = await getDatasetResult(observedId);
         // TODO: Donu should indicate to us which column is time based and which should be used as a value
         // Currently some datasets may contain multiple value columns, here we find the first one
@@ -312,7 +315,7 @@ const mutations: MutationTree<HMI.SimulationState> = {
 
         // Format observed data for chart consumption
         const observed = [];
-        for (let i = 0; i < observedTimes.values.length; i++) {
+        for (let i = 0; i < Math.min(observedTimes.values.length, currentRunVariableValuesLen); i++) {
           observed.push({
             x: observedTimes.values[i],
             y: observedValues.values[i],
@@ -322,12 +325,12 @@ const mutations: MutationTree<HMI.SimulationState> = {
         measures.push({
           uid: variable.uid,
           observed: {
-            times: observedTimes.values,
-            values: observedValues.values,
+            times: observedTimes.values.slice(0, currentRunVariableValuesLen),
+            values: observedValues.values.slice(0, currentRunVariableValuesLen),
           },
           predicted: {
-            times: variable.values[variable.values.length - 1].map(d => d.x),
-            values: variable.values[variable.values.length - 1].map(d => d.y),
+            times: currentRunVariableValues.map(d => d.x),
+            values: currentRunVariableValues.map(d => d.y),
           },
         });
       }
@@ -346,9 +349,6 @@ const mutations: MutationTree<HMI.SimulationState> = {
     // Force reactive update
     state.models = [...state.models];
   },
-  // 1. Get list of datasets from Donu -store in memory
-  // 2. User clicks a dataset
-  // 3. Retrieve dataset values from Donu
 
   setVariablesAggregate (state: HMI.SimulationState, args: {
     aggregator: Function, /* eslint-disable-line @typescript-eslint/ban-types */
