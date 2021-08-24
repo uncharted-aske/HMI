@@ -107,7 +107,7 @@
     'J:V': 'J:V_init',
     'J:S': 'J:S_init',
     'J:vax': 'J:vax_rate',
-  }
+  };
 
   const SIMPLE_SIR_UID_MAP = {
     'J:beta': 'J:beta_rate',
@@ -115,7 +115,7 @@
     'J:S': 'J:S_init',
     'J:I': 'J:I_init',
     'J:R': 'J:R_init',
-  }
+  };
 
   @Component({ components })
   export default class ParametersPanel extends Vue {
