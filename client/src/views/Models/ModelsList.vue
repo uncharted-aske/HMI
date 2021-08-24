@@ -66,15 +66,16 @@
   import CardContainer from '@/components/Cards/CardContainer.vue';
 
   // Screenshots
-  import ChimeScreenshot from '@/assets/img/CHIME_SIR.png';
-  import ChimePlusScreenshot from '@/assets/img/SimpleChime+.png';
-  import SIRScreenshot from '@/assets/img/SimpleSIR.png';
-  import SEIRScreenshot from '@/assets/img/SimpleSEIR.png';
-  import SEIRDScreenshot from '@/assets/img/SimpleSEIRD.png';
-  import SIRDScreenshot from '@/assets/img/SimpleSIRD.png';
-  import SpatialSIRDScreenshot from '@/assets/img/SimpleSpatialSIRD.png';
-  import MarmScreenshot from '@/assets/img/marm_model.png';
-  import Covid19Screenshot from '@/assets/img/covid19_inflammasome.png';
+  import ChimeScreenshot from '@/assets/img/models/CHIME_SIR.png';
+  import ChimeSIRBaseScreenshot from '@/assets/img/models/CHIME_SIR_Base.png';
+  import ChimePlusScreenshot from '@/assets/img/models/SimpleChime+.png';
+  import SIRScreenshot from '@/assets/img/models/SimpleSIR.png';
+  import SEIRScreenshot from '@/assets/img/models/SimpleSEIR.png';
+  import SEIRDScreenshot from '@/assets/img/models/SimpleSEIRD.png';
+  import SIRDScreenshot from '@/assets/img/models/SimpleSIRD.png';
+  import SpatialSIRDScreenshot from '@/assets/img/models/SimpleSpatialSIRD.png';
+  import MarmScreenshot from '@/assets/img/models/marm_model.png';
+  import Covid19Screenshot from '@/assets/img/models/covid19_inflammasome.png';
   import PlaceholderScreenshot from '@/assets/img/placeholder_image.png';
 
   const TABS: TabInterface[] = [
@@ -185,6 +186,8 @@
           return Covid19Screenshot;
         } else if (model.name === 'CHIME_SIR') {
           return ChimeScreenshot;
+        } else if (model.name === 'CHIME_SIR_Base') {
+          return ChimeSIRBaseScreenshot;
         } else if (model.name === 'SimpleChime+') {
           return ChimePlusScreenshot;
         } else return PlaceholderScreenshot;
