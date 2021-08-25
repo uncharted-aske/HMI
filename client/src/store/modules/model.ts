@@ -62,6 +62,14 @@ const getters: GetterTree<Model.State, any> = {
     }
     return { nodes: [...nodes].map(node => ({ id: node })), edges: [] };
   },
+  getSelectedNodesData: (state, getters) => {
+    const modelGraphType = getters.getSelectedModelGraphType;
+    return state.selectedNodes.map((selectedNode: Model.SelectedNode) => {
+      return state.modelsList
+        .find(model => model.id === selectedNode.model)?.modelGraph
+        .find(model => model.type === modelGraphType);
+    });
+  },
   getSelectedNodes: (state, getters) => (modelId: number): Graphs.SubgraphInterface => {
     const modelGraphType = getters.getSelectedModelGraphType;
     const selectedModel = state.modelsList.find(model => model.id === modelId).name + modelGraphType;

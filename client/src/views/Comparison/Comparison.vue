@@ -1,67 +1,108 @@
 <template>
   <div class="view-container">
-    <header>
-      <button
-        class="btn btn-primary"
-        :class="{ 'active': displaySearch }"
-        @click="displaySearch = !displaySearch"
-      >
-        <font-awesome-icon :icon="['fas', 'search' ]" />
-        Search
-      </button>
-      <settings
-        :layouts="layouts"
-        :selected-layout-id="getModelsLayout"
-        :selected-view-id="getSelectedModelGraphType"
-        :views="graphTypesAvailable"
-        @layout-change="setModelsLayout"
-        @view-change="setSelectedModelGraphType"
-      />
-      <button
-        class="btn-sim btn btn-primary"
-        @click="onOpenSimView"
-      >
-        <font-awesome-icon :icon="['fas', 'chart-line' ]" />
-        Open Simulation
-      </button>
-    </header>
-
-    <aside class="search-bar" :class="{ 'active': displaySearch }">
-      <search-bar />
-    </aside>
-
     <loader v-if="selectedModels.length < 1" loading="true" />
-    <resizable-grid v-else :map="gridMap" :dimensions="gridDimensions">
-      <template v-for="(model, index) in selectedModels">
-        <model-panel
-          class="comparison-panel"
-          :key="index"
-          :model="model"
-          :slot="('model_' + model.id)"
+    <section v-else>
+      <header>
+        <button
+          class="btn btn-primary"
+          :class="{ 'active': displaySearch }"
+          @click="displaySearch = !displaySearch"
+        >
+          <font-awesome-icon :icon="['fas', 'search' ]" />
+          Search
+        </button>
+        <settings
+          :layouts="layouts"
+          :selected-layout-id="getModelsLayout"
+          :selected-view-id="getSelectedModelGraphType"
+          :views="graphTypesAvailable"
+          @layout-change="setModelsLayout"
+          @view-change="setSelectedModelGraphType"
         />
-      </template>
-    </resizable-grid>
+        <button
+          class="btn-sim btn btn-primary"
+          @click="onOpenSimView"
+        >
+          <font-awesome-icon :icon="['fas', 'chart-line' ]" />
+          Open Simulation
+        </button>
+      </header>
+
+      <aside class="search-bar" :class="{ 'active': displaySearch }">
+        <search-bar />
+      </aside>
+
+      <resizable-grid :map="gridMap" :dimensions="gridDimensions">
+        <template v-for="(model, index) in selectedModels">
+          <model-panel
+            class="comparison-panel"
+            :key="index"
+            :model="model"
+            :slot="('model_' + model.id)"
+            @node-click="onNodeClick"
+          />
+        </template>
+      </resizable-grid>
+    </section>
+
+    <drilldown-panel
+      class="drilldown-panel-model"
+      :active-tab-id="drilldownActiveTabId"
+      :is-open="drilldownActiveTabId"
+      :pane-subtitle="drilldownPaneSubtitle"
+      :pane-title="drilldownPaneTitle"
+      :tabs="drilldownTabs"
+      @close-pane="drilldownActiveTabId = ''"
+      @tab-click="tabId => drilldownActiveTabId = tabId"
+    >
+      <metadata-pane
+        v-if="drilldownActiveTabId === 'metadata'"
+        slot="content"
+        :metadata="drilldownMetadata"
+        :model-name="selectedModel.name"
+      />
+      <parameters-pane
+        v-if="drilldownActiveTabId === 'parameters'"
+        slot="content"
+        :related="drilldownRelatedParameters"
+      />
+      <knowledge-pane
+        v-if="drilldownActiveTabId === 'knowledge'"
+        slot="content"
+        :data="drilldownKnowledge"
+      />
+    </drilldown-panel>
   </div>
 </template>
 
 <script lang="ts">
+  import { merge } from 'lodash';
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import { Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation } from 'vuex-class';
   import { RawLocation } from 'vue-router';
 
+  import * as HMI from '@/types/types';
+  import * as GroMEt from '@/types/typesGroMEt';
   import * as Graph from '@/types/typesGraphs';
   import * as Model from '@/types/typesModel';
   import * as RGrid from '@/types/typesResizableGrid';
+  import * as Cosmos from '@/types/typesCosmos';
 
   import Counters from '@/components/Counters.vue';
   import Loader from '@/components/widgets/Loader.vue';
   import ResizableGrid from '@/components/ResizableGrid/ResizableGrid.vue';
   import SearchBar from '@/components/SearchBar.vue';
   import Settings from '@/views/Models/components/Settings.vue';
-
   import ModelPanel from '@/views/Simulation/components/ModelPanel.vue';
+  import DrilldownPanel from '@/components/DrilldownPanel.vue';
+  import MetadataPane from '@/views/Models/components/DrilldownPanel/MetadataPane.vue';
+  import KnowledgePane from '@/views/Models/components/DrilldownPanel/KnowledgePane.vue';
+  import ParametersPane from '@/views/Models/components/DrilldownPanel/ParametersPane.vue';
+
+  import { cosmosRelatedParameters, cosmosSearch } from '@/services/CosmosFetchService';
+  import { filterToParamObj } from '@/utils/CosmosDataUtil';
 
   const components = {
     Counters,
@@ -70,13 +111,22 @@
     ResizableGrid,
     SearchBar,
     Settings,
+    DrilldownPanel,
+    MetadataPane,
+    KnowledgePane,
+    ParametersPane,
   };
 
   @Component({ components })
   export default class Comparison extends Vue {
     displaySearch: boolean = false;
-    highlighted: string = '';
     selectedModelForComparison: string = '';
+    drilldownActiveTabId: string = '';
+    drilldownPaneTitle = '';
+    drilldownPaneSubtitle = '';
+    drilldownMetadata: any = null;
+    drilldownKnowledge: Cosmos.CosmosSearchInterface | Record<any, never> = {};
+    drilldownRelatedParameters: any = null;
 
     layouts: Graph.GraphLayoutInterface[] = Graph.LAYOUTS;
 
@@ -87,6 +137,7 @@
     @Getter getModelsLayout;
     @Getter getModelsList;
     @Getter getSelectedModelIds;
+    @Getter getSelectedNodesData;
 
     @Mutation setModelsLayout;
     @Mutation setSelectedModelGraphType;
@@ -99,6 +150,76 @@
 
     mounted (): void {
       this.initializeSim();
+    }
+
+    onNodeClick (node: Graph.GraphNodeInterface): void {
+      if (node) {
+        // Select which tab should be open first, then open the drilldown.
+        this.drilldownActiveTabId = 'metadata';
+
+        // Merge node metadata with Variables metadata. c.f. Graph.GraphNodeInterface type
+        this.drilldownMetadata = node?.metadata ? node.metadata.flat() : null;
+
+        this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
+        this.drilldownPaneTitle = node.label;
+        this.getDrilldownKnowledge();
+        this.getRelatedParameters(node.label);
+      } else {
+        this.drilldownActiveTabId = '';
+      }
+    }
+
+    async getRelatedParameters (keyword: string): Promise<void> {
+      const response = await cosmosRelatedParameters({ word: keyword, model: 'trigram', n: 10 });
+      this.drilldownRelatedParameters = response.data;
+    }
+
+    get drilldownTabs (): HMI.TabInterface[] {
+      return [
+        { name: 'Metadata', icon: '', id: 'metadata' },
+        { name: 'Parameters', icon: '', id: 'parameters' },
+        { name: 'Knowledge', icon: '', id: 'knowledge' },
+      ];
+    }
+
+    get selectedModel (): any {
+      return this.getSelectedNodesData[0] ?? {};
+    }
+
+    get selectedGraphMetadata (): Model.GraphMetadata[] {
+      return this.selectedModel?.metadata ?? null;
+    }
+
+    get selectedGraph (): Graph.GraphInterface {
+      return this.selectedModel?.graph ?? null;
+    }
+
+    async getDrilldownKnowledge (): Promise<void> {
+      if (this.selectedGraphMetadata?.constructor === Array) {
+        const codeCollection = this.selectedGraphMetadata.find(metadata => {
+          return metadata.metadata_type === GroMEt.MetadataType.CodeCollectionReference;
+        }) as GroMEt.CodeCollectionInterface;
+
+        if (codeCollection?.global_reference_id?.id) {
+          this.drilldownKnowledge = merge(this.drilldownKnowledge, await cosmosSearch(filterToParamObj({
+            cosmosAskeId: codeCollection.global_reference_id.id,
+          })));
+        }
+
+        const textualDocumentReference = this.selectedGraphMetadata.find(metadata => {
+          return metadata.metadata_type === GroMEt.MetadataType.TextualDocumentReferenceSet;
+        }) as GroMEt.TextualDocumentReferenceSet;
+
+        if (textualDocumentReference?.documents?.length) {
+          this.drilldownKnowledge = merge(this.drilldownKnowledge, await cosmosSearch(filterToParamObj({
+            cosmosAskeId: textualDocumentReference.documents[0].global_reference_id.id,
+          })));
+        }
+
+        if (this.drilldownKnowledge.objects) {
+          delete this.drilldownKnowledge.error;
+        }
+      }
     }
 
     get selectedModels (): Model.Model[] {
@@ -179,9 +300,11 @@
 </script>
 
 <style scoped>
-  .view-container {
+  .view-container section {
+    display: flex;
     flex-direction: column;
     flex-grow: 1;
+    position: relative;
   }
 
   header {
