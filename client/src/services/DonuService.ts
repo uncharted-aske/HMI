@@ -376,6 +376,7 @@ export const getDatasetResult = async (model: string): Promise<Donu.GetDatasetRe
 //     }
 //   ]
 // }
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const fitMeasures = async (data: any, parameters: string[], source: string, type: Donu.Type): Promise<Donu.FitMeasuresResponse> => {
   const request: Donu.Request = {
     command: Donu.RequestCommand.FIT_MEASURES,
