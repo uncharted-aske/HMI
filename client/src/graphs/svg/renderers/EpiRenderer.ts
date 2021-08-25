@@ -281,11 +281,13 @@ export default class EpiRenderer extends SVGRenderer {
     }
   }
 
-  markNonOverlappingElements (subgraph: SubgraphInterface): void {
+  //HACK: This function actually does the opposite, it marks nodes that are actually different between models. 
+  //Since there are upstream consequences to focus on non-overlapping elements we will keep it this way for now.
+  markOverlappingElements (subgraph: SubgraphInterface): void {
     const chart = (this as any).chart;
     chart?.selectAll('.node-ui').each(function (d) {
-      const isNotOverlapping = subgraph.nodes.some(node => node.id !== d.data.grometID);
-      if (isNotOverlapping && !d.nodes) {
+      const isOverlapping = subgraph.nodes.some(node => node.id === d.data.grometID);
+      if (!isOverlapping && !d.nodes) {
         d3.select(this)
           .select('rect, ellipse')
           .style('fill', Colors.NONOVERLAPPING);
