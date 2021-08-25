@@ -48,7 +48,7 @@
           :key="index"
           :class="{
             error: nonValidValue(parameterValues[parameter.uid]),
-            highlighted: parameter.metadata.name === highlighted,
+            highlighted: isHighlighted(parameter.uid),
             'domain_parameter': isDomainParameter(parameter),
           }"
           :title="parameter.metadata.Description"
@@ -104,12 +104,36 @@
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
-  import { fitMeasures } from '@/services/DonuService';
+  // import { fitMeasures } from '@/services/DonuService';
 
   const components = {
     Counters,
     SettingsBar,
     MessageDisplay,
+  };
+
+  const SIMPLECHIME_UID_MAP = {
+    'J:I_U': 'J:I_U_init',
+    'J:I_V': 'J:I_V_init',
+    'J:gamma': 'J:rec_u_rate',
+    'J:inf_uu': 'J:inf_uu_rate',
+    'J:inf_vv': 'J:inf_vv_rate',
+    'J:inf_vu': 'J:inf_vu_rate',
+    'J:inf_uv': 'J:inf_uv_rate',
+    'J:R': 'J:R_init',
+    'J:rec_u': 'J:rec_u_rate',
+    'J:rec_v': 'J:rec_v_rate',
+    'J:V': 'J:V_init',
+    'J:S': 'J:S_init',
+    'J:vax': 'J:vax_rate',
+  };
+
+  const SIMPLE_SIR_UID_MAP = {
+    'J:beta': 'J:beta_rate',
+    'J:gamma': 'J:gamma_rate',
+    'J:S': 'J:S_init',
+    'J:I': 'J:I_init',
+    'J:R': 'J:R_init',
   };
 
   @Component({ components })
@@ -118,11 +142,13 @@
     @Prop({ default: null }) modelId: number;
     @Prop({ default: null }) model: Model.Model;
     @Prop({ default: null }) highlighted: string;
+
     @InjectReactive() resized!: boolean;
     @InjectReactive() isResizing!: boolean;
 
     @Getter getSimModel;
     @Getter getSimParameterArray;
+    @Getter getSelectedNodes;
     @Action setSimParameterValue;
     @Action hideParameter;
 
@@ -292,6 +318,16 @@
       if (displayed < total) {
         return [{ name: 'total', value: total }];
       }
+    }
+
+    isHighlighted (uid: string): boolean {
+      return this.getSelectedNodes(this.modelId).nodes.some(node => {
+        if (this.modelId === 0) {
+          return SIMPLECHIME_UID_MAP[node.id] === uid;
+        } else if (this.modelId === 8) {
+          return SIMPLE_SIR_UID_MAP[node.id] === uid;
+        }
+      });
     }
 
     graphHeight (): number {
