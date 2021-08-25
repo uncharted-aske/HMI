@@ -39,7 +39,7 @@
     </message-display>
     <global-graph
       v-else
-      :data="getGraph"
+      :data="calculateGraph"
       :displayed-nodes="displayedNodes"
       :overlapping-elements="getSharedNodes(model.id)"
       :highlight="getSelectedNodes(model.id)"
@@ -169,7 +169,7 @@
       return selectedModelGraph?.graph ?? null;
     }
 
-    get getGraph(): Graph.GraphInterface {
+    get calculateGraph(): Graph.GraphInterface {
       return this.neighborhoodGraph ?? this.graph;
     }
 

@@ -149,6 +149,7 @@
     async refresh (): Promise<void> {
       if (!this.data) return;
       let data = _.cloneDeep(this.data);
+      console.log(data);
 
       // Layout selection
       if (this.layout === GraphLayoutInterfaceType.elk) {
@@ -164,7 +165,6 @@
 
       this.renderer.setData(data);
       await this.renderer.render();
-      this.renderer.enableDrag(true);
 
       // Collapse top-level boxes by default
       // HACK: The collapse/expand functions are asynchronous and trying to execute them all at once
@@ -173,10 +173,10 @@
       if (collapsedIds.length > 0) {
         collapsedIds.forEach(nextId => this.renderer.collapse(nextId));
         await this.renderer.render();
-        this.renderer.enableDrag(true);
-        this.renderer.centerGraph();
       }
 
+      this.renderer.enableDrag(true);
+      this.renderer.centerGraph();
       this.dataDecorationChanged();
     }
   }
