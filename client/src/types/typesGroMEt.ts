@@ -36,12 +36,15 @@ export enum MetadataType {
   TextualDocumentReferenceSet = 'TextualDocumentReferenceSet',
   IndraAgentReferenceSet = 'IndraAgentReferenceSet',
   ReactionReference = 'ReactionReference',
+  EquationParameter = 'EQUATION_PARAMETER',
+  Domain = 'DOMAIN',
 }
 
 export interface Metadata {
   metadata_type: MetadataType,
   provenance: Provenance,
-  uid: string,
+  uid?: string,
+  type?: MetadataType,
 }
 
 export interface ModelInterface extends Metadata {
@@ -75,6 +78,20 @@ export interface EquationDefinition extends Metadata {
     equation_source_latex: string,
     equation_source_mml: string,
   }
+}
+export interface EquationParameter extends Metadata {
+  equation_extraction: {
+    document_reference_uid: string,
+    equation_number: number,
+    source_type: string,
+  },
+  value: string,
+  variable_identifier: string,
+}
+
+export interface Domain extends Metadata {
+  measurement_scale: string,
+  data_type: string,
 }
 
 export interface TextDefinition extends Metadata {

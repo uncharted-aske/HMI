@@ -9,6 +9,15 @@
       v-else
       v-for="(datum, index) in sortedMetadata" :key="index"
     >
+      <template v-if="isTypeDomain(datum)">
+        <summary :title="datum.uid">
+          Domain
+        </summary>
+        <div class="metadata-content">
+          <p>Data type: {{ datum.data_type }} Scale: {{ datum.measurement_scale }}</p>
+        </div>
+      </template>
+
       <template v-if="isTypeText(datum)">
         <summary :title="datum.uid">
           Text {{ isTypeTextParameter(datum) ? 'Parameter' : 'Definition' }}
@@ -22,7 +31,7 @@
             <h6>Reference</h6>
             <ul>
               <li>{{ datum.text_extraction.document_reference_uid }}</li>
-              <li>{{ textExtraction(datum) }}</li>
+              <li v-if="!datum.text_spans">{{ textExtraction(datum) }}</li>
             </ul>
           </template>
         </div>
@@ -43,6 +52,18 @@
             <h6>LaTeX</h6>
             <pre>{{ datum.equation_extraction.equation_source_latex }}</pre>
           </template>
+        </div>
+      </template>
+
+      <template v-if="isTypeEquationParameter(datum)">
+        <summary>Equation Parameter</summary>
+        <div class="metadata-content">
+          <p>{{ datum.value }}</p>
+          <p>{{ datum.variable_identifier }}</p>
+          <h6>Number {{ datum.equation_extraction.equation_number }}</h6>
+          <p>{{ datum.equation_extraction.document_reference_uid }}</p>
+          <p>{{ datum.equation_extraction.source_type }}</p>
+
         </div>
       </template>
 
@@ -140,6 +161,7 @@
 
   const METADATA_TYPES_ORDER = [
     GroMET.MetadataType.TextDefinition,
+    GroMET.MetadataType.Domain,
     GroMET.MetadataType.TextParameter,
     GroMET.MetadataType.EquationDefinition,
     GroMET.MetadataType.CodeSpanReference,
@@ -191,16 +213,21 @@
       return this.metadata?.length === 0 || this.metadata === [];
     }
 
-    isTypeCodeSpanReference (datum: GroMET.Metadata): boolean {
-      return datum.metadata_type === GroMET.MetadataType.CodeSpanReference;
+    isTypeCodeSpanReference (datum: any): boolean {
+      return datum.metadata_type === GroMET.MetadataType.CodeSpanReference || datum.type === "CODE_SPAN_REFERENCE";
     }
 
     isTypeEquationDefinition (datum: GroMET.Metadata): boolean {
       return datum.metadata_type === GroMET.MetadataType.EquationDefinition;
     }
 
-    isTypeTextDefinition (datum: GroMET.Metadata): boolean {
-      return datum.metadata_type === GroMET.MetadataType.TextDefinition;
+    isTypeEquationParameter (datum: GroMET.Metadata): boolean {
+      return datum.metadata_type === GroMET.MetadataType.EquationParameter || datum.type === GroMET.MetadataType.EquationParameter;
+    }
+    
+    // eslint-disable-next-line
+    isTypeTextDefinition (datum: any): boolean {
+      return datum.metadata_type === GroMET.MetadataType.TextDefinition || datum.type === "TEXT_DEFINITION";
     }
 
     isTypeTextParameter (datum: GroMET.Metadata): boolean {
@@ -210,6 +237,10 @@
     isTypeText (datum: GroMET.Metadata): boolean {
       return this.isTypeTextDefinition(datum) ||
         this.isTypeTextParameter(datum);
+    }
+
+    isTypeDomain (datum: GroMET.Metadata): boolean {
+      return datum.type === GroMET.MetadataType.Domain
     }
 
     isTypeIndraAgentReferenceSet (datum: GroMET.Metadata): boolean {
