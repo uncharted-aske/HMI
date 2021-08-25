@@ -159,7 +159,7 @@
 
       // If we are in comparison mode, we don't include edges to get a linear layout
       // and we set the layout to dagre
-      if (this.$router.currentRoute.name === 'comparison') {
+      if (this.$router.currentRoute.name === 'comparison' || this.$router.currentRoute.name === 'simulation') {
         const graph = { nodes: selectedModelGraph?.graph.nodes, edges: [] };
         this.setModelsLayout(Graph.GraphLayoutInterfaceType.dagre);
         return graph;
