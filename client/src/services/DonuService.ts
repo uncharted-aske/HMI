@@ -195,26 +195,21 @@ export const getModelInterface = async (model: Model.Model, selectedModelGraphTy
        */
       if (selectedModelGraphType === Model.GraphTypes.FunctionNetwork) {
         const result = response?.result as Donu.ModelDefinition;
-        let parameters, outputs, domainParameter;
+        let domainParameter;
         if (modelGraph.model === 'SimpleSIR_metadata_gromet_FunctionNetwork.json') {
           domainParameter = 'P:sir.in.dt';
-          parameters = { 'P:sir.in.S': 'S', 'P:sir.in.I': 'I', 'P:sir.in.R': 'R', 'P:sir.in.beta': 'beta', 'P:sir.in.gamma': 'gamma', 'P:sir.in.dt': 'dt' };
-          outputs = { 'P:sir.out.S': 'S', 'P:sir.out.I': 'I', 'P:sir.out.R': 'R' };
         } else if (modelGraph.model === 'CHIME_SIR_v01_gromet_FunctionNetwork_by_hand.json') {
           domainParameter = 'P:sir.n';
-          parameters = { 'P:sir.s_in': 'S', 'P:sir.i_in': 'I', 'P:sir.r_in': 'R', 'P:sir.beta': 'beta', 'P:sir.gamma': 'gamma', 'P:sir.n': 'n' };
-          outputs = { 'P:sir.s_out': 'S', 'P:sir.i_out': 'I', 'P:sir.r_out': 'R' };
+        } else if (modelGraph.model === 'CHIME_SIR_Base_variables_gromet_FunctionNetwork-with-metadata--GroMEt.json') {
+          // TODO: Ensure with Donu team that this is the right domain parameter
+          domainParameter = 'J:main.n_days';
+        } else {
+          // HACK: Fallback when we don't know the domain parameter we guess
+          domainParameter = 'J:main.n_days';
         }
-        result.measures = result.measures
-          .filter(measure => Object.keys(outputs).includes(measure.uid))
-          .map(measure => {
-            measure.metadata.name = outputs[measure.uid];
-            return measure;
-          });
 
         result.parameters = result.parameters
           .map(parameter => {
-            parameter.metadata.name = parameters?.[parameter.uid] ?? parameter.uid;
             if (parameter.uid === domainParameter) {
               parameter.value_type = 'domain_parameter'; // Leveraging this unused property.
             }
