@@ -165,7 +165,6 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
         seenModelNames.set(name, index);
       }
     });
-    console.log(output);
 
     // HACK: Duplicate Simple SIR PNC under CHIME SIR and CHIME+ under CHIME_SVIIvR
     const simpleSIR = output.find(model => model.name === 'SimpleSIR_metadata');
@@ -175,7 +174,6 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
 
     chimeSIR.modelGraph[1] = simpleSIR.modelGraph[0];
     sviivr.modelGraph[1] = simpleChimePlus.modelGraph[0];
-
 
     return output;
   } else {
