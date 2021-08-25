@@ -111,6 +111,7 @@
           }
           this.renderer.render().then(() => {
               this.renderer.enableDrag(true);
+              this.dataDecorationChanged();
           });
         }
 
