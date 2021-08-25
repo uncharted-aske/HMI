@@ -79,7 +79,7 @@
       if (this.displayedNodes) {
         this.renderer.markDisplayedNodes(this.displayedNodes);
       }
-      if (this.overlappingElements) {
+      if (this.overlappingElements.nodes.length > 0) {
         this.renderer.markOverlappingElements(this.overlappingElements);
       }
       if (this.highlight) {
@@ -111,6 +111,7 @@
           }
           this.renderer.render().then(() => {
               this.renderer.enableDrag(true);
+              this.dataDecorationChanged();
           });
         }
 
@@ -172,6 +173,7 @@
       if (collapsedIds.length > 0) {
         collapsedIds.forEach(nextId => this.renderer.collapse(nextId));
         await this.renderer.render();
+        this.renderer.centerGraph();
       }
 
       this.renderer.enableDrag(true);
