@@ -15,7 +15,8 @@
   import { Prop, Watch } from 'vue-property-decorator';
   import { AxisScale } from 'd3';
 
-  import { createChart, axis, pathFn } from '@/utils/SVGUtil';
+  import { createChart, axis, pathFn, showTooltip, hideTooltip } from '@/utils/SVGUtil';
+  import { standardNb } from '@/utils/NumberUtil';
 
   import { Colors } from '@/graphs/svg/encodings';
 
@@ -84,14 +85,20 @@
         .attr('stroke-linejoin', 'round');
     }
 
+    get xRange (): [number, number] {
+      return d3.extent(this.data.flat(), (d: any) => d.x) as [number, number];
+    }
+
     get xScale (): AxisScale<any> {
-      const range = d3.extent(this.data.flat(), (d: any) => d.x);
-      return axis(range, this.margin.left, this.width - this.margin.right);
+      return axis(this.xRange, this.margin.left, this.width - this.margin.right);
+    }
+
+    get yRange (): [number, number] {
+      return d3.extent(this.data.flat(), (d: any) => d.y) as [number, number];
     }
 
     get yScale (): AxisScale<any> {
-      const range = d3.extent(this.data.flat(), (d: any) => d.y);
-      return axis(range, this.height - this.margin.bottom, this.margin.top);
+      return axis(this.yRange, this.height - this.margin.bottom, this.margin.top);
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -153,6 +160,7 @@
           .attr('stroke-dasharray', `${l},${l}`);
 
       // Draw data dots
+      const yRangeMidpoint = (this.yRange[1] - this.yRange[0]) / 2;
       svg.append('g')
           .attr('fill', style.node.fill)
           .attr('stroke', 'black')
@@ -162,7 +170,13 @@
         .join('circle')
           .attr('cx', d => this.xScale(d.x))
           .attr('cy', d => this.yScale(d.y))
-          .attr('r', 3);
+          .attr('r', 3)
+        .on('mouseover', (event, d) => {
+          const text = `x: ${standardNb(d.x)}\ny: ${standardNb(d.y)}`;
+          const position = [this.xScale(d.x), this.yScale(d.y)];
+          showTooltip(svg, text, position, d.y > yRangeMidpoint ? Math.PI / 2 : -Math.PI / 2);
+        })
+        .on('mouseout', () => hideTooltip(svg));
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
