@@ -166,9 +166,9 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
       }
     });
 
-    //HACK: Duplicate Simple SIR PNC under CHIME SIR
-    const simpleSIR = output.find(model=> model.name === 'SimpleSIR_metadata');
-    const chimeSIR = output.find(model=> model.name === 'CHIME_SIR_Base');
+    // HACK: Duplicate Simple SIR PNC under CHIME SIR
+    const simpleSIR = output.find(model => model.name === 'SimpleSIR_metadata');
+    const chimeSIR = output.find(model => model.name === 'CHIME_SIR_Base');
     chimeSIR.modelGraph[1] = simpleSIR.modelGraph[0];
 
     return output;
