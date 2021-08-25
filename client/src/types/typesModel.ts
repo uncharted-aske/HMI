@@ -79,7 +79,7 @@ interface ViewInterface extends HMI.ViewInterface {
 
 const GRAPHTYPE_VIEWS: ViewInterface[] = [
   { name: 'Petri Net Classic', id: GraphTypes.PetriNetClassic },
-  { name: 'Functional Network', id: GraphTypes.FunctionNetwork },
+  { name: 'Function Network', id: GraphTypes.FunctionNetwork },
 ];
 
 export {
