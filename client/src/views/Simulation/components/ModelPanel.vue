@@ -39,7 +39,7 @@
     </message-display>
     <global-graph
       v-else
-      :data="graph"
+      :data="getGraph"
       :displayed-nodes="displayedNodes"
       :overlapping-elements="getSharedNodes(model.id)"
       :highlight="getSelectedNodes(model.id)"
@@ -64,6 +64,7 @@
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import GlobalGraph from '@/views/Models/components/Graphs/GlobalGraph.vue';
+  import { calculateNodeNeighborhood } from '@/graphs/svg/util.js';
 
   const components = {
     Counters,
@@ -98,15 +99,25 @@
     @Action toggleVariable;
 
     settingsOpen: boolean = false;
+    neighborhoodGraph: Graph.GraphInterface = null;
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
       this.setSelectedNodes([{ model: this.model.id, node: selected.grometID }]);
       this.$emit('highlight', selected.label);
+
+
+      //Experiment
+      const selectedModelGraph = this.model?.modelGraph.find(graph => {
+        return graph.type === this.getSelectedModelGraphType;
+      });
+      const nodeNeighborhood = calculateNodeNeighborhood(selectedModelGraph.graph, selected);
+      this.neighborhoodGraph = { nodes:this.graph.nodes, edges:nodeNeighborhood.edges };
     }
 
     onBackgroundClick (): void {
       this.setSelectedNodes([]);
       this.$emit('highlight', '');
+      this.neighborhoodGraph = this.graph;
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
@@ -156,6 +167,10 @@
         return graph;
       }
       return selectedModelGraph?.graph ?? null;
+    }
+
+    get getGraph(): Graph.GraphInterface {
+      return this.neighborhoodGraph ?? this.graph;
     }
 
     get modelName (): string {
