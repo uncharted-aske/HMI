@@ -32,7 +32,7 @@
         <template v-else v-for="(plot, index) in displayedVariables">
           <multi-line-plot
             class="pt-2 pl-2 pr-3 plot"
-            :class="[{highlighted: plot.metadata.name === highlighted}]"
+            :class="[{highlighted: getSelectedNodes(modelId).nodes.some(node => node.id === plot.uid)}]"
             :data="plot.values"
             :polygon="plot.polygon"
             :key="'plot' + index"
@@ -159,6 +159,7 @@
 
     @Getter getSimModel;
     @Getter getVariablesRunsCount;
+    @Getter getSelectedNodes;
     @Action hideVariable;
     @Action setVariableObservedId;
 
