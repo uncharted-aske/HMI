@@ -172,6 +172,7 @@
       if (collapsedIds.length > 0) {
         collapsedIds.forEach(nextId => this.renderer.collapse(nextId));
         await this.renderer.render();
+        this.renderer.centerGraph();
       }
 
       this.renderer.enableDrag(true);
