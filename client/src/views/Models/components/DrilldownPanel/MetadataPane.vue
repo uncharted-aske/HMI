@@ -213,8 +213,9 @@
       return this.metadata?.length === 0 || this.metadata === [];
     }
 
+    // eslint-disable-next-line
     isTypeCodeSpanReference (datum: any): boolean {
-      return datum.metadata_type === GroMET.MetadataType.CodeSpanReference || datum.type === "CODE_SPAN_REFERENCE";
+      return datum.metadata_type === GroMET.MetadataType.CodeSpanReference || datum.type === 'CODE_SPAN_REFERENCE';
     }
 
     isTypeEquationDefinition (datum: GroMET.Metadata): boolean {
@@ -224,10 +225,10 @@
     isTypeEquationParameter (datum: GroMET.Metadata): boolean {
       return datum.metadata_type === GroMET.MetadataType.EquationParameter || datum.type === GroMET.MetadataType.EquationParameter;
     }
-    
+
     // eslint-disable-next-line
     isTypeTextDefinition (datum: any): boolean {
-      return datum.metadata_type === GroMET.MetadataType.TextDefinition || datum.type === "TEXT_DEFINITION";
+      return datum.metadata_type === GroMET.MetadataType.TextDefinition || datum.type === 'TEXT_DEFINITION';
     }
 
     isTypeTextParameter (datum: GroMET.Metadata): boolean {
@@ -240,7 +241,7 @@
     }
 
     isTypeDomain (datum: GroMET.Metadata): boolean {
-      return datum.type === GroMET.MetadataType.Domain
+      return datum.type === GroMET.MetadataType.Domain;
     }
 
     isTypeIndraAgentReferenceSet (datum: GroMET.Metadata): boolean {
