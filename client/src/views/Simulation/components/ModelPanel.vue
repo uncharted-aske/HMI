@@ -89,7 +89,6 @@
     @Mutation setSelectedNodes;
     @Mutation setModelsLayout;
 
-
     @Action hideAllParameters;
     @Action showAllParameters;
     @Action toggleParameter;
@@ -105,13 +104,12 @@
       this.setSelectedNodes([{ model: this.model.id, node: selected.grometID }]);
       this.$emit('highlight', selected.label);
 
-
-      //Experiment
+      // Experiment
       const selectedModelGraph = this.model?.modelGraph.find(graph => {
         return graph.type === this.getSelectedModelGraphType;
       });
       const nodeNeighborhood = calculateNodeNeighborhood(selectedModelGraph.graph, selected);
-      this.neighborhoodGraph = { nodes:this.graph.nodes, edges:nodeNeighborhood.edges };
+      this.neighborhoodGraph = { nodes: this.graph.nodes, edges: nodeNeighborhood.edges };
     }
 
     onBackgroundClick (): void {
@@ -159,17 +157,17 @@
         return graph.type === this.getSelectedModelGraphType;
       });
 
-      //If we are in comparison mode, we don't include edges to get a linear layout
+      // If we are in comparison mode, we don't include edges to get a linear layout
       // and we set the layout to dagre
       if (this.$router.currentRoute.name === 'comparison') {
-        const graph =  {nodes: selectedModelGraph?.graph.nodes, edges: []};
+        const graph = { nodes: selectedModelGraph?.graph.nodes, edges: [] };
         this.setModelsLayout(Graph.GraphLayoutInterfaceType.dagre);
         return graph;
       }
       return selectedModelGraph?.graph ?? null;
     }
 
-    get calculateGraph(): Graph.GraphInterface {
+    get calculateGraph (): Graph.GraphInterface {
       return this.neighborhoodGraph ?? this.graph;
     }
 

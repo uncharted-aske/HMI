@@ -149,7 +149,6 @@
     async refresh (): Promise<void> {
       if (!this.data) return;
       let data = _.cloneDeep(this.data);
-      console.log(data);
 
       // Layout selection
       if (this.layout === GraphLayoutInterfaceType.elk) {
