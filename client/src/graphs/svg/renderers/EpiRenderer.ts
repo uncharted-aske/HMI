@@ -128,14 +128,13 @@ export default class EpiRenderer extends SVGRenderer {
       .attr('color', 'SourceGraphic');
   }
 
-  centerGraph () {
-    const viewBox = (this as any).svgEl.viewBox.baseVal;
+  centerGraph (): void {
     const centerTranslate = {
-      x: ((this as any).chartSize.width - (this as any).layout.width)  / 2,
-      y: ((this as any).chartSize.height  - (this as any).layout.height) / 2
+      x: ((this as any).chartSize.width - (this as any).layout.width) / 2,
+      y: ((this as any).chartSize.height - (this as any).layout.height) / 2,
     };
     d3.select((this as any).svgEl).call((this as any).zoom.transform, d3.zoomIdentity.translate(centerTranslate.x, centerTranslate.y));
-  };
+  }
 
   renderNode (nodeSelection: d3.Selection<any, any, any, any>): void {
     nodeSelection.each(function () {

@@ -9,7 +9,7 @@
   import Component from 'vue-class-component';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import { expandCollapse, highlight, panZoom } from 'svg-flowgraph';
+  import { expandCollapse, highlight } from 'svg-flowgraph';
 
   import { GraphInterface, SubgraphInterface, SubgraphNodeInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
 
