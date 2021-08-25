@@ -412,6 +412,25 @@
       this.drilldownActiveTabId = 'metadata';
       this.isOpenDrilldown = true;
 
+      //HACK: Couldn't find metadata for this box so I just added it
+      if (node.grometID === 'B:sir_r_n_exp') {
+        this.drilldownMetadata =   {
+          "metadata_type": "EquationDefinition",
+          "uid": "eqn_def_sir_i_n_exp",
+          "provenance": {
+            "metadata_type": "Provenance",
+            "method": "Manual_claytonm@az",
+            "timestamp": "2021-08-25T17:25:04:075378_MST-0700"
+          },
+          "equation_extraction": {
+            "document_reference_uid": "chime_webdocs_as_pdf",
+            "equation_number": 1,
+            "equation_source_latex": "I_{t+1} = I_{t} + \\beta S_{t} I_{t} - \\gamma I_{t}",
+            "equation_source_mml": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\" title=\"I_{t+1} = I_{t} + \beta S_{t} I_{t} - \\gamma I_{t} \"><mrow><msub><mrow><mi>I</mi></mrow><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mrow><mi>I</mi></mrow><mrow><mi>t</mi></mrow></msub><mo>+</mo><mi>\u03b2</mi><msub><mrow><mi>S</mi></mrow><mrow><mi>t</mi></mrow></msub><msub><mrow><mi>I</mi></mrow><mrow><mi>t</mi></mrow></msub><mo>-</mo><mi>\u03b3</mi><msub><mrow><mi>I</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow></math>"
+          }
+        }
+      }
+
       // Merge node metadata with Variables metadata. c.f. Graph.GraphNodeInterface type
       this.drilldownMetadata = node.metadata ? node.metadata.flat() : null;
       console.log(this.drilldownMetadata);
