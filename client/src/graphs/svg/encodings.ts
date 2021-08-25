@@ -2,7 +2,7 @@ export abstract class Colors {
   static readonly HIGHLIGHT: string = '#EBCB8B';
   static readonly STROKE: string = '#81A1C1';
   static readonly CONTAINER_CONTROL: string = '#D08770';
-  static readonly NONOVERLAPPING: string = '#81A1C1';
+  static readonly NONOVERLAPPING: string = '#d08770';
 
   static readonly NODES: Record<string, any> = {
     DEFAULT: '#ECEFF4',

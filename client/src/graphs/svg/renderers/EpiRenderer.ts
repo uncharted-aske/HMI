@@ -281,8 +281,8 @@ export default class EpiRenderer extends SVGRenderer {
     }
   }
 
-  //HACK: This function actually does the opposite, it marks nodes that are actually different between models. 
-  //Since there are upstream consequences to focus on non-overlapping elements we will keep it this way for now.
+  // HACK: This function actually does the opposite, it marks nodes that are actually different between models.
+  // Since there are upstream consequences to focus on non-overlapping elements we will keep it this way for now.
   markOverlappingElements (subgraph: SubgraphInterface): void {
     const chart = (this as any).chart;
     chart?.selectAll('.node-ui').each(function (d) {
