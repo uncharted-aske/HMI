@@ -58,7 +58,6 @@
           :model="model"
           :overlapping-elements="model.modelGraph[0].overlappingElements"
           :slot="('model_' + model.id)"
-          @highlight="onNodeHighlight"
           @expand="setExpandedId('model')"
         />
         <parameters-panel
@@ -67,7 +66,6 @@
           :key="index"
           :modelId="model.id"
           :slot="('parameters_' + model.id)"
-          :highlighted="highlighted"
           @expand="setExpandedId('parameters')"
           @invalid="isRunFeasible = !$event"
         />
@@ -77,7 +75,6 @@
           :key="index"
           :modelId="model.id"
           :slot="('variables_' + model.id)"
-          :highlighted="highlighted"
           @expand="setExpandedId('variables')"
         />
       </template>
@@ -153,7 +150,6 @@
     expandedId: string = '';
     runConfig: Donu.RequestConfig = { end: 100, start: 0, step: 1 };
     subgraph: Graph.GraphInterface = null;
-    highlighted: string = '';
     isRunFeasible: boolean = true; // Check if a Run can be triggered or saved.
 
     isProvenanceGraphOpen: boolean = false;
@@ -321,10 +317,6 @@
           this.fetchModelResults({ model, config, selectedModelGraphType });
         });
       }
-    }
-
-    onNodeHighlight (label: string): void {
-      this.highlighted = label;
     }
 
     onToggleProvenanceGraph (): void {
