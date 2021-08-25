@@ -65,6 +65,7 @@
           class="simulation-panel"
           :expanded="expandedId === 'parameters'"
           :key="index"
+          :model="model"
           :modelId="model.id"
           :slot="('parameters_' + model.id)"
           :highlighted="highlighted"

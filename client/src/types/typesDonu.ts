@@ -16,6 +16,7 @@ enum RequestCommand {
   LIST_DATASETS = 'list-datasets',
   GET_DATASET = 'get-dataset',
   COMPUTE_ERROR = 'compute-error',
+  FIT_MEASURES = 'fit-measures',
 }
 
 enum Type {
@@ -129,6 +130,10 @@ type GetDatasetResponse = {
   }]
 }
 
+type FitMeasuresResponse = {
+  [parameter: string]: number,
+}
+
 type RequestParameters = {
   [key: string]: number[],
 }
@@ -142,7 +147,7 @@ type RequestConfig = {
 type Request = {
   command: RequestCommand;
   definition?: string | ModelDefinition;
-  parameters?: RequestParameters,
+  parameters?: RequestParameters | string[],
   'interp-model'?: InterpolationModelTypes,
   'error-model'?: ErrorModelTypes,
   // 'dest-type'?: string;
@@ -158,6 +163,7 @@ type Request = {
     model: string,
   },
   measures?: any,
+  data?: any,
 }
 
 enum ResponseStatus {
@@ -172,7 +178,8 @@ type ResponseResult =
   SimulationResponse |
   ComputeErrorResponse |
   ListDatasetsResponse[] |
-  GetDatasetResponse
+  GetDatasetResponse |
+  FitMeasuresResponse
 ;
 
 type Response = {
@@ -198,6 +205,7 @@ export {
   SimulationResponse,
   ListDatasetsResponse,
   GetDatasetResponse,
+  FitMeasuresResponse,
   Type,
   SimulationType,
   Measure,
