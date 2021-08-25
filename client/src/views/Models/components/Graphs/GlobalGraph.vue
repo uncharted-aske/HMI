@@ -9,7 +9,7 @@
   import Component from 'vue-class-component';
   import { Prop, Watch } from 'vue-property-decorator';
 
-  import { expandCollapse, highlight } from 'svg-flowgraph';
+  import { expandCollapse, highlight, nodeDrag } from 'svg-flowgraph';
 
   import { GraphInterface, SubgraphInterface, SubgraphNodeInterface, GraphLayoutInterfaceType } from '@/types/typesGraphs';
 
@@ -96,7 +96,7 @@
         useZoom: true,
         useStableZoomPan: true,
         useMinimap: false,
-        addons: [expandCollapse, highlight],
+        addons: [expandCollapse, highlight, nodeDrag],
       });
 
       this.renderer.setCallback('nodeDblClick', (evt, node) => {
@@ -109,7 +109,9 @@
           } else {
             this.renderer.collapse(id);
           }
-          this.renderer.render();
+          this.renderer.render().then(() => {
+              this.renderer.enableDrag(true);
+          });
         }
 
         this.$emit('node-dblclick', node.datum().data);
@@ -162,6 +164,7 @@
 
       this.renderer.setData(data);
       await this.renderer.render();
+      this.renderer.enableDrag(true);
 
       // Collapse top-level boxes by default
       // HACK: The collapse/expand functions are asynchronous and trying to execute them all at once
@@ -170,6 +173,7 @@
       if (collapsedIds.length > 0) {
         collapsedIds.forEach(nextId => this.renderer.collapse(nextId));
         await this.renderer.render();
+        this.renderer.enableDrag(true);
         this.renderer.centerGraph();
       }
 
