@@ -98,7 +98,7 @@
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
   import svgUtil from '@/utils/SVGUtil';
-  import { scientificNotation } from '@/utils/NumberUtil';
+  import { scientificNotationSplitStr } from '@/utils/NumberUtil';
   import * as HMI from '@/types/types';
   import * as Model from '@/types/typesModel';
   import Counters from '@/components/Counters.vue';
@@ -365,11 +365,14 @@
         // Action button + .parameter padding + axis label padding + axis label width
         right: (this.parameterAction + (this.padding * 3) + axisLabelWidth),
       };
+      const topPercentage = 0.45;
       const marginY = {
         // first .parameter: middle of the top half of the CSS grid
-        top: this.padding + this.parameterHeight * 0.25,
+        // top: this.padding + this.parameterHeight * 0.25,
+        top: this.padding + this.parameterHeight * topPercentage,
         // last .parameter: middle of the top half of the CSS grid
-        bottom: this.parameterHeight * 0.75 - this.padding,
+        // bottom: this.parameterHeight * 0.75 - this.padding,
+        bottom: this.parameterHeight * (1 - topPercentage) - this.padding,
       };
       const xMinMax = [marginX.left, this.graphWidth() - marginX.right];
       const yMinMax = [marginY.top, this.graphHeight() - marginY.bottom];
@@ -435,13 +438,23 @@
               .attr('x', xMinMax[0])
               .attr('text-anchor', 'end')
               .attr('transform', svgUtil.translate(-this.padding, 3))
-              .text(d => scientificNotation(xScales.get(d).min));
+              .append('tspan')
+                .html(d => scientificNotationSplitStr(xScales.get(d).min)[0])
+              .append('tspan')
+                .text(d => scientificNotationSplitStr(xScales.get(d).min)[1])
+                .attr('dy', -5)
+                .attr('font-size', 'smaller');
 
             // max label
             g.append('text')
               .attr('x', xMinMax[1])
               .attr('transform', svgUtil.translate(this.padding, 3))
-              .text(d => scientificNotation(xScales.get(d).max));
+              .append('tspan')
+                .html(d => scientificNotationSplitStr(xScales.get(d).max)[0])
+              .append('tspan')
+                .text(d => scientificNotationSplitStr(xScales.get(d).max)[1])
+                .attr('dy', -5)
+                .attr('font-size', 'smaller');
 
             return g;
           });
@@ -509,7 +522,7 @@
     display: grid;
     grid-template-areas:
       "name axis action"
-      "value . ."
+      "value . action"
     ;
     grid-template-columns: var(--parameter-input) auto var(--parameter-action);
     grid-template-rows: 1fr 1fr;
@@ -546,11 +559,14 @@
 
   .parameter .btn-group {
     grid-area: action;
+    display: flex;
+    align-items: center;
   }
 
   .parameter .btn-group button {
     padding-bottom: 0;
     padding-top: 0;
+    height: 35px;
   }
 
   .parameter.highlighted {
