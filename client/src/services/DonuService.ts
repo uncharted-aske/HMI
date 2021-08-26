@@ -166,6 +166,15 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
       }
     });
 
+    // HACK: Duplicate Simple SIR PNC under CHIME SIR and CHIME+ under CHIME_SVIIvR
+    const simpleSIR = output.find(model => model.name === 'SimpleSIR_metadata');
+    const chimeSIR = output.find(model => model.name === 'CHIME_SIR_Base');
+    const simpleChimePlus = output.find(model => model.name === 'SimpleChime+');
+    const sviivr = output.find(model => model.name === 'CHIME_SVIIvR');
+
+    chimeSIR.modelGraph[1] = simpleSIR.modelGraph[0];
+    sviivr.modelGraph[1] = simpleChimePlus.modelGraph[0];
+
     return output;
   } else {
     console.error('[DONU Service] — fetchDonuModels', response.error); // eslint-disable-line no-console
