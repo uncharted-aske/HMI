@@ -201,12 +201,18 @@ export const getModelInterface = async (model: Model.Model, selectedModelGraphTy
         } else if (modelGraph.model === 'CHIME_SIR_v01_gromet_FunctionNetwork_by_hand.json') {
           domainParameter = 'P:sir.n';
         } else if (modelGraph.model === 'CHIME_SIR_Base_variables_gromet_FunctionNetwork-with-metadata--GroMEt.json') {
-          // TODO: Ensure with Donu team that this is the right domain parameter
           domainParameter = 'J:main.n_days';
+        } else if (modelGraph.model === 'CHIME_SIR_Dyn_gromet_FunctionNetwork-with-vars-with-metadata--GroMEt.json') {
+          domainParameter = 'P:sir.n';
+        } else if (modelGraph.model === 'CHIME_SVIIvR_Dyn_gromet_FunctionNetwork-with-vars-with-metadata--GroMEt.json') {
+          domainParameter = 'P:sir.n';
         } else {
           // HACK: Fallback when we don't know the domain parameter we guess
           domainParameter = 'J:main.n_days';
         }
+
+        result.measures = result.measures
+          .filter(measure => measure.uid.includes('out'));
 
         result.parameters = result.parameters
           .map(parameter => {
@@ -264,10 +270,12 @@ export const getModelResult = async (
       } else if (modelGraph.model === 'CHIME_SIR_Base_variables_gromet_FunctionNetwork-with-metadata--GroMEt.json') {
         // TODO: Ensure with Donu team that this is the right domain parameter
         request.domain_parameter = 'J:main.n_days';
+        request.outputs = ['P:main.out.S', 'P:main.out.E', 'P:main.out.I', 'P:main.out.R'];
       } else {
         // HACK: Fallback when we don't know the domain parameter we guess
         console.warn('[DONU Service] — getModelResult', 'Using default domain parameter may not be correct.'); // eslint-disable-line no-console
         request.domain_parameter = 'J:main.n_days';
+        request.outputs = ['P:main.out.S', 'P:main.out.E', 'P:main.out.I', 'P:main.out.Iv', 'P:main.out.R', 'P:main.out.V'];
       }
     }
 
