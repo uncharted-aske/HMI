@@ -655,5 +655,339 @@
         "P:sir_r_exp.r"
       ]
     }
+  },
+  "CHIME_SIR_DynFunctionNetwork": {
+    "CHIME_SVIIvR_DynFunctionNetwork": {
+      "P:sir.s_in": [
+        "P:sir.s_in",
+        "P:sir_s_n_exp.s",
+        "P:sir_i_n_exp.s"
+      ],
+      "P:sir_s_n_exp.s": [
+        "P:sir.s_in",
+        "P:sir_s_n_exp.s",
+        "P:sir_i_n_exp.s"
+      ],
+      "P:sir_i_n_exp.s": [
+        "P:sir.s_in",
+        "P:sir_s_n_exp.s",
+        "P:sir_i_n_exp.s"
+      ],
+      "P:sir.i_in": [
+        "P:sir.i_in",
+        "P:sir_s_n_exp.i",
+        "P:sir_i_n_exp.i",
+        "P:sir_r_n_exp.i"
+      ],
+      "P:sir_s_n_exp.i": [
+        "P:sir.i_in",
+        "P:sir_s_n_exp.i",
+        "P:sir_i_n_exp.i",
+        "P:sir_r_n_exp.i"
+      ],
+      "P:sir_i_n_exp.i": [
+        "P:sir.i_in",
+        "P:sir_s_n_exp.i",
+        "P:sir_i_n_exp.i",
+        "P:sir_r_n_exp.i"
+      ],
+      "P:sir_r_n_exp.i": [
+        "P:sir.i_in",
+        "P:sir_s_n_exp.i",
+        "P:sir_i_n_exp.i",
+        "P:sir_r_n_exp.i"
+      ],
+      "P:sir.r_in": [
+        "P:sir.r_in",
+        "P:sir_r_n_exp.r"
+      ],
+      "P:sir_r_n_exp.r": [
+        "P:sir.r_in",
+        "P:sir_r_n_exp.r"
+      ],
+      "P:sir.beta": [
+        "P:sir.beta",
+        "P:sir_s_n_exp.beta",
+        "P:sir_i_n_exp.beta"
+      ],
+      "P:sir_s_n_exp.beta": [
+        "P:sir.beta",
+        "P:sir_s_n_exp.beta",
+        "P:sir_i_n_exp.beta"
+      ],
+      "P:sir_i_n_exp.beta": [
+        "P:sir.beta",
+        "P:sir_s_n_exp.beta",
+        "P:sir_i_n_exp.beta"
+      ],
+      "P:sir.n": [
+        "P:sir.n",
+        "P:sir_scale_exp.n"
+      ],
+      "P:sir_scale_exp.n": [
+        "P:sir.n",
+        "P:sir_scale_exp.n"
+      ],
+      "P:sir_scale_exp.scale": [
+        "P:sir_scale_exp.scale",
+        "P:sir_s_exp.scale",
+        "P:sir_i_exp.scale",
+        "P:sir_r_exp.scale"
+      ],
+      "P:sir_s_exp.scale": [
+        "P:sir_scale_exp.scale",
+        "P:sir_s_exp.scale",
+        "P:sir_i_exp.scale",
+        "P:sir_r_exp.scale"
+      ],
+      "P:sir_i_exp.scale": [
+        "P:sir_scale_exp.scale",
+        "P:sir_s_exp.scale",
+        "P:sir_i_exp.scale",
+        "P:sir_r_exp.scale"
+      ],
+      "P:sir_r_exp.scale": [
+        "P:sir_scale_exp.scale",
+        "P:sir_s_exp.scale",
+        "P:sir_i_exp.scale",
+        "P:sir_r_exp.scale"
+      ],
+      "P:sir_s_n_exp.s_n": [
+        "P:sir_s_n_exp.s_n",
+        "P:sir_scale_exp.s_n",
+        "P:sir_s_exp.s_n"
+      ],
+      "P:sir_scale_exp.s_n": [
+        "P:sir_s_n_exp.s_n",
+        "P:sir_scale_exp.s_n",
+        "P:sir_s_exp.s_n"
+      ],
+      "P:sir_s_exp.s_n": [
+        "P:sir_s_n_exp.s_n",
+        "P:sir_scale_exp.s_n",
+        "P:sir_s_exp.s_n"
+      ],
+      "P:sir_i_n_exp.i_n": [
+        "P:sir_i_n_exp.i_n",
+        "P:sir_scale_exp.i_n",
+        "P:sir_i_exp.i_n"
+      ],
+      "P:sir_scale_exp.i_n": [
+        "P:sir_i_n_exp.i_n",
+        "P:sir_scale_exp.i_n",
+        "P:sir_i_exp.i_n"
+      ],
+      "P:sir_i_exp.i_n": [
+        "P:sir_i_n_exp.i_n",
+        "P:sir_scale_exp.i_n",
+        "P:sir_i_exp.i_n"
+      ],
+      "P:sir_r_n_exp.r_n": [
+        "P:sir_r_n_exp.r_n",
+        "P:sir_scale_exp.r_n",
+        "P:sir_r_exp.r_n"
+      ],
+      "P:sir_scale_exp.r_n": [
+        "P:sir_r_n_exp.r_n",
+        "P:sir_scale_exp.r_n",
+        "P:sir_r_exp.r_n"
+      ],
+      "P:sir_r_exp.r_n": [
+        "P:sir_r_n_exp.r_n",
+        "P:sir_scale_exp.r_n",
+        "P:sir_r_exp.r_n"
+      ],
+      "P:sir.s_out": [
+        "P:sir.s_out",
+        "P:sir_s_exp.s"
+      ],
+      "P:sir_s_exp.s": [
+        "P:sir.s_out",
+        "P:sir_s_exp.s"
+      ],
+      "P:sir.i_out": [
+        "P:sir.i_out",
+        "P:sir_i_exp.i"
+      ],
+      "P:sir_i_exp.i": [
+        "P:sir.i_out",
+        "P:sir_i_exp.i"
+      ],
+      "P:sir.r_out": [
+        "P:sir.r_out",
+        "P:sir_r_exp.r"
+      ],
+      "P:sir_r_exp.r": [
+        "P:sir.r_out",
+        "P:sir_r_exp.r"
+      ]
+    }
+  },
+  "CHIME_SVIIvR_DynFunctionNetwork": {
+    "CHIME_SIR_DynFunctionNetwork": {
+      "P:sir.s_in": [
+        "P:sir.s_in",
+        "P:sir_s_n_exp.s",
+        "P:sir_i_n_exp.s"
+      ],
+      "P:sir_s_n_exp.s": [
+        "P:sir.s_in",
+        "P:sir_s_n_exp.s",
+        "P:sir_i_n_exp.s"
+      ],
+      "P:sir_i_n_exp.s": [
+        "P:sir.s_in",
+        "P:sir_s_n_exp.s",
+        "P:sir_i_n_exp.s"
+      ],
+      "P:sir.i_in": [
+        "P:sir.i_in",
+        "P:sir_s_n_exp.i",
+        "P:sir_i_n_exp.i",
+        "P:sir_r_n_exp.i"
+      ],
+      "P:sir_s_n_exp.i": [
+        "P:sir.i_in",
+        "P:sir_s_n_exp.i",
+        "P:sir_i_n_exp.i",
+        "P:sir_r_n_exp.i"
+      ],
+      "P:sir_i_n_exp.i": [
+        "P:sir.i_in",
+        "P:sir_s_n_exp.i",
+        "P:sir_i_n_exp.i",
+        "P:sir_r_n_exp.i"
+      ],
+      "P:sir_r_n_exp.i": [
+        "P:sir.i_in",
+        "P:sir_s_n_exp.i",
+        "P:sir_i_n_exp.i",
+        "P:sir_r_n_exp.i"
+      ],
+      "P:sir.r_in": [
+        "P:sir.r_in",
+        "P:sir_r_n_exp.r"
+      ],
+      "P:sir_r_n_exp.r": [
+        "P:sir.r_in",
+        "P:sir_r_n_exp.r"
+      ],
+      "P:sir.beta": [
+        "P:sir.beta",
+        "P:sir_s_n_exp.beta",
+        "P:sir_i_n_exp.beta"
+      ],
+      "P:sir_s_n_exp.beta": [
+        "P:sir.beta",
+        "P:sir_s_n_exp.beta",
+        "P:sir_i_n_exp.beta"
+      ],
+      "P:sir_i_n_exp.beta": [
+        "P:sir.beta",
+        "P:sir_s_n_exp.beta",
+        "P:sir_i_n_exp.beta"
+      ],
+      "P:sir.n": [
+        "P:sir.n",
+        "P:sir_scale_exp.n"
+      ],
+      "P:sir_scale_exp.n": [
+        "P:sir.n",
+        "P:sir_scale_exp.n"
+      ],
+      "P:sir_scale_exp.scale": [
+        "P:sir_scale_exp.scale",
+        "P:sir_s_exp.scale",
+        "P:sir_i_exp.scale",
+        "P:sir_r_exp.scale"
+      ],
+      "P:sir_s_exp.scale": [
+        "P:sir_scale_exp.scale",
+        "P:sir_s_exp.scale",
+        "P:sir_i_exp.scale",
+        "P:sir_r_exp.scale"
+      ],
+      "P:sir_i_exp.scale": [
+        "P:sir_scale_exp.scale",
+        "P:sir_s_exp.scale",
+        "P:sir_i_exp.scale",
+        "P:sir_r_exp.scale"
+      ],
+      "P:sir_r_exp.scale": [
+        "P:sir_scale_exp.scale",
+        "P:sir_s_exp.scale",
+        "P:sir_i_exp.scale",
+        "P:sir_r_exp.scale"
+      ],
+      "P:sir_s_n_exp.s_n": [
+        "P:sir_s_n_exp.s_n",
+        "P:sir_scale_exp.s_n",
+        "P:sir_s_exp.s_n"
+      ],
+      "P:sir_scale_exp.s_n": [
+        "P:sir_s_n_exp.s_n",
+        "P:sir_scale_exp.s_n",
+        "P:sir_s_exp.s_n"
+      ],
+      "P:sir_s_exp.s_n": [
+        "P:sir_s_n_exp.s_n",
+        "P:sir_scale_exp.s_n",
+        "P:sir_s_exp.s_n"
+      ],
+      "P:sir_i_n_exp.i_n": [
+        "P:sir_i_n_exp.i_n",
+        "P:sir_scale_exp.i_n",
+        "P:sir_i_exp.i_n"
+      ],
+      "P:sir_scale_exp.i_n": [
+        "P:sir_i_n_exp.i_n",
+        "P:sir_scale_exp.i_n",
+        "P:sir_i_exp.i_n"
+      ],
+      "P:sir_i_exp.i_n": [
+        "P:sir_i_n_exp.i_n",
+        "P:sir_scale_exp.i_n",
+        "P:sir_i_exp.i_n"
+      ],
+      "P:sir_r_n_exp.r_n": [
+        "P:sir_r_n_exp.r_n",
+        "P:sir_scale_exp.r_n",
+        "P:sir_r_exp.r_n"
+      ],
+      "P:sir_scale_exp.r_n": [
+        "P:sir_r_n_exp.r_n",
+        "P:sir_scale_exp.r_n",
+        "P:sir_r_exp.r_n"
+      ],
+      "P:sir_r_exp.r_n": [
+        "P:sir_r_n_exp.r_n",
+        "P:sir_scale_exp.r_n",
+        "P:sir_r_exp.r_n"
+      ],
+      "P:sir.s_out": [
+        "P:sir.s_out",
+        "P:sir_s_exp.s"
+      ],
+      "P:sir_s_exp.s": [
+        "P:sir.s_out",
+        "P:sir_s_exp.s"
+      ],
+      "P:sir.i_out": [
+        "P:sir.i_out",
+        "P:sir_i_exp.i"
+      ],
+      "P:sir_i_exp.i": [
+        "P:sir.i_out",
+        "P:sir_i_exp.i"
+      ],
+      "P:sir.r_out": [
+        "P:sir.r_out",
+        "P:sir_r_exp.r"
+      ],
+      "P:sir_r_exp.r": [
+        "P:sir.r_out",
+        "P:sir_r_exp.r"
+      ]
+    }
   }
 }

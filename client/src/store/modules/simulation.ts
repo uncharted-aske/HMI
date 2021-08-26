@@ -357,7 +357,7 @@ const mutations: MutationTree<HMI.SimulationState> = {
     if (!args.aggregator) args.aggregator = d3.mean;
     getModel(state, args.modelId).variables.forEach(variable => {
       // No saved runs, no need to aggregate
-      if (state.numberOfSavedRuns < 3) {
+      if (state.numberOfSavedRuns < 6) {
         variable.aggregate = null;
         return;
       }
