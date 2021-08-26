@@ -81,7 +81,7 @@
   import { InjectReactive, Prop, Watch } from 'vue-property-decorator';
   import * as d3 from 'd3';
   import svgUtil from '@/utils/SVGUtil';
-  import { scientificNotation } from '@/utils/NumberUtil';
+  import { scientificNotationSplitStr } from '@/utils/NumberUtil';
   import * as HMI from '@/types/types';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
@@ -345,13 +345,23 @@
               .attr('x', xMinMax[0])
               .attr('text-anchor', 'end')
               .attr('transform', svgUtil.translate(-this.padding, 3))
-              .text(d => scientificNotation(xScales.get(d).min));
+              .append('tspan')
+                .html(d => scientificNotationSplitStr(xScales.get(d).min)[0])
+              .append('tspan')
+                .text(d => scientificNotationSplitStr(xScales.get(d).min)[1])
+                .attr('dy', -5)
+                .attr('font-size', 'smaller');
 
             // max label
             g.append('text')
               .attr('x', xMinMax[1])
               .attr('transform', svgUtil.translate(this.padding, 3))
-              .text(d => scientificNotation(xScales.get(d).max));
+              .append('tspan')
+                .html(d => scientificNotationSplitStr(xScales.get(d).max)[0])
+              .append('tspan')
+                .text(d => scientificNotationSplitStr(xScales.get(d).max)[1])
+                .attr('dy', -5)
+                .attr('font-size', 'smaller');
 
             return g;
           });
