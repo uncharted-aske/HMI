@@ -258,6 +258,65 @@
       ]
     }
   },
+  "CHIME_SVIIvRPetriNetClassic": {
+    "CHIME_SIR_BasePetriNetClassic": {
+      "J:S": [
+        "J:S"
+      ],
+      "J:I_U": [
+        "J:I"
+      ],
+      "J:V": [
+        "J:S"
+      ],
+      "J:R": [
+        "J:R",
+        "J:R"
+      ],
+      "J:I_V": [
+        "J:I"
+      ],
+      "J:rec_v": [
+        "J:gamma"
+      ],
+      "J:inf_vv": [
+        "J:beta"
+      ],
+      "J:inf_vu": [],
+      "J:inf_uu": [
+        "J:beta"
+      ],
+      "J:inf_uv": [],
+      "J:vax": [],
+      "J:rec_u": [
+        "J:gamma"
+      ]
+    }
+  },
+  "CHIME_SIR_BasePetriNetClassic": {
+    "CHIME_SVIIvRPetriNetClassic": {
+      "J:S": [
+        "J:S",
+        "J:V"
+      ],
+      "J:I": [
+        "J:I_U",
+        "J:I_V"
+      ],
+      "J:R": [
+        "J:R",
+        "J:R"
+      ],
+      "J:beta": [
+        "J:inf_uu",
+        "J:inf_vv"
+      ],
+      "J:gamma": [
+        "J:rec_u",
+        "J:rec_v"
+      ]
+    }
+  },
   "CHIME_SIR_BaseFunctionNetwork": {
     "CHIME_SVIIvRFunctionNetwork": {
       "P:sir.s_in": [
