@@ -256,13 +256,18 @@ export const getModelResult = async (
      */
     if (selectedModelGraphType === Model.GraphTypes.FunctionNetwork) {
       if (modelGraph.model === 'SimpleSIR_metadata_gromet_FunctionNetwork.json') {
-        request.outputs = ['P:sir.out.S', 'P:sir.out.I', 'P:sir.out.R'];
+        // request.outputs = ['P:sir.out.S', 'P:sir.out.I', 'P:sir.out.R'];
         request.domain_parameter = 'P:sir.in.dt';
       } else if (modelGraph.model === 'CHIME_SIR_v01_gromet_FunctionNetwork_by_hand.json') {
-        request.outputs = ['P:sir.s_out', 'P:sir.i_out', 'P:sir.r_out'];
+        // request.outputs = ['P:sir.s_out', 'P:sir.i_out', 'P:sir.r_out'];
         request.domain_parameter = 'P:sir.n';
+      } else if (modelGraph.model === 'CHIME_SIR_Base_variables_gromet_FunctionNetwork-with-metadata--GroMEt.json') {
+        // TODO: Ensure with Donu team that this is the right domain parameter
+        request.domain_parameter = 'J:main.n_days';
       } else {
-        console.warn('[DONU Service] — getModelResult', 'The request cannot be executed because _outputs_ or/and _domainParameter_ are missing.'); // eslint-disable-line no-console
+        // HACK: Fallback when we don't know the domain parameter we guess
+        console.warn('[DONU Service] — getModelResult', 'Using default domain parameter may not be correct.'); // eslint-disable-line no-console
+        request.domain_parameter = 'J:main.n_days';
       }
     }
 

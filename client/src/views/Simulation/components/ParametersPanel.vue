@@ -455,6 +455,7 @@
      * this is the parameter that will be used to apply the Simulation steps.
      */
     isDomainParameter (parameter: HMI.SimulationParameter): boolean {
+      // return false;
       return parameter.value_type === 'domain_parameter';
     }
   }
