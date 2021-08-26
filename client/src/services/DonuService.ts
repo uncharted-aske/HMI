@@ -204,11 +204,13 @@ export const getModelInterface = async (model: Model.Model, selectedModelGraphTy
        */
       if (selectedModelGraphType === Model.GraphTypes.FunctionNetwork) {
         const result = response?.result as Donu.ModelDefinition;
-        let domainParameter;
+        let domainParameter, outputs;
         if (modelGraph.model === 'SimpleSIR_metadata_gromet_FunctionNetwork.json') {
+          outputs = ['P:sir.out.S', 'P:sir.out.I', 'P:sir.out.R'];
           domainParameter = 'P:sir.in.dt';
         } else if (modelGraph.model === 'CHIME_SIR_v01_gromet_FunctionNetwork_by_hand.json') {
           domainParameter = 'P:sir.n';
+          outputs = ['P:sir.s_out', 'P:sir.i_out', 'P:sir.r_out'];
         } else if (modelGraph.model === 'CHIME_SIR_Base_variables_gromet_FunctionNetwork-with-metadata--GroMEt.json') {
           domainParameter = 'J:main.n_days';
         } else if (modelGraph.model === 'CHIME_SIR_Dyn_gromet_FunctionNetwork-with-vars-with-metadata--GroMEt.json') {
@@ -221,7 +223,13 @@ export const getModelInterface = async (model: Model.Model, selectedModelGraphTy
         }
 
         result.measures = result.measures
-          .filter(measure => measure.uid.includes('out'));
+          .filter(measure => {
+            if (!outputs) {
+              return measure.uid.includes('out');
+            } else {
+              return outputs.includes(measure.uid);
+            }
+          });
 
         result.parameters = result.parameters
           .map(parameter => {
@@ -271,10 +279,10 @@ export const getModelResult = async (
      */
     if (selectedModelGraphType === Model.GraphTypes.FunctionNetwork) {
       if (modelGraph.model === 'SimpleSIR_metadata_gromet_FunctionNetwork.json') {
-        // request.outputs = ['P:sir.out.S', 'P:sir.out.I', 'P:sir.out.R'];
+        request.outputs = ['P:sir.out.S', 'P:sir.out.I', 'P:sir.out.R'];
         request.domain_parameter = 'P:sir.in.dt';
       } else if (modelGraph.model === 'CHIME_SIR_v01_gromet_FunctionNetwork_by_hand.json') {
-        // request.outputs = ['P:sir.s_out', 'P:sir.i_out', 'P:sir.r_out'];
+        request.outputs = ['P:sir.s_out', 'P:sir.i_out', 'P:sir.r_out'];
         request.domain_parameter = 'P:sir.n';
       } else if (modelGraph.model === 'CHIME_SIR_Base_variables_gromet_FunctionNetwork-with-metadata--GroMEt.json') {
         // TODO: Ensure with Donu team that this is the right domain parameter
