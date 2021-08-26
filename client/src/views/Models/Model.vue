@@ -433,6 +433,7 @@
 
       // Merge node metadata with Variables metadata. c.f. Graph.GraphNodeInterface type
       this.drilldownMetadata = node.metadata ? node.metadata.flat() : null;
+      console.log(this.drilldownMetadata);
 
       this.drilldownPaneSubtitle = `${node.nodeType} (${node.dataType})`;
       this.drilldownPaneTitle = node.label;

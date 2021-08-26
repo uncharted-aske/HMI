@@ -38,6 +38,7 @@ export enum MetadataType {
   ReactionReference = 'ReactionReference',
   EquationParameter = 'EQUATION_PARAMETER',
   Domain = 'DOMAIN',
+  TextUnit = 'TEXT_UNIT',
 }
 
 export interface Metadata {
@@ -93,7 +94,6 @@ export interface Domain extends Metadata {
   measurement_scale: string,
   data_type: string,
 }
-
 export interface TextDefinition extends Metadata {
   text_extraction: {
     document_reference_uid: string,
@@ -117,6 +117,7 @@ export interface TextParameter extends Metadata {
   variable_identifier: string,
   value: string,
 }
+
 
 export interface IndraAgentReferenceSet extends Metadata {
   indra_agent_references: IndraAgentReference[],
