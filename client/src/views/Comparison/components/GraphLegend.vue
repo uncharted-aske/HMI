@@ -31,7 +31,6 @@
       </svg>
       Overlapping elements
     </li>
-
   </ul>
 </template>
 
