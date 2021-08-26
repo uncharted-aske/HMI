@@ -45,6 +45,9 @@
       </resizable-grid>
     </section>
 
+     <legend-panel open="open">
+        <graph-legend />
+      </legend-panel>
     <drilldown-panel
       class="drilldown-panel-model"
       :active-tab-id="drilldownActiveTabId"
@@ -100,6 +103,8 @@
   import MetadataPane from '@/views/Models/components/DrilldownPanel/MetadataPane.vue';
   import KnowledgePane from '@/views/Models/components/DrilldownPanel/KnowledgePane.vue';
   import ParametersPane from '@/views/Models/components/DrilldownPanel/ParametersPane.vue';
+  import LegendPanel from '@/components/widgets/LegendPanel.vue';
+  import GraphLegend from './components/GraphLegend.vue';
 
   import { cosmosRelatedParameters, cosmosSearch } from '@/services/CosmosFetchService';
   import { filterToParamObj } from '@/utils/CosmosDataUtil';
@@ -115,6 +120,8 @@
     MetadataPane,
     KnowledgePane,
     ParametersPane,
+    LegendPanel,
+    GraphLegend,
   };
 
   @Component({ components })
