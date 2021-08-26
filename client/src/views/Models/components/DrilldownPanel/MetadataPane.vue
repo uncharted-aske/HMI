@@ -92,7 +92,7 @@
           Text Unit
         </summary>
         <div class="metadata-content">
-          <h6>Unit</h6> {{ datum.unit }} 
+          <h6>Unit</h6> {{ datum.unit }}
         </div>
       </template>
 
