@@ -95,13 +95,13 @@
     stroke-width: var(--stroke-width);
   }
 
-  .legend-graph .legend-overlapping rect {
+  .legend-overlapping rect {
     fill: var(--colour-nodes-default);
     stroke: var(--stroke);
     stroke-width: var(--stroke-width);
   }
 
-  .legend-graph .legend-non-overlapping rect {
+  .legend-non-overlapping rect {
     fill: var(--colour-nodes-nonoverlapping);
     stroke: var(--stroke);
     stroke-width: var(--stroke-width);
