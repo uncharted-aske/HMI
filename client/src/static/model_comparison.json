@@ -296,35 +296,24 @@
   "CHIME_SIR_BasePetriNetClassic": {
     "CHIME_SVIIvRPetriNetClassic": {
       "J:S": [
-        "J:S"
+        "J:S",
+        "J:V"
       ],
-      "J:I_U": [
-        "J:I"
-      ],
-      "J:V": [
-        "J:S"
+      "J:I": [
+        "J:I_U",
+        "J:I_V"
       ],
       "J:R": [
         "J:R",
         "J:R"
       ],
-      "J:I_V": [
-        "J:I"
+      "J:beta": [
+        "J:inf_uu",
+        "J:inf_vv"
       ],
-      "J:rec_v": [
-        "J:gamma"
-      ],
-      "J:inf_vv": [
-        "J:beta"
-      ],
-      "J:inf_vu": [],
-      "J:inf_uu": [
-        "J:beta"
-      ],
-      "J:inf_uv": [],
-      "J:vax": [],
-      "J:rec_u": [
-        "J:gamma"
+      "J:gamma": [
+        "J:rec_u",
+        "J:rec_v"
       ]
     }
   },
