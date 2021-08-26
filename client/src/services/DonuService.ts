@@ -358,3 +358,42 @@ export const getDatasetResult = async (model: string): Promise<Donu.GetDatasetRe
     console.error('[DONU Service] — getDatasetResult', response); // eslint-disable-line no-console
   }
 };
+
+// Get Dataset Response output
+// {
+//   name: "GDA Infection Data",
+//   description: "Infection data for FL",
+//   columns: [
+//     {
+//       values: [0, 1, 2, 3, ...],
+//       name: 'date',
+//       description: 'date',
+//     },
+//     {
+//       values: [129, 32, 0, 213, ...],
+//       name: 'daily_cases',
+//       description: 'daily_cases',
+//     }
+//   ]
+// }
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const fitMeasures = async (data: any, parameters: string[], source: string, type: Donu.Type): Promise<Donu.FitMeasuresResponse> => {
+  const request: Donu.Request = {
+    command: Donu.RequestCommand.FIT_MEASURES,
+    definition: {
+      type,
+      source: {
+        model: source,
+      },
+    },
+    parameters,
+    data,
+  };
+
+  const response = await callDonuCache(request);
+  if (response.status === Donu.ResponseStatus.success) {
+    return response.result as Donu.FitMeasuresResponse;
+  } else {
+    console.error('[DONU Service] — fitMeasures', response); // eslint-disable-line no-console
+  }
+};
