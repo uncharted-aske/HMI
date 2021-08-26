@@ -275,11 +275,14 @@
         // Action button + .parameter padding + axis label padding + axis label width
         right: (this.parameterAction + (this.padding * 3) + axisLabelWidth),
       };
+      const topPercentage = 0.45;
       const marginY = {
         // first .parameter: middle of the top half of the CSS grid
-        top: this.padding + this.parameterHeight * 0.25,
+        // top: this.padding + this.parameterHeight * 0.25,
+        top: this.padding + this.parameterHeight * topPercentage,
         // last .parameter: middle of the top half of the CSS grid
-        bottom: this.parameterHeight * 0.75 - this.padding,
+        // bottom: this.parameterHeight * 0.75 - this.padding,
+        bottom: this.parameterHeight * (1 - topPercentage) - this.padding,
       };
       const xMinMax = [marginX.left, this.graphWidth() - marginX.right];
       const yMinMax = [marginY.top, this.graphHeight() - marginY.bottom];
@@ -429,7 +432,7 @@
     display: grid;
     grid-template-areas:
       "name axis action"
-      "value . ."
+      "value . action"
     ;
     grid-template-columns: var(--parameter-input) auto var(--parameter-action);
     grid-template-rows: 1fr 1fr;
@@ -466,11 +469,14 @@
 
   .parameter .btn-group {
     grid-area: action;
+    display: flex;
+    align-items: center;
   }
 
   .parameter .btn-group button {
     padding-bottom: 0;
     padding-top: 0;
+    height: 35px;
   }
 
   .parameter.highlighted {
