@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { GroMEt2Graph } from 'research/gromet/tools/parser/GroMEt2Graph';
 import * as MARM_MODEL_AGGREGATED from '@/static/gromets/emmaa_aggregated/marm_model_gromet_2021-06-28-17-07-14_graph_agg_rev_rategroups.json';
 
@@ -175,7 +176,11 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
     chimeSIR.modelGraph[1] = simpleSIR.modelGraph[0];
     sviivr.modelGraph[1] = simpleChimePlus.modelGraph[0];
 
-    return output;
+    // HACK: Remove simpleChimePlus from the list since it is already under CHIME_SVIIvR.
+    // Sort list by alphabetical order
+    const filteredOutput = _.orderBy(output.filter(model => model.name !== 'SimpleChime+'), ['name'], ['asc']);
+
+    return filteredOutput;
   } else {
     console.error('[DONU Service] — fetchDonuModels', response.error); // eslint-disable-line no-console
   }
