@@ -31,10 +31,6 @@
       </svg>
       Overlapping elements
     </li>
-<<<<<<< HEAD
-=======
-
->>>>>>> 550c6b21... lint issues
   </ul>
 </template>
 
