@@ -56,6 +56,7 @@
   import Component from 'vue-class-component';
   import { Prop } from 'vue-property-decorator';
   import { Action, Getter, Mutation } from 'vuex-class';
+
   import * as HMI from '@/types/types';
   import * as Model from '@/types/typesModel';
   import * as Graph from '@/types/typesGraphs';
@@ -82,9 +83,11 @@
     @Getter getSimModel;
     @Getter getSelectedModelGraphType;
     @Getter getModelsLayout;
+    @Getter getSelectedModelIds;
     @Getter getSharedNodes;
     @Getter getSelectedNodes;
     @Mutation setSelectedNodes;
+    @Mutation setModelsLayout;
 
     @Action hideAllParameters;
     @Action showAllParameters;
@@ -98,12 +101,12 @@
 
     onNodeClick (selected: Graph.GraphNodeInterface): void {
       this.setSelectedNodes([{ model: this.model.id, node: selected.grometID }]);
-      this.$emit('highlight', selected.label);
+      this.$emit('node-click', selected);
     }
 
     onBackgroundClick (): void {
       this.setSelectedNodes([]);
-      this.$emit('highlight', '');
+      this.$emit('node-click', null);
     }
 
     onNodeDblClick (selected: Graph.GraphNodeInterface): void {
@@ -144,6 +147,15 @@
       const selectedModelGraph = this.model?.modelGraph.find(graph => {
         return graph.type === this.getSelectedModelGraphType;
       });
+
+      // If we are in comparison mode, we don't include edges to get a linear layout
+      // and we set the layout to dagre
+      if ((this.$router.currentRoute.name === 'comparison' || this.$router.currentRoute.name === 'simulation') &&
+        this.getSelectedModelIds.length > 1) {
+        const graph = { nodes: selectedModelGraph?.graph.nodes, edges: [] };
+        this.setModelsLayout(Graph.GraphLayoutInterfaceType.dagre);
+        return graph;
+      }
       return selectedModelGraph?.graph ?? null;
     }
 

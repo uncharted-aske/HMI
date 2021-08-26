@@ -130,8 +130,8 @@ export default class EpiRenderer extends SVGRenderer {
 
   centerGraph (): void {
     const centerTranslate = {
-      x: ((this as any).chartSize.width - (this as any).layout.width) / 2,
-      y: ((this as any).chartSize.height - (this as any).layout.height) / 2,
+      x: (((this as any).chartSize.width - (this as any).layout.width) / 2),
+      y: (((this as any).chartSize.height - (this as any).layout.height) / 2),
     };
     d3.select((this as any).svgEl).call((this as any).zoom.transform, d3.zoomIdentity.translate(centerTranslate.x, centerTranslate.y));
   }
@@ -289,14 +289,16 @@ export default class EpiRenderer extends SVGRenderer {
     }
   }
 
+  // HACK: This function actually does the opposite, it marks nodes that are actually different between models.
+  // Since there are upstream consequences to focus on non-overlapping elements we will keep it this way for now.
   markOverlappingElements (subgraph: SubgraphInterface): void {
     const chart = (this as any).chart;
     chart?.selectAll('.node-ui').each(function (d) {
       const isOverlapping = subgraph.nodes.some(node => node.id === d.data.grometID);
-      if (isOverlapping) {
+      if (!isOverlapping && !d.nodes) {
         d3.select(this)
           .select('rect, ellipse')
-          .style('fill', Colors.OVERLAPPING);
+          .style('fill', Colors.NONOVERLAPPING);
       }
     });
   }

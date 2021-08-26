@@ -17,6 +17,13 @@
       <aside slot="right">
         <button
           class="btn btn-secondary"
+          title="Fit Parameters"
+          type="button"
+          @click="onParameterValuesFitEvent()">
+          <font-awesome-icon :icon="['fas', 'chart-line']" />
+        </button>
+        <button
+          class="btn btn-secondary"
           title="Expand Parameters Panel"
           type="button"
           @click="$emit('expand')">
@@ -54,6 +61,16 @@
             :disabled="isDomainParameter(parameter)"
           />
           <aside class="btn-group">
+            <!-- TODO: Allow users to select which parameters should be fitted
+                 and which should be fixed -->
+            <!-- <button
+              class="btn btn-secondary btn-sm"
+              title="Fit Parameter"
+              type="button"
+              @click="onSetParameterToBeFitted(parameter.uid)"
+            >
+              <font-awesome-icon :icon="['fas', parametersToFit.has(parameter.uid) ? 'ban' : 'chart-line']" />
+            </button> -->
             <button
               class="btn btn-secondary btn-sm"
               title="Remove parameter from editable panel"
@@ -83,9 +100,11 @@
   import svgUtil from '@/utils/SVGUtil';
   import { scientificNotation } from '@/utils/NumberUtil';
   import * as HMI from '@/types/types';
+  import * as Model from '@/types/typesModel';
   import Counters from '@/components/Counters.vue';
   import SettingsBar from '@/components/SettingsBar.vue';
   import MessageDisplay from '@/components/widgets/MessageDisplay.vue';
+  // import { fitMeasures } from '@/services/DonuService';
 
   const components = {
     Counters,
@@ -121,6 +140,9 @@
   export default class ParametersPanel extends Vue {
     @Prop({ default: false }) expanded: boolean;
     @Prop({ default: null }) modelId: number;
+    @Prop({ default: null }) model: Model.Model;
+    @Prop({ default: null }) highlighted: string;
+
     @InjectReactive() resized!: boolean;
     @InjectReactive() isResizing!: boolean;
 
@@ -136,6 +158,7 @@
     private parameterAction: number = 35; // in pixels
     private parameterValues: { [uid: string]: number } = {};
     private someParametersAreInvalid: boolean = false;
+    private parametersToFit: Set<string> = new Set();
 
     // Condition when to re/draw the Graph
     @Watch('resized') onResized (): void { this.resized && this.drawGraph(); }
@@ -194,6 +217,73 @@
           return this.nonValidValue(currentValue);
         });
       this.$emit('invalid', this.someParametersAreInvalid);
+    }
+
+    // Parameters values update
+    async onParameterValuesFitEvent (): Promise<void> {
+      const model = this.getSimModel(this.modelId);
+
+      // Build model fit data payload
+      const data = {
+        values: {},
+        times: [],
+      };
+      model.variables.forEach(v => {
+        if (v.observed) {
+          // NOTE: fitting measures is computationally expensive so we take only a sample of the observed data
+          const numOfSamples = 4;
+          const sampleDelta = Math.ceil(v.observed.length / numOfSamples);
+          const times = [];
+          const values = [];
+          for (let i = 0; i < v.observed.length; i += sampleDelta) {
+            const observed = v.observed[i];
+            times.push(observed.x);
+            values.push(observed.y);
+          }
+          data.values[v.uid] = values;
+          data.times = times;
+        }
+      });
+      // TODO: Fit Measures endpoint often crashes the service
+      // I've commented it out for now in favour of a hard-coded
+      // alternative
+      // const fittedParameters = await fitMeasures(
+      //   data,
+      //   Array.from(this.parametersToFit),
+      //   this.model.modelGraph[0].model,
+      //   this.model.modelGraph[0].donuType,
+      // );
+      const fittedParameters = {
+        'J:rec_rate': 0.05,
+        'J:inf_rate': 0.4,
+      };
+
+      Object.entries(fittedParameters).forEach(([pid, value]) => {
+        this.parameterValues[pid] = value;
+
+        this.setSimParameterValue({
+          modelId: this.modelId,
+          uid: pid,
+          value,
+        });
+      });
+      this.drawGraph();
+
+      // Make sure that for every non domain parameters, their current value is valid.
+      this.someParametersAreInvalid = this.parameters
+        .filter(parameter => !this.isDomainParameter(parameter))
+        .some(parameter => {
+          const currentValue = parameter.values[parameter.values.length - 1];
+          return this.nonValidValue(currentValue);
+        });
+      this.$emit('invalid', this.someParametersAreInvalid);
+    }
+
+    onSetParameterToBeFitted (uid: string): void {
+      // TODO: Modify this for multi-model view
+      // may need to go in simulate vuex store
+      this.parametersToFit.add(uid);
+      this.drawGraph();
     }
 
     get triggerParameterValues (): string {
