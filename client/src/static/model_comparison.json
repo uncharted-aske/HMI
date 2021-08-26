@@ -258,7 +258,7 @@
       ]
     }
   },
-  "SimpleChime+PetriNetClassic": {
+  "CHIME_SVIIvRPetriNetClassic": {
     "CHIME_SIR_BasePetriNetClassic": {
       "J:S": [
         "J:S"
@@ -294,7 +294,7 @@
     }
   },
   "CHIME_SIR_BasePetriNetClassic": {
-    "SimpleChime+PetriNetClassic": {
+    "CHIME_SVIIvRPetriNetClassic": {
       "J:S": [
         "J:S"
       ],
