@@ -93,12 +93,14 @@
       stroke: Colors.STROKE,
       strokeWidth: 1,
       borderRadius: 5,
+      opacity: 1,
     },
     edge: {
       fill: 'none',
       strokeWidth: 2.5,
       strokeColor: Colors.NODES.DEFAULT,
       transitionDuration: 500,
+      opacity: 1,
     },
     label: {
       text: Colors.LABELS.LIGHT,
@@ -108,9 +110,11 @@
   const AGGREGATE_STYLE = {
     node: {
       fill: '#EBCB8B',
+      opacity: 0.3,
     },
     edge: {
       strokeColor: '#EBCB8B',
+      opacity: 0.3,
     },
   };
 
