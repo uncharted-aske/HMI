@@ -267,7 +267,7 @@
     isTypeParameterSetting (datum: any): boolean {
       return datum.type === 'PARAMETER_SETTING';
     }
-
+    // eslint-disable-next-line
     isTypeTextUnit (datum: any): boolean {
       return datum.type === 'TEXT_UNIT';
     }
