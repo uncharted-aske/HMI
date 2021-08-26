@@ -79,7 +79,7 @@
       if (this.displayedNodes) {
         this.renderer.markDisplayedNodes(this.displayedNodes);
       }
-      if (this.overlappingElements.nodes.length > 0) {
+      if (this.overlappingElements?.nodes.length > 0) {
         this.renderer.markOverlappingElements(this.overlappingElements);
       }
       if (this.highlight) {
