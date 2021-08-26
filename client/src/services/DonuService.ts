@@ -176,8 +176,8 @@ export const fetchDonuModels = async (): Promise<Model.Model[]> => {
     chimeSIR.modelGraph[1] = simpleSIR.modelGraph[0];
     sviivr.modelGraph[1] = simpleChimePlus.modelGraph[0];
 
-    //HACK: Remove simpleChimePlus from the list since it is already under CHIME_SVIIvR.
-    //Sort list by alphabetical order
+    // HACK: Remove simpleChimePlus from the list since it is already under CHIME_SVIIvR.
+    // Sort list by alphabetical order
     const filteredOutput = _.orderBy(output.filter(model => model.name !== 'SimpleChime+'), ['name'], ['asc']);
 
     return filteredOutput;
