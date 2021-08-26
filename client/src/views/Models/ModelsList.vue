@@ -67,6 +67,9 @@
 
   // Screenshots
   import ChimeScreenshot from '@/assets/img/models/CHIME_SIR.png';
+  import ChimeSVIIvRDynScreenshot from '@/assets/img/models/CHIME_SVIIvR_Dyn.png';
+  import ChimeSIRDynScreenshot from '@/assets/img/models/CHIME_SIR_Dyn.png';
+  import ChimeSVIIvRScreenshot from '@/assets/img/models/CHIME_SVIIvR.png';
   import ChimeSIRBaseScreenshot from '@/assets/img/models/CHIME_SIR_Base.png';
   import ChimePlusScreenshot from '@/assets/img/models/SimpleChime+.png';
   import SIRScreenshot from '@/assets/img/models/SimpleSIR.png';
@@ -190,6 +193,12 @@
           return ChimeSIRBaseScreenshot;
         } else if (model.name === 'SimpleChime+') {
           return ChimePlusScreenshot;
+        } else if (model.name === 'CHIME_SVIIvR_Dyn') {
+          return ChimeSVIIvRDynScreenshot;
+        } else if (model.name === 'CHIME_SIR_Dyn') {
+          return ChimeSIRDynScreenshot;
+        } else if (model.name === 'CHIME_SVIIvR') {
+          return ChimeSVIIvRScreenshot;
         } else return PlaceholderScreenshot;
       }
       return this.models.map(model => {
