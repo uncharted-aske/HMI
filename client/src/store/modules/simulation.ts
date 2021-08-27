@@ -76,12 +76,19 @@ const getters: GetterTree<any, HMI.SimulationParameter[]> = {
 };
 
 const actions: ActionTree<HMI.SimulationState, HMI.SimulationParameter[]> = {
-  setVariableObservedId ({ commit }, args: {
+  setVariableObservedVariable ({ commit }, args: {
+    modelId: number,
+    uid: string,
+    observedObj: Model.SelectedNode,
+  }): void {
+    commit('setVariableObservedVariable', args);
+  },
+  setVariableObservedHistorical ({ commit }, args: {
     modelId: number,
     uid: string,
     observedId: string,
   }): void {
-    commit('setVariableObservedId', args);
+    commit('setVariableObservedHistorical', args);
   },
 
   setSimParameterValue ({ commit }, args: {
@@ -289,25 +296,81 @@ const mutations: MutationTree<HMI.SimulationState> = {
     state.numberOfSavedRuns = count;
   },
 
-  async setVariableObservedId (state: HMI.SimulationState, args: {
+  async setVariableObservedVariable (state: HMI.SimulationState, args: {
+    modelId: number,
+    uid: string,
+    observedObj: Model.SelectedNode,
+  }): Promise<void> {
+    const variable = getVariable(state, args.modelId, args.uid);
+    variable.observedId = args.observedObj;
+    variable.observedType = HMI.ObservedType.VARIABLE;
+
+    const observedVariable = getVariable(state, args.observedObj.model, args.observedObj.node);
+    const observedCurrentRun = observedVariable.values[observedVariable.values.length - 1];
+    // Build measures array for error calculation
+    const measures: Donu.Measure[] = [];
+    const model = getModel(state, args.modelId);
+    for (const variable of model.variables) {
+      const { observedId, observedType } = variable;
+      if (observedId && observedType === HMI.ObservedType.VARIABLE) {
+        const currentRunVariableValues = variable.values[variable.values.length - 1];
+
+        let observedVariableValues;
+        if (variable?.uid === args.uid) {
+          variable.observed = observedCurrentRun;
+          observedVariableValues = observedCurrentRun;
+        } else {
+          observedVariableValues = variable.observed;
+        }
+
+        measures.push({
+          uid: variable.uid,
+          observed: {
+            times: observedVariableValues.map(d => d.x),
+            values: observedVariableValues.map(d => d.y),
+          },
+          predicted: {
+            times: currentRunVariableValues.map(d => d.x),
+            values: currentRunVariableValues.map(d => d.y),
+          },
+        });
+      }
+    }
+
+    const currentRunErrors = await getSimulationError(
+      measures,
+      Donu.InterpolationModelTypes.Linear,
+      Donu.ErrorModelTypes.L2,
+    );
+    for (const variable of model.variables) {
+      variable.currentRunError = currentRunErrors.measures.find(m => m.uid === variable.uid)?.error_total;
+    }
+    model.aggregateError = currentRunErrors?.error_total;
+
+    // Force reactive update
+    state.models = [...state.models];
+  },
+
+  async setVariableObservedHistorical (state: HMI.SimulationState, args: {
     modelId: number,
     uid: string,
     observedId: string,
   }): Promise<void> {
     const variable = getVariable(state, args.modelId, args.uid);
     variable.observedId = args.observedId;
+    variable.observedType = HMI.ObservedType.HISTORICAL;
 
     // Build measures array for error calculation
     const allowedTimeColumnNames = ['date', 'time', 'Day', 'week', 'month', 'year'];
     const measures: Donu.Measure[] = [];
     const model = getModel(state, args.modelId);
     for (const variable of model.variables) {
-      const observedId = variable.observedId;
-      if (observedId) {
+      const { observedId, observedType } = variable;
+      if (observedId && observedType === HMI.ObservedType.HISTORICAL) {
         const currentRunVariableValues = variable.values[variable.values.length - 1];
         const currentRunVariableValuesLen = currentRunVariableValues.length;
 
-        const result = await getDatasetResult(observedId);
+        const result = await getDatasetResult(observedId as string);
         // TODO: Donu should indicate to us which column is time based and which should be used as a value
         // Currently some datasets may contain multiple value columns, here we find the first one
         const observedTimes = result.columns.find(column => allowedTimeColumnNames.some(timeName => timeName === column.name));
@@ -321,12 +384,20 @@ const mutations: MutationTree<HMI.SimulationState> = {
             y: observedValues.values[i],
           });
         }
-        variable.observed = observed;
+
+        let observedVariableValues;
+        if (variable?.uid === args.uid) {
+          variable.observed = observed;
+          observedVariableValues = observed;
+        } else {
+          observedVariableValues = variable.observed;
+        }
+
         measures.push({
           uid: variable.uid,
           observed: {
-            times: observedTimes.values.slice(0, currentRunVariableValuesLen),
-            values: observedValues.values.slice(0, currentRunVariableValuesLen),
+            times: observedVariableValues.map(d => d.x),
+            values: observedVariableValues.map(d => d.y),
           },
           predicted: {
             times: currentRunVariableValues.map(d => d.x),

@@ -1,5 +1,6 @@
 /* eslint camelcase: 0 */
 
+import * as Model from '@/types/typesModel';
 import * as Donu from '@/types/typesDonu';
 
 interface ModelComponentMetadataInterface {
@@ -68,12 +69,18 @@ interface SimulationParameter extends Donu.ModelParameter {
 // List of runs, containing a list of coordinates.
 type SimulationVariableValues = Array<{x: number, y: number}>;
 
+enum ObservedType {
+  HISTORICAL = 'historical',
+  VARIABLE = 'variable',
+}
+
 interface SimulationVariable extends Donu.ModelVariable {
   displayed?: boolean,
   aggregate: SimulationVariableValues,
   values: SimulationVariableValues[],
   polygon?: SimulationVariableValues,
-  observedId?: string,
+  observedType: ObservedType,
+  observedId?: string | Model.SelectedNode,
   observed: SimulationVariableValues,
   currentRunError?: number,
 }
@@ -108,6 +115,7 @@ export {
   SimulationParameter,
   SimulationRun,
   SimulationState,
+  ObservedType,
   SimulationVariable,
   SimulationVariableValues,
   TabInterface,
