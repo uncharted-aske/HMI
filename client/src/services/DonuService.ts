@@ -201,6 +201,28 @@ export const getModelInterface = async (model: Model.Model, selectedModelGraphTy
 
     const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
+      if (selectedModelGraphType === Model.GraphTypes.PetriNetClassic) {
+        const result = response?.result as Donu.ModelDefinition;
+        if (modelGraph.model === 'SimpleSIR_metadata_gromet_PetriNetClassic.json') {
+          result.measures.push({
+            uid: 'beta*S*I',
+            value_type: 'float',
+            metadata: {
+              name: 'Daily New Infected',
+              type: 'float',
+            },
+          });
+        } else if (modelGraph.model === 'chime+.json') {
+          result.measures.push({
+            uid: 'computed',
+            value_type: 'float',
+            metadata: {
+              name: 'Daily New Infected',
+              type: 'float',
+            },
+          });
+        }
+      }
       /** TODO
        * This is a temporary mock up for Demonstration purposes.
        * The DONU API needs to be clearer on which outputs can be selected programatically.
@@ -276,6 +298,11 @@ export const getModelResult = async (
       step: config.step,
     };
 
+    if (selectedModelGraphType === Model.GraphTypes.PetriNetClassic) {
+      // HACK: Algebraic Julia doesn't work when value types are wrong
+      request['sim-type'] = Donu.SimulationType.GSL;
+    }
+
     /** TODO
      * This is a temporary mock up for Demonstration purposes.
      * The DONU API needs to be clearer on which outputs can be selected programatically.
@@ -303,7 +330,44 @@ export const getModelResult = async (
 
     const response = await callDonuCache(request);
     if (response.status === Donu.ResponseStatus.success) {
-      return response?.result as Donu.SimulationResponse ?? null;
+      const result = response.result as Donu.SimulationResponse;
+      if (selectedModelGraphType === Model.GraphTypes.PetriNetClassic) {
+        if (modelGraph.model === 'SimpleSIR_metadata_gromet_PetriNetClassic.json') {
+          const beta = parameters['J:beta_rate'] as unknown as number;
+          const I = result[0].values['J:I'];
+          const S = result[0].values['J:S'];
+          const dailyNewInfectedValues = [];
+          for (let i = 0; i < result[0].times.length; i++) {
+            dailyNewInfectedValues.push(beta * S[i] * I[i]);
+          }
+          result[0].values['beta*S*I'] = dailyNewInfectedValues;
+        } else if (modelGraph.model === 'chime+.json') {
+          // const beta = parameters['J:beta_rate'] as unknown as number;
+          // const I = result[0].values['J:I'];
+          const S = result[0].values['J:S'];
+          const I_U = result[0].values['J:I_U'];
+          const I_V = result[0].values['J:I_V'];
+          const V = result[0].values['J:V'];
+
+          // eslint-disable-next-line camelcase
+          const inf_uu = parameters['J:inf_uu_rate'] as unknown as number;
+          // eslint-disable-next-line camelcase
+          const inf_vu = parameters['J:inf_vu_rate'] as unknown as number;
+          // eslint-disable-next-line camelcase
+          const inf_uv = parameters['J:inf_uv_rate'] as unknown as number;
+          // eslint-disable-next-line camelcase
+          const inf_vv = parameters['J:inf_vv_rate'] as unknown as number;
+
+          const dailyNewInfectedValues = [];
+          for (let i = 0; i < result[0].times.length; i++) {
+            // eslint-disable-next-line camelcase
+            dailyNewInfectedValues.push(S[i] * I_U[i] * inf_uu + S[i] * I_V[i] * inf_vu + V[i] * I_U[i] * inf_uv + V[i] * I_V[i] * inf_vv);
+          }
+          result[0].values.computed = dailyNewInfectedValues;
+        }
+      }
+
+      return result;
     } else {
       console.error('[DONU Service] — getModelResult', response.error); // eslint-disable-line no-console
     }
@@ -383,29 +447,19 @@ export const getDatasetResult = async (model: string): Promise<Donu.GetDatasetRe
 
   const response = await callDonuCache(request);
   if (response.status === Donu.ResponseStatus.success) {
-    return response.result as Donu.GetDatasetResponse;
+    const result = _.cloneDeep(response.result) as Donu.GetDatasetResponse;
+    // HACK
+    if (model === 'GDA-Infections-FL.json') {
+      const dailyCases = result.columns.find(c => c.name === 'daily_cases');
+      dailyCases.values = dailyCases.values.slice(25);
+    }
+    return result;
   } else {
     console.error('[DONU Service] — getDatasetResult', response); // eslint-disable-line no-console
   }
 };
 
-// Get Dataset Response output
-// {
-//   name: "GDA Infection Data",
-//   description: "Infection data for FL",
-//   columns: [
-//     {
-//       values: [0, 1, 2, 3, ...],
-//       name: 'date',
-//       description: 'date',
-//     },
-//     {
-//       values: [129, 32, 0, 213, ...],
-//       name: 'daily_cases',
-//       description: 'daily_cases',
-//     }
-//   ]
-// }
+// Fit Model Measures' to Observational Data
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const fitMeasures = async (data: any, parameters: string[], source: string, type: Donu.Type): Promise<Donu.FitMeasuresResponse> => {
   const request: Donu.Request = {

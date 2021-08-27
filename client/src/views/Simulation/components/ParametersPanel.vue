@@ -253,10 +253,38 @@
       //   this.model.modelGraph[0].model,
       //   this.model.modelGraph[0].donuType,
       // );
-      const fittedParameters = {
-        'J:rec_rate': 0.05,
-        'J:inf_rate': 0.4,
-      };
+      let fittedParameters: {
+        [paramUid: string]: number;
+      } = {};
+      if (this.model.metadata?.name === 'CHIME_SIR_Base') {
+        fittedParameters = {
+          'J:beta_rate': 1.7221469058282074e-7,
+          'J:gamma_rate': 0.04954677073300576,
+          'J:S_init': 720130.5394121626,
+          'J:I_init': 6368.2763686775015,
+          'J:R_init': 9.999999999999996e-11,
+        };
+      } else if (this.model.metadata?.name === 'CHIME_SVIIvR') {
+        fittedParameters = {
+          'J:S_init': 874270.0703645574,
+          'J:I_U_init': 2657.7553778002,
+          'J:V_init': 45.90865845686915,
+          'J:R_init': 0.10000000000000002,
+          'J:I_V_init': 1.5201678216286594,
+          'J:rec_v_rate': 2.3526228492762642e-5,
+          'J:inf_vv_rate': 2.6041225138605557e-8,
+          'J:inf_vu_rate': 2.8956286100930364e-9,
+          'J:inf_uu_rate': 1.466296766065254e-7,
+          'J:inf_uv_rate': 1.1577435141227581e-8,
+          'J:vax_rate': 0.011287926731402404,
+          'J:rec_u_rate': 1.7081993411296042e-5,
+        };
+      } else {
+        fittedParameters = {
+          'J:rec_rate': 0.05,
+          'J:inf_rate': 0.4,
+        };
+      }
 
       Object.entries(fittedParameters).forEach(([pid, value]) => {
         this.parameterValues[pid] = value;
