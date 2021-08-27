@@ -57,7 +57,7 @@
             </aside>
           </multi-line-plot>
           <observed-modal
-            @datasetSelected="setObservedId"
+            :modelId="modelId"
             :data="plot.uid === variableOpen ? plot : false"
             @close="variableOpen = ''"
             :key="'modal' + index"
@@ -165,7 +165,6 @@
     @Getter getVariablesRunsCount;
     @Getter getSelectedNodes;
     @Action hideVariable;
-    @Action setVariableObservedId;
 
     variablesData: any = [];
     variableOpen: string = '';
@@ -278,14 +277,6 @@
       this.variableOpen = plot.uid;
       this.updateVariables();
       return listDatasetsResult();
-    }
-
-    setObservedId (observedId: string): void {
-      this.setVariableObservedId({
-        modelId: this.modelId,
-        uid: this.variableOpen,
-        observedId,
-      });
     }
   }
 </script>
