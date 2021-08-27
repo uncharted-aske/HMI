@@ -431,6 +431,166 @@
         };
       }
 
+      if (node.grometID === 'V:relative_contact_rate_1') {
+        this.drilldownMetadata = [
+        {
+          type: 'DOMAIN',
+          provenance: {
+            method: 'PROGRAM_ANALYSIS_PIPELINE',
+            timestamp: '2021-08-25 08:49:29.746121',
+          },
+          data_type: 'float',
+          measurement_scale: 'continuous',
+          elements: [],
+        },
+        {
+          type: 'CODE_SPAN_REFERENCE',
+          provenance: {
+            method: 'PROGRAM_ANALYSIS_PIPELINE',
+            timestamp: '2021-08-25 08:49:29.708781',
+          },
+          code_type: 'identifier',
+          code_file_reference_uid: '',
+          code_span: {
+            line_begin: 237,
+            line_end: 237,
+            col_begin: 4,
+            col_end: 32,
+          },
+        },
+        {
+          type: 'TEXT_DEFINITION',
+          provenance: {
+            method: 'TEXT_READING_PIPELINE',
+            timestamp: '2021-08-25 08:49:30.080149',
+          },
+          text_extraction: {
+            source_type: 'text_document_source',
+            document_reference_uid: '',
+            text_spans: [
+              {
+                page: null,
+                block: null,
+                span: {
+                  char_begin: 4,
+                  char_end: 32,
+                },
+              },
+            ],
+          },
+          variable_identifier: '\u03b2',
+          variable_definition: "model's parameters",
+        },
+        {
+          type: 'TEXT_DEFINITION',
+          provenance: {
+            method: 'TEXT_READING_PIPELINE',
+            timestamp: '2021-08-25 08:49:30.080149',
+          },
+          text_extraction: {
+            source_type: 'text_document_source',
+            document_reference_uid: '',
+            text_spans: [
+              {
+                page: null,
+                block: null,
+                span: {
+                  char_begin: 0,
+                  char_end: 50,
+                },
+              },
+            ],
+          },
+          variable_identifier: '\u03b2',
+          variable_definition: 'effective contact rate',
+        },
+        {
+          type: 'EQUATION_PARAMETER',
+          provenance: {
+            method: 'TEXT_READING_PIPELINE',
+            timestamp: '2021-08-25 08:49:30.080149',
+          },
+          equation_extraction: {
+            source_type: 'equation_document_source',
+            document_reference_uid: '',
+            equation_number: 3,
+          },
+          variable_identifier: '\u03b2',
+          value: '\u03b2',
+        },
+        {
+          type: 'EQUATION_PARAMETER',
+          provenance: {
+            method: 'TEXT_READING_PIPELINE',
+            timestamp: '2021-08-25 08:49:30.080149',
+          },
+          equation_extraction: {
+            source_type: 'equation_document_source',
+            document_reference_uid: '',
+            equation_number: 5,
+          },
+          variable_identifier: '\u03b2',
+          value: '\u03b2',
+        },
+        {
+          type: 'EQUATION_PARAMETER',
+          provenance: {
+            method: 'TEXT_READING_PIPELINE',
+            timestamp: '2021-08-25 08:49:30.080149',
+          },
+          equation_extraction: {
+            source_type: 'equation_document_source',
+            document_reference_uid: '',
+            equation_number: 2,
+          },
+          variable_identifier: '\u03b2',
+          value: '\u03b2',
+        },
+        {
+          type: 'EQUATION_PARAMETER',
+          provenance: {
+            method: 'TEXT_READING_PIPELINE',
+            timestamp: '2021-08-25 08:49:30.080149',
+          },
+          equation_extraction: {
+            source_type: 'equation_document_source',
+            document_reference_uid: '',
+            equation_number: 7,
+          },
+          variable_identifier: '\u03b2',
+          value: '\u03b2',
+        },
+        {
+          type: 'EQUATION_PARAMETER',
+          provenance: {
+            method: 'TEXT_READING_PIPELINE',
+            timestamp: '2021-08-25 08:49:30.080149',
+          },
+          equation_extraction: {
+            source_type: 'equation_document_source',
+            document_reference_uid: '',
+            equation_number: 0,
+          },
+          variable_identifier: '\u03b2',
+          value: '\u03b2',
+        },
+        {
+          type: 'EQUATION_PARAMETER',
+          provenance: {
+            method: 'TEXT_READING_PIPELINE',
+            timestamp: '2021-08-25 08:49:30.080149',
+          },
+          equation_extraction: {
+            source_type: 'equation_document_source',
+            document_reference_uid: '',
+            equation_number: 6,
+          },
+          variable_identifier: '\u03b2',
+          value: '\u03b2',
+        },
+      ];
+      }
+
       // Merge node metadata with Variables metadata. c.f. Graph.GraphNodeInterface type
       this.drilldownMetadata = node.metadata ? node.metadata.flat() : null;
 

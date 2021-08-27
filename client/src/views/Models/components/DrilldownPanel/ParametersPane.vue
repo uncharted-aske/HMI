@@ -65,7 +65,7 @@
     selectedVariable: string = null;
 
     mounted (): void {
-      this.selectedVariable = 'tranmission rate';
+      this.selectedVariable = 'doubling time';
     }
 
     get getVariables (): string[] {

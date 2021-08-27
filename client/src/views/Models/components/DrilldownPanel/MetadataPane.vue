@@ -14,26 +14,46 @@
           Domain
         </summary>
         <div class="metadata-content">
-          <p>Data type: {{ datum.data_type }} Scale: {{ datum.measurement_scale }}</p>
+          <span><h6>Data type</h6> {{ datum.data_type }}</span>
+          <span><h6>Scale</h6> {{ datum.measurement_scale }}</span>
         </div>
       </template>
 
       <template v-if="isTypeText(datum)">
-        <summary :title="datum.uid">
+       <summary :title="datum.uid">
           Text {{ isTypeTextParameter(datum) ? 'Parameter' : 'Definition' }}
         </summary>
         <div class="metadata-content">
           <template v-if="datum.variable_identifier">
-            <h6>Variable {{ datum.variable_identifier }}</h6>
+            <h6>Variable identifier:</h6>{{ datum.variable_identifier }}
             <p>{{ isTypeTextParameter(datum) ? datum.value : datum.variable_definition }}</p>
           </template>
-          <template v-if="datum.text_extraction">
+          <!-- <template v-if="datum.text_extraction">
             <h6>Reference</h6>
             <ul>
               <li>{{ datum.text_extraction.document_reference_uid }}</li>
               <li v-if="!datum.text_spans">{{ textExtraction(datum) }}</li>
             </ul>
+          </template> -->
+        </div>
+      </template>
+
+      <template v-if="isTypeParameterSetting(datum)">
+       <summary :title="datum.uid">
+          Parameter Setting
+        </summary>
+        <div class="metadata-content">
+          <template v-if="datum.variable_identifier">
+            <h6>Variable identifier</h6>{{ datum.variable_identifier }}
+            <h6>Value</h6>{{ datum.value }}
           </template>
+          <!-- <template v-if="datum.text_extraction">
+            <h6>Reference</h6>
+            <ul>
+              <li>{{ datum.text_extraction.document_reference_uid }}</li>
+              <li v-if="!datum.text_spans">{{ textExtraction(datum) }}</li>
+            </ul>
+          </template> -->
         </div>
       </template>
 
@@ -64,6 +84,15 @@
           <p>{{ datum.equation_extraction.document_reference_uid }}</p>
           <p>{{ datum.equation_extraction.source_type }}</p>
 
+        </div>
+      </template>
+
+      <template v-if="isTypeTextUnit(datum)">
+        <summary :title="datum.uid">
+          Text Unit
+        </summary>
+        <div class="metadata-content">
+          <h6>Unit</h6> {{ datum.unit }}
         </div>
       </template>
 
@@ -233,6 +262,14 @@
 
     isTypeTextParameter (datum: GroMET.Metadata): boolean {
       return datum.metadata_type === GroMET.MetadataType.TextParameter;
+    }
+    // eslint-disable-next-line
+    isTypeParameterSetting (datum: any): boolean {
+      return datum.type === 'PARAMETER_SETTING';
+    }
+    // eslint-disable-next-line
+    isTypeTextUnit (datum: any): boolean {
+      return datum.type === 'TEXT_UNIT';
     }
 
     isTypeText (datum: GroMET.Metadata): boolean {
