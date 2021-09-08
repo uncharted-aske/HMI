@@ -18,7 +18,8 @@ export interface QueryFieldEntry {
   order?: number, // used to sort fields
   // baseType/lexType defines the type conversion required from/to base/lex types
   baseType: LexConvertType,
-  lexType: LexConvertType
+  lexType: LexConvertType,
+  queryFunctionConfig?: any,
 }
 export type QueryFieldMap = Record<QueryFieldKey, QueryFieldEntry>
 
