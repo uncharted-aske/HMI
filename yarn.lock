@@ -611,10 +611,10 @@
     lit-element "^2.2.1"
     lit-html "^1.1.2"
 
-"@uncharted.software/grafer@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@uncharted.software/grafer/-/grafer-0.5.0.tgz#0e8a7c560be8ba8a34f0795c08eac89328bff713"
-  integrity sha512-an3+HHDuCoUyFYBNufLvBduJ4etARabkBBd2Z1473MkG/eTIr7GkeoEn245KDkbNO3VH5ZNH7sIMT4Oy/0C0lg==
+"@uncharted.software/grafer@0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@uncharted.software/grafer/-/grafer-0.5.1.tgz#521d2e583ff8ef0bb6a9c3b1a32dac2a3ad5ffc7"
+  integrity sha512-vubljZ0FYl3jf731KtRxkxEEuaNX+53/bEEwc4SpeIm3/r6HpiRdUBhB4oiIL1rh74h/EtnpKqHyqJ9Qz8NAxw==
   dependencies:
     "@dekkai/data-source" "^0.2.3"
     "@dekkai/event-emitter" "^1.1.0"
