@@ -27,7 +27,7 @@
     "@uncharted.software/bgraph": "0.3.2",
     "@uncharted.software/facets-core": "^3.1.0",
     "@uncharted.software/facets-plugins": "^3.1.0",
-    "@uncharted.software/grafer": "^0.3.4",
+    "@uncharted.software/grafer": "0.5.1",
     "@uncharted.software/lex": "^1.0.0",
     "alpha-shape": "^1.0.0",
     "aws-sdk": "^2.866.0",
