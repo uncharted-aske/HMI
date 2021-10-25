@@ -58,18 +58,34 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     ..._searchable('Node Name', false),
     baseType: 'string',
     lexType: 'string',
+    queryFunctionConfig: {
+      documentType: 'node',
+      property: 'name',
+      matchType: 'string',
+      toLowerCase: true,
+    },
   },
   BIO_NODE_GROUNDED: {
     ..._field('bioNodeGrounded', 'Node Grounded'),
     ..._searchable('Node Grounded', false),
     baseType: 'integer',
     lexType: 'integer',
+    queryFunctionConfig: {
+      documentType: 'node',
+      property: 'grounded_db',
+      matchType: 'boolean',
+    },
   },
   BIO_NODE_GROUNDED_ONTO: {
     ..._field('bioNodeGroundedOnto', 'Node Grounded Onto'),
     ..._searchable('Node Grounded Onto', false),
     baseType: 'integer',
     lexType: 'integer',
+    queryFunctionConfig: {
+      documentType: 'node',
+      property: 'grounded_group',
+      matchType: 'boolean',
+    },
   },
   BIO_NODE_GROUP: {
     ..._field('bioNodeGroup', 'Node Group'),
@@ -82,12 +98,22 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     ..._searchable('Node In-degree', false),
     baseType: 'integer',
     lexType: 'integer',
+    queryFunctionConfig: {
+      documentType: 'node',
+      property: 'in_degree',
+      matchType: 'number',
+    },
   },
   BIO_NODE_OUT_DEGREE: {
     ..._field('bioNodeOutDegree', 'Node Out-degree'),
     ..._searchable('Node Out-degree', false),
     baseType: 'integer',
     lexType: 'integer',
+    queryFunctionConfig: {
+      documentType: 'node',
+      property: 'out_degree',
+      matchType: 'number',
+    },
   },
   BIO_NODE_POST: {
     ..._field('bioNodePost', 'Node Post'),
@@ -119,6 +145,11 @@ const QUERY_FIELDS_MAP: QueryFieldMap = {
     ..._searchable('Edge Tested', false),
     baseType: 'integer',
     lexType: 'integer',
+    queryFunctionConfig: {
+      documentType: 'edge',
+      property: 'tested',
+      matchType: 'boolean',
+    },
   },
   BIO_EDGE_DOI: {
     ..._field('bioEdgeDoi', 'Edge DOI'),
